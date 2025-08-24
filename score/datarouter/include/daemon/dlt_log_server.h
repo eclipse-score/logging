@@ -217,8 +217,8 @@ class DltLogServer : score::platform::datarouter::DltNonverboseHandlerType::IOut
       public:
         std::size_t operator()(const KeyT& k) const
         {
-            auto low = static_cast<uint64_t>(k.first.value);
-            auto high = static_cast<uint64_t>(k.second.value) << 32;
+            auto low = static_cast<uint64_t>(k.first.GetHash());
+            auto high = static_cast<uint64_t>(k.second.GetHash()) << 32;
             return std::hash<uint64_t>{}(high | low);
         }
     };

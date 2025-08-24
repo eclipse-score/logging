@@ -16,7 +16,6 @@
 #include "score/datarouter/include/daemon/configurator_commands.h"
 #include "score/datarouter/include/daemon/diagnostic_job_parser.h"
 #include "score/datarouter/include/daemon/i_diagnostic_job_handler.h"
-#include "score/datarouter/include/dlt/dltid_converter.h"
 
 #include <algorithm>
 #include <sstream>
@@ -53,8 +52,7 @@ void DltLogServer::SendVerbose(
     const auto sender = [&tmsp, &entry, this](DltLogChannel& c) {
         log_sender_->SendVerbose(tmsp, entry, c);
     };
-    FilterAndCall(
-        platform::ConvertToDltId(entry.app_id), platform::ConvertToDltId(entry.ctx_id), entry.log_level, sender);
+    FilterAndCall(platform::DltidT{entry.app_id}, platform::DltidT{entry.ctx_id}, entry.log_level, sender);
 }
 
 void DltLogServer::SendFtVerbose(score::cpp::span<const std::uint8_t> data,

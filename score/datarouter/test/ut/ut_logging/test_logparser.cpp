@@ -54,7 +54,7 @@ STRUCT_VISITABLE(TestFilter, test_field)
 template <typename T>
 std::string MakeTypeParams(DltidT ecu_id, DltidT app_id)
 {
-    return std::string(4, char(0)) + std::string(ecu_id.Data(), 4) + std::string(app_id.Data(), 4) +
+    return std::string(4, char(0)) + std::string(ecu_id) + std::string(app_id) +
            ::score::common::visitor::logger_type_string<T>();
 }
 
@@ -62,8 +62,7 @@ template <typename T>
 std::string MakeWrongTypeParams(DltidT ecu_id, DltidT app_id)
 {
     // Without the first four zeros.
-    return std::string(ecu_id.Data(), 4) + std::string(app_id.Data(), 4) +
-           ::score::common::visitor::logger_type_string<T>();
+    return std::string(ecu_id) + std::string(app_id) + ::score::common::visitor::logger_type_string<T>();
 }
 
 template <typename S, typename T>
