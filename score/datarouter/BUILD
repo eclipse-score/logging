@@ -32,16 +32,12 @@ clang_tidy_extra_checks(
 
 cc_library(
     name = "dltprotocol",
-    srcs = [
-        "src/dlt/dltid_converter.cpp",
-    ],
     hdrs = [
         "include/dlt/dlt_common.h",
         "include/dlt/dlt_headers.h",
         "include/dlt/dlt_protocol.h",
         "include/dlt/dlt_types.h",
         "include/dlt/dltid.h",
-        "include/dlt/dltid_converter.h",
         "include/dlt/logentry_trace.h",
         "include/dlt/plogfilterdesc.h",
     ],

@@ -247,8 +247,8 @@ class DltLogChannel
     {
         auto log_stream{stat_logger.LogInfo()};
         log_stream << std::string(statistics_type.data(), statistics_type.size())
-                   << " messages in the channel:" << std::string{channel_id.Data(), channel_id.size()} << ": count "
-                   << statistics.stats_msgcnt << ", size " << statistics.stats_totalsize << " bytes ("
+                   << " messages in the channel:" << channel_id.Data() << ": count " << statistics.stats_msgcnt
+                   << ", size " << statistics.stats_totalsize << " bytes ("
                    << statistics.stats_totalsize / kBandwidthDenominator << " kiB/s)"
                    << "failed to send: total count " << statistics.send_failures_count;
 
@@ -288,8 +288,7 @@ class DltLogChannel
                   });
 
         auto&& log_stream = stat_logger.LogInfo();
-        log_stream << "dlt stats: non-verbose messages in channel:" << std::string{channel_id.Data(), channel_id.size()}
-                   << " sent data by message id.";
+        log_stream << "dlt stats: non-verbose messages in channel:" << channel_id.Data() << " sent data by message id.";
         std::for_each(
             begin(dlt_non_verbose_diagnostics), end(dlt_non_verbose_diagnostics), [&log_stream](const auto& elem) {
                 log_stream << "Msgid:" << elem.first << " bytes:" << elem.second << " ("
