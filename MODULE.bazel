@@ -11,8 +11,8 @@
 # SPDX-License-Identifier: Apache-2.0
 # *******************************************************************************
 module(
-    name = "cpp_rust_template_repository",
-    version = "1.0",
+    name = "score-mw-log",
+    version = "0.1",
 )
 
 bazel_dep(name = "rules_python", version = "1.4.1")
@@ -27,31 +27,48 @@ python.toolchain(
 use_repo(python)
 
 # Add GoogleTest dependency
-bazel_dep(name = "googletest", version = "1.17.0")
+bazel_dep(name = "googletest", version = "1.15.0")
 
 # Rust rules for Bazel
-bazel_dep(name = "rules_rust", version = "0.63.0")
+bazel_dep(name = "rules_rust", version = "0.56.0")
+
+# Checker rule for CopyRight checks/fixs
+bazel_dep(name = "score_cr_checker", version = "0.3.1")
+bazel_dep(name = "score_python_basics", version = "0.3.4")
+bazel_dep(name = "score_starpls_lsp", version = "0.1.0")
 
 # C/C++ rules for Bazel
-bazel_dep(name = "rules_cc", version = "0.2.1")
+bazel_dep(name = "rules_cc", version = "0.1.1")
 
 # LLVM Toolchains Rules - host configuration
-bazel_dep(name = "toolchains_llvm", version = "1.4.0")
+bazel_dep(name = "toolchains_llvm", version = "1.3.0")
 
-llvm = use_extension("@toolchains_llvm//toolchain/extensions:llvm.bzl", "llvm")
-llvm.toolchain(
-    cxx_standard = {"": "c++17"},
-    llvm_version = "19.1.0",
+# Configure and register the toolchain.
+bazel_dep(name = "score_toolchains_gcc", version = "0.4", dev_dependency = True)
+
+gcc = use_extension("@score_toolchains_gcc//extentions:gcc.bzl", "gcc", dev_dependency = True)
+gcc.toolchain(
+    sha256 = "457f5f20f57528033cb840d708b507050d711ae93e009388847e113b11bf3600",
+    strip_prefix = "x86_64-unknown-linux-gnu",
+    url = "https://github.com/eclipse-score/toolchains_gcc_packages/releases/download/0.0.1/x86_64-unknown-linux-gnu_gcc12.tar.gz",
 )
-use_repo(llvm, "llvm_toolchain")
-use_repo(llvm, "llvm_toolchain_llvm")
+use_repo(gcc, "gcc_toolchain", "gcc_toolchain_gcc")
 
-register_toolchains("@llvm_toolchain//:all")
+# Dash license checker
+bazel_dep(name = "score_dash_license_checker", version = "0.1.2")
 
-# tooling
-bazel_dep(name = "score_tooling", version = "1.0.1")
-bazel_dep(name = "aspect_rules_lint", version = "1.5.3")
+# Format checker
+bazel_dep(name = "score_format_checker", version = "0.1.1")
+bazel_dep(name = "aspect_rules_lint", version = "1.4.4")
 bazel_dep(name = "buildifier_prebuilt", version = "8.2.0.2")
 
 #docs-as-code
-bazel_dep(name = "score_docs_as_code", version = "1.1.0")
+bazel_dep(name = "score_docs_as_code", version = "1.0.1")
+
+# Code deps
+bazel_dep(name = "score-baselibs", version = "0.1.0")
+git_override(
+    module_name = "score-baselibs",
+    commit = "ae050e3cc556572830e1ec02ffbcbbd03f26df13",  # or use "tag" or "branch"
+    remote = "https://github.com/eclipse-score/baselibs.git",
+)
