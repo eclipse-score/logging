@@ -15,9 +15,9 @@ load("@rules_rust//cargo:defs.bzl", "cargo_build_script")
 load("@rules_rust//rust:defs.bzl", "rust_binary", "rust_library")
 
 cc_library(
-    name = "libmw_log_ffi",
-    srcs = ["src/mw_log_ffi.cpp"],
-    visibility = ["//visibility:public"],
+    name = "librust_cpp_log_adapter",
+    srcs = ["src/rust_cpp_log_adapter.cpp"],
+    visibility = ["//visibility:private"],
     deps = [
         "@score-baselibs//score/mw/log",
     ],
@@ -30,7 +30,7 @@ rust_library(
     edition = "2021",
     visibility = ["//visibility:public"],
     deps = [
-        ":libmw_log_ffi",
+        ":librust_cpp_log_adapter",
         "@score-baselibs//score/mw/log/rust:mw_log",
     ],
 )

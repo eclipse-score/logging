@@ -38,7 +38,7 @@ impl MwLoggerBuilder {
         self,
     ) -> MwLogger {
         let context_cstr = self.context.unwrap_or(CString::new("DFLT").unwrap());
-        let c_logger_ptr = unsafe { mw_log_create_logger(context_cstr.as_ptr() as *const _) };
+        let c_logger_ptr = unsafe { mw_log_create_logger(context_cstr.as_ptr().cast::<c_char>()) };
         MwLogger {
             ptr: c_logger_ptr,
             log_fn: log::<SHOW_MODULE, SHOW_FILE, SHOW_LINE>,
