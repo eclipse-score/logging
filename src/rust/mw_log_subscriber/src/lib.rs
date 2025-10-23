@@ -17,7 +17,7 @@ use crate::mw_log_ffi::*;
 
 use core::ffi::c_char;
 use core::fmt::{self, Write};
-use mw_log::{Level, Log, Metadata, Record};
+use log::{Level, Log, Metadata, Record};
 use std::ffi::CString;
 use std::mem::MaybeUninit;
 
@@ -54,8 +54,8 @@ impl MwLoggerBuilder {
         self,
     ) {
         let logger = self.build::<SHOW_MODULE, SHOW_FILE, SHOW_LINE>();
-        mw_log::set_max_level(mw_log_logger_level(logger.ptr));
-        mw_log::set_boxed_logger(Box::new(logger))
+        log::set_max_level(mw_log_logger_level(logger.ptr));
+        log::set_boxed_logger(Box::new(logger))
             .expect("Failed to initialize MwLogger as default logger - logger may already be set");
     }
 

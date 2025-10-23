@@ -13,7 +13,7 @@
 
 use std::path::PathBuf;
 
-use mw_log::{debug, error, info, trace, warn};
+use log::{debug, error, info, trace, warn};
 use mw_log_subscriber::MwLoggerBuilder;
 
 fn main() {

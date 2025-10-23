@@ -31,7 +31,7 @@ rust_library(
     visibility = ["//visibility:public"],
     deps = [
         ":librust_cpp_log_adapter",
-        "@score-baselibs//score/mw/log/rust:mw_log",
+        "@score-baselibs//score/mw/log/rust:log",
     ],
 )
 
@@ -42,9 +42,14 @@ rust_binary(
         "examples/config/logging.json",
     ],
     edition = "2021",
+    rustc_flags = [
+        "-Clink-arg=-lstdc++",
+        "-Clink-arg=-lm",
+        "-Clink-arg=-lc",
+    ],
     visibility = ["//visibility:public"],
     deps = [
         ":mw_log_subscriber",
-        "@score-baselibs//score/mw/log/rust:mw_log",
+        "@score-baselibs//score/mw/log/rust:log",
     ],
 )

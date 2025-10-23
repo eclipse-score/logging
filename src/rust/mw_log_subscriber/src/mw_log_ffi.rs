@@ -13,7 +13,7 @@
 
 use core::ffi::c_char;
 
-use mw_log::{Level, LevelFilter};
+use log::{Level, LevelFilter};
 
 // Opaque type representing the C++ logger ptr
 #[repr(C)]
