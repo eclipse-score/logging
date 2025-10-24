@@ -11,7 +11,8 @@
 # SPDX-License-Identifier: Apache-2.0
 # *******************************************************************************
 load("@score_docs_as_code//:docs.bzl", "docs")
-load("@score_tooling//:defs.bzl", "copyright_checker", "dash_license_checker", "setup_starpls", "use_format_targets")
+load("@score_format_checker//:macros.bzl", "use_format_targets")
+load("@score_starpls_lsp//:starpls.bzl", "setup_starpls")
 load("//:project_config.bzl", "PROJECT_CONFIG")
 
 setup_starpls(
@@ -33,8 +34,8 @@ copyright_checker(
         "//:MODULE.bazel",
         "//:project_config.bzl",
     ],
-    config = "@score_tooling//cr_checker/resources:config",
-    template = "@score_tooling//cr_checker/resources:templates",
+    config = "@score_cr_checker//resources:config",
+    template = "@score_cr_checker//resources:templates",
     visibility = ["//visibility:public"],
 )
 
