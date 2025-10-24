@@ -7,3 +7,8 @@ test --test_output=errors
 
 common --registry=https://raw.githubusercontent.com/eclipse-score/bazel_registry/main/
 common --registry=https://bcr.bazel.build
+
+# magic logging configuration
+common --@score-baselibs//score/mw/log/detail/flags:KUse_Stub_Implementation_Only=False
+common --@score-baselibs//score/mw/log/flags:KRemote_Logging=False
+common --@score-baselibs//score/json:base_library=nlohmann
