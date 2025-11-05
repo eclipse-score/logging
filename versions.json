@@ -2,9 +2,5 @@
   {
     "version": "main",
     "url": "https://eclipse-score.github.io/logging/main/"
-  },
-  {
-    "version": "pr-4",
-    "url": "https://eclipse-score.github.io/logging/pr-4/"
   }
 ]
