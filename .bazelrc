@@ -9,6 +9,6 @@ common --registry=https://raw.githubusercontent.com/eclipse-score/bazel_registry
 common --registry=https://bcr.bazel.build
 
 # magic logging configuration
-common --@score-baselibs//score/mw/log/detail/flags:KUse_Stub_Implementation_Only=False
-common --@score-baselibs//score/mw/log/flags:KRemote_Logging=False
-common --@score-baselibs//score/json:base_library=nlohmann
+common --@score_baselibs//score/mw/log/detail/flags:KUse_Stub_Implementation_Only=False
+common --@score_baselibs//score/mw/log/flags:KRemote_Logging=False
+common --@score_baselibs//score/json:base_library=nlohmann
