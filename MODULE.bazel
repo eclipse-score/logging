@@ -17,7 +17,6 @@ module(
 )
 
 bazel_dep(name = "platforms", version = "1.0.0")
-
 bazel_dep(name = "score_toolchains_gcc", version = "0.4", dev_dependency = True)
 
 bazel_dep(name = "googletest", version = "1.17.0.bcr.1")
