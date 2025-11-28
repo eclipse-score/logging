@@ -401,8 +401,8 @@ cc_library(
         ":logparser",
         ":message_passing_server",
         ":unixdomain_server",
-        "//score/datarouter/lib/synchronized:synchronized_utility",
         "//score/mw/log/detail/data_router/shared_memory:reader",
+        "@score_baselibs//score/concurrency:synchronized",
         "@score_baselibs//score/language/futurecpp",
     ],
 )
@@ -424,7 +424,7 @@ cc_library(
         ":logparser",
         ":message_passing_server",
         ":unixdomain_mock",
-        "//score/datarouter/lib/synchronized:synchronized_utility",
+        "@score_baselibs//score/concurrency:synchronized",
     ],
 )
 
@@ -446,7 +446,7 @@ cc_library(
         ":logparser_testing",
         ":message_passing_server",
         ":unixdomain_mock",
-        "//score/datarouter/lib/synchronized:synchronized_utility",
+        "@score_baselibs//score/concurrency:synchronized",
     ],
 )
 
