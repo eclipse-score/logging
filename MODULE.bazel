@@ -17,6 +17,7 @@ module(
 )
 
 bazel_dep(name = "rules_python", version = "1.4.1")
+bazel_dep(name = "googletest", version = "1.14.0")
 
 PYTHON_VERSION = "3.12"
 
@@ -27,16 +28,8 @@ python.toolchain(
 )
 use_repo(python)
 
-# Add GoogleTest dependency
-bazel_dep(name = "googletest", version = "1.15.0")
-
 # Rust rules for Bazel
 bazel_dep(name = "rules_rust", version = "0.61.0")
-
-# Checker rule for CopyRight checks/fixs
-bazel_dep(name = "score_cr_checker", version = "0.3.1")
-bazel_dep(name = "score_python_basics", version = "0.3.4")
-bazel_dep(name = "score_starpls_lsp", version = "0.1.0")
 
 # C/C++ rules for Bazel
 bazel_dep(name = "rules_cc", version = "0.1.1")
@@ -74,22 +67,17 @@ register_toolchains(
     dev_dependency = True,
 )
 
-# Dash license checker
-bazel_dep(name = "score_dash_license_checker", version = "0.1.2")
-
-# Format checker
-bazel_dep(name = "score_format_checker", version = "0.1.1")
-bazel_dep(name = "aspect_rules_lint", version = "1.4.4")
-bazel_dep(name = "buildifier_prebuilt", version = "8.2.0.2")
-
-#docs-as-code
-bazel_dep(name = "score_docs_as_code", version = "1.0.1")
+bazel_dep(name = "aspect_rules_lint", version = "1.0.3")
+bazel_dep(name = "buildifier_prebuilt", version = "7.3.1")
+bazel_dep(name = "score_bazel_platforms", version = "0.0.2")
+bazel_dep(name = "score_docs_as_code", version = "2.0.2")
+bazel_dep(name = "score_tooling", version = "1.0.4")
 
 # Code deps
-bazel_dep(name = "score-baselibs", version = "0.1.0")
+bazel_dep(name = "score_baselibs", version = "0.2.0")
 git_override(
-    module_name = "score-baselibs",
-    commit = "c2d9b7e872c1e67b69256214a75c937e00d03601",  # or use "tag" or "branch"
+    module_name = "score_baselibs",
+    commit = "59dba065def85e3c7fb38e08f0d4cb04cc693b2f",
     remote = "https://github.com/eclipse-score/baselibs.git",
 )
 

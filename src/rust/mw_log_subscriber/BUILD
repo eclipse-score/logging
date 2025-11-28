@@ -19,7 +19,7 @@ cc_library(
     srcs = ["src/rust_cpp_log_adapter.cpp"],
     visibility = ["//visibility:private"],
     deps = [
-        "@score-baselibs//score/mw/log",
+        "@score_baselibs//score/mw/log",
     ],
 )
 
@@ -31,7 +31,7 @@ rust_library(
     visibility = ["//visibility:public"],
     deps = [
         ":librust_cpp_log_adapter",
-        "@score-baselibs//score/mw/log/rust:log",
+        "@score_baselibs//score/mw/log/rust:log",
     ],
 )
 
@@ -50,6 +50,6 @@ rust_binary(
     visibility = ["//visibility:public"],
     deps = [
         ":mw_log_subscriber",
-        "@score-baselibs//score/mw/log/rust:log",
+        "@score_baselibs//score/mw/log/rust:log",
     ],
 )
