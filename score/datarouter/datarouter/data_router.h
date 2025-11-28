@@ -22,8 +22,8 @@
 #include "score/datarouter/daemon_communication/session_handle_interface.h"
 #include "unix_domain/unix_domain_server.h"
 
+#include "score/concurrency/synchronized.h"
 #include "score/mw/log/logger.h"
-#include "score/datarouter/lib/synchronized/synchronized.h"
 
 #include "score/variant.hpp"
 
@@ -42,6 +42,9 @@ namespace datarouter
 using internal::ILogParser;
 using internal::MessagePassingServer;
 using internal::UnixDomainServer;
+
+template <typename T, typename Mutex = std::mutex>
+using Synchronized = score::concurrency::Synchronized<T, Mutex>;
 
 std::string QuotaValueAsString(double quota) noexcept;
 
