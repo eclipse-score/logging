@@ -1,0 +1,13 @@
+{
+    "file_format_version": "1.0",
+    "storage_list": {
+        "datarouter/datarouter_RootSwc/PersistencyNvmblockPPort": {
+            "is_installed": true,
+            "path": "\/persistent\/trusted\/datarouter\/key_value_storage",
+            "is_crc_protected": false,
+            "max_redundancy_files": 1,
+            "sw_cluster_version": "1.0.0",
+            "executable_version": "1.0.0"
+        }
+    }
+}

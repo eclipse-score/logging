@@ -1,0 +1,8 @@
+{
+     "verbose_filters": {
+          "test":{"appId": "", "ctxId": "", "logLevel": "kError" }
+     },
+      "nonverbose_filters": {
+           "test":"score::tracing::TimeTrace"
+      }
+}

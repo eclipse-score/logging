@@ -1,0 +1,25 @@
+{
+	"score::logging::PersistentLogFileEvent": {
+		"id": 301,
+		"ctxid": "PERL",
+		"appid": "DRC",
+		"loglevel": 1
+	},
+	"aas::logging::ReprocessingCycle": {
+		"id": 150,
+		"ctxid": "Repr",
+		"appid": "Plan",
+		"loglevel": 4
+	},
+	"poseng::logging::ReprocessingCycle": {
+		"id": 41000,
+		"ctxid": "Cycl",
+		"appid": "PE"
+	},
+	"score::mw::log::detail::LogEntry": {
+		"id": 10,
+		"ctxid": "STDA",
+		"appid": "STDF",
+		"loglevel": 2
+	}
+}

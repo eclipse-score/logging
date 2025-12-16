@@ -1,0 +1,17 @@
+{
+     "verbose_filters": [
+          {"appId": "", "ctxId": "", "logLevel": "kError" },
+          {"appId": "CDH", "ctxId": "SHCD", "logLevel": "kInfo" },
+          {"appId": "CHD", "ctxId": "DFLT", "logLevel": "kInfo" },
+          {"appId": "LOGC", "ctxId": "" , "logLevel": "kDebug" },
+          {"appId": "EM" , "ctxId": "prlf", "logLevel": "kDebug" },
+          {"appId": "MSM", "ctxId": "MSM", "logLevel": "kDebug" },
+          {"appId": "MON", "ctxId": "CPUS", "logLevel": "kInfo" },
+          {"appId": "MON", "ctxId": "MEMS", "logLevel": "kInfo" },
+          {"appId": "UTC", "ctxId": "UTC", "logLevel": "kInfo" }
+      ],
+      "nonverbose_filters": [
+           1,
+           2
+      ]
+}
