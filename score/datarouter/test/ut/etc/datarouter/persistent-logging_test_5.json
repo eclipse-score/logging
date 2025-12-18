@@ -1,0 +1,25 @@
+{
+     "verbose_filters": [
+          {"appId": "", "ctxId": "", "logLevel": "kError" },
+          {"appId": 1, "ctxId": 2, "logLevel": 3 },
+          {"appId": "CHD", "ctxId": "DFLT", "logLevel": "kInfo" },
+          {"appId": "LOGC", "ctxId": "" , "logLevel": "kDebug" },
+          {"appId": "EM" , "ctxId": "prlf", "logLevel": "kDebug" },
+          {"appId": "MSM", "ctxId": "MSM", "logLevel": "kDebug" },
+          {"appId": "MON", "ctxId": "CPUS", "logLevel": "kInfo" },
+          {"appId": "MON", "ctxId": "MEMS", "logLevel": "kInfo" },
+          {"appId": "UTC", "ctxId": "UTC", "logLevel": "kInfo" }
+      ],
+      "nonverbose_filters": [
+           "score::tracing::TimeTrace",
+           "aas::logging::ReprocessingCycle",
+           "score::logging::standard_frame::CurrentEngineeringMode",
+           "score::logging::standard_frame::EcuHwVersion",
+           "score::logging::standard_frame::EcuSwVersion1",
+           "score::logging::standard_frame::EcuSwVersion2",
+           "score::logging::standard_frame::EcuSwVersion3",
+           "score::logging::standard_frame::EcuSwVersion4",
+           "score::logging::standard_frame::EcuSwVersion5",
+           "score::logging::standard_frame::EcuSwVersion6"
+      ]
+}

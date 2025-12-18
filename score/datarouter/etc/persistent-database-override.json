@@ -1,0 +1,9 @@
+{
+    "SysEDR_Data": {
+        "stack": 1024,
+        "ring": 1048576,
+        "overwrite": true,
+        "share_protected": true
+    }
+}
+

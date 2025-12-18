@@ -1,0 +1,33 @@
+{
+    "channelAssignments": {
+        "DR": {
+            "": [
+                "3492"
+            ],
+            "CTX1": [
+                "3492",
+                "3493"
+            ]
+        },
+        "-NI-": {
+            "": [
+                "3491"
+            ]
+        }
+    },
+    "defaultChannel": "3493",
+    "defaultThresold": "kVerbose",
+    "messageThresholds": {
+        "": {
+            "vcip": "kInfo"
+        },
+        "DR": {
+            "": "kVerbose",
+            "CTX1": "kVerbose",
+            "STAT": "kDebug"
+        },
+        "-NI-": {
+            "": "kVerbose"
+        }
+    }
+}

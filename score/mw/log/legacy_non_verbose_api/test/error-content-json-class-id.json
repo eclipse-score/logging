@@ -1,0 +1,61 @@
+{
+	"score::pcp::CrocStateTraceable": {
+		"id": 8650814,
+		"ctxid": "CRoC",
+		"appid": "Plan",
+		"loglevel": 3
+	},
+	"score::pcp::obstacles::ObstaclesTraceable": {
+		"id": 8650815,
+		"ctxid": "OBSF",
+		"appid": "Plan",
+		"loglevel": 3
+	},
+	"score::plg::awa::DebugData": {
+		"id": 8650816,
+		"ctxid": "AWA",
+		"appid": "Plan",
+		"loglevel": 2
+	},
+	"score::plg::driving_tube::DiagnosticLogsData": {
+		"id": 8650817,
+		"ctxid": "DTNV",
+		"appid": "Plan",
+		"loglevel": 4
+	},
+	"score::logging::timesync::DltTimeSyncTimestamp": {
+		"id": 27,
+		"ctxid": "TSNC",
+		"appid": "STDF",
+		"loglevel": 2
+	},
+	"aas::logging::ReprocessingEvent": {
+		"id": 8650752,
+		"ctxid": "Repr",
+		"appid": "Plan",
+		"loglevel": 4
+	},
+	"adp::time::StdTimestamp": {
+		"id": 8650753,
+		"appid": "DR",
+		"loglevel": 4
+	},
+	"adp::logging::DynamicInsight": {
+		"id": 8650754,
+		"ctxid": "VIS",
+		"appid": "Plan",
+		"loglevel": 3
+	},
+	"score::sli::CommonStrategiesConfig": {
+		"id": 8458555,
+		"ctxid": "sli",
+		"appid": "Fasi",
+		"loglevel": 4
+	},
+	"score::sli::TsfBaseConfig": {
+		"id": 8458423,
+		"ctxid": "sli",
+		"appid": "Fasi",
+		"loglevel": 4
+	}
+}
