@@ -1,5 +1,5 @@
 # *******************************************************************************
-# Copyright (c) 2024-2025 Contributors to the Eclipse Foundation
+# Copyright (c) 2025 Contributors to the Eclipse Foundation
 #
 # See the NOTICE file(s) distributed with this work for additional
 # information regarding copyright ownership.
@@ -10,15 +10,18 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 # *******************************************************************************
-module(name = "score_logging")
+module(
+    name = "score_logging",
+    version = "0.0.3",
+    compatibility_level = 0,
+)
 
 bazel_dep(name = "platforms", version = "1.0.0")
-
 bazel_dep(name = "score_toolchains_gcc", version = "0.4", dev_dependency = True)
 
 bazel_dep(name = "googletest", version = "1.17.0.bcr.1")
 bazel_dep(name = "google_benchmark", version = "1.9.4")
-bazel_dep(name = "rules_rust", version = "0.61.0")
+bazel_dep(name = "rules_rust", version = "0.63.0")
 bazel_dep(name = "rapidjson", version = "1.1.0")
 bazel_dep(name = "score_crates", version = "0.0.3", repo_name = "crate_index")
 bazel_dep(name = "jemalloc", version = "5.3.0-bcr.alpha.4")
@@ -89,6 +92,9 @@ download_archive(
     urls = ["https://github.com/python-jsonschema/jsonschema/archive/refs/tags/v4.23.0.tar.gz"],
 )
 
+# C/C++ rules for Bazel
+bazel_dep(name = "rules_cc", version = "0.2.1")
+
 bazel_dep(name = "nlohmann_json", version = "3.11.3")
 bazel_dep(name = "bazel_skylib", version = "1.7.1")
 bazel_dep(name = "rules_doxygen", version = "2.5.0")
@@ -100,7 +106,7 @@ git_override(
 )
 
 # Python 3.12 toolchain for Bazel (required for LOBSTER/TRLC dependencies)
-bazel_dep(name = "rules_python", version = "1.0.0")
+bazel_dep(name = "rules_python", version = "1.4.1")
 
 python = use_extension("@rules_python//python/extensions:python.bzl", "python")
 python.toolchain(
@@ -134,3 +140,24 @@ git_override(
     commit = "5a70133dd8bd632f5c07f200a5ee4bc9f507c23b",
     remote = "https://github.com/eclipse-score/communication.git",
 )
+
+# LLVM Toolchains Rules - host configuration
+bazel_dep(name = "toolchains_llvm", version = "1.4.0")
+
+llvm = use_extension("@toolchains_llvm//toolchain/extensions:llvm.bzl", "llvm")
+llvm.toolchain(
+    cxx_standard = {"": "c++17"},
+    llvm_version = "19.1.0",
+)
+use_repo(llvm, "llvm_toolchain")
+use_repo(llvm, "llvm_toolchain_llvm")
+
+register_toolchains("@llvm_toolchain//:all")
+
+# tooling
+bazel_dep(name = "score_tooling", version = "1.0.1")
+bazel_dep(name = "aspect_rules_lint", version = "1.5.3")
+bazel_dep(name = "buildifier_prebuilt", version = "8.2.0.2")
+
+#docs-as-code
+bazel_dep(name = "score_docs_as_code", version = "1.1.0")
