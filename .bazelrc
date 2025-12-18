@@ -11,9 +11,6 @@
 # SPDX-License-Identifier: Apache-2.0
 # *******************************************************************************
 
-# magic logging configuration
-common --@score-baselibs//score/mw/log/detail/flags:KUse_Stub_Implementation_Only=False
-common --@score-baselibs//score/mw/log/flags:KRemote_Logging=False
 common --@score_baselibs//score/memory/shared/flags:use_typedshmd=False
 common --@score-baselibs//score/json:base_library=nlohmann
 
