@@ -39,20 +39,23 @@ NODES_STD = [
 ]
 
 lobster_code_template = {
-        "data": [],
-        "generator": "lobster_cpp",
-        "schema": "lobster-imp-trace",
-        "version": 3
-    }
+    "data": [],
+    "generator": "lobster_cpp",
+    "schema": "lobster-imp-trace",
+    "version": 3,
+}
 
 lobster_reqs_template = {
-        "data": [],
-        "generator": "lobster-trlc",
-        "schema": "lobster-req-trace",
-        "version": 4
-    }
+    "data": [],
+    "generator": "lobster-trlc",
+    "schema": "lobster-req-trace",
+    "version": 4,
+}
 
-def extract_id_from_line(line: str, tags: List[str], nodes: List[str]) -> Optional[Tuple[str, str]]:
+
+def extract_id_from_line(
+    line: str, tags: List[str], nodes: List[str]
+) -> Optional[Tuple[str, str]]:
     """
     Parse a single line to extract the ID from tags or nodes.
 
@@ -90,10 +93,12 @@ def extract_id_from_line(line: str, tags: List[str], nodes: List[str]) -> Option
     None
     """
     # Step 1: Clean the line of $, \n, and \\n
-    cleaned_line = line.replace('\n', '').replace('\\n', '')
+    cleaned_line = line.replace("\n", "").replace("\\n", "")
 
     # Step 2: Remove all single and double quotes
-    cleaned_line = cleaned_line.replace('"', '').replace("'", '').replace("{",'').strip()
+    cleaned_line = (
+        cleaned_line.replace('"', "").replace("'", "").replace("{", "").strip()
+    )
 
     # Step 3 and 4: Search for tags or nodes and capture the last element
     for tag in tags:
@@ -103,16 +108,16 @@ def extract_id_from_line(line: str, tags: List[str], nodes: List[str]) -> Option
     for node in nodes:
         if cleaned_line.startswith(node):
             # Scan for Macro
-            if node.startswith('$'):
-                parts = cleaned_line.split(',')
+            if node.startswith("$"):
+                parts = cleaned_line.split(",")
                 if len(parts) >= 2:
-                    return parts[1].strip().rstrip(')'), node
-            else: # scan for normal plantuml element
+                    return parts[1].strip().rstrip(")"), node
+            else:  # scan for normal plantuml element
                 # Remove the identifier from the start of the line
-                parts = cleaned_line[len(node):].strip().split()
+                parts = cleaned_line[len(node) :].strip().split()
 
                 # If there are at least 3 parts and the second-to-last is 'as', return the last part
-                if len(parts) >= 3 and parts[-2] == 'as':
+                if len(parts) >= 3 and parts[-2] == "as":
                     return parts[-1], node
 
                 # If there's only one part after the identifier, return it
@@ -121,11 +126,12 @@ def extract_id_from_line(line: str, tags: List[str], nodes: List[str]) -> Option
 
     return None
 
+
 def extract_tags(
     source_file: str,
     github_base_url: str,
     nodes: List[str],
-    git_hash_func: Union[Callable[[str], str], None] = get_git_hash
+    git_hash_func: Union[Callable[[str], str], None] = get_git_hash,
 ) -> Dict[str, List[Tuple[str, str]]]:
     """
     This extracts the file-path, lineNr as well as the git hash of the file
@@ -142,7 +148,9 @@ def extract_tags(
     if git_hash_func is None:
         git_hash_func = get_git_hash
 
-    requirement_mapping: dict[str, List[Tuple[str, str]]] = collections.defaultdict(list)
+    requirement_mapping: dict[str, List[Tuple[str, str]]] = collections.defaultdict(
+        list
+    )
     with open(source_file) as f:
         hash = git_hash_func(source_file)
         for line_number, line in enumerate(f):
@@ -159,11 +167,12 @@ def extract_tags(
 
     return requirement_mapping
 
+
 def _extract_tags_dispatch(
     source_file: str,
     github_base_url: str,
     mode=str,
-    git_hash_func: Union[Callable[[str], str], None] = get_git_hash
+    git_hash_func: Union[Callable[[str], str], None] = get_git_hash,
 ) -> Dict[str, List[str]]:
     """
     Dispatch to a specialized parser based on file extension.
@@ -176,7 +185,7 @@ def _extract_tags_dispatch(
 
     if mode == "reqs":
         foo = lobster_reqs_template
-        rm =  extract_tags(source_file, github_base_url, [], git_hash_func)
+        rm = extract_tags(source_file, github_base_url, [], git_hash_func)
         for id, item in rm.items():
             link, node = item[0]
             requirement = {
@@ -193,9 +202,9 @@ def _extract_tags_dispatch(
                 "just_down": [],
                 "just_global": [],
                 "framework": "TRLC",
-                "kind": node.replace('$','').strip(),
+                "kind": node.replace("$", "").strip(),
                 "text": f"{id}",
-                }
+            }
 
             foo["data"].append(requirement)
     else:
@@ -217,15 +226,14 @@ def _extract_tags_dispatch(
                 "just_up": [],
                 "just_down": [],
                 "just_global": [],
-                "refs": [
-                    f"req {id}"
-                ],
+                "refs": [f"req {id}"],
                 "language": "cpp",
-                "kind": "Function"
-                }
+                "kind": "Function",
+            }
             foo["data"].append(codetag)
 
     return foo
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
@@ -253,14 +261,18 @@ if __name__ == "__main__":
     logger.info(f"Parsing source files: {args.inputs}")
 
     # Finding the GH URL
-    gh_base_url=f"{args.url}{get_github_repo()}"
+    gh_base_url = f"{args.url}{get_github_repo()}"
 
-    requirement_mappings: Dict[str, List[Tuple[str, str]]] = collections.defaultdict(list)
+    requirement_mappings: Dict[str, List[Tuple[str, str]]] = collections.defaultdict(
+        list
+    )
 
     for input in args.inputs:
         with open(input) as f:
             for source_file in f:
-                foo = _extract_tags_dispatch(source_file.strip(), gh_base_url, args.trace)
+                foo = _extract_tags_dispatch(
+                    source_file.strip(), gh_base_url, args.trace
+                )
 
     if not foo:
         if args.trace == "reqs":
