@@ -19,10 +19,12 @@ import sys
 import subprocess
 from pathlib import Path
 
+
 def get_github_repo() -> str:
     git_root = find_git_root()
     repo = get_github_repo_info(git_root)
     return repo
+
 
 def parse_git_output(str_line: str) -> str:
     if len(str_line.split()) < 2:
