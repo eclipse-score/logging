@@ -296,11 +296,11 @@ filegroup(
         "etc/persistent-logging.json",
     ],
     visibility = [
-        "//ecu/xpad/xpad-shared/config/common/pas/datarouter:__subpackages__",
+        "//ecu/xyz/xyz-shared/config/common/pas/datarouter:__subpackages__",
         "//score/datarouter/test:__subpackages__",
         "//platform/aas/tools/itf:__subpackages__",
         "//platform/aas/tools/sctf:__subpackages__",
-        # "@ddad//ecu/xpad/xpad-shared/config/common/pas/datarouter:__subpackages__",
+        # "@ddad//ecu/xyz/xyz-shared/config/common/pas/datarouter:__subpackages__",
     ],
 )
 
@@ -762,10 +762,10 @@ cc_binary(
     ],
     features = COMPILER_WARNING_FEATURES,
     visibility = [
-        "//ecu/xpad/xpad-shared/config/common/pas/datarouter:__subpackages__",
+        "//ecu/xyz/xyz-shared/config/common/pas/datarouter:__subpackages__",
         "//platform/aas/tools/itf:__subpackages__",
         "//platform/aas/tools/sctf:__subpackages__",
-        # "@ddad//ecu/xpad/xpad-shared/config/common/pas/datarouter:__subpackages__",
+        # "@ddad//ecu/xyz/xyz-shared/config/common/pas/datarouter:__subpackages__",
     ],
     deps = [
         ":datarouter_app",
