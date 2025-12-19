@@ -11,7 +11,7 @@
 # SPDX-License-Identifier: Apache-2.0
 # *******************************************************************************
 
-name: Documentation
+name: Tests, Verify and Build Docs
 
 permissions:
   contents: write
@@ -29,15 +29,24 @@ on:
     types: [checks_requested]
 
 jobs:
-  build-docs:
+  docs-verify:
+    uses: eclipse-score/cicd-workflows/.github/workflows/docs-verify.yml@main
+    permissions:
+      pull-requests: write
+      contents: read
+    with:
+      bazel-docs-verify-target: "//:docs_check"
+
+  # TODO skipping tests as we don't integrate test results in docs anyways
+
+  docs-build:
+    needs: [docs-verify]
     uses: eclipse-score/cicd-workflows/.github/workflows/docs.yml@main
     permissions:
       contents: write
       pages: write
       pull-requests: write
       id-token: write
-
     with:
-      # the bazel-target depends on your repo specific docs_targets configuration (e.g. "suffix")
       bazel-target: "//:docs -- --github_user=${{ github.repository_owner }} --github_repo=${{ github.event.repository.name }}"
       retention-days: 3
