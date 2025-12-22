@@ -26,11 +26,6 @@ bazel_dep(name = "rules_rust", version = "0.63.0")
 bazel_dep(name = "rapidjson", version = "1.1.0")
 bazel_dep(name = "score_crates", version = "0.0.3", repo_name = "crate_index")
 bazel_dep(name = "jemalloc", version = "5.3.0-bcr.alpha.4")
-bazel_dep(name = "libatomic", version = "1.0")
-local_path_override(
-    module_name = "libatomic",
-    path = "third_party/libatomic",
-)
 
 gcc = use_extension("@score_toolchains_gcc//extentions:gcc.bzl", "gcc", dev_dependency = True)
 gcc.toolchain(
