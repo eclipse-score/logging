@@ -33,8 +33,8 @@ copyright_checker(
         "//:MODULE.bazel",
         "//:project_config.bzl",
     ],
-    config = "@score_cr_checker//resources:config",
-    template = "@score_cr_checker//resources:templates",
+    config = "@score_tooling//cr_checker/resources:config",
+    template = "@score_tooling//cr_checker/resources:templates",
     visibility = ["//visibility:public"],
 )
 

@@ -17,14 +17,15 @@ on:
     types: [opened, reopened, synchronize]
   merge_group:
     types: [checks_requested]
-
+env:
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 permissions:
   pull-requests: write
   issues: write
 
-
 jobs:
   license-check:
+    if: ${{ github.repository == 'eclipse-score/logging' }}
     uses: eclipse-score/cicd-workflows/.github/workflows/license-check.yml@main
     with:
       repo-url: "${{ github.server_url }}/${{ github.repository }}"

@@ -34,9 +34,7 @@ impl MwLoggerBuilder {
     }
 
     /// Builds the MwLogger with the specified context and configuration and returns it.
-    pub fn build<const SHOW_MODULE: bool, const SHOW_FILE: bool, const SHOW_LINE: bool>(
-        self,
-    ) -> MwLogger {
+    pub fn build<const SHOW_MODULE: bool, const SHOW_FILE: bool, const SHOW_LINE: bool>(self) -> MwLogger {
         let context_cstr = self.context.unwrap_or(CString::new("DFLT").unwrap());
         let c_logger_ptr = unsafe { mw_log_create_logger(context_cstr.as_ptr().cast::<c_char>()) };
         MwLogger {
@@ -46,13 +44,7 @@ impl MwLoggerBuilder {
     }
 
     /// Builds and sets the MwLogger as the default logger with the specified configuration.
-    pub fn set_as_default_logger<
-        const SHOW_MODULE: bool,
-        const SHOW_FILE: bool,
-        const SHOW_LINE: bool,
-    >(
-        self,
-    ) {
+    pub fn set_as_default_logger<const SHOW_MODULE: bool, const SHOW_FILE: bool, const SHOW_LINE: bool>(self) {
         let logger = self.build::<SHOW_MODULE, SHOW_FILE, SHOW_LINE>();
         log::set_max_level(mw_log_logger_level(logger.ptr));
         log::set_boxed_logger(Box::new(logger))
