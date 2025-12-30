@@ -19,7 +19,8 @@ cc_library(
     srcs = ["src/rust_cpp_log_adapter.cpp"],
     visibility = ["//visibility:private"],
     deps = [
-        "@score_baselibs//score/mw/log",
+        "//score/mw/log/detail/common:recorder_factory",
+        "@score_baselibs//score/mw/log:frontend",
     ],
 )
 
