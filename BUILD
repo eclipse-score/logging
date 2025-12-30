@@ -24,8 +24,11 @@ copyright_checker(
     srcs = [
         ".github",
         "docs",
+        "examples",
+        "score",
         "src",
         "tests",
+        "//:.bazelrc",
         "//:BUILD",
         "//:MODULE.bazel",
         "//:project_config.bzl",
