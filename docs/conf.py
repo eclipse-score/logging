@@ -34,7 +34,7 @@ extensions = [
     "sphinx_design",
     "sphinx_needs",
     "sphinxcontrib.plantuml",
-    "score_plantuml",
+    # "score_plantuml",
     "score_metamodel",
     "score_draw_uml_funcs",
     "score_source_code_linker",
