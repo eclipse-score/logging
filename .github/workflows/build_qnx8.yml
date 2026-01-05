@@ -25,7 +25,7 @@ jobs:
       contents: read
       pull-requests: read
     with:
-      bazel-target: "//src/..."
+      bazel-target: "//score/... //src/..."
       bazel-config: "build_qnx8"
       credential-helper: "scripts/internal/qnx_creds.py"
       environment-name: "workflow-approval"
