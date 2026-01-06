@@ -41,6 +41,7 @@ user.bazelrc
 .cache/*
 compile_commands.json
 rust-project.json
+
 # Ruff
 .ruff_cache
 
