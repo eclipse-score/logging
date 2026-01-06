@@ -24,9 +24,9 @@
 #endif
 
 #if defined(NON_VERBOSE_DLT)
-#include "score/datarouter/nonverbose_dlt/nonverbose_dlt.h"
+#include "score/datarouter/src/dlt/nonverbose_dlt_impl/nonverbose_dlt.h"
 #else
-#include "score/datarouter/nonverbose_dlt_stub/stub_nonverbose_dlt.h"
+#include "score/datarouter/src/dlt/nonverbose_dlt_stub/stub_nonverbose_dlt.h"
 #endif
 
 #if defined(DYNAMIC_CONFIGURATION_IN_DATAROUTER)

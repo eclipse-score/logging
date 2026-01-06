@@ -164,8 +164,8 @@ cc_library(
     features = COMPILER_WARNING_FEATURES,
     strip_include_prefix = "include",
     visibility = [
-        "//score/datarouter/nonverbose_dlt:__pkg__",
-        "//score/datarouter/nonverbose_dlt_stub:__pkg__",
+        "//score/datarouter/src/dlt/nonverbose_dlt_impl:__pkg__",
+        "//score/datarouter/src/dlt/nonverbose_dlt_stub:__pkg__",
         "//score/datarouter/src/file_transfer:__subpackages__",
         "//score/datarouter/src/persistent_logging:__pkg__",
         "//score/datarouter/src/persistent_logging/persistent_logging:__pkg__",
@@ -187,8 +187,8 @@ cc_library(
     features = COMPILER_WARNING_FEATURES,
     strip_include_prefix = "include",
     visibility = [
-        "//score/datarouter/nonverbose_dlt:__pkg__",
-        "//score/datarouter/nonverbose_dlt_stub:__pkg__",
+        "//score/datarouter/src/dlt/nonverbose_dlt_impl:__pkg__",
+        "//score/datarouter/src/dlt/nonverbose_dlt_stub:__pkg__",
         "//score/datarouter/src/file_transfer:__subpackages__",
         "//score/datarouter/src/persistent_logging:__pkg__",
         "//score/datarouter/src/persistent_logging/persistent_logging:__pkg__",
@@ -543,8 +543,8 @@ cc_library(
         (
             "",
             "//score/datarouter/src/persistency/ara_per_persistent_dictionary:ara_per_persistent_dictionary_factory",
-            "//score/datarouter/nonverbose_dlt:nonverbose_dlt_handler",
-            "//score/datarouter/nonverbose_dlt_stub:nonverbose_dlt_handler_stub",
+            "//score/datarouter/src/dlt/nonverbose_dlt_impl:nonverbose_dlt_handler",
+            "//score/datarouter/src/dlt/nonverbose_dlt_stub:nonverbose_dlt_handler_stub",
             "//score/datarouter/dynamic_configuration/dynamic_config_session:dynamic_config_session",
             "//score/datarouter/dynamic_configuration/config_session_stub:config_session_stub",
             False,
@@ -552,8 +552,8 @@ cc_library(
         (
             "_testing",
             "//score/datarouter/src/persistency/ara_per_persistent_dictionary:ara_per_persistent_dictionary_factory_testing",
-            "//score/datarouter/nonverbose_dlt:nonverbose_dlt_handler_testing",
-            "//score/datarouter/nonverbose_dlt_stub:nonverbose_dlt_handler_stub_testing",
+            "//score/datarouter/src/dlt/nonverbose_dlt_impl:nonverbose_dlt_handler_testing",
+            "//score/datarouter/src/dlt/nonverbose_dlt_stub:nonverbose_dlt_handler_stub_testing",
             "//score/datarouter/dynamic_configuration/dynamic_config_session:dynamic_config_session_testing",
             "//score/datarouter/dynamic_configuration/config_session_stub:config_session_stub_testing",
             True,
@@ -619,8 +619,8 @@ cc_library(
         features = COMPILER_WARNING_FEATURES,
         strip_include_prefix = "include",
         visibility = [
-            "//score/datarouter/nonverbose_dlt:__pkg__",
-            "//score/datarouter/nonverbose_dlt_stub:__pkg__",
+            "//score/datarouter/src/dlt/nonverbose_dlt_impl:__pkg__",
+            "//score/datarouter/src/dlt/nonverbose_dlt_stub:__pkg__",
         ],
         deps = [
             ":dltserver_common",
