@@ -112,3 +112,9 @@ PROJECT_CONFIG = {
 
 When used with macros like `dash_license_checker`, it allows dynamic selection of file types
  (e.g., `cargo`, `requirements`) based on the languages declared in `source_code`.
+
+## IDE support
+
+### Rust
+
+Use `scripts/generate_rust_analyzer_support.sh` to generate `rust_analyzer` settings that will let VS Code work.
