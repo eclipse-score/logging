@@ -13,7 +13,7 @@
 
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
-#include "score/datarouter/nonverbose_dlt/nonverbose_dlt.h"
+#include "score/datarouter/src/dlt/nonverbose_dlt_impl/nonverbose_dlt.h"
 
 using namespace ::testing;
 using namespace score::logging::dltserver;
