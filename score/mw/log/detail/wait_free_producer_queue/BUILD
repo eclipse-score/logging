@@ -108,7 +108,6 @@ cc_test(
         "alternating_writer",
         "read_only_reader",
         "//score/mw/log/test/console_logging_environment",
-        "//third_party/libatomic",
         "@googletest//:gtest_main",
     ],
 )

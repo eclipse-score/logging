@@ -129,7 +129,6 @@ cc_test(
         ":reader",
         ":writer",
         "//score/mw/log/test/console_logging_environment",
-        "//third_party/libatomic",
         "@googletest//:gtest_main",
         "@score_baselibs//score/os/mocklib:fcntl_mock",
         "@score_baselibs//score/os/mocklib:mman_mock",

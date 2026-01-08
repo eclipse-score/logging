@@ -1,4 +1,0 @@
-module(
-    name = "libatomic",
-    version = "1.0",
-)
