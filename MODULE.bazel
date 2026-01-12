@@ -83,24 +83,6 @@ git_override(
 
 use_repo(gcc, "gcc_toolchain", "gcc_toolchain_gcc")
 
-bazel_dep(name = "download_utils", version = "1.0.1")
-
-download_archive = use_repo_rule("@download_utils//download/archive:defs.bzl", "download_archive")
-
-download_archive(
-    name = "json_schema_validator",
-    build = "//third_party/json_schema_validator:json_schema_validator.BUILD",
-    strip_prefix = "json-schema-validator-2.1.0",
-    urls = ["https://github.com/pboettch/json-schema-validator/archive/refs/tags/2.1.0.tar.gz"],
-)
-
-download_archive(
-    name = "jsonschema",
-    build = "//third_party/jsonschema:jsonschema.BUILD",
-    strip_prefix = "jsonschema-4.23.0",
-    urls = ["https://github.com/python-jsonschema/jsonschema/archive/refs/tags/v4.23.0.tar.gz"],
-)
-
 toolchains_qnx = use_extension("@score_toolchains_qnx//:extensions.bzl", "toolchains_qnx", dev_dependency = True)
 toolchains_qnx.sdp(
     sha256 = "f2e0cb21c6baddbcb65f6a70610ce498e7685de8ea2e0f1648f01b327f6bac63",
@@ -124,23 +106,7 @@ use_repo(toolchains_qnx, "toolchains_qnx_ifs")
 # C++ dependencies
 
 bazel_dep(name = "googletest", version = "1.17.0.bcr.1")
-bazel_dep(name = "google_benchmark", version = "1.9.4")
 bazel_dep(name = "rapidjson", version = "1.1.0")
-bazel_dep(name = "jemalloc", version = "5.3.0-bcr.alpha.4")
-bazel_dep(name = "libatomic", version = "1.0")
-local_path_override(
-    module_name = "libatomic",
-    path = "third_party/libatomic",
-)
-
-bazel_dep(name = "rules_boost", repo_name = "com_github_nelhage_rules_boost")
-archive_override(
-    module_name = "rules_boost",
-    strip_prefix = "rules_boost-master",
-    urls = ["https://github.com/nelhage/rules_boost/archive/refs/heads/master.tar.gz"],
-)
-
-bazel_dep(name = "boost.program_options", version = "1.87.0")
 bazel_dep(name = "score_communication", version = "0.1.2")
 git_override(
     module_name = "score_communication",
@@ -148,8 +114,6 @@ git_override(
     remote = "https://github.com/eclipse-score/communication.git",
 )
 
-bazel_dep(name = "nlohmann_json", version = "3.11.3")
-bazel_dep(name = "rules_doxygen", version = "2.5.0")
 bazel_dep(name = "score_baselibs", version = "0.2.0")
 git_override(
     module_name = "score_baselibs",
