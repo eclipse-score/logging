@@ -22,7 +22,7 @@ cc_library(
     features = COMPILER_WARNING_FEATURES,
     visibility = ["//visibility:public"],
     deps = [
-        "//score/datarouter/lib/synchronized:synchronized_utility",
+        "@score_baselibs//score/concurrency:synchronized",
         "@score_baselibs//score/language/futurecpp",
         "@score_baselibs//score/mw/log:recorder",
     ],

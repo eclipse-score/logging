@@ -12,6 +12,7 @@
  ********************************************************************************/
 #include "score/mw/log/test/fake_recorder/fake_recorder.h"
 
+#include <algorithm>
 #include <bitset>
 #include <cstdio>
 #include <mutex>
@@ -41,16 +42,17 @@ std::string ToBinaryString(std::uint64_t value)
 score::cpp::optional<SlotHandle> FakeRecorder::StartRecord(const std::string_view /*context_id*/,
                                                     const LogLevel /*log_level*/) noexcept
 {
-    return state_.WithLock([](State& s) -> score::cpp::optional<SlotHandle> {
-        for (std::size_t i = 0U; i < kMaxSlots; ++i)
+    return state_.with_lock([](SyncState::const_pointer state) -> score::cpp::optional<SlotHandle> {
+        auto found = std::find(begin(state->in_flight), end(state->in_flight), std::nullopt);
+        if (found != end(state->in_flight))
         {
-            if (!s.in_flight[i].has_value())
-            {
-                s.in_flight[i].emplace();
-                return SlotHandle(static_cast<std::uint8_t>(i));
-            }
+            auto index = static_cast<std::uint8_t>(std::distance(begin(state->in_flight), found));
+            return SlotHandle(index);
         }
-        return {};
+        else
+        {
+            return {};  // std::nullopt;
+        }
     });
 }
 
@@ -185,16 +187,16 @@ void FakeRecorder::Log(const SlotHandle& slot, const LogBin64 data) noexcept
 
 std::vector<std::string> FakeRecorder::GetRecordedMessages() const noexcept
 {
-    return state_.WithLock([](const State& s) {
-        return s.recorded_messages;
+    return state_.with_lock([](SyncState::const_pointer locked_state) {
+        return locked_state->recorded_messages;
     });
 }
 
 void FakeRecorder::ClearRecordedMessages() noexcept
 {
-    state_.WithLock([](State& s) {
-        s.recorded_messages.clear();
-        for (auto& slot : s.in_flight)
+    state_.with_lock([](SyncState::pointer locked_state) {
+        locked_state->recorded_messages.clear();
+        for (auto& slot : locked_state->in_flight)
         {
             slot.reset();
         }
@@ -204,12 +206,12 @@ void FakeRecorder::ClearRecordedMessages() noexcept
 void FakeRecorder::AppendToSlot(const SlotHandle& slot, const std::string_view text) noexcept
 {
     const auto idx = static_cast<std::size_t>(slot.GetSlotOfSelectedRecorder());
-    state_.WithLock([idx, text](State& s) {
-        if (!s.in_flight[idx].has_value())
+    state_.with_lock([idx, text](SyncState::pointer locked_state) {
+        if (!locked_state->in_flight[idx].has_value())
         {
             return;
         }
-        s.in_flight[idx]->append(text);
+        locked_state->in_flight[idx]->append(text);
     });
 }
 
@@ -218,14 +220,14 @@ void FakeRecorder::FlushSlot(const SlotHandle& slot) noexcept
     const auto idx = static_cast<std::size_t>(slot.GetSlotOfSelectedRecorder());
     std::string msg;
 
-    state_.WithLock([&msg, idx](State& s) {
-        if (!s.in_flight[idx].has_value())
+    state_.with_lock([&msg, idx](SyncState::pointer locked_state) {
+        if (!locked_state->in_flight[idx].has_value())
         {
             return;
         }
 
-        msg = std::move(*s.in_flight[idx]);
-        s.in_flight[idx].reset();
+        msg = std::move(*locked_state->in_flight[idx]);
+        locked_state->in_flight[idx].reset();
     });
 
     if (msg.empty())
@@ -240,8 +242,8 @@ void FakeRecorder::FlushSlot(const SlotHandle& slot) noexcept
         std::fflush(stdout);
     }
 
-    state_.WithLock([&msg](State& s) {
-        s.recorded_messages.push_back(std::move(msg));
+    state_.with_lock([msg = std::move(msg)](SyncState::pointer locked_state) {
+        locked_state->recorded_messages.push_back(std::move(msg));
     });
 }
 
