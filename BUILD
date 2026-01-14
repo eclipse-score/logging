@@ -25,7 +25,6 @@ copyright_checker(
         "docs",
         "examples",
         "score",
-        "src",
         "tests",
         "//:.bazelrc",
         "//:BUILD",
