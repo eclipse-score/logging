@@ -302,58 +302,6 @@ TEST(ResetToDefaultTest, ResetToDefaultCommandChannelsSizeTooBigNoReadCallback)
     EXPECT_OK_OR_NOOP(response);
 }
 
-TEST_F(DltServerCreatedWithConfigFixture, SetDefaultLogLevelWrongCommandExpectReadCallback)
-{
-    EXPECT_CALL(read_callback, Call()).Times(1).WillOnce(Return(p_config));
-    EXPECT_CALL(write_callback, Call(_)).Times(0);
-
-    DltLogServer dlt_server(s_config, read_callback.AsStdFunction(), write_callback.AsStdFunction(), true);
-
-    std::string response{};
-    auto session = dlt_server.NewConfigSession(
-        score::platform::datarouter::ConfigSessionHandleType{0, nullptr, std::reference_wrapper<std::string>{response}});
-
-    session->OnCommand(std::string(kCommandSize, config::kSetDefaultLogLevel));
-
-    EXPECT_ERR_OR_NOOP(response);
-}
-
-TEST_F(DltServerCreatedWithConfigFixture, SetDefaultLogLevelCommandExpectReadCallback)
-{
-    EXPECT_CALL(read_callback, Call()).Times(1).WillOnce(Return(p_config));
-    EXPECT_CALL(write_callback, Call(_)).Times(0);
-
-    DltLogServer dlt_server(s_config, read_callback.AsStdFunction(), write_callback.AsStdFunction(), true);
-
-    std::string response{};
-    auto session = dlt_server.NewConfigSession(
-        score::platform::datarouter::ConfigSessionHandleType{0, nullptr, std::reference_wrapper<std::string>{response}});
-
-    std::array<std::uint8_t, 2> command_buffer{config::kSetDefaultLogLevel, 1};
-    const std::string command{command_buffer.begin(), command_buffer.end()};
-    session->OnCommand(command);
-
-    EXPECT_OK_OR_NOOP(response);
-}
-
-TEST_F(DltServerCreatedWithConfigFixture, SetDefaultLogLevelCommandReadLevelErrorExpectReadCallback)
-{
-    EXPECT_CALL(read_callback, Call()).Times(1).WillOnce(Return(p_config));
-    EXPECT_CALL(write_callback, Call(_)).Times(0);
-
-    DltLogServer dlt_server(s_config, read_callback.AsStdFunction(), write_callback.AsStdFunction(), true);
-
-    std::string response{};
-    auto session = dlt_server.NewConfigSession(
-        score::platform::datarouter::ConfigSessionHandleType{0, nullptr, std::reference_wrapper<std::string>{response}});
-
-    std::array<std::uint8_t, 2> command_buffer{config::kSetDefaultLogLevel, 7};
-    const std::string command{command_buffer.begin(), command_buffer.end()};
-    session->OnCommand(command);
-
-    EXPECT_ERR_OR_NOOP(response);
-}
-
 TEST_F(DltServerCreatedWithConfigFixture, SetTraceStateCommandExpectReadCallback)
 {
     EXPECT_CALL(read_callback, Call()).Times(1).WillOnce(Return(p_config));
@@ -598,7 +546,7 @@ TEST_F(DltServerCreatedWithConfigFixture, SetDltOutputEnableCommandCallbackEnabl
     EXPECT_OK_OR_NOOP(response);
 }
 
-TEST_F(DltServerCreatedWithConfigFixture, SetMessagingFilteringStateWrongCommandExpectReadCallback)
+TEST_F(DltServerCreatedWithConfigFixture, SetDltOutputEnableCommandWrongSizeExpectError)
 {
     EXPECT_CALL(read_callback, Call()).Times(1).WillOnce(Return(p_config));
     EXPECT_CALL(write_callback, Call(_)).Times(0);
@@ -609,9 +557,78 @@ TEST_F(DltServerCreatedWithConfigFixture, SetMessagingFilteringStateWrongCommand
     auto session = dlt_server.NewConfigSession(
         score::platform::datarouter::ConfigSessionHandleType{0, nullptr, std::reference_wrapper<std::string>{response}});
 
-    session->OnCommand(std::string(kCommandSize, config::kSetMessagingFilteringState));
+    // Send command with wrong size (only command byte, missing enable/disable parameter)
+    session->OnCommand(std::string(kCommandSize, config::kSetDltOutputEnable));
 
     EXPECT_ERR_OR_NOOP(response);
+}
+
+TEST_F(DltServerCreatedWithConfigFixture, SetDefaultLogLevelCommandExpectReadCallback)
+{
+    EXPECT_CALL(read_callback, Call()).Times(1).WillOnce(Return(p_config));
+    EXPECT_CALL(write_callback, Call(_)).Times(0);
+
+    DltLogServer dlt_server(s_config, read_callback.AsStdFunction(), write_callback.AsStdFunction(), true);
+
+    std::string response{};
+    auto session = dlt_server.NewConfigSession(
+        score::platform::datarouter::ConfigSessionHandleType{0, nullptr, std::reference_wrapper<std::string>{response}});
+
+    std::array<std::uint8_t, 2> command_buffer{config::kSetDefaultLogLevel, 1};
+    const std::string command{command_buffer.begin(), command_buffer.end()};
+    session->OnCommand(command);
+
+    EXPECT_OK_OR_NOOP(response);
+}
+
+TEST_F(DltServerCreatedWithConfigFixture, SetDefaultLogLevelCommandReadLevelErrorExpectReadCallback)
+{
+    EXPECT_CALL(read_callback, Call()).Times(1).WillOnce(Return(p_config));
+    EXPECT_CALL(write_callback, Call(_)).Times(0);
+
+    DltLogServer dlt_server(s_config, read_callback.AsStdFunction(), write_callback.AsStdFunction(), true);
+
+    std::string response{};
+    auto session = dlt_server.NewConfigSession(
+        score::platform::datarouter::ConfigSessionHandleType{0, nullptr, std::reference_wrapper<std::string>{response}});
+
+    std::array<std::uint8_t, 2> command_buffer{config::kSetDefaultLogLevel, 7};
+    const std::string command{command_buffer.begin(), command_buffer.end()};
+    session->OnCommand(command);
+
+    EXPECT_ERR_OR_NOOP(response);
+}
+
+TEST_F(DltServerCreatedWithConfigFixture, SetDefaultLogLevelBehaviorAffectsNewContexts)
+{
+    EXPECT_CALL(read_callback, Call()).Times(1).WillOnce(Return(p_config));
+    EXPECT_CALL(write_callback, Call(_)).Times(0);
+
+    score::logging::dltserver::DltLogServer::DltLogServerTest dlt_server(
+        s_config, read_callback.AsStdFunction(), write_callback.AsStdFunction(), true, std::move(log_sender_mock));
+
+    // Change default log level to kInfo.
+    const auto resp = dlt_server.SetDefaultLogLevel(score::mw::log::LogLevel::kInfo);
+    EXPECT_EQ(resp.size(), 1U);
+    EXPECT_EQ(resp[0], static_cast<char>(config::kRetOk));
+
+    // Use a NEW1/CTX1 pair that is not present in the s_config.message_thresholds mapping.
+    const score::mw::log::detail::LoggingIdentifier new_app_id{"NEW1"};
+    const score::mw::log::detail::LoggingIdentifier new_ctx_id{"CTX1"};
+
+    const score::mw::log::detail::log_entry_deserialization::LogEntryDeserializationReflection verbose_entry{
+        new_app_id, new_ctx_id, {}, 0, score::mw::log::LogLevel::kVerbose};
+    const score::mw::log::detail::log_entry_deserialization::LogEntryDeserializationReflection info_entry{
+        new_app_id, new_ctx_id, {}, 0, score::mw::log::LogLevel::kInfo};
+
+    // With default set to kInfo, verbose must be filtered.
+    EXPECT_CALL(*log_sender_mock_raw_ptr, SendVerbose(_, _, _)).Times(0);
+    dlt_server.SendVerbose(100U, verbose_entry);
+    ::testing::Mock::VerifyAndClearExpectations(log_sender_mock_raw_ptr);
+
+    // Info should be forwarded.
+    EXPECT_CALL(*log_sender_mock_raw_ptr, SendVerbose(_, _, _)).Times(1);
+    dlt_server.SendVerbose(100U, info_entry);
 }
 
 TEST_F(DltServerCreatedWithConfigFixture, SetMessagingFilteringStateCommandExpectReadCallback)
@@ -632,65 +649,44 @@ TEST_F(DltServerCreatedWithConfigFixture, SetMessagingFilteringStateCommandExpec
     EXPECT_OK_OR_NOOP(response);
 }
 
-TEST_F(DltServerCreatedWithConfigFixture, SetLogLevelBehaviorIncreaseThresholdAllowsVerbose)
+TEST_F(DltServerCreatedWithConfigFixture, SetMessagingFilteringStateBehaviorBypassesThresholds)
 {
-    // Load persistent config (initial thresholds from sConfig.messageThresholds: APP0/CTX0 => kOff)
     EXPECT_CALL(read_callback, Call()).Times(1).WillOnce(Return(p_config));
     EXPECT_CALL(write_callback, Call(_)).Times(0);
 
-    // Use test subclass to access sendVerbose
+    // Start with filtering enabled (default in s_config).
     score::logging::dltserver::DltLogServer::DltLogServerTest dlt_server(
         s_config, read_callback.AsStdFunction(), write_callback.AsStdFunction(), true, std::move(log_sender_mock));
 
-    const score::mw::log::detail::LoggingIdentifier app_id{"APP0"};
-    const score::mw::log::detail::LoggingIdentifier ctx_id{"CTX0"};
-    const score::mw::log::detail::log_entry_deserialization::LogEntryDeserializationReflection verbose_entry{
-        app_id, ctx_id, {}, 0, score::mw::log::LogLevel::kVerbose};
+    // Set CORE threshold to kInfo so it would normally block verbose.
+    const auto resp_threshold = dlt_server.SetLogChannelThreshold(DltidT{"CORE"}, score::mw::log::LogLevel::kInfo);
+    EXPECT_EQ(resp_threshold[0], static_cast<char>(config::kRetOk));
 
-    // Initially threshold for APP0/CTX0 is kOff, so verbose should be filtered out.
+    const score::mw::log::detail::LoggingIdentifier app_id{"APP0"};
+    const score::mw::log::detail::LoggingIdentifier core_ctx_id{"CORE"};
+    const score::mw::log::detail::log_entry_deserialization::LogEntryDeserializationReflection verbose_entry{
+        app_id, core_ctx_id, {}, 0, score::mw::log::LogLevel::kVerbose};
+
+    // With filtering enabled, verbose should be filtered.
     EXPECT_CALL(*log_sender_mock_raw_ptr, SendVerbose(_, _, _)).Times(0);
     dlt_server.SendVerbose(100U, verbose_entry);
     ::testing::Mock::VerifyAndClearExpectations(log_sender_mock_raw_ptr);
 
-    // Increase threshold to kVerbose for APP0/CTX0 using direct API
-    const ThresholdT new_threshold{LoglevelT{score::mw::log::LogLevel::kVerbose}};
-    const auto resp = dlt_server.SetLogLevel(DltidT{"APP0"}, DltidT{"CTX0"}, new_threshold);
-    // Response always one byte RET_OK
-    EXPECT_EQ(resp[0], static_cast<char>(config::kRetOk));
+    // Disable messaging filtering: thresholds should be bypassed and verbose should be forwarded.
+    const auto resp_disable = dlt_server.SetMessagingFilteringState(false);
+    EXPECT_EQ(resp_disable.size(), 1U);
+    EXPECT_EQ(resp_disable[0], static_cast<char>(config::kRetOk));
 
-    // Now verbose should pass filtering and be forwarded once per assigned channel (DFLT + CORE) -> 2 calls.
-    EXPECT_CALL(*log_sender_mock_raw_ptr, SendVerbose(_, _, _)).Times(2);
-    dlt_server.SendVerbose(100U, verbose_entry);
-}
-
-TEST_F(DltServerCreatedWithConfigFixture, SetLogLevelBehaviorResetToDefaultBlocksVerboseAgain)
-{
-    EXPECT_CALL(read_callback, Call()).Times(1).WillOnce(Return(p_config));
-    EXPECT_CALL(write_callback, Call(_)).Times(0);
-
-    score::logging::dltserver::DltLogServer::DltLogServerTest dlt_server(
-        s_config, read_callback.AsStdFunction(), write_callback.AsStdFunction(), true, std::move(log_sender_mock));
-
-    const score::mw::log::detail::LoggingIdentifier app_id{"APP0"};
-    const score::mw::log::detail::LoggingIdentifier ctx_id{"CTX0"};
-    const score::mw::log::detail::log_entry_deserialization::LogEntryDeserializationReflection verbose_entry{
-        app_id, ctx_id, {}, 0, score::mw::log::LogLevel::kVerbose};
-
-    // Raise threshold first so verbose is forwarded
-    const ThresholdT raise_threshold{LoglevelT{score::mw::log::LogLevel::kVerbose}};
-    const auto resp_raise = dlt_server.SetLogLevel(DltidT{"APP0"}, DltidT{"CTX0"}, raise_threshold);
-    EXPECT_EQ(resp_raise[0], static_cast<char>(config::kRetOk));
-    // With raise_threshold, verbose accepted and forwarded for both assigned channels -> 2 calls.
-    EXPECT_CALL(*log_sender_mock_raw_ptr, SendVerbose(_, _, _)).Times(2);
+    // When filtering is disabled, verbose is forwarded.
+    EXPECT_CALL(*log_sender_mock_raw_ptr, SendVerbose(_, _, _)).Times(1);
     dlt_server.SendVerbose(100U, verbose_entry);
     ::testing::Mock::VerifyAndClearExpectations(log_sender_mock_raw_ptr);
 
-    // Now reset to default (ThresholdCmd::UseDefault removes specific mapping)
-    const ThresholdT reset_threshold{ThresholdCmd::kUseDefault};
-    const auto resp_reset = dlt_server.SetLogLevel(DltidT{"APP0"}, DltidT{"CTX0"}, reset_threshold);
-    EXPECT_EQ(resp_reset[0], static_cast<char>(config::kRetOk));
+    // Re-enable filtering: verbose should be filtered again.
+    const auto resp_enable = dlt_server.SetMessagingFilteringState(true);
+    EXPECT_EQ(resp_enable.size(), 1U);
+    EXPECT_EQ(resp_enable[0], static_cast<char>(config::kRetOk));
 
-    // With default threshold kOff, verbose must be filtered again
     EXPECT_CALL(*log_sender_mock_raw_ptr, SendVerbose(_, _, _)).Times(0);
     dlt_server.SendVerbose(100U, verbose_entry);
 }
@@ -745,6 +741,94 @@ TEST_F(DltServerCreatedWithConfigFixture, SetLogChannelThresholdChannelFoundComm
     session->OnCommand(command);
 
     EXPECT_OK_OR_NOOP(response);
+}
+
+TEST_F(DltServerCreatedWithConfigFixture, SetLogChannelThresholdBehaviorFiltersLowerLevels)
+{
+    EXPECT_CALL(read_callback, Call()).Times(1).WillOnce(Return(p_config));
+    EXPECT_CALL(write_callback, Call(_)).Times(0);
+
+    score::logging::dltserver::DltLogServer::DltLogServerTest dlt_server(
+        s_config, read_callback.AsStdFunction(), write_callback.AsStdFunction(), true, std::move(log_sender_mock));
+
+    // Set CORE channel threshold to kInfo.
+    const auto resp = dlt_server.SetLogChannelThreshold(DltidT{"CORE"}, score::mw::log::LogLevel::kInfo);
+    EXPECT_EQ(resp.size(), 1U);
+    EXPECT_EQ(resp[0], static_cast<char>(config::kRetOk));
+
+    // Route against a known mapping that is already used elsewhere in this file:
+    // APP0/CTX0 is assigned to the CORE channel in the fixture config.
+    const score::mw::log::detail::LoggingIdentifier app_id{"APP0"};
+    const score::mw::log::detail::LoggingIdentifier ctx_id{"CTX0"};
+
+    const score::mw::log::detail::log_entry_deserialization::LogEntryDeserializationReflection verbose_entry{
+        app_id, ctx_id, {}, 0, score::mw::log::LogLevel::kVerbose};
+    // With the threshold raised to kInfo, verbose must be filtered.
+    EXPECT_CALL(*log_sender_mock_raw_ptr, SendVerbose(_, _, _)).Times(0);
+    dlt_server.SendVerbose(100U, verbose_entry);
+}
+
+TEST_F(DltServerCreatedWithConfigFixture, SetLogLevelBehaviorIncreaseThresholdAllowsVerbose)
+{
+    // Load persistent config (initial thresholds from s_config.message_thresholds: APP0/CTX0 => kOff)
+    EXPECT_CALL(read_callback, Call()).Times(1).WillOnce(Return(p_config));
+    EXPECT_CALL(write_callback, Call(_)).Times(0);
+
+    // Use test subclass to access SendVerbose
+    score::logging::dltserver::DltLogServer::DltLogServerTest dlt_server(
+        s_config, read_callback.AsStdFunction(), write_callback.AsStdFunction(), true, std::move(log_sender_mock));
+
+    const score::mw::log::detail::LoggingIdentifier app_id{"APP0"};
+    const score::mw::log::detail::LoggingIdentifier ctx_id{"CTX0"};
+    const score::mw::log::detail::log_entry_deserialization::LogEntryDeserializationReflection verbose_entry{
+        app_id, ctx_id, {}, 0, score::mw::log::LogLevel::kVerbose};
+
+    // Initially threshold for APP0/CTX0 is kOff, so verbose should be filtered out.
+    EXPECT_CALL(*log_sender_mock_raw_ptr, SendVerbose(_, _, _)).Times(0);
+    dlt_server.SendVerbose(100U, verbose_entry);
+    ::testing::Mock::VerifyAndClearExpectations(log_sender_mock_raw_ptr);
+
+    // Increase threshold to kVerbose for APP0/CTX0 using direct API
+    const ThresholdT new_threshold{LoglevelT{score::mw::log::LogLevel::kVerbose}};
+    const auto resp = dlt_server.SetLogLevel(DltidT{"APP0"}, DltidT{"CTX0"}, new_threshold);
+    // Response always one byte kRetOk
+    EXPECT_EQ(resp[0], static_cast<char>(config::kRetOk));
+
+    // Now verbose should pass filtering and be forwarded once per assigned channel (DFLT + CORE) -> 2 calls.
+    EXPECT_CALL(*log_sender_mock_raw_ptr, SendVerbose(_, _, _)).Times(2);
+    dlt_server.SendVerbose(100U, verbose_entry);
+}
+
+TEST_F(DltServerCreatedWithConfigFixture, SetLogLevelBehaviorResetToDefaultBlocksVerboseAgain)
+{
+    EXPECT_CALL(read_callback, Call()).Times(1).WillOnce(Return(p_config));
+    EXPECT_CALL(write_callback, Call(_)).Times(0);
+
+    score::logging::dltserver::DltLogServer::DltLogServerTest dlt_server(
+        s_config, read_callback.AsStdFunction(), write_callback.AsStdFunction(), true, std::move(log_sender_mock));
+
+    const score::mw::log::detail::LoggingIdentifier app_id{"APP0"};
+    const score::mw::log::detail::LoggingIdentifier ctx_id{"CTX0"};
+    const score::mw::log::detail::log_entry_deserialization::LogEntryDeserializationReflection verbose_entry{
+        app_id, ctx_id, {}, 0, score::mw::log::LogLevel::kVerbose};
+
+    // Raise threshold first so verbose is forwarded
+    const ThresholdT raise_threshold{LoglevelT{score::mw::log::LogLevel::kVerbose}};
+    const auto resp_raise = dlt_server.SetLogLevel(DltidT{"APP0"}, DltidT{"CTX0"}, raise_threshold);
+    EXPECT_EQ(resp_raise[0], static_cast<char>(config::kRetOk));
+    // With raise_threshold, verbose accepted and forwarded for both assigned channels -> 2 calls.
+    EXPECT_CALL(*log_sender_mock_raw_ptr, SendVerbose(_, _, _)).Times(2);
+    dlt_server.SendVerbose(100U, verbose_entry);
+    ::testing::Mock::VerifyAndClearExpectations(log_sender_mock_raw_ptr);
+
+    // Now reset to default (ThresholdCmd::UseDefault removes specific mapping)
+    const ThresholdT reset_threshold{ThresholdCmd::kUseDefault};
+    const auto resp_reset = dlt_server.SetLogLevel(DltidT{"APP0"}, DltidT{"CTX0"}, reset_threshold);
+    EXPECT_EQ(resp_reset[0], static_cast<char>(config::kRetOk));
+
+    // With default threshold kOff, verbose must be filtered again
+    EXPECT_CALL(*log_sender_mock_raw_ptr, SendVerbose(_, _, _)).Times(0);
+    dlt_server.SendVerbose(100U, verbose_entry);
 }
 
 TEST(DltServerTest, ExtractIdValidInputDataExpectValidResult)
