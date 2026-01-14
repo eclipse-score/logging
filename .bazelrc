@@ -42,6 +42,18 @@ build:build_qnx8 --extra_toolchains=@score_toolchains_rust//toolchains/aarch64-u
 build:build_qnx8 --extra_toolchains=@toolchains_qnx_ifs//:ifs_x86_64
 build:build_qnx8 --extra_toolchains=@toolchains_qnx_ifs//:ifs_aarch64
 
+common:qnx_x86_64 --host_platform=@score_bazel_platforms//:x86_64-linux
+common:qnx_x86_64 --platforms=@score_bazel_platforms//:x86_64-qnx8_0
+common:qnx_x86_64 --extra_toolchains=@toolchains_qnx_ifs//:ifs_x86_64
+common:qnx_x86_64 --extra_toolchains=@toolchains_qnx_qcc//:qcc_x86_64
+common:qnx_x86_64 --sandbox_writable_path=/var/tmp
+
+common:qnx_arm64 --host_platform=@score_bazel_platforms//:x86_64-linux
+common:qnx_arm64 --platforms=@score_bazel_platforms//:arm64-qnx8_0
+common:qnx_arm64 --extra_toolchains=@toolchains_qnx_ifs//:ifs_aarch64
+common:qnx_arm64 --extra_toolchains=@toolchains_qnx_qcc//:qcc_aarch64
+common:qnx_arm64 --sandbox_writable_path=/var/tmp
+
 common --extra_toolchains=@gcc_toolchain//:host_gcc_12
 common --extra_toolchains=@score_toolchains_rust//toolchains/x86_64-unknown-linux-gnu:toolchain_x86_64_linux
 
