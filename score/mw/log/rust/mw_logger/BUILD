@@ -25,9 +25,9 @@ cc_library(
 )
 
 rust_library(
-    name = "mw_log_subscriber",
+    name = "mw_logger",
     srcs = glob(["src/**/*.rs"]),
-    crate_name = "mw_log_subscriber",
+    crate_name = "mw_logger",
     edition = "2021",
     visibility = ["//visibility:public"],
     deps = [
@@ -50,7 +50,7 @@ rust_binary(
     ],
     visibility = ["//visibility:public"],
     deps = [
-        ":mw_log_subscriber",
+        ":mw_logger",
         "@score_baselibs//score/mw/log/rust:log",
     ],
 )

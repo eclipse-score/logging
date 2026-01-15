@@ -17,7 +17,7 @@ It provides a **standardized project structure**, ensuring best practices for:
 | File/Folder                         | Description                                       |
 | ----------------------------------- | ------------------------------------------------- |
 | `README.md`                         | Short description & build instructions            |
-| `src/`                              | Source files for the module                       |
+| `score/`                            | Source files for the module                       |
 | `tests/`                            | Unit tests (UT) and integration tests (IT)        |
 | `examples/`                         | Example files used for guidance                   |
 | `docs/`                             | Documentation (Doxygen for C++ / mdBook for Rust) |
@@ -47,15 +47,15 @@ cd YOUR_PROJECT
 To build all targets of the module the following command can be used:
 
 ```sh
-bazel build //src/...
+bazel build //score/...
 ```
 
 This command will instruct Bazel to build all targets that are under Bazel
-package `src/`. The ideal solution is to provide single target that builds
+package `score/`. The ideal solution is to provide single target that builds
 artifacts, for example:
 
 ```sh
-bazel build //src/<module_name>:release_artifacts
+bazel build //score/<module_name>:release_artifacts
 ```
 
 where `:release_artifacts` is filegroup target that collects all release

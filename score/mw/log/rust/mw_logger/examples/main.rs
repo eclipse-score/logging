@@ -14,7 +14,7 @@
 use std::path::PathBuf;
 
 use log::{debug, error, info, trace, warn};
-use mw_log_subscriber::MwLoggerBuilder;
+use mw_logger::MwLoggerBuilder;
 
 fn main() {
     //Setup for example using config file
