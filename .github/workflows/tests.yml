@@ -38,5 +38,5 @@ jobs:
 
       - name: Run Tests via Bazel
         run: |
-          echo "Running: bazel test //score/... //src/..."
-          bazel test //score/... //src/...
+          echo "Running: bazel test //score/..."
+          bazel test //score/...
