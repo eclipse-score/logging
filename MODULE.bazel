@@ -103,9 +103,6 @@ use_repo(toolchains_qnx, "toolchains_qnx_sdp")
 use_repo(toolchains_qnx, "toolchains_qnx_qcc")
 use_repo(toolchains_qnx, "toolchains_qnx_ifs")
 
-register_toolchains("@toolchains_qnx_qcc//:qcc_x86_64")
-register_toolchains("@toolchains_qnx_qcc//:qcc_aarch64")
-
 # C++ dependencies
 
 bazel_dep(name = "googletest", version = "1.17.0.bcr.1")
