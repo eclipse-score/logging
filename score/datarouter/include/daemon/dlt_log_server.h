@@ -100,7 +100,7 @@ class DltLogServer : score::platform::datarouter::DltNonverboseHandlerType::IOut
     virtual ~DltLogServer() = default;
     // Not possible to mock LogParser currently.
     // LCOV_EXCL_START
-    void add_handlers(LogParser& parser)
+    void add_handlers(ILogParser& parser)
     {
         parser.add_global_handler(*sysedr_handler_);
         parser.add_type_handler(PERSISTENT_REQUEST_TYPE_NAME, *sysedr_handler_);
@@ -114,7 +114,7 @@ class DltLogServer : score::platform::datarouter::DltNonverboseHandlerType::IOut
         }
     }
 
-    void update_handlers(LogParser& parser, bool enabled)
+    void update_handlers(ILogParser& parser, bool enabled)
     {
         // protected by external mutex
         if (enabled)

@@ -11,8 +11,8 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-#ifndef BMW_MW_LOG_WAIT_FREE_SHARED_MEMORY_WRITER_FACTORY
-#define BMW_MW_LOG_WAIT_FREE_SHARED_MEMORY_WRITER_FACTORY
+#ifndef BMW_MW_LOG_SHARED_MEMORY_WRITER_FACTORY
+#define BMW_MW_LOG_SHARED_MEMORY_WRITER_FACTORY
 
 #include "score/mw/log/detail/data_router/shared_memory/shared_memory_writer.h"
 

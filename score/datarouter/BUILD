@@ -154,6 +154,26 @@ cc_library(
 ## ---------------------------------------------------------------------------
 
 cc_library(
+    name = "logparser_interface",
+    hdrs = [
+        "include/logparser/i_logparser.h",
+    ],
+    features = COMPILER_WARNING_FEATURES,
+    strip_include_prefix = "include",
+    visibility = [
+        "//score/datarouter/file_transfer:__subpackages__",
+        "//score/datarouter/nonverbose_dlt:__pkg__",
+        "//score/datarouter/nonverbose_dlt_stub:__pkg__",
+        "//score/datarouter/persistent_logging:__pkg__",
+        "//score/datarouter/persistent_logging/persistent_logging:__pkg__",
+        "//score/datarouter/test:__subpackages__",
+    ],
+    deps = [
+        "//score/mw/log/detail/data_router/shared_memory:reader",
+    ],
+)
+
+cc_library(
     name = "logparser",
     srcs = [
         "src/logparser/logparser.cpp",
@@ -174,6 +194,7 @@ cc_library(
         ":datarouter_types",
         ":dltprotocol",
         ":log",
+        ":logparser_interface",
         "//score/mw/log/detail/data_router/shared_memory:reader",
         "@score_baselibs//score/static_reflection_with_serialization/serialization",
     ],
@@ -191,9 +212,24 @@ cc_library(
     deps = [
         ":datarouter_types",
         ":dltprotocol",
+        ":logparser_interface",
         "//score/mw/log/detail/data_router/shared_memory:reader",
         "@score_baselibs//score/mw/log/configuration:nvconfig",
         "@score_baselibs//score/static_reflection_with_serialization/serialization",
+    ],
+)
+
+cc_library(
+    name = "logparser_mock",
+    hdrs = [
+        "mocks/logparser_mock.h",
+    ],
+    features = COMPILER_WARNING_FEATURES,
+    strip_include_prefix = "mocks",
+    visibility = ["//score/datarouter/test:__subpackages__"],
+    deps = [
+        ":logparser_interface",
+        "@googletest//:gtest_main",
     ],
 )
 
@@ -664,6 +700,7 @@ cc_library(
     strip_include_prefix = "include",
     visibility = ["//visibility:private"],
     deps = [
+        ":datarouter_feature_config",
         ":datarouter_lib",
         ":dltserver_common",
         ":persistentlogconfig",
@@ -693,6 +730,7 @@ cc_library(
     strip_include_prefix = "include",
     visibility = ["//score/datarouter/test:__subpackages__"],
     deps = [
+        ":datarouter_feature_config",
         ":datarouter_testing",
         ":dltserver_common",
         ":persistentlogconfig",
@@ -738,6 +776,38 @@ cc_library(
 )
 
 cc_library(
+    name = "datarouter_socketserver_testing",
+    testonly = True,
+    srcs = [
+        "src/daemon/socketserver.cpp",
+    ],
+    hdrs = [
+        "include/daemon/socketserver.h",
+    ],
+    # TODO: will be reworked in Ticket-207823
+    features = COMPILER_WARNING_FEATURES,
+    local_defines = select({
+        "//score/datarouter/build_configuration_flags:config_persistent_logging": ["PERSISTENT_LOGGING"],
+        "//conditions:default": [],
+    }),
+    strip_include_prefix = "include",
+    visibility = ["//score/datarouter/test:__subpackages__"],
+    deps = [
+        ":datarouter_feature_config",
+        ":datarouter_lib",
+        ":dltserver",
+        ":persistentlogconfig",
+        ":socketserver_config_lib_testing",
+        "@score_baselibs//score/mw/log/configuration:nvconfigfactory",
+    ] + select({
+        "//score/datarouter/build_configuration_flags:config_persistent_logging": [
+            "//score/datarouter/persistent_logging/persistent_logging_stub:sysedr_stub",
+        ],
+        "//conditions:default": [],
+    }),
+)
+
+cc_library(
     name = "datarouter_app",
     srcs = [
         "src/applications/datarouter_app.cpp",
@@ -762,10 +832,7 @@ cc_binary(
     ],
     features = COMPILER_WARNING_FEATURES,
     visibility = [
-        "//ecu/xyz/xyz-shared/config/common/pas/datarouter:__subpackages__",
-        "//platform/aas/tools/itf:__subpackages__",
-        "//platform/aas/tools/sctf:__subpackages__",
-        # "@ddad//ecu/xyz/xyz-shared/config/common/pas/datarouter:__subpackages__",
+        "//visibility:public",
     ],
     deps = [
         ":datarouter_app",

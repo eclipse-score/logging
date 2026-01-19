@@ -39,7 +39,7 @@ namespace platform
 namespace datarouter
 {
 
-using internal::LogParser;
+using internal::ILogParser;
 using internal::MessagePassingServer;
 using internal::UnixDomainServer;
 
@@ -84,7 +84,7 @@ struct StatsData
 class DataRouter
 {
   public:
-    using SourceSetupCallback = std::function<void(LogParser&&)>;
+    using SourceSetupCallback = std::function<void(ILogParser&&)>;
     using SessionPtr = std::unique_ptr<UnixDomainServer::ISession>;
     using MessagingSessionPtr = std::unique_ptr<MessagePassingServer::ISession>;
 
@@ -120,6 +120,9 @@ class DataRouter
 
     void show_source_statistics(uint16_t series_num);
 
+    // for unit test only. to keep rest of functions in private
+    class DataRouterForTest;
+
   private:
     /**
      * class SourceSession is private to Datarouter and could not be used outside Datarouter, so it is safe to keep in
@@ -127,18 +130,18 @@ class DataRouter
      * MessagePassingServer::ISession / UnixDomainServer::ISession
      */
     // NOLINTNEXTLINE(fuchsia-multiple-inheritance) - Both base classes are pure interfaces
-    class SourceSession final : public UnixDomainServer::ISession, public MessagePassingServer::ISession
+    class SourceSession : public UnixDomainServer::ISession, public MessagePassingServer::ISession
     {
       public:
         SourceSession(DataRouter& router,
-                      score::mw::log::detail::SharedMemoryReader reader,
+                      std::unique_ptr<score::mw::log::detail::ISharedMemoryReader> reader,
                       const std::string& name,
                       const bool is_dlt_enabled,
                       SessionHandleVariant handle,
                       const double quota,
                       bool quota_enforcement_enabled,
                       score::mw::log::Logger& stats_logger,
-                      const score::mw::log::NvConfig& nvConfig);
+                      std::unique_ptr<score::platform::internal::ILogParser> parser);
 
         SourceSession(const SourceSession&) = delete;
         SourceSession& operator=(const SourceSession&) = delete;
@@ -150,6 +153,9 @@ class DataRouter
             local_subscriber_data_.lock()->enabled_logging_at_server_ = enable;
         }
         ~SourceSession();
+
+        // for unit test only. to keep rest of functions in private
+        class SourceSessionForTest;
 
       private:
         bool is_source_closed() override
@@ -183,26 +189,27 @@ class DataRouter
         Synchronized<StatsData> stats_data_;
 
         DataRouter& router_;
-        score::mw::log::detail::SharedMemoryReader reader_;
-        LogParser parser_;
+        std::unique_ptr<score::mw::log::detail::ISharedMemoryReader> reader_;
+        std::unique_ptr<score::platform::internal::ILogParser> parser_;
         SessionHandleVariant handle_;
         score::mw::log::Logger& stats_logger_;
 
       public:
         void show_stats();
-        LogParser& get_parser()
+        ILogParser& get_parser()
         {
-            return parser_;
+            return *(parser_.get());
         }
     };
 
-    std::unique_ptr<SourceSession> new_source_session_impl(const std::string name,
-                                                           const bool is_dlt_enabled,
-                                                           SessionHandleVariant handle,
-                                                           const double quota,
-                                                           bool quota_enforcement_enabled,
-                                                           score::mw::log::detail::SharedMemoryReader reader,
-                                                           const score::mw::log::NvConfig& nvConfig);
+    std::unique_ptr<SourceSession> new_source_session_impl(
+        const std::string name,
+        const bool is_dlt_enabled,
+        SessionHandleVariant handle,
+        const double quota,
+        bool quota_enforcement_enabled,
+        std::unique_ptr<score::mw::log::detail::ISharedMemoryReader> reader,
+        const score::mw::log::NvConfig& nvConfig);
 
     score::mw::log::Logger& stats_logger_;
 

@@ -34,6 +34,7 @@
 #include "data_router_cfg.h"
 
 #include <score/math.hpp>
+#include <functional>
 #include <iostream>
 
 namespace score
@@ -93,26 +94,22 @@ std::string ResolveSharedMemoryFileName(const score::mw::log::detail::ConnectMes
 // LCOV_EXCL_STOP
 
 }  // namespace
-/*
-    - this is private functions in this file so it cannot be test.
-    - contains some concreate classes so we can not inject them.
 
-*/
-// LCOV_EXCL_START
-void SocketServer::doWork(const std::atomic_bool& exit_requested, const bool no_adaptive_runtime)
+SocketServer::PersistentStorageHandlers SocketServer::InitializePersistentStorage(
+    std::unique_ptr<IPersistentDictionary>& persistent_dictionary)
 {
-    SetThreadName();
+    PersistentStorageHandlers handlers;
 
-    score::mw::log::Logger& stats_logger = score::mw::log::CreateLogger("STAT", "statistics");
+    handlers.load_dlt = [&persistent_dictionary]() {
+        return readDlt(*persistent_dictionary);
+    };
 
-    std::unique_ptr<IPersistentDictionary> pd = PersistentDictionaryFactoryType::Create(no_adaptive_runtime);
-    const auto loadDlt = [&pd]() {
-        return readDlt(*pd);
+    handlers.store_dlt = [&persistent_dictionary](const score::logging::dltserver::PersistentConfig& config) {
+        writeDlt(config, *persistent_dictionary);
     };
-    const auto storeDlt = [&pd](const score::logging::dltserver::PersistentConfig& config) {
-        writeDlt(config, *pd);
-    };
-    bool isDltEnabled = readDltEnabled(*pd);
+
+    handlers.is_dlt_enabled = readDltEnabled(*persistent_dictionary);
+
 /*
     Deviation from Rule A16-0-1:
     - Rule A16-0-1 (required, implementation, automated)
@@ -126,19 +123,27 @@ void SocketServer::doWork(const std::atomic_bool& exit_requested, const bool no_
 // coverity[autosar_cpp14_a16_0_1_violation]
 #ifdef DLT_OUTPUT_ENABLED
     // TODO: will be reworked in Ticket-207823
-    isDltEnabled = true;
+    handlers.is_dlt_enabled = true;
 // coverity[autosar_cpp14_a16_0_1_violation] see above
 #endif
 
-    score::mw::log::LogInfo() << "Loaded output enable = " << isDltEnabled;
+    score::mw::log::LogInfo() << "Loaded output enable = " << handlers.is_dlt_enabled;
+
+    return handlers;
+}
+
+std::unique_ptr<score::logging::dltserver::DltLogServer> SocketServer::CreateDltServer(
+    const PersistentStorageHandlers& storage_handlers)
+{
     const auto static_config = readStaticDlt(LOG_CHANNELS_PATH);
     if (!static_config.has_value())
     {
         score::mw::log::LogError() << static_config.error();
-        score::mw::log::LogError() << "Error during parsing file " << LOG_CHANNELS_PATH
+        score::mw::log::LogError() << "Error during parsing file " << std::string_view{LOG_CHANNELS_PATH}
                                  << ", static config is not available, interrupt work";
-        return;
+        return nullptr;
     }
+
     /*
         Deviation from Rule A5-1-4:
         - A lambda expression object shall not outlive any of its reference captured objects.
@@ -146,11 +151,52 @@ void SocketServer::doWork(const std::atomic_bool& exit_requested, const bool no_
         - dltServer and lambda are in the same scope.
     */
     // coverity[autosar_cpp14_a5_1_4_violation]
-    score::logging::dltserver::DltLogServer dltServer(static_config.value(), loadDlt, storeDlt, isDltEnabled);
-    const auto sourceSetup = [&dltServer](LogParser&& parser) {
+    return std::make_unique<score::logging::dltserver::DltLogServer>(
+        static_config.value(), storage_handlers.load_dlt, storage_handlers.store_dlt, storage_handlers.is_dlt_enabled);
+}
+
+DataRouter::SourceSetupCallback SocketServer::CreateSourceSetupHandler(
+    score::logging::dltserver::DltLogServer& dlt_server)
+{
+    /*
+        Deviation from Rule A5-1-4:
+        - A lambda expression object shall not outlive any of its reference captured objects.
+        Justification:
+        - dltServer and lambda are in the same scope.
+    */
+    // coverity[autosar_cpp14_a5_1_4_violation]
+    return [&dlt_server](score::platform::internal::ILogParser&& parser) {
         parser.set_filter_factory(getFilterFactory());
-        dltServer.add_handlers(parser);
+        dlt_server.add_handlers(parser);
     };
+}
+
+// Static helper: Update handlers for each parser
+void SocketServer::UpdateParserHandlers(score::logging::dltserver::DltLogServer& dlt_server,
+                                        score::platform::internal::ILogParser& parser,
+                                        bool enable)
+{
+    dlt_server.update_handlers(parser, enable);
+}
+
+// Static helper: Final update after all parsers processed
+void SocketServer::UpdateHandlersFinal(score::logging::dltserver::DltLogServer& dlt_server, bool enable)
+{
+    dlt_server.update_handlers_final(enable);
+}
+
+// Static helper: Create a new config session from Unix domain handle
+std::unique_ptr<UnixDomainServer::ISession> SocketServer::CreateConfigSession(
+    score::logging::dltserver::DltLogServer& dlt_server,
+    UnixDomainServer::SessionHandle handle)
+{
+    return dlt_server.new_config_session(score::platform::datarouter::ConfigSessionHandleType{std::move(handle)});
+}
+
+std::function<void(bool)> SocketServer::CreateEnableHandler(DataRouter& router,
+                                                            IPersistentDictionary& persistent_dictionary,
+                                                            score::logging::dltserver::DltLogServer& dlt_server)
+{
     /*
         Deviation from Rule A5-1-4:
         - A lambda expression object shall not outlive any of its reference captured objects.
@@ -158,8 +204,7 @@ void SocketServer::doWork(const std::atomic_bool& exit_requested, const bool no_
         - router and lambda are in the same scope.
     */
     // coverity[autosar_cpp14_a5_1_4_violation]
-    DataRouter router(stats_logger, sourceSetup);
-    const auto enableHandler = [&router, &pd, &dltServer](bool enable) {
+    return [&router, &persistent_dictionary, &dlt_server](bool enable) {
 /*
     Deviation from Rule A16-0-1:
     - Rule A16-0-1 (required, implementation, automated)
@@ -178,21 +223,19 @@ void SocketServer::doWork(const std::atomic_bool& exit_requested, const bool no_
 #endif
         std::cerr << "DRCMD enable callback called with " << enable << std::endl;
         score::mw::log::LogWarn() << "Changing output enable to " << enable;
-        writeDltEnabled(enable, *pd);
+        writeDltEnabled(enable, persistent_dictionary);
         router.for_each_source_parser(
-            [&dltServer, enable](LogParser& parser) {
-                dltServer.update_handlers(parser, enable);
-            },
-            [&dltServer, enable] {
-                dltServer.update_handlers_final(enable);
-            },
+            std::bind(&SocketServer::UpdateParserHandlers, std::ref(dlt_server), std::placeholders::_1, enable),
+            std::bind(&SocketServer::UpdateHandlersFinal, std::ref(dlt_server), enable),
             enable);
     };
-    dltServer.set_enabled_callback(enableHandler);
+}
 
-    const auto factory = [&dltServer](const std::string& /*name*/, UnixDomainServer::SessionHandle handle) {
-        return dltServer.new_config_session(score::platform::datarouter::ConfigSessionHandleType{std::move(handle)});
-    };
+std::unique_ptr<score::platform::internal::UnixDomainServer> SocketServer::CreateUnixDomainServer(
+    score::logging::dltserver::DltLogServer& dlt_server)
+{
+    const auto factory = std::bind(&SocketServer::CreateConfigSession, std::ref(dlt_server), std::placeholders::_2);
+
     const UnixDomainSockAddr addr(score::logging::config::socket_address, true);
     /*
     Deviation from Rule A5-1-4:
@@ -201,11 +244,14 @@ void SocketServer::doWork(const std::atomic_bool& exit_requested, const bool no_
     - server does not exist inside any lambda.
     */
     // coverity[autosar_cpp14_a5_1_4_violation: FALSE]
-    UnixDomainServer server(addr, factory);
+    return std::make_unique<UnixDomainServer>(addr, factory);
+}
 
-    // Try to create NvConfig from file using factory, fallback to empty config if it fails
-    const auto nvConfig = [&stats_logger]() {
-        auto nvConfigResult = score::mw::log::NvConfigFactory::CreateAndInit();
+score::mw::log::NvConfig SocketServer::LoadNvConfig(score::mw::log::Logger& stats_logger, const std::string& config_path)
+{
+    if constexpr (score::platform::datarouter::kNonVerboseDltEnabled)
+    {
+        auto nvConfigResult = score::mw::log::NvConfigFactory::CreateAndInit(config_path);
         if (nvConfigResult.has_value())
         {
             stats_logger.LogInfo() << "NvConfig loaded successfully";
@@ -214,51 +260,136 @@ void SocketServer::doWork(const std::atomic_bool& exit_requested, const bool no_
         else
         {
             stats_logger.LogWarn() << "Failed to load NvConfig: " << nvConfigResult.error().Message();
-            return score::mw::log::NvConfigFactory::CreateEmpty();
         }
-    }();  // ← immediately invoked
+    }
+    return score::mw::log::NvConfigFactory::CreateEmpty();
+}
 
-    const auto mp_factory = [&router, &dltServer, &nvConfig](
-                                const pid_t client_pid,
-                                const score::mw::log::detail::ConnectMessageFromClient& conn,
-                                score::cpp::pmr::unique_ptr<score::platform::internal::daemon::ISessionHandle> handle)
-        -> std::unique_ptr<MessagePassingServer::ISession> {
-        const auto appid_sv = conn.GetAppId().GetStringView();
-        const std::string appid{appid_sv.data(), appid_sv.size()};
-        const std::string shared_memory_file_name = ResolveSharedMemoryFileName(conn, appid);
-        // The reason for banning is, because it's error-prone to use. One should use abstractions e.g. provided by
-        // the C++ standard library. But these abstraction do not support exclusive access, which is why we created
-        // this abstraction library.
-        // NOLINTBEGIN(score-banned-function): See above.
-        auto maybe_fd =
-            score::os::Fcntl::instance().open(shared_memory_file_name.c_str(), score::os::Fcntl::Open::kReadOnly);
-        // NOLINTEND(score-banned-function) it is among safety headers.
-        if (!maybe_fd.has_value())
+// Static helper: Create a message passing session from connection info
+std::unique_ptr<MessagePassingServer::ISession> SocketServer::CreateMessagePassingSession(
+    DataRouter& router,
+    score::logging::dltserver::DltLogServer& dlt_server,
+    const score::mw::log::NvConfig& nv_config,
+    const pid_t client_pid,
+    const score::mw::log::detail::ConnectMessageFromClient& conn,
+    score::cpp::pmr::unique_ptr<score::platform::internal::daemon::ISessionHandle> handle)
+{
+    const auto appid_sv = conn.GetAppId().GetStringView();
+    const std::string appid{appid_sv.data(), appid_sv.size()};
+    const std::string shared_memory_file_name = ResolveSharedMemoryFileName(conn, appid);
+    // The reason for banning is, because it's error-prone to use. One should use abstractions e.g. provided by
+    // the C++ standard library. But these abstraction do not support exclusive access, which is why we created
+    // this abstraction library.
+    // NOLINTBEGIN(score-banned-function): See above.
+    auto maybe_fd = score::os::Fcntl::instance().open(shared_memory_file_name.c_str(), score::os::Fcntl::Open::kReadOnly);
+    // NOLINTEND(score-banned-function) it is among safety headers.
+    if (!maybe_fd.has_value())
+    {
+        std::cerr << "message_session_factory: open(O_RDONLY) " << shared_memory_file_name << maybe_fd.error()
+                  << std::endl;
+        return std::unique_ptr<MessagePassingServer::ISession>();
+    }
+
+    const auto fd = maybe_fd.value();
+    const auto quota = dlt_server.get_quota(appid);
+    const auto quotaEnforcementEnabled = dlt_server.getQuotaEnforcementEnabled();
+    const bool is_dlt_enabled = dlt_server.GetDltEnabled();
+    auto source_session = router.new_source_session(
+        fd, appid, is_dlt_enabled, std::move(handle), quota, quotaEnforcementEnabled, client_pid, nv_config);
+    // The reason for banning is, because it's error-prone to use. One should use abstractions e.g. provided by
+    // the C++ standard library. But these abstraction do not support exclusive access, which is why we created
+    // this abstraction library.
+    // NOLINTNEXTLINE(score-banned-function): See above.
+    const auto close_result = score::os::Unistd::instance().close(fd);
+    if (close_result.has_value() == false)
+    {
+        std::cerr << "message_session_factory: close(" << shared_memory_file_name
+                  << ") failed: " << close_result.error() << std::endl;
+    }
+    return source_session;
+}
+
+/*
+    RunEventLoop and doWork are integration-level orchestration functions.
+    They are tested through integration tests. All individual functions they call
+    (InitializePersistentStorage, CreateDltServer, CreateEnableHandler, etc.)
+    are already tested at 100% coverage in unit tests.
+*/
+// LCOV_EXCL_START
+void SocketServer::RunEventLoop(const std::atomic_bool& exit_requested,
+                                DataRouter& router,
+                                score::logging::dltserver::DltLogServer& dlt_server,
+                                score::mw::log::Logger& stats_logger)
+{
+    uint16_t count = 0U;
+    constexpr std::uint32_t statistics_freq_divider = statistics_log_period_us / throttle_time_us;
+    constexpr std::uint32_t dlt_freq_divider = dlt_flush_period_us / throttle_time_us;
+
+    while (!exit_requested.load())
+    {
+        usleep(throttle_time_us);
+
+        if ((count % statistics_freq_divider) == 0U)
         {
-            std::cerr << "message_session_factory: open(O_RDONLY) " << shared_memory_file_name << maybe_fd.error()
-                      << std::endl;
-            return std::unique_ptr<MessagePassingServer::ISession>();
+            router.show_source_statistics(static_cast<uint16_t>(count / statistics_freq_divider));
+            dlt_server.show_channel_statistics(static_cast<uint16_t>(count / statistics_freq_divider), stats_logger);
         }
-
-        const auto fd = maybe_fd.value();
-        const auto quota = dltServer.get_quota(appid);
-        const auto quotaEnforcementEnabled = dltServer.getQuotaEnforcementEnabled();
-        const bool is_dlt_enabled = dltServer.GetDltEnabled();
-        auto source_session = router.new_source_session(
-            fd, appid, is_dlt_enabled, std::move(handle), quota, quotaEnforcementEnabled, client_pid, nvConfig);
-        // The reason for banning is, because it's error-prone to use. One should use abstractions e.g. provided by
-        // the C++ standard library. But these abstraction do not support exclusive access, which is why we created
-        // this abstraction library.
-        // NOLINTNEXTLINE(score-banned-function): See above.
-        const auto close_result = score::os::Unistd::instance().close(fd);
-        if (close_result.has_value() == false)
+        if ((count % dlt_freq_divider) == 0U)
         {
-            std::cerr << "message_session_factory: close(" << shared_memory_file_name
-                      << ") failed: " << close_result.error() << std::endl;
+            dlt_server.flush();
         }
-        return source_session;
-    };
+        ++count;
+    }
+}
 
+void SocketServer::doWork(const std::atomic_bool& exit_requested, const bool no_adaptive_runtime)
+{
+    SetThreadName();
+
+    score::mw::log::Logger& stats_logger = score::mw::log::CreateLogger("STAT", "statistics");
+
+    // Initialize persistent storage
+    std::unique_ptr<IPersistentDictionary> pd = PersistentDictionaryFactoryType::Create(no_adaptive_runtime);
+    const PersistentStorageHandlers storage_handlers = InitializePersistentStorage(pd);
+
+    // Create DLT server
+    auto dlt_server = CreateDltServer(storage_handlers);
+    if (!dlt_server)
+    {
+        return;
+    }
+
+    // Create data router with source setup handler
+    const auto source_setup = CreateSourceSetupHandler(*dlt_server);
+    /*
+        Deviation from Rule A5-1-4:
+        - A lambda expression object shall not outlive any of its reference captured objects.
+        Justification:
+        - router and lambda are in the same scope.
+    */
+    // coverity[autosar_cpp14_a5_1_4_violation]
+    DataRouter router(stats_logger, source_setup);
+
+    // Create and set enable handler
+    const auto enable_handler = CreateEnableHandler(router, *pd, *dlt_server);
+    dlt_server->set_enabled_callback(enable_handler);
+
+    // Create Unix domain server for config sessions
+    auto unix_domain_server = CreateUnixDomainServer(*dlt_server);
+
+    // Load NvConfig
+    const score::mw::log::NvConfig nv_config = LoadNvConfig(stats_logger);
+
+    // Create message passing factory using std::bind directly
+    const auto mp_factory = std::bind(&SocketServer::CreateMessagePassingSession,
+                                      std::ref(router),
+                                      std::ref(*dlt_server),
+                                      std::ref(nv_config),
+                                      std::placeholders::_1,   // client_pid
+                                      std::placeholders::_2,   // conn
+                                      std::placeholders::_3);  // handle
+
+    // Create message passing server with thread pool
     // As documented in aas/mw/com/message_passing/design/README.md, the Receiver implementation will use just 1 thread
     // from the thread pool for MQueue (Linux). For Resource Manager (QNX), it is supposed to use 2 threads. If it
     // cannot allocate the second thread, it will work with just one thread, with reduced functionality (still enough
@@ -273,25 +404,8 @@ void SocketServer::doWork(const std::atomic_bool& exit_requested, const bool no_
     // coverity[autosar_cpp14_a5_1_4_violation: FALSE]
     MessagePassingServer mp_server(mp_factory, executor);
 
-    uint16_t count = 0U;
-    constexpr std::uint32_t statistics_freq_divider = statistics_log_period_us / throttle_time_us;
-    constexpr std::uint32_t dlt_freq_divider = dlt_flush_period_us / throttle_time_us;
-
-    while (!exit_requested.load())
-    {
-        usleep(throttle_time_us);
-
-        if ((count % statistics_freq_divider) == 0U)
-        {
-            router.show_source_statistics(static_cast<uint16_t>(count / statistics_freq_divider));
-            dltServer.show_channel_statistics(static_cast<uint16_t>(count / statistics_freq_divider), stats_logger);
-        }
-        if ((count % dlt_freq_divider) == 0U)
-        {
-            dltServer.flush();
-        }
-        ++count;
-    }
+    // Run main event loop
+    RunEventLoop(exit_requested, router, *dlt_server, stats_logger);
 }
 // LCOV_EXCL_STOP
 

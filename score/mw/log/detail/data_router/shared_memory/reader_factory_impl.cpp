@@ -37,8 +37,8 @@ Byte* GetBufferAddress(Byte* const start, const Length offset)
     return start_address;
 }
 
-std::optional<SharedMemoryReader> ReaderFactoryImpl::Create(const std::int32_t file_descriptor,
-                                                            const pid_t expected_pid) noexcept
+std::unique_ptr<ISharedMemoryReader> ReaderFactoryImpl::Create(const std::int32_t file_descriptor,
+                                                               const pid_t expected_pid) noexcept
 {
     score::os::StatBuffer buffer{};
 
@@ -47,13 +47,13 @@ std::optional<SharedMemoryReader> ReaderFactoryImpl::Create(const std::int32_t f
     if (stat_result.has_value() == false)
     {
         std::cerr << "ReaderFactoryImpl::Create: fstat failed: " << stat_result.error();
-        return {};
+        return nullptr;
     }
 
     if (buffer.st_size < 0)
     {
         std::cerr << "ReaderFactoryImpl::Create: unexpected negative buffer.st_size: " << buffer.st_size;
-        return {};
+        return nullptr;
     }
 
     const auto map_size_bytes = static_cast<Length>(buffer.st_size);
@@ -62,7 +62,7 @@ std::optional<SharedMemoryReader> ReaderFactoryImpl::Create(const std::int32_t f
     {
         std::cerr << "ReaderFactoryImpl::Create: Invalid shared memory size: found " << map_size_bytes
                   << " but expected at least " << sizeof(SharedData) << " bytes\n";
-        return {};
+        return nullptr;
     }
 
     static constexpr void* null_addr = nullptr;
@@ -77,7 +77,7 @@ std::optional<SharedMemoryReader> ReaderFactoryImpl::Create(const std::int32_t f
     if (mmap_result.has_value() == false)
     {
         std::cerr << "ReaderFactoryImpl::Create: mmap failed: " << mmap_result.error() << '\n';
-        return {};
+        return nullptr;
     }
 
     /*
@@ -108,7 +108,7 @@ std::optional<SharedMemoryReader> ReaderFactoryImpl::Create(const std::int32_t f
         std::cerr << "ReaderFactoryImpl::Create: Invalid shared_data content: max_offset_bytes=" << max_offset_bytes
                   << " but map_size_bytes is only " << map_size_bytes << '\n';
         unmap_callback();
-        return {};
+        return nullptr;
     }
 
     if (shared_data.producer_pid != expected_pid)
@@ -116,7 +116,7 @@ std::optional<SharedMemoryReader> ReaderFactoryImpl::Create(const std::int32_t f
         std::cerr << "SharedMemoryReader found invalid pid. Expected " << expected_pid << " but found "
                   << shared_data.producer_pid << " in shared memory. Dropping the logs from this client.\n";
         unmap_callback();
-        return {};
+        return nullptr;
     }
     /*
         Deviation from Rule M5-2-8:
@@ -135,7 +135,8 @@ std::optional<SharedMemoryReader> ReaderFactoryImpl::Create(const std::int32_t f
     AlternatingReadOnlyReader alternating_read_only_reader{
         shared_data.control_block, buffer_block_even, buffer_block_odd};
 
-    return SharedMemoryReader(shared_data, std::move(alternating_read_only_reader), std::move(unmap_callback));
+    return std::make_unique<SharedMemoryReader>(
+        shared_data, std::move(alternating_read_only_reader), std::move(unmap_callback));
 }
 
 ReaderFactoryPtr ReaderFactory::Default(score::cpp::pmr::memory_resource* memory_resource) noexcept

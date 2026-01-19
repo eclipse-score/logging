@@ -46,9 +46,7 @@ class StubDltNonverboseHandler : public LogParser::AnyHandler
 
     void handle(const TypeInfo&, timestamp_t, const char*, bufsize_t) override
     {
-        std::cerr
-            << "Warning: This is a stub implementation for the DltNonverboseHandler and the feature is not supported "
-            << std::endl;
+        // Stub implementation does nothing
     }
 };
 

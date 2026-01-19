@@ -89,33 +89,53 @@ score::logging::dltserver::UdpStreamOutput::UdpStreamOutput(const char* dstAddr,
         }
     }
 
-    if (multicastInterface != nullptr && std::strlen(multicastInterface) != 0)
+    if (multicastInterface != nullptr)
     {
-        struct in_addr addr{};
-        if (inet_aton(multicastInterface, &addr) != 0)
+        const std::string_view strViewMulticastInterface{multicastInterface};
+        if (strViewMulticastInterface.length() != 0)
         {
-            if (setsockopt(socket_, IPPROTO_IP, IP_MULTICAST_IF, &addr, sizeof(addr)) == -1)
+            struct in_addr addr{};
+            if (inet_aton(multicastInterface, &addr) != 0)
             {
-                std::cerr << "ERROR: (UDP) socket cannot use multicast interface: "
-                          /*
-                              Deviation from Rule M19-3-1:
-                              - The error indicator errno shall not be used.
-                              Justification:
-                              - Using library-defined macro to ensure correct operation.
-                          */
+                if (setsockopt(socket_, IPPROTO_IP, IP_MULTICAST_IF, &addr, sizeof(addr)) == -1)
+                {
+                    std::cerr << "ERROR: (UDP) socket cannot use multicast interface: "
+                              /*
+                                  Deviation from Rule M19-3-1:
+                                  - The error indicator errno shall not be used.
+                                  Justification:
+                                  - Using library-defined macro to ensure correct operation.
+                              */
+                              // coverity[autosar_cpp14_m19_3_1_violation]
+                              << std::system_category().message(errno) << std::endl;
+                }
+            }
+            else
+            {
+                std::cerr << "ERROR: Invalid multicast interface address: " << multicastInterface
+                          << " "
                           // coverity[autosar_cpp14_m19_3_1_violation]
                           << std::system_category().message(errno) << std::endl;
             }
         }
-        else
-        {
-            std::cerr << "ERROR: Invalid multicast interface address: " << multicastInterface
-                      << " "
-                      // coverity[autosar_cpp14_m19_3_1_violation]
-                      << std::system_category().message(errno) << std::endl;
-        }
     }
-
+/*
+Deviation from Rule A16-0-1:
+- Rule A16-0-1 (required, implementation, automated)
+The pre-processor shall only be used for unconditional and conditional file
+inclusion and include guards, and using the following directives: (1) #ifndef,
+#ifdef, (3) #if, (4) #if defined, (5) #elif, (6) #else, (7) #define, (8) #endif, (9)
+#include.
+Justification:
+- Implementation selection for different OS and respective versions.
+*/
+// coverity[autosar_cpp14_a16_0_1_violation] see above
+#if defined(__QNX__) && __QNX__ >= 800
+    // In QNX 8.0, the vlan priority cannot be set per socket, but by interface. Hence SetVlanPriorityOfSocket is
+    // skipped.
+    static_cast<void>(vlan);
+// coverity[autosar_cpp14_a16_0_1_violation] see above
+#else
     constexpr std::uint8_t kDltPcpPriority = 1u;
     const auto pcp_result = vlan.SetVlanPriorityOfSocket(kDltPcpPriority, socket_);
     if (!pcp_result.has_value())
@@ -123,6 +143,8 @@ score::logging::dltserver::UdpStreamOutput::UdpStreamOutput(const char* dstAddr,
         const auto error = pcp_result.error().ToString();
         std::cerr << "ERROR: Setting PCP Priority: " << error << std::endl;
     }
+// coverity[autosar_cpp14_a16_0_1_violation] see above
+#endif
 }
 
 score::logging::dltserver::UdpStreamOutput::~UdpStreamOutput()

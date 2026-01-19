@@ -207,6 +207,14 @@ void LogParser::parse(timestamp_t timestamp, const char* data, bufsize_t size)
         return;
     }
     bufsize_t index = 0U;
+    /*
+    Deviation from Rule M5-0-16:
+    - A pointer operand and any pointer resulting from pointer arithmetic using that operand shall both address elements
+    of the same array. Justification:
+    - type case is necessary to extract index of parser from raw memory block (input data).
+    - std::copy_n() uses same array for output, different array warning comes from score::cpp::bit_cast usage.
+    */
+    // coverity[autosar_cpp14_m5_0_16_violation] see above
     std::copy_n(data, sizeof(index), score::cpp::bit_cast<char*>(&index));
 
     std::advance(data, sizeof(index));

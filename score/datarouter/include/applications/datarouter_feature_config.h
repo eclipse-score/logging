@@ -72,14 +72,18 @@ namespace datarouter
 // --- Conditional Compilation Feature Switch ---
 #if defined(PERSISTENT_CONFIG_FEATURE_ENABLED)
 using PersistentDictionaryFactoryType = AraPerPersistentDictionaryFactory;
+inline constexpr bool kPersistentConfigFeatureEnabled = true;
 #else
 using PersistentDictionaryFactoryType = StubPersistentDictionaryFactory;
+inline constexpr bool kPersistentConfigFeatureEnabled = false;
 #endif
 
 #if defined(NON_VERBOSE_DLT)
 using DltNonverboseHandlerType = score::logging::dltserver::DltNonverboseHandler;
+inline constexpr bool kNonVerboseDltEnabled = true;
 #else
 using DltNonverboseHandlerType = score::logging::dltserver::StubDltNonverboseHandler;
+inline constexpr bool kNonVerboseDltEnabled = false;
 #endif
 
 #if defined(DYNAMIC_CONFIGURATION_IN_DATAROUTER)

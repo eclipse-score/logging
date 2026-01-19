@@ -11,8 +11,8 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-#ifndef BMW_MW_LOG_WAIT_FREE_SHARED_MEMORY_READER_FACTORY_MOCK
-#define BMW_MW_LOG_WAIT_FREE_SHARED_MEMORY_READER_FACTORY_MOCK
+#ifndef BMW_MW_LOG_SHARED_MEMORY_READER_FACTORY_MOCK
+#define BMW_MW_LOG_SHARED_MEMORY_READER_FACTORY_MOCK
 
 #include "score/mw/log/detail/data_router/shared_memory/reader_factory.h"
 
@@ -31,7 +31,7 @@ namespace detail
 class ReaderFactoryMock : public ReaderFactory
 {
   public:
-    MOCK_METHOD((std::optional<SharedMemoryReader>),
+    MOCK_METHOD((std::unique_ptr<ISharedMemoryReader>),
                 Create,
                 (const std::int32_t file_handle, const pid_t expected_pid),
                 (override));
@@ -42,4 +42,4 @@ class ReaderFactoryMock : public ReaderFactory
 }  // namespace mw
 }  // namespace score
 
-#endif  //  BMW_MW_LOG_WAIT_FREE_SHARED_MEMORY_READER_FACTORY_MOCK
+#endif  //  BMW_MW_LOG_SHARED_MEMORY_READER_FACTORY_MOCK

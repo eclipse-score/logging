@@ -71,6 +71,7 @@ cc_library(
         "shared_memory_reader.cpp",
     ],
     hdrs = [
+        "i_shared_memory_reader.h",
         "reader_factory.h",
         "reader_factory_impl.h",
         "shared_memory_reader.h",
@@ -99,6 +100,16 @@ cc_library(
     testonly = True,
     srcs = [
         "reader_factory_mock.h",
+    ],
+    visibility = ["//score/datarouter/test:__subpackages__"],
+    deps = ["@googletest//:gtest"],
+)
+
+cc_library(
+    name = "shared_memory_reader_mock",
+    testonly = True,
+    srcs = [
+        "shared_memory_reader_mock.h",
     ],
     visibility = ["//score/datarouter/test:__subpackages__"],
     deps = ["@googletest//:gtest"],

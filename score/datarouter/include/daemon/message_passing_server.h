@@ -84,7 +84,7 @@ class MessagePassingServer : public IMessagePassingServerSessionWrapper
                                                 score::cpp::pmr::unique_ptr<daemon::ISessionHandle>)>;
 
     MessagePassingServer(SessionFactory factory, ::score::concurrency::Executor& executor);
-    ~MessagePassingServer();
+    ~MessagePassingServer() noexcept;
 
     // for unit test only. to keep rest of functions in private
     class MessagePassingServerForTest;
