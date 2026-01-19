@@ -1,0 +1,36 @@
+name: QNX Build (gated)
+
+on:
+  pull_request_target:
+    types: [opened, reopened, synchronize]
+
+jobs:
+  qnx-build-x86_64:
+    uses: eclipse-score/cicd-workflows/.github/workflows/qnx-build.yml@main
+    permissions:
+      contents: read
+      pull-requests: read
+    with:
+      bazel-target: "//..."
+      bazel-config: "x86_64-qnx"
+      credential-helper: "scripts/internal/qnx_creds.py"
+      environment-name: "workflow-approval"
+    secrets:
+      score-qnx-license: ${{ secrets.SCORE_QNX_LICENSE }}
+      score-qnx-user: ${{ secrets.SCORE_QNX_USER }}
+      score-qnx-password: ${{ secrets.SCORE_QNX_PASSWORD }}
+
+  qnx-build-arm64:
+    uses: eclipse-score/cicd-workflows/.github/workflows/qnx-build.yml@main
+    permissions:
+      contents: read
+      pull-requests: read
+    with:
+      bazel-target: "//..."
+      bazel-config: "arm64-qnx"
+      credential-helper: "scripts/internal/qnx_creds.py"
+      environment-name: "workflow-approval"
+    secrets:
+      score-qnx-license: ${{ secrets.SCORE_QNX_LICENSE }}
+      score-qnx-user: ${{ secrets.SCORE_QNX_USER }}
+      score-qnx-password: ${{ secrets.SCORE_QNX_PASSWORD }}
