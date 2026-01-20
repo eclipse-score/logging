@@ -16,7 +16,7 @@ use score_log_bridge::ScoreLoggerBuilder;
 use std::path::PathBuf;
 
 fn main() {
-    // Setup for example using config file
+    // Setup for example using config file.
     let config_path = PathBuf::from(std::env::current_dir().unwrap())
         .join(file!())
         .parent()
@@ -24,7 +24,7 @@ fn main() {
         .join("config")
         .join("logging.json");
 
-    // Just initialize and set as default logger
+    // Initialize `ScoreLogger` as a default logger.
     ScoreLoggerBuilder::new()
         .show_module(false)
         .show_file(true)
@@ -32,6 +32,7 @@ fn main() {
         .config(config_path)
         .set_as_default_logger();
 
+    // Regular log usage.
     trace!("This is a trace log - hidden");
     debug!("This is a debug log - hidden");
     info!("This is an info log");
@@ -39,8 +40,15 @@ fn main() {
     error!("This is an error log");
     fatal!("This is a fatal log");
 
-    error!(context: "X", "This log contains single letter context");
+    // Log with modified context.
+    trace!(context: "EX1", "This is a trace log - hidden");
+    debug!(context: "EX1", "This is a debug log - hidden");
+    info!(context: "EX1", "This is an info log");
+    warn!(context: "EX1", "This is a warn log");
+    error!(context: "EX1", "This is an error log");
+    fatal!(context: "EX1", "This is a fatal log");
 
+    // Log with numeric values.
     let x1 = 123.4;
     let x2 = 111;
     let x3 = true;
@@ -50,7 +58,7 @@ fn main() {
         x1, x2, x3, x4,
     );
 
-    // Using logger instance with context
+    // Use logger instance with modified context.
     let logger = ScoreLoggerBuilder::new()
         .context("ALFA")
         .show_module(false)
@@ -58,6 +66,7 @@ fn main() {
         .show_line(false)
         .build();
 
+    // Log with provided logger.
     trace!(
         logger: logger,
         "This is a trace log - hidden"
@@ -67,4 +76,12 @@ fn main() {
     warn!(logger: logger, "This is a warn log");
     error!(logger: logger, "This is an error log");
     fatal!(logger: logger, "This is an fatal log");
+
+    // Log with provided logger and modified context.
+    trace!(logger: logger, context: "EX2", "This is a trace log - hidden");
+    debug!(logger: logger, context: "EX2", "This is a debug log - hidden");
+    info!(logger: logger, context: "EX2", "This is an info log");
+    warn!(logger: logger, context: "EX2", "This is a warn log");
+    error!(logger: logger, context: "EX2", "This is an error log");
+    fatal!(logger: logger, context: "EX2", "This is an fatal log");
 }

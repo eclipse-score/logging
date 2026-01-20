@@ -17,8 +17,14 @@
 using namespace score::mw::log;
 using namespace score::mw::log::detail;
 
-// Verify configuration.
+// Verify configuration at compile time.
+// `SlotHandle` is expected to be allocated on stack to reduce performance overhead.
+// Size and alignment of `SlotHandle` (C++) and `SlotHandleStorage` (Rust) must match.
+// Those parameters must be:
+// - managed by build system (using defines and features)
+// - cross-checked between `ffi.rs` and `adapter.cpp`
 #if defined(x86_64_linux) || defined(arm64_qnx)
+// Expected size and alignment of `SlotHandle`.
 static_assert(sizeof(SlotHandle) == 24);
 static_assert(alignof(SlotHandle) == 8);
 #else
@@ -234,13 +240,9 @@ void log_hex64(Recorder* recorder, SlotHandle* slot, const uint64_t* value) {
 
 /// @brief Get size of `SlotHandle`.
 /// @return Size.
-size_t slot_handle_size() {
-    return sizeof(SlotHandle);
-}
+size_t slot_handle_size() { return sizeof(SlotHandle); }
 
 /// @brief Get alignment of `SlotHandle`.
 /// @return Alignment.
-size_t slot_handle_alignment() {
-    return alignof(SlotHandle);
-}
+size_t slot_handle_alignment() { return alignof(SlotHandle); }
 }

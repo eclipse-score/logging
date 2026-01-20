@@ -13,26 +13,15 @@
 
 //! C++-based logger implementation
 
-use crate::ffi::{LogLevel, LogStream, Recorder, SlotHandlePtr};
-use crate::score_logger_writer::ScoreLoggerWriter;
+use crate::ffi::{Context, LogLevel, LogMessage, Recorder, SlotHandleStorage};
 use score_log::fmt::{score_write, write};
 use score_log::{Log, Metadata, Record};
 use std::env::{set_var, var_os};
 use std::path::PathBuf;
-use std::sync::Once;
-
-/// Perform layout check, panic on mismatch.
-fn layout_check() {
-    let slot_layout_rust = SlotHandlePtr::layout_rust();
-    let slot_layout_cpp = SlotHandlePtr::layout_cpp();
-    if slot_layout_rust != slot_layout_cpp {
-        panic!("SlotHandle layout mismatch, Rust: {slot_layout_rust:?}, C++: {slot_layout_cpp:?}");
-    }
-}
 
 /// Builder for the [`ScoreLogger`].
 pub struct ScoreLoggerBuilder {
-    context: String,
+    context: Context,
     show_module: bool,
     show_file: bool,
     show_line: bool,
@@ -42,15 +31,11 @@ pub struct ScoreLoggerBuilder {
 impl ScoreLoggerBuilder {
     /// Create builder with default parameters.
     ///
-    /// # Note
+    /// # Panics
     ///
-    /// This operation perform data layout check.
+    /// Data layout check is performed.
     /// This might cause panic if layout of FFI structures is mismatched.
     pub fn new() -> Self {
-        // Perform layout check - only once.
-        static LAYOUT_CHECK: Once = Once::new();
-        LAYOUT_CHECK.call_once(layout_check);
-
         Self::default()
     }
 
@@ -59,7 +44,7 @@ impl ScoreLoggerBuilder {
     /// Only ASCII characters are allowed.
     /// Max 4 characters are used. Rest of the provided string will be trimmed.
     pub fn context(mut self, context: &str) -> Self {
-        self.context = context.to_string();
+        self.context = Context::from(context);
         self
     }
 
@@ -81,7 +66,8 @@ impl ScoreLoggerBuilder {
         self
     }
 
-    /// Set `MW_LOG_CONFIG_FILE` environment variable during [`Self::build`].
+    /// Set path to the logging configuration.
+    /// `MW_LOG_CONFIG_FILE` environment variable is set during [`Self::set_as_default_logger`].
     ///
     /// Following conditions must be met:
     /// - Variable is set only during the first call to [`Self::set_as_default_logger`].
@@ -104,6 +90,11 @@ impl ScoreLoggerBuilder {
     }
 
     /// Build the [`ScoreLogger`] and set it as the default logger.
+    ///
+    /// # Safety
+    ///
+    /// Method sets `MW_LOG_CONFIG_FILE` environment variable.
+    /// Setting it is safe only before any other thread started.
     pub fn set_as_default_logger(self) {
         // Set `MW_LOG_CONFIG_FILE`.
         {
@@ -116,6 +107,9 @@ impl ScoreLoggerBuilder {
                 if let Some(ref path) = self.config_path {
                     let path_os_str = path.as_os_str();
                     if !path_os_str.is_empty() {
+                        // SAFETY:
+                        // Safe only before any other thread started.
+                        // Operation is performed only once.
                         unsafe { set_var(KEY, path_os_str) };
                     }
                 }
@@ -133,9 +127,24 @@ impl ScoreLoggerBuilder {
 }
 
 impl Default for ScoreLoggerBuilder {
+    /// Create builder with default parameters.
+    ///
+    /// # Panics
+    ///
+    /// Data layout check is performed.
+    /// This might cause panic if layout of FFI structures is mismatched.
     fn default() -> Self {
+        // Perform layout check.
+        let slot_layout_rust = SlotHandleStorage::layout_rust();
+        let slot_layout_cpp = SlotHandleStorage::layout_cpp();
+        assert!(
+            slot_layout_rust == slot_layout_cpp,
+            "SlotHandle layout mismatch, this indicates compilation settings misalignment (Rust: {slot_layout_rust:?}, C++: {slot_layout_cpp:?})"
+        );
+
+        // Create builder with default parameters.
         Self {
-            context: "DFLT".to_string(),
+            context: Context::from("DFLT"),
             show_module: false,
             show_file: false,
             show_line: false,
@@ -146,7 +155,7 @@ impl Default for ScoreLoggerBuilder {
 
 /// C++-based logger implementation.
 pub struct ScoreLogger {
-    context: String,
+    context: Context,
     show_module: bool,
     show_file: bool,
     show_line: bool,
@@ -155,18 +164,19 @@ pub struct ScoreLogger {
 
 impl ScoreLogger {
     /// Current log level for provided context.
-    pub(crate) fn log_level(&self, context: &str) -> LogLevel {
+    pub(crate) fn log_level(&self, context: &Context) -> LogLevel {
         self.recorder.log_level(context)
     }
 }
 
 impl Log for ScoreLogger {
     fn enabled(&self, metadata: &Metadata) -> bool {
-        self.log_level(metadata.context()) >= metadata.level().into()
+        let context = Context::from(metadata.context());
+        self.log_level(&context) >= metadata.level().into()
     }
 
     fn context(&self) -> &str {
-        &self.context
+        <&str>::from(&self.context)
     }
 
     fn log(&self, record: &Record) {
@@ -176,44 +186,39 @@ impl Log for ScoreLogger {
             return;
         }
 
-        // Create log stream.
-        let context = metadata.context();
+        // Create log message.
+        let context = Context::from(metadata.context());
         let log_level = metadata.level().into();
-        let log_stream = LogStream::new(&self.recorder, context, log_level);
-
-        // Create writer.
-        let mut writer = ScoreLoggerWriter::new(log_stream);
+        // Finish early if unable to create message.
+        let mut log_message = match LogMessage::new(&self.recorder, &context, log_level) {
+            Ok(log_message) => log_message,
+            Err(_) => return,
+        };
 
         // Write module, file and line.
         if self.show_module || self.show_file || self.show_line {
-            let _ = score_write!(&mut writer, "[");
+            let _ = score_write!(&mut log_message, "[");
             if self.show_module {
-                let _ = score_write!(&mut writer, "{}:", record.module_path());
+                let _ = score_write!(&mut log_message, "{}:", record.module_path());
             }
             if self.show_file {
-                let _ = score_write!(&mut writer, "{}:", record.file());
+                let _ = score_write!(&mut log_message, "{}:", record.file());
             }
             if self.show_line {
-                let _ = score_write!(&mut writer, "{}", record.line());
+                let _ = score_write!(&mut log_message, "{}", record.line());
             }
-            let _ = score_write!(&mut writer, "]");
+            let _ = score_write!(&mut log_message, "]");
         }
 
         // Write log data.
-        let _ = write(&mut writer, *record.args());
-        // Written data is flushed on log stream drop.
+        let _ = write(&mut log_message, *record.args());
+        // Written data is flushed on log message drop.
     }
 
     fn flush(&self) {
         // No-op.
     }
 }
-
-// SAFETY: The underlying C++ logger is known to be thread-safe.
-unsafe impl Send for ScoreLogger {}
-
-// SAFETY: The underlying C++ logger is known to be thread-safe.
-unsafe impl Sync for ScoreLogger {}
 
 #[cfg(test)]
 mod tests {
@@ -224,7 +229,7 @@ mod tests {
     #[test]
     fn test_builder_new() {
         let builder = ScoreLoggerBuilder::new();
-        assert_eq!(builder.context, "DFLT");
+        assert_eq!(builder.context, "DFLT".into());
         assert!(!builder.show_module);
         assert!(!builder.show_file);
         assert!(!builder.show_line);
@@ -234,7 +239,7 @@ mod tests {
     #[test]
     fn test_builder_default() {
         let builder = ScoreLoggerBuilder::default();
-        assert_eq!(builder.context, "DFLT");
+        assert_eq!(builder.context, "DFLT".into());
         assert!(!builder.show_module);
         assert!(!builder.show_file);
         assert!(!builder.show_line);
@@ -244,7 +249,7 @@ mod tests {
     #[test]
     fn test_builder_context() {
         let builder = ScoreLoggerBuilder::new().context("NEW_CONTEXT");
-        assert_eq!(builder.context, "NEW_CONTEXT");
+        assert_eq!(builder.context, "NEW_CONTEXT".into());
         assert!(!builder.show_module);
         assert!(!builder.show_file);
         assert!(!builder.show_line);
@@ -254,7 +259,7 @@ mod tests {
     #[test]
     fn test_builder_show_module() {
         let builder = ScoreLoggerBuilder::new().show_module(true);
-        assert_eq!(builder.context, "DFLT");
+        assert_eq!(builder.context, "DFLT".into());
         assert!(builder.show_module);
         assert!(!builder.show_file);
         assert!(!builder.show_line);
@@ -264,7 +269,7 @@ mod tests {
     #[test]
     fn test_builder_show_file() {
         let builder = ScoreLoggerBuilder::new().show_file(true);
-        assert_eq!(builder.context, "DFLT");
+        assert_eq!(builder.context, "DFLT".into());
         assert!(!builder.show_module);
         assert!(builder.show_file);
         assert!(!builder.show_line);
@@ -274,7 +279,7 @@ mod tests {
     #[test]
     fn test_builder_show_line() {
         let builder = ScoreLoggerBuilder::new().show_line(true);
-        assert_eq!(builder.context, "DFLT");
+        assert_eq!(builder.context, "DFLT".into());
         assert!(!builder.show_module);
         assert!(!builder.show_file);
         assert!(builder.show_line);
@@ -284,7 +289,7 @@ mod tests {
     #[test]
     fn test_builder_config_path() {
         let builder = ScoreLoggerBuilder::new().config(PathBuf::from("/some/path"));
-        assert_eq!(builder.context, "DFLT");
+        assert_eq!(builder.context, "DFLT".into());
         assert!(!builder.show_module);
         assert!(!builder.show_file);
         assert!(!builder.show_line);
@@ -299,7 +304,7 @@ mod tests {
             .show_file(true)
             .show_line(true)
             .config(PathBuf::from("/some/path"));
-        assert_eq!(builder.context, "NEW_CONTEXT");
+        assert_eq!(builder.context, "NEW_CONTEXT".into());
         assert!(builder.show_module);
         assert!(builder.show_file);
         assert!(builder.show_line);
@@ -314,7 +319,7 @@ mod tests {
             .show_file(true)
             .show_line(true)
             .build();
-        assert_eq!(logger.context, "NEW_CONTEXT");
+        assert_eq!(logger.context, "NEW_CONTEXT".into());
         assert!(logger.show_module);
         assert!(logger.show_file);
         assert!(logger.show_line);

@@ -14,6 +14,9 @@
 use core::alloc::Layout;
 use core::cmp::min;
 use core::ffi::c_char;
+use core::mem::transmute;
+use core::slice::from_raw_parts;
+use score_log::fmt::{DisplayHint, Error, FormatSpec, Result as FmtResult, ScoreWrite};
 
 /// Represents severity of a log message.
 #[derive(PartialEq, Eq, PartialOrd, Ord, Debug)]
@@ -51,7 +54,7 @@ impl From<LogLevel> for score_log::Level {
             LogLevel::Info => score_log::Level::Info,
             LogLevel::Debug => score_log::Level::Debug,
             LogLevel::Verbose => score_log::Level::Trace,
-            _ => panic!("Log level not supported"),
+            _ => panic!("log level not supported"),
         }
     }
 }
@@ -72,29 +75,61 @@ impl From<LogLevel> for score_log::LevelFilter {
 
 /// Name of the context.
 /// Max 4 bytes containing ASCII characters.
-struct Context {
+#[derive(Clone, Debug, PartialEq, Eq)]
+pub struct Context {
     data: [c_char; 4],
     size: usize,
 }
 
-impl Context {
-    pub fn from(context: &str) -> Self {
+impl From<&str> for Context {
+    /// Create `Context` from `&str`.
+    ///
+    /// # Panics
+    ///
+    /// Method will panic if provided `&str` contains non-ASCII characters.
+    fn from(value: &str) -> Self {
         // Disallow non-ASCII strings.
         // ASCII characters are single byte in UTF-8.
-        if !context.is_ascii() {
-            panic!("Provided context contains non-ASCII characters: {context}");
-        }
+        assert!(
+            value.is_ascii(),
+            "provided context contains non-ASCII characters: {value}"
+        );
 
         // Get number of characters.
-        let size = min(context.len(), 4);
+        let size = min(value.len(), 4);
 
         // Copy data into array.
-        let mut data: [c_char; 4] = [0; 4];
+        let mut data = [0; _];
+        // SAFETY:
+        // Copying is safe:
+        // - source is a `&str`.
+        // - destination is a stack-allocated array of known size.
+        // - number of bytes to copy is determined based on source.
         unsafe {
-            core::ptr::copy_nonoverlapping(context.as_ptr(), data.as_mut_ptr() as *mut u8, size);
+            core::ptr::copy_nonoverlapping(value.as_ptr(), data.as_mut_ptr().cast(), size);
         }
 
         Self { data, size }
+    }
+}
+
+impl From<&Context> for &str {
+    fn from(value: &Context) -> Self {
+        // SAFETY:
+        // ASCII characters (`c_char`) are compatible with single byte UTF-8 characters (`u8`).
+        // This function reinterprets data containing same information.
+        // `[c_char; _]` -> `* const u8` -> `&[u8]` -> `&str`.
+
+        // Characters are reinterpreted from `c_char` (`i8`) to `u8`.
+        let data = value.data.as_ptr().cast();
+        // Number of bytes is always bound to provided or max allowed size.
+        let size = min(value.size, 4);
+        unsafe {
+            // Create a slice from pointer and size.
+            let slice = from_raw_parts(data, size);
+            // Create a UTF-8 string from a slice.
+            str::from_utf8_unchecked(slice)
+        }
     }
 }
 
@@ -105,250 +140,309 @@ struct RecorderPtr {
 }
 
 /// Recorder instance.
-pub(crate) struct Recorder {
-    inner: *mut RecorderPtr,
+pub struct Recorder {
+    ptr: *mut RecorderPtr,
 }
 
 impl Recorder {
+    /// Get recorder instance.
+    ///
+    /// # Panics
+    ///
+    /// Method panics if recorder was not properly initialized.
     pub fn new() -> Self {
-        let inner = unsafe { recorder_get() };
-        Self { inner }
+        // Get recorder and check it's not null.
+        // SAFETY: Recorder must be available. Null indicates lack of proper initialization.
+        let ptr = unsafe { recorder_get() };
+        assert!(!ptr.is_null(), "recorder is not properly initialized");
+        Self { ptr }
     }
 
-    pub fn log_level(&self, context: &str) -> LogLevel {
-        let context = Context::from(context);
-        unsafe { recorder_log_level(self.inner, context.data.as_ptr(), context.size) }
+    pub fn log_level(&self, context: &Context) -> LogLevel {
+        // SAFETY: FFI call. Validity of provided objects checked elsewhere.
+        unsafe { recorder_log_level(self.ptr, context.data.as_ptr(), context.size) }
     }
 }
 
-/// Opaque type representing `SlotHandle`.
+// SAFETY:
+// `Runtime::GetRecorder()` is thread-safe in this use-case.
+// Refer to `runtime.h` for more details.
+unsafe impl Send for Recorder {}
+
+// SAFETY:
+// `Runtime::GetRecorder()` is thread-safe in this use-case.
+// Refer to `runtime.h` for more details.
+unsafe impl Sync for Recorder {}
+
+/// Opaque storage type representing `SlotHandle`.
+///
+/// `SlotHandle` is expected to be allocated on stack to reduce performance overhead.
+/// Size and alignment of `SlotHandle` (C++) and `SlotHandleStorage` (Rust) must match.
+/// Those parameters must be:
+/// - managed by build system (using defines and features)
+/// - cross-checked between `ffi.rs` and `adapter.cpp`
 #[cfg(any(feature = "x86_64_linux", feature = "arm64_qnx"))]
 #[repr(C, align(8))]
-pub(crate) struct SlotHandlePtr {
+pub struct SlotHandleStorage {
     _private: [u8; 24],
 }
 
-impl SlotHandlePtr {
+impl SlotHandleStorage {
+    /// Returns an unsafe mutable pointer to this object.
+    pub fn as_mut_ptr(&mut self) -> *mut SlotHandleStorage {
+        self as *mut SlotHandleStorage
+    }
+
+    /// Rust-side layout of this object.
     pub fn layout_rust() -> Layout {
         Layout::new::<Self>()
     }
 
+    /// C++-side layout of this object.
     pub fn layout_cpp() -> Layout {
+        // SAFETY: parameter-less FFI calls.
         let size = unsafe { slot_handle_size() };
         let align = unsafe { slot_handle_alignment() };
         Layout::from_size_align(size, align).expect("Invalid SlotHandle layout, size: {size}, alignment: {align}")
     }
 }
 
-/// Single log message stream.
-pub struct LogStream<'a> {
-    recorder: &'a Recorder,
-    slot: Option<SlotHandlePtr>,
+impl Default for SlotHandleStorage {
+    /// Create storage for `SlotHandle`.
+    fn default() -> Self {
+        Self { _private: [0; _] }
+    }
 }
 
-impl<'a> LogStream<'a> {
-    pub fn new(recorder: &'a Recorder, context: &str, log_level: LogLevel) -> Self {
-        // Create context object.
-        let context = Context::from(context);
+/// Single log message.
+/// Adds values to the log message with selected formatting.
+/// Message is flushed on drop.
+pub struct LogMessage<'a> {
+    recorder: &'a Recorder,
+    slot: SlotHandleStorage,
+}
 
+impl<'a> LogMessage<'a> {
+    pub fn new(recorder: &'a Recorder, context: &Context, log_level: LogLevel) -> Result<Self, ()> {
         // Start record.
         // `SlotHandle` is allocated on stack.
-        let mut slot_buffer = SlotHandlePtr { _private: [0; 24] };
+        let mut slot = SlotHandleStorage::default();
+        // SAFETY: FFI call.
+        // Provided pointers are valid and checked elsewhere.
+        // `slot` is stack-allocated above.
+        // If result is null - logging is not performed.
         let slot_result = unsafe {
             recorder_start(
-                recorder.inner,
+                recorder.ptr,
                 context.data.as_ptr(),
                 context.size,
                 log_level,
-                &mut slot_buffer as *mut SlotHandlePtr,
+                slot.as_mut_ptr(),
             )
         };
 
-        // Store buffer only if acquired.
-        let slot = if !slot_result.is_null() {
-            Some(slot_buffer)
-        } else {
-            None
-        };
-
-        Self { recorder, slot }
-    }
-
-    pub fn log_bool(&mut self, v: &bool) {
-        if let Some(slot) = self.slot.as_mut() {
-            unsafe {
-                log_bool(self.recorder.inner, slot as *mut SlotHandlePtr, v as *const bool);
-            }
-        }
-    }
-
-    pub fn log_f32(&mut self, v: &f32) {
-        if let Some(slot) = self.slot.as_mut() {
-            unsafe {
-                log_f32(self.recorder.inner, slot as *mut SlotHandlePtr, v as *const f32);
-            }
-        }
-    }
-
-    pub fn log_f64(&mut self, v: &f64) {
-        if let Some(slot) = self.slot.as_mut() {
-            unsafe {
-                log_f64(self.recorder.inner, slot as *mut SlotHandlePtr, v as *const f64);
-            }
-        }
-    }
-
-    pub fn log_string(&mut self, v: &str) {
-        // Disallow non-ASCII strings.
-        if !v.is_ascii() {
-            panic!("Provided string contains non-ASCII characters: {v}");
+        // Return without value if failed to acquire slot.
+        if slot_result.is_null() {
+            return Err(());
         }
 
-        // Get string as pointer and size.
-        // ASCII characters are single byte in UTF-8.
-        let v_ptr = v.as_ptr() as *const c_char;
-        let v_size = v.len();
-
-        if let Some(slot) = self.slot.as_mut() {
-            unsafe {
-                log_string(self.recorder.inner, slot as *mut SlotHandlePtr, v_ptr, v_size);
-            }
-        }
-    }
-
-    pub fn log_i8(&mut self, v: &i8) {
-        if let Some(slot) = self.slot.as_mut() {
-            unsafe {
-                log_i8(self.recorder.inner, slot as *mut SlotHandlePtr, v as *const i8);
-            }
-        }
-    }
-
-    pub fn log_i16(&mut self, v: &i16) {
-        if let Some(slot) = self.slot.as_mut() {
-            unsafe {
-                log_i16(self.recorder.inner, slot as *mut SlotHandlePtr, v as *const i16);
-            }
-        }
-    }
-
-    pub fn log_i32(&mut self, v: &i32) {
-        if let Some(slot) = self.slot.as_mut() {
-            unsafe {
-                log_i32(self.recorder.inner, slot as *mut SlotHandlePtr, v as *const i32);
-            }
-        }
-    }
-
-    pub fn log_i64(&mut self, v: &i64) {
-        if let Some(slot) = self.slot.as_mut() {
-            unsafe {
-                log_i64(self.recorder.inner, slot as *mut SlotHandlePtr, v as *const i64);
-            }
-        }
-    }
-
-    pub fn log_u8(&mut self, v: &u8) {
-        if let Some(slot) = self.slot.as_mut() {
-            unsafe {
-                log_u8(self.recorder.inner, slot as *mut SlotHandlePtr, v as *const u8);
-            }
-        }
-    }
-
-    pub fn log_u16(&mut self, v: &u16) {
-        if let Some(slot) = self.slot.as_mut() {
-            unsafe {
-                log_u16(self.recorder.inner, slot as *mut SlotHandlePtr, v as *const u16);
-            }
-        }
-    }
-
-    pub fn log_u32(&mut self, v: &u32) {
-        if let Some(slot) = self.slot.as_mut() {
-            unsafe {
-                log_u32(self.recorder.inner, slot as *mut SlotHandlePtr, v as *const u32);
-            }
-        }
-    }
-
-    pub fn log_u64(&mut self, v: &u64) {
-        if let Some(slot) = self.slot.as_mut() {
-            unsafe {
-                log_u64(self.recorder.inner, slot as *mut SlotHandlePtr, v as *const u64);
-            }
-        }
-    }
-
-    pub fn log_bin8(&mut self, v: &u8) {
-        if let Some(slot) = self.slot.as_mut() {
-            unsafe {
-                log_bin8(self.recorder.inner, slot as *mut SlotHandlePtr, v as *const u8);
-            }
-        }
-    }
-
-    pub fn log_bin16(&mut self, v: &u16) {
-        if let Some(slot) = self.slot.as_mut() {
-            unsafe {
-                log_bin16(self.recorder.inner, slot as *mut SlotHandlePtr, v as *const u16);
-            }
-        }
-    }
-
-    pub fn log_bin32(&mut self, v: &u32) {
-        if let Some(slot) = self.slot.as_mut() {
-            unsafe {
-                log_bin32(self.recorder.inner, slot as *mut SlotHandlePtr, v as *const u32);
-            }
-        }
-    }
-
-    pub fn log_bin64(&mut self, v: &u64) {
-        if let Some(slot) = self.slot.as_mut() {
-            unsafe {
-                log_bin64(self.recorder.inner, slot as *mut SlotHandlePtr, v as *const u64);
-            }
-        }
-    }
-
-    pub fn log_hex8(&mut self, v: &u8) {
-        if let Some(slot) = self.slot.as_mut() {
-            unsafe {
-                log_hex8(self.recorder.inner, slot as *mut SlotHandlePtr, v as *const u8);
-            }
-        }
-    }
-
-    pub fn log_hex16(&mut self, v: &u16) {
-        if let Some(slot) = self.slot.as_mut() {
-            unsafe {
-                log_hex16(self.recorder.inner, slot as *mut SlotHandlePtr, v as *const u16);
-            }
-        }
-    }
-
-    pub fn log_hex32(&mut self, v: &u32) {
-        if let Some(slot) = self.slot.as_mut() {
-            unsafe {
-                log_hex32(self.recorder.inner, slot as *mut SlotHandlePtr, v as *const u32);
-            }
-        }
-    }
-
-    pub fn log_hex64(&mut self, v: &u64) {
-        if let Some(slot) = self.slot.as_mut() {
-            unsafe {
-                log_hex64(self.recorder.inner, slot as *mut SlotHandlePtr, v as *const u64);
-            }
-        }
+        Ok(Self { recorder, slot })
     }
 }
 
-impl Drop for LogStream<'_> {
+impl ScoreWrite for LogMessage<'_> {
+    #[inline]
+    fn write_bool(&mut self, v: &bool, _spec: &FormatSpec) -> FmtResult {
+        // SAFETY: FFI call. Reference is reinterpreted as a pointer of the same type.
+        unsafe { log_bool(self.recorder.ptr, self.slot.as_mut_ptr(), v as *const _) };
+        Ok(())
+    }
+
+    #[inline]
+    fn write_f32(&mut self, v: &f32, _spec: &FormatSpec) -> FmtResult {
+        // SAFETY: FFI call. Reference is reinterpreted as a pointer of the same type.
+        unsafe { log_f32(self.recorder.ptr, self.slot.as_mut_ptr(), v as *const _) };
+        Ok(())
+    }
+
+    #[inline]
+    fn write_f64(&mut self, v: &f64, _spec: &FormatSpec) -> FmtResult {
+        // SAFETY: FFI call. Reference is reinterpreted as a pointer of the same type.
+        unsafe { log_f64(self.recorder.ptr, self.slot.as_mut_ptr(), v as *const _) };
+        Ok(())
+    }
+
+    #[inline]
+    fn write_i8(&mut self, v: &i8, spec: &FormatSpec) -> FmtResult {
+        // SAFETY: FFI calls. Reference is reinterpreted as a pointer of the same type.
+        match spec.get_display_hint() {
+            DisplayHint::NoHint => unsafe { log_i8(self.recorder.ptr, self.slot.as_mut_ptr(), v as *const _) },
+            DisplayHint::LowerHex | DisplayHint::UpperHex => {
+                // SAFETY: source and destination types are of the same length.
+                unsafe {
+                    let v: &u8 = transmute(v);
+                    log_hex8(self.recorder.ptr, self.slot.as_mut_ptr(), v as *const _);
+                }
+            },
+            DisplayHint::Binary => {
+                // SAFETY: source and destination types are of the same length.
+                unsafe {
+                    let v: &u8 = transmute(v);
+                    log_bin8(self.recorder.ptr, self.slot.as_mut_ptr(), v as *const _);
+                }
+            },
+            _ => return Err(Error),
+        }
+        Ok(())
+    }
+
+    #[inline]
+    fn write_i16(&mut self, v: &i16, spec: &FormatSpec) -> FmtResult {
+        // SAFETY: FFI calls. Reference is reinterpreted as a pointer of the same type.
+        match spec.get_display_hint() {
+            DisplayHint::NoHint => unsafe { log_i16(self.recorder.ptr, self.slot.as_mut_ptr(), v as *const _) },
+            DisplayHint::LowerHex | DisplayHint::UpperHex => {
+                // SAFETY: source and destination types are of the same length.
+                unsafe {
+                    let v: &u16 = transmute(v);
+                    log_hex16(self.recorder.ptr, self.slot.as_mut_ptr(), v as *const _);
+                }
+            },
+            DisplayHint::Binary => {
+                // SAFETY: source and destination types are of the same length.
+                unsafe {
+                    let v: &u16 = transmute(v);
+                    log_bin16(self.recorder.ptr, self.slot.as_mut_ptr(), v as *const _);
+                }
+            },
+            _ => return Err(Error),
+        }
+        Ok(())
+    }
+
+    #[inline]
+    fn write_i32(&mut self, v: &i32, spec: &FormatSpec) -> FmtResult {
+        // SAFETY: FFI calls. Reference is reinterpreted as a pointer of the same type.
+        match spec.get_display_hint() {
+            DisplayHint::NoHint => unsafe { log_i32(self.recorder.ptr, self.slot.as_mut_ptr(), v as *const _) },
+            DisplayHint::LowerHex | DisplayHint::UpperHex => {
+                // SAFETY: source and destination types are of the same length.
+                unsafe {
+                    let v: &u32 = transmute(v);
+                    log_hex32(self.recorder.ptr, self.slot.as_mut_ptr(), v as *const _);
+                }
+            },
+            DisplayHint::Binary => {
+                // SAFETY: source and destination types are of the same length.
+                unsafe {
+                    let v: &u32 = transmute(v);
+                    log_bin32(self.recorder.ptr, self.slot.as_mut_ptr(), v as *const _);
+                }
+            },
+            _ => return Err(Error),
+        }
+        Ok(())
+    }
+
+    #[inline]
+    fn write_i64(&mut self, v: &i64, spec: &FormatSpec) -> FmtResult {
+        // SAFETY: FFI calls. Reference is reinterpreted as a pointer of the same type.
+        match spec.get_display_hint() {
+            DisplayHint::NoHint => unsafe { log_i64(self.recorder.ptr, self.slot.as_mut_ptr(), v as *const _) },
+            DisplayHint::LowerHex | DisplayHint::UpperHex => {
+                // SAFETY: source and destination types are of the same length.
+                unsafe {
+                    let v: &u64 = transmute(v);
+                    log_hex64(self.recorder.ptr, self.slot.as_mut_ptr(), v as *const _);
+                }
+            },
+            DisplayHint::Binary => {
+                // SAFETY: source and destination types are of the same length.
+                unsafe {
+                    let v: &u64 = transmute(v);
+                    log_bin64(self.recorder.ptr, self.slot.as_mut_ptr(), v as *const _);
+                }
+            },
+            _ => return Err(Error),
+        }
+        Ok(())
+    }
+
+    #[inline]
+    fn write_u8(&mut self, v: &u8, spec: &FormatSpec) -> FmtResult {
+        // SAFETY: FFI calls. Reference is reinterpreted as a pointer of the same type.
+        match spec.get_display_hint() {
+            DisplayHint::NoHint => unsafe { log_u8(self.recorder.ptr, self.slot.as_mut_ptr(), v as *const _) },
+            DisplayHint::LowerHex | DisplayHint::UpperHex => unsafe {
+                log_hex8(self.recorder.ptr, self.slot.as_mut_ptr(), v as *const _)
+            },
+            DisplayHint::Binary => unsafe { log_bin8(self.recorder.ptr, self.slot.as_mut_ptr(), v as *const _) },
+            _ => return Err(Error),
+        }
+        Ok(())
+    }
+
+    #[inline]
+    fn write_u16(&mut self, v: &u16, spec: &FormatSpec) -> FmtResult {
+        // SAFETY: FFI calls. Reference is reinterpreted as a pointer of the same type.
+        match spec.get_display_hint() {
+            DisplayHint::NoHint => unsafe { log_u16(self.recorder.ptr, self.slot.as_mut_ptr(), v as *const _) },
+            DisplayHint::LowerHex | DisplayHint::UpperHex => unsafe {
+                log_hex16(self.recorder.ptr, self.slot.as_mut_ptr(), v as *const _)
+            },
+            DisplayHint::Binary => unsafe { log_bin16(self.recorder.ptr, self.slot.as_mut_ptr(), v as *const _) },
+            _ => return Err(Error),
+        }
+        Ok(())
+    }
+
+    #[inline]
+    fn write_u32(&mut self, v: &u32, spec: &FormatSpec) -> FmtResult {
+        // SAFETY: FFI calls. Reference is reinterpreted as a pointer of the same type.
+        match spec.get_display_hint() {
+            DisplayHint::NoHint => unsafe { log_u32(self.recorder.ptr, self.slot.as_mut_ptr(), v as *const _) },
+            DisplayHint::LowerHex | DisplayHint::UpperHex => unsafe {
+                log_hex32(self.recorder.ptr, self.slot.as_mut_ptr(), v as *const _)
+            },
+            DisplayHint::Binary => unsafe { log_bin32(self.recorder.ptr, self.slot.as_mut_ptr(), v as *const _) },
+            _ => return Err(Error),
+        }
+        Ok(())
+    }
+
+    #[inline]
+    fn write_u64(&mut self, v: &u64, spec: &FormatSpec) -> FmtResult {
+        // SAFETY: FFI calls. Reference is reinterpreted as a pointer of the same type.
+        match spec.get_display_hint() {
+            DisplayHint::NoHint => unsafe { log_u64(self.recorder.ptr, self.slot.as_mut_ptr(), v as *const _) },
+            DisplayHint::LowerHex | DisplayHint::UpperHex => unsafe {
+                log_hex64(self.recorder.ptr, self.slot.as_mut_ptr(), v as *const _)
+            },
+            DisplayHint::Binary => unsafe { log_bin64(self.recorder.ptr, self.slot.as_mut_ptr(), v as *const _) },
+            _ => return Err(Error),
+        }
+        Ok(())
+    }
+
+    #[inline]
+    fn write_str(&mut self, v: &str, _spec: &FormatSpec) -> FmtResult {
+        // Get string as pointer and size.
+        let v_ptr = v.as_ptr().cast();
+        let v_size = v.len();
+
+        // SAFETY: FFI call. String is reinterpreted into `c_char` pointer and number of bytes.
+        unsafe {
+            log_string(self.recorder.ptr, self.slot.as_mut_ptr(), v_ptr, v_size);
+        }
+        Ok(())
+    }
+}
+
+impl Drop for LogMessage<'_> {
     fn drop(&mut self) {
-        if let Some(slot) = self.slot.as_mut() {
-            unsafe { recorder_stop(self.recorder.inner, slot) }
+        // SAFETY: FFI call. Validity of objects is checked elsewhere.
+        unsafe {
+            recorder_stop(self.recorder.ptr, self.slot.as_mut_ptr());
         }
     }
 }
@@ -360,30 +454,30 @@ unsafe extern "C" {
         context: *const c_char,
         context_size: usize,
         log_level: LogLevel,
-        slot: *mut SlotHandlePtr,
-    ) -> *mut SlotHandlePtr;
-    fn recorder_stop(recorder: *mut RecorderPtr, slot: *mut SlotHandlePtr);
+        slot: *mut SlotHandleStorage,
+    ) -> *mut SlotHandleStorage;
+    fn recorder_stop(recorder: *mut RecorderPtr, slot: *mut SlotHandleStorage);
     fn recorder_log_level(recorder: *const RecorderPtr, context: *const c_char, context_size: usize) -> LogLevel;
-    fn log_bool(recorder: *mut RecorderPtr, slot: *mut SlotHandlePtr, value: *const bool);
-    fn log_f32(recorder: *mut RecorderPtr, slot: *mut SlotHandlePtr, value: *const f32);
-    fn log_f64(recorder: *mut RecorderPtr, slot: *mut SlotHandlePtr, value: *const f64);
-    fn log_string(recorder: *mut RecorderPtr, slot: *mut SlotHandlePtr, value: *const c_char, size: usize);
-    fn log_i8(recorder: *mut RecorderPtr, slot: *mut SlotHandlePtr, value: *const i8);
-    fn log_i16(recorder: *mut RecorderPtr, slot: *mut SlotHandlePtr, value: *const i16);
-    fn log_i32(recorder: *mut RecorderPtr, slot: *mut SlotHandlePtr, value: *const i32);
-    fn log_i64(recorder: *mut RecorderPtr, slot: *mut SlotHandlePtr, value: *const i64);
-    fn log_u8(recorder: *mut RecorderPtr, slot: *mut SlotHandlePtr, value: *const u8);
-    fn log_u16(recorder: *mut RecorderPtr, slot: *mut SlotHandlePtr, value: *const u16);
-    fn log_u32(recorder: *mut RecorderPtr, slot: *mut SlotHandlePtr, value: *const u32);
-    fn log_u64(recorder: *mut RecorderPtr, slot: *mut SlotHandlePtr, value: *const u64);
-    fn log_bin8(recorder: *mut RecorderPtr, slot: *mut SlotHandlePtr, value: *const u8);
-    fn log_bin16(recorder: *mut RecorderPtr, slot: *mut SlotHandlePtr, value: *const u16);
-    fn log_bin32(recorder: *mut RecorderPtr, slot: *mut SlotHandlePtr, value: *const u32);
-    fn log_bin64(recorder: *mut RecorderPtr, slot: *mut SlotHandlePtr, value: *const u64);
-    fn log_hex8(recorder: *mut RecorderPtr, slot: *mut SlotHandlePtr, value: *const u8);
-    fn log_hex16(recorder: *mut RecorderPtr, slot: *mut SlotHandlePtr, value: *const u16);
-    fn log_hex32(recorder: *mut RecorderPtr, slot: *mut SlotHandlePtr, value: *const u32);
-    fn log_hex64(recorder: *mut RecorderPtr, slot: *mut SlotHandlePtr, value: *const u64);
+    fn log_bool(recorder: *mut RecorderPtr, slot: *mut SlotHandleStorage, value: *const bool);
+    fn log_f32(recorder: *mut RecorderPtr, slot: *mut SlotHandleStorage, value: *const f32);
+    fn log_f64(recorder: *mut RecorderPtr, slot: *mut SlotHandleStorage, value: *const f64);
+    fn log_string(recorder: *mut RecorderPtr, slot: *mut SlotHandleStorage, value: *const c_char, size: usize);
+    fn log_i8(recorder: *mut RecorderPtr, slot: *mut SlotHandleStorage, value: *const i8);
+    fn log_i16(recorder: *mut RecorderPtr, slot: *mut SlotHandleStorage, value: *const i16);
+    fn log_i32(recorder: *mut RecorderPtr, slot: *mut SlotHandleStorage, value: *const i32);
+    fn log_i64(recorder: *mut RecorderPtr, slot: *mut SlotHandleStorage, value: *const i64);
+    fn log_u8(recorder: *mut RecorderPtr, slot: *mut SlotHandleStorage, value: *const u8);
+    fn log_u16(recorder: *mut RecorderPtr, slot: *mut SlotHandleStorage, value: *const u16);
+    fn log_u32(recorder: *mut RecorderPtr, slot: *mut SlotHandleStorage, value: *const u32);
+    fn log_u64(recorder: *mut RecorderPtr, slot: *mut SlotHandleStorage, value: *const u64);
+    fn log_bin8(recorder: *mut RecorderPtr, slot: *mut SlotHandleStorage, value: *const u8);
+    fn log_bin16(recorder: *mut RecorderPtr, slot: *mut SlotHandleStorage, value: *const u16);
+    fn log_bin32(recorder: *mut RecorderPtr, slot: *mut SlotHandleStorage, value: *const u32);
+    fn log_bin64(recorder: *mut RecorderPtr, slot: *mut SlotHandleStorage, value: *const u64);
+    fn log_hex8(recorder: *mut RecorderPtr, slot: *mut SlotHandleStorage, value: *const u8);
+    fn log_hex16(recorder: *mut RecorderPtr, slot: *mut SlotHandleStorage, value: *const u16);
+    fn log_hex32(recorder: *mut RecorderPtr, slot: *mut SlotHandleStorage, value: *const u32);
+    fn log_hex64(recorder: *mut RecorderPtr, slot: *mut SlotHandleStorage, value: *const u64);
     fn slot_handle_size() -> usize;
     fn slot_handle_alignment() -> usize;
 }
@@ -463,7 +557,7 @@ mod tests {
     }
 
     #[test]
-    #[should_panic(expected = "Provided context contains non-ASCII characters: ")]
+    #[should_panic(expected = "provided context contains non-ASCII characters: ")]
     fn test_context_non_ascii() {
         let _ = Context::from("❌");
     }

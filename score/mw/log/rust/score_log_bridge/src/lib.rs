@@ -19,6 +19,5 @@
 
 mod ffi;
 mod score_logger;
-mod score_logger_writer;
 
 pub use crate::score_logger::{ScoreLogger, ScoreLoggerBuilder};
