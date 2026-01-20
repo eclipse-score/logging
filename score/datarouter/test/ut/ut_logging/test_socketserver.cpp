@@ -4,6 +4,7 @@
 #include "score/mw/log/configuration/invconfig_mock.h"
 #include "score/datarouter/datarouter/data_router.h"
 #include "score/datarouter/src/persistency/mock_persistent_dictionary.h"
+#include "applications/datarouter_feature_config.h"
 
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
@@ -283,6 +284,11 @@ TEST_F(SocketServerRemainingFunctionsTest, LoadNvConfigSuccessPath)
     RecordProperty("TestType", "Interface test");
     RecordProperty("Verifies", "::score::platform::datarouter::SocketServer::LoadNvConfig()");
     RecordProperty("DerivationTechnique", "Error guessing based on knowledge or experience");
+
+    if constexpr (!score::platform::datarouter::kNonVerboseDltEnabled)
+    {
+        GTEST_SKIP() << "Test requires NON_VERBOSE_DLT feature to be enabled";
+    }
 
     score::mw::log::Logger& logger = score::mw::log::CreateLogger("TEST", "test");
 
