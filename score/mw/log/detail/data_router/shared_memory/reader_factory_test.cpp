@@ -83,7 +83,7 @@ TEST_F(ReaderFactoryFixture, FailingCallToFstatShallResultInEmptyOptional)
     EXPECT_CALL(*mman_mock_, mmap(_, _, _, _, _, _)).Times(0);
 
     auto result = factory_.Create(kFileHandle, kExpectedPid);
-    EXPECT_FALSE(result.has_value());
+    EXPECT_EQ(result, nullptr);
 }
 
 TEST_F(ReaderFactoryFixture, FstatInvalidReturnShallResultInEmptyOptional)
@@ -104,7 +104,7 @@ TEST_F(ReaderFactoryFixture, FstatInvalidReturnShallResultInEmptyOptional)
     EXPECT_CALL(*mman_mock_, mmap(_, _, _, _, _, _)).Times(0);
 
     auto result = factory_.Create(kFileHandle, kExpectedPid);
-    EXPECT_FALSE(result.has_value());
+    EXPECT_FALSE(result);
 }
 
 TEST_F(ReaderFactoryFixture, FstatReturningSizeTooSmallShallResultInEmptyOptional)
@@ -127,7 +127,7 @@ TEST_F(ReaderFactoryFixture, FstatReturningSizeTooSmallShallResultInEmptyOptiona
     EXPECT_CALL(*mman_mock_, mmap(_, _, _, _, _, _)).Times(0);
 
     auto result = factory_.Create(kFileHandle, kExpectedPid);
-    EXPECT_FALSE(result.has_value());
+    EXPECT_EQ(result, nullptr);
 }
 
 TEST_F(ReaderFactoryFixture, MmapFailingShallResultInEmptyOptional)
@@ -154,7 +154,7 @@ TEST_F(ReaderFactoryFixture, MmapFailingShallResultInEmptyOptional)
         .WillOnce(Return(score::cpp::make_unexpected(score::os::Error::createFromErrno(EINVAL))));
 
     auto result = factory_.Create(kFileHandle, kExpectedPid);
-    EXPECT_FALSE(result.has_value());
+    EXPECT_EQ(result, nullptr);
 }
 
 TEST_F(ReaderFactoryFixture, SharedDataMemberPointingOutOfBoundsShallResultInEmptyOptional)
@@ -187,7 +187,7 @@ TEST_F(ReaderFactoryFixture, SharedDataMemberPointingOutOfBoundsShallResultInEmp
     EXPECT_CALL(*mman_mock_, munmap(_, kSharedSize)).WillOnce(Return(score::cpp::expected_blank<score::os::Error>{}));
 
     auto result = factory_.Create(kFileHandle, kExpectedPid);
-    EXPECT_FALSE(result.has_value());
+    EXPECT_EQ(result, nullptr);
 }
 
 TEST_F(ReaderFactoryFixture, UnexpectedPidShallResultInEmptyOptional)
@@ -218,7 +218,7 @@ TEST_F(ReaderFactoryFixture, UnexpectedPidShallResultInEmptyOptional)
     EXPECT_CALL(*mman_mock_, munmap(_, kSharedSize)).WillOnce(Return(score::cpp::expected_blank<score::os::Error>{}));
 
     auto result = factory_.Create(kFileHandle, kExpectedPid);
-    EXPECT_FALSE(result.has_value());
+    EXPECT_EQ(result, nullptr);
 }
 
 TEST_F(ReaderFactoryFixture, ProperSetupShallResultValidReader)
@@ -248,7 +248,7 @@ TEST_F(ReaderFactoryFixture, ProperSetupShallResultValidReader)
     EXPECT_CALL(*mman_mock_, munmap(_, kSharedSize)).Times(0);
 
     auto result = factory_.Create(kFileHandle, kExpectedPid);
-    EXPECT_TRUE(result.has_value());
+    EXPECT_NE(result, nullptr);
 
     EXPECT_CALL(*mman_mock_, munmap(_, kSharedSize)).WillOnce(Return(score::cpp::expected_blank<score::os::Error>{}));
 }
@@ -277,7 +277,7 @@ TEST_F(ReaderFactoryFixture, UnmapFailureShallResultValidReader)
         .WillOnce(Return(score::cpp::expected<void*, score::os::Error>{&buffer_}));
 
     auto result = factory_.Create(kFileHandle, kExpectedPid);
-    EXPECT_TRUE(result.has_value());
+    EXPECT_NE(result, nullptr);
 
     EXPECT_CALL(*mman_mock_, munmap(_, kSharedSize))
         .WillOnce(Return(score::cpp::make_unexpected(score::os::Error::createFromErrno(EINVAL))));

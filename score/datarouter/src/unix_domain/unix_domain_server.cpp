@@ -188,9 +188,20 @@ std::int32_t UnixDomainServer::setup_server_socket(UnixDomainSockAddr& addr)
         // NOLINTNEXTLINE(score-banned-function): Suppressed here because of error handling
         std::exit(EXIT_FAILURE);
     }
+
     const std::int32_t server_fd = socket_ret.value();
     const auto bind_ret = score::os::Socket::instance().bind(
-        server_fd, static_cast<const sockaddr*>(static_cast<const void*>(&addr)), sizeof(sockaddr_un));
+        server_fd,
+        /*
+        Deviation from Rule A5-2-8:
+        - An object with integer type or pointer to void type shall not be converted to an object with pointer type.
+        Justification:
+        - type case is necessary to convert pointer to internal type (UnixDomainSockAddr) to pointer to sockaddr type
+        - which is required for score::os::Socket::instance()::bind()
+        */
+        // coverity[autosar_cpp14_m5_2_8_violation] see above
+        static_cast<const sockaddr*>(static_cast<const void*>(&addr)),
+        sizeof(sockaddr_un));
     if (!bind_ret.has_value())
     {
         std::perror("bind");

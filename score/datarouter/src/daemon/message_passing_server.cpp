@@ -125,7 +125,11 @@ void MessagePassingServer::SessionWrapper::enqueue_tick_while_locked()
 // coverity[autosar_cpp14_a3_1_1_violation]
 MessagePassingServer::MessagePassingServer(MessagePassingServer::SessionFactory factory,
                                            ::score::concurrency::Executor& executor)
-    : factory_{std::move(factory)}, connection_timeout_{}, workers_exit_{false}, session_finishing_{false}
+    : IMessagePassingServerSessionWrapper(),
+      factory_{std::move(factory)},
+      connection_timeout_{},
+      workers_exit_{false},
+      session_finishing_{false}
 {
     worker_thread_ = score::cpp::jthread([this]() {
         RunWorkerThread();
@@ -161,7 +165,20 @@ MessagePassingServer::MessagePassingServer(MessagePassingServer::SessionFactory 
     }
 }
 
-MessagePassingServer::~MessagePassingServer()
+/*
+Deviation from Rule A15-5-1:
+- All user-provided class destructors, deallocation functions, move constructors,
+- move assignment operators and swap functions shall not exit with an exception.
+- A noexcept exception specification shall be added to these functions as appropriate.
+Justification:
+- Ensure that worker_thread_ is not running after destruction of MessagePassingServer
+- checking worker_thread_.joinable() should be enough to avoid exception from join().
+- in this case join() could throw exception only if something goes wrong on OS level.
+- this should be fine, moreover it could happen only on system shutdown stage
+- and does not affect normal runtime
+*/
+// coverity[autosar_cpp14_a15_5_1_violation] see above
+MessagePassingServer::~MessagePassingServer() noexcept
 {
     // first, unblock the possible client connection requests
     {
@@ -178,7 +195,10 @@ MessagePassingServer::~MessagePassingServer()
         workers_exit_ = true;
     }
     worker_cond_.notify_all();
-    worker_thread_.join();
+    if (worker_thread_.joinable())
+    {
+        worker_thread_.join();
+    }
 
     // finally, explicitly close all the remaining sessions
     pid_session_map_.clear();

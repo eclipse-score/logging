@@ -39,7 +39,7 @@ int main(std::int32_t argc, const char* argv[])
     if (!score::logging::options::Options::parse(argc, const_cast<char* const*>(argv)))
     {
         //  Error messages have already been logged, just say goodbye.
-        score::mw::log::LogError() << args.front() << "Terminating because of errors in command line";
+        score::mw::log::LogError() << std::string_view(args.front()) << "Terminating because of errors in command line";
 
         return 1;
     }

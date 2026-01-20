@@ -15,6 +15,7 @@
 
 #include "daemon/socketserver_json_helpers.h"
 #include "score/datarouter/error/error.h"
+#include "score/datarouter/include/applications/datarouter_feature_config.h"
 #include "score/datarouter/include/daemon/utility.h"
 
 #include <rapidjson/document.h>
@@ -337,7 +338,10 @@ void writeDlt(const score::logging::dltserver::PersistentConfig& config, IPersis
 bool readDltEnabled(IPersistentDictionary& pd)
 {
     const bool enabled = pd.getBool(CONFIG_OUTPUT_ENABLED_KEY, true);
-    std::cout << "Loaded output enable = " << enabled << " from KVS" << std::endl;
+    if constexpr (kPersistentConfigFeatureEnabled)
+    {
+        std::cout << "Loaded output enable = " << enabled << " from KVS" << std::endl;
+    }
     return enabled;
 }
 

@@ -11,10 +11,10 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-#ifndef BMW_MW_LOG_WAIT_FREE_SHARED_MEMORY_READER
-#define BMW_MW_LOG_WAIT_FREE_SHARED_MEMORY_READER
+#ifndef BMW_MW_LOG_SHARED_MEMORY_READER
+#define BMW_MW_LOG_SHARED_MEMORY_READER
 
-#include "score/mw/log/detail/data_router/shared_memory/common.h"
+#include "score/mw/log/detail/data_router/shared_memory/i_shared_memory_reader.h"
 #include "score/mw/log/detail/wait_free_producer_queue/alternating_reader.h"
 
 #include <score/utility.hpp>
@@ -30,40 +30,9 @@ namespace log
 namespace detail
 {
 
-struct TypeRegistration
-{
-    /*
-      Maintaining compatibility and avoiding performance overhead outweighs POD Type (class) based design for this
-      particular struct. The Type is simple and does not require invariance (interface OR custom behavior) as per the
-      design. Moreover the type is ONLY used internally under the namespace detail and NOT exposed publicly; this is
-      additionally guaranteed by the build system(bazel) visibility
-  */
-    // coverity[autosar_cpp14_m11_0_1_violation]
-    TypeIdentifier type_id{};
-    // coverity[autosar_cpp14_m11_0_1_violation]
-    score::cpp::span<Byte> registration_data;
-};
-
-using TypeRegistrationCallback = score::cpp::callback<void(const TypeRegistration&), 64>;
-
-struct SharedMemoryRecord
-{ /*
-     Maintaining compatibility and avoiding performance overhead outweighs POD Type (class) based design for this
-     particular struct. The Type is simple and does not require invariance (interface OR custom behavior) as per the
-     design. Moreover the type is ONLY used internally under the namespace detail and NOT exposed publicly; this is
-     additionally guaranteed by the build system(bazel) visibility
- */
-    // coverity[autosar_cpp14_m11_0_1_violation]
-    BufferEntryHeader header;
-    // coverity[autosar_cpp14_m11_0_1_violation]
-    score::cpp::span<Byte> payload;
-};
-
-using NewRecordCallback = score::cpp::callback<void(const SharedMemoryRecord&), 64>;
-
 /// \brief This class manages the reading of serialized data types on read-only shared memory.
 /// This class is not thread safe.
-class SharedMemoryReader
+class SharedMemoryReader : public ISharedMemoryReader
 {
   public:
     explicit SharedMemoryReader(const SharedData& shared_data,
@@ -82,29 +51,29 @@ class SharedMemoryReader
     /// writers based on the assumption that the writer has already finished any activities leading to data
     /// modification. In this case it is assumed that logging client has terminated or crashed.
     std::optional<Length> Read(const TypeRegistrationCallback& type_registration_callback,
-                               const NewRecordCallback& new_message_callback) noexcept;
+                               const NewRecordCallback& new_message_callback) noexcept override;
 
     //  This function may be used to get a temporary view of the value of bytes acquired by writers.
     std::optional<Length> PeekNumberOfBytesAcquiredInBuffer(
-        const std::uint32_t acquired_buffer_count_id) const noexcept;
+        const std::uint32_t acquired_buffer_count_id) const noexcept override;
 
     /// \brief Method shall be called when a client closed the connection to Datarouter.
     std::optional<Length> ReadDetached(const TypeRegistrationCallback& type_registration_callback,
-                                       const NewRecordCallback& new_message_callback) noexcept;
+                                       const NewRecordCallback& new_message_callback) noexcept override;
 
-    Length GetNumberOfDropsWithBufferFull() const noexcept;
-    Length GetNumberOfDropsWithInvalidSize() const noexcept;
-    Length GetNumberOfDropsWithTypeRegistrationFailed() const noexcept;
-    Length GetSizeOfDropsWithBufferFull() const noexcept;
+    Length GetNumberOfDropsWithBufferFull() const noexcept override;
+    Length GetNumberOfDropsWithInvalidSize() const noexcept override;
+    Length GetNumberOfDropsWithTypeRegistrationFailed() const noexcept override;
+    Length GetSizeOfDropsWithBufferFull() const noexcept override;
 
-    Length GetRingBufferSizeBytes() const noexcept;
+    Length GetRingBufferSizeBytes() const noexcept override;
 
-    bool IsBlockReleasedByWriters(const std::uint32_t block_count) noexcept;
+    bool IsBlockReleasedByWriters(const std::uint32_t block_count) noexcept override;
 
     /// \brief This method shall be called by the server when a client has acknowledged an acquire request.
     /// It sets Reader to acquired data that can be later used by Read() method
     /// Returns number of bytes of acquired buffer if available. Otherwise it returns std::nullopt
-    std::optional<Length> NotifyAcquisitionSetReader(const ReadAcquireResult& acquire_result) noexcept;
+    std::optional<Length> NotifyAcquisitionSetReader(const ReadAcquireResult& acquire_result) noexcept override;
 
   private:
     const SharedData& shared_data_;
@@ -129,4 +98,4 @@ class SharedMemoryReader
 }  // namespace mw
 }  // namespace score
 
-#endif  // MWSR_WRITER_IMPL_H_
+#endif  // BMW_MW_LOG_SHARED_MEMORY_READER

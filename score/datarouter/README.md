@@ -32,13 +32,13 @@ Example statistics message:
 ```
 [APP1 : count  4074 , size  714378  B, read_time: 21000  us, transp_delay: 204000  us  time_between_to_calls_: 0  us  time_to_process_records_: 0  us  buffer size watermark:  152  KB out of 512  KB ( 29 %)  messages dropped:  0  (accumulated)]
 ```
-This example shows source `APP1` transmitted 4074 messages with a total payload size of 714378 bytes. The datarouter spent 204000 microseconds reading the messages (since the last read cycle), with a maximum message latency of 1364 microseconds.
+This example shows source `APP1` transmitted 4074 messages with a total payload size of 714378 bytes. The datarouter spent 204000 microseconds reading the messages (since the last read cycle).
 
 The datarouter detects message gaps in the incoming flow and reports them using the source ID as the context ID.
 
 Example gap detection message:
 ```
-535575 2019/11/05 14:59:22.720133 244.3038 157 HFPP DR 485 0 log error verbose 5 message drop detected: messages 1073 to 1110 lost!
+535575 2019/11/05 14:59:22.720133 244.3038 157 ECU1 DR 485 0 log error verbose 5 message drop detected: messages 1073 to 1110 lost!
 ```
 The source ID corresponds to its PID. In this example, the source with PID `485` lost 37 messages because the datarouter did not read the ring buffer fast enough.
 

@@ -57,11 +57,10 @@ PersistentLoggingConfig readPersistentLoggingConfig(const std::string& filePath)
     if (!ok)
     {
         score::mw::log::LogError() << "PersistentLoggingConfig:json parser error: "
-                                 << rapidjson::GetParseError_En(ok.Code());
+                                 << std::string_view{rapidjson::GetParseError_En(ok.Code())};
         config.readResult_ = ReadResult::ERROR_PARSE;
         return config;
     }
-
     if (false == d.HasMember("verbose_filters") || false == d.HasMember("nonverbose_filters"))
     {
         score::mw::log::LogError() << "PersistentLoggingConfig: json filter members not found.";

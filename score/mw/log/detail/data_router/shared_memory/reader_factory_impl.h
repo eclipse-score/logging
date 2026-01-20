@@ -11,8 +11,8 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-#ifndef BMW_MW_LOG_WAIT_FREE_SHARED_MEMORY_READER_FACTORY_IMPL
-#define BMW_MW_LOG_WAIT_FREE_SHARED_MEMORY_READER_FACTORY_IMPL
+#ifndef BMW_MW_LOG_SHARED_MEMORY_READER_FACTORY_IMPL
+#define BMW_MW_LOG_SHARED_MEMORY_READER_FACTORY_IMPL
 
 #include "score/mw/log/detail/data_router/shared_memory/reader_factory.h"
 
@@ -36,8 +36,8 @@ class ReaderFactoryImpl : public ReaderFactory
   public:
     explicit ReaderFactoryImpl(score::cpp::pmr::unique_ptr<score::os::Mman>&& mman,
                                score::cpp::pmr::unique_ptr<score::os::Stat>&& stat_osal) noexcept;
-    std::optional<SharedMemoryReader> Create(const std::int32_t file_descriptor,
-                                             const pid_t expected_pid) noexcept override;
+    std::unique_ptr<ISharedMemoryReader> Create(const std::int32_t file_descriptor,
+                                                const pid_t expected_pid) noexcept override;
 
   private:
     score::cpp::pmr::unique_ptr<score::os::Mman> mman_;
@@ -49,4 +49,4 @@ class ReaderFactoryImpl : public ReaderFactory
 }  // namespace mw
 }  // namespace score
 
-#endif  //  BMW_MW_LOG_WAIT_FREE_SHARED_MEMORY_READER_FACTORY_IMPL
+#endif  //  BMW_MW_LOG_SHARED_MEMORY_READER_FACTORY_IMPL

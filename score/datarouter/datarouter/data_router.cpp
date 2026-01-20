@@ -93,14 +93,14 @@ DataRouter::MessagingSessionPtr DataRouter::new_source_session(
     //  It shall be safe to create shared memory reader as only single process - Datarouter daemon, shall be running
     //  at all times in whole system.
     auto reader = reader_factory->Create(fd, client_pid);
-    if (reader.has_value() == false)
+    if (reader == nullptr)
     {
         stats_logger_.LogError() << "Failed to create session for pid=" << client_pid << ", appid=" << name;
         return nullptr;
     }
 
     return new_source_session_impl(
-        name, is_dlt_enabled, std::move(handle), quota, quota_enforcement_enabled, std::move(reader.value()), nvConfig);
+        name, is_dlt_enabled, std::move(handle), quota, quota_enforcement_enabled, std::move(reader), nvConfig);
 }
 
 void DataRouter::show_source_statistics(uint16_t series_num)
@@ -119,20 +119,21 @@ std::unique_ptr<DataRouter::SourceSession> DataRouter::new_source_session_impl(
     SessionHandleVariant handle,
     const double quota,
     bool quota_enforcement_enabled,
-    score::mw::log::detail::SharedMemoryReader reader,
+    std::unique_ptr<score::mw::log::detail::ISharedMemoryReader> reader,
     const score::mw::log::NvConfig& nvConfig)
 {
     std::lock_guard<std::mutex> lock(subscriber_mutex_);
 
-    auto sourceSession = std::make_unique<DataRouter::SourceSession>(*this,
-                                                                     std::move(reader),
-                                                                     name,
-                                                                     is_dlt_enabled,
-                                                                     std::move(handle),
-                                                                     quota,
-                                                                     quota_enforcement_enabled,
-                                                                     stats_logger_,
-                                                                     nvConfig);
+    auto sourceSession =
+        std::make_unique<DataRouter::SourceSession>(*this,
+                                                    std::move(reader),
+                                                    name,
+                                                    is_dlt_enabled,
+                                                    std::move(handle),
+                                                    quota,
+                                                    quota_enforcement_enabled,
+                                                    stats_logger_,
+                                                    std::make_unique<score::platform::internal::LogParser>(nvConfig));
     if (sourceCallback_)
     {
         sourceCallback_(std::move(sourceSession->get_parser()));
@@ -178,9 +179,9 @@ bool DataRouter::SourceSession::tryFinalizeAcquisition(bool& needs_fast_reschedu
 
     if (data_acquired_local.has_value())
     {
-        if (reader_.IsBlockReleasedByWriters(data_acquired_local.value().acquired_buffer))
+        if (reader_->IsBlockReleasedByWriters(data_acquired_local.value().acquired_buffer))
         {
-            std::ignore = reader_.NotifyAcquisitionSetReader(data_acquired_local.value());
+            std::ignore = reader_->NotifyAcquisitionSetReader(data_acquired_local.value());
             command_data_.lock()->data_acquired_ = std::nullopt;
 
             return true;
@@ -213,7 +214,7 @@ void DataRouter::SourceSession::processAndRouteLogMessages(uint64_t& message_cou
 
     score::mw::log::detail::TypeRegistrationCallback on_new_type =
         [this](const score::mw::log::detail::TypeRegistration& registration) noexcept {
-            parser_.AddIncomingType(registration);
+            parser_->AddIncomingType(registration);
         };
 
     score::mw::log::detail::NewRecordCallback on_new_record =
@@ -225,7 +226,7 @@ void DataRouter::SourceSession::processAndRouteLogMessages(uint64_t& message_cou
             }
 
             auto record_received_timestamp = score::mw::log::detail::TimePoint::clock::now();
-            parser_.Parse(record);
+            parser_->Parse(record);
             ++message_count_local;
 
             transport_delay_local = std::max(transport_delay_local,
@@ -234,7 +235,7 @@ void DataRouter::SourceSession::processAndRouteLogMessages(uint64_t& message_cou
         };
 
     bool detach_needed = false;
-    const auto number_of_bytes_in_buffer_result = reader_.Read(on_new_type, on_new_record);
+    const auto number_of_bytes_in_buffer_result = reader_->Read(on_new_type, on_new_record);
     if (number_of_bytes_in_buffer_result.has_value())
     {
         number_of_bytes_in_buffer = number_of_bytes_in_buffer_result.value();
@@ -262,7 +263,7 @@ void DataRouter::SourceSession::processAndRouteLogMessages(uint64_t& message_cou
             if (cmd->block_expected_to_be_next.has_value())
             {
                 const auto peek_bytes =
-                    reader_.PeekNumberOfBytesAcquiredInBuffer(cmd->block_expected_to_be_next.value());
+                    reader_->PeekNumberOfBytesAcquiredInBuffer(cmd->block_expected_to_be_next.value());
 
                 if ((peek_bytes.has_value() && peek_bytes.value() > 0) ||
                     (cmd->ticks_without_write > kTicksWithoutAcquireWhileNoWrites))
@@ -291,12 +292,12 @@ void DataRouter::SourceSession::processAndRouteLogMessages(uint64_t& message_cou
 
 void DataRouter::SourceSession::process_detached_logs(uint64_t& number_of_bytes_in_buffer)
 {
-    const auto number_of_bytes_in_buffer_result_detached = reader_.ReadDetached(
+    const auto number_of_bytes_in_buffer_result_detached = reader_->ReadDetached(
         [this](const auto& registration) noexcept {
-            parser_.AddIncomingType(registration);
+            parser_->AddIncomingType(registration);
         },
         [this](const auto& record) noexcept {
-            parser_.Parse(record);
+            parser_->Parse(record);
         });
 
     if (number_of_bytes_in_buffer_result_detached.has_value())
@@ -316,8 +317,8 @@ void DataRouter::SourceSession::update_and_log_stats(uint64_t message_count_loca
     {
         auto stats = stats_data_.lock();
 
-        const auto message_count_dropped_new = reader_.GetNumberOfDropsWithBufferFull();
-        const auto size_dropped_new = reader_.GetSizeOfDropsWithBufferFull();
+        const auto message_count_dropped_new = reader_->GetNumberOfDropsWithBufferFull();
+        const auto size_dropped_new = reader_->GetSizeOfDropsWithBufferFull();
         if (message_count_dropped_new != stats->message_count_dropped)
         {
             stats_logger_.LogError() << stats->name << ": message drop detected: "
@@ -327,7 +328,7 @@ void DataRouter::SourceSession::update_and_log_stats(uint64_t message_count_loca
             stats->size_dropped = size_dropped_new;
         }
 
-        const auto message_count_dropped_invalid_size_new = reader_.GetNumberOfDropsWithInvalidSize();
+        const auto message_count_dropped_invalid_size_new = reader_->GetNumberOfDropsWithInvalidSize();
         if (message_count_dropped_invalid_size_new != stats->message_count_dropped_invalid_size)
         {
             stats_logger_.LogError() << stats->name << ": message drop detected: "
@@ -349,14 +350,14 @@ void DataRouter::SourceSession::update_and_log_stats(uint64_t message_count_loca
 }
 
 DataRouter::SourceSession::SourceSession(DataRouter& router,
-                                         score::mw::log::detail::SharedMemoryReader reader,
+                                         std::unique_ptr<score::mw::log::detail::ISharedMemoryReader> reader,
                                          const std::string& name,
                                          const bool is_dlt_enabled,
                                          SessionHandleVariant handle,
                                          const double quota,
                                          bool quota_enforcement_enabled,
                                          score::mw::log::Logger& stats_logger,
-                                         const score::mw::log::NvConfig& nvConfig)
+                                         std::unique_ptr<score::platform::internal::ILogParser> parser)
     : UnixDomainServer::ISession{},
       MessagePassingServer::ISession{},
       local_subscriber_data_(LocalSubscriberData{}),
@@ -364,7 +365,7 @@ DataRouter::SourceSession::SourceSession(DataRouter& router,
       stats_data_(StatsData{}),
       router_(router),
       reader_(std::move(reader)),
-      parser_(nvConfig),
+      parser_(std::move(parser)),
       handle_(std::move(handle)),
       stats_logger_(stats_logger)
 {
@@ -464,7 +465,7 @@ void DataRouter::SourceSession::show_stats()
         name = stats->name;
     }
 
-    const auto buffer_size_kb = reader_.GetRingBufferSizeBytes() / 1024U / 2U;
+    const auto buffer_size_kb = reader_->GetRingBufferSizeBytes() / 1024U / 2U;
     auto buffer_watermark_kb = max_bytes_in_buffer / 1024U;
 
     if (message_count_dropped > 0)
@@ -533,7 +534,8 @@ void DataRouter::SourceSession::request_acquire()
                    },
                    [](score::cpp::pmr::unique_ptr<score::platform::internal::daemon::ISessionHandle>& handle) {
                        handle->AcquireRequest();
-                   }),
+                       // For the quality team argumentation, kindly, check Ticket-200702 and Ticket-229594.
+                   }),  // LCOV_EXCL_LINE : tooling issue. no code to test in this line.
                handle_);
 }
 
@@ -548,7 +550,6 @@ void DataRouter::SourceSession::on_closed_by_peer()
 {
     command_data_.lock()->command_detach_on_closed = true;
 }
-// LCOV_EXCL_STOP
 
 }  // namespace datarouter
 }  // namespace platform

@@ -180,7 +180,7 @@ class UnixDomainServer
     static void process_idle_connections(ConnectionState& state);
     void cleanup_all_connections(ConnectionState& state);
     std::int32_t setup_server_socket(UnixDomainSockAddr& addr);
-    void process_server_iteration(ConnectionState& state, std::int32_t server_fd, std::int32_t timeout);
+    void process_server_iteration(ConnectionState& state, const std::int32_t server_fd, const std::int32_t timeout);
 
     void update_thread_name_server_routine() noexcept;
     std::atomic_bool server_exit_;
