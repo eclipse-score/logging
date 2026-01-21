@@ -10,5 +10,3 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 # *******************************************************************************
-
-# Refer targets from `score_baselibs`

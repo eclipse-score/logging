@@ -11,13 +11,13 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
+#include "applications/datarouter_feature_config.h"
 #include "daemon/socketserver.h"
 #include "logparser/logparser.h"
 #include "score/os/mocklib/unistdmock.h"
 #include "score/mw/log/configuration/invconfig_mock.h"
 #include "score/datarouter/datarouter/data_router.h"
 #include "score/datarouter/src/persistency/mock_persistent_dictionary.h"
-#include "applications/datarouter_feature_config.h"
 
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"

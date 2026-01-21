@@ -11,4 +11,11 @@
 # SPDX-License-Identifier: Apache-2.0
 # *******************************************************************************
 
-# Refer targets from `score_baselibs`
+cc_library(
+    name = "log",
+    visibility = ["//visibility:public"],
+    deps = [
+        "//score/mw/log/detail/common:recorder_factory",
+        "@score_baselibs//score/mw/log:frontend",
+    ],
+)
