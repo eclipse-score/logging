@@ -18,5 +18,9 @@
   {
     "version": "pr-29",
     "url": "https://eclipse-score.github.io/logging/pr-29/"
+  },
+  {
+    "version": "pr-32",
+    "url": "https://eclipse-score.github.io/logging/pr-32/"
   }
 ]
