@@ -44,7 +44,7 @@ Project Layout
 
 The module template includes the following top-level structure:
 
-- `score/`: Main C++/Rust sources
+- `src/`: Main C++/Rust sources
 - `tests/`: Unit and integration tests
 - `examples/`: Usage examples
 - `docs/`: Documentation using `docs-as-code`
@@ -57,7 +57,7 @@ To build the module:
 
 .. code-block:: bash
 
-   bazel build //score/...
+   bazel build //src/...
 
 To run tests:
 
