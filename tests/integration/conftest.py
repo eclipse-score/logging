@@ -51,7 +51,7 @@ _DATAROUTER_CHECK_CMD = "/proc/boot/pidin | /proc/boot/grep datarouter"
 # pathspace ability provides the datarouter access to the `procnto` pathname prefix space
 # required for mw/com message passing with mw::log frontend
 _DATAROUTER_START_CMD = (
-    "cd /usr/bin && on -A nonroot,allow,pathspace -u 1038:1054 "
+    "cd /usr/bin && on -A nonroot,allow,pathspace -u 1051:1091 "
     "./datarouter --no_adaptive_runtime &"
 )
 _DATAROUTER_STARTUP_TIMEOUT_SEC = 2

@@ -19,6 +19,15 @@ Integration tests for the `score_logging` component that verify DLT (Diagnostic 
 
 Complete the QNX 8.0 QEMU environment setup as described in the [QNX QEMU documentation](score_reference_integration/qnx_qemu/README.md).
 
+### Network Bridge Setup (virbr0)
+
+The integration tests use QEMU with bridge networking, which requires the `virbr0` virtual bridge interface. Instructions: reference_integration/qnx_qemu/README.md#Configure QEMU networking
+
+This creates:
+- Bridge interface `virbr0` with IP `192.168.122.1/24` on the host. Reference: /usr/share/libvirt/networks/default.xml
+- DHCP server assigning IPs `192.168.122.2-254` to VMs
+- NAT rules for outbound internet access
+
 ## Usage
 
 ### 1. Start the QNX QEMU Target
