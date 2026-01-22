@@ -1,6 +1,6 @@
 {
-    "appId": "JSON",
-    "appDesc": "JSON example programs",
+    "appId": "EXMP",
+    "appDesc": "Logger example",
     "logMode" : "kConsole",
     "logLevel": "kVerbose",
     "logLevelThresholdConsole": "kInfo"

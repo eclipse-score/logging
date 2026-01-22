@@ -120,3 +120,7 @@ git_override(
     commit = "3c65b223e9f516f95935bb4cd2e83d6088ca016f",
     remote = "https://github.com/eclipse-score/baselibs.git",
 )
+
+# Rust dependencies
+
+bazel_dep(name = "score_baselibs_rust", version = "0.0.3")
