@@ -24,7 +24,7 @@ namespace detail
 
 AlternatingControlBlockSelectId SelectLinearControlBlockId(std::uint32_t count)
 {
-    if (count % 2U == 0U)
+    if (count % 2U != 0U)
     {
         return AlternatingControlBlockSelectId::kBlockEven;
     }
