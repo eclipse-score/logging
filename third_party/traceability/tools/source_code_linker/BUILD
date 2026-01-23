@@ -11,6 +11,8 @@
 # SPDX-License-Identifier: Apache-2.0
 # *******************************************************************************
 
+load("@rules_python//python:defs.bzl", "py_binary")
+
 # Carry over from Eclipse S-Core including slight modifications:
 # https://github.com/eclipse-score/docs-as-code/tree/v0.4.0/src/extensions/score_source_code_linker
 

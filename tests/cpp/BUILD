@@ -10,6 +10,9 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 # *******************************************************************************
+
+load("@rules_cc//cc:defs.bzl", "cc_test")
+
 cc_test(
     name = "cpp_test_main",
     srcs = ["test_main.cpp"],
