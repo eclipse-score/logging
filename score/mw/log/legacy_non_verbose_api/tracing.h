@@ -91,7 +91,7 @@ class logger
 
                 return appPrefix_.size() + ::score::common::visitor::logger_type_info<T>().size();
             }
-            void copy(score::cpp::span<score::mw::log::detail::Byte> data) const
+            void Copy(score::cpp::span<score::mw::log::detail::Byte> data) const
             {
                 std::ignore = std::copy(appPrefix_.cbegin(), appPrefix_.cend(), data.begin());
                 // The following condition should be always true

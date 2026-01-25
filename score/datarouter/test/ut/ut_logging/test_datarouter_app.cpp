@@ -25,7 +25,7 @@ class DatarouterAppTest : public ::testing::Test
 {
   protected:
     // We'll keep an atomic_bool to pass to datarouter_app_run()
-    std::atomic_bool exitRequested_{false};
+    std::atomic_bool exit_requested_{false};
 
     void SetUp() override
     {
@@ -50,13 +50,13 @@ TEST_F(DatarouterAppTest, AppRunNoAdaptiveRuntime)
     // Suppose your Options parser sets no_adaptive_runtime_ = true with "-n"
     int argc = 2;
     char prog[] = "testProg";
-    char noAdaptiveArg[] = "-n";
-    char* argv[] = {prog, noAdaptiveArg, nullptr};
+    char no_adaptive_arg[] = "-n";
+    char* argv[] = {prog, no_adaptive_arg, nullptr};
 
-    bool parseOk = score::logging::options::Options::parse(argc, argv);
-    ASSERT_TRUE(parseOk);
+    bool parse_ok = score::logging::options::Options::parse(argc, argv);
+    ASSERT_TRUE(parse_ok);
 
-    EXPECT_NO_FATAL_FAILURE(score::logging::datarouter::datarouter_app_run(exitRequested_));
+    EXPECT_NO_FATAL_FAILURE(score::logging::datarouter::datarouter_app_run(exit_requested_));
 }
 
 TEST_F(DatarouterAppTest, AppRunPrintVersion)
@@ -64,15 +64,15 @@ TEST_F(DatarouterAppTest, AppRunPrintVersion)
     // Simulate parse with an argument that sets print_version_ = true
     int argc = 2;
     char prog[] = "testProg";
-    char versionArg[] = "--version";
-    char* argv[] = {prog, versionArg, nullptr};
+    char version_arg[] = "--version";
+    char* argv[] = {prog, version_arg, nullptr};
 
-    bool parseOk = score::logging::options::Options::parse(argc, argv);
-    ASSERT_TRUE(parseOk);
+    bool parse_ok = score::logging::options::Options::parse(argc, argv);
+    ASSERT_TRUE(parse_ok);
 
     // We'll capture stdout to verify that "Version 0.1s" was printed
     testing::internal::CaptureStdout();
-    score::logging::datarouter::datarouter_app_run(exitRequested_);
+    score::logging::datarouter::datarouter_app_run(exit_requested_);
     std::string output = testing::internal::GetCapturedStdout();
 
     // Check if the version string is present
@@ -85,15 +85,15 @@ TEST_F(DatarouterAppTest, AppRunDoNothing)
     // Simulate parse with an argument that sets do_nothing_ = true
     int argc = 2;
     char prog[] = "testProg";
-    char doNothingArg[] = "-h";
-    char* argv[] = {prog, doNothingArg, nullptr};
+    char do_nothing_arg[] = "-h";
+    char* argv[] = {prog, do_nothing_arg, nullptr};
 
     // parse sets do_nothing_ = true
-    bool parseOk = score::logging::options::Options::parse(argc, argv);
-    ASSERT_TRUE(parseOk);
+    bool parse_ok = score::logging::options::Options::parse(argc, argv);
+    ASSERT_TRUE(parse_ok);
 
     // Now call run. Because do_nothing() is true, it should return immediately.
-    EXPECT_NO_FATAL_FAILURE(score::logging::datarouter::datarouter_app_run(exitRequested_));
+    EXPECT_NO_FATAL_FAILURE(score::logging::datarouter::datarouter_app_run(exit_requested_));
 }
 
 TEST_F(DatarouterAppTest, AppShutdown)

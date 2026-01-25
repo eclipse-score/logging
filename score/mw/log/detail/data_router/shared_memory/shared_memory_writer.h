@@ -170,7 +170,7 @@ class SharedMemoryWriter
 
                 // Write type info
                 const auto type_info_span = payload_span.subspan(type_identifier_size, type_info_size);
-                info.copy(type_info_span);
+                info.Copy(type_info_span);
             });
 
         return result;

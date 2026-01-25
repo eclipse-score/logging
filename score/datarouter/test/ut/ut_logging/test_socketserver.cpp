@@ -33,7 +33,6 @@
 using namespace testing;
 using score::mw::log::detail::ConnectMessageFromClient;
 using score::mw::log::detail::LoggingIdentifier;
-using score::platform::datarouter::SocketServer;
 
 namespace score
 {
@@ -44,8 +43,8 @@ namespace datarouter
 namespace
 {
 
-const std::string CONFIG_DATABASE_KEY = "dltConfig";
-const std::string CONFIG_OUTPUT_ENABLED_KEY = "dltOutputEnabled";
+const std::string kConfigDatabaseKey = "dltConfig";
+const std::string kConfigOutputEnabledKey = "dltOutputEnabled";
 
 class SocketServerInitializePersistentStorageTest : public ::testing::Test
 {
@@ -66,7 +65,7 @@ TEST_F(SocketServerInitializePersistentStorageTest, InitializeWithDltEnabled)
     RecordProperty("DerivationTechnique", "Analysis of boundary values");
 
     // Expect readDltEnabled to be called and return true
-    EXPECT_CALL(*dynamic_cast<MockPersistentDictionary*>(mock_pd_.get()), GetBool(CONFIG_OUTPUT_ENABLED_KEY, true))
+    EXPECT_CALL(*dynamic_cast<MockPersistentDictionary*>(mock_pd_.get()), GetBool(kConfigOutputEnabledKey, true))
         .WillOnce(Return(true));
 
     auto handlers = SocketServer::InitializePersistentStorage(mock_pd_);
@@ -94,7 +93,7 @@ TEST_F(SocketServerInitializePersistentStorageTest, InitializeWithDltDisabled)
     RecordProperty("DerivationTechnique", "Analysis of boundary values");
 
     // Expect readDltEnabled to be called and return false
-    EXPECT_CALL(*dynamic_cast<MockPersistentDictionary*>(mock_pd_.get()), GetBool(CONFIG_OUTPUT_ENABLED_KEY, true))
+    EXPECT_CALL(*dynamic_cast<MockPersistentDictionary*>(mock_pd_.get()), GetBool(kConfigOutputEnabledKey, true))
         .WillOnce(Return(false));
 
     auto handlers = SocketServer::InitializePersistentStorage(mock_pd_);
@@ -122,13 +121,13 @@ TEST_F(SocketServerInitializePersistentStorageTest, LoadDltLambdaCallsReadDlt)
     RecordProperty("DerivationTechnique", "Error guessing based on knowledge or experience");
 
     // Expect readDltEnabled to be called
-    EXPECT_CALL(*dynamic_cast<MockPersistentDictionary*>(mock_pd_.get()), GetBool(CONFIG_OUTPUT_ENABLED_KEY, true))
+    EXPECT_CALL(*dynamic_cast<MockPersistentDictionary*>(mock_pd_.get()), GetBool(kConfigOutputEnabledKey, true))
         .WillOnce(Return(true));
 
     auto handlers = SocketServer::InitializePersistentStorage(mock_pd_);
 
     // Expect getString to be called when load_dlt lambda is invoked (by readDlt)
-    EXPECT_CALL(*dynamic_cast<MockPersistentDictionary*>(mock_pd_.get()), GetString(CONFIG_DATABASE_KEY, _))
+    EXPECT_CALL(*dynamic_cast<MockPersistentDictionary*>(mock_pd_.get()), GetString(kConfigDatabaseKey, _))
         .WillOnce(Return("{}"));
 
     // Call the load_dlt lambda - it should successfully return a PersistentConfig
@@ -146,13 +145,13 @@ TEST_F(SocketServerInitializePersistentStorageTest, StoreDltLambdaCallsWriteDlt)
     RecordProperty("DerivationTechnique", "Error guessing based on knowledge or experience");
 
     // Expect readDltEnabled to be called
-    EXPECT_CALL(*dynamic_cast<MockPersistentDictionary*>(mock_pd_.get()), GetBool(CONFIG_OUTPUT_ENABLED_KEY, true))
+    EXPECT_CALL(*dynamic_cast<MockPersistentDictionary*>(mock_pd_.get()), GetBool(kConfigOutputEnabledKey, true))
         .WillOnce(Return(true));
 
     auto handlers = SocketServer::InitializePersistentStorage(mock_pd_);
 
     // Expect setString to be called when store_dlt lambda is invoked (by writeDlt)
-    EXPECT_CALL(*dynamic_cast<MockPersistentDictionary*>(mock_pd_.get()), SetString(CONFIG_DATABASE_KEY, _)).Times(1);
+    EXPECT_CALL(*dynamic_cast<MockPersistentDictionary*>(mock_pd_.get()), SetString(kConfigDatabaseKey, _)).Times(1);
 
     // Create a test config
     score::logging::dltserver::PersistentConfig test_config;
@@ -377,8 +376,7 @@ TEST_F(SocketServerRemainingFunctionsTest, CreateEnableHandlerCreatesCallbackSuc
     DataRouter router(logger, source_setup);
 
     // Expect writeDltEnabled to be called when the handler lambda executes
-    EXPECT_CALL(*dynamic_cast<MockPersistentDictionary*>(mock_pd_.get()), SetBool(CONFIG_OUTPUT_ENABLED_KEY, _))
-        .Times(1);
+    EXPECT_CALL(*dynamic_cast<MockPersistentDictionary*>(mock_pd_.get()), SetBool(kConfigOutputEnabledKey, _)).Times(1);
 
     // Create the enable handler - this covers lines 160-171 (function body and lambda creation)
     auto enable_handler = SocketServer::CreateEnableHandler(router, *mock_pd_, *dlt_server);

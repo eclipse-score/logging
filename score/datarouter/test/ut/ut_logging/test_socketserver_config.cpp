@@ -38,11 +38,11 @@ namespace datarouter
 namespace
 {
 
-const std::string CONFIG_DATABASE_KEY = "dltConfig";
-const std::string CONFIG_OUTPUT_ENABLED_KEY = "dltOutputEnabled";
+const std::string kConfigDatabaseKey = "dltConfig";
+const std::string kConfigOutputEnabledKey = "dltOutputEnabled";
 
 template <typename T>
-std::string type_name()
+std::string TypeName()
 {
     return ::score::common::visitor::struct_visitable<T>::name();
 }
@@ -61,17 +61,17 @@ TEST(SocketserverConfigTest, FilterFactoryLogEntry)
     using ::score::mw::log::detail::LogEntry;
     using ::score::platform::dltid_t;
     using ::score::platform::internal::LogEntryFilter;
-    using s = ::score::common::visitor::logging_serializer;
+    using S = ::score::common::visitor::logging_serializer;
 
     constexpr std::size_t kSerializationBufferSize = 128;
     std::array<char, kSerializationBufferSize> buffer;
 
     const LogEntryFilter filter{
         score::mw::log::detail::LoggingIdentifier{"APP0"}, score::mw::log::detail::LoggingIdentifier{""}, 1U};
-    const auto fSize = s::serialize(filter, buffer.data(), buffer.size());
-    ::score::platform::DataFilter dataFilter{type_name<LogEntryFilter>(), std::string(buffer.data(), fSize)};
+    const auto f_size = S::serialize(filter, buffer.data(), buffer.size());
+    ::score::platform::DataFilter data_filter{TypeName<LogEntryFilter>(), std::string(buffer.data(), f_size)};
 
-    const auto matcher = factory(type_name<LogEntry>(), dataFilter);
+    const auto matcher = factory(TypeName<LogEntry>(), data_filter);
     EXPECT_TRUE(matcher);
 
     const LogEntry entry1{score::mw::log::detail::LoggingIdentifier{"APP0"},
@@ -98,12 +98,12 @@ TEST(SocketserverConfigTest, FilterFactoryLogEntry)
                           1,
                           {},
                           mw::log::LogLevel::kOff};
-    const auto tSize1 = s::serialize(entry1, buffer.data(), buffer.size());
-    EXPECT_TRUE(matcher(buffer.data(), tSize1));
-    const auto tSize2 = s::serialize(entry2, buffer.data(), buffer.size());
-    EXPECT_FALSE(matcher(buffer.data(), tSize2));
-    const auto tSize3 = s::serialize(entry3, buffer.data(), buffer.size());
-    EXPECT_FALSE(matcher(buffer.data(), tSize3));
+    const auto t_size1 = S::serialize(entry1, buffer.data(), buffer.size());
+    EXPECT_TRUE(matcher(buffer.data(), t_size1));
+    const auto t_size2 = S::serialize(entry2, buffer.data(), buffer.size());
+    EXPECT_FALSE(matcher(buffer.data(), t_size2));
+    const auto t_size3 = S::serialize(entry3, buffer.data(), buffer.size());
+    EXPECT_FALSE(matcher(buffer.data(), t_size3));
     // Test deserialization for failing and return false.
     EXPECT_FALSE(matcher(buffer.data(), 0));
 }
@@ -327,7 +327,7 @@ TEST(SocketserverConfigTest, GetStringCallExpected)
 {
     StubPersistentDictionary pd;
     const std::string json{};
-    auto default_return = pd.GetString(CONFIG_DATABASE_KEY, json);
+    auto default_return = pd.GetString(kConfigDatabaseKey, json);
     ASSERT_EQ(default_return, json);
 }
 
@@ -335,9 +335,9 @@ TEST(SocketserverConfigTest, GetBoolCallExpected)
 {
     StubPersistentDictionary pd;
     const std::string key{};
-    const bool defaultBoolValue{};
-    auto default_return = pd.GetBool(key, defaultBoolValue);
-    ASSERT_EQ(default_return, defaultBoolValue);
+    const bool default_bool_value{};
+    auto default_return = pd.GetBool(key, default_bool_value);
+    ASSERT_EQ(default_return, default_bool_value);
 }
 
 }  // namespace

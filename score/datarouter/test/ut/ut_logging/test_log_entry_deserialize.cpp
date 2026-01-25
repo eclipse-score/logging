@@ -61,13 +61,13 @@ TEST(SerializeDeserialize, DataSerializedFromVectorShouldBeAccessibleUsingSpan)
     });
     SerializedVectorDataWrapper unit_output;
 
-    using s = ::score::common::visitor::logging_serializer;
+    using S = ::score::common::visitor::logging_serializer;
     std::array<std::uint8_t, 512> buffer_on_stack;
     score::cpp::span serialized_data{buffer_on_stack.begin(), buffer_on_stack.size()};
     const auto ssize =
-        s::serialize(unit_input, serialized_data.data(), static_cast<std::uint32_t>(serialized_data.size()));
+        S::serialize(unit_input, serialized_data.data(), static_cast<std::uint32_t>(serialized_data.size()));
 
-    s::deserialize(serialized_data.data(), static_cast<std::uint32_t>(serialized_data.size()), unit_output);
+    S::deserialize(serialized_data.data(), static_cast<std::uint32_t>(serialized_data.size()), unit_output);
 
     EXPECT_TRUE(ssize > 0);
     EXPECT_EQ(unit_output.m, unit_input.m);
@@ -90,11 +90,11 @@ TEST(SerializeDeserialize, DataSerializedFromDeserializeOffsetReturnZero)
 {
     SerializedVectorDataWrapper unit_output{};
 
-    using s = ::score::common::visitor::logging_serializer;
+    using S = ::score::common::visitor::logging_serializer;
     std::array<std::uint8_t, 512> buffer_on_stack{};
     score::cpp::span serialized_data{buffer_on_stack.begin(), buffer_on_stack.size()};
 
-    s::deserialize(serialized_data.data(), static_cast<std::uint32_t>(serialized_data.size()), unit_output);
+    S::deserialize(serialized_data.data(), static_cast<std::uint32_t>(serialized_data.size()), unit_output);
 
     EXPECT_EQ(unit_output.n, 0);
 }
@@ -103,11 +103,11 @@ TEST(SerializeDeserialize, DataSerializedFromDeserializeVectorSizeLocationNullpt
 {
     SerializedVectorDataWrapper unit_output{};
 
-    using s = ::score::common::visitor::logging_serializer;
+    using S = ::score::common::visitor::logging_serializer;
     std::array<std::uint8_t, 512> buffer_on_stack{0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
     score::cpp::span serialized_data{buffer_on_stack.begin(), buffer_on_stack.size()};
 
-    s::deserialize(serialized_data.data(), static_cast<std::uint32_t>(serialized_data.size()), unit_output);
+    S::deserialize(serialized_data.data(), static_cast<std::uint32_t>(serialized_data.size()), unit_output);
 
     // Should have some garbage values, because initial buffer contains garbage.
     EXPECT_NE(unit_output.m, 0);
@@ -126,14 +126,14 @@ TEST(SerializeDeserialize, DataSerializedFromDeserializeVectorSizeLocationZero2)
     });
     SerializedVectorDataWrapper unit_output{};
 
-    using s = ::score::common::visitor::logging_serializer;
+    using S = ::score::common::visitor::logging_serializer;
     std::array<std::uint8_t, 512> buffer_on_stack{};
     std::generate(buffer_on_stack.begin(), buffer_on_stack.end(), [n = 255]() mutable {
         return n;
     });
     score::cpp::span serialized_data{buffer_on_stack.begin(), buffer_on_stack.size()};
     const auto ssize =
-        s::serialize(unit_input, serialized_data.data(), static_cast<std::uint32_t>(serialized_data.size()));
+        S::serialize(unit_input, serialized_data.data(), static_cast<std::uint32_t>(serialized_data.size()));
 
     // corrupt serialized buffer
     auto it = serialized_data.begin();
@@ -142,7 +142,7 @@ TEST(SerializeDeserialize, DataSerializedFromDeserializeVectorSizeLocationZero2)
     std::array<std::uint8_t, 4> garbage{1, 1, 1, 1};
     memcpy(src, garbage.begin(), garbage.size());
 
-    s::deserialize(serialized_data.data(), static_cast<std::uint32_t>(serialized_data.size()), unit_output);
+    S::deserialize(serialized_data.data(), static_cast<std::uint32_t>(serialized_data.size()), unit_output);
 
     EXPECT_TRUE(ssize > 0);
     // Should have some garbage values, because initial buffer corrupted.
