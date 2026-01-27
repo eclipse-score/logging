@@ -24,7 +24,7 @@ jobs:
       contents: read
       pull-requests: read
     with:
-      bazel-target: "//... -//:ide_support -//:starpls_server -//:docs"
+      bazel-target: "//score/... //tests/..."
       bazel-config: "x86_64-qnx"
       credential-helper: "scripts/internal/qnx_creds.py"
       environment-name: "workflow-approval"
@@ -39,7 +39,7 @@ jobs:
       contents: read
       pull-requests: read
     with:
-      bazel-target: "//... -//:ide_support -//:starpls_server -//:docs"
+      bazel-target: "//score/... //tests/..."
       bazel-config: "arm64-qnx"
       credential-helper: "scripts/internal/qnx_creds.py"
       environment-name: "workflow-approval"
