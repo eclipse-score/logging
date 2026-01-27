@@ -43,24 +43,25 @@ common:qnx --sandbox_writable_path=/var/tmp
 build:build_qnx8 --platforms=@score_bazel_platforms//:arm64-qnx8_0
 build:build_qnx8 --extra_toolchains=@toolchains_qnx_qcc//:qcc_aarch64
 build:build_qnx8 --extra_toolchains=@toolchains_qnx_ifs//:ifs_aarch64
-build:build_qnx8 --extra_toolchains=@score_toolchains_rust//toolchains/aarch64-unknown-qnx8_0:toolchain_aarch64_qnx8_0
+build:build_qnx8 --extra_toolchains=@score_toolchains_rust//toolchains/ferrocene:ferrocene_aarch64_unknown_nto_qnx800
 
 common:qnx_x86_64 --config=qnx
 common:qnx_x86_64 --platforms=@score_bazel_platforms//:x86_64-qnx8_0
 common:qnx_x86_64 --extra_toolchains=@toolchains_qnx_ifs//:ifs_x86_64
 common:qnx_x86_64 --extra_toolchains=@toolchains_qnx_qcc//:qcc_x86_64
+common:qnx_x86_64 --extra_toolchains=@score_toolchains_rust//toolchains/ferrocene:ferrocene_x86_64_pc_nto_qnx800
 
 common:qnx_arm64 --config=qnx
 common:qnx_arm64 --platforms=@score_bazel_platforms//:arm64-qnx8_0
 common:qnx_arm64 --extra_toolchains=@toolchains_qnx_ifs//:ifs_aarch64
 common:qnx_arm64 --extra_toolchains=@toolchains_qnx_qcc//:qcc_aarch64
-common:qnx_arm64 --extra_toolchains=@score_toolchains_rust//toolchains/aarch64-unknown-qnx8_0:toolchain_aarch64_qnx8_0
+common:qnx_arm64 --extra_toolchains=@score_toolchains_rust//toolchains/ferrocene:ferrocene_aarch64_unknown_nto_qnx800
 
 common:x86_64-qnx --config=qnx_x86_64
 common:arm64-qnx --config=qnx_arm64
 
 common --extra_toolchains=@gcc_toolchain//:host_gcc_12
-common --extra_toolchains=@score_toolchains_rust//toolchains/x86_64-unknown-linux-gnu:toolchain_x86_64_linux
+common --extra_toolchains=@score_toolchains_rust//toolchains/ferrocene:ferrocene_x86_64_unknown_linux_gnu
 
 # With this instrumentation filter for our two main components, we ensure that `bazel coverage //...` is yielding the correct results
 coverage --instrumentation_filter="^//score/datarouter[/:],^//score/mw/log[/:],-//score/mw/.*/test[/:]"
