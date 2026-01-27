@@ -13,7 +13,7 @@
 
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
-#include "score/datarouter/file_transfer/file_transfer_impl/filetransfer_stream.h"
+#include "score/datarouter/src/file_transfer/file_transfer_impl/filetransfer_stream.h"
 #include <array>
 #include <chrono>
 #include <fstream>
@@ -31,7 +31,7 @@ class MockFTOutput : public FileTransferStreamHandler::IOutput
 {
   public:
     MOCK_METHOD(void,
-                sendFTVerbose,
+                SendFtVerbose,
                 (score::cpp::span<const std::uint8_t> data,
                  score::mw::log::LogLevel loglevel,
                  score::platform::dltid_t appId,
@@ -92,7 +92,7 @@ TEST_F(FileTransferStreamTest, ShouldTransferFileSuccessfully)
 
     EXPECT_CALL(
         *mockOutput,
-        sendFTVerbose(
+        SendFtVerbose(
             _, score::mw::log::LogLevel::kInfo, score::platform::dltid_t("APPX"), score::platform::dltid_t("CTXX"), _, _))
         .Times(AtLeast(3));
 
@@ -109,7 +109,7 @@ TEST_F(FileTransferStreamTest, ShouldLogErrorWhenFileNotFound)
 
     EXPECT_CALL(
         *mockOutput,
-        sendFTVerbose(
+        SendFtVerbose(
             _, score::mw::log::LogLevel::kError, score::platform::dltid_t("APPX"), score::platform::dltid_t("CTXX"), _, _))
         .Times(1);
 
@@ -125,7 +125,7 @@ TEST_F(FileTransferStreamTest, ShouldDeleteFileIfFlagSet)
 
     EXPECT_CALL(
         *mockOutput,
-        sendFTVerbose(
+        SendFtVerbose(
             _, score::mw::log::LogLevel::kInfo, score::platform::dltid_t("APPX"), score::platform::dltid_t("CTXX"), _, _))
         .Times(AtLeast(2));
 

@@ -29,11 +29,11 @@ namespace datarouter
 class MockPersistentDictionary : public ::score::platform::datarouter::IPersistentDictionary
 {
   public:
-    MOCK_METHOD(std::string, getString, (const std::string& key, const std::string& defaultValue), (override final));
-    MOCK_METHOD(bool, getBool, (const std::string& key, const bool defaultValue), (override final));
+    MOCK_METHOD(std::string, GetString, (const std::string& key, const std::string& defaultValue), (override final));
+    MOCK_METHOD(bool, GetBool, (const std::string& key, const bool defaultValue), (override final));
 
-    MOCK_METHOD(void, setString, (const std::string& key, const std::string& value), (override final));
-    MOCK_METHOD(void, setBool, (const std::string& key, const bool value), (override final));
+    MOCK_METHOD(void, SetString, (const std::string& key, const std::string& value), (override final));
+    MOCK_METHOD(void, SetBool, (const std::string& key, const bool value), (override final));
 
   protected:
     ~MockPersistentDictionary() = default;

@@ -11,11 +11,8 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-#ifndef SCORE_PAS_LOGGING_INCLUDE_SYSEDR_STUB_SYSEDR_FACTORY_H
-#define SCORE_PAS_LOGGING_INCLUDE_SYSEDR_STUB_SYSEDR_FACTORY_H
-
-#include "score/datarouter/persistent_logging/persistent_logging_stub/stub_sysedr_handler.h"
-#include "score/datarouter/persistent_logging/sysedr_factory.hpp"
+#include "score/datarouter/src/persistent_logging/persistent_logging_stub/stub_sysedr_factory.h"
+#include "score/mw/log/logging.h"
 
 namespace score
 {
@@ -24,14 +21,12 @@ namespace platform
 namespace internal
 {
 
-class StubSysedrFactory : public SysedrFactory<StubSysedrFactory>
+std::unique_ptr<ISysedrHandler> StubSysedrFactory::CreateConcreteSysedrHandler()
 {
-  public:
-    std::unique_ptr<ISysedrHandler> CreateConcreteSysedrHandler();
-};
+    score::mw::log::LogError() << "persistent_logging disabled, no persistent logging actions performed";
+    return std::make_unique<StubSysedrHandler>();
+}
 
 }  // namespace internal
 }  // namespace platform
 }  // namespace score
-
-#endif  // SCORE_PAS_LOGGING_INCLUDE_SYSEDR_STUB_SYSEDR_FACTORY_H

@@ -30,7 +30,7 @@ namespace logging
 namespace dltserver
 {
 
-void DltLogServer::sendNonVerbose(const score::mw::log::config::NvMsgDescriptor& desc,
+void DltLogServer::SendNonVerbose(const score::mw::log::config::NvMsgDescriptor& desc,
                                   uint32_t tmsp,
                                   const void* data,
                                   size_t size)
@@ -57,7 +57,7 @@ void DltLogServer::sendVerbose(
         platform::convertToDltId(entry.app_id), platform::convertToDltId(entry.ctx_id), entry.log_level, sender);
 }
 
-void DltLogServer::sendFTVerbose(score::cpp::span<const std::uint8_t> data,
+void DltLogServer::SendFtVerbose(score::cpp::span<const std::uint8_t> data,
                                  mw::log::LogLevel loglevel,
                                  dltid_t appId,
                                  dltid_t ctxId,

@@ -12,10 +12,10 @@
  ********************************************************************************/
 #include "score/mw/log/test/console_logging_environment/console_logging_environment.h"
 
-#if (!defined KUSE_STUB_IMPLEMENTATION_ONLY)
+#if defined(KCONSOLE_LOGGING)
 #include "score/mw/log/detail/common/recorder_factory.h"
 #else
-#include "score/mw/log/detail/recorder_factory_stub.h"
+#include "score/mw/log/detail/recorder_factory_basic.h"
 #endif
 
 #include "score/mw/log/runtime.h"
@@ -29,7 +29,7 @@ namespace log
 
 void ConsoleLoggingEnvironment::SetUp()
 {
-#if (!defined KUSE_STUB_IMPLEMENTATION_ONLY)
+#if defined(KCONSOLE_LOGGING)
     score::mw::log::detail::Configuration config{};
     config.SetLogMode({score::mw::LogMode::kConsole});
     config.SetDefaultConsoleLogLevel(score::mw::log::LogLevel::kVerbose);

@@ -11,40 +11,31 @@
 # SPDX-License-Identifier: Apache-2.0
 # *******************************************************************************
 
-load("@rules_cc//cc:defs.bzl", "cc_library")
 load("@score_baselibs//score/language/safecpp:toolchain_features.bzl", "COMPILER_WARNING_FEATURES")
+load("@score_baselibs//score/quality/clang_tidy:extra_checks.bzl", "clang_tidy_extra_checks")
 
-cc_library(
-    name = "file_transfer_handler_factory_stub",
-    hdrs = [
-        "file_transfer_handler_factory_stub.h",
-    ],
-    features = COMPILER_WARNING_FEATURES,
-    visibility = [
-        "//score/datarouter:__pkg__",
-        "//score/datarouter/test:__subpackages__",
-    ],
-    deps = [
-        ":file_transfer_stream_handler_stub",
-        "//score/datarouter:logparser",
-        "//score/datarouter/file_transfer:file_transfer_handler_factory",
+clang_tidy_extra_checks(
+    name = "clang_tidy_extra_checks",
+    extra_features = [
+        "spp_code_style_check_header_guards",
+        "spp_code_style_check_method_names",
+        "spp_code_style_check_readability",
+        "spp_code_style_check_type_names",
+        "spp_code_style_check_variable_names",
     ],
 )
 
 cc_library(
-    name = "file_transfer_stream_handler_stub",
+    name = "file_transfer_handler_factory",
     hdrs = [
-        "file_transfer_stream_handler_stub.h",
+        "file_transfer_handler_factory.hpp",
     ],
     features = COMPILER_WARNING_FEATURES,
     visibility = [
-        "//score/datarouter:__pkg__",
+        "//score/datarouter/src/file_transfer:__subpackages__",
+        "//score/datarouter/test:__subpackages__",
     ],
     deps = [
-        "//score/datarouter:dltprotocol",
-        "//score/datarouter:dltserver_common",
-        "//score/datarouter:log",
         "//score/datarouter:logparser",
-        "@score_baselibs//score/language/futurecpp",
     ],
 )

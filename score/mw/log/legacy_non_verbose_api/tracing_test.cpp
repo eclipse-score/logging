@@ -403,6 +403,100 @@ TEST_F(LoggerFixture, WhenTypeRegistrationFailsDroppedLogsCounterIsIncremented)
     EXPECT_EQ(static_cast<std::uint64_t>(kNumberOfLogAttempts), log_entry_instance.get_dropped_logs_count());
 }
 
+TEST_F(LoggerFixture, WhenContextIdNotInContextLogLevelMapGetTypeThresholdReturnsVerbose)
+{
+    RecordProperty("Requirement", "SCR-1633147,SCR-1633921");
+    RecordProperty("ASIL", "B");
+    RecordProperty("Description",
+                   "When a type is registered in nvconfig but its context ID is not in the context log level map, "
+                   "get_type_threshold shall return kVerbose (default)");
+    RecordProperty("TestingTechnique", "Requirements-based test");
+    RecordProperty("DerivationTechnique", "Analysis of requirements");
+
+    // Create nvconfig with "score::mw::log::detail::LogEntry" type that has ctxId "STDA"
+    auto nvConfigResult = NvConfigFactory::CreateAndInit(JSON_PATH);
+    ASSERT_TRUE(nvConfigResult.has_value());
+
+    // Configure context_log_level_map with a DIFFERENT context ID (not "STDA")
+    // This creates a scenario where the type exists in nvconfig but its ctxId is not configured
+    PrepareContextLogLevelFixture(nvConfigResult.value(), "DIFF");
+
+    const auto threshold = logger_->get_type_threshold<score::mw::log::detail::LogEntry>();
+
+    // Should return kVerbose since ctxId "STDA" is not in the map
+    EXPECT_EQ(score::platform::LogLevel::kVerbose, threshold);
+}
+
+TEST(TraceFixtureTest, TraceFatalFunctionCallsTraceLevel)
+{
+    RecordProperty("Requirement", "SCR-1633147");
+    RecordProperty("ASIL", "B");
+    RecordProperty("Description", "Verifies that TRACE_FATAL calls TRACE_LEVEL with kFatal level");
+    RecordProperty("TestingTechnique", "Requirements-based test");
+    RecordProperty("DerivationTechnique", "Analysis of requirements");
+
+    LogEntry entry{};
+    auto& logger = LOG_ENTRY<score::mw::log::detail::LogEntry>();
+    TRACE_FATAL(entry);
+    EXPECT_EQ(true, logger.enabled_at(score::platform::LogLevel::kFatal));
+}
+
+TEST(TraceFixtureTest, TraceWarnFunctionCallsTraceLevel)
+{
+    RecordProperty("Requirement", "SCR-1633147");
+    RecordProperty("ASIL", "B");
+    RecordProperty("Description", "Verifies that TRACE_WARN calls TRACE_LEVEL with kWarn level");
+    RecordProperty("TestingTechnique", "Requirements-based test");
+    RecordProperty("DerivationTechnique", "Analysis of requirements");
+
+    LogEntry entry{};
+    auto& logger = LOG_ENTRY<score::mw::log::detail::LogEntry>();
+    TRACE_WARN(entry);
+    EXPECT_EQ(true, logger.enabled_at(score::platform::LogLevel::kWarn));
+}
+
+TEST(TraceFixtureTest, TraceVerboseFunctionCallsTraceLevel)
+{
+    RecordProperty("Requirement", "SCR-1633147");
+    RecordProperty("ASIL", "B");
+    RecordProperty("Description", "Verifies that TRACE_VERBOSE calls TRACE_LEVEL with kVerbose level");
+    RecordProperty("TestingTechnique", "Requirements-based test");
+    RecordProperty("DerivationTechnique", "Analysis of requirements");
+
+    LogEntry entry{};
+    auto& logger = LOG_ENTRY<score::mw::log::detail::LogEntry>();
+    TRACE_VERBOSE(entry);
+    EXPECT_EQ(true, logger.enabled_at(score::platform::LogLevel::kVerbose));
+}
+
+TEST(TraceFixtureTest, TraceDebugFunctionCallsTraceLevel)
+{
+    RecordProperty("Requirement", "SCR-1633147");
+    RecordProperty("ASIL", "B");
+    RecordProperty("Description", "Verifies that TRACE_DEBUG calls TRACE_LEVEL with kDebug level");
+    RecordProperty("TestingTechnique", "Requirements-based test");
+    RecordProperty("DerivationTechnique", "Analysis of requirements");
+
+    LogEntry entry{};
+    auto& logger = LOG_ENTRY<score::mw::log::detail::LogEntry>();
+    TRACE_DEBUG(entry);
+    EXPECT_EQ(true, logger.enabled_at(score::platform::LogLevel::kDebug));
+}
+
+TEST(TraceFixtureTest, TraceInfoFunctionCallsTraceLevel)
+{
+    RecordProperty("Requirement", "SCR-1633147");
+    RecordProperty("ASIL", "B");
+    RecordProperty("Description", "Verifies that TRACE_INFO calls TRACE_LEVEL with kInfo level");
+    RecordProperty("TestingTechnique", "Requirements-based test");
+    RecordProperty("DerivationTechnique", "Analysis of requirements");
+
+    LogEntry entry{};
+    auto& logger = LOG_ENTRY<score::mw::log::detail::LogEntry>();
+    TRACE_INFO(entry);
+    EXPECT_EQ(true, logger.enabled_at(score::platform::LogLevel::kInfo));
+}
+
 }  // namespace
 }  // namespace detail
 }  // namespace log

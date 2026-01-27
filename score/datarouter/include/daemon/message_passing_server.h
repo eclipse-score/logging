@@ -18,15 +18,20 @@
 
 #include "score/mw/log/detail/data_router/shared_memory/common.h"
 
-#include "score/mw/com/message_passing/receiver_factory.h"
-#include "score/mw/com/message_passing/sender_factory.h"
+#include "score/message_passing/i_client_factory.h"
+#include "score/message_passing/i_server_connection.h"
+#include "score/message_passing/i_server_factory.h"
 #include "score/mw/log/detail/logging_identifier.h"
 
 #include "score/datarouter/daemon_communication/session_handle_interface.h"
 #include <score/jthread.hpp>
+
+#include "score/concurrency/interruptible_wait.h"
+#include <score/stop_token.hpp>
 #include <condition_variable>
 #include <functional>
 #include <mutex>
+#include <optional>
 #include <queue>
 #include <thread>
 #include <unordered_map>
@@ -47,6 +52,19 @@ class IMessagePassingServerSessionWrapper
     virtual void EnqueueTickWhileLocked(pid_t /*pid*/) = 0;
 };
 
+/// QNX message passing server for handling logging client connections.
+///
+/// Manages multiple client sessions and processes their log data asynchronously.
+/// Uses a single worker thread to read from client shared memory buffers and route
+/// log messages through the DataRouter pipeline.
+///
+/// Threading model:
+/// - Dispatch thread: Created by QnxDispatchEngine; receives connection requests and
+///   messages via QNX message passing (dispatch_block loop in QnxDispatchEngine::RunOnThread)
+/// - Worker thread: Processes session tick events to read shared memory and route logs
+///
+/// Each client session is scheduled on the worker thread via a work queue to avoid
+/// blocking the dispatch thread during potentially slow shared memory operations.
 class MessagePassingServer : public IMessagePassingServerSessionWrapper
 {
   public:
@@ -55,17 +73,18 @@ class MessagePassingServer : public IMessagePassingServerSessionWrapper
       public:
         SessionHandle(pid_t pid,
                       MessagePassingServer* server,
-                      score::cpp::pmr::unique_ptr<score::mw::com::message_passing::ISender> sender)
-            : daemon::ISessionHandle(), sender_(std::move(sender)), pid_(pid), server_(server)
+                      score::cpp::pmr::unique_ptr<score::message_passing::IClientConnection> sender)
+            : daemon::ISessionHandle(), sender_(std::move(sender)), pid_(pid), server_(server), sender_state_{}
         {
         }
 
-        void AcquireRequest() const override;
+        bool AcquireRequest() const override;
 
       private:
-        score::cpp::pmr::unique_ptr<score::mw::com::message_passing::ISender> sender_;
+        score::cpp::pmr::unique_ptr<score::message_passing::IClientConnection> sender_;
         pid_t pid_;
         MessagePassingServer* server_;
+        mutable std::optional<score::message_passing::IClientConnection::State> sender_state_;
     };
 
     class ISession
@@ -83,19 +102,20 @@ class MessagePassingServer : public IMessagePassingServerSessionWrapper
                                                 const score::mw::log::detail::ConnectMessageFromClient&,
                                                 score::cpp::pmr::unique_ptr<daemon::ISessionHandle>)>;
 
-    MessagePassingServer(SessionFactory factory, ::score::concurrency::Executor& executor);
+    MessagePassingServer(SessionFactory factory,
+                         std::shared_ptr<score::message_passing::IServerFactory> server_factory = nullptr,
+                         std::shared_ptr<score::message_passing::IClientFactory> client_factory = nullptr);
     ~MessagePassingServer() noexcept;
 
     // for unit test only. to keep rest of functions in private
     class MessagePassingServerForTest;
 
   private:
-    static score::mw::com::message_passing::ShortMessage PrepareAcquireRequestMessage() noexcept;
-
     void NotifyAcquireRequestFailed(std::int32_t pid);
 
-    void OnConnectRequest(const score::mw::com::message_passing::MediumMessagePayload payload, const pid_t pid);
-    void OnAcquireResponse(const score::mw::com::message_passing::MediumMessagePayload payload, const pid_t pid);
+    void MessageCallback(const score::cpp::span<const std::uint8_t> message, const pid_t pid);
+    void OnConnectRequest(const score::cpp::span<const std::uint8_t> message, const pid_t pid);
+    void OnAcquireResponse(const score::cpp::span<const std::uint8_t> message, const pid_t pid);
 
     using timestamp_t = std::chrono::steady_clock::time_point;
 
@@ -157,7 +177,7 @@ class MessagePassingServer : public IMessagePassingServerSessionWrapper
 
     SessionFactory factory_;
 
-    score::cpp::pmr::unique_ptr<score::mw::com::message_passing::IReceiver> receiver_;
+    score::cpp::pmr::unique_ptr<score::message_passing::IServer> receiver_;
 
     std::mutex mutex_;
     score::cpp::stop_source stop_source_;
@@ -166,9 +186,12 @@ class MessagePassingServer : public IMessagePassingServerSessionWrapper
     std::condition_variable worker_cond_;  // to wake up worker thread
     std::unordered_map<pid_t, SessionWrapper> pid_session_map_;
     std::queue<pid_t> work_queue_;
-    bool workers_exit_;
+    std::atomic<bool> workers_exit_;
     std::condition_variable server_cond_;  // to wake up server thread
     bool session_finishing_;
+
+    std::shared_ptr<score::message_passing::IServerFactory> server_factory_;
+    std::shared_ptr<score::message_passing::IClientFactory> client_factory_;
 };
 
 }  // namespace internal

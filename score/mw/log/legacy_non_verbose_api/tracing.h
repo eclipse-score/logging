@@ -202,10 +202,32 @@ class log_entry
         {
             return registered_id;
         }
+        // LCOV_EXCL_START
+        // Rationale for coverage exclusion:
+        // This else branch is triggered when compare_exchange_strong fails, which occurs in a
+        // multi-threaded race condition where two threads attempt to register the same type
+        // simultaneously. For this to happen:
+        // 1. Both threads must pass the guard check (shared_memory_id_ == registration_token)
+        // 2. Thread A executes compare_exchange_strong and succeeds (updates shared_memory_id_)
+        // 3. Thread B executes compare_exchange_strong and fails (shared_memory_id_ already updated)
+        //
+        // Why this cannot be reliably tested in unit tests:
+        // - The race window exists only between the guard check and the atomic operation
+        // - This window is typically a few CPU cycles (nanoseconds)
+        // - Once any thread updates shared_memory_id_, the guard check prevents other threads
+        //   from reaching compare_exchange_strong
+        // - Unit tests cannot deterministically create this precise timing condition without
+        //   introducing test flakiness
+        // - Thread scheduling is non-deterministic and hardware-dependent
+        //
+        // The correctness is guaranteed by C++ atomics: when compare_exchange_strong fails,
+        // 'expected' is automatically updated with the current shared_memory_id_ value, which
+        // is then correctly returned.
         else
         {
             return expected;
         }
+        // LCOV_EXCL_STOP
     }
 
     template <typename F>

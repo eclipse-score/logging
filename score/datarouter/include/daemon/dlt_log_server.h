@@ -322,14 +322,14 @@ class DltLogServer : score::platform::datarouter::DltNonverboseHandlerType::IOut
 
     std::unique_ptr<ISysedrHandler> sysedr_handler_;
 
-    void sendNonVerbose(const score::mw::log::config::NvMsgDescriptor& desc,
+    void SendNonVerbose(const score::mw::log::config::NvMsgDescriptor& desc,
                         uint32_t tmsp,
                         const void* data,
                         size_t size) override final;
     void sendVerbose(
         uint32_t tmsp,
         const score::mw::log::detail::log_entry_deserialization::LogEntryDeserializationReflection& entry) override final;
-    void sendFTVerbose(score::cpp::span<const std::uint8_t> data,
+    void SendFtVerbose(score::cpp::span<const std::uint8_t> data,
                        mw::log::LogLevel loglevel,
                        dltid_t appId,
                        dltid_t ctxId,

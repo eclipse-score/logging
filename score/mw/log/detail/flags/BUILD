@@ -44,19 +44,3 @@ config_setting(
         "@score_baselibs//score/mw/log:__subpackages__",
     ],
 )
-
-bool_flag(
-    name = "KUse_Stub_Implementation_Only",
-    build_setting_default = False,
-)
-
-config_setting(
-    name = "config_KUse_Stub_Implementation_Only",
-    flag_values = {
-        ":KUse_Stub_Implementation_Only": "True",
-    },
-    visibility = [
-        "//score/mw/log:__subpackages__",
-        "@score_baselibs//score/mw/log:__subpackages__",
-    ],
-)

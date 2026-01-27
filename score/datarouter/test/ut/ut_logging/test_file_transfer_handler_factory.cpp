@@ -11,13 +11,13 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-#include "score/datarouter/file_transfer/file_transfer_handler_factory.hpp"
 #include "score/datarouter/include/applications/datarouter_feature_config.h"
+#include "score/datarouter/src/file_transfer/file_transfer_handler_factory.hpp"
 
 #if defined(DLT_FILE_TRANSFER_FEATURE)
-#include "score/datarouter/file_transfer/file_transfer_impl/file_transfer_stream_handler_factory.h"
+#include "score/datarouter/src/file_transfer/file_transfer_impl/file_transfer_stream_handler_factory.h"
 #else
-#include "score/datarouter/file_transfer/file_transfer_stub/file_transfer_handler_factory_stub.h"
+#include "score/datarouter/src/file_transfer/file_transfer_stub/file_transfer_handler_factory_stub.h"
 #endif
 
 #include <gmock/gmock.h>

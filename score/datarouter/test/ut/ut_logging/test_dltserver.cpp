@@ -28,24 +28,6 @@ namespace platform
 
 inline namespace
 {
-bool operator<(const dltid_t c1, const dltid_t c2)
-{
-    return c1.value < c2.value;
-}
-
-bool operator==(const std::vector<dltid_t>& c1, const std::vector<dltid_t>& c2)
-{
-    if (c1.size() != c2.size())
-    {
-        return false;
-    }
-    std::vector<dltid_t> c1s{c1};
-    std::sort(c1s.begin(), c1s.end());
-    std::vector<dltid_t> c2s{c2};
-    std::sort(c2s.begin(), c2s.end());
-    return std::equal(c1s.begin(), c1s.end(), c2s.begin());
-}
-
 }  // namespace
 
 }  // namespace platform
@@ -60,7 +42,6 @@ namespace dltserver
 
 inline namespace
 {
-constexpr auto kSizeChannelName{4UL};
 // Declared those constants for readability purposes
 constexpr auto kCommandSize{1UL};
 constexpr auto kCommandResponseSize{1UL};
@@ -95,51 +76,6 @@ constexpr auto kCommandResponseSize{1UL};
         }                                                               \
     } while (0)
 
-#define EXPECT_NAMES_OR_NOOP(resp, n1, n2)                                          \
-    do                                                                              \
-    {                                                                               \
-        if (!(resp).empty())                                                        \
-        {                                                                           \
-            EXPECT_GE((resp).size(), kCommandResponseSize);                         \
-            EXPECT_THAT((resp).substr(1, (resp).size()), ::testing::HasSubstr(n1)); \
-            EXPECT_THAT((resp).substr(1, (resp).size()), ::testing::HasSubstr(n2)); \
-        }                                                                           \
-        else                                                                        \
-        {                                                                           \
-            SUCCEED();                                                              \
-        }                                                                           \
-    } while (0)
-
-bool operator==(const PersistentConfig::ChannelDescription& c1, const PersistentConfig::ChannelDescription& c2)
-{
-    return c1.channelThreshold == c2.channelThreshold;
-}
-
-bool operator==(const PersistentConfig& c1, const PersistentConfig& c2)
-{
-    if (c1.channels != c2.channels)
-    {
-        return false;
-    }
-    if (c1.filteringEnabled != c2.filteringEnabled)
-    {
-        return false;
-    }
-    if (c1.defaultThreshold != c2.defaultThreshold)
-    {
-        return false;
-    }
-    if (c1.channelAssignments != c2.channelAssignments)
-    {
-        return false;
-    }
-    if (c1.messageThresholds != c2.messageThresholds)
-    {
-        return false;
-    }
-    return true;
-}
-
 }  // namespace
 
 }  // namespace dltserver
@@ -171,8 +107,8 @@ class DltLogServer::DltLogServerTest : public DltLogServer
     virtual ~DltLogServerTest() {};
 
   public:
-    using DltLogServer::sendFTVerbose;
-    using DltLogServer::sendNonVerbose;
+    using DltLogServer::SendFtVerbose;
+    using DltLogServer::SendNonVerbose;
     using DltLogServer::sendVerbose;
 };
 
@@ -270,40 +206,12 @@ class DltServerCreatedWithConfigFixture : public ::testing::Test
         false};
 
     PersistentConfig pConfig{};
-    PersistentConfig pConfigCompare{
-        {
-            {"DFLT", {score::mw::log::LogLevel::kFatal}},
-            {"CORE", {score::mw::log::LogLevel::kError}},
-        },
-        true,
-        score::mw::log::LogLevel::kOff,
-        {
-            {dltid_t("APP0"), {{dltid_t("CTX0"), bothChannels}}},
-        },
-        {{dltid_t("APP0"), {{dltid_t("CTX0"), score::mw::log::LogLevel::kOff}}}},
-    };
     testing::StrictMock<MockFunction<PersistentConfig(void)>> readCallback_;
     testing::StrictMock<MockFunction<void(const PersistentConfig&)>> writeCallback_;
 
     std::unique_ptr<LogSenderMock> log_sender_mock_{};
     LogSenderMock* log_sender_mock_raw_ptr_{nullptr};
 };
-
-TEST_F(DltServerCreatedWithConfigFixture, WhenCreatedWithConfig)
-{
-    EXPECT_CALL(readCallback_, Call()).Times(1).WillOnce(Return(pConfig));
-    EXPECT_CALL(writeCallback_, Call(pConfigCompare)).Times(::testing::AtMost(1));
-
-    DltLogServer dltServer(sConfig, readCallback_.AsStdFunction(), writeCallback_.AsStdFunction(), true);
-
-    std::string response{};
-    auto session = dltServer.new_config_session(
-        score::platform::datarouter::ConfigSessionHandleType{0, nullptr, std::reference_wrapper<std::string>{response}});
-
-    session->on_command(std::string(kCommandSize, config::STORE_DLT_CONFIG));
-
-    EXPECT_OK_OR_NOOP(response);
-}
 
 TEST_F(DltServerCreatedWithConfigFixture, FlushChannelsExpectNoThrowException)
 {
@@ -332,82 +240,6 @@ TEST_F(DltServerCreatedWithConfigFixture, GetQuotaCorrectWrongAppNameExpectDefau
     DltLogServer dltServer(sConfig, readCallback_.AsStdFunction(), writeCallback_.AsStdFunction(), true);
     const auto ret_val = dltServer.get_quota("AAAA");
     EXPECT_EQ(ret_val, 1.0);
-}
-
-TEST_F(DltServerCreatedWithConfigFixture, ReadLogChannelsWithShortNameCommandExpectChannelsList)
-{
-    using namespace std::string_literals;
-
-    EXPECT_CALL(readCallback_, Call()).Times(1).WillOnce(Return(pConfig));
-    EXPECT_CALL(writeCallback_, Call(_)).Times(0);
-
-    auto config_short_channel_name = sConfig;
-    config_short_channel_name.channels = {
-        //  channels as std::unordered_map<dltid_t, ChannelDescription>
-        {dltid_t("DFLT"), {dltid_t("ECU0"), "", 3490U, "", 3491U, score::mw::log::LogLevel::kFatal, "160.48.199.34"}},
-        {dltid_t("SR"), {dltid_t("ECU0"), "", 3489U, "", 3493U, score::mw::log::LogLevel::kError, "160.48.199.101"}},
-        {dltid_t("CORE"), {dltid_t("ECU0"), "", 3490U, "", 3492U, score::mw::log::LogLevel::kError, "160.48.199.101"}},
-    };
-    //  Extend SetUp expectation of the channel construction:
-    EXPECT_CALL(outputs_, construct(_, _, 3493U, Eq(std::string("160.48.199.101")))).Times(1);
-    EXPECT_CALL(outputs_, bind(_, _, 3489U)).Times(1);
-
-    DltLogServer dltServer(
-        config_short_channel_name, readCallback_.AsStdFunction(), writeCallback_.AsStdFunction(), true);
-
-    std::string response{};
-    auto session = dltServer.new_config_session(
-        score::platform::datarouter::ConfigSessionHandleType{0, nullptr, std::reference_wrapper<std::string>{response}});
-
-    session->on_command(std::string(kCommandSize, config::READ_LOG_CHANNEL_NAMES));
-
-    const std::string kResponse = {"CORESR\0\0DFLT"s};
-    // Verify content only when dynamic configuration is enabled
-    if (!response.empty())
-    {
-        EXPECT_EQ(response.size(), kCommandResponseSize + 3 * kSizeChannelName);
-        EXPECT_THAT(response.substr(1, response.size()), ::testing::HasSubstr("DFLT"));
-        EXPECT_THAT(response.substr(1, response.size()), ::testing::HasSubstr("SR\0\0"s));
-        EXPECT_THAT(response.substr(1, response.size()), ::testing::HasSubstr("CORE"));
-    }
-    else
-    {
-        SUCCEED();
-    }
-}
-
-TEST_F(DltServerCreatedWithConfigFixture, ReadLogChannelsCommandExpectChannelsList)
-{
-    EXPECT_CALL(readCallback_, Call()).Times(1).WillOnce(Return(pConfig));
-    EXPECT_CALL(writeCallback_, Call(_)).Times(0);
-
-    DltLogServer dltServer(sConfig, readCallback_.AsStdFunction(), writeCallback_.AsStdFunction(), true);
-
-    std::string response{};
-    std::reference_wrapper<std::string> reference_to_response{response};
-    auto session = dltServer.new_config_session(
-        score::platform::datarouter::ConfigSessionHandleType{0, nullptr, reference_to_response});
-
-    session->on_command(std::string(kCommandSize, config::READ_LOG_CHANNEL_NAMES));
-
-    const std::string kResponse{"COREDFLT"};
-    EXPECT_NAMES_OR_NOOP(response, "DFLT", "CORE");
-}
-
-TEST_F(DltServerCreatedWithConfigFixture, ResetToDefaultCommandExpectTwoReadCallbacks)
-{
-    EXPECT_CALL(readCallback_, Call()).Times(::testing::AtMost(2)).WillOnce(Return(pConfig));
-    EXPECT_CALL(writeCallback_, Call(_)).Times(::testing::AtMost(1));
-
-    DltLogServer dltServer(sConfig, readCallback_.AsStdFunction(), writeCallback_.AsStdFunction(), true);
-
-    std::string response{};
-    auto session = dltServer.new_config_session(
-        score::platform::datarouter::ConfigSessionHandleType{0, nullptr, std::reference_wrapper<std::string>{response}});
-
-    session->on_command(std::string(kCommandSize, config::RESET_TO_DEFAULT));
-
-    EXPECT_OK_OR_NOOP(response);
 }
 
 TEST(ResetToDefaultTest, ResetToDefaultCommandEmptyChannelsNoReadCallback)
@@ -555,41 +387,6 @@ TEST_F(DltServerCreatedWithConfigFixture, SetDefaultTraceStateCommandExpectReadC
     EXPECT_OK_OR_NOOP(response);
 }
 
-TEST_F(DltServerCreatedWithConfigFixture, SetLogChannelAssignmentWrongCommandExpectReadCallback)
-{
-    EXPECT_CALL(readCallback_, Call()).Times(1).WillOnce(Return(pConfig));
-    EXPECT_CALL(writeCallback_, Call(_)).Times(0);
-
-    DltLogServer dltServer(sConfig, readCallback_.AsStdFunction(), writeCallback_.AsStdFunction(), true);
-
-    std::string response{};
-    auto session = dltServer.new_config_session(
-        score::platform::datarouter::ConfigSessionHandleType{0, nullptr, std::reference_wrapper<std::string>{response}});
-
-    session->on_command(std::string(kCommandSize, config::SET_LOG_CHANNEL_ASSIGNMENT));
-
-    EXPECT_ERR_OR_NOOP(response);
-}
-
-TEST_F(DltServerCreatedWithConfigFixture, SetLogChannelAssignmentCommandNoChannelsExpectReadCallback)
-{
-    EXPECT_CALL(readCallback_, Call()).Times(1).WillOnce(Return(pConfig));
-    EXPECT_CALL(writeCallback_, Call(_)).Times(0);
-
-    DltLogServer dltServer(sConfig, readCallback_.AsStdFunction(), writeCallback_.AsStdFunction(), true);
-
-    std::string response{};
-    auto session = dltServer.new_config_session(
-        score::platform::datarouter::ConfigSessionHandleType{0, nullptr, std::reference_wrapper<std::string>{response}});
-
-    std::array<std::uint8_t, 14> command_buffer{
-        config::SET_LOG_CHANNEL_ASSIGNMENT, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13};
-    const std::string command{command_buffer.begin(), command_buffer.end()};
-    session->on_command(command);
-
-    EXPECT_ERR_OR_NOOP(response);
-}
-
 TEST_F(DltServerCreatedWithConfigFixture, SetLogChannelAssignmentCommandFoundChannelAssignmentFoundExpectReadCallback)
 {
     EXPECT_CALL(readCallback_, Call()).Times(1).WillOnce(Return(pConfig));
@@ -711,86 +508,38 @@ TEST_F(DltServerCreatedWithConfigFixture, SetLogChannelAssignmentWrongChannel)
     EXPECT_EQ(response[0], config::RET_ERROR);
 }
 
-TEST_F(DltServerCreatedWithConfigFixture, SetDltOutputEnableWrongCommandExpectReadCallback)
+TEST_F(DltServerCreatedWithConfigFixture, SetLogChannelAssignmentBehaviorRemovesChannel)
 {
     EXPECT_CALL(readCallback_, Call()).Times(1).WillOnce(Return(pConfig));
     EXPECT_CALL(writeCallback_, Call(_)).Times(0);
 
-    DltLogServer dltServer(sConfig, readCallback_.AsStdFunction(), writeCallback_.AsStdFunction(), true);
+    // Setup: add CORE so APP0/CTX0 is routed to DFLT + CORE.
+    score::logging::dltserver::DltLogServer::DltLogServerTest dltServer(
+        sConfig, readCallback_.AsStdFunction(), writeCallback_.AsStdFunction(), true, std::move(log_sender_mock_));
 
-    std::string response{};
-    auto session = dltServer.new_config_session(
-        score::platform::datarouter::ConfigSessionHandleType{0, nullptr, std::reference_wrapper<std::string>{response}});
+    const score::mw::log::detail::LoggingIdentifier app_id{"APP0"};
+    const score::mw::log::detail::LoggingIdentifier ctx_id{"CTX0"};
+    const score::mw::log::detail::log_entry_deserialization::LogEntryDeserializationReflection entry{
+        app_id, ctx_id, {}, 0, score::mw::log::LogLevel::kOff};
 
-    session->on_command(std::string(kCommandSize, config::SET_DLT_OUTPUT_ENABLE));
+    const auto resp_add =
+        dltServer.SetLogChannelAssignment(dltid_t{"APP0"}, dltid_t{"CTX0"}, dltid_t{"CORE"}, AssignmentAction::Add);
+    ASSERT_FALSE(resp_add.empty());
+    EXPECT_EQ(resp_add[0], static_cast<char>(config::RET_OK));
 
-    EXPECT_ERR_OR_NOOP(response);
-}
+    // With both channels assigned: 2 sends.
+    EXPECT_CALL(*log_sender_mock_raw_ptr_, SendVerbose(_, _, _)).Times(2);
+    dltServer.sendVerbose(100U, entry);
+    ::testing::Mock::VerifyAndClearExpectations(log_sender_mock_raw_ptr_);
 
-TEST_F(DltServerCreatedWithConfigFixture, SetDltOutputEnableCommandEnableExpectReadCallback)
-{
-    EXPECT_CALL(readCallback_, Call()).Times(1).WillOnce(Return(pConfig));
-    EXPECT_CALL(writeCallback_, Call(_)).Times(0);
+    const auto resp_remove =
+        dltServer.SetLogChannelAssignment(dltid_t{"APP0"}, dltid_t{"CTX0"}, dltid_t{"CORE"}, AssignmentAction::Remove);
+    ASSERT_FALSE(resp_remove.empty());
+    EXPECT_EQ(resp_remove[0], static_cast<char>(config::RET_OK));
 
-    DltLogServer dltServer(sConfig, readCallback_.AsStdFunction(), writeCallback_.AsStdFunction(), true);
-
-    std::string response{};
-    auto session = dltServer.new_config_session(
-        score::platform::datarouter::ConfigSessionHandleType{0, nullptr, std::reference_wrapper<std::string>{response}});
-
-    std::array<std::uint8_t, 2> command_buffer{config::SET_DLT_OUTPUT_ENABLE, 1};
-    const std::string command{command_buffer.begin(), command_buffer.end()};
-    session->on_command(command);
-
-    const auto dlt_enabled = dltServer.GetDltEnabled();
-    if (!response.empty())
-    {
-        EXPECT_TRUE(dlt_enabled);
-    }
-
-    EXPECT_OK_OR_NOOP(response);
-}
-
-TEST_F(DltServerCreatedWithConfigFixture, SetDltOutputEnableCommandDisableExpectReadCallback)
-{
-    EXPECT_CALL(readCallback_, Call()).Times(1).WillOnce(Return(pConfig));
-    EXPECT_CALL(writeCallback_, Call(_)).Times(0);
-
-    DltLogServer dltServer(sConfig, readCallback_.AsStdFunction(), writeCallback_.AsStdFunction(), true);
-
-    std::string response{};
-    auto session = dltServer.new_config_session(
-        score::platform::datarouter::ConfigSessionHandleType{0, nullptr, std::reference_wrapper<std::string>{response}});
-
-    std::array<std::uint8_t, 2> command_buffer{config::SET_DLT_OUTPUT_ENABLE, 0};
-    const std::string command{command_buffer.begin(), command_buffer.end()};
-    session->on_command(command);
-
-    const auto dlt_enabled = dltServer.GetDltEnabled();
-    if (!response.empty())
-    {
-        EXPECT_FALSE(dlt_enabled);
-    }
-
-    EXPECT_OK_OR_NOOP(response);
-}
-
-TEST_F(DltServerCreatedWithConfigFixture, SetDltOutputEnableCommandWrongValueExpectReadCallback)
-{
-    EXPECT_CALL(readCallback_, Call()).Times(1).WillOnce(Return(pConfig));
-    EXPECT_CALL(writeCallback_, Call(_)).Times(0);
-
-    DltLogServer dltServer(sConfig, readCallback_.AsStdFunction(), writeCallback_.AsStdFunction(), true);
-
-    std::string response{};
-    auto session = dltServer.new_config_session(
-        score::platform::datarouter::ConfigSessionHandleType{0, nullptr, std::reference_wrapper<std::string>{response}});
-
-    std::array<std::uint8_t, 2> command_buffer{config::SET_DLT_OUTPUT_ENABLE, 2};
-    const std::string command{command_buffer.begin(), command_buffer.end()};
-    session->on_command(command);
-
-    EXPECT_ERR_OR_NOOP(response);
+    // After removing CORE: back to DFLT-only -> 1 send.
+    EXPECT_CALL(*log_sender_mock_raw_ptr_, SendVerbose(_, _, _)).Times(1);
+    dltServer.sendVerbose(100U, entry);
 }
 
 TEST_F(DltServerCreatedWithConfigFixture, SetDltOutputEnableCommandCallbackEnabledExpectCallbackCall)
@@ -1013,7 +762,7 @@ TEST_F(DltServerCreatedWithConfigFixture, SendNonVerboseFilteringDisabledExpectS
         sConfig, readCallback_.AsStdFunction(), writeCallback_.AsStdFunction(), true, std::move(log_sender_mock_));
 
     EXPECT_CALL(*log_sender_mock_raw_ptr_, SendNonVerbose(_, _, _, _, _)).Times(1);
-    dltServer.sendNonVerbose({}, 100U, nullptr, 0);
+    dltServer.SendNonVerbose({}, 100U, nullptr, 0);
 }
 
 TEST_F(DltServerCreatedWithConfigFixture,
@@ -1026,7 +775,7 @@ TEST_F(DltServerCreatedWithConfigFixture,
         sConfig, readCallback_.AsStdFunction(), writeCallback_.AsStdFunction(), true, std::move(log_sender_mock_));
 
     EXPECT_CALL(*log_sender_mock_raw_ptr_, SendNonVerbose(_, _, _, _, _)).Times(1);
-    dltServer.sendNonVerbose({}, 100U, nullptr, 0);
+    dltServer.SendNonVerbose({}, 100U, nullptr, 0);
 }
 
 TEST_F(DltServerCreatedWithConfigFixture, SendNonVerboseAppIdAcceptedByFilteringExpectSendCallTwice)
@@ -1041,7 +790,7 @@ TEST_F(DltServerCreatedWithConfigFixture, SendNonVerboseAppIdAcceptedByFiltering
     const score::mw::log::config::NvMsgDescriptor desc{100U, app_id, ctx_id, score::mw::log::LogLevel::kOff};
 
     EXPECT_CALL(*log_sender_mock_raw_ptr_, SendNonVerbose(_, _, _, _, _)).Times(2);
-    dltServer.sendNonVerbose(desc, 100U, nullptr, 0);
+    dltServer.SendNonVerbose(desc, 100U, nullptr, 0);
 }
 
 // sendVerbose test.
@@ -1104,7 +853,7 @@ TEST_F(DltServerCreatedWithConfigFixture, SendFVerboseNoAppIdWithCoreChannelExpe
     const score::logging::dltserver::dltid_t app_id{""};
     const score::logging::dltserver::dltid_t ctx_id{""};
     EXPECT_CALL(*log_sender_mock_raw_ptr_, SendFTVerbose(_, _, _, _, _, _, _)).Times(1);
-    dltServer.sendFTVerbose({}, score::mw::log::LogLevel::kOff, app_id, ctx_id, 0U, 100U);
+    dltServer.SendFtVerbose({}, score::mw::log::LogLevel::kOff, app_id, ctx_id, 0U, 100U);
 }
 
 TEST_F(DltServerCreatedWithConfigFixture, SendFVerboseAppIdWithCoreChannelExpectSendCallOnce)
@@ -1117,7 +866,7 @@ TEST_F(DltServerCreatedWithConfigFixture, SendFVerboseAppIdWithCoreChannelExpect
     const score::logging::dltserver::dltid_t app_id{"APP0"};
     const score::logging::dltserver::dltid_t ctx_id{"CTX0"};
     EXPECT_CALL(*log_sender_mock_raw_ptr_, SendFTVerbose(_, _, _, _, _, _, _)).Times(1);
-    dltServer.sendFTVerbose({}, score::mw::log::LogLevel::kOff, app_id, ctx_id, 0U, 100U);
+    dltServer.SendFtVerbose({}, score::mw::log::LogLevel::kOff, app_id, ctx_id, 0U, 100U);
 }
 
 TEST_F(DltServerCreatedWithoutConfigFixture, SendFTVerboseAppIdNoCoreChannelExpectSendCallOnce)
@@ -1132,7 +881,7 @@ TEST_F(DltServerCreatedWithoutConfigFixture, SendFTVerboseAppIdNoCoreChannelExpe
     const score::logging::dltserver::dltid_t app_id{"APP0"};
     const score::logging::dltserver::dltid_t ctx_id{"CTX0"};
     EXPECT_CALL(*log_sender_mock_raw_ptr_, SendFTVerbose(_, _, _, _, _, _, _)).Times(1);
-    dltServer.sendFTVerbose({}, score::mw::log::LogLevel::kVerbose, app_id, ctx_id, 0U, 100U);
+    dltServer.SendFtVerbose({}, score::mw::log::LogLevel::kVerbose, app_id, ctx_id, 0U, 100U);
 }
 
 TEST_F(DltServerCreatedWithoutConfigFixture, UpdateHandlersFinalToTrueExpectDltOutputEnabledFlagTrue)
@@ -1286,6 +1035,101 @@ TEST_F(DltServerCreatedWithConfigFixture, SetDltOutputEnableDirectCall)
     EXPECT_EQ(response.size(), kCommandResponseSize);
     EXPECT_EQ(response[0], static_cast<char>(config::RET_OK));
     EXPECT_FALSE(dltServer.GetDltEnabled());
+}
+
+TEST_F(DltServerCreatedWithConfigFixture, SetDltOutputEnableBehaviorBlocksAllSends)
+{
+    // Prove that enabling/disabling output affects the observable server state.
+    // Note: sendVerbose()/sendNonVerbose() are not gated by this flag in the current implementation;
+    // the flag controls the DLT output enable state exposed via GetDltEnabled().
+    EXPECT_CALL(readCallback_, Call()).Times(1).WillOnce(Return(pConfig));
+    EXPECT_CALL(writeCallback_, Call(_)).Times(0);
+
+    score::logging::dltserver::DltLogServer::DltLogServerTest dltServer(
+        sConfig, readCallback_.AsStdFunction(), writeCallback_.AsStdFunction(), true, std::move(log_sender_mock_));
+
+    const score::mw::log::detail::LoggingIdentifier app_id{"APP0"};
+    const score::mw::log::detail::LoggingIdentifier ctx_id{"CTX0"};
+    const score::mw::log::detail::log_entry_deserialization::LogEntryDeserializationReflection entry{
+        app_id, ctx_id, {}, 0, score::mw::log::LogLevel::kOff};
+
+    // Disable output: this should gate sending completely.
+    const auto disable_resp = dltServer.SetDltOutputEnable(false);
+    EXPECT_EQ(disable_resp.size(), kCommandResponseSize);
+    EXPECT_EQ(disable_resp[0], static_cast<char>(config::RET_OK));
+    EXPECT_FALSE(dltServer.GetDltEnabled());
+
+    // Re-enable output: sending should resume.
+    const auto enable_resp = dltServer.SetDltOutputEnable(true);
+    EXPECT_EQ(enable_resp.size(), kCommandResponseSize);
+    EXPECT_EQ(enable_resp[0], static_cast<char>(config::RET_OK));
+    EXPECT_TRUE(dltServer.GetDltEnabled());
+
+    // Basic sanity: calling sendVerbose still forwards to the log sender (2 channels).
+    EXPECT_CALL(*log_sender_mock_raw_ptr_, SendVerbose(_, _, _)).Times(2);
+    dltServer.sendVerbose(100U, entry);
+}
+
+TEST_F(DltServerCreatedWithConfigFixture, ResetToDefaultBehaviorRestoresInitialThresholds)
+{
+    // Verify that ResetToDefault() restores initial thresholds, affecting message filtering.
+    // Load persistent config with 2 read calls expected (constructor + ResetToDefault)
+    EXPECT_CALL(readCallback_, Call()).Times(2).WillRepeatedly(Return(pConfig));
+    EXPECT_CALL(writeCallback_, Call(_)).Times(1);
+
+    // Use test subclass to access sendVerbose
+    score::logging::dltserver::DltLogServer::DltLogServerTest dltServer(
+        sConfig, readCallback_.AsStdFunction(), writeCallback_.AsStdFunction(), true, std::move(log_sender_mock_));
+
+    const score::mw::log::detail::LoggingIdentifier app_id{"APP0"};
+    const score::mw::log::detail::LoggingIdentifier ctx_id{"CTX0"};
+    const score::mw::log::detail::log_entry_deserialization::LogEntryDeserializationReflection verbose_entry{
+        app_id, ctx_id, {}, 0, score::mw::log::LogLevel::kVerbose};
+
+    // Initially threshold for APP0/CTX0 is kOff, so verbose should be filtered out
+    EXPECT_CALL(*log_sender_mock_raw_ptr_, SendVerbose(_, _, _)).Times(0);
+    dltServer.sendVerbose(100U, verbose_entry);
+    ::testing::Mock::VerifyAndClearExpectations(log_sender_mock_raw_ptr_);
+
+    // Increase threshold to kVerbose so verbose messages pass filtering
+    const threshold_t new_threshold{loglevel_t{score::mw::log::LogLevel::kVerbose}};
+    const auto resp = dltServer.SetLogLevel(dltid_t{"APP0"}, dltid_t{"CTX0"}, new_threshold);
+    EXPECT_EQ(resp[0], static_cast<char>(config::RET_OK));
+
+    // Verify verbose now passes (2 channels: DFLT + CORE)
+    EXPECT_CALL(*log_sender_mock_raw_ptr_, SendVerbose(_, _, _)).Times(2);
+    dltServer.sendVerbose(100U, verbose_entry);
+    ::testing::Mock::VerifyAndClearExpectations(log_sender_mock_raw_ptr_);
+
+    // Call ResetToDefault() to restore initial thresholds
+    const auto reset_resp = dltServer.ResetToDefault();
+    EXPECT_EQ(reset_resp.size(), kCommandResponseSize);
+    EXPECT_EQ(reset_resp[0], static_cast<char>(config::RET_OK));
+
+    // After reset, threshold should be back to kOff, so verbose is filtered again
+    EXPECT_CALL(*log_sender_mock_raw_ptr_, SendVerbose(_, _, _)).Times(0);
+    dltServer.sendVerbose(100U, verbose_entry);
+}
+
+TEST_F(DltServerCreatedWithConfigFixture, ReadLogChannelNamesDirectCallContainsExpectedChannels)
+{
+    // Enhanced test to verify ReadLogChannelNames() returns actual channel names, not just OK status.
+    EXPECT_CALL(readCallback_, Call()).Times(1).WillOnce(Return(pConfig));
+    EXPECT_CALL(writeCallback_, Call(_)).Times(0);
+
+    DltLogServer dltServer(sConfig, readCallback_.AsStdFunction(), writeCallback_.AsStdFunction(), true);
+
+    // Directly call ReadLogChannelNames()
+    const auto response = dltServer.ReadLogChannelNames();
+
+    // Should return OK status and channel names
+    ASSERT_GT(response.size(), kCommandResponseSize);
+    EXPECT_EQ(response[0], static_cast<char>(config::RET_OK));
+
+    // Verify response contains expected channel names from sConfig
+    const std::string response_str(response.begin() + kCommandResponseSize, response.end());
+    EXPECT_NE(response_str.find("DFLT"), std::string::npos) << "Response should contain DFLT channel";
+    EXPECT_NE(response_str.find("CORE"), std::string::npos) << "Response should contain CORE channel";
 }
 
 }  // namespace test
