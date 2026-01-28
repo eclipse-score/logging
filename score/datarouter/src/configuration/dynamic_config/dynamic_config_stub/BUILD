@@ -38,7 +38,9 @@ clang_tidy_extra_checks(
         features = COMPILER_WARNING_FEATURES,
         strip_include_prefix = ".",
         visibility = visibility,
-        deps = deps,
+        deps = deps + [
+            "//score/datarouter/src/configuration/dynamic_config:i_session",
+        ],
     )
     for name, test_only, visibility, deps in [
         (
@@ -49,8 +51,7 @@ clang_tidy_extra_checks(
                 "@score_logging//score/datarouter:__subpackages__",
             ],
             [
-                "//score/datarouter/dynamic_configuration/config_session_factory",
-                "//score/datarouter/dynamic_configuration/i_session",
+                "//score/datarouter/src/configuration/dynamic_config:config_session_factory",
             ],
         ),
         (
@@ -61,8 +62,7 @@ clang_tidy_extra_checks(
                 "//score/datarouter/test:__subpackages__",
             ],
             [
-                "//score/datarouter/dynamic_configuration/config_session_factory:config_session_factory_testing",
-                "//score/datarouter/dynamic_configuration/i_session",
+                "//score/datarouter/src/configuration/dynamic_config:config_session_factory_testing",
             ],
         ),
     ]

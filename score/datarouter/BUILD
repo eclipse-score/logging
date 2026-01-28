@@ -101,12 +101,12 @@ cc_library(
     features = COMPILER_WARNING_FEATURES,
     strip_include_prefix = "include",
     visibility = [
-        "//score/datarouter/dynamic_configuration:__subpackages__",
+        "//score/datarouter/src/configuration/dynamic_config:__subpackages__",
         "//score/datarouter/test:__subpackages__",
     ],
     deps = [
         ":unixdomain_common",
-        "//score/datarouter/dynamic_configuration/i_session",
+        "//score/datarouter/src/configuration/dynamic_config:i_session",
         "@score_baselibs//score/os:pthread",
         "@score_baselibs//score/os:sys_poll",
         "@score_baselibs//score/quality/compiler_warnings",
@@ -126,7 +126,7 @@ cc_library(
     visibility = ["//score/datarouter/test:__subpackages__"],
     deps = [
         ":unixdomain_client",
-        "//score/datarouter/dynamic_configuration/i_session",
+        "//score/datarouter/src/configuration/dynamic_config:i_session",
         "@score_baselibs//score/os:pthread",
         "@score_baselibs//score/os:sys_poll",
         "@score_baselibs//score/quality/compiler_warnings",
@@ -142,12 +142,12 @@ cc_library(
     features = COMPILER_WARNING_FEATURES,
     strip_include_prefix = "mocks",
     visibility = [
-        "//score/datarouter/dynamic_configuration:__subpackages__",
+        "//score/datarouter/src/configuration/dynamic_config:__subpackages__",
         "//score/datarouter/test:__subpackages__",
     ],
     deps = [
         ":unixdomain_common",
-        "//score/datarouter/dynamic_configuration/i_session",
+        "//score/datarouter/src/configuration/dynamic_config:i_session",
         "@googletest//:gtest_main",
     ],
 )
@@ -545,8 +545,8 @@ cc_library(
             "//score/datarouter/src/persistency/ara_per_persistent_dictionary:ara_per_persistent_dictionary_factory",
             "//score/datarouter/src/dlt/nonverbose_dlt_impl:nonverbose_dlt_handler",
             "//score/datarouter/src/dlt/nonverbose_dlt_stub:nonverbose_dlt_handler_stub",
-            "//score/datarouter/dynamic_configuration/dynamic_config_session:dynamic_config_session",
-            "//score/datarouter/dynamic_configuration/config_session_stub:config_session_stub",
+            "//score/datarouter/src/configuration/dynamic_config/dynamic_config_impl:dynamic_config_session",
+            "//score/datarouter/src/configuration/dynamic_config/dynamic_config_stub:config_session_stub",
             False,
         ),
         (
@@ -554,8 +554,8 @@ cc_library(
             "//score/datarouter/src/persistency/ara_per_persistent_dictionary:ara_per_persistent_dictionary_factory_testing",
             "//score/datarouter/src/dlt/nonverbose_dlt_impl:nonverbose_dlt_handler_testing",
             "//score/datarouter/src/dlt/nonverbose_dlt_stub:nonverbose_dlt_handler_stub_testing",
-            "//score/datarouter/dynamic_configuration/dynamic_config_session:dynamic_config_session_testing",
-            "//score/datarouter/dynamic_configuration/config_session_stub:config_session_stub_testing",
+            "//score/datarouter/src/configuration/dynamic_config/dynamic_config_impl:dynamic_config_session_testing",
+            "//score/datarouter/src/configuration/dynamic_config/dynamic_config_stub:config_session_stub_testing",
             True,
         ),
     ]

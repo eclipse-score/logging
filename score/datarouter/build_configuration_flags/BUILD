@@ -56,14 +56,14 @@ config_setting(
 )
 
 bool_flag(
-    name = "enable_dynamic_configuration_in_datarouter",
+    name = "enable_dynamic_configuration",
     build_setting_default = True,
 )
 
 config_setting(
     name = "config_datarouter_dynamic_configuration",
     flag_values = {
-        ":enable_dynamic_configuration_in_datarouter": "True",
+        ":enable_dynamic_configuration": "True",
     },
     visibility = [
         "@score_logging//score/datarouter:__subpackages__",

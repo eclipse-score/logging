@@ -382,7 +382,7 @@ cc_test(
             "@googletest//:gtest_main",
         ],
         "//conditions:default": [
-            "//score/datarouter/dynamic_configuration/config_session_stub:config_session_stub_testing",
+            "//score/datarouter/src/configuration/dynamic_config/dynamic_config_stub:config_session_stub_testing",
             "@googletest//:gtest_main",
             "@score_logging//score/datarouter:datarouter_feature_config_testing",
         ],
@@ -405,8 +405,7 @@ cc_test(
         # buildifier on
         "@score_logging//score/datarouter:datarouter_feature_config_testing",
         "@score_logging//score/datarouter:dltserver_testing",
-        # "//score/datarouter/dynamic_configuration/dynamic_config_session:dynamic_config_session_testing",
-        "//score/datarouter/dynamic_configuration/config_session_stub:config_session_stub_testing",
+        "//score/datarouter/src/configuration/dynamic_config/dynamic_config_stub:config_session_stub_testing",
         "@googletest//:gtest_main",
     ],
 )
