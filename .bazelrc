@@ -55,9 +55,10 @@ coverage --test_env=COVERAGE_GCOV_OPTIONS=-bcu
 # TODO set toolchain feature once possible
 # These compile time options are required to cover abnormal termination cases. In GCC one can use `__gcc_dump()`, but this does not work with LLVM
 # LLVM provided these compile-time options in combination with a specific profile setting which is enabled in bazel via `LLVM_PROFILE_CONTINUOUS_MODE`
-coverage --test_env=LLVM_PROFILE_CONTINUOUS_MODE=1
-coverage --cxxopt -mllvm
-coverage --cxxopt -runtime-counter-relocation
+# NOTE: Commented out for GCC compatibility - uncomment when using LLVM/Clang toolchain
+# coverage --test_env=LLVM_PROFILE_CONTINUOUS_MODE=1
+# coverage --cxxopt -mllvm
+# coverage --cxxopt -runtime-counter-relocation
 
 # Additional coverage configuration (SCORE baselibs style)
 coverage --features=coverage
