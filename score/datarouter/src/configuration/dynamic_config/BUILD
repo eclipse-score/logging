@@ -37,3 +37,41 @@ cc_library(
         "@score_logging//score/datarouter:__subpackages__",
     ],
 )
+
+[
+    cc_library(
+        name = "config_session_factory" + name,
+        testonly = test_only,
+        hdrs = [
+            "config_session_factory.hpp",
+        ],
+        features = COMPILER_WARNING_FEATURES,
+        strip_include_prefix = ".",
+        visibility = [
+            "@score_logging//score/datarouter:__subpackages__",
+        ],
+        deps = deps,
+    )
+    for name, test_only, deps in [
+        (
+            "",
+            False,
+            [
+                ":i_session",
+            ],
+        ),
+        (
+            "_testing",
+            True,
+            [],
+        ),
+    ]
+]
+
+exports_files(
+    [
+        "config_session_factory.hpp",
+        "i_session.h",
+    ],
+    visibility = ["@score_logging//score/datarouter:__subpackages__"],
+)
