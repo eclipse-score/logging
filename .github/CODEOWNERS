@@ -10,4 +10,4 @@
 /score/mw/log @antonkri
 
 # mw/log rust mw_logger owners (more specific rule overrides general rule above)
-/score/mw/log/rust/mw_logger @pawelrutkaq
+/score/mw/log/rust @pawelrutkaq
