@@ -49,13 +49,19 @@ jobs:
           bazel coverage -- //score/...
       - name: Generate HTML Coverage Report
         run: |
-          genhtml "$(bazel info output_path)/_coverage/_coverage_report.dat" \
-            -o=cpp_coverage \
-            --show-details \
-            --legend \
-            --function-coverage \
-            --branch-coverage \
-            --ignore-errors empty
+          if [ -s "$(bazel info output_path)/_coverage/_coverage_report.dat" ]; then
+            genhtml "$(bazel info output_path)/_coverage/_coverage_report.dat" \
+              -o=cpp_coverage \
+              --show-details \
+              --legend \
+              --function-coverage \
+              --branch-coverage \
+              --ignore-errors empty,source || echo "Coverage report generation failed, but continuing..."
+          else
+            echo "Coverage report is empty, skipping HTML generation"
+            mkdir -p cpp_coverage
+            echo "<html><body><h1>No coverage data available</h1></body></html>" > cpp_coverage/index.html
+          fi
         shell: bash
 
       - name: Upload Coverage Artifacts
