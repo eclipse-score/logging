@@ -54,7 +54,8 @@ jobs:
             --show-details \
             --legend \
             --function-coverage \
-            --branch-coverage
+            --branch-coverage \
+            --ignore-errors empty
         shell: bash
 
       - name: Upload Coverage Artifacts
