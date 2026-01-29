@@ -404,9 +404,9 @@ cc_library(
         "//score/mw/log/detail/data_router/shared_memory:reader",
         "@score_baselibs//score/concurrency:locked_ptr",
         "@score_baselibs//score/concurrency:synchronized",
+        "@score_baselibs//score/concurrency:type_traits",
         "@score_baselibs//score/concurrency:unlock_guard",
         "@score_baselibs//score/language/futurecpp",
-        "@score_baselibs//score/type_traits",
     ],
 )
 
@@ -429,8 +429,8 @@ cc_library(
         ":unixdomain_mock",
         "@score_baselibs//score/concurrency:locked_ptr",
         "@score_baselibs//score/concurrency:synchronized",
+        "@score_baselibs//score/concurrency:type_traits",
         "@score_baselibs//score/concurrency:unlock_guard",
-        "@score_baselibs//score/type_traits",
     ],
 )
 
@@ -454,8 +454,8 @@ cc_library(
         ":unixdomain_mock",
         "@score_baselibs//score/concurrency:locked_ptr",
         "@score_baselibs//score/concurrency:synchronized",
+        "@score_baselibs//score/concurrency:type_traits",
         "@score_baselibs//score/concurrency:unlock_guard",
-        "@score_baselibs//score/type_traits",
     ],
 )
 
@@ -1096,7 +1096,6 @@ cc_library(
 test_suite(
     name = "unit_tests",
     tests = [
-        "//score/datarouter/lib/synchronized:synchronized_test",
         #"//score/datarouter/persistent_log_request:unit_tests",
         #"//score/datarouter/test:unit_tests",
         #"//score/datarouter/tools/generator:unit_tests",
