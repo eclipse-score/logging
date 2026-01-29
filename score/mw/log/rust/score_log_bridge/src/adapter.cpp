@@ -23,7 +23,7 @@ using namespace score::mw::log::detail;
 // Those parameters must be:
 // - managed by build system (using defines and features)
 // - cross-checked between `ffi.rs` and `adapter.cpp`
-#if defined(x86_64_linux) || defined(arm64_qnx)
+#if defined(x86_64_linux) || defined(arm64_qnx) || defined(x86_64_qnx)
 // Expected size and alignment of `SlotHandle`.
 static_assert(sizeof(SlotHandle) == 24);
 static_assert(alignof(SlotHandle) == 8);
