@@ -26,7 +26,7 @@ bazel_dep(name = "buildifier_prebuilt", version = "7.3.1")
 bazel_dep(name = "platforms", version = "1.0.0")
 
 # S-CORE process rules
-bazel_dep(name = "score_bazel_platforms", version = "0.0.3")
+bazel_dep(name = "score_bazel_platforms", version = "0.0.4")
 bazel_dep(name = "score_docs_as_code", version = "2.2.0")
 bazel_dep(name = "score_tooling", version = "1.0.4")
 bazel_dep(name = "score_rust_policies", version = "0.0.3")
@@ -35,6 +35,7 @@ bazel_dep(name = "score_process", version = "1.4.0", dev_dependency = True)
 bazel_dep(name = "score_platform", version = "0.5.1", dev_dependency = True)  # This is main score repo
 
 # Toolchains and extensions
+bazel_dep(name = "score_bazel_cpp_toolchains", version = "0.2.0", dev_dependency = True)
 bazel_dep(name = "score_toolchains_gcc", version = "0.5", dev_dependency = True)
 bazel_dep(name = "score_toolchains_qnx", version = "0.0.6", dev_dependency = True)
 bazel_dep(name = "rust_qnx8_toolchain", version = "1.2.0", dev_dependency = True)
@@ -66,12 +67,23 @@ archive_override(
 
 # Extensions
 
+gcc_cpp = use_extension("@score_bazel_cpp_toolchains//extensions:gcc.bzl", "gcc", dev_dependency = True)
+gcc_cpp.toolchain(
+    name = "score_gcc_x86_64_toolchain",
+    target_cpu = "x86_64",
+    target_os = "linux",
+    use_default_package = True,
+    version = "12.2.0",
+)
+use_repo(gcc_cpp, "score_gcc_x86_64_toolchain")
+
 gcc = use_extension("@score_toolchains_gcc//extentions:gcc.bzl", "gcc", dev_dependency = True)
 gcc.toolchain(
     sha256 = "457f5f20f57528033cb840d708b507050d711ae93e009388847e113b11bf3600",
     strip_prefix = "x86_64-unknown-linux-gnu",
     url = "https://github.com/eclipse-score/toolchains_gcc_packages/releases/download/0.0.1/x86_64-unknown-linux-gnu_gcc12.tar.gz",
 )
+use_repo(gcc, "gcc_toolchain", "gcc_toolchain_gcc")
 
 # TRLC dependency for requirements traceability
 bazel_dep(name = "trlc", version = "0.0.0", dev_dependency = True)
@@ -80,8 +92,6 @@ git_override(
     commit = "650b51a47264a4f232b3341f473527710fc32669",  # trlc-2.0.2 release
     remote = "https://github.com/bmw-software-engineering/trlc.git",
 )
-
-use_repo(gcc, "gcc_toolchain", "gcc_toolchain_gcc")
 
 toolchains_qnx = use_extension("@score_toolchains_qnx//:extensions.bzl", "toolchains_qnx", dev_dependency = True)
 toolchains_qnx.sdp(

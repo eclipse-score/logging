@@ -50,3 +50,11 @@ coverage --features=coverage
 coverage --combined_report=lcov
 coverage --cache_test_results=no
 coverage --instrumentation_filter="^//score[/:]"
+
+# Coverage configuration
+build:blcov-x86_64-linux --incompatible_strict_action_env
+build:blcov-x86_64-linux --platforms=@score_bazel_platforms//:x86_64-linux-gcc_12.2.0-posix
+build:blcov-x86_64-linux --extra_toolchains=@score_gcc_x86_64_toolchain//:x86_64-linux-gcc_12.2.0-posix
+test:blcov-x86_64-linux --build_tests_only
+test:blcov-x86_64-linux --test_tag_filters=-manual
+test:blcov-x86_64-linux --test_output=errors

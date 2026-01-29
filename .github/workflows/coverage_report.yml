@@ -23,7 +23,7 @@ on:
 
 jobs:
   coverage-report:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
 
     permissions:
       contents: read
@@ -46,7 +46,7 @@ jobs:
 
       - name: Run Bazel Coverage
         run: |
-          bazel coverage -- //score/...
+          bazel coverage --config=blcov-x86_64-linux -- //score/... //tests/...
       - name: Generate HTML Coverage Report
         run: |
           genhtml "$(bazel info output_path)/_coverage/_coverage_report.dat" \
