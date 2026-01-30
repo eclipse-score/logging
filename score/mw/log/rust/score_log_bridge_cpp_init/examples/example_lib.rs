@@ -15,7 +15,7 @@
 //! Based on `//score/mw/log/rust/score_log_bridge:example`.
 
 use score_log::{debug, error, fatal, info, trace, warn, Log};
-use score_log_bridge::ScoreLoggerBuilder;
+use score_log_bridge::ScoreLogBridgeBuilder;
 
 /// Show example logs.
 #[no_mangle]
@@ -47,7 +47,7 @@ extern "C" fn show_logs() {
     );
 
     // Use logger instance with modified context.
-    let logger = ScoreLoggerBuilder::new()
+    let logger = ScoreLogBridgeBuilder::new()
         .context("ALFA")
         .show_module(false)
         .show_file(true)

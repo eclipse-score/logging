@@ -26,7 +26,7 @@ namespace score::mw::log::rust
 /// If parameter is not set explicitly then Rust-side default is used.
 /// Only global logger setup is allowed.
 /// `config` method is not exposed.
-class ScoreLoggerBuilder final
+class ScoreLogBridgeBuilder final
 {
   public:
     /// @brief Set context for the logger.
@@ -35,22 +35,22 @@ class ScoreLoggerBuilder final
     /// Only ASCII characters are allowed.
     /// Max 4 characters are used. Rest of the provided string will be trimmed.
     /// @return This builder.
-    ScoreLoggerBuilder& Context(const std::string& context) noexcept;
+    ScoreLogBridgeBuilder& Context(const std::string& context) noexcept;
 
     /// @brief Show module name in logs.
     /// @param show_module Value to set.
     /// @return This builder.
-    ScoreLoggerBuilder& ShowModule(bool show_module) noexcept;
+    ScoreLogBridgeBuilder& ShowModule(bool show_module) noexcept;
 
     /// @brief Show file name in logs.
     /// @param show_module Value to set.
     /// @return This builder.
-    ScoreLoggerBuilder& ShowFile(bool show_file) noexcept;
+    ScoreLogBridgeBuilder& ShowFile(bool show_file) noexcept;
 
     /// @brief Show line number in logs.
     /// @param show_module Value to set.
     /// @return This builder.
-    ScoreLoggerBuilder& ShowLine(bool show_line) noexcept;
+    ScoreLogBridgeBuilder& ShowLine(bool show_line) noexcept;
 
     /// @brief Initialize default logger with provided parameters.
     void SetAsDefaultLogger() noexcept;

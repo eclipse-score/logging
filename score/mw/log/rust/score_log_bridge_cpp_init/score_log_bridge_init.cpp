@@ -22,31 +22,31 @@ extern "C" void set_default_logger(const char* context_ptr,
 namespace score::mw::log::rust
 {
 
-ScoreLoggerBuilder& ScoreLoggerBuilder::Context(const std::string& context) noexcept
+ScoreLogBridgeBuilder& ScoreLogBridgeBuilder::Context(const std::string& context) noexcept
 {
     context_ = context;
     return *this;
 }
 
-ScoreLoggerBuilder& ScoreLoggerBuilder::ShowModule(bool show_module) noexcept
+ScoreLogBridgeBuilder& ScoreLogBridgeBuilder::ShowModule(bool show_module) noexcept
 {
     show_module_ = show_module;
     return *this;
 }
 
-ScoreLoggerBuilder& ScoreLoggerBuilder::ShowFile(bool show_file) noexcept
+ScoreLogBridgeBuilder& ScoreLogBridgeBuilder::ShowFile(bool show_file) noexcept
 {
     show_file_ = show_file;
     return *this;
 }
 
-ScoreLoggerBuilder& ScoreLoggerBuilder::ShowLine(bool show_line) noexcept
+ScoreLogBridgeBuilder& ScoreLogBridgeBuilder::ShowLine(bool show_line) noexcept
 {
     show_line_ = show_line;
     return *this;
 }
 
-void ScoreLoggerBuilder::SetAsDefaultLogger() noexcept
+void ScoreLogBridgeBuilder::SetAsDefaultLogger() noexcept
 {
     const char* context_ptr{nullptr};
     size_t context_size{0};

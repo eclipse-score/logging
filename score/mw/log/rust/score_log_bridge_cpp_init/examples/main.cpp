@@ -21,7 +21,7 @@ int main()
 {
     using namespace score::mw::log::rust;
 
-    ScoreLoggerBuilder builder;
+    ScoreLogBridgeBuilder builder;
     builder.Context("ABCD").ShowModule(true).ShowFile(true).ShowLine(true).SetAsDefaultLogger();
 
     show_logs();

@@ -18,6 +18,6 @@
 #![warn(clippy::alloc_instead_of_core)]
 
 mod ffi;
-mod score_logger;
+mod score_log_bridge;
 
-pub use crate::score_logger::{ScoreLogger, ScoreLoggerBuilder};
+pub use crate::score_log_bridge::{ScoreLogBridge, ScoreLogBridgeBuilder};

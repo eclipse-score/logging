@@ -13,7 +13,7 @@
 
 use core::ffi::c_char;
 use core::slice::from_raw_parts;
-use score_log_bridge::ScoreLoggerBuilder;
+use score_log_bridge::ScoreLogBridgeBuilder;
 
 #[no_mangle]
 extern "C" fn set_default_logger(
@@ -23,7 +23,7 @@ extern "C" fn set_default_logger(
     show_file: *const bool,
     show_line: *const bool,
 ) {
-    let mut builder = ScoreLoggerBuilder::new();
+    let mut builder = ScoreLogBridgeBuilder::new();
 
     // Set parameters if non-null (option-like).
     if !context_ptr.is_null() {
