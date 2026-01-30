@@ -70,7 +70,7 @@ template <typename S, typename T>
 std::string make_message(S typeIndex, const T& t)
 {
     static constexpr msgsize_t MaxMessageSize = 65500;
-    std::array<char, MaxMessageSize> buffer;
+    std::array<char, MaxMessageSize> buffer{};
     using s = ::score::common::visitor::logging_serializer;
     const auto indexSize = s::serialize(typeIndex, buffer.data(), buffer.size());
     const auto size = indexSize + s::serialize(t, buffer.data() + indexSize, buffer.size() - indexSize);
