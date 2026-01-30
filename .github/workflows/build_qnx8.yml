@@ -11,21 +11,36 @@
 # SPDX-License-Identifier: Apache-2.0
 # *******************************************************************************
 
-name: QNX8 Build
+name: QNX8 Build and Test
+
 on:
   pull_request_target:
     types: [opened, reopened, synchronize]
-  merge_group:
-    types: [checks_requested]
+
 jobs:
-  qnx-build:
+  qnx-build-x86_64:
     uses: eclipse-score/cicd-workflows/.github/workflows/qnx-build.yml@main
     permissions:
       contents: read
       pull-requests: read
     with:
-      bazel-target: "//score/..."
-      bazel-config: "build_qnx8"
+      bazel-target: "//score/... //tests/..."
+      bazel-config: "x86_64-qnx"
+      credential-helper: "scripts/internal/qnx_creds.py"
+      environment-name: "workflow-approval"
+    secrets:
+      score-qnx-license: ${{ secrets.SCORE_QNX_LICENSE }}
+      score-qnx-user: ${{ secrets.SCORE_QNX_USER }}
+      score-qnx-password: ${{ secrets.SCORE_QNX_PASSWORD }}
+
+  qnx-build-arm64:
+    uses: eclipse-score/cicd-workflows/.github/workflows/qnx-build.yml@main
+    permissions:
+      contents: read
+      pull-requests: read
+    with:
+      bazel-target: "//score/... //tests/..."
+      bazel-config: "arm64-qnx"
       credential-helper: "scripts/internal/qnx_creds.py"
       environment-name: "workflow-approval"
     secrets:

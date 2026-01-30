@@ -30,6 +30,14 @@ config_setting(
     ],
 )
 
+config_setting(
+    name = "x86_64-qnx",
+    constraint_values = [
+        "@platforms//cpu:x86_64",
+        "@platforms//os:qnx",
+    ],
+)
+
 cc_library(
     name = "adapter",
     srcs = ["src/adapter.cpp"],
@@ -37,6 +45,7 @@ cc_library(
     defines = select({
         ":x86_64-linux": ["x86_64_linux"],
         ":arm64-qnx": ["arm64_qnx"],
+        ":x86_64-qnx": ["x86_64_qnx"],
         "//conditions:default": [],
     }),
     visibility = ["//visibility:private"],
@@ -53,6 +62,7 @@ rust_library(
     crate_features = select({
         ":x86_64-linux": ["x86_64_linux"],
         ":arm64-qnx": ["arm64_qnx"],
+        ":x86_64-qnx": ["x86_64_qnx"],
         "//conditions:default": [],
     }),
     edition = "2021",
