@@ -250,13 +250,21 @@ std::atomic<int> CountingSession::gTicks{0};
 
 UnixDomainSockAddr MakeTempAddrAbstractFalse()
 {
+#ifdef _NTO_VERSION
+    std::string name = "/qnx6fs_persistent/uds_ut_" + std::to_string(getpid()) + "_" + std::to_string(rand() & 0xffff);
+#else
     std::string name = "/tmp/uds_ut_" + std::to_string(getpid()) + "_" + std::to_string(rand() & 0xffff);
+#endif
     return UnixDomainSockAddr(name, /*isAbstract=*/false);
 }
 
 UnixDomainSockAddr MakeTempAddrAbstractFalse(std::string& name)
 {
+#ifdef _NTO_VERSION
+    name = "/qnx6fs_persistent/uds_ut_" + std::to_string(getpid()) + "_" + std::to_string(rand() & 0xffff);
+#else
     name = "/tmp/uds_ut_" + std::to_string(getpid()) + "_" + std::to_string(rand() & 0xffff);
+#endif
     return UnixDomainSockAddr(name, /*isAbstract=*/false);
 }
 
@@ -332,7 +340,11 @@ TEST(UnixDomainServerSessionWrapper, ServerSessionWrapperWithRealFactory)
 
 TEST(UnixDomainServerAcceptTest, AcceptsOneClientConnection)
 {
+#ifdef _NTO_VERSION
+    std::string path = "/qnx6fs_persistent/uds_accept_test_" + std::to_string(getpid());
+#else
     std::string path = "/tmp/uds_accept_test_" + std::to_string(getpid());
+#endif
     ::unlink(path.c_str());
 
     UnixDomainSockAddr addr(path, /* isAbstract = */ false);
@@ -763,7 +775,11 @@ TEST(UnixDomainServerSocketFixture, ServerFailedToListen)
 
 TEST(UnixDomainServerSocketFixture, FailedToPoll)
 {
+#ifdef _NTO_VERSION
+    std::string path = "/qnx6fs_persistent/uds_accept_test_" + std::to_string(getpid());
+#else
     std::string path = "/tmp/uds_accept_test_" + std::to_string(getpid());
+#endif
     ::unlink(path.c_str());
 
     score::os::SysPollMock sys_poll_mock;
