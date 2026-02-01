@@ -10,8 +10,8 @@
  *
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
-#ifndef MW_LOG_DETAILS_SVP_TIME_H_
-#define MW_LOG_DETAILS_SVP_TIME_H_
+#ifndef SCORE_MW_LOG_DETAIL_FILE_RECORDER_SVP_TIME_H
+#define SCORE_MW_LOG_DETAIL_FILE_RECORDER_SVP_TIME_H
 
 #include <cstdint>
 
@@ -36,4 +36,4 @@ struct SVPTime
 }  // namespace mw
 }  // namespace score
 
-#endif  // MW_LOG_DETAILS_SVP_TIME_H_
+#endif  // SCORE_MW_LOG_DETAIL_FILE_RECORDER_SVP_TIME_H

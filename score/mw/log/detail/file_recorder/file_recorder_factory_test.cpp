@@ -63,7 +63,7 @@ TEST_F(FileRecorderFactoryConfigFixture, FileConfigurionShallCallFileCreationAnd
     RecordProperty("DerivationTechnique", "Analysis of requirements");
 
     auto fcntl_mock = score::cpp::pmr::make_unique<score::os::FcntlMock>(memory_resource_);
-    auto fcntl_mock_raw_ptr = fcntl_mock.get();
+    auto* fcntl_mock_raw_ptr = fcntl_mock.get();
     std::int32_t file_descriptor = 3;
 
     const score::os::Fcntl::Open open_flags =
@@ -83,7 +83,7 @@ TEST_F(FileRecorderFactoryConfigFixture, FileConfigurionShallCallFileCreationAnd
 TEST_F(FileRecorderFactoryConfigFixture, CreateFileLoggingBackendFalied)
 {
     auto fcntl_mock = score::cpp::pmr::make_unique<score::os::FcntlMock>(memory_resource_);
-    auto fcntl_mock_raw_ptr = fcntl_mock.get();
+    auto* fcntl_mock_raw_ptr = fcntl_mock.get();
 
     EXPECT_CALL(*fcntl_mock_raw_ptr, open(_, _, _))
         .Times(1)

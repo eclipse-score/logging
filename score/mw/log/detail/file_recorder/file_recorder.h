@@ -10,8 +10,8 @@
  *
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
-#ifndef SCORE_MW_LOG_DETAIL_FILE_RECORDER_H
-#define SCORE_MW_LOG_DETAIL_FILE_RECORDER_H
+#ifndef SCORE_MW_LOG_DETAIL_FILE_RECORDER_FILE_RECORDER_H
+#define SCORE_MW_LOG_DETAIL_FILE_RECORDER_FILE_RECORDER_H
 
 #include "score/mw/log/configuration/configuration.h"
 #include "score/mw/log/detail/backend.h"
@@ -75,4 +75,4 @@ class FileRecorder final : public Recorder
 }  // namespace mw
 }  // namespace score
 
-#endif  // SCORE_MW_LOG_DETAIL_FILE_RECORDER_H
+#endif  // SCORE_MW_LOG_DETAIL_FILE_RECORDER_FILE_RECORDER_H

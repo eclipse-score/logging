@@ -10,8 +10,8 @@
  *
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
-#ifndef SCORE_MW_LOG_DETAIL_DLT_MESSAGE_BUILDER_TYPES_H_
-#define SCORE_MW_LOG_DETAIL_DLT_MESSAGE_BUILDER_TYPES_H_
+#ifndef SCORE_MW_LOG_DETAIL_FILE_RECORDER_DLT_MESSAGE_BUILDER_TYPES_H
+#define SCORE_MW_LOG_DETAIL_FILE_RECORDER_DLT_MESSAGE_BUILDER_TYPES_H
 
 #include <array>
 #include <cstdint>
@@ -165,4 +165,4 @@ struct DltVerboseHeader
 }  // namespace mw
 }  // namespace score
 
-#endif  //  SCORE_MW_LOG_DETAIL_DLT_MESSAGE_BUILDER_TYPES_H_
+#endif  // SCORE_MW_LOG_DETAIL_FILE_RECORDER_DLT_MESSAGE_BUILDER_TYPES_H

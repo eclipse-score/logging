@@ -29,12 +29,9 @@ namespace detail
 namespace
 {
 
-using ::testing::_;
-using ::testing::HasSubstr;
-using ::testing::MatchesRegex;
 using ::testing::StrEq;
 
-const std::map<std::uint8_t, std::string> levels = {
+const std::map<std::uint8_t, std::string> kLevels = {
     {0, "off"},
     {1, "fatal"},
     {2, "error"},
