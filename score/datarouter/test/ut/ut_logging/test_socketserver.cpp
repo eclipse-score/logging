@@ -317,7 +317,7 @@ TEST_F(SocketServerRemainingFunctionsTest, LoadNvConfigSuccessPath)
 
     // Verify that we got a valid config by checking for a known type from test-class-id.json
     // The test data contains "score::logging::PersistentLogFileEvent"
-    const auto* descriptor = nv_config.getDltMsgDesc("score::logging::PersistentLogFileEvent");
+    const auto* descriptor = nv_config.GetDltMsgDesc("score::logging::PersistentLogFileEvent");
     EXPECT_NE(nullptr, descriptor);  // Should find the entry
 }
 
@@ -336,7 +336,7 @@ TEST_F(SocketServerRemainingFunctionsTest, LoadNvConfigErrorPath)
     auto nv_config = SocketServer::LoadNvConfig(logger, "/nonexistent/path/class-id.json");
 
     // Verify that we got an empty config by checking for any type
-    const auto* descriptor = nv_config.getDltMsgDesc("score::logging::PersistentLogFileEvent");
+    const auto* descriptor = nv_config.GetDltMsgDesc("score::logging::PersistentLogFileEvent");
     EXPECT_EQ(nullptr, descriptor);  // Empty config returns nullptr for all queries
 }
 

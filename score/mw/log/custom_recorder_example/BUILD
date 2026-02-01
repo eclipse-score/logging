@@ -1,3 +1,5 @@
+load("@rules_cc//cc:defs.bzl", "cc_binary", "cc_library")
+
 # *******************************************************************************
 # Copyright (c) 2025 Contributors to the Eclipse Foundation
 #
@@ -10,8 +12,18 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 # *******************************************************************************
+load("@score_baselibs//score/quality/clang_tidy:extra_checks.bzl", "clang_tidy_extra_checks")
 
-load("@rules_cc//cc:defs.bzl", "cc_binary", "cc_library")
+clang_tidy_extra_checks(
+    name = "clang_tidy_extra_checks",
+    extra_features = [
+        "spp_code_style_check_header_guards",
+        "spp_code_style_check_method_names",
+        "spp_code_style_check_readability",
+        "spp_code_style_check_type_names",
+        "spp_code_style_check_variable_names",
+    ],
+)
 
 cc_library(
     name = "custom_recorder_example",

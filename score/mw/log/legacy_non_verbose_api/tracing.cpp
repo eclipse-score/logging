@@ -71,7 +71,7 @@ logger::logger(const score::cpp::optional<const score::mw::log::detail::Configur
 
 std::optional<LogLevel> logger::GetLevelForContext(const std::string& name) const noexcept
 {
-    const score::mw::log::config::NvMsgDescriptor* const msg_desc = nvconfig_.getDltMsgDesc(name);
+    const score::mw::log::config::NvMsgDescriptor* const msg_desc = nvconfig_.GetDltMsgDesc(name);
     if (msg_desc != nullptr)
     {
         const auto ctxId = msg_desc->GetCtxId();

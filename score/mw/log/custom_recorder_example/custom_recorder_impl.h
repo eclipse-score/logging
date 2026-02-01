@@ -10,8 +10,8 @@
  *
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
-#ifndef SCORE_MW_LOG_CUSTOM_RECORDER_IMPL_H
-#define SCORE_MW_LOG_CUSTOM_RECORDER_IMPL_H
+#ifndef SCORE_MW_LOG_CUSTOM_RECORDER_EXAMPLE_CUSTOM_RECORDER_IMPL_H
+#define SCORE_MW_LOG_CUSTOM_RECORDER_EXAMPLE_CUSTOM_RECORDER_IMPL_H
 
 #include "score/mw/log/recorder.h"
 
@@ -69,4 +69,4 @@ class CustomRecorderImpl final : public score::mw::log::Recorder
 }  // namespace specific
 }  // namespace user
 
-#endif  // SCORE_MW_LOG_CUSTOM_RECORDER_IMPL_H
+#endif  // SCORE_MW_LOG_CUSTOM_RECORDER_EXAMPLE_CUSTOM_RECORDER_IMPL_H
