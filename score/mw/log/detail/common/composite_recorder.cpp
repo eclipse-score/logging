@@ -48,7 +48,7 @@ void ForEachRecorder(const std::vector<std::unique_ptr<Recorder>>& recorders,
     for (auto it = recorders.begin(); it < recorders.end(); it++)
     {
         const auto index = static_cast<std::size_t>(std::distance(begin, it));
-        callback(*it->get(), SlotHandle::RecorderIdentifier{index});
+        callback(**it, SlotHandle::RecorderIdentifier{index});
     }
 }
 

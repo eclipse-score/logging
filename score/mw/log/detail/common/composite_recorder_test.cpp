@@ -66,8 +66,8 @@ const LogBin16 kBin16{kUint16 - 2};
 const LogBin32 kBin32{kUint32 - 2};
 const LogBin64 kBin64{kUint64 - 2};
 
-LogRawBuffer log_raw_buffer{nullptr, 0};
-LogSlog2Message log_Slog2Message{1, "Hello World"};
+LogRawBuffer gLogRawBuffer{nullptr, 0};
+LogSlog2Message gLogSlog2Message{1, "Hello World"};
 
 MATCHER_P(LogStringEquals, expected, "matches LogString objects")
 {
@@ -240,9 +240,8 @@ TEST_F(CompositeRecorderFixture, LogInvocationShallBeForwardedToAllAvailableReco
         EXPECT_CALL(*mock_recorder, LogUint32(recorder_slot, kBin32.value));
         EXPECT_CALL(*mock_recorder, LogUint64(recorder_slot, kBin64.value));
 
-        EXPECT_CALL(
-            *mock_recorder,
-            Log_LogRawBuffer(recorder_slot, log_raw_buffer.data(), static_cast<uint64_t>(log_raw_buffer.size())));
+        EXPECT_CALL(*mock_recorder,
+                    Log_LogRawBuffer(recorder_slot, gLogRawBuffer.data(), static_cast<uint64_t>(gLogRawBuffer.size())));
         return mock_recorder;
     });
 
@@ -273,7 +272,7 @@ TEST_F(CompositeRecorderFixture, LogInvocationShallBeForwardedToAllAvailableReco
     composite_recorder.Log(slot.value(), kBin32);
     composite_recorder.Log(slot.value(), kBin64);
 
-    composite_recorder.Log(slot.value(), log_raw_buffer);
+    composite_recorder.Log(slot.value(), gLogRawBuffer);
 }
 
 TEST_F(CompositeRecorderFixture, LogSlog2MessageAvailableRecorders)
@@ -291,8 +290,8 @@ TEST_F(CompositeRecorderFixture, LogSlog2MessageAvailableRecorders)
         EXPECT_CALL(
             *mock_recorder,
             Log_LogSlog2Message(recorder_slot,
-                                static_cast<uint16_t>(log_Slog2Message.GetCode()),
-                                LogStringEquals(static_cast<score::mw::log::LogString>(log_Slog2Message.GetMessage()))))
+                                static_cast<uint16_t>(gLogSlog2Message.GetCode()),
+                                LogStringEquals(static_cast<score::mw::log::LogString>(gLogSlog2Message.GetMessage()))))
             .Times(0);
         return mock_recorder;
     });
@@ -300,7 +299,7 @@ TEST_F(CompositeRecorderFixture, LogSlog2MessageAvailableRecorders)
 
     const auto slot = composite_recorder.StartRecord(kContext, kLogLevel);
     ASSERT_TRUE(slot.has_value());
-    composite_recorder.Log(slot.value(), log_Slog2Message);
+    composite_recorder.Log(slot.value(), gLogSlog2Message);
 }
 
 TEST_F(CompositeRecorderFixture, LogShallBeEnabledIfAtLeastOneRecorderIsEnabled)

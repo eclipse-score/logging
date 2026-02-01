@@ -44,7 +44,7 @@ struct StatisticsReporterFixture : public ::testing::Test
 {
     void ExpectNoReport()
     {
-        EXPECT_CALL(recorder_mock_, StartRecord(_, _)).Times(0);
+        EXPECT_CALL(recorder_mock, StartRecord(_, _)).Times(0);
     }
 
     void ExpectReport(const std::size_t expected_no_slot_available_counter,
@@ -52,16 +52,16 @@ struct StatisticsReporterFixture : public ::testing::Test
                       const LogLevel expected_log_level)
     {
         InSequence in_sequence{};
-        EXPECT_CALL(recorder_mock_, StartRecord(_, expected_log_level)).Times(1).WillOnce(Return(kSlot));
-        EXPECT_CALL(recorder_mock_, LogUint64(kSlot, kNumberOfSlots));
-        EXPECT_CALL(recorder_mock_, LogUint64(kSlot, kSlotSizeBytes));
-        EXPECT_CALL(recorder_mock_, LogUint64(kSlot, expected_no_slot_available_counter));
-        EXPECT_CALL(recorder_mock_, LogUint64(kSlot, expected_message_too_long_counter));
-        EXPECT_CALL(recorder_mock_, StopRecord(kSlot)).Times(1);
+        EXPECT_CALL(recorder_mock, StartRecord(_, expected_log_level)).Times(1).WillOnce(Return(kSlot));
+        EXPECT_CALL(recorder_mock, LogUint64(kSlot, kNumberOfSlots));
+        EXPECT_CALL(recorder_mock, LogUint64(kSlot, kSlotSizeBytes));
+        EXPECT_CALL(recorder_mock, LogUint64(kSlot, expected_no_slot_available_counter));
+        EXPECT_CALL(recorder_mock, LogUint64(kSlot, expected_message_too_long_counter));
+        EXPECT_CALL(recorder_mock, StopRecord(kSlot)).Times(1);
     }
 
-    RecorderMock recorder_mock_{};
-    StatisticsReporter unit_{recorder_mock_, kReportInterval, kNumberOfSlots, kSlotSizeBytes};
+    RecorderMock recorder_mock{};
+    StatisticsReporter unit{recorder_mock, kReportInterval, kNumberOfSlots, kSlotSizeBytes};
 };
 
 TEST_F(StatisticsReporterFixture, UpdateShallReportIfOverDue)
@@ -75,7 +75,7 @@ TEST_F(StatisticsReporterFixture, UpdateShallReportIfOverDue)
     const std::size_t expected_no_slot_available_counter = 0;
     const std::size_t expected_message_too_long_counter = 0;
     ExpectReport(expected_no_slot_available_counter, expected_message_too_long_counter, kZeroErrorsLogLevel);
-    unit_.Update(kOverdueTime);
+    unit.Update(kOverdueTime);
 }
 
 TEST_F(StatisticsReporterFixture, UpdateShallReportWarningIfOverDueAndErrors)
@@ -90,11 +90,11 @@ TEST_F(StatisticsReporterFixture, UpdateShallReportWarningIfOverDueAndErrors)
     const std::size_t expected_message_too_long_counter = 1;
     ExpectReport(expected_no_slot_available_counter, expected_message_too_long_counter, kNonZeroErrorsLogLevel);
 
-    unit_.IncrementNoSlotAvailable();
-    unit_.IncrementNoSlotAvailable();
-    unit_.IncrementMessageTooLong();
+    unit.IncrementNoSlotAvailable();
+    unit.IncrementNoSlotAvailable();
+    unit.IncrementMessageTooLong();
 
-    unit_.Update(kOverdueTime);
+    unit.Update(kOverdueTime);
 }
 
 TEST_F(StatisticsReporterFixture, UpdateShallReportWarningMessageIsTooooLong)
@@ -105,10 +105,10 @@ TEST_F(StatisticsReporterFixture, UpdateShallReportWarningMessageIsTooooLong)
     RecordProperty("TestingTechnique", "Requirements-based test");
     RecordProperty("DerivationTechnique", "Analysis of requirements");
 
-    EXPECT_CALL(recorder_mock_, StopRecord(kSlot)).Times(0);
+    EXPECT_CALL(recorder_mock, StopRecord(kSlot)).Times(0);
 
-    unit_.IncrementMessageTooLong();
-    unit_.Update(kOverdueTime);
+    unit.IncrementMessageTooLong();
+    unit.Update(kOverdueTime);
 }
 
 TEST_F(StatisticsReporterFixture, UpdateShallGiveUpIfNotYetTimeToReport)
@@ -122,9 +122,9 @@ TEST_F(StatisticsReporterFixture, UpdateShallGiveUpIfNotYetTimeToReport)
     RecordProperty("DerivationTechnique", "Analysis of requirements");
 
     InSequence in_sequence{};
-    EXPECT_CALL(recorder_mock_, StartRecord(_, _)).Times(0);
+    EXPECT_CALL(recorder_mock, StartRecord(_, _)).Times(0);
 
-    unit_.Update(kInitialTime);
+    unit.Update(kInitialTime);
 }
 
 TEST_F(StatisticsReporterFixture, UpdateShallGiveUpIfAlreadyReporting)
@@ -136,13 +136,13 @@ TEST_F(StatisticsReporterFixture, UpdateShallGiveUpIfAlreadyReporting)
     RecordProperty("DerivationTechnique", "Analysis of requirements");
 
     InSequence in_sequence{};
-    EXPECT_CALL(recorder_mock_, StartRecord(_, _)).Times(1).WillOnce([this](auto, auto) {
-        EXPECT_CALL(recorder_mock_, StartRecord(_, _)).Times(0);
-        unit_.Update(kOverdueTime);
+    EXPECT_CALL(recorder_mock, StartRecord(_, _)).Times(1).WillOnce([this](auto, auto) {
+        EXPECT_CALL(recorder_mock, StartRecord(_, _)).Times(0);
+        unit.Update(kOverdueTime);
         return kSlot;
     });
 
-    unit_.Update(kOverdueTime);
+    unit.Update(kOverdueTime);
 }
 
 }  // namespace

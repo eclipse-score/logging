@@ -20,7 +20,7 @@ int main(int argc, char** argv)
     ::testing::InitGoogleTest(&argc, argv);
 
     // Googletest will delete all registered global environments and thus we must use new() here.
-    auto console_log_environment = new score::mw::log::ConsoleLoggingEnvironment();
+    auto* console_log_environment = new score::mw::log::ConsoleLoggingEnvironment();
     AddGlobalTestEnvironment(console_log_environment);
 
     return RUN_ALL_TESTS();

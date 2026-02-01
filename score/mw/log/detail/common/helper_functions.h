@@ -62,9 +62,9 @@ inline constexpr Target ClampTo(Source value) noexcept
 
 inline std::uint16_t ClampAddNullTerminator(std::uint16_t length) noexcept
 {
-    constexpr auto max_u16 = std::numeric_limits<std::uint16_t>::max();
+    constexpr auto kMaxU16 = std::numeric_limits<std::uint16_t>::max();
     // If there's room for a null terminator, add one; otherwise, stick to the max.
-    return (length < max_u16) ? static_cast<std::uint16_t>(length + 1U) : length;
+    return (length < kMaxU16) ? static_cast<std::uint16_t>(length + 1U) : length;
 }
 
 }  // namespace helper

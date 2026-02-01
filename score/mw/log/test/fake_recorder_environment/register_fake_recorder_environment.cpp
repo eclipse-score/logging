@@ -25,6 +25,6 @@ struct AutoRegisterFakeRecorderEnvironment
     }
 };
 
-static AutoRegisterFakeRecorderEnvironment auto_register_instance;
+AutoRegisterFakeRecorderEnvironment gAutoRegisterInstance;
 
 }  // namespace

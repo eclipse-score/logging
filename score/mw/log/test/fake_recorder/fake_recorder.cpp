@@ -28,13 +28,13 @@ namespace test
 {
 namespace
 {
-std::mutex g_stdout_mutex;
+std::mutex gStdoutMutex;
 
 /// Convert unsigned integer to binary string using std::bitset
-template <std::size_t N>
+template <std::size_t n>
 std::string ToBinaryString(std::uint64_t value)
 {
-    return "0b" + std::bitset<N>(value).to_string();
+    return "0b" + std::bitset<n>(value).to_string();
 }
 }  // namespace
 
@@ -234,7 +234,7 @@ void FakeRecorder::FlushSlot(const SlotHandle& slot) noexcept
     }
 
     {
-        std::lock_guard<std::mutex> out_lock(g_stdout_mutex);
+        std::lock_guard<std::mutex> out_lock(gStdoutMutex);
         std::fwrite(msg.c_str(), 1U, msg.size(), stdout);
         std::fwrite("\n", 1U, 1U, stdout);
         std::fflush(stdout);

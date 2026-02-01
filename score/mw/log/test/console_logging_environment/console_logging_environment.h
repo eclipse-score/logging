@@ -10,8 +10,8 @@
  *
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
-#ifndef SCORE_MW_LOG_CONSOLE_LOGGING_ENVIRONMENT_H
-#define SCORE_MW_LOG_CONSOLE_LOGGING_ENVIRONMENT_H
+#ifndef SCORE_MW_LOG_TEST_CONSOLE_LOGGING_ENVIRONMENT_CONSOLE_LOGGING_ENVIRONMENT_H
+#define SCORE_MW_LOG_TEST_CONSOLE_LOGGING_ENVIRONMENT_CONSOLE_LOGGING_ENVIRONMENT_H
 
 #include "gtest/gtest.h"
 
@@ -39,4 +39,4 @@ class ConsoleLoggingEnvironment : public ::testing::Environment
 }  // namespace mw
 }  // namespace score
 
-#endif
+#endif  // SCORE_MW_LOG_TEST_CONSOLE_LOGGING_ENVIRONMENT_CONSOLE_LOGGING_ENVIRONMENT_H
