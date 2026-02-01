@@ -35,9 +35,6 @@ namespace detail
 namespace
 {
 
-using ::testing::_;
-using ::testing::Return;
-
 template <typename ConcreteRecorder>
 bool IsRecorderOfType(const std::unique_ptr<Recorder>& recorder) noexcept
 {
@@ -275,9 +272,9 @@ TEST_F(RecorderFactoryConfigFixture, OutOfRangeLogModeShallReturnEmptyRecorder)
     RecordProperty("DerivationTechnique", "Analysis of requirements");
 
     // selected number should not be listed in LogMode enum definition
-    const LogMode outOfRangeLogMode = static_cast<LogMode>(240);
+    const LogMode out_of_range_log_mode = static_cast<LogMode>(240);
 
-    SetConfigurationWithLogMode({outOfRangeLogMode});
+    SetConfigurationWithLogMode({out_of_range_log_mode});
     auto recorder = CreateFromConfiguration();
     EXPECT_TRUE(IsRecorderOfType<EmptyRecorder>(recorder));
 }

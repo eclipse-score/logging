@@ -87,12 +87,12 @@ class TypeInfo
     }
 
     // \Requirement PRS_Dlt_00625
-    constexpr static std::uint32_t TYPE_BOOL_BIT = 4U;
-    constexpr static std::uint32_t TYPE_SIGNED_BIT = 5U;
-    constexpr static std::uint32_t TYPE_UNSIGNED_BIT = 6U;
-    constexpr static std::uint32_t TYPE_FLOAT_BIT = 7U;
-    constexpr static std::uint32_t TYPE_STRING_BIT = 9U;
-    constexpr static std::uint32_t TYPE_RAW_BIT = 10U;
+    constexpr static std::uint32_t kTypeBoolBit = 4U;
+    constexpr static std::uint32_t kTypeSignedBit = 5U;
+    constexpr static std::uint32_t kTypeUnsignedBit = 6U;
+    constexpr static std::uint32_t kTypeFloatBit = 7U;
+    constexpr static std::uint32_t kTypeStringBit = 9U;
+    constexpr static std::uint32_t kTypeRawBit = 10U;
 
     // \Requirement PRS_Dlt_00354
     score::cpp::optional<TypeInfo> Set(const TypeLength length)
@@ -106,8 +106,8 @@ class TypeInfo
     // \Requirement PRS_Dlt_00183, PRS_Dlt_00367
     score::cpp::optional<TypeInfo> Set(const StringEncoding encoding) noexcept
     {
-        const auto is_type_string_bit_set = score::platform::CheckBit(underlying_type_, TYPE_STRING_BIT);
-        const auto is_trace_info_bit_set = score::platform::CheckBit(underlying_type_, TRACE_INFO_BIT);
+        const auto is_type_string_bit_set = score::platform::CheckBit(underlying_type_, kTypeStringBit);
+        const auto is_trace_info_bit_set = score::platform::CheckBit(underlying_type_, kTraceInfoBit);
         //  LCOV_EXCL_START : can't achieve the other conditions because can't control the "underlying_type_" value.
         if ((is_type_string_bit_set || is_trace_info_bit_set) == false)
         {
@@ -117,15 +117,15 @@ class TypeInfo
 
         static_assert(std::is_same<std::underlying_type<StringEncoding>::type, std::uint32_t>::value,
                       "Mismatching underlying type. Cast not valid.");
-        underlying_type_ |= (static_cast<std::uint32_t>(encoding) << STRING_ENCODING_START);
+        underlying_type_ |= (static_cast<std::uint32_t>(encoding) << kStringEncodingStart);
         return *this;
     }
 
     // \Requirement PRS_Dlt_00782, PRS_Dlt_00783
     score::cpp::optional<TypeInfo> Set(const score::mw::log::detail::IntegerRepresentation encoding) noexcept
     {
-        const auto is_type_unsigned_bit_set = score::platform::CheckBit(underlying_type_, TYPE_UNSIGNED_BIT);
-        const auto is_type_signed_bit_set = score::platform::CheckBit(underlying_type_, TYPE_SIGNED_BIT);
+        const auto is_type_unsigned_bit_set = score::platform::CheckBit(underlying_type_, kTypeUnsignedBit);
+        const auto is_type_signed_bit_set = score::platform::CheckBit(underlying_type_, kTypeSignedBit);
         //  LCOV_EXCL_START : can't achieve the other conditions because can't control the "underlying_type_" value.
         if ((is_type_unsigned_bit_set || is_type_signed_bit_set) == false)
         {
@@ -146,7 +146,7 @@ class TypeInfo
         static_assert(
             std::is_same<std::underlying_type<score::mw::log::detail::IntegerRepresentation>::type, std::uint8_t>::value,
             "Mismatching underlying type. Cast not valid.");
-        underlying_type_ |= (static_cast<std::uint32_t>(encoding) << INTEGER_ENCODING_START);
+        underlying_type_ |= (static_cast<std::uint32_t>(encoding) << kIntegerEncodingStart);
         return *this;
     }
 
@@ -157,10 +157,10 @@ class TypeInfo
     // \Requirement PRS_Dlt_00625
     // constexpr static auto VARIABLE_INFO_BIT = 11U; not supported in our implementation
     // constexpr static auto FIXED_POINT_BIT = 12U; not supported in our implementation
-    constexpr static std::size_t TRACE_INFO_BIT{13UL};
-    constexpr static auto STRING_ENCODING_START = 15U;
+    constexpr static std::size_t kTraceInfoBit{13UL};
+    constexpr static auto kStringEncodingStart = 15U;
     // \Requirement PRS_Dlt_00782
-    constexpr static auto INTEGER_ENCODING_START = 15U;
+    constexpr static auto kIntegerEncodingStart = 15U;
 };
 
 template <typename T>
@@ -343,7 +343,7 @@ namespace detail
 AddArgumentResult DLTFormat::Log(VerbosePayload& payload, const bool data) noexcept
 {
     // \Requirement PRS_Dlt_00139
-    TypeInfo type_info(TypeInfo::TYPE_BOOL_BIT);
+    TypeInfo type_info(TypeInfo::kTypeBoolBit);
     //  LCOV_EXCL_START : we can't cover true case as TypeLength and TypeInfo are constant and harded code
     if (type_info.Set(TypeLength::k8Bit).has_value() == false)
     {
@@ -362,113 +362,113 @@ AddArgumentResult DLTFormat::Log(VerbosePayload& payload,
                                  const std::uint8_t data,
                                  const IntegerRepresentation repr) noexcept
 {
-    return LogData(payload, data, repr, TypeInfo::TYPE_UNSIGNED_BIT, TypeLength::k8Bit);
+    return LogData(payload, data, repr, TypeInfo::kTypeUnsignedBit, TypeLength::k8Bit);
 }
 
 AddArgumentResult DLTFormat::Log(VerbosePayload& payload,
                                  const std::uint16_t data,
                                  const IntegerRepresentation repr) noexcept
 {
-    return LogData(payload, data, repr, TypeInfo::TYPE_UNSIGNED_BIT, TypeLength::k16Bit);
+    return LogData(payload, data, repr, TypeInfo::kTypeUnsignedBit, TypeLength::k16Bit);
 }
 
 AddArgumentResult DLTFormat::Log(VerbosePayload& payload,
                                  const std::uint32_t data,
                                  const IntegerRepresentation repr) noexcept
 {
-    return LogData(payload, data, repr, TypeInfo::TYPE_UNSIGNED_BIT, TypeLength::k32Bit);
+    return LogData(payload, data, repr, TypeInfo::kTypeUnsignedBit, TypeLength::k32Bit);
 }
 
 AddArgumentResult DLTFormat::Log(VerbosePayload& payload,
                                  const std::uint64_t data,
                                  const IntegerRepresentation repr) noexcept
 {
-    return LogData(payload, data, repr, TypeInfo::TYPE_UNSIGNED_BIT, TypeLength::k64Bit);
+    return LogData(payload, data, repr, TypeInfo::kTypeUnsignedBit, TypeLength::k64Bit);
 }
 
 AddArgumentResult DLTFormat::Log(VerbosePayload& payload,
                                  const std::int8_t data,
                                  const IntegerRepresentation repr) noexcept
 {
-    return LogData(payload, data, repr, TypeInfo::TYPE_SIGNED_BIT, TypeLength::k8Bit);
+    return LogData(payload, data, repr, TypeInfo::kTypeSignedBit, TypeLength::k8Bit);
 }
 
 AddArgumentResult DLTFormat::Log(VerbosePayload& payload,
                                  const std::int16_t data,
                                  const IntegerRepresentation repr) noexcept
 {
-    return LogData(payload, data, repr, TypeInfo::TYPE_SIGNED_BIT, TypeLength::k16Bit);
+    return LogData(payload, data, repr, TypeInfo::kTypeSignedBit, TypeLength::k16Bit);
 }
 AddArgumentResult DLTFormat::Log(VerbosePayload& payload,
                                  const std::int32_t data,
                                  const IntegerRepresentation repr) noexcept
 {
-    return LogData(payload, data, repr, TypeInfo::TYPE_SIGNED_BIT, TypeLength::k32Bit);
+    return LogData(payload, data, repr, TypeInfo::kTypeSignedBit, TypeLength::k32Bit);
 }
 
 AddArgumentResult DLTFormat::Log(VerbosePayload& payload,
                                  const std::int64_t data,
                                  const IntegerRepresentation repr) noexcept
 {
-    return LogData(payload, data, repr, TypeInfo::TYPE_SIGNED_BIT, TypeLength::k64Bit);
+    return LogData(payload, data, repr, TypeInfo::kTypeSignedBit, TypeLength::k64Bit);
 }
 
 AddArgumentResult DLTFormat::Log(VerbosePayload& payload, const LogHex8 data, const IntegerRepresentation repr) noexcept
 {
-    return LogData(payload, data, repr, TypeInfo::TYPE_UNSIGNED_BIT, TypeLength::k8Bit);
+    return LogData(payload, data, repr, TypeInfo::kTypeUnsignedBit, TypeLength::k8Bit);
 }
 
 AddArgumentResult DLTFormat::Log(VerbosePayload& payload,
                                  const LogHex16 data,
                                  const IntegerRepresentation repr) noexcept
 {
-    return LogData(payload, data, repr, TypeInfo::TYPE_UNSIGNED_BIT, TypeLength::k16Bit);
+    return LogData(payload, data, repr, TypeInfo::kTypeUnsignedBit, TypeLength::k16Bit);
 }
 
 AddArgumentResult DLTFormat::Log(VerbosePayload& payload,
                                  const LogHex32 data,
                                  const IntegerRepresentation repr) noexcept
 {
-    return LogData(payload, data, repr, TypeInfo::TYPE_UNSIGNED_BIT, TypeLength::k32Bit);
+    return LogData(payload, data, repr, TypeInfo::kTypeUnsignedBit, TypeLength::k32Bit);
 }
 
 AddArgumentResult DLTFormat::Log(VerbosePayload& payload,
                                  const LogHex64 data,
                                  const IntegerRepresentation repr) noexcept
 {
-    return LogData(payload, data, repr, TypeInfo::TYPE_UNSIGNED_BIT, TypeLength::k64Bit);
+    return LogData(payload, data, repr, TypeInfo::kTypeUnsignedBit, TypeLength::k64Bit);
 }
 
 AddArgumentResult DLTFormat::Log(VerbosePayload& payload, const LogBin8 data, const IntegerRepresentation repr) noexcept
 {
-    return LogData(payload, data, repr, TypeInfo::TYPE_UNSIGNED_BIT, TypeLength::k8Bit);
+    return LogData(payload, data, repr, TypeInfo::kTypeUnsignedBit, TypeLength::k8Bit);
 }
 
 AddArgumentResult DLTFormat::Log(VerbosePayload& payload,
                                  const LogBin16 data,
                                  const IntegerRepresentation repr) noexcept
 {
-    return LogData(payload, data, repr, TypeInfo::TYPE_UNSIGNED_BIT, TypeLength::k16Bit);
+    return LogData(payload, data, repr, TypeInfo::kTypeUnsignedBit, TypeLength::k16Bit);
 }
 
 AddArgumentResult DLTFormat::Log(VerbosePayload& payload,
                                  const LogBin32 data,
                                  const IntegerRepresentation repr) noexcept
 {
-    return LogData(payload, data, repr, TypeInfo::TYPE_UNSIGNED_BIT, TypeLength::k32Bit);
+    return LogData(payload, data, repr, TypeInfo::kTypeUnsignedBit, TypeLength::k32Bit);
 }
 
 AddArgumentResult DLTFormat::Log(VerbosePayload& payload,
                                  const LogBin64 data,
                                  const IntegerRepresentation repr) noexcept
 {
-    return LogData(payload, data, repr, TypeInfo::TYPE_UNSIGNED_BIT, TypeLength::k64Bit);
+    return LogData(payload, data, repr, TypeInfo::kTypeUnsignedBit, TypeLength::k64Bit);
 }
 
 AddArgumentResult DLTFormat::Log(VerbosePayload& payload, const float data) noexcept
 {
     // \Requirement PRS_Dlt_00390, PRS_Dlt_00145
-    TypeInfo type_info(TypeInfo::TYPE_FLOAT_BIT);
+    TypeInfo type_info(TypeInfo::kTypeFloatBit);
     //  LCOV_EXCL_START : we can't cover true case as TypeLength and TypeInfo are constant and harded code
     if (type_info.Set(TypeLength::k32Bit).has_value() == false)
     {
@@ -483,7 +483,7 @@ AddArgumentResult DLTFormat::Log(VerbosePayload& payload, const float data) noex
 AddArgumentResult DLTFormat::Log(VerbosePayload& payload, const double data) noexcept
 {
     // \Requirement PRS_Dlt_00386, PRS_Dlt_00356
-    TypeInfo type_info(TypeInfo::TYPE_FLOAT_BIT);
+    TypeInfo type_info(TypeInfo::kTypeFloatBit);
     //  LCOV_EXCL_START : we can't cover true case as TypeLength and TypeInfo are constant and harded code
     if (type_info.Set(TypeLength::k64Bit).has_value() == false)
     {
@@ -498,7 +498,7 @@ AddArgumentResult DLTFormat::Log(VerbosePayload& payload, const double data) noe
 AddArgumentResult DLTFormat::Log(VerbosePayload& payload, const std::string_view data) noexcept
 {
     // \Requirement PRS_Dlt_00420, PRS_Dlt_00155
-    TypeInfo type_info(TypeInfo::TYPE_STRING_BIT);
+    TypeInfo type_info(TypeInfo::kTypeStringBit);
     //  LCOV_EXCL_START : we can't cover true case as TypeLength and TypeInfo are constant and harded code
     if (type_info.Set(StringEncoding::kUTF8).has_value() == false)
     {
@@ -519,16 +519,16 @@ AddArgumentResult DLTFormat::Log(VerbosePayload& payload, const std::string_view
     // including the DLT headers.
 
     // Number of bytes needed for the header needed before the payload.
-    constexpr std::uint64_t header_size = sizeof(type_info) + sizeof(std::uint16_t);
+    constexpr std::uint64_t kHeaderSize = sizeof(type_info) + sizeof(std::uint16_t);
 
-    if (payload.RemainingCapacity() <= header_size)
+    if (payload.RemainingCapacity() <= kHeaderSize)
     {
         // No space left in buffer for payload.
         return AddArgumentResult::NotAdded;
     }
 
     // Now figure out how many bytes we can store for the string (including null terminator).
-    const auto capacity_after_header = payload.RemainingCapacity() - header_size;
+    const auto capacity_after_header = payload.RemainingCapacity() - kHeaderSize;
 
     // Clamp that capacity to what fits in a 16-bit length field.
     // This is our max "string length including null".
@@ -541,7 +541,7 @@ AddArgumentResult DLTFormat::Log(VerbosePayload& payload, const std::string_view
 AddArgumentResult DLTFormat::Log(VerbosePayload& payload, const LogRawBuffer data) noexcept
 {
     // \Requirement PRS_Dlt_00625
-    const auto type_info = TypeInfo(TypeInfo::TYPE_RAW_BIT);
+    const auto type_info = TypeInfo(TypeInfo::kTypeRawBit);
 
     // \Requirement PRS_Dlt_00160, PRS_Dlt_00374
     // The string payload shall be assembled as follows:
@@ -554,16 +554,16 @@ AddArgumentResult DLTFormat::Log(VerbosePayload& payload, const LogRawBuffer dat
     // including the DLT headers.
 
     // Number of bytes needed for the header needed before the payload.
-    constexpr std::size_t header_size = sizeof(type_info) + sizeof(std::uint16_t);
+    constexpr std::size_t kHeaderSize = sizeof(type_info) + sizeof(std::uint16_t);
 
-    if (payload.RemainingCapacity() <= header_size)
+    if (payload.RemainingCapacity() <= kHeaderSize)
     {
         // No space left in buffer for payload.
         return AddArgumentResult::NotAdded;
     }
 
     // Calculate how many bytes can remain for the raw buffer after the header.
-    const auto capacity_after_header = payload.RemainingCapacity() - header_size;
+    const auto capacity_after_header = payload.RemainingCapacity() - kHeaderSize;
 
     // Clamp that to fit in uint16_t.
     const auto max_length = helper::ClampTo<std::uint16_t>(capacity_after_header);

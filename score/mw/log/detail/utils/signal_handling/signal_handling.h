@@ -11,8 +11,8 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-#ifndef SCORE_MW_LOG_DETAIL_UTILS_SIGNAL_HANDLING_SIGNAL_HANDLING_H_
-#define SCORE_MW_LOG_DETAIL_UTILS_SIGNAL_HANDLING_SIGNAL_HANDLING_H_
+#ifndef SCORE_MW_LOG_DETAIL_UTILS_SIGNAL_HANDLING_SIGNAL_HANDLING_H
+#define SCORE_MW_LOG_DETAIL_UTILS_SIGNAL_HANDLING_SIGNAL_HANDLING_H
 
 #include "score/os/utils/signal.h"
 
@@ -55,4 +55,4 @@ class SignalHandling
 
 }  //  namespace score::mw::log::detail
 
-#endif  //  SCORE_MW_LOG_DETAIL_UTILS_SIGNAL_HANDLING_SIGNAL_HANDLING_H_
+#endif  //  SCORE_MW_LOG_DETAIL_UTILS_SIGNAL_HANDLING_SIGNAL_HANDLING_H

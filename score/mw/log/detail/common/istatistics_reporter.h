@@ -10,8 +10,8 @@
  *
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
-#ifndef SCORE_MW_LOG_DETAIL_COMMON_DATA_ROUTER_ISTATISTICS_REPORTER_H
-#define SCORE_MW_LOG_DETAIL_COMMON_DATA_ROUTER_ISTATISTICS_REPORTER_H
+#ifndef SCORE_MW_LOG_DETAIL_COMMON_ISTATISTICS_REPORTER_H
+#define SCORE_MW_LOG_DETAIL_COMMON_ISTATISTICS_REPORTER_H
 
 #include "score/mw/log/recorder.h"
 
@@ -59,4 +59,4 @@ class IStatisticsReporter
 }  // namespace mw
 }  // namespace score
 
-#endif  // SCORE_MW_LOG_DETAIL_COMMON_DATA_ROUTER_ISTATISTICS_REPORTER_H
+#endif  // SCORE_MW_LOG_DETAIL_COMMON_ISTATISTICS_REPORTER_H

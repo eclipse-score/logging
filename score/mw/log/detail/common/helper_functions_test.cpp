@@ -42,17 +42,17 @@ TEST(SumTest, SumOverflow)
 TEST(ClampAddNullTerminatorTest, ClampAddNullTerminatorNoOverFlow)
 {
     std::uint16_t v1 = 1U;
-    constexpr std::uint16_t expected_value = 2U;
+    constexpr std::uint16_t kExpectedValue = 2U;
     std::size_t result1 = ClampAddNullTerminator(v1);
-    EXPECT_EQ(result1, expected_value);
+    EXPECT_EQ(result1, kExpectedValue);
 }
 
 TEST(ClampAddNullTerminatorTest, ClampAddNullTerminatorOverFlow)
 {
     std::uint16_t v1 = std::numeric_limits<std::uint16_t>::max();
-    constexpr std::uint16_t expected_value = std::numeric_limits<std::uint16_t>::max();
+    constexpr std::uint16_t kExpectedValue = std::numeric_limits<std::uint16_t>::max();
     std::size_t result1 = ClampAddNullTerminator(v1);
-    EXPECT_EQ(result1, expected_value);
+    EXPECT_EQ(result1, kExpectedValue);
 }
 
 TEST(ClampTest, ClampSourceOverflow)
@@ -63,8 +63,8 @@ TEST(ClampTest, ClampSourceOverflow)
     static_assert(std::numeric_limits<SourceType>::max() > std::numeric_limits<TargetType>::max(),
                   "SourceType type must be greater than TargetType");
 
-    constexpr SourceType source = std::numeric_limits<SourceType>::max();
-    const auto result = helper::ClampTo<TargetType>(source);
+    constexpr SourceType kSource = std::numeric_limits<SourceType>::max();
+    const auto result = helper::ClampTo<TargetType>(kSource);
     EXPECT_EQ(result, std::numeric_limits<TargetType>::max());
 }
 

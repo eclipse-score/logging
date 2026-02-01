@@ -41,7 +41,7 @@ bool IsRecorderOfType(const Recorder& recorder) noexcept
 class RuntimeFixture : public ::testing::Test
 {
   public:
-    RecorderMock recorder_mock_{};
+    RecorderMock recorder_mock{};
 };
 
 TEST_F(RuntimeFixture, CanSetALoggingBackend)
@@ -54,7 +54,7 @@ TEST_F(RuntimeFixture, CanSetALoggingBackend)
     // Given an empty process
 
     // When setting the recorder for e.g. testing purposes
-    Runtime::SetRecorder(&recorder_mock_);
+    Runtime::SetRecorder(&recorder_mock);
 
     // Then no exception happens (API test)
 }
@@ -67,11 +67,11 @@ TEST_F(RuntimeFixture, CanRetrieveSetRecorder)
     RecordProperty("DerivationTechnique", "Generation and analysis of equivalence classes");
 
     // Given the recorder was already set
-    Runtime::SetRecorder(&recorder_mock_);
+    Runtime::SetRecorder(&recorder_mock);
 
     // When trying to read the current recorder
     // Then it is the one that was previously stored
-    EXPECT_EQ(&recorder_mock_, &Runtime::GetRecorder());
+    EXPECT_EQ(&recorder_mock, &Runtime::GetRecorder());
 }
 
 TEST_F(RuntimeFixture, CanRetrieveFallbackRecorder)
@@ -99,7 +99,7 @@ TEST_F(RuntimeFixture, DefaultRecorderShallBeReturned)
     RecordProperty("DerivationTechnique", "Generation and analysis of equivalence classes");
 
     // Given the unset recorder:
-    Runtime::SetRecorder(&recorder_mock_);
+    Runtime::SetRecorder(&recorder_mock);
     auto& recorder = Runtime::GetRecorder();
     Runtime::SetRecorder(nullptr);
 
