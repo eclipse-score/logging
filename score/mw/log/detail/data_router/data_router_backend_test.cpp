@@ -41,24 +41,23 @@ namespace
 {
 
 using ::testing::_;
-using ::testing::AnyNumber;
 using ::testing::Return;
 using ::testing::StrEq;
 
-static constexpr pid_t kPid{0x314};
-static constexpr std::int32_t kArbitratyUid = 21880012;
-static constexpr std::int32_t kFileDescriptor = 0x31;  //  arbitrary file descriptor number
-static constexpr std::int32_t kFdNumber = 17;
-static constexpr auto kSharedSize = 64UL;
-static constexpr auto kOpenReadFlagsDynamic =
+constexpr pid_t kPid{0x314};
+constexpr std::int32_t kArbitratyUid = 21880012;
+constexpr std::int32_t kFileDescriptor = 0x31;  //  arbitrary file descriptor number
+constexpr std::int32_t kFdNumber = 17;
+constexpr auto kSharedSize = 64UL;
+constexpr auto kOpenReadFlagsDynamic =
     score::os::Fcntl::Open::kReadWrite | score::os::Fcntl::Open::kExclusive | score::os::Fcntl::Open::kCloseOnExec;
-static constexpr auto kOpenReadFlags = kOpenReadFlagsDynamic | score::os::Fcntl::Open::kCreate;
-static constexpr auto kOpenModeFlags =
+constexpr auto kOpenReadFlags = kOpenReadFlagsDynamic | score::os::Fcntl::Open::kCreate;
+constexpr auto kOpenModeFlags =
     score::os::Stat::Mode::kReadUser | score::os::Stat::Mode::kReadGroup | score::os::Stat::Mode::kReadOthers;
 constexpr auto kAlignRequirement = std::alignment_of<SharedData>::value;
 const char kDynamicFileName[] = "/tmp/logging-XXXXXX.shmem";
 
-const std::string GetStaticSharedMemoryFileName() noexcept
+std::string GetStaticSharedMemoryFileName() noexcept
 {
     std::stringstream ss;
     ss << "/tmp/logging.NONE." << kArbitratyUid << ".shmem";
@@ -76,7 +75,7 @@ struct DatarouterMessageClientStub : DatarouterMessageClient
 WriterFactory::OsalInstances CreateSharedMemoryWriterFactoryMockResources()
 {
     WriterFactory::OsalInstances osal;
-    auto memory_resource = score::cpp::pmr::get_default_resource();
+    auto* memory_resource = score::cpp::pmr::get_default_resource();
     osal.fcntl_osal = score::cpp::pmr::make_unique<score::os::FcntlMock>(memory_resource);
     osal.unistd = score::cpp::pmr::make_unique<score::os::UnistdMock>(memory_resource);
     osal.mman = score::cpp::pmr::make_unique<score::os::MmanMock>(memory_resource);
@@ -128,35 +127,35 @@ class DataRouterBackendFixture : public ::testing::Test, public ::testing::WithP
                                                    shared_data_.control_block.control_block_odd.data};
         reader_ = std::make_unique<SharedMemoryReader>(shared_data_, std::move(read_only_reader), []() noexcept {});
 
-        config_.SetDynamicDatarouterIdentifiers(false);
-        logger_ = std::make_unique<score::platform::logger>(
-            config_, score::mw::log::NvConfigFactory::CreateEmpty(), std::move(writer_));
+        config.SetDynamicDatarouterIdentifiers(false);
+        logger = std::make_unique<score::platform::logger>(
+            config, score::mw::log::NvConfigFactory::CreateEmpty(), std::move(writer_));
 
-        ::score::platform::logger::InjectTestInstance(logger_.get());
+        ::score::platform::logger::InjectTestInstance(logger.get());
 
         CreateSharedMemoryWriterFactory();
 
-        map_address_ = buffer_.data();
+        map_address = buffer.data();
 
-        ON_CALL(*stdlib_mock_raw_ptr_, mkstemps(_, _)).WillByDefault(Return(kFdNumber));
+        ON_CALL(*stdlib_mock_raw_ptr, mkstemps(_, _)).WillByDefault(Return(kFdNumber));
 
-        ON_CALL(*unistd_mock_raw_ptr_, ftruncate(kFileDescriptor, _))
+        ON_CALL(*unistd_mock_raw_ptr, ftruncate(kFileDescriptor, _))
             .WillByDefault(Return(score::cpp::expected_blank<score::os::Error>{}));
 
-        ON_CALL(*stat_mock_raw_ptr_, chmod(_, _)).WillByDefault(Return(score::cpp::expected_blank<score::os::Error>{}));
+        ON_CALL(*stat_mock_raw_ptr, chmod(_, _)).WillByDefault(Return(score::cpp::expected_blank<score::os::Error>{}));
 
-        ON_CALL(*unistd_mock_raw_ptr_, getuid()).WillByDefault(Return(kArbitratyUid));
+        ON_CALL(*unistd_mock_raw_ptr, getuid()).WillByDefault(Return(kArbitratyUid));
 
-        ON_CALL(*mman_mock_raw_ptr_,
+        ON_CALL(*mman_mock_raw_ptr,
                 mmap(nullptr,
                      _,
                      score::os::Mman::Protection::kRead | score::os::Mman::Protection::kWrite,
                      score::os::Mman::Map::kShared,
                      kFileDescriptor,
                      0))
-            .WillByDefault(Return(score::cpp::expected<void*, score::os::Error>{map_address_}));
+            .WillByDefault(Return(score::cpp::expected<void*, score::os::Error>{map_address}));
 
-        ON_CALL(*unistd_mock_raw_ptr_, getpid()).WillByDefault(Return(kPid));
+        ON_CALL(*unistd_mock_raw_ptr, getpid()).WillByDefault(Return(kPid));
     }
 
     void TearDown() override
@@ -164,25 +163,25 @@ class DataRouterBackendFixture : public ::testing::Test, public ::testing::WithP
         ::score::platform::logger::InjectTestInstance(nullptr);
     }
 
-    void SimulateLogging(const std::string& context_id, const LogLevel logLevel = LogLevel::kError)
+    void SimulateLogging(const std::string& context_id, const LogLevel log_level = LogLevel::kError)
     {
-        SimulateLogging(logLevel, context_id);
+        SimulateLogging(log_level, context_id);
     }
 
     void CreateSharedMemoryWriterFactory()
     {
-        auto memory_resource = score::cpp::pmr::get_default_resource();
+        auto* memory_resource = score::cpp::pmr::get_default_resource();
         auto fcntl_mock = score::cpp::pmr::make_unique<score::os::FcntlMock>(memory_resource);
         auto unistd_mock = score::cpp::pmr::make_unique<score::os::UnistdMock>(memory_resource);
         auto mman_mock = score::cpp::pmr::make_unique<score::os::MmanMock>(memory_resource);
         auto stat_mock = score::cpp::pmr::make_unique<score::os::StatMock>(memory_resource);
         auto stdlib_mock = score::cpp::pmr::make_unique<score::os::StdlibMock>(memory_resource);
 
-        fcntl_mock_raw_ptr_ = fcntl_mock.get();
-        mman_mock_raw_ptr_ = mman_mock.get();
-        unistd_mock_raw_ptr_ = unistd_mock.get();
-        stat_mock_raw_ptr_ = stat_mock.get();
-        stdlib_mock_raw_ptr_ = stdlib_mock.get();
+        fcntl_mock_raw_ptr = fcntl_mock.get();
+        mman_mock_raw_ptr = mman_mock.get();
+        unistd_mock_raw_ptr = unistd_mock.get();
+        stat_mock_raw_ptr = stat_mock.get();
+        stdlib_mock_raw_ptr = stdlib_mock.get();
 
         WriterFactory::OsalInstances osal;
         osal.fcntl_osal = std::move(fcntl_mock);
@@ -191,53 +190,53 @@ class DataRouterBackendFixture : public ::testing::Test, public ::testing::WithP
         osal.stat_osal = std::move(stat_mock);
         osal.stdlib = std::move(stdlib_mock);
 
-        writer_factory_ = WriterFactory{std::move(osal)};
+        writer_factory = WriterFactory{std::move(osal)};
     }
 
-    void SimulateLogging(const LogLevel logLevel = LogLevel::kError,
+    void SimulateLogging(const LogLevel log_level = LogLevel::kError,
                          const std::string& context_id = "DFLT",
                          const std::string& app_id = "TEST")
     {
 
         const auto slot = unit_.ReserveSlot().value();
 
-        auto&& logRecord = unit_.GetLogRecord(slot);
-        auto& log_entry = logRecord.getLogEntry();
+        auto&& log_record = unit_.GetLogRecord(slot);
+        auto& log_entry = log_record.getLogEntry();
 
         log_entry.app_id = LoggingIdentifier{app_id};
         log_entry.ctx_id = LoggingIdentifier{context_id};
-        log_entry.log_level = logLevel;
+        log_entry.log_level = log_level;
         log_entry.num_of_args = 5;
-        logRecord.getVerbosePayload().Put("ABC DEF", 7);
+        log_record.getVerbosePayload().Put("ABC DEF", 7);
 
         unit_.FlushSlot(slot);
 
-        const auto acquire_result = logger_->GetSharedMemoryWriter().ReadAcquire();
-        config_ = logger_->get_config();
+        const auto acquire_result = logger->GetSharedMemoryWriter().ReadAcquire();
+        config = logger->get_config();
 
         reader_->NotifyAcquisitionSetReader(acquire_result);
 
         reader_->Read([](const TypeRegistration&) noexcept {},
                       [this](const SharedMemoryRecord& record) {
                           std::ignore = SerializeNs::deserialize(
-                              record.payload.data(), GetDataSizeAsLength(record.payload), header_);
+                              record.payload.data(), GetDataSizeAsLength(record.payload), header);
                       });
     }
 
-    LogEntry header_{};
-    std::unique_ptr<score::platform::logger> logger_{};
-    Configuration config_{};
+    LogEntry header{};
+    std::unique_ptr<score::platform::logger> logger{};
+    Configuration config{};
 
     //  Mocks needed for dependency injection into SharedMemoryWriter:
-    score::os::FcntlMock* fcntl_mock_raw_ptr_;
-    score::os::UnistdMock* unistd_mock_raw_ptr_;
-    score::os::StatMock* stat_mock_raw_ptr_;
-    score::os::StdlibMock* stdlib_mock_raw_ptr_;
-    score::os::MmanMock* mman_mock_raw_ptr_;
+    score::os::FcntlMock* fcntl_mock_raw_ptr;
+    score::os::UnistdMock* unistd_mock_raw_ptr;
+    score::os::StatMock* stat_mock_raw_ptr;
+    score::os::StdlibMock* stdlib_mock_raw_ptr;
+    score::os::MmanMock* mman_mock_raw_ptr;
 
-    score::mw::log::detail::WriterFactory writer_factory_{{}};
-    std::array<Byte, kSharedSize + kAlignRequirement> buffer_;
-    void* map_address_;
+    score::mw::log::detail::WriterFactory writer_factory{{}};
+    std::array<Byte, kSharedSize + kAlignRequirement> buffer;
+    void* map_address;
 
   private:
     SharedData shared_data_{};
@@ -251,7 +250,7 @@ class DataRouterBackendFixture : public ::testing::Test, public ::testing::WithP
     DataRouterBackend unit_{std::uint8_t{255UL},
                             LogRecord{},
                             message_client_factory_,
-                            config_,
+                            config,
                             WriterFactory{CreateSharedMemoryWriterFactoryMockResources()}};
 };
 
@@ -265,7 +264,7 @@ TEST_F(DataRouterBackendFixture, AppIDSetCorrectly)
     SimulateLogging();
 
     const auto app_id = LoggingIdentifier{"TEST"};
-    EXPECT_EQ(header_.app_id, app_id);
+    EXPECT_EQ(header.app_id, app_id);
 }
 
 TEST_F(DataRouterBackendFixture, ToSmallAppIdSetCorrectlyWithZeroPadding)
@@ -278,7 +277,7 @@ TEST_F(DataRouterBackendFixture, ToSmallAppIdSetCorrectlyWithZeroPadding)
     SimulateLogging(LogLevel::kError, "DFLT", "TES");
 
     const auto test = LoggingIdentifier{"TES"};
-    EXPECT_EQ(header_.app_id, test);
+    EXPECT_EQ(header.app_id, test);
 }
 
 TEST_F(DataRouterBackendFixture, ContextIdSetCorrectly)
@@ -291,7 +290,7 @@ TEST_F(DataRouterBackendFixture, ContextIdSetCorrectly)
     SimulateLogging();
 
     const auto ctx = LoggingIdentifier{"DFLT"};
-    EXPECT_EQ(header_.ctx_id, ctx);
+    EXPECT_EQ(header.ctx_id, ctx);
 }
 
 TEST_F(DataRouterBackendFixture, ToSmallCtxSetCorrectlyWithZeroPadding)
@@ -304,7 +303,7 @@ TEST_F(DataRouterBackendFixture, ToSmallCtxSetCorrectlyWithZeroPadding)
     SimulateLogging("DFL");
 
     const auto ctx = LoggingIdentifier{"DFL"};
-    EXPECT_EQ(header_.ctx_id, ctx);
+    EXPECT_EQ(header.ctx_id, ctx);
 }
 
 TEST_P(DataRouterBackendFixture, LogLevelSetCorrectly)
@@ -318,7 +317,7 @@ TEST_P(DataRouterBackendFixture, LogLevelSetCorrectly)
 
     SimulateLogging(GetParam());
 
-    EXPECT_EQ(header_.log_level, GetParam());
+    EXPECT_EQ(header.log_level, GetParam());
 }
 
 INSTANTIATE_TEST_SUITE_P(LogLevelSetCorrectly,
@@ -416,7 +415,7 @@ TEST_F(DataRouterBackendFixture, NumberOfArgsSetCorrectly)
 
     SimulateLogging();
 
-    EXPECT_EQ(header_.num_of_args, 5UL);
+    EXPECT_EQ(header.num_of_args, 5UL);
 }
 
 TEST_F(DataRouterBackendFixture, PayloadSetCorrectly)
@@ -431,7 +430,7 @@ TEST_F(DataRouterBackendFixture, PayloadSetCorrectly)
     ByteVector payload{'A', 'B', 'C', ' ', 'D', 'E', 'F'};
 
     // Payload content
-    EXPECT_EQ(header_.payload, payload);
+    EXPECT_EQ(header.payload, payload);
 }
 
 TEST(DataRouterBackendTests, CheckSizeValid)
@@ -441,16 +440,16 @@ TEST(DataRouterBackendTests, CheckSizeValid)
     RecordProperty("TestType", "Interface test");
     RecordProperty("DerivationTechnique", "Analysis of boundary values");
 
-    const std::size_t kMaxSlotsSize = 255UL;
+    const std::size_t k_max_slots_size = 255UL;
     DatarouterMessageClientStubFactory message_client_factory;
     //  Give the try to allocate one more then possible number of slots
-    const Configuration config_{};
+    const Configuration config{};
     WriterFactory writer_factory{CreateSharedMemoryWriterFactoryMockResources()};
     DataRouterBackend datarouter_backend{
-        kMaxSlotsSize + 1, LogRecord{}, message_client_factory, config_, std::move(writer_factory)};
+        k_max_slots_size + 1, LogRecord{}, message_client_factory, config, std::move(writer_factory)};
 
     // Given depleted allocator:
-    for (std::size_t i = 0; i < kMaxSlotsSize; i++)
+    for (std::size_t i = 0; i < k_max_slots_size; i++)
     {
         const auto& slot = datarouter_backend.ReserveSlot();
         EXPECT_TRUE(slot.has_value());
@@ -469,17 +468,17 @@ TEST(DataRouterBackendTests, WhenAllPossibleSlotsUsedFailToAllocateMore)
     RecordProperty("DerivationTechnique", "Analysis of boundary values");
 
     // Given maksimum allocation size:
-    const std::uint8_t kMaxSlotsSize = 255UL;
+    const std::uint8_t k_max_slots_size = 255UL;
     DatarouterMessageClientStubFactory message_client_factory{};
-    const Configuration config_{};
-    DataRouterBackend datarouter_backend(kMaxSlotsSize,
+    const Configuration config{};
+    DataRouterBackend datarouter_backend(k_max_slots_size,
                                          LogRecord{},
                                          message_client_factory,
-                                         config_,
+                                         config,
                                          WriterFactory{CreateSharedMemoryWriterFactoryMockResources()});
 
     // Given depleted allocator:
-    for (std::size_t i = 0; i < kMaxSlotsSize; i++)
+    for (std::size_t i = 0; i < k_max_slots_size; i++)
     {
         const auto& slot = datarouter_backend.ReserveSlot();
         EXPECT_TRUE(slot.has_value());
@@ -497,10 +496,10 @@ TEST_F(DataRouterBackendFixture, WhenSafeIpcIsTrueMessageClientIsCreated)
     RecordProperty("TestType", "Interface test");
     RecordProperty("DerivationTechnique", "Generation and analysis of equivalence classes");
 
-    const std::uint8_t kMaxSlotsSize = 255UL;
+    const std::uint8_t k_max_slots_size = 255UL;
     DatarouterMessageClientFactoryMock message_client_factory{};
 
-    EXPECT_CALL(*fcntl_mock_raw_ptr_, open(StrEq(GetStaticSharedMemoryFileName()), kOpenReadFlags, kOpenModeFlags))
+    EXPECT_CALL(*fcntl_mock_raw_ptr, open(StrEq(GetStaticSharedMemoryFileName()), kOpenReadFlags, kOpenModeFlags))
         .WillOnce(Return(score::cpp::expected<std::int32_t, score::os::Error>{kFileDescriptor}));
 
     EXPECT_CALL(message_client_factory, CreateOnce(_, _))
@@ -509,7 +508,7 @@ TEST_F(DataRouterBackendFixture, WhenSafeIpcIsTrueMessageClientIsCreated)
         });
 
     DataRouterBackend datarouter_backend(
-        kMaxSlotsSize, LogRecord{}, message_client_factory, config_, std::move(writer_factory_));
+        k_max_slots_size, LogRecord{}, message_client_factory, config, std::move(writer_factory));
 }
 
 TEST_F(DataRouterBackendFixture, WhenIdentifierIsNotDynamicUidShallBeUsed)
@@ -519,10 +518,10 @@ TEST_F(DataRouterBackendFixture, WhenIdentifierIsNotDynamicUidShallBeUsed)
     RecordProperty("TestType", "Interface test");
     RecordProperty("DerivationTechnique", "Generation and analysis of equivalence classes");
 
-    const std::uint8_t kSlotsSize = 16UL;
+    const std::uint8_t k_slots_size = 16UL;
     DatarouterMessageClientFactoryMock message_client_factory{};
 
-    EXPECT_CALL(*fcntl_mock_raw_ptr_, open(StrEq(GetStaticSharedMemoryFileName()), kOpenReadFlags, kOpenModeFlags))
+    EXPECT_CALL(*fcntl_mock_raw_ptr, open(StrEq(GetStaticSharedMemoryFileName()), kOpenReadFlags, kOpenModeFlags))
         .WillOnce(Return(score::cpp::expected<std::int32_t, score::os::Error>{kFileDescriptor}));
 
     EXPECT_CALL(message_client_factory, CreateOnce(_, _))
@@ -531,7 +530,7 @@ TEST_F(DataRouterBackendFixture, WhenIdentifierIsNotDynamicUidShallBeUsed)
         });
 
     DataRouterBackend datarouter_backend(
-        kSlotsSize, LogRecord{}, message_client_factory, config_, std::move(writer_factory_));
+        k_slots_size, LogRecord{}, message_client_factory, config, std::move(writer_factory));
 }
 
 TEST_F(DataRouterBackendFixture, ConstructWithDynamicIdentifier)
@@ -541,11 +540,11 @@ TEST_F(DataRouterBackendFixture, ConstructWithDynamicIdentifier)
     RecordProperty("TestType", "Interface test");
     RecordProperty("DerivationTechnique", "Generation and analysis of equivalence classes");
 
-    const std::uint8_t kMaxSlotsSize = 255UL;
+    const std::uint8_t k_max_slots_size = 255UL;
     DatarouterMessageClientFactoryMock message_client_factory{};
-    config_.SetDynamicDatarouterIdentifiers(true);
+    config.SetDynamicDatarouterIdentifiers(true);
 
-    EXPECT_CALL(*fcntl_mock_raw_ptr_, open(StrEq(kDynamicFileName), kOpenReadFlagsDynamic, kOpenModeFlags))
+    EXPECT_CALL(*fcntl_mock_raw_ptr, open(StrEq(kDynamicFileName), kOpenReadFlagsDynamic, kOpenModeFlags))
         .WillOnce(Return(score::cpp::expected<std::int32_t, score::os::Error>{kFileDescriptor}));
 
     EXPECT_CALL(message_client_factory, CreateOnce(_, _))
@@ -553,19 +552,19 @@ TEST_F(DataRouterBackendFixture, ConstructWithDynamicIdentifier)
             return std::make_unique<DatarouterMessageClientMock>();
         });
 
-    EXPECT_CALL(*unistd_mock_raw_ptr_, getuid()).Times(0);
+    EXPECT_CALL(*unistd_mock_raw_ptr, getuid()).Times(0);
 
     DataRouterBackend datarouter_backend(
-        kMaxSlotsSize, LogRecord{}, message_client_factory, config_, std::move(writer_factory_));
+        k_max_slots_size, LogRecord{}, message_client_factory, config, std::move(writer_factory));
 }
 
 TEST_F(DataRouterBackendFixture, ConstructWithDynamicIdentifierAndChmodSuccess)
 {
-    const std::uint8_t kMaxSlotsSize = 255UL;
+    const std::uint8_t k_max_slots_size = 255UL;
     DatarouterMessageClientFactoryMock message_client_factory{};
-    config_.SetDynamicDatarouterIdentifiers(true);
+    config.SetDynamicDatarouterIdentifiers(true);
 
-    EXPECT_CALL(*fcntl_mock_raw_ptr_, open(StrEq(kDynamicFileName), kOpenReadFlagsDynamic, kOpenModeFlags))
+    EXPECT_CALL(*fcntl_mock_raw_ptr, open(StrEq(kDynamicFileName), kOpenReadFlagsDynamic, kOpenModeFlags))
         .WillOnce(Return(score::cpp::expected<std::int32_t, score::os::Error>{kFileDescriptor}));
 
     EXPECT_CALL(message_client_factory, CreateOnce(_, _))
@@ -573,10 +572,10 @@ TEST_F(DataRouterBackendFixture, ConstructWithDynamicIdentifierAndChmodSuccess)
             return std::make_unique<DatarouterMessageClientMock>();
         });
 
-    EXPECT_CALL(*unistd_mock_raw_ptr_, getuid()).Times(0);
+    EXPECT_CALL(*unistd_mock_raw_ptr, getuid()).Times(0);
 
     DataRouterBackend datarouter_backend(
-        kMaxSlotsSize, LogRecord{}, message_client_factory, config_, std::move(writer_factory_));
+        k_max_slots_size, LogRecord{}, message_client_factory, config, std::move(writer_factory));
 }
 
 TEST_F(DataRouterBackendFixture, DataRouterBackEndConstructedWithEmptyIdentifierWhenMkstempFail)
@@ -586,24 +585,24 @@ TEST_F(DataRouterBackendFixture, DataRouterBackEndConstructedWithEmptyIdentifier
     RecordProperty("TestType", "Interface test");
     RecordProperty("DerivationTechnique", "Generation and analysis of equivalence classes");
 
-    config_.SetDynamicDatarouterIdentifiers(true);
+    config.SetDynamicDatarouterIdentifiers(true);
 
-    const std::uint8_t kMaxSlotsSize = 255UL;
+    const std::uint8_t k_max_slots_size = 255UL;
     DatarouterMessageClientFactoryMock message_client_factory{};
 
-    EXPECT_CALL(*stdlib_mock_raw_ptr_, mkstemps(_, _))
+    EXPECT_CALL(*stdlib_mock_raw_ptr, mkstemps(_, _))
         .WillOnce(Return(score::cpp::make_unexpected(score::os::Error::createFromErrno())));
 
-    EXPECT_CALL(*stat_mock_raw_ptr_, chmod(_, _))
+    EXPECT_CALL(*stat_mock_raw_ptr, chmod(_, _))
         .Times(2)
         .WillRepeatedly(Return(score::cpp::make_unexpected(score::os::Error::createFromErrno())));
 
     EXPECT_CALL(message_client_factory, CreateOnce(_, _)).Times(0);
 
-    EXPECT_CALL(*unistd_mock_raw_ptr_, getuid()).Times(0);
+    EXPECT_CALL(*unistd_mock_raw_ptr, getuid()).Times(0);
 
     DataRouterBackend datarouter_backend(
-        kMaxSlotsSize, LogRecord{}, message_client_factory, config_, std::move(writer_factory_));
+        k_max_slots_size, LogRecord{}, message_client_factory, config, std::move(writer_factory));
 }
 
 }  // namespace

@@ -31,10 +31,10 @@ namespace detail
 namespace
 {
 
-static std::size_t CheckForMaxCapacity(const std::size_t capacity) noexcept
+std::size_t CheckForMaxCapacity(const std::size_t capacity) noexcept
 {
-    const auto isWithinMaxCapacity = (capacity <= std::numeric_limits<SlotIndex>::max());
-    if (isWithinMaxCapacity)
+    const auto is_within_max_capacity = (capacity <= std::numeric_limits<SlotIndex>::max());
+    if (is_within_max_capacity)
     {
         return capacity;
     }

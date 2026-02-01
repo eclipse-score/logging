@@ -11,8 +11,8 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-#ifndef BMW_MW_LOG_SHARED_MEMORY_READER_FACTORY
-#define BMW_MW_LOG_SHARED_MEMORY_READER_FACTORY
+#ifndef SCORE_MW_LOG_DETAIL_DATA_ROUTER_SHARED_MEMORY_READER_FACTORY_H
+#define SCORE_MW_LOG_DETAIL_DATA_ROUTER_SHARED_MEMORY_READER_FACTORY_H
 
 #include "score/mw/log/detail/data_router/shared_memory/shared_memory_reader.h"
 
@@ -54,4 +54,4 @@ class ReaderFactory
 }  // namespace mw
 }  // namespace score
 
-#endif  //  BMW_MW_LOG_SHARED_MEMORY_READER_FACTORY
+#endif  // SCORE_MW_LOG_DETAIL_DATA_ROUTER_SHARED_MEMORY_READER_FACTORY_H

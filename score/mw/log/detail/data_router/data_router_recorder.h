@@ -11,8 +11,8 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-#ifndef SCORE_MW_LOG_DETAIL_DATA_ROUTER_RECORDER_H
-#define SCORE_MW_LOG_DETAIL_DATA_ROUTER_RECORDER_H
+#ifndef SCORE_MW_LOG_DETAIL_DATA_ROUTER_DATA_ROUTER_RECORDER_H
+#define SCORE_MW_LOG_DETAIL_DATA_ROUTER_DATA_ROUTER_RECORDER_H
 
 #include "score/mw/log/recorder.h"
 
@@ -95,4 +95,4 @@ class DataRouterRecorder final : public Recorder
 }  // namespace mw
 }  // namespace score
 
-#endif  // SCORE_MW_LOG_DETAIL_DATA_ROUTER_RECORDER_H
+#endif  // SCORE_MW_LOG_DETAIL_DATA_ROUTER_DATA_ROUTER_RECORDER_H

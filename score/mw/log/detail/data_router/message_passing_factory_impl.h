@@ -56,4 +56,4 @@ class MessagePassingFactoryImpl : public MessagePassingFactory
 }  // namespace mw
 }  // namespace score
 
-#endif  // SCORE_MW_LOG_DETAIL_DATA_ROUTER_MESSAGE_CLIENT_H
+#endif  // SCORE_MW_LOG_DETAIL_DATA_ROUTER_MESSAGE_PASSING_FACTORY_IMPL_H

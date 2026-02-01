@@ -38,12 +38,9 @@ namespace
 {
 
 using ::testing::_;
-using ::testing::An;
 using ::testing::ByMove;
-using ::testing::Eq;
 using ::testing::Matcher;
 using ::testing::Return;
-using ::testing::ReturnRef;
 using ::testing::StrEq;
 
 MATCHER_P(CompareServiceProtocol, expected, "")
@@ -84,10 +81,10 @@ const auto kMwsrFileName = "/tmp" + kClientReceiverIdentifier + ".shmem";
 const auto kAppid = LoggingIdentifier{"TeAp"};
 const uid_t kUid = 1234;
 const auto kDynamicDataRouterIdentifiers = true;
-const pid_t kThisProcessPid = 99u;
+const pid_t kThisProcessPid = 99U;
 constexpr pthread_t kThreadId = 42;
 constexpr auto kLoggerThreadName = "logger";
-constexpr uid_t datarouter_dummy_uid = 111;
+constexpr uid_t kDatarouterDummyUid = 111;
 constexpr std::uint32_t kMaxSendBytes{17U};
 constexpr std::uint32_t kMaxNumberMessagesInReceiverQueue{0UL};
 
@@ -96,15 +93,15 @@ class DatarouterMessageClientFixture : public ::testing::Test
   public:
     DatarouterMessageClientFixture() = default;
 
-    DatarouterMessageClientFixture(const bool dynamicDataRouterIdentifiers)
-        : dynamicDataRouterIdentifiers_(dynamicDataRouterIdentifiers)
+    DatarouterMessageClientFixture(const bool dynamic_data_router_identifiers)
+        : dynamic_data_router_identifiers_(dynamic_data_router_identifiers)
     {
     }
 
-    DatarouterMessageClientFixture(const std::string mwsrFileName) : mwsrFileName_(mwsrFileName) {}
+    DatarouterMessageClientFixture(const std::string mwsr_file_name) : mwsr_file_name_(mwsr_file_name) {}
     void SetUp() override
     {
-        auto memory_resource = score::cpp::pmr::get_default_resource();
+        auto* memory_resource = score::cpp::pmr::get_default_resource();
         auto unistd_mock = score::cpp::pmr::make_unique<testing::StrictMock<score::os::UnistdMock>>(memory_resource);
         unistd_mock_ = unistd_mock.get();
         auto pthread_mock = score::cpp::pmr::make_unique<testing::StrictMock<score::os::MockPthread>>(memory_resource);
@@ -116,11 +113,11 @@ class DatarouterMessageClientFixture : public ::testing::Test
 
         client_ = std::make_unique<DatarouterMessageClientImpl>(
             MsgClientIdentifiers(
-                kClientReceiverIdentifier, kThisProcessPid, kAppid, static_cast<uid_t>(datarouter_dummy_uid), kUid),
+                kClientReceiverIdentifier, kThisProcessPid, kAppid, static_cast<uid_t>(kDatarouterDummyUid), kUid),
             MsgClientBackend(shared_memory_writer_,
-                             mwsrFileName_,
+                             mwsr_file_name_,
                              std::move(message_passing_factory),
-                             dynamicDataRouterIdentifiers_),
+                             dynamic_data_router_identifiers_),
             MsgClientUtils{std::move(unistd_mock), std::move(pthread_mock), std::move(signal_mock)},
             stop_source_);
     }
@@ -157,7 +154,7 @@ class DatarouterMessageClientFixture : public ::testing::Test
     {
         auto receiver = score::cpp::pmr::make_unique<testing::StrictMock<score::message_passing::ServerMock>>(
             score::cpp::pmr::get_default_resource());
-        auto receiver_ptr = receiver.get();
+        auto* receiver_ptr = receiver.get();
         const score::message_passing::ServiceProtocolConfig service_protocol_config{
             kClientReceiverIdentifier, kMaxSendBytes, 0U, 0U};
 
@@ -214,11 +211,11 @@ class DatarouterMessageClientFixture : public ::testing::Test
         sender_mock_in_transit_ =
             score::cpp::pmr::make_unique<testing::StrictMock<score::message_passing::ClientConnectionMock>>(
                 score::cpp::pmr::get_default_resource());
-        auto sender_mock = sender_mock_in_transit_.get();
+        auto* sender_mock = sender_mock_in_transit_.get();
         const score::message_passing::ServiceProtocolConfig service_protocol_config{
             kDatarouterReceiverIdentifier, kMaxSendBytes, 0U, 0U};
 
-        const score::message_passing::IClientFactory::ClientConfig& client_config{0, 10, false, true, false};
+        const score::message_passing::IClientFactory::ClientConfig client_config{0, 10, false, true, false};
 
         EXPECT_CALL(*message_passing_factory_,
                     CreateClient(CompareServiceProtocol(service_protocol_config), CompareClientConfig(client_config)))
@@ -271,7 +268,7 @@ class DatarouterMessageClientFixture : public ::testing::Test
 
     void ExpectUnlinkMwsrWriterFile(bool unlink_successful = true)
     {
-        EXPECT_CALL(*unistd_mock_, unlink(StrEq(mwsrFileName_)))
+        EXPECT_CALL(*unistd_mock_, unlink(StrEq(mwsr_file_name_)))
             .WillOnce([unlink_successful](const char*) -> score::cpp::expected_blank<score::os::Error> {
                 if (unlink_successful)
                 {
@@ -334,18 +331,18 @@ class DatarouterMessageClientFixture : public ::testing::Test
         score::message_passing::DisconnectCallback* disconnect_callback = nullptr,
         score::message_passing::MessageCallback* sent_callback = nullptr,
         score::message_passing::MessageCallback* sent_with_reply_callback = nullptr,
-        bool blockTerminationSignalPass = true,
+        bool block_termination_signal_pass = true,
         bool receiver_start_listening = true)
 
     {
-        std::ignore = blockTerminationSignalPass;  // TODO: remove this param
-        auto receiver = ExpectReceiverCreated();
+        std::ignore = block_termination_signal_pass;  // TODO: remove this param
+        auto* receiver = ExpectReceiverCreated();
         if (receiver_ptr != nullptr)
         {
             *receiver_ptr = receiver;
         }
 
-        if (blockTerminationSignalPass)
+        if (block_termination_signal_pass)
         {
             ExpectBlockTerminationSignalPass();
         }
@@ -356,7 +353,7 @@ class DatarouterMessageClientFixture : public ::testing::Test
 
         ExpectSetLoggerThreadName();
 
-        auto sender = ExpectSenderCreation(state_callback, callback_registered);
+        auto* sender = ExpectSenderCreation(state_callback, callback_registered);
         if (sender_ptr != nullptr)
         {
             *sender_ptr = sender;
@@ -378,16 +375,16 @@ class DatarouterMessageClientFixture : public ::testing::Test
             .WillOnce([this](score::cpp::span<const std::uint8_t> msg) -> score::cpp::expected_blank<score::os::Error> {
                 EXPECT_EQ(msg.front(), score::cpp::to_underlying(DatarouterMessageIdentifier::kConnect));
                 std::array<char, 6> random_part;
-                if (dynamicDataRouterIdentifiers_ && !mwsrFileName_.empty())
+                if (dynamic_data_router_identifiers_ && !mwsr_file_name_.empty())
                 {
-                    memcpy(random_part.data(), &mwsrFileName_.data()[13], random_part.size());
+                    memcpy(random_part.data(), &mwsr_file_name_[13], random_part.size());
                 }
                 else
                 {
                     random_part = {};
                 }
 
-                ConnectMessageFromClient expected_msg(kAppid, kUid, dynamicDataRouterIdentifiers_, random_part);
+                ConnectMessageFromClient expected_msg(kAppid, kUid, dynamic_data_router_identifiers_, random_part);
                 ConnectMessageFromClient received_msg;
                 const auto payload = msg.subspan(1);
                 memcpy(&received_msg, payload.data(), sizeof(ConnectMessageFromClient));
@@ -420,8 +417,8 @@ class DatarouterMessageClientFixture : public ::testing::Test
     }
 
     bool unlink_done_{false};
-    bool dynamicDataRouterIdentifiers_{kDynamicDataRouterIdentifiers};
-    std::string mwsrFileName_{kMwsrFileName};
+    bool dynamic_data_router_identifiers_{kDynamicDataRouterIdentifiers};
+    std::string mwsr_file_name_{kMwsrFileName};
 
     score::cpp::pmr::unique_ptr<testing::StrictMock<score::message_passing::ClientConnectionMock>> sender_mock_in_transit_;
 
@@ -462,7 +459,7 @@ TEST_F(DatarouterMessageClientFixture, CreateSenderShouldCreateSenderWithExpecte
     RecordProperty("DerivationTechnique", "Generation and analysis of equivalence classes");
 
     testing::InSequence order_matters;
-    auto sender = ExpectSenderCreation();
+    auto* sender = ExpectSenderCreation();
     ExpectClientDestruction(sender);
     client_->CreateSender();
 }
@@ -529,7 +526,7 @@ TEST_F(DatarouterMessageClientFixture, SendConnectMessageShouldSendExpectedPaylo
     score::message_passing::IClientConnection::StateCallback state_callback;
     testing::InSequence order_matters;
 
-    auto sender = ExpectSenderCreation(&state_callback);
+    auto* sender = ExpectSenderCreation(&state_callback);
     ExpectSendConnectMessage(sender);
     ExpectClientDestruction(sender);
 
@@ -549,7 +546,7 @@ TEST_F(DynamicDataRouterIdentifiersFalseFixture,
     score::message_passing::IClientConnection::StateCallback state_callback;
     testing::InSequence order_matters;
 
-    auto sender = ExpectSenderCreation(&state_callback);
+    auto* sender = ExpectSenderCreation(&state_callback);
     ExpectSendConnectMessage(sender);
     ExpectClientDestruction(sender);
 
@@ -568,7 +565,7 @@ TEST_F(MwsrFileNameEmptyFixture, SendConnectMessageMwsrFileNameEmptyShouldSendEx
     score::message_passing::IClientConnection::StateCallback state_callback;
     testing::InSequence order_matters;
 
-    auto sender = ExpectSenderCreation(&state_callback);
+    auto* sender = ExpectSenderCreation(&state_callback);
     ExpectSendConnectMessage(sender);
     ExpectClientDestruction(sender);
 

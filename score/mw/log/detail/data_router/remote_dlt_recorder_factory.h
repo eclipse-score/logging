@@ -11,8 +11,8 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-#ifndef SCORE_MW_LOG_DETAIL_REMOTE_DLT_RECORDER_FACTORY_H
-#define SCORE_MW_LOG_DETAIL_REMOTE_DLT_RECORDER_FACTORY_H
+#ifndef SCORE_MW_LOG_DETAIL_DATA_ROUTER_REMOTE_DLT_RECORDER_FACTORY_H
+#define SCORE_MW_LOG_DETAIL_DATA_ROUTER_REMOTE_DLT_RECORDER_FACTORY_H
 
 #include "score/mw/log/configuration/configuration.h"
 #include "score/mw/log/detail/log_recorder_factory.hpp"
@@ -33,4 +33,4 @@ class RemoteDltRecorderFactory : public LogRecorderFactory<RemoteDltRecorderFact
 
 }  //   namespace score::mw::log::detail
 
-#endif  //  SCORE_MW_LOG_DETAIL_REMOTE_DLT_RECORDER_FACTORY_H
+#endif  // SCORE_MW_LOG_DETAIL_DATA_ROUTER_REMOTE_DLT_RECORDER_FACTORY_H

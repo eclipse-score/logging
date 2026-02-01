@@ -11,8 +11,8 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-#ifndef BMW_MW_LOG_SHARED_MEMORY_WRITER_FACTORY
-#define BMW_MW_LOG_SHARED_MEMORY_WRITER_FACTORY
+#ifndef SCORE_MW_LOG_DETAIL_DATA_ROUTER_SHARED_MEMORY_WRITER_FACTORY_H
+#define SCORE_MW_LOG_DETAIL_DATA_ROUTER_SHARED_MEMORY_WRITER_FACTORY_H
 
 #include "score/mw/log/detail/data_router/shared_memory/shared_memory_writer.h"
 
@@ -85,7 +85,7 @@ class WriterFactory
     void UnlinkExistingFile(const std::string& file_name) const noexcept;
     score::cpp::optional<int32_t> OpenAndTruncateFile(const std::size_t buffer_total_size,
                                                const std::string& file_name,
-                                               const score::os::Fcntl::Open flags) noexcept;
+                                               const score::os::Fcntl::Open flags) const noexcept;
     score::cpp::optional<void* const> MapSharedMemory(const std::size_t buffer_total_size,
                                                const int32_t memfd_write,
                                                const std::string& file_name) noexcept;
@@ -109,4 +109,4 @@ class WriterFactory
 }  // namespace mw
 }  // namespace score
 
-#endif
+#endif  // SCORE_MW_LOG_DETAIL_DATA_ROUTER_SHARED_MEMORY_WRITER_FACTORY_H

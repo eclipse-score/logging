@@ -11,8 +11,8 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-#ifndef SCORE_MW_LOG_DETAIL_DATA_ROUTER_MESSAGE_CLIENT_IMPL_H
-#define SCORE_MW_LOG_DETAIL_DATA_ROUTER_MESSAGE_CLIENT_IMPL_H
+#ifndef SCORE_MW_LOG_DETAIL_DATA_ROUTER_DATA_ROUTER_MESSAGE_CLIENT_IMPL_H
+#define SCORE_MW_LOG_DETAIL_DATA_ROUTER_DATA_ROUTER_MESSAGE_CLIENT_IMPL_H
 
 #include "score/expected.hpp"
 #include "score/jthread.hpp"
@@ -145,4 +145,4 @@ class DatarouterMessageClientImpl : public DatarouterMessageClient
 }  // namespace mw
 }  // namespace score
 
-#endif  // SCORE_MW_LOG_DETAIL_DATA_ROUTER_MESSAGE_CLIENT_H
+#endif  // SCORE_MW_LOG_DETAIL_DATA_ROUTER_DATA_ROUTER_MESSAGE_CLIENT_IMPL_H

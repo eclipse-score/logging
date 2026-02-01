@@ -11,8 +11,8 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-#ifndef MW_LOG_DETAILS_DATA_ROUTER_MESSAGE_CLIENT_UTILS_H_
-#define MW_LOG_DETAILS_DATA_ROUTER_MESSAGE_CLIENT_UTILS_H_
+#ifndef SCORE_MW_LOG_DETAIL_DATA_ROUTER_DATA_ROUTER_MESSAGE_CLIENT_UTILS_H
+#define SCORE_MW_LOG_DETAIL_DATA_ROUTER_DATA_ROUTER_MESSAGE_CLIENT_UTILS_H
 
 #include "score/os/pthread.h"
 #include "score/os/unistd.h"
@@ -51,4 +51,4 @@ class MsgClientUtils
 }  // namespace mw
 }  // namespace score
 
-#endif  // MW_LOG_DETAILS_DATA_ROUTER_MESSAGE_CLIENT_UTILS_H_
+#endif  // SCORE_MW_LOG_DETAIL_DATA_ROUTER_DATA_ROUTER_MESSAGE_CLIENT_UTILS_H

@@ -39,19 +39,19 @@ using ::testing::_;
 using ::testing::Return;
 using ::testing::StrEq;
 
-static constexpr pid_t kPid{0x314};
-static constexpr std::int32_t kArbitratyUid = 12365432UL;
-static constexpr bool kDynamicFalse = false;
-static constexpr bool kDynamicTrue = true;
-static constexpr auto kDefaultRingSize = 1024UL;
-static constexpr auto kSharedSize = kDefaultRingSize + sizeof(SharedData);
-static constexpr auto kOverflowSize = std::numeric_limits<size_t>::max();
-static constexpr std::int32_t kFileDescriptor = 0x1;
-static constexpr auto kOpenReadFlags =
+constexpr pid_t kPid{0x314};
+constexpr std::int32_t kArbitratyUid = 12365432UL;
+constexpr bool kDynamicFalse = false;
+constexpr bool kDynamicTrue = true;
+constexpr auto kDefaultRingSize = 1024UL;
+constexpr auto kSharedSize = kDefaultRingSize + sizeof(SharedData);
+constexpr auto kOverflowSize = std::numeric_limits<size_t>::max();
+constexpr std::int32_t kFileDescriptor = 0x1;
+constexpr auto kOpenReadFlags =
     score::os::Fcntl::Open::kCreate | score::os::Fcntl::Open::kReadWrite | score::os::Fcntl::Open::kExclusive;
-static constexpr auto kOpenReadFlagsDynamic =
+constexpr auto kOpenReadFlagsDynamic =
     score::os::Fcntl::Open::kReadWrite | score::os::Fcntl::Open::kExclusive | score::os::Fcntl::Open::kCloseOnExec;
-static constexpr auto kOpenModeFlags =
+constexpr auto kOpenModeFlags =
     score::os::Stat::Mode::kReadUser | score::os::Stat::Mode::kReadGroup | score::os::Stat::Mode::kReadOthers;
 constexpr auto kAlignRequirement = std::alignment_of<SharedData>::value;
 const char kFileNameDynamic[] = "/tmp/logging-XXXXXX.shmem";
@@ -61,58 +61,58 @@ const std::string& GetSharedMemoryFileName()
     std::stringstream ss;
     ss << "/tmp/logging.UTST." << kArbitratyUid << ".shmem";
     ss.str();
-    static const std::string file_name{ss.str()};
-    return file_name;
+    static const std::string kFileName{ss.str()};
+    return kFileName;
 }
 
 class WriterFactoryFixture : public ::testing::Test
 {
   public:
-    WriterFactoryFixture() : shared_memory_file_name_{GetSharedMemoryFileName()}
+    WriterFactoryFixture() : shared_memory_file_name{GetSharedMemoryFileName()}
 
     {
-        auto memory_resource = score::cpp::pmr::get_default_resource();
+        auto* memory_resource = score::cpp::pmr::get_default_resource();
         auto fcntl_mock = score::cpp::pmr::make_unique<score::os::FcntlMock>(memory_resource);
         auto unistd_mock = score::cpp::pmr::make_unique<score::os::UnistdMock>(memory_resource);
         auto mman_mock = score::cpp::pmr::make_unique<score::os::MmanMock>(memory_resource);
         auto stat_mock = score::cpp::pmr::make_unique<score::os::StatMock>(memory_resource);
         auto stdlib_mock = score::cpp::pmr::make_unique<score::os::StdlibMock>(memory_resource);
 
-        fcntl_mock_raw_ptr_ = fcntl_mock.get();
-        mman_mock_raw_ptr_ = mman_mock.get();
-        unistd_mock_raw_ptr_ = unistd_mock.get();
-        stat_mock_raw_ptr_ = stat_mock.get();
-        stdlib_mock_raw_ptr_ = stdlib_mock.get();
+        fcntl_mock_raw_ptr = fcntl_mock.get();
+        mman_mock_raw_ptr = mman_mock.get();
+        unistd_mock_raw_ptr = unistd_mock.get();
+        stat_mock_raw_ptr = stat_mock.get();
+        stdlib_mock_raw_ptr = stdlib_mock.get();
 
-        osal_.fcntl_osal = std::move(fcntl_mock);
-        osal_.unistd = std::move(unistd_mock);
-        osal_.mman = std::move(mman_mock);
-        osal_.stdlib = std::move(stdlib_mock);
-        osal_.stat_osal = std::move(stat_mock);
+        osal.fcntl_osal = std::move(fcntl_mock);
+        osal.unistd = std::move(unistd_mock);
+        osal.mman = std::move(mman_mock);
+        osal.stdlib = std::move(stdlib_mock);
+        osal.stat_osal = std::move(stat_mock);
 
-        ON_CALL(*unistd_mock_raw_ptr_, getuid()).WillByDefault(Return(kArbitratyUid));
+        ON_CALL(*unistd_mock_raw_ptr, getuid()).WillByDefault(Return(kArbitratyUid));
 
-        non_zero_address_ = &buffer_[0];
-        map_address_ = &buffer_[0];
+        non_zero_address = &buffer[0];
+        map_address = &buffer[0];
     }
     ~WriterFactoryFixture()
     {
-        non_zero_address_ = nullptr;
-        map_address_ = nullptr;
+        non_zero_address = nullptr;
+        map_address = nullptr;
     }
 
-    score::os::FcntlMock* fcntl_mock_raw_ptr_;
-    score::os::UnistdMock* unistd_mock_raw_ptr_;
-    score::os::StatMock* stat_mock_raw_ptr_;
-    score::os::StdlibMock* stdlib_mock_raw_ptr_;
-    score::os::MmanMock* mman_mock_raw_ptr_;
-    WriterFactory::OsalInstances osal_;
+    score::os::FcntlMock* fcntl_mock_raw_ptr;
+    score::os::UnistdMock* unistd_mock_raw_ptr;
+    score::os::StatMock* stat_mock_raw_ptr;
+    score::os::StdlibMock* stdlib_mock_raw_ptr;
+    score::os::MmanMock* mman_mock_raw_ptr;
+    WriterFactory::OsalInstances osal;
 
     //  Mmap helpers:
-    Byte buffer_[kSharedSize + kAlignRequirement];
-    void* non_zero_address_;
-    void* map_address_;
-    std::string shared_memory_file_name_;
+    Byte buffer[kSharedSize + kAlignRequirement];
+    void* non_zero_address;
+    void* map_address;
+    std::string shared_memory_file_name;
 };
 
 TEST(WriterFactory, MissingOsalShallResultInEmptyOptional)
@@ -218,21 +218,21 @@ TEST_F(WriterFactoryFixture, WhenTheFileExistsItShallBeUnlinked)
     RecordProperty("DerivationTechnique", "Analysis of requirements");
     RecordProperty("Priority", "3");
 
-    WriterFactory writer(std::move(osal_));
+    WriterFactory writer(std::move(osal));
 
-    EXPECT_CALL(*unistd_mock_raw_ptr_, access(StrEq(shared_memory_file_name_), score::os::Unistd::AccessMode::kExists))
+    EXPECT_CALL(*unistd_mock_raw_ptr, access(StrEq(shared_memory_file_name), score::os::Unistd::AccessMode::kExists))
         .WillOnce(Return(score::cpp::expected_blank<score::os::Error>{}));
 
-    EXPECT_CALL(*unistd_mock_raw_ptr_, unlink(StrEq(shared_memory_file_name_)))
+    EXPECT_CALL(*unistd_mock_raw_ptr, unlink(StrEq(shared_memory_file_name)))
         .WillOnce(Return(score::cpp::expected_blank<score::os::Error>{}));
 
     EXPECT_CALL(
-        *fcntl_mock_raw_ptr_,
-        open(StrEq(shared_memory_file_name_), kOpenReadFlags | score::os::Fcntl::Open::kCloseOnExec, kOpenModeFlags))
+        *fcntl_mock_raw_ptr,
+        open(StrEq(shared_memory_file_name), kOpenReadFlags | score::os::Fcntl::Open::kCloseOnExec, kOpenModeFlags))
         .WillOnce(Return(score::cpp::make_unexpected(score::os::Error::createFromErrno(EINVAL))));
 
     //  Expect to exit before a call to next mocking feature
-    EXPECT_CALL(*unistd_mock_raw_ptr_, ftruncate(_, _)).Times(0);
+    EXPECT_CALL(*unistd_mock_raw_ptr, ftruncate(_, _)).Times(0);
 
     auto result = writer.Create(kDefaultRingSize, kDynamicFalse, "UTST");
     EXPECT_FALSE(result.has_value());
@@ -249,21 +249,21 @@ TEST_F(WriterFactoryFixture, WhenTheFileExistsAndCannotBeUnlinkedItShallContinue
     RecordProperty("DerivationTechnique", "Analysis of requirements");
     RecordProperty("Priority", "3");
 
-    WriterFactory writer(std::move(osal_));
+    WriterFactory writer(std::move(osal));
 
-    EXPECT_CALL(*unistd_mock_raw_ptr_, access(StrEq(shared_memory_file_name_), score::os::Unistd::AccessMode::kExists))
+    EXPECT_CALL(*unistd_mock_raw_ptr, access(StrEq(shared_memory_file_name), score::os::Unistd::AccessMode::kExists))
         .WillOnce(Return(score::cpp::expected_blank<score::os::Error>{}));
 
-    EXPECT_CALL(*unistd_mock_raw_ptr_, unlink(StrEq(shared_memory_file_name_)))
+    EXPECT_CALL(*unistd_mock_raw_ptr, unlink(StrEq(shared_memory_file_name)))
         .WillOnce(Return(score::cpp::make_unexpected(score::os::Error::createFromErrno(EINVAL))));
 
     EXPECT_CALL(
-        *fcntl_mock_raw_ptr_,
-        open(StrEq(shared_memory_file_name_), kOpenReadFlags | score::os::Fcntl::Open::kCloseOnExec, kOpenModeFlags))
+        *fcntl_mock_raw_ptr,
+        open(StrEq(shared_memory_file_name), kOpenReadFlags | score::os::Fcntl::Open::kCloseOnExec, kOpenModeFlags))
         .WillOnce(Return(score::cpp::make_unexpected(score::os::Error::createFromErrno(EINVAL))));
 
     //  Expect to exit before a call to next mocking feature
-    EXPECT_CALL(*unistd_mock_raw_ptr_, ftruncate(_, _)).Times(0);
+    EXPECT_CALL(*unistd_mock_raw_ptr, ftruncate(_, _)).Times(0);
 
     auto result = writer.Create(kDefaultRingSize, kDynamicFalse, "UTST");
     EXPECT_FALSE(result.has_value());
@@ -278,11 +278,11 @@ TEST_F(WriterFactoryFixture, InDynamicFileExistanceShallNotBeChecked)
     RecordProperty("DerivationTechnique", "Analysis of requirements");
     RecordProperty("Priority", "3");
 
-    WriterFactory writer(std::move(osal_));
+    WriterFactory writer(std::move(osal));
 
-    EXPECT_CALL(*unistd_mock_raw_ptr_, access(_, _)).Times(0);
+    EXPECT_CALL(*unistd_mock_raw_ptr, access(_, _)).Times(0);
 
-    EXPECT_CALL(*fcntl_mock_raw_ptr_, open(StrEq(kFileNameDynamic), kOpenReadFlagsDynamic, kOpenModeFlags))
+    EXPECT_CALL(*fcntl_mock_raw_ptr, open(StrEq(kFileNameDynamic), kOpenReadFlagsDynamic, kOpenModeFlags))
         .WillOnce(Return(score::cpp::make_unexpected(score::os::Error::createFromErrno(EINVAL))));
 
     auto result = writer.Create(kDefaultRingSize, kDynamicTrue, "UTST");
@@ -298,13 +298,13 @@ TEST_F(WriterFactoryFixture, FailureToOpenFileShallResultInEmptyOptionalResult)
     RecordProperty("DerivationTechnique", "Analysis of requirements");
     RecordProperty("Priority", "3");
 
-    WriterFactory writer(std::move(osal_));
+    WriterFactory writer(std::move(osal));
 
-    EXPECT_CALL(*fcntl_mock_raw_ptr_, open(StrEq(kFileNameDynamic), kOpenReadFlagsDynamic, kOpenModeFlags))
+    EXPECT_CALL(*fcntl_mock_raw_ptr, open(StrEq(kFileNameDynamic), kOpenReadFlagsDynamic, kOpenModeFlags))
         .WillOnce(Return(score::cpp::make_unexpected(score::os::Error::createFromErrno(EINVAL))));
 
     //  Expect to exit before a call to next mocking feature
-    EXPECT_CALL(*unistd_mock_raw_ptr_, ftruncate(_, _)).Times(0);
+    EXPECT_CALL(*unistd_mock_raw_ptr, ftruncate(_, _)).Times(0);
 
     auto result = writer.Create(kDefaultRingSize, kDynamicTrue, "UTST");
     EXPECT_FALSE(result.has_value());
@@ -320,20 +320,20 @@ TEST_F(WriterFactoryFixture, FailureToTruncateFileShallResultInEmptyOptionalResu
     RecordProperty("DerivationTechnique", "Analysis of requirements");
     RecordProperty("Priority", "3");
 
-    WriterFactory writer(std::move(osal_));
+    WriterFactory writer(std::move(osal));
 
-    EXPECT_CALL(*fcntl_mock_raw_ptr_, open(StrEq(kFileNameDynamic), kOpenReadFlagsDynamic, kOpenModeFlags))
+    EXPECT_CALL(*fcntl_mock_raw_ptr, open(StrEq(kFileNameDynamic), kOpenReadFlagsDynamic, kOpenModeFlags))
         .WillOnce(Return(score::cpp::expected<std::int32_t, score::os::Error>{kFileDescriptor}));
 
-    EXPECT_CALL(*unistd_mock_raw_ptr_, ftruncate(kFileDescriptor, kSharedSize))
+    EXPECT_CALL(*unistd_mock_raw_ptr, ftruncate(kFileDescriptor, kSharedSize))
         .WillOnce(Return(score::cpp::make_unexpected(score::os::Error::createFromErrno(EINVAL))));
 
     //  Expect unlink to be called before exit
-    EXPECT_CALL(*unistd_mock_raw_ptr_, unlink(StrEq(kFileNameDynamic)))
+    EXPECT_CALL(*unistd_mock_raw_ptr, unlink(StrEq(kFileNameDynamic)))
         .WillOnce(Return(score::cpp::expected_blank<score::os::Error>{}));
 
     //  We expect mmap not to be called irregardless of arguments
-    EXPECT_CALL(*mman_mock_raw_ptr_, mmap(_, _, _, _, _, _)).Times(0);
+    EXPECT_CALL(*mman_mock_raw_ptr, mmap(_, _, _, _, _, _)).Times(0);
 
     auto result = writer.Create(kDefaultRingSize, kDynamicTrue, "UTST");
     EXPECT_FALSE(result.has_value());
@@ -349,12 +349,12 @@ TEST_F(WriterFactoryFixture, MakeSureThatOpenCallWillOnlyBeDoneWithCorrectOpenRe
     RecordProperty("DerivationTechnique", "Analysis of requirements");
     RecordProperty("Priority", "3");
 
-    WriterFactory writer(std::move(osal_));
+    WriterFactory writer(std::move(osal));
     EXPECT_CALL(
-        *fcntl_mock_raw_ptr_,
+        *fcntl_mock_raw_ptr,
         open(StrEq(kFileNameDynamic), score::os::Fcntl::Open::kCreate | score::os::Fcntl::Open::kReadWrite, kOpenModeFlags))
         .Times(0);
-    EXPECT_CALL(*fcntl_mock_raw_ptr_, open(StrEq(kFileNameDynamic), kOpenReadFlagsDynamic, kOpenModeFlags)).Times(1);
+    EXPECT_CALL(*fcntl_mock_raw_ptr, open(StrEq(kFileNameDynamic), kOpenReadFlagsDynamic, kOpenModeFlags)).Times(1);
 
     auto result = writer.Create(kDefaultRingSize, kDynamicTrue, "UTST");
 }
@@ -368,15 +368,15 @@ TEST_F(WriterFactoryFixture, FailureToMapFileShallResultInEmptyOptionalResult)
     RecordProperty("DerivationTechnique", "Analysis of requirements");
     RecordProperty("Priority", "3");
 
-    WriterFactory writer(std::move(osal_));
+    WriterFactory writer(std::move(osal));
 
-    EXPECT_CALL(*fcntl_mock_raw_ptr_, open(StrEq(kFileNameDynamic), kOpenReadFlagsDynamic, kOpenModeFlags))
+    EXPECT_CALL(*fcntl_mock_raw_ptr, open(StrEq(kFileNameDynamic), kOpenReadFlagsDynamic, kOpenModeFlags))
         .WillOnce(Return(score::cpp::expected<std::int32_t, score::os::Error>{kFileDescriptor}));
 
-    EXPECT_CALL(*unistd_mock_raw_ptr_, ftruncate(kFileDescriptor, kSharedSize))
+    EXPECT_CALL(*unistd_mock_raw_ptr, ftruncate(kFileDescriptor, kSharedSize))
         .WillOnce(Return(score::cpp::expected_blank<score::os::Error>{}));
 
-    EXPECT_CALL(*mman_mock_raw_ptr_,
+    EXPECT_CALL(*mman_mock_raw_ptr,
                 mmap(nullptr,
                      kSharedSize,
                      score::os::Mman::Protection::kRead | score::os::Mman::Protection::kWrite,
@@ -386,7 +386,7 @@ TEST_F(WriterFactoryFixture, FailureToMapFileShallResultInEmptyOptionalResult)
         .WillOnce(Return(score::cpp::make_unexpected(score::os::Error::createFromErrno(EINVAL))));
 
     //  Expect unlink to be called before exit
-    EXPECT_CALL(*unistd_mock_raw_ptr_, unlink(StrEq(kFileNameDynamic)))
+    EXPECT_CALL(*unistd_mock_raw_ptr, unlink(StrEq(kFileNameDynamic)))
         .WillOnce(Return(score::cpp::expected_blank<score::os::Error>{}));
 
     auto result = writer.Create(kDefaultRingSize, kDynamicTrue, "UTST");
@@ -403,29 +403,29 @@ TEST_F(WriterFactoryFixture, WhenAllMocksReturnValidShallResultValidOptionalResu
     RecordProperty("DerivationTechnique", "Analysis of requirements");
     RecordProperty("Priority", "3");
 
-    WriterFactory writer(std::move(osal_));
+    WriterFactory writer(std::move(osal));
 
-    EXPECT_CALL(*fcntl_mock_raw_ptr_, open(StrEq(kFileNameDynamic), kOpenReadFlagsDynamic, kOpenModeFlags))
+    EXPECT_CALL(*fcntl_mock_raw_ptr, open(StrEq(kFileNameDynamic), kOpenReadFlagsDynamic, kOpenModeFlags))
         .WillOnce(Return(score::cpp::expected<std::int32_t, score::os::Error>{kFileDescriptor}));
 
-    EXPECT_CALL(*unistd_mock_raw_ptr_, ftruncate(kFileDescriptor, kSharedSize))
+    EXPECT_CALL(*unistd_mock_raw_ptr, ftruncate(kFileDescriptor, kSharedSize))
         .WillOnce(Return(score::cpp::expected_blank<score::os::Error>{}));
 
-    EXPECT_CALL(*mman_mock_raw_ptr_,
+    EXPECT_CALL(*mman_mock_raw_ptr,
                 mmap(nullptr,
                      kSharedSize,
                      score::os::Mman::Protection::kRead | score::os::Mman::Protection::kWrite,
                      score::os::Mman::Map::kShared,
                      kFileDescriptor,
                      0))
-        .WillOnce(Return(score::cpp::expected<void*, score::os::Error>{map_address_}));
+        .WillOnce(Return(score::cpp::expected<void*, score::os::Error>{map_address}));
 
-    EXPECT_CALL(*unistd_mock_raw_ptr_, getpid()).WillOnce(Return(kPid));
+    EXPECT_CALL(*unistd_mock_raw_ptr, getpid()).WillOnce(Return(kPid));
 
     const auto result = writer.Create(kDefaultRingSize, kDynamicTrue, "UTST");
     EXPECT_TRUE(result.has_value());
 
-    EXPECT_CALL(*mman_mock_raw_ptr_, munmap(_, kSharedSize)).WillOnce(Return(score::cpp::expected_blank<score::os::Error>{}));
+    EXPECT_CALL(*mman_mock_raw_ptr, munmap(_, kSharedSize)).WillOnce(Return(score::cpp::expected_blank<score::os::Error>{}));
 }
 
 TEST_F(WriterFactoryFixture, WhenMmapIsValidAndUnmmapIsFailingItShallPrintCerrMessage)
@@ -437,29 +437,29 @@ TEST_F(WriterFactoryFixture, WhenMmapIsValidAndUnmmapIsFailingItShallPrintCerrMe
     RecordProperty("DerivationTechnique", "Analysis of requirements");
     RecordProperty("Priority", "3");
 
-    WriterFactory writer(std::move(osal_));
+    WriterFactory writer(std::move(osal));
 
-    EXPECT_CALL(*fcntl_mock_raw_ptr_, open(StrEq(kFileNameDynamic), kOpenReadFlagsDynamic, kOpenModeFlags))
+    EXPECT_CALL(*fcntl_mock_raw_ptr, open(StrEq(kFileNameDynamic), kOpenReadFlagsDynamic, kOpenModeFlags))
         .WillOnce(Return(score::cpp::expected<std::int32_t, score::os::Error>{kFileDescriptor}));
 
-    EXPECT_CALL(*unistd_mock_raw_ptr_, ftruncate(kFileDescriptor, kSharedSize))
+    EXPECT_CALL(*unistd_mock_raw_ptr, ftruncate(kFileDescriptor, kSharedSize))
         .WillOnce(Return(score::cpp::expected_blank<score::os::Error>{}));
 
-    EXPECT_CALL(*mman_mock_raw_ptr_,
+    EXPECT_CALL(*mman_mock_raw_ptr,
                 mmap(nullptr,
                      kSharedSize,
                      score::os::Mman::Protection::kRead | score::os::Mman::Protection::kWrite,
                      score::os::Mman::Map::kShared,
                      kFileDescriptor,
                      0))
-        .WillOnce(Return(score::cpp::expected<void*, score::os::Error>{map_address_}));
+        .WillOnce(Return(score::cpp::expected<void*, score::os::Error>{map_address}));
 
-    EXPECT_CALL(*unistd_mock_raw_ptr_, getpid()).WillOnce(Return(kPid));
+    EXPECT_CALL(*unistd_mock_raw_ptr, getpid()).WillOnce(Return(kPid));
 
     const auto result = writer.Create(kDefaultRingSize, kDynamicTrue, "UTST");
     EXPECT_TRUE(result.has_value());
 
-    EXPECT_CALL(*mman_mock_raw_ptr_, munmap(_, kSharedSize))
+    EXPECT_CALL(*mman_mock_raw_ptr, munmap(_, kSharedSize))
         .WillOnce(Return(score::cpp::make_unexpected(score::os::Error::createFromErrno(EINVAL))));
 }
 
@@ -474,15 +474,15 @@ TEST_F(WriterFactoryFixture, MmapReturnsNullptrValueShallCallUnmapAndReturnEmpty
     RecordProperty("DerivationTechnique", "Analysis of requirements");
     RecordProperty("Priority", "3");
 
-    WriterFactory writer(std::move(osal_));
+    WriterFactory writer(std::move(osal));
 
-    EXPECT_CALL(*fcntl_mock_raw_ptr_, open(StrEq(kFileNameDynamic), kOpenReadFlagsDynamic, kOpenModeFlags))
+    EXPECT_CALL(*fcntl_mock_raw_ptr, open(StrEq(kFileNameDynamic), kOpenReadFlagsDynamic, kOpenModeFlags))
         .WillOnce(Return(score::cpp::expected<std::int32_t, score::os::Error>{kFileDescriptor}));
 
-    EXPECT_CALL(*unistd_mock_raw_ptr_, ftruncate(kFileDescriptor, kSharedSize))
+    EXPECT_CALL(*unistd_mock_raw_ptr, ftruncate(kFileDescriptor, kSharedSize))
         .WillOnce(Return(score::cpp::expected_blank<score::os::Error>{}));
 
-    EXPECT_CALL(*mman_mock_raw_ptr_,
+    EXPECT_CALL(*mman_mock_raw_ptr,
                 mmap(nullptr,
                      kSharedSize,
                      score::os::Mman::Protection::kRead | score::os::Mman::Protection::kWrite,
@@ -491,9 +491,9 @@ TEST_F(WriterFactoryFixture, MmapReturnsNullptrValueShallCallUnmapAndReturnEmpty
                      0))
         .WillOnce(Return(score::cpp::expected<void*, score::os::Error>{nullptr}));
 
-    EXPECT_CALL(*unistd_mock_raw_ptr_, getpid()).Times(0);
+    EXPECT_CALL(*unistd_mock_raw_ptr, getpid()).Times(0);
 
-    EXPECT_CALL(*mman_mock_raw_ptr_, munmap(_, kSharedSize)).WillOnce(Return(score::cpp::expected_blank<score::os::Error>{}));
+    EXPECT_CALL(*mman_mock_raw_ptr, munmap(_, kSharedSize)).WillOnce(Return(score::cpp::expected_blank<score::os::Error>{}));
 
     const auto result = writer.Create(kDefaultRingSize, kDynamicTrue, "UTST");
     EXPECT_FALSE(result.has_value());
@@ -522,17 +522,17 @@ TEST_F(WriterFactoryFixture, MmapReturingImproperAlignedMemoryShallCallUnmapAndR
     RecordProperty("DerivationTechnique", "Analysis of requirements");
     RecordProperty("Priority", "3");
 
-    WriterFactory writer(std::move(osal_));
+    WriterFactory writer(std::move(osal));
 
-    EXPECT_CALL(*fcntl_mock_raw_ptr_, open(StrEq(kFileNameDynamic), kOpenReadFlagsDynamic, kOpenModeFlags))
+    EXPECT_CALL(*fcntl_mock_raw_ptr, open(StrEq(kFileNameDynamic), kOpenReadFlagsDynamic, kOpenModeFlags))
         .WillOnce(Return(score::cpp::expected<std::int32_t, score::os::Error>{kFileDescriptor}));
 
-    EXPECT_CALL(*unistd_mock_raw_ptr_, ftruncate(kFileDescriptor, kSharedSize))
+    EXPECT_CALL(*unistd_mock_raw_ptr, ftruncate(kFileDescriptor, kSharedSize))
         .WillOnce(Return(score::cpp::expected_blank<score::os::Error>{}));
 
-    Byte* improper_alignment_address = GetImproperAlignment(map_address_);
+    Byte* improper_alignment_address = GetImproperAlignment(map_address);
 
-    EXPECT_CALL(*mman_mock_raw_ptr_,
+    EXPECT_CALL(*mman_mock_raw_ptr,
                 mmap(nullptr,
                      kSharedSize,
                      score::os::Mman::Protection::kRead | score::os::Mman::Protection::kWrite,
@@ -541,9 +541,9 @@ TEST_F(WriterFactoryFixture, MmapReturingImproperAlignedMemoryShallCallUnmapAndR
                      0))
         .WillOnce(Return(score::cpp::expected<void*, score::os::Error>{improper_alignment_address}));
 
-    EXPECT_CALL(*unistd_mock_raw_ptr_, getpid()).Times(0);
+    EXPECT_CALL(*unistd_mock_raw_ptr, getpid()).Times(0);
 
-    EXPECT_CALL(*mman_mock_raw_ptr_, munmap(_, kSharedSize)).WillOnce(Return(score::cpp::expected_blank<score::os::Error>{}));
+    EXPECT_CALL(*mman_mock_raw_ptr, munmap(_, kSharedSize)).WillOnce(Return(score::cpp::expected_blank<score::os::Error>{}));
 
     const auto result = writer.Create(kDefaultRingSize, kDynamicTrue, "UTST");
     EXPECT_FALSE(result.has_value());
@@ -554,18 +554,18 @@ TEST_F(WriterFactoryFixture, UnexpectedBufferSizeWithOverflowShallMakeCerrOutput
     // Tests behavior when ring buffer size causes integer overflow during total size calculation.
     // Expected size is sizeof(SharedData) which contains
     const std::size_t expected_shared_data_size = 143;
-    WriterFactory writer(std::move(osal_));
+    WriterFactory writer(std::move(osal));
 
     // Step 1: Open shared memory file succeeds
-    EXPECT_CALL(*fcntl_mock_raw_ptr_, open(StrEq(kFileNameDynamic), kOpenReadFlagsDynamic, kOpenModeFlags))
+    EXPECT_CALL(*fcntl_mock_raw_ptr, open(StrEq(kFileNameDynamic), kOpenReadFlagsDynamic, kOpenModeFlags))
         .WillOnce(Return(score::cpp::expected<std::int32_t, score::os::Error>{kFileDescriptor}));
 
     // Step 2: Truncate file to expected size (overflow clamped to SharedData size)
-    EXPECT_CALL(*unistd_mock_raw_ptr_, ftruncate(kFileDescriptor, expected_shared_data_size))
+    EXPECT_CALL(*unistd_mock_raw_ptr, ftruncate(kFileDescriptor, expected_shared_data_size))
         .WillOnce(Return(score::cpp::expected_blank<score::os::Error>{}));
 
     // Step 3: Memory mapping fails (returns nullptr)
-    EXPECT_CALL(*mman_mock_raw_ptr_,
+    EXPECT_CALL(*mman_mock_raw_ptr,
                 mmap(nullptr,
                      expected_shared_data_size,
                      score::os::Mman::Protection::kRead | score::os::Mman::Protection::kWrite,
@@ -575,10 +575,10 @@ TEST_F(WriterFactoryFixture, UnexpectedBufferSizeWithOverflowShallMakeCerrOutput
         .WillOnce(Return(score::cpp::expected<void*, score::os::Error>{nullptr}));
 
     // Step 4: getpid should not be called due to mmap failure
-    EXPECT_CALL(*unistd_mock_raw_ptr_, getpid()).Times(0);
+    EXPECT_CALL(*unistd_mock_raw_ptr, getpid()).Times(0);
 
     // Step 5: Cleanup - unmap is called during error handling
-    EXPECT_CALL(*mman_mock_raw_ptr_, munmap(_, expected_shared_data_size))
+    EXPECT_CALL(*mman_mock_raw_ptr, munmap(_, expected_shared_data_size))
         .WillOnce(Return(score::cpp::expected_blank<score::os::Error>{}));
 
     // Verify: Create fails and returns empty optional

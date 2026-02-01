@@ -33,24 +33,24 @@ namespace
 
 constexpr auto kStatisticsReportInterval = std::chrono::seconds{5};
 
-void CleanLogRecord(LogRecord& logRecord) noexcept
+void CleanLogRecord(LogRecord& log_record) noexcept
 {
-    auto& log_entry = logRecord.getLogEntry();
+    auto& log_entry = log_record.getLogEntry();
     log_entry.num_of_args = 0U;
     log_entry.payload.clear();
 }
 
-void SetContext(LogRecord& logRecord, const std::string_view context_id) noexcept
+void SetContext(LogRecord& log_record, const std::string_view context_id) noexcept
 {
-    auto& log_entry = logRecord.getLogEntry();
+    auto& log_entry = log_record.getLogEntry();
     log_entry.ctx_id = LoggingIdentifier{context_id};
 }
 
-void SetLogLevel(LogRecord& logRecord, const LogLevel level) noexcept
+void SetLogLevel(LogRecord& log_record, const LogLevel level) noexcept
 {
     static_assert(std::is_same<std::underlying_type<LogLevel>::type, std::uint8_t>::value,
                   "LogLevel is not of expected type. Static cast will be invalid.");
-    logRecord.getLogEntry().log_level = level;
+    log_record.getLogEntry().log_level = level;
 }
 
 }  // namespace
@@ -77,11 +77,11 @@ score::cpp::optional<SlotHandle> DataRouterRecorder::StartRecord(const std::stri
 
     if (slot.has_value())
     {
-        auto&& logRecord = backend_->GetLogRecord(*slot);
-        CleanLogRecord(logRecord);
-        SetApplicationId(logRecord);
-        SetContext(logRecord, context_id);
-        SetLogLevel(logRecord, log_level);
+        auto&& log_record = backend_->GetLogRecord(*slot);
+        CleanLogRecord(log_record);
+        SetApplicationId(log_record);
+        SetContext(log_record, context_id);
+        SetLogLevel(log_record, log_level);
     }
     else
     {
@@ -99,10 +99,10 @@ void DataRouterRecorder::StopRecord(const SlotHandle& slot) noexcept
 template <typename T>
 void DataRouterRecorder::LogData(const SlotHandle& slot, const T data) noexcept
 {
-    auto& logRecord = backend_->GetLogRecord(slot);
-    DltArgumentCounter counter{logRecord.getLogEntry().num_of_args};
-    std::ignore = counter.TryAddArgument([data, &logRecord, this]() noexcept {
-        const auto result = DLTFormat::Log(logRecord.getVerbosePayload(), data);
+    auto& log_record = backend_->GetLogRecord(slot);
+    DltArgumentCounter counter{log_record.getLogEntry().num_of_args};
+    std::ignore = counter.TryAddArgument([data, &log_record, this]() noexcept {
+        const auto result = DLTFormat::Log(log_record.getVerbosePayload(), data);
         if (result == AddArgumentResult::NotAdded)
         {
             this->statistics_reporter_.IncrementMessageTooLong();
@@ -221,9 +221,9 @@ void DataRouterRecorder::Log(const SlotHandle& slot, const LogSlog2Message data)
     LogData(slot, data.GetMessage());
 }
 
-void DataRouterRecorder::SetApplicationId(LogRecord& logRecord) noexcept
+void DataRouterRecorder::SetApplicationId(LogRecord& log_record) noexcept
 {
-    auto& log_entry = logRecord.getLogEntry();
+    auto& log_entry = log_record.getLogEntry();
     const auto app_id = config_.GetAppId();
     log_entry.app_id = LoggingIdentifier{app_id};
 }

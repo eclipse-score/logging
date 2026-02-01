@@ -11,8 +11,8 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-#ifndef MW_LOG_DETAILS_DATA_ROUTER_MESSAGE_CLIENT_BACKEND_H_
-#define MW_LOG_DETAILS_DATA_ROUTER_MESSAGE_CLIENT_BACKEND_H_
+#ifndef SCORE_MW_LOG_DETAIL_DATA_ROUTER_DATA_ROUTER_MESSAGE_CLIENT_BACKEND_H
+#define SCORE_MW_LOG_DETAIL_DATA_ROUTER_DATA_ROUTER_MESSAGE_CLIENT_BACKEND_H
 
 #include "score/mw/log/detail/data_router/message_passing_factory.h"
 #include "score/mw/log/detail/data_router/shared_memory/shared_memory_writer.h"
@@ -53,4 +53,4 @@ class MsgClientBackend
 }  // namespace mw
 }  // namespace score
 
-#endif  // MW_LOG_DETAILS_DATA_ROUTER_MESSAGE_CLIENT_BACKEND_H_
+#endif  // SCORE_MW_LOG_DETAIL_DATA_ROUTER_DATA_ROUTER_MESSAGE_CLIENT_BACKEND_H

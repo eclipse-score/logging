@@ -11,8 +11,8 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-#ifndef BMW_MW_LOG_SHARED_MEMORY_COMMON
-#define BMW_MW_LOG_SHARED_MEMORY_COMMON
+#ifndef SCORE_MW_LOG_DETAIL_DATA_ROUTER_SHARED_MEMORY_COMMON_H
+#define SCORE_MW_LOG_DETAIL_DATA_ROUTER_SHARED_MEMORY_COMMON_H
 
 #include "score/os/utils/high_resolution_steady_clock.h"
 #include "score/mw/log/detail/wait_free_producer_queue/alternating_control_block.h"
@@ -100,4 +100,4 @@ constexpr TypeIdentifier GetRegisterTypeToken()
 }  // namespace mw
 }  // namespace score
 
-#endif  //  BMW_MW_LOG_SHARED_MEMORY_COMMON
+#endif  // SCORE_MW_LOG_DETAIL_DATA_ROUTER_SHARED_MEMORY_COMMON_H

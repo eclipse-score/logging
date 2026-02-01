@@ -77,35 +77,35 @@ void WriterFactory::UnlinkExistingFile(const std::string& file_name) const noexc
 
 score::cpp::optional<int32_t> WriterFactory::OpenAndTruncateFile(const std::size_t buffer_total_size,
                                                           const std::string& file_name,
-                                                          const score::os::Fcntl::Open flags) noexcept
+                                                          const score::os::Fcntl::Open flags) const noexcept
 {
-    const score::cpp::span<const char> funcSpan(__func__);
+    const score::cpp::span<const char> func_span(__func__);
     constexpr auto kOpenModeFlags =
         score::os::Stat::Mode::kReadUser | score::os::Stat::Mode::kReadGroup | score::os::Stat::Mode::kReadOthers;
     // NOLINTNEXTLINE(score-banned-function) it is among safety headers.
     const auto open_ret_val = osal_.fcntl_osal->open(file_name.c_str(), flags, kOpenModeFlags);
     if (open_ret_val.has_value() == false)
     {
-        std::cerr << funcSpan.data() << ":open " << file_name << " " << open_ret_val.error().ToString() << '\n';
+        std::cerr << func_span.data() << ":open " << file_name << " " << open_ret_val.error().ToString() << '\n';
         return {};
     }
-    const int32_t memfd_write_ = open_ret_val.value();
+    const int32_t memfd_write = open_ret_val.value();
 
     const auto chmod_ret_val = osal_.stat_osal->chmod(file_name.c_str(), kOpenModeFlags);
     if (chmod_ret_val.has_value() == false)
     {
-        std::cerr << funcSpan.data() << ":chmod " << file_name << " " << chmod_ret_val.error().ToString() << '\n';
+        std::cerr << func_span.data() << ":chmod " << file_name << " " << chmod_ret_val.error().ToString() << '\n';
         return {};
     }
 
-    auto ftruncate_ret_val = osal_.unistd->ftruncate(memfd_write_, static_cast<off_t>(buffer_total_size));
+    auto ftruncate_ret_val = osal_.unistd->ftruncate(memfd_write, static_cast<off_t>(buffer_total_size));
     if (ftruncate_ret_val.has_value() == false)
     {
-        std::cerr << funcSpan.data() << ":ftruncate " << ftruncate_ret_val.error().ToString() << '\n';
+        std::cerr << func_span.data() << ":ftruncate " << ftruncate_ret_val.error().ToString() << '\n';
         std::ignore = osal_.unistd->unlink(file_name.c_str());
         return {};
     }
-    return memfd_write_;
+    return memfd_write;
 }
 
 score::cpp::optional<void* const> WriterFactory::MapSharedMemory(const std::size_t buffer_total_size,
@@ -137,8 +137,8 @@ score::cpp::optional<void* const> WriterFactory::MapSharedMemory(const std::size
 
     if (nullptr == mmap_result_.value())
     {
-        const score::cpp::span<const char> funcSpan(__func__);
-        std::cerr << funcSpan.data() << ":mmap result it nullptr\n";
+        const score::cpp::span<const char> func_span(__func__);
+        std::cerr << func_span.data() << ":mmap result it nullptr\n";
         unmap_callback_();
         return {};
     }
@@ -174,13 +174,13 @@ SharedData* WriterFactory::ConstructSharedData(void* const ring_buffer_address,
                                                const std::size_t ring_buffer_size) const noexcept
 {
     // NOLINTNEXTLINE(score-no-dynamic-raw-memory) new keyword is intended by design
-    auto shared_data = new (ring_buffer_address) SharedData();
+    auto* shared_data = new (ring_buffer_address) SharedData();
     shared_data->producer_pid = osal_.unistd->getpid();
 
     //  move pointer to point after shared data structure and only after that cast to void* for further pointer
     //  operations:
     //  Cast used because by design we cast data structures onto memory allocated by mmap
-    auto iter = shared_data;
+    auto* iter = shared_data;
     std::advance(iter, 1); /*moving pointer forward by one SharedData  type*/
     void* const linear_space = static_cast<void*>(iter);
 
@@ -200,7 +200,7 @@ SharedData* WriterFactory::ConstructSharedData(void* const ring_buffer_address,
     // An object with integer type or pointer to void type shall not be converted to an object with pointer type.
     // But we need to convert void pointer to bytes for serialization purposes, no out of bounds there
     // coverity[autosar_cpp14_m5_2_8_violation]
-    const auto block_1_data = static_cast<Byte*>(linear_space);
+    auto* const block_1_data = static_cast<Byte*>(linear_space);
     shared_data->control_block.control_block_even.data = score::cpp::span<Byte>{block_1_data, linear_buffer_size};
     std::ignore = InitializeSharedData(*shared_data);
     //  Initialize buffer switch sides:
@@ -211,7 +211,7 @@ SharedData* WriterFactory::ConstructSharedData(void* const ring_buffer_address,
     // An object with integer type or pointer to void type shall not be converted to an object with pointer type.
     // But we need to convert void pointer to bytes for serialization purposes, no out of bounds there
     // coverity[autosar_cpp14_m5_2_8_violation]
-    auto block_2_data = static_cast<Byte*>(linear_space);
+    auto* block_2_data = static_cast<Byte*>(linear_space);
 
     std::advance(block_2_data, static_cast<std::ptrdiff_t>(half_buffer_size));
 
@@ -238,16 +238,16 @@ LoggingClientFileNameResult WriterFactory::PrepareFileNameAndUpdateOpenFlags(
             std::cerr << "mkstemps: Failed to create '" << name_buffer.data() << "' file for app: " << app_id.data()
                       << '\n';
         }
-        constexpr score::os::Stat::Mode permissions = score::os::Stat::Mode::kReadUser | score::os::Stat::Mode::kReadGroup |
-                                                    score::os::Stat::Mode::kReadOthers | score::os::Stat::Mode::kWriteUser;
+        constexpr score::os::Stat::Mode kPermissions = score::os::Stat::Mode::kReadUser | score::os::Stat::Mode::kReadGroup |
+                                                     score::os::Stat::Mode::kReadOthers | score::os::Stat::Mode::kWriteUser;
 
-        if ((osal_.stat_osal->chmod(name_buffer.data(), permissions)).has_value() == false)
+        if ((osal_.stat_osal->chmod(name_buffer.data(), kPermissions)).has_value() == false)
         {
             std::cerr << "Unable to apply permissions to: " << name_buffer.data() << '\n';
         }
         result_file_name.file_name = std::string{name_buffer.data(), name_buffer.size() - 1UL};
 
-        auto find_beginning_logging_identifier = std::begin(name_buffer);
+        auto* find_beginning_logging_identifier = std::begin(name_buffer);
         static_assert(
             sizeof(kFileNameDirectoryTemplate) <= static_cast<std::size_t>(std::numeric_limits<int32_t>::max() - 1),
             "size of kFileNameDirectoryTemplate is greater than size of int");
@@ -271,13 +271,13 @@ score::cpp::optional<void* const> WriterFactory::GetAlignedRingBufferAddress(
     const std::string& file_name,
     const score::os::Fcntl::Open file_open_flags) noexcept
 {
-    const auto memfd_write_ = OpenAndTruncateFile(total_size, file_name, file_open_flags);
-    if (memfd_write_.has_value() == false)
+    const auto memfd_write = OpenAndTruncateFile(total_size, file_name, file_open_flags);
+    if (memfd_write.has_value() == false)
     {
         return {};
     }
 
-    auto ring_buffer_address = MapSharedMemory(total_size, memfd_write_.value(), file_name);
+    auto ring_buffer_address = MapSharedMemory(total_size, memfd_write.value(), file_name);
     if (ring_buffer_address.has_value() == false)
     {
         return {};
@@ -305,14 +305,14 @@ score::cpp::optional<SharedMemoryWriter> WriterFactory::Create(const std::size_t
         score::os::Fcntl::Open::kReadWrite | score::os::Fcntl::Open::kExclusive | score::os::Fcntl::Open::kCloseOnExec;
     file_attributes_ = PrepareFileNameAndUpdateOpenFlags(flags, dynamic_mode, app_id);
 
-    constexpr std::size_t buffer_start_offset = sizeof(SharedData);
-    if (buffer_start_offset > std::numeric_limits<size_t>::max() - ring_buffer_size)
+    constexpr std::size_t kBufferStartOffset = sizeof(SharedData);
+    if (kBufferStartOffset > std::numeric_limits<size_t>::max() - ring_buffer_size)
     {
-        const score::cpp::span<const char> funcSpan(__func__);
-        std::cerr << "(buffer_start_offset + ring_buffer_size) Overflow happened in function : " << funcSpan.data()
+        const score::cpp::span<const char> func_span(__func__);
+        std::cerr << "(buffer_start_offset + ring_buffer_size) Overflow happened in function : " << func_span.data()
                   << " in line : " << __LINE__ << "\n";
     }
-    const std::size_t buffer_end_offset = buffer_start_offset + ring_buffer_size;
+    const std::size_t buffer_end_offset = kBufferStartOffset + ring_buffer_size;
     const auto total_size = buffer_end_offset;
 
     auto ring_buffer_address = GetAlignedRingBufferAddress(total_size, file_attributes_.file_name, flags);
