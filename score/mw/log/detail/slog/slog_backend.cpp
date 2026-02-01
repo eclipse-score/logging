@@ -30,8 +30,8 @@ namespace detail
 
 namespace
 {
-constexpr auto SLOG_BUFFER_DEFAULT = 0;
-constexpr auto SLOG_VERBOSITY_DEFAULT = SLOG2_DEBUG2;
+constexpr auto kSlogBufferDefault = 0;
+constexpr auto kSlogVerbosityDefault = SLOG2_DEBUG2;
 
 std::size_t CheckTheMaxCapacity(const std::size_t capacity) noexcept
 {
@@ -114,7 +114,7 @@ SlogBackend::SlogBackend(
       slog_buffer_config_{},
       slog2_instance_{std::move(slog2_instance)}
 {
-    Init(static_cast<std::uint8_t>(SLOG_VERBOSITY_DEFAULT));
+    Init(static_cast<std::uint8_t>(kSlogVerbosityDefault));
 }
 
 score::cpp::optional<SlotHandle> SlogBackend::ReserveSlot() noexcept
@@ -149,14 +149,14 @@ void SlogBackend::FlushSlot(const SlotHandle& slot) noexcept
     auto& log_entry =
         buffer_.GetUnderlyingBufferFor(static_cast<std::size_t>(slot.GetSlotOfSelectedRecorder())).getLogEntry();
 
-    constexpr std::size_t max_id_length{4U};
+    constexpr std::size_t kMaxIdLength{4U};
 
     // Cast appid length to int32 without overflow.
-    const std::int32_t app_id_length = static_cast<int32_t>(std::min(max_id_length, app_id_.size()));
+    const std::int32_t app_id_length = static_cast<int32_t>(std::min(kMaxIdLength, app_id_.size()));
 
     // Cast context length to int32 without overflow.
     const std::int32_t ctx_id_length =
-        static_cast<int32_t>(std::min(max_id_length, log_entry.ctx_id.GetStringView().size()));
+        static_cast<int32_t>(std::min(kMaxIdLength, log_entry.ctx_id.GetStringView().size()));
 
     // Cast payload size to int32_t without overflow.
     const std::int32_t payload_length = static_cast<int32_t>(
@@ -194,8 +194,8 @@ void SlogBackend::Init(const std::uint8_t verbosity) noexcept
     slog_buffer_config_.num_buffers = 1;
     slog_buffer_config_.buffer_set_name = app_id_.c_str();
     slog_buffer_config_.verbosity_level = verbosity;
-    slog_buffer_config_.buffer_config[SLOG_BUFFER_DEFAULT].buffer_name = app_id_.c_str();
-    slog_buffer_config_.buffer_config[SLOG_BUFFER_DEFAULT].num_pages = 16;  // 16*4kB = 64kB
+    slog_buffer_config_.buffer_config[kSlogBufferDefault].buffer_name = app_id_.c_str();
+    slog_buffer_config_.buffer_config[kSlogBufferDefault].num_pages = 16;  // 16*4kB = 64kB
 
     const auto result = slog2_instance_->slog2_register(&slog_buffer_config_, &slog_buffer_, 0U);
     if (result.has_value() == false)

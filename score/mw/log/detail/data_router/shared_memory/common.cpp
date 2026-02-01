@@ -34,7 +34,7 @@ std::uint32_t GetExpectedNextAcquiredBlockId(const ReadAcquireResult& acquired) 
     // it wraps around to zero due to the well-defined unsigned integer overflow behavior.
     // This behavior is intentional and designed to ensure seamless buffer ID cycling.
     // coverity[autosar_cpp14_a4_7_1_violation]
-    return acquired.acquired_buffer + 1u;
+    return acquired.acquired_buffer + 1U;
 }
 
 }  // namespace detail

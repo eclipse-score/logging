@@ -38,35 +38,35 @@ using ::testing::Return;
 //  Testing:
 //  score::cpp::optional<SharedMemoryReader> ReaderFactory::Create(const std::int32_t file_handle, const pid_t expected_pid)
 
-static constexpr auto kDefaultRingSize = 1024UL;
-static constexpr auto kLinearBufferSize = 1024UL / 2UL;
-static constexpr auto kSharedSize = kDefaultRingSize + sizeof(SharedData);
-static constexpr int kFileHandle{15};
-static constexpr pid_t kExpectedPid{0x137};
-static constexpr auto kMmapOffset = 0;
+constexpr auto kDefaultRingSize = 1024UL;
+constexpr auto kLinearBufferSize = 1024UL / 2UL;
+constexpr auto kSharedSize = kDefaultRingSize + sizeof(SharedData);
+constexpr int kFileHandle{15};
+constexpr pid_t kExpectedPid{0x137};
+constexpr auto kMmapOffset = 0;
 
 class ReaderFactoryFixture : public ::testing::Test
 {
   public:
-    ReaderFactoryFixture() : shared_data_(*(::new(&buffer_) SharedData))
+    ReaderFactoryFixture() : shared_data(*(::new(&buffer) SharedData))
     {
-        shared_data_.linear_buffer_1_offset = sizeof(SharedData);
-        shared_data_.linear_buffer_2_offset = sizeof(SharedData) + kLinearBufferSize;
-        shared_data_.producer_pid = kExpectedPid;
+        shared_data.linear_buffer_1_offset = sizeof(SharedData);
+        shared_data.linear_buffer_2_offset = sizeof(SharedData) + kLinearBufferSize;
+        shared_data.producer_pid = kExpectedPid;
     }
     ~ReaderFactoryFixture()
     {
-        reinterpret_cast<SharedData*>(&buffer_)->~SharedData();
+        reinterpret_cast<SharedData*>(&buffer)->~SharedData();
     }
 
-    score::cpp::pmr::memory_resource* memory_resource_ = score::cpp::pmr::get_default_resource();
-    score::cpp::pmr::unique_ptr<score::os::MmanMock> mman_mock_pmr = score::cpp::pmr::make_unique<score::os::MmanMock>(memory_resource_);
-    score::cpp::pmr::unique_ptr<score::os::StatMock> stat_mock_pmr = score::cpp::pmr::make_unique<score::os::StatMock>(memory_resource_);
-    score::os::MmanMock* mman_mock_ = mman_mock_pmr.get();
-    score::os::StatMock* stat_mock_ = stat_mock_pmr.get();
-    std::aligned_storage_t<kSharedSize, alignof(SharedData)> buffer_;
-    SharedData& shared_data_;
-    ReaderFactoryImpl factory_{std::move(mman_mock_pmr), std::move(stat_mock_pmr)};
+    score::cpp::pmr::memory_resource* memory_resource = score::cpp::pmr::get_default_resource();
+    score::cpp::pmr::unique_ptr<score::os::MmanMock> mman_mock_pmr = score::cpp::pmr::make_unique<score::os::MmanMock>(memory_resource);
+    score::cpp::pmr::unique_ptr<score::os::StatMock> stat_mock_pmr = score::cpp::pmr::make_unique<score::os::StatMock>(memory_resource);
+    score::os::MmanMock* mman_mock = mman_mock_pmr.get();
+    score::os::StatMock* stat_mock = stat_mock_pmr.get();
+    std::aligned_storage_t<kSharedSize, alignof(SharedData)> buffer;
+    SharedData& shared_data;
+    ReaderFactoryImpl factory{std::move(mman_mock_pmr), std::move(stat_mock_pmr)};
 };
 
 TEST_F(ReaderFactoryFixture, FailingCallToFstatShallResultInEmptyOptional)
@@ -76,13 +76,13 @@ TEST_F(ReaderFactoryFixture, FailingCallToFstatShallResultInEmptyOptional)
     RecordProperty("TestType", "Interface test");
     RecordProperty("DerivationTechnique", "Generation and analysis of equivalence classes");
 
-    EXPECT_CALL(*stat_mock_, fstat(kFileHandle, _))
+    EXPECT_CALL(*stat_mock, fstat(kFileHandle, _))
         .WillOnce(Return(score::cpp::make_unexpected(score::os::Error::createFromErrno(EINVAL))));
 
     //  We expect mmap not to be called irregardless of arguments
-    EXPECT_CALL(*mman_mock_, mmap(_, _, _, _, _, _)).Times(0);
+    EXPECT_CALL(*mman_mock, mmap(_, _, _, _, _, _)).Times(0);
 
-    auto result = factory_.Create(kFileHandle, kExpectedPid);
+    auto result = factory.Create(kFileHandle, kExpectedPid);
     EXPECT_EQ(result, nullptr);
 }
 
@@ -93,7 +93,7 @@ TEST_F(ReaderFactoryFixture, FstatInvalidReturnShallResultInEmptyOptional)
     RecordProperty("TestType", "Interface test");
     RecordProperty("DerivationTechnique", "Generation and analysis of equivalence classes");
 
-    EXPECT_CALL(*stat_mock_, fstat(kFileHandle, _))
+    EXPECT_CALL(*stat_mock, fstat(kFileHandle, _))
         .WillOnce(
             ::testing::Invoke([](const auto& /*handle*/, auto& stat_buffer) -> score::cpp::expected_blank<score::os::Error> {
                 stat_buffer.st_size = -1L;
@@ -101,9 +101,9 @@ TEST_F(ReaderFactoryFixture, FstatInvalidReturnShallResultInEmptyOptional)
             }));
 
     //  We expect mmap not to be called irregardless of arguments
-    EXPECT_CALL(*mman_mock_, mmap(_, _, _, _, _, _)).Times(0);
+    EXPECT_CALL(*mman_mock, mmap(_, _, _, _, _, _)).Times(0);
 
-    auto result = factory_.Create(kFileHandle, kExpectedPid);
+    auto result = factory.Create(kFileHandle, kExpectedPid);
     EXPECT_FALSE(result);
 }
 
@@ -115,7 +115,7 @@ TEST_F(ReaderFactoryFixture, FstatReturningSizeTooSmallShallResultInEmptyOptiona
     RecordProperty("TestType", "Interface test");
     RecordProperty("DerivationTechnique", "Generation and analysis of equivalence classes");
 
-    EXPECT_CALL(*stat_mock_, fstat(kFileHandle, _))
+    EXPECT_CALL(*stat_mock, fstat(kFileHandle, _))
         .WillOnce(
             ::testing::Invoke([](const auto& /*handle*/, auto& stat_buffer) -> score::cpp::expected_blank<score::os::Error> {
                 static_assert(sizeof(SharedData) > 0UL, "SharedData cannot be zero-sized type");
@@ -124,9 +124,9 @@ TEST_F(ReaderFactoryFixture, FstatReturningSizeTooSmallShallResultInEmptyOptiona
             }));
 
     //  We expect mmap not to be called irregardless of arguments
-    EXPECT_CALL(*mman_mock_, mmap(_, _, _, _, _, _)).Times(0);
+    EXPECT_CALL(*mman_mock, mmap(_, _, _, _, _, _)).Times(0);
 
-    auto result = factory_.Create(kFileHandle, kExpectedPid);
+    auto result = factory.Create(kFileHandle, kExpectedPid);
     EXPECT_EQ(result, nullptr);
 }
 
@@ -137,14 +137,14 @@ TEST_F(ReaderFactoryFixture, MmapFailingShallResultInEmptyOptional)
     RecordProperty("TestType", "Interface test");
     RecordProperty("DerivationTechnique", "Generation and analysis of equivalence classes");
 
-    EXPECT_CALL(*stat_mock_, fstat(kFileHandle, _))
+    EXPECT_CALL(*stat_mock, fstat(kFileHandle, _))
         .WillOnce(
             ::testing::Invoke([](const auto& /*handle*/, auto& stat_buffer) -> score::cpp::expected_blank<score::os::Error> {
                 stat_buffer.st_size = kSharedSize;
                 return score::cpp::expected_blank<score::os::Error>{};
             }));
 
-    EXPECT_CALL(*mman_mock_,
+    EXPECT_CALL(*mman_mock,
                 mmap(nullptr,
                      kSharedSize,
                      score::os::Mman::Protection::kRead,
@@ -153,7 +153,7 @@ TEST_F(ReaderFactoryFixture, MmapFailingShallResultInEmptyOptional)
                      kMmapOffset))
         .WillOnce(Return(score::cpp::make_unexpected(score::os::Error::createFromErrno(EINVAL))));
 
-    auto result = factory_.Create(kFileHandle, kExpectedPid);
+    auto result = factory.Create(kFileHandle, kExpectedPid);
     EXPECT_EQ(result, nullptr);
 }
 
@@ -166,27 +166,27 @@ TEST_F(ReaderFactoryFixture, SharedDataMemberPointingOutOfBoundsShallResultInEmp
     RecordProperty("TestingTechnique", "Requirements-based test");
     RecordProperty("DerivationTechnique", "Analysis of requirements");
 
-    EXPECT_CALL(*stat_mock_, fstat(kFileHandle, _))
+    EXPECT_CALL(*stat_mock, fstat(kFileHandle, _))
         .WillOnce(
             ::testing::Invoke([](const auto& /*handle*/, auto& stat_buffer) -> score::cpp::expected_blank<score::os::Error> {
                 stat_buffer.st_size = kSharedSize;
                 return score::cpp::expected_blank<score::os::Error>{};
             }));
 
-    EXPECT_CALL(*mman_mock_,
+    EXPECT_CALL(*mman_mock,
                 mmap(nullptr,
                      kSharedSize,
                      score::os::Mman::Protection::kRead,
                      score::os::Mman::Map::kShared,
                      kFileHandle,
                      kMmapOffset))
-        .WillOnce(Return(score::cpp::expected<void*, score::os::Error>{&buffer_}));
+        .WillOnce(Return(score::cpp::expected<void*, score::os::Error>{&buffer}));
 
-    shared_data_.linear_buffer_1_offset = kSharedSize + 1UL;
+    shared_data.linear_buffer_1_offset = kSharedSize + 1UL;
 
-    EXPECT_CALL(*mman_mock_, munmap(_, kSharedSize)).WillOnce(Return(score::cpp::expected_blank<score::os::Error>{}));
+    EXPECT_CALL(*mman_mock, munmap(_, kSharedSize)).WillOnce(Return(score::cpp::expected_blank<score::os::Error>{}));
 
-    auto result = factory_.Create(kFileHandle, kExpectedPid);
+    auto result = factory.Create(kFileHandle, kExpectedPid);
     EXPECT_EQ(result, nullptr);
 }
 
@@ -197,27 +197,27 @@ TEST_F(ReaderFactoryFixture, UnexpectedPidShallResultInEmptyOptional)
     RecordProperty("TestType", "Interface test");
     RecordProperty("DerivationTechnique", "Generation and analysis of equivalence classes");
 
-    EXPECT_CALL(*stat_mock_, fstat(kFileHandle, _))
+    EXPECT_CALL(*stat_mock, fstat(kFileHandle, _))
         .WillOnce(
             ::testing::Invoke([](const auto& /*handle*/, auto& stat_buffer) -> score::cpp::expected_blank<score::os::Error> {
                 stat_buffer.st_size = kSharedSize;
                 return score::cpp::expected_blank<score::os::Error>{};
             }));
 
-    EXPECT_CALL(*mman_mock_,
+    EXPECT_CALL(*mman_mock,
                 mmap(nullptr,
                      kSharedSize,
                      score::os::Mman::Protection::kRead,
                      score::os::Mman::Map::kShared,
                      kFileHandle,
                      kMmapOffset))
-        .WillOnce(Return(score::cpp::expected<void*, score::os::Error>{&buffer_}));
+        .WillOnce(Return(score::cpp::expected<void*, score::os::Error>{&buffer}));
 
-    shared_data_.producer_pid = 0x1;
+    shared_data.producer_pid = 0x1;
 
-    EXPECT_CALL(*mman_mock_, munmap(_, kSharedSize)).WillOnce(Return(score::cpp::expected_blank<score::os::Error>{}));
+    EXPECT_CALL(*mman_mock, munmap(_, kSharedSize)).WillOnce(Return(score::cpp::expected_blank<score::os::Error>{}));
 
-    auto result = factory_.Create(kFileHandle, kExpectedPid);
+    auto result = factory.Create(kFileHandle, kExpectedPid);
     EXPECT_EQ(result, nullptr);
 }
 
@@ -228,29 +228,29 @@ TEST_F(ReaderFactoryFixture, ProperSetupShallResultValidReader)
     RecordProperty("TestType", "Interface test");
     RecordProperty("DerivationTechnique", "Generation and analysis of equivalence classes");
 
-    EXPECT_CALL(*stat_mock_, fstat(kFileHandle, _))
+    EXPECT_CALL(*stat_mock, fstat(kFileHandle, _))
         .WillOnce(
             ::testing::Invoke([](const auto& /*handle*/, auto& stat_buffer) -> score::cpp::expected_blank<score::os::Error> {
                 stat_buffer.st_size = kSharedSize;
                 return score::cpp::expected_blank<score::os::Error>{};
             }));
 
-    EXPECT_CALL(*mman_mock_,
+    EXPECT_CALL(*mman_mock,
                 mmap(nullptr,
                      kSharedSize,
                      score::os::Mman::Protection::kRead,
                      score::os::Mman::Map::kShared,
                      kFileHandle,
                      kMmapOffset))
-        .WillOnce(Return(score::cpp::expected<void*, score::os::Error>{&buffer_}));
+        .WillOnce(Return(score::cpp::expected<void*, score::os::Error>{&buffer}));
 
     //  Memory shall not be unmapped until Reader is destructed
-    EXPECT_CALL(*mman_mock_, munmap(_, kSharedSize)).Times(0);
+    EXPECT_CALL(*mman_mock, munmap(_, kSharedSize)).Times(0);
 
-    auto result = factory_.Create(kFileHandle, kExpectedPid);
+    auto result = factory.Create(kFileHandle, kExpectedPid);
     EXPECT_NE(result, nullptr);
 
-    EXPECT_CALL(*mman_mock_, munmap(_, kSharedSize)).WillOnce(Return(score::cpp::expected_blank<score::os::Error>{}));
+    EXPECT_CALL(*mman_mock, munmap(_, kSharedSize)).WillOnce(Return(score::cpp::expected_blank<score::os::Error>{}));
 }
 
 TEST_F(ReaderFactoryFixture, UnmapFailureShallResultValidReader)
@@ -260,26 +260,26 @@ TEST_F(ReaderFactoryFixture, UnmapFailureShallResultValidReader)
     RecordProperty("TestType", "Interface test");
     RecordProperty("DerivationTechnique", "Generation and analysis of equivalence classes");
 
-    EXPECT_CALL(*stat_mock_, fstat(kFileHandle, _))
+    EXPECT_CALL(*stat_mock, fstat(kFileHandle, _))
         .WillOnce(
             ::testing::Invoke([](const auto& /*handle*/, auto& stat_buffer) -> score::cpp::expected_blank<score::os::Error> {
                 stat_buffer.st_size = kSharedSize;
                 return score::cpp::expected_blank<score::os::Error>{};
             }));
 
-    EXPECT_CALL(*mman_mock_,
+    EXPECT_CALL(*mman_mock,
                 mmap(nullptr,
                      kSharedSize,
                      score::os::Mman::Protection::kRead,
                      score::os::Mman::Map::kShared,
                      kFileHandle,
                      kMmapOffset))
-        .WillOnce(Return(score::cpp::expected<void*, score::os::Error>{&buffer_}));
+        .WillOnce(Return(score::cpp::expected<void*, score::os::Error>{&buffer}));
 
-    auto result = factory_.Create(kFileHandle, kExpectedPid);
+    auto result = factory.Create(kFileHandle, kExpectedPid);
     EXPECT_NE(result, nullptr);
 
-    EXPECT_CALL(*mman_mock_, munmap(_, kSharedSize))
+    EXPECT_CALL(*mman_mock, munmap(_, kSharedSize))
         .WillOnce(Return(score::cpp::make_unexpected(score::os::Error::createFromErrno(EINVAL))));
 }
 

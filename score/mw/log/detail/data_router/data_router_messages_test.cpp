@@ -33,8 +33,8 @@ const uid_t kUid = 1234;
 const uid_t kUid2 = 4321;
 const bool kDynamicDatarouterIdentifiersFalse = false;
 const bool kDynamicDatarouterIdentifiersTrue = true;
-std::array<char, 6> random_part1{"x"};
-std::array<char, 6> random_part2{"y"};
+std::array<char, 6> gRandomPart1{"x"};
+std::array<char, 6> gRandomPart2{"y"};
 
 TEST(DataRouterMessagesTests, EqualOperatorShouldReturnTrueForEqualConnectMessageFromClientInstances)
 {
@@ -45,8 +45,8 @@ TEST(DataRouterMessagesTests, EqualOperatorShouldReturnTrueForEqualConnectMessag
     RecordProperty("TestType", "Interface test");
     RecordProperty("DerivationTechnique", "Generation and analysis of equivalence classes");
 
-    ConnectMessageFromClient lhs{kAppid, kUid, kDynamicDatarouterIdentifiersFalse, random_part1};
-    ConnectMessageFromClient rhs{kAppid, kUid, kDynamicDatarouterIdentifiersFalse, random_part1};
+    ConnectMessageFromClient lhs{kAppid, kUid, kDynamicDatarouterIdentifiersFalse, gRandomPart1};
+    ConnectMessageFromClient rhs{kAppid, kUid, kDynamicDatarouterIdentifiersFalse, gRandomPart1};
     EXPECT_EQ(lhs, rhs);
 }
 
@@ -57,8 +57,8 @@ TEST(DataRouterMessagesTests, EqualOperatorShouldReturnFalseForDifferentAppids)
     RecordProperty("TestType", "Interface test");
     RecordProperty("DerivationTechnique", "Generation and analysis of equivalence classes");
 
-    ConnectMessageFromClient lhs{kAppid, kUid, kDynamicDatarouterIdentifiersFalse, random_part1};
-    ConnectMessageFromClient rhs{kAppid2, kUid, kDynamicDatarouterIdentifiersFalse, random_part1};
+    ConnectMessageFromClient lhs{kAppid, kUid, kDynamicDatarouterIdentifiersFalse, gRandomPart1};
+    ConnectMessageFromClient rhs{kAppid2, kUid, kDynamicDatarouterIdentifiersFalse, gRandomPart1};
     EXPECT_NE(lhs, rhs);
 }
 
@@ -69,8 +69,8 @@ TEST(DataRouterMessagesTests, EqualOperatorShouldReturnFalseForDifferentUids)
     RecordProperty("TestType", "Interface test");
     RecordProperty("DerivationTechnique", "Generation and analysis of equivalence classes");
 
-    ConnectMessageFromClient lhs{kAppid, kUid, kDynamicDatarouterIdentifiersFalse, random_part1};
-    ConnectMessageFromClient rhs{kAppid, kUid2, kDynamicDatarouterIdentifiersFalse, random_part1};
+    ConnectMessageFromClient lhs{kAppid, kUid, kDynamicDatarouterIdentifiersFalse, gRandomPart1};
+    ConnectMessageFromClient rhs{kAppid, kUid2, kDynamicDatarouterIdentifiersFalse, gRandomPart1};
     EXPECT_NE(lhs, rhs);
 }
 
@@ -82,8 +82,8 @@ TEST(DataRouterMessagesTests, EqualOperatorShouldReturnFalseForDifferentDynamicD
     RecordProperty("TestType", "Interface test");
     RecordProperty("DerivationTechnique", "Generation and analysis of equivalence classes");
 
-    ConnectMessageFromClient lhs{kAppid, kUid, kDynamicDatarouterIdentifiersFalse, random_part1};
-    ConnectMessageFromClient rhs{kAppid, kUid, kDynamicDatarouterIdentifiersTrue, random_part1};
+    ConnectMessageFromClient lhs{kAppid, kUid, kDynamicDatarouterIdentifiersFalse, gRandomPart1};
+    ConnectMessageFromClient rhs{kAppid, kUid, kDynamicDatarouterIdentifiersTrue, gRandomPart1};
     EXPECT_NE(lhs, rhs);
 }
 
@@ -94,8 +94,8 @@ TEST(DataRouterMessagesTests, EqualOperatorShouldReturnFalseForDifferentRandomPa
     RecordProperty("TestType", "Interface test");
     RecordProperty("DerivationTechnique", "Generation and analysis of equivalence classes");
 
-    ConnectMessageFromClient lhs{kAppid, kUid, kDynamicDatarouterIdentifiersFalse, random_part1};
-    ConnectMessageFromClient rhs{kAppid, kUid, kDynamicDatarouterIdentifiersFalse, random_part2};
+    ConnectMessageFromClient lhs{kAppid, kUid, kDynamicDatarouterIdentifiersFalse, gRandomPart1};
+    ConnectMessageFromClient rhs{kAppid, kUid, kDynamicDatarouterIdentifiersFalse, gRandomPart2};
     EXPECT_NE(lhs, rhs);
 }
 
@@ -106,7 +106,7 @@ TEST(DataRouterMessagesTests, GetGUIShouldReturnCorrectValue)
     RecordProperty("TestType", "Interface test");
     RecordProperty("DerivationTechnique", "Generation and analysis of equivalence classes");
 
-    ConnectMessageFromClient message{kAppid, kUid, kDynamicDatarouterIdentifiersFalse, random_part1};
+    ConnectMessageFromClient message{kAppid, kUid, kDynamicDatarouterIdentifiersFalse, gRandomPart1};
 
     EXPECT_EQ(message.GetUid(), kUid);
 
@@ -123,7 +123,7 @@ TEST(DataRouterMessagesTests, GetUseDynamicIdentifierShouldReturnCorrectValue)
     RecordProperty("TestType", "Interface test");
     RecordProperty("DerivationTechnique", "Generation and analysis of equivalence classes");
 
-    ConnectMessageFromClient message{kAppid, kUid, kDynamicDatarouterIdentifiersFalse, random_part1};
+    ConnectMessageFromClient message{kAppid, kUid, kDynamicDatarouterIdentifiersFalse, gRandomPart1};
 
     EXPECT_EQ(message.GetUseDynamicIdentifier(), kDynamicDatarouterIdentifiersFalse);
 
@@ -139,7 +139,7 @@ TEST(DataRouterMessagesTests, GetAppIdDynamicIdentifierShouldReturnCorrectValue)
     RecordProperty("TestType", "Interface test");
     RecordProperty("DerivationTechnique", "Generation and analysis of equivalence classes");
 
-    ConnectMessageFromClient message{kAppid, kUid, kDynamicDatarouterIdentifiersFalse, random_part1};
+    ConnectMessageFromClient message{kAppid, kUid, kDynamicDatarouterIdentifiersFalse, gRandomPart1};
 
     EXPECT_EQ(message.GetAppId(), kAppid);
 

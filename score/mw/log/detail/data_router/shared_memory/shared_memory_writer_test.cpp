@@ -31,45 +31,45 @@ namespace detail
 namespace
 {
 
-static constexpr std::array<char, 10UL> test_data_sample{"test data"};
+constexpr std::array<char, 10UL> kTestDataSample{"test data"};
 
-static constexpr auto kNumberOfThreads = 10UL;
-static constexpr auto kNumberOfActions = 5UL;
-static constexpr auto kNumberOfTests = 50UL;
+constexpr auto kNumberOfThreads = 10UL;
+constexpr auto kNumberOfActions = 5UL;
+constexpr auto kNumberOfTests = 50UL;
 
-static constexpr auto kRingSize = 4UL * 1024UL;
+constexpr auto kRingSize = 4UL * 1024UL;
 
 class SharedMemoryWriterFixture : public ::testing::Test
 {
   public:
     SharedMemoryWriterFixture()
-        : shared_data_{}, shared_memory_writer_(InitializeSharedData(shared_data_), UnmapCallback{})
+        : shared_data{}, shared_memory_writer(InitializeSharedData(shared_data), UnmapCallback{})
     {
         stack_based_shared_memory[0].fill(0x00);
         stack_based_shared_memory[1].fill(0x00);
 
-        shared_data_.linear_buffer_1_offset = sizeof(SharedData);
-        shared_data_.linear_buffer_2_offset = sizeof(SharedData) + kRingSize / 2UL;
+        shared_data.linear_buffer_1_offset = sizeof(SharedData);
+        shared_data.linear_buffer_2_offset = sizeof(SharedData) + kRingSize / 2UL;
 
-        shared_data_.control_block.control_block_even.data =
-            score::cpp::span<Byte>(&stack_based_shared_memory[0][0], kRingSize / 2UL);
-        shared_data_.control_block.control_block_odd.data =
-            score::cpp::span<Byte>(&stack_based_shared_memory[1][0], kRingSize / 2UL);
+        shared_data.control_block.control_block_even.data =
+            score::cpp::span<Byte>(stack_based_shared_memory[0].data(), kRingSize / 2UL);
+        shared_data.control_block.control_block_odd.data =
+            score::cpp::span<Byte>(stack_based_shared_memory[1].data(), kRingSize / 2UL);
 
         AlternatingReadOnlyReader read_only_reader{
-            shared_data_.control_block,
-            shared_data_.control_block.control_block_even.data,
-            shared_data_.control_block.control_block_odd.data,
+            shared_data.control_block,
+            shared_data.control_block.control_block_even.data,
+            shared_data.control_block.control_block_odd.data,
         };
-        shared_memory_reader_ =
-            std::make_unique<SharedMemoryReader>(shared_data_, std::move(read_only_reader), UnmapCallback{});
+        shared_memory_reader =
+            std::make_unique<SharedMemoryReader>(shared_data, std::move(read_only_reader), UnmapCallback{});
     }
 
-    SharedData shared_data_;
-    std::unique_ptr<SharedMemoryReader> shared_memory_reader_;
+    SharedData shared_data;
+    std::unique_ptr<SharedMemoryReader> shared_memory_reader;
     std::array<char, kRingSize> stack_based_shared_memory[2];
 
-    SharedMemoryWriter shared_memory_writer_;
+    SharedMemoryWriter shared_memory_writer;
 };
 
 class SharedMemoryWriterOversizedRequestsFixture : public SharedMemoryWriterFixture,
@@ -88,15 +88,15 @@ class TypeInfoTest
   public:
     void Copy(const score::cpp::span<Byte> data) const
     {
-        std::memcpy(data.data(), type.data(), type.size());
+        std::memcpy(data.data(), type_.data(), type_.size());
     }
     std::size_t size() const
     {
-        return sizeof(type);
+        return sizeof(type_);
     }
 
   private:
-    const std::array<char, 10UL> type{"test::int"};
+    const std::array<char, 10UL> type_{"test::int"};
 };
 
 class TypeInfoTestOversized
@@ -105,10 +105,10 @@ class TypeInfoTestOversized
     void Copy(const score::cpp::span<Byte>) const {}
     std::size_t size() const
     {
-        constexpr std::size_t type_max = std::numeric_limits<score::mw::log::detail::TypeIdentifier>::max() + 1UL;
-        static_assert(type_max > 0 && (std::numeric_limits<std::size_t>::max() > type_max),
+        constexpr std::size_t kTypeMax = std::numeric_limits<score::mw::log::detail::TypeIdentifier>::max() + 1UL;
+        static_assert(kTypeMax > 0 && (std::numeric_limits<std::size_t>::max() > kTypeMax),
                       "Type requirements not met");
-        return type_max;
+        return kTypeMax;
     }
 };
 
@@ -119,7 +119,7 @@ TEST_F(SharedMemoryWriterFixture, OversizedTypeRegisterShallReturnEmpty)
     RecordProperty("Description", "If a type info returns an oversized length the type registration shall fail.");
     RecordProperty("TestingTechnique", "Requirements-based test");
     RecordProperty("DerivationTechnique", "Analysis of requirements");
-    const auto result = shared_memory_writer_.TryRegisterType(TypeInfoTestOversized{});
+    const auto result = shared_memory_writer.TryRegisterType(TypeInfoTestOversized{});
 
     EXPECT_FALSE(result.has_value());
 }
@@ -131,7 +131,7 @@ TEST_F(SharedMemoryWriterFixture, BasicRegisterShallReturnValue)
     RecordProperty("Description", "For a valid type the type registration shall succeed.");
     RecordProperty("TestingTechnique", "Requirements-based test");
     RecordProperty("DerivationTechnique", "Analysis of requirements");
-    const auto result = shared_memory_writer_.TryRegisterType(TypeInfoTest{});
+    const auto result = shared_memory_writer.TryRegisterType(TypeInfoTest{});
 
     EXPECT_TRUE(result.has_value());
 }
@@ -144,8 +144,8 @@ TEST_F(SharedMemoryWriterFixture, RegistrationInSequenceShallYieldUniqueTypes)
     RecordProperty("TestingTechnique", "Requirements-based test");
     RecordProperty("DerivationTechnique", "Analysis of requirements");
 
-    const auto result = shared_memory_writer_.TryRegisterType(TypeInfoTest{});
-    const auto second_result = shared_memory_writer_.TryRegisterType(TypeInfoTest{});
+    const auto result = shared_memory_writer.TryRegisterType(TypeInfoTest{});
+    const auto second_result = shared_memory_writer.TryRegisterType(TypeInfoTest{});
 
     EXPECT_NE(result, second_result);
 }
@@ -158,12 +158,12 @@ TEST_F(SharedMemoryWriterFixture, ShallHandleOverflowAndNotFail)
     RecordProperty("TestingTechnique", "Requirements-based test");
     RecordProperty("DerivationTechnique", "Analysis of requirements");
 
-    const auto first = shared_memory_writer_.TryRegisterType(TypeInfoTest{});
+    const auto first = shared_memory_writer.TryRegisterType(TypeInfoTest{});
     for (auto i = 0UL; i < kRingSize; i++)  //  much more then it is possible
     {
-        const auto result = shared_memory_writer_.TryRegisterType(TypeInfoTest{});
+        const auto result = shared_memory_writer.TryRegisterType(TypeInfoTest{});
     }
-    const auto result = shared_memory_writer_.TryRegisterType(TypeInfoTest{});
+    const auto result = shared_memory_writer.TryRegisterType(TypeInfoTest{});
     EXPECT_FALSE(result.has_value());
 }
 
@@ -175,22 +175,22 @@ TEST_F(SharedMemoryWriterFixture, SingleWriteReadShallBeReadPresentingTheSameVal
     RecordProperty("TestingTechnique", "Requirements-based test");
     RecordProperty("DerivationTechnique", "Analysis of requirements");
 
-    const auto type_id = shared_memory_writer_.TryRegisterType(TypeInfoTest{});
+    const auto type_id = shared_memory_writer.TryRegisterType(TypeInfoTest{});
 
     Byte* get_buffer_space_address = nullptr;
-    shared_memory_writer_.AllocAndWrite(
+    shared_memory_writer.AllocAndWrite(
         [&get_buffer_space_address](auto span) {
-            EXPECT_EQ(span.size(), test_data_sample.size());
-            std::memcpy(span.data(), test_data_sample.data(), test_data_sample.size());
+            EXPECT_EQ(span.size(), kTestDataSample.size());
+            std::memcpy(span.data(), kTestDataSample.data(), kTestDataSample.size());
             get_buffer_space_address = span.data();
         },
         type_id.value(),
-        test_data_sample.size());
+        kTestDataSample.size());
 
-    const auto read_acquire_result = shared_memory_writer_.ReadAcquire();
+    const auto read_acquire_result = shared_memory_writer.ReadAcquire();
 
     //  Datarouter part after acquisition
-    shared_memory_reader_->NotifyAcquisitionSetReader(read_acquire_result);
+    shared_memory_reader->NotifyAcquisitionSetReader(read_acquire_result);
 
     auto on_new_type = [&](const score::mw::log::detail::TypeRegistration& registration) noexcept {
         EXPECT_EQ(registration.type_id, type_id.value());
@@ -200,7 +200,7 @@ TEST_F(SharedMemoryWriterFixture, SingleWriteReadShallBeReadPresentingTheSameVal
         EXPECT_EQ(record.payload.data(), get_buffer_space_address);
     };
 
-    shared_memory_reader_->Read(on_new_type, on_new_record);
+    shared_memory_reader->Read(on_new_type, on_new_record);
 }
 
 TEST_P(SharedMemoryWriterOversizedRequestsFixture, WriteWithTooBigRequestShallBeRejected)
@@ -211,21 +211,21 @@ TEST_P(SharedMemoryWriterOversizedRequestsFixture, WriteWithTooBigRequestShallBe
     RecordProperty("TestingTechnique", "Requirements-based test");
     RecordProperty("DerivationTechnique", "Analysis of requirements");
 
-    const auto type_id = shared_memory_writer_.TryRegisterType(TypeInfoTest{});
+    const auto type_id = shared_memory_writer.TryRegisterType(TypeInfoTest{});
     const auto oversized = GetParam();
 
     //  Expect that there is no data to be written
-    shared_memory_writer_.AllocAndWrite(
+    shared_memory_writer.AllocAndWrite(
         [&](auto) {
             FAIL();
         },
         type_id.value(),
         oversized);
 
-    const auto read_acquire_result = shared_memory_writer_.ReadAcquire();
+    const auto read_acquire_result = shared_memory_writer.ReadAcquire();
 
     //  Datarouter part after acquisition
-    shared_memory_reader_->NotifyAcquisitionSetReader(read_acquire_result);
+    shared_memory_reader->NotifyAcquisitionSetReader(read_acquire_result);
 
     auto on_new_type = [&](const score::mw::log::detail::TypeRegistration& registration) noexcept {
         EXPECT_EQ(registration.type_id, type_id.value());
@@ -235,7 +235,7 @@ TEST_P(SharedMemoryWriterOversizedRequestsFixture, WriteWithTooBigRequestShallBe
         FAIL();
     };
 
-    shared_memory_reader_->Read(on_new_type, on_new_record);
+    shared_memory_reader->Read(on_new_type, on_new_record);
 }
 
 TEST_F(SharedMemoryWriterFixture, MultipleConcurentRegistrationShallBeValidInCount)
@@ -255,7 +255,7 @@ TEST_F(SharedMemoryWriterFixture, MultipleConcurentRegistrationShallBeValidInCou
         threads.at(counter) = std::thread([this]() noexcept {
             for (auto number = 0UL; number < kNumberOfActions; number++)
             {
-                const auto type_id = shared_memory_writer_.TryRegisterType(TypeInfoTest{});
+                const auto type_id = shared_memory_writer.TryRegisterType(TypeInfoTest{});
             }
         });
     }
@@ -266,10 +266,10 @@ TEST_F(SharedMemoryWriterFixture, MultipleConcurentRegistrationShallBeValidInCou
         thread.join();
     }
 
-    const auto read_acquire_result = shared_memory_writer_.ReadAcquire();
+    const auto read_acquire_result = shared_memory_writer.ReadAcquire();
 
     //  Datarouter part after acquisition
-    shared_memory_reader_->NotifyAcquisitionSetReader(read_acquire_result);
+    shared_memory_reader->NotifyAcquisitionSetReader(read_acquire_result);
 
     auto count = 0UL;
     auto on_new_type = [&count](const score::mw::log::detail::TypeRegistration&) noexcept {
@@ -279,7 +279,7 @@ TEST_F(SharedMemoryWriterFixture, MultipleConcurentRegistrationShallBeValidInCou
         FAIL();
     };
 
-    shared_memory_reader_->Read(on_new_type, on_new_record);
+    shared_memory_reader->Read(on_new_type, on_new_record);
 
     EXPECT_EQ(count, kNumberOfThreads * kNumberOfActions);
 }
@@ -296,7 +296,7 @@ TEST_F(SharedMemoryWriterFixture, MultipleConcurrentWritesShallAllBeReceivedVali
     RecordProperty("TestingTechnique", "Requirements-based test");
     RecordProperty("DerivationTechnique", "Analysis of requirements");
 
-    const auto type_id = shared_memory_writer_.TryRegisterType(TypeInfoTest{});
+    const auto type_id = shared_memory_writer.TryRegisterType(TypeInfoTest{});
 
     auto call_write_operations = [this, &type_id]() {
         // When writing into it from multiple threads
@@ -307,13 +307,13 @@ TEST_F(SharedMemoryWriterFixture, MultipleConcurrentWritesShallAllBeReceivedVali
             threads.at(counter) = std::thread([type_id = type_id.value(), this]() noexcept {
                 for (auto number = 0UL; number < kNumberOfActions; number++)
                 {
-                    shared_memory_writer_.AllocAndWrite(
+                    shared_memory_writer.AllocAndWrite(
                         [](auto span) {
-                            EXPECT_EQ(span.size(), test_data_sample.size());
-                            std::memcpy(span.data(), test_data_sample.data(), test_data_sample.size());
+                            EXPECT_EQ(span.size(), kTestDataSample.size());
+                            std::memcpy(span.data(), kTestDataSample.data(), kTestDataSample.size());
                         },
                         type_id,
-                        test_data_sample.size());
+                        kTestDataSample.size());
                 }
             });
         }
@@ -331,12 +331,12 @@ TEST_F(SharedMemoryWriterFixture, MultipleConcurrentWritesShallAllBeReceivedVali
         auto count = 0UL;
         auto on_new_record = [&](const score::mw::log::detail::SharedMemoryRecord& record) noexcept {
             EXPECT_EQ(record.header.type_identifier, type_id.value());
-            EXPECT_EQ(record.payload.size(), test_data_sample.size());
-            EXPECT_EQ(0, std::memcmp(record.payload.data(), test_data_sample.data(), test_data_sample.size()));
+            EXPECT_EQ(record.payload.size(), kTestDataSample.size());
+            EXPECT_EQ(0, std::memcmp(record.payload.data(), kTestDataSample.data(), kTestDataSample.size()));
             count++;
         };
 
-        shared_memory_reader_->Read(on_new_type, on_new_record);
+        shared_memory_reader->Read(on_new_type, on_new_record);
         EXPECT_EQ(count, kNumberOfThreads * kNumberOfActions);
     };
 
@@ -344,10 +344,10 @@ TEST_F(SharedMemoryWriterFixture, MultipleConcurrentWritesShallAllBeReceivedVali
     {  //  test write/verify multiple times to test double buffering and to detect synchronization issues:
         call_write_operations();
 
-        const auto read_acquire_result = shared_memory_writer_.ReadAcquire();
+        const auto read_acquire_result = shared_memory_writer.ReadAcquire();
 
         //  Datarouter part after acquisition
-        shared_memory_reader_->NotifyAcquisitionSetReader(read_acquire_result);
+        shared_memory_reader->NotifyAcquisitionSetReader(read_acquire_result);
 
         verify_write_operation();
     }

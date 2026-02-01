@@ -87,8 +87,8 @@ Length ReadLinearBuffer(LinearReader& reader,
                 continue;
             }
             static_assert(std::is_trivially_copyable_v<decltype(type_registration.type_id)> == true);
-            const auto kTypeIdSize = sizeof(type_registration.type_id);
-            const auto type_id_source = payload_span.subspan(0, kTypeIdSize);
+            const auto k_type_id_size = sizeof(type_registration.type_id);
+            const auto type_id_source = payload_span.subspan(0, k_type_id_size);
             auto type_id_destination =
                 /*
                     Deviation from Rule M5-2-8:
@@ -99,7 +99,7 @@ Length ReadLinearBuffer(LinearReader& reader,
                       payload_span into object type_registration.type_id.
                 */
                 // coverity[autosar_cpp14_m5_2_8_violation]
-                score::cpp::span<Byte>{static_cast<Byte*>(static_cast<void*>(&type_registration.type_id)), kTypeIdSize};
+                score::cpp::span<Byte>{static_cast<Byte*>(static_cast<void*>(&type_registration.type_id)), k_type_id_size};
             std::ignore = std::copy(type_id_source.cbegin(), type_id_source.cend(), type_id_destination.begin());
 
             // type_id is integer uint16_t and thus is within range of values
@@ -271,7 +271,7 @@ std::optional<Length> SharedMemoryReader::PeekNumberOfBytesAcquiredInBuffer(
     const std::uint32_t acquired_buffer_count_id) const noexcept
 {
     auto block_id = SelectLinearControlBlockId(acquired_buffer_count_id);
-    auto& block = SelectLinearControlBlockReference(block_id, shared_data_.control_block);
+    const auto& block = SelectLinearControlBlockReference(block_id, shared_data_.control_block);
 
     return block.acquired_index.load();
 }

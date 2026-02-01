@@ -55,8 +55,8 @@ TEST(MessagePassingFactoryTests, CreateSenderShouldReturnValue)
 
     MessagePassingFactoryImpl factory{};
 
-    const score::message_passing::ServiceProtocolConfig& protocol_config{kIdentifier, 9U, 0U, 0U};
-    const score::message_passing::IClientFactory::ClientConfig& client_config{0, 0, false, false, false};
+    const score::message_passing::ServiceProtocolConfig protocol_config{kIdentifier, 9U, 0U, 0U};
+    const score::message_passing::IClientFactory::ClientConfig client_config{0, 0, false, false, false};
 
     auto sender = factory.CreateClient(protocol_config, client_config);
     EXPECT_NE(sender, nullptr);

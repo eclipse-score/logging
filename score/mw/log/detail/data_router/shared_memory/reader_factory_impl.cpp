@@ -32,7 +32,7 @@ ReaderFactoryImpl::ReaderFactoryImpl(score::cpp::pmr::unique_ptr<score::os::Mman
 
 Byte* GetBufferAddress(Byte* const start, const Length offset)
 {
-    auto start_address = start;
+    auto* start_address = start;
     std::advance(start_address, static_cast<std::iterator_traits<Byte*>::difference_type>(offset));
     return start_address;
 }
@@ -65,9 +65,9 @@ std::unique_ptr<ISharedMemoryReader> ReaderFactoryImpl::Create(const std::int32_
         return nullptr;
     }
 
-    static constexpr void* null_addr = nullptr;
+    static constexpr void* kNullAddr = nullptr;
     static constexpr std::int64_t kMmapOffset = 0;
-    auto mmap_result = mman_->mmap(null_addr,
+    auto mmap_result = mman_->mmap(kNullAddr,
                                    map_size_bytes,
                                    score::os::Mman::Protection::kRead,
                                    score::os::Mman::Map::kShared,
@@ -126,9 +126,9 @@ std::unique_ptr<ISharedMemoryReader> ReaderFactoryImpl::Create(const std::int32_
         - casted as Byte to access memory mapped by mmap function.
     */
     // coverity[autosar_cpp14_m5_2_8_violation]
-    const auto shared_data_addr = static_cast<Byte*>(mmap_result.value());
-    const auto buffer1_addr = GetBufferAddress(shared_data_addr, shared_data.linear_buffer_1_offset);
-    const auto buffer2_addr = GetBufferAddress(shared_data_addr, shared_data.linear_buffer_2_offset);
+    auto* const shared_data_addr = static_cast<Byte*>(mmap_result.value());
+    auto* const buffer1_addr = GetBufferAddress(shared_data_addr, shared_data.linear_buffer_1_offset);
+    auto* const buffer2_addr = GetBufferAddress(shared_data_addr, shared_data.linear_buffer_2_offset);
     const score::cpp::span<Byte> buffer_block_even(buffer1_addr, shared_data.control_block.control_block_even.data.size());
     const score::cpp::span<Byte> buffer_block_odd(buffer2_addr, shared_data.control_block.control_block_odd.data.size());
 

@@ -36,9 +36,6 @@ namespace detail
 namespace
 {
 
-using ::testing::_;
-using ::testing::Return;
-
 template <typename ConcreteRecorder>
 bool IsRecorderOfType(const std::unique_ptr<Recorder>& recorder) noexcept
 {

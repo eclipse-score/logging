@@ -33,8 +33,6 @@ namespace log
 namespace detail
 {
 
-using std::chrono_literals::operator"" ms;
-
 DatarouterMessageClientImpl::DatarouterMessageClientImpl(const MsgClientIdentifiers& ids,
                                                          MsgClientBackend backend,
                                                          MsgClientUtils utils,
@@ -312,12 +310,12 @@ void DatarouterMessageClientImpl::Shutdown() noexcept
 
 score::cpp::expected_blank<score::os::Error> DatarouterMessageClientImpl::CreateSender() noexcept
 {
-    const score::message_passing::ServiceProtocolConfig& protocol_config{
+    const score::message_passing::ServiceProtocolConfig protocol_config{
         MessagePassingConfig::kDatarouterReceiverIdentifier,
         MessagePassingConfig::kMaxMessageSize,
         MessagePassingConfig::kMaxReplySize,
         MessagePassingConfig::kMaxNotifySize};
-    const score::message_passing::IClientFactory::ClientConfig& client_config{0, 10, false, true, false};
+    const score::message_passing::IClientFactory::ClientConfig client_config{0, 10, false, true, false};
     sender_ = message_passing_factory_->CreateClient(protocol_config, client_config);
 
     if (sender_ == nullptr)

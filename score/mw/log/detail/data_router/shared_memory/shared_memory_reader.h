@@ -11,8 +11,8 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-#ifndef BMW_MW_LOG_SHARED_MEMORY_READER
-#define BMW_MW_LOG_SHARED_MEMORY_READER
+#ifndef SCORE_MW_LOG_DETAIL_DATA_ROUTER_SHARED_MEMORY_SHARED_MEMORY_READER_H
+#define SCORE_MW_LOG_DETAIL_DATA_ROUTER_SHARED_MEMORY_SHARED_MEMORY_READER_H
 
 #include "score/mw/log/detail/data_router/shared_memory/i_shared_memory_reader.h"
 #include "score/mw/log/detail/wait_free_producer_queue/alternating_reader.h"
@@ -98,4 +98,4 @@ class SharedMemoryReader : public ISharedMemoryReader
 }  // namespace mw
 }  // namespace score
 
-#endif  // BMW_MW_LOG_SHARED_MEMORY_READER
+#endif  // SCORE_MW_LOG_DETAIL_DATA_ROUTER_SHARED_MEMORY_SHARED_MEMORY_READER_H

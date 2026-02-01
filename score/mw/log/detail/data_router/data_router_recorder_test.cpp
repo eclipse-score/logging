@@ -134,7 +134,7 @@ class DataRouterRecorderFixture : public ::testing::Test
         EXPECT_CALL(*backend_, FlushSlot(slot_));
         ON_CALL(*backend_, GetLogRecord(slot_)).WillByDefault(ReturnRef(log_record_));
         recorder_ = std::make_unique<DataRouterRecorder>(std::move(backend_), config_);
-        recorder_->StartRecord(context_id_, logLevel);
+        recorder_->StartRecord(context_id_, log_level_);
     }
 
     void TearDown() override
@@ -144,7 +144,7 @@ class DataRouterRecorderFixture : public ::testing::Test
         const auto log_entry_app_id = log_entry.app_id.GetStringView();
         EXPECT_EQ(config_app_id, log_entry_app_id);
         EXPECT_EQ(log_entry.ctx_id.GetStringView(), context_id_);
-        EXPECT_EQ(log_entry.log_level, logLevel);
+        EXPECT_EQ(log_entry.log_level, log_level_);
         EXPECT_EQ(log_entry.num_of_args, expected_number_of_arguments_at_teardown_);
         recorder_->StopRecord(slot_);
     }
@@ -155,7 +155,7 @@ class DataRouterRecorderFixture : public ::testing::Test
     std::unique_ptr<DataRouterRecorder> recorder_;
     SlotHandle slot_{};
     LogRecord log_record_{};
-    LogLevel logLevel = kActiveLogLevel;
+    LogLevel log_level_ = kActiveLogLevel;
     const std::string_view context_id_ = "DFLT";
     std::uint8_t expected_number_of_arguments_at_teardown_{1};
 };
@@ -167,9 +167,9 @@ TEST_F(DataRouterRecorderFixture, TooManyArgumentsWillYieldTruncatedLog)
     RecordProperty("Description", "Verifies that too many arguments shall lead to a truncated log.");
     RecordProperty("TestType", "Interface test");
 
-    constexpr std::size_t type_info_byte_size_according_to_specification = 4;
+    constexpr std::size_t kTypeInfoByteSizeAccordingToSpecification = 4;
     const std::size_t number_of_arguments = log_record_.getLogEntry().payload.capacity() /
-                                            (type_info_byte_size_according_to_specification + sizeof(std::uint32_t));
+                                            (kTypeInfoByteSizeAccordingToSpecification + sizeof(std::uint32_t));
     for (std::size_t i = 0; i < number_of_arguments + 5; ++i)
     {
         recorder_->Log(SlotHandle{}, std::uint32_t{});
@@ -434,14 +434,14 @@ TEST(DataRouterRecorderTests, DatarouterRecorderShouldClearSlotOnStart)
     auto recorder = std::make_unique<DataRouterRecorder>(std::move(backend), config);
 
     // Simulate the case that a slot already contains data from a previous message.
-    constexpr auto context = "ctx0";
-    recorder->StartRecord(context, kActiveLogLevel);
+    constexpr auto kContext = "ctx0";
+    recorder->StartRecord(kContext, kActiveLogLevel);
     const auto payload = std::string_view{"Hello world"};
     recorder->Log(SlotHandle{}, payload);
     recorder->StopRecord(SlotHandle{});
 
     // Expect that the previous data is cleared.
-    recorder->StartRecord(context, kActiveLogLevel);
+    recorder->StartRecord(kContext, kActiveLogLevel);
     EXPECT_EQ(log_record.getVerbosePayload().GetSpan().size(), 0);
     EXPECT_EQ(log_record.getLogEntry().num_of_args, 0);
 }

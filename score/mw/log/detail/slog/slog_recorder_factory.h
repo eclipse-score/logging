@@ -10,8 +10,8 @@
  *
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
-#ifndef SCORE_MW_LOG_DETAIL_SLOG_RECORDER_FACTORY_H
-#define SCORE_MW_LOG_DETAIL_SLOG_RECORDER_FACTORY_H
+#ifndef SCORE_MW_LOG_DETAIL_SLOG_SLOG_RECORDER_FACTORY_H
+#define SCORE_MW_LOG_DETAIL_SLOG_SLOG_RECORDER_FACTORY_H
 
 #include "score/mw/log/detail/log_recorder_factory.hpp"
 #include "score/mw/log/detail/slog/slog_backend.h"
@@ -41,4 +41,4 @@ class SlogRecorderFactory : public LogRecorderFactory<SlogRecorderFactory>
 }  // namespace mw
 }  // namespace score
 
-#endif  // SCORE_MW_LOG_DETAIL_SLOG_RECORDER_FACTORY_H
+#endif  // SCORE_MW_LOG_DETAIL_SLOG_SLOG_RECORDER_FACTORY_H

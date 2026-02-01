@@ -11,8 +11,8 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-#ifndef BMW_MW_LOG_SHARED_MEMORY_WRITER
-#define BMW_MW_LOG_SHARED_MEMORY_WRITER
+#ifndef SCORE_MW_LOG_DETAIL_DATA_ROUTER_SHARED_MEMORY_SHARED_MEMORY_WRITER_H
+#define SCORE_MW_LOG_DETAIL_DATA_ROUTER_SHARED_MEMORY_SHARED_MEMORY_WRITER_H
 
 #include "score/mw/log/detail/data_router/shared_memory/common.h"
 #include "score/mw/log/detail/wait_free_producer_queue/alternating_reader_proxy.h"
@@ -54,10 +54,10 @@ class SharedMemoryWriter
     static constexpr Length GetMaxPayloadSize()
     {
         // max size of a dlt-v1 message excluding the header.
-        constexpr std::uint64_t value = 65500UL;
-        static_assert(GetMaxAcquireLengthBytes() >= value + sizeof(BufferEntryHeader),
+        constexpr std::uint64_t kValue = 65500UL;
+        static_assert(GetMaxAcquireLengthBytes() >= kValue + sizeof(BufferEntryHeader),
                       "must not exceed limits of linear writer");
-        return value;
+        return kValue;
     }
 
     /// \brief Allocates space on buffer and writes data into it.
@@ -140,7 +140,7 @@ class SharedMemoryWriter
     {
         score::cpp::optional<TypeIdentifier> result{};
 
-        constexpr size_type type_identifier_size = sizeof(TypeIdentifier);
+        constexpr size_type kTypeIdentifierSize = sizeof(TypeIdentifier);
         const auto type_info_size_pre = info.size();
         static_assert(std::is_same<decltype(type_info_size_pre), const std::size_t>::value,
                       "Return type of ::size() method of template parameter has uncompatible type");
@@ -148,7 +148,7 @@ class SharedMemoryWriter
         //  static_cast of a positive value after value has been verified
         const auto type_info_size = static_cast<size_type>(type_info_size_pre);
         //  cast to bigger type:
-        const auto total_size = static_cast<Length>(type_identifier_size) + static_cast<Length>(type_info_size);
+        const auto total_size = static_cast<Length>(kTypeIdentifierSize) + static_cast<Length>(type_info_size);
 
         this->AllocAndWrite(
             TimePoint::clock::now(),
@@ -166,10 +166,10 @@ class SharedMemoryWriter
                 // coverity[autosar_cpp14_m5_2_8_violation]
                 const score::cpp::span<Byte> result_span{static_cast<Byte*>(static_cast<void*>(&result)), sizeof(result)};
                 std::ignore = std::copy_n(
-                    result_span.begin(), static_cast<std::size_t>(type_identifier_size), payload_span.begin());
+                    result_span.begin(), static_cast<std::size_t>(kTypeIdentifierSize), payload_span.begin());
 
                 // Write type info
-                const auto type_info_span = payload_span.subspan(type_identifier_size, type_info_size);
+                const auto type_info_span = payload_span.subspan(kTypeIdentifierSize, type_info_size);
                 info.Copy(type_info_span);
             });
 
@@ -207,4 +207,4 @@ class SharedMemoryWriter
 }  // namespace mw
 }  // namespace score
 
-#endif  // BMW_MW_LOG_SHARED_MEMORY_WRITER
+#endif  // SCORE_MW_LOG_DETAIL_DATA_ROUTER_SHARED_MEMORY_SHARED_MEMORY_WRITER_H

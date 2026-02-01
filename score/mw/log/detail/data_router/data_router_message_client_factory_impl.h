@@ -11,8 +11,8 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-#ifndef SCORE_MW_LOG_DETAIL_DATA_ROUTER_MESSAGE_CLIENT_FACTORY_IMPL_H
-#define SCORE_MW_LOG_DETAIL_DATA_ROUTER_MESSAGE_CLIENT_FACTORY_IMPL_H
+#ifndef SCORE_MW_LOG_DETAIL_DATA_ROUTER_DATA_ROUTER_MESSAGE_CLIENT_FACTORY_IMPL_H
+#define SCORE_MW_LOG_DETAIL_DATA_ROUTER_DATA_ROUTER_MESSAGE_CLIENT_FACTORY_IMPL_H
 
 #include "score/mw/log/configuration/configuration.h"
 #include "score/mw/log/detail/data_router/data_router_message_client_factory.h"
@@ -52,4 +52,4 @@ class DatarouterMessageClientFactoryImpl : public DatarouterMessageClientFactory
 }  // namespace mw
 }  // namespace score
 
-#endif  // SCORE_MW_LOG_DETAIL_DATA_ROUTER_MESSAGE_CLIENT_H
+#endif  // SCORE_MW_LOG_DETAIL_DATA_ROUTER_DATA_ROUTER_MESSAGE_CLIENT_FACTORY_IMPL_H

@@ -11,8 +11,8 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-#ifndef SCORE_MW_LOG_DETAIL_DATA_ROUTER_MESSAGES_H
-#define SCORE_MW_LOG_DETAIL_DATA_ROUTER_MESSAGES_H
+#ifndef SCORE_MW_LOG_DETAIL_DATA_ROUTER_DATA_ROUTER_MESSAGES_H
+#define SCORE_MW_LOG_DETAIL_DATA_ROUTER_DATA_ROUTER_MESSAGES_H
 
 #include "score/mw/log/detail/logging_identifier.h"
 
@@ -106,4 +106,4 @@ class ConnectMessageFromClient
 }  // namespace log
 }  // namespace mw
 }  // namespace score
-#endif  // SCORE_MW_LOG_DETAIL_DATA_ROUTER_MESSAGES_H
+#endif  // SCORE_MW_LOG_DETAIL_DATA_ROUTER_DATA_ROUTER_MESSAGES_H

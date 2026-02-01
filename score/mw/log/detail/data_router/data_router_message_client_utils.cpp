@@ -31,17 +31,17 @@ MsgClientUtils::MsgClientUtils(score::cpp::pmr::unique_ptr<score::os::Unistd> un
 
 score::os::Unistd& MsgClientUtils::GetUnistd() const noexcept
 {
-    return *unistd_.get();
+    return *unistd_;
 }
 
 score::os::Pthread& MsgClientUtils::GetPthread() const noexcept
 {
-    return *pthread_.get();
+    return *pthread_;
 }
 
 score::os::Signal& MsgClientUtils::GetSignal() const noexcept
 {
-    return *signal_.get();
+    return *signal_;
 }
 
 }  // namespace detail

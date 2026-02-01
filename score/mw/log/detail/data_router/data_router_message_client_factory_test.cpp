@@ -35,12 +35,7 @@ namespace detail
 namespace
 {
 
-using ::testing::_;
-using ::testing::ByMove;
-using ::testing::Eq;
-using ::testing::Matcher;
 using ::testing::Return;
-using ::testing::ReturnRef;
 using ::testing::StrEq;
 
 const auto kMwsrFileName = "";
@@ -53,7 +48,7 @@ class DatarouterMessageClientFactoryFixture : public ::testing::Test
   public:
     void SetUp() override
     {
-        auto memory_resource = score::cpp::pmr::get_default_resource();
+        auto* memory_resource = score::cpp::pmr::get_default_resource();
         auto unistd_mock = score::cpp::pmr::make_unique<testing::StrictMock<score::os::UnistdMock>>(memory_resource);
         auto pthread_mock = score::cpp::pmr::make_unique<testing::StrictMock<score::os::MockPthread>>(memory_resource);
         auto signal_mock = score::cpp::pmr::make_unique<testing::StrictMock<score::os::SignalMock>>(memory_resource);
@@ -64,7 +59,7 @@ class DatarouterMessageClientFactoryFixture : public ::testing::Test
         auto message_passing_factory = std::make_unique<testing::StrictMock<MessagePassingFactoryMock>>();
         message_passing_factory_ = message_passing_factory.get();
         factory_ = std::make_unique<DatarouterMessageClientFactoryImpl>(
-            config,
+            config_,
             std::move(message_passing_factory),
             MsgClientUtils{std::move(unistd_mock), std::move(pthread_mock), std::move(signal_mock)});
     }
@@ -101,7 +96,7 @@ class DatarouterMessageClientFactoryFixture : public ::testing::Test
     std::unique_ptr<DatarouterMessageClientImpl> client_;
     testing::StrictMock<MessagePassingFactoryMock>* message_passing_factory_;
     std::unique_ptr<DatarouterMessageClientFactoryImpl> factory_;
-    const score::mw::log::detail::Configuration config{};
+    const score::mw::log::detail::Configuration config_{};
 };
 
 TEST_F(DatarouterMessageClientFactoryFixture, CreateOnceShouldReturnClientWithExpectedValues)
@@ -113,12 +108,12 @@ TEST_F(DatarouterMessageClientFactoryFixture, CreateOnceShouldReturnClientWithEx
 
     auto client = CreateClientWithFactory();
 
-    auto client_impl = dynamic_cast<DatarouterMessageClientImpl*>(client.get());
+    auto* client_impl = dynamic_cast<DatarouterMessageClientImpl*>(client.get());
 
     // Using the getters check that the factory provided the expected values to the constructor.
 
     EXPECT_EQ(client_impl->GetReceiverIdentifier(), kClientReceiverIdentifier);
-    EXPECT_EQ(client_impl->GetAppid(), LoggingIdentifier{config.GetAppId()});
+    EXPECT_EQ(client_impl->GetAppid(), LoggingIdentifier{config_.GetAppId()});
     EXPECT_EQ(client_impl->GetThisProcessPid(), kThisProcessPid);
     EXPECT_EQ(client_impl->GetWriterFileName(), kMwsrFileName);
 }
