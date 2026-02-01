@@ -123,7 +123,7 @@ class logger
     {
         auto log_level = LogLevel::kInfo;
         const score::mw::log::config::NvMsgDescriptor* const msg_desc =
-            nvconfig_.getDltMsgDesc(::score::common::visitor::struct_visitable<T>::name());
+            nvconfig_.GetDltMsgDesc(::score::common::visitor::struct_visitable<T>::name());
         if (msg_desc != nullptr)
         {
             auto message_descriptor_log_level = msg_desc->GetLogLevel();

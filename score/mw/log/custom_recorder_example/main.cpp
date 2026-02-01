@@ -13,7 +13,7 @@
 
 #include "score/mw/log/logging.h"
 
-int main(void)
+int main()
 {
     score::mw::log::LogInfo("TEST") << "welcome to mw::log";
 }
