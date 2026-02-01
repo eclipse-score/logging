@@ -151,9 +151,9 @@ void ConstructDltStandardHeaderTypes(DltStandardHeader& standard,
     standard.len = htons(msg_size);
 }
 
-using timestamp_t = score::os::HighResolutionSteadyClock::time_point;
-using systime_t = std::chrono::system_clock::time_point;
-using dlt_duration_t = std::chrono::duration<std::uint32_t, std::ratio<1, 10000>>;
+using TimestampT = score::os::HighResolutionSteadyClock::time_point;
+using SystimeT = std::chrono::system_clock::time_point;
+using DltDurationT = std::chrono::duration<std::uint32_t, std::ratio<1, 10000>>;
 
 DltMessageBuilder::DltMessageBuilder(const std::string_view ecu_id) noexcept
     : IMessageBuilder(),
@@ -169,16 +169,16 @@ void DltMessageBuilder::SetNextMessage(LogRecord& log_record) noexcept
     log_record_ = log_record;
 
     const auto& entry = log_record.getLogEntry();
-    const auto time_stamp = timestamp_t::clock::now().time_since_epoch();
-    const auto time_epoch = systime_t::clock::now().time_since_epoch();
+    const auto time_stamp = TimestampT::clock::now().time_since_epoch();
+    const auto time_epoch = SystimeT::clock::now().time_since_epoch();
 
-    using secs_u32 = std::chrono::duration<std::uint32_t, std::ratio<1>>;
-    const std::uint32_t seconds = std::chrono::duration_cast<secs_u32>(time_epoch).count();
+    using SecsU32 = std::chrono::duration<std::uint32_t, std::ratio<1>>;
+    const std::uint32_t seconds = std::chrono::duration_cast<SecsU32>(time_epoch).count();
     const auto secs_remainder = time_epoch - std::chrono::seconds(seconds);
 
-    using microsecs_i32 = std::chrono::duration<std::int32_t, std::micro>;
-    const std::int32_t microsecs = std::chrono::duration_cast<microsecs_i32>(secs_remainder).count();
-    const std::uint32_t timestamp = std::chrono::duration_cast<dlt_duration_t>(time_stamp).count();
+    using MicrosecsI32 = std::chrono::duration<std::int32_t, std::micro>;
+    const std::int32_t microsecs = std::chrono::duration_cast<MicrosecsI32>(secs_remainder).count();
+    const std::uint32_t timestamp = std::chrono::duration_cast<DltDurationT>(time_stamp).count();
 
     /*
     Deviation from AUTOSAR C++14 Rule A4-7-1

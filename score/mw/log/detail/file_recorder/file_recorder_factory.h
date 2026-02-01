@@ -10,8 +10,8 @@
  *
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
-#ifndef SCORE_MW_LOG_DETAIL_FILE_RECORDER_FACTORY_H
-#define SCORE_MW_LOG_DETAIL_FILE_RECORDER_FACTORY_H
+#ifndef SCORE_MW_LOG_DETAIL_FILE_RECORDER_FILE_RECORDER_FACTORY_H
+#define SCORE_MW_LOG_DETAIL_FILE_RECORDER_FILE_RECORDER_FACTORY_H
 
 #include "score/os/fcntl.h"
 #include "score/mw/log/detail/error.h"
@@ -49,4 +49,4 @@ class FileRecorderFactory : public LogRecorderFactory<FileRecorderFactory>
 }  // namespace mw
 }  // namespace score
 
-#endif  // SCORE_MW_LOG_DETAIL_FILE_RECORDER_FACTORY_H
+#endif  // SCORE_MW_LOG_DETAIL_FILE_RECORDER_FILE_RECORDER_FACTORY_H
