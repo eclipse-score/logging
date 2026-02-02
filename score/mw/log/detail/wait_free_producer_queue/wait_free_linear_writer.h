@@ -11,8 +11,8 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-#ifndef SCORE_MW_LOG_DETAIL_WAIT_FREE_LINEAR_WRITER_H
-#define SCORE_MW_LOG_DETAIL_WAIT_FREE_LINEAR_WRITER_H
+#ifndef SCORE_MW_LOG_DETAIL_WAIT_FREE_PRODUCER_QUEUE_WAIT_FREE_LINEAR_WRITER_H
+#define SCORE_MW_LOG_DETAIL_WAIT_FREE_PRODUCER_QUEUE_WAIT_FREE_LINEAR_WRITER_H
 
 #include "score/mw/log/detail/wait_free_producer_queue/linear_control_block.h"
 
@@ -53,7 +53,7 @@ class WaitFreeLinearWriter
 {
   public:
     explicit WaitFreeLinearWriter(LinearControlBlock& cb,
-                                  PreAcquireHook pre_acquire_hook = std::move(empty_hook)) noexcept;
+                                  PreAcquireHook pre_acquire_hook = std::move(EmptyHook)) noexcept;
 
     /// \brief Try to acquire the length for writing.
     /// Returns empty if there is not enough space available.
@@ -63,7 +63,7 @@ class WaitFreeLinearWriter
     void Release(const AcquiredData& acquired_data) noexcept;
 
   private:
-    static inline void empty_hook(WaitFreeLinearWriter&) noexcept {}
+    static inline void EmptyHook(WaitFreeLinearWriter&) noexcept {}
 
   private:
     LinearControlBlock& control_block_;
@@ -75,4 +75,4 @@ class WaitFreeLinearWriter
 }  // namespace mw
 }  // namespace score
 
-#endif
+#endif  // SCORE_MW_LOG_DETAIL_WAIT_FREE_PRODUCER_QUEUE_WAIT_FREE_LINEAR_WRITER_H

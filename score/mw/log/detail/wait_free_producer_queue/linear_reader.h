@@ -57,4 +57,4 @@ LinearReader CreateLinearReaderFromDataAndLength(const score::cpp::span<Byte>& d
 }  // namespace mw
 }  // namespace score
 
-#endif
+#endif  // SCORE_MW_LOG_DETAIL_WAIT_FREE_PRODUCER_QUEUE_LINEAR_READER_H

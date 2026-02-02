@@ -121,13 +121,13 @@ class LoggerFixture : public ::testing::Test
         const auto slot = unit_.ReserveSlot().value();
 
         auto&& log_record = unit_.GetLogRecord(slot);
-        auto& log_entry = log_record.getLogEntry();
+        auto& log_entry = log_record.GetLogEntry();
 
         log_entry.app_id = LoggingIdentifier{app_id};
         log_entry.ctx_id = LoggingIdentifier{context_id};
         log_entry.log_level = log_level;
         log_entry.num_of_args = 5;
-        log_record.getVerbosePayload().Put("xyz xyz", 7);
+        log_record.GetVerbosePayload().Put("xyz xyz", 7);
 
         unit_.FlushSlot(slot);
 

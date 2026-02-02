@@ -61,7 +61,7 @@ struct SlogBackendFixture : ::testing::Test
         EXPECT_TRUE(slot.has_value());
 
         auto& payload = backend.GetLogRecord(slot.value());
-        auto& log_entry = payload.getLogEntry();
+        auto& log_entry = payload.GetLogEntry();
         log_entry.ctx_id = LoggingIdentifier(std::string_view(ctx_id));
         log_entry.log_level = log_level;
         log_entry.payload = ByteVector(message.begin(), message.end());

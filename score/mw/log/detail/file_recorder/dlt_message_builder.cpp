@@ -49,9 +49,9 @@ void ConstructDltStandardHeaderExtra(score::mw::log::detail::DltStandardHeaderEx
                                      const score::mw::log::detail::LoggingIdentifier& ecu,
                                      const std::uint32_t tmsp) noexcept
 {
-    static_assert(sizeof(decltype(standard_extra_header.ecu)) == sizeof(decltype(ecu.data_)),
+    static_assert(sizeof(decltype(standard_extra_header.ecu)) == sizeof(decltype(ecu.data)),
                   "Types storing logging ID should be the same.");
-    std::ignore = std::copy(ecu.data_.begin(), ecu.data_.end(), standard_extra_header.ecu.begin());
+    std::ignore = std::copy(ecu.data.begin(), ecu.data.end(), standard_extra_header.ecu.begin());
     // htonl is library function which uses c-style conversion
     // coverity[autosar_cpp14_a5_2_2_violation]
     standard_extra_header.tmsp = htonl(tmsp);
@@ -71,12 +71,12 @@ void ConstructDltExtendedHeader(score::mw::log::detail::DltExtendedHeader& exten
     //  static_cast operation within uint8_t range
     extended_header.msin = static_cast<std::uint8_t>(message_info);
     extended_header.noar = number_of_arguments;
-    static_assert(sizeof(decltype(extended_header.apid)) == sizeof(decltype(app_id.data_)),
+    static_assert(sizeof(decltype(extended_header.apid)) == sizeof(decltype(app_id.data)),
                   "Types storing logging ID should be the same.");
-    std::ignore = std::copy(app_id.data_.begin(), app_id.data_.end(), extended_header.apid.begin());
-    static_assert(sizeof(decltype(extended_header.ctid)) == sizeof(decltype(ctx_id.data_)),
+    std::ignore = std::copy(app_id.data.begin(), app_id.data.end(), extended_header.apid.begin());
+    static_assert(sizeof(decltype(extended_header.ctid)) == sizeof(decltype(ctx_id.data)),
                   "Types storing logging ID should be the same.");
-    std::ignore = std::copy(ctx_id.data_.begin(), ctx_id.data_.end(), extended_header.ctid.begin());
+    std::ignore = std::copy(ctx_id.data.begin(), ctx_id.data.end(), extended_header.ctid.begin());
 }
 
 void ConstructStorageVerbosePacket(score::mw::log::detail::VerbosePayload& header_payload,
@@ -168,7 +168,7 @@ void DltMessageBuilder::SetNextMessage(LogRecord& log_record) noexcept
 {
     log_record_ = log_record;
 
-    const auto& entry = log_record.getLogEntry();
+    const auto& entry = log_record.GetLogEntry();
     const auto time_stamp = TimestampT::clock::now().time_since_epoch();
     const auto time_epoch = SystimeT::clock::now().time_since_epoch();
 
@@ -205,7 +205,7 @@ score::cpp::optional<score::cpp::span<const std::uint8_t>> DltMessageBuilder::Ge
 
     score::cpp::optional<score::cpp::span<const std::uint8_t>> return_result = {};
 
-    detail::VerbosePayload& verbose_payload = log_record_.value().get().getVerbosePayload();
+    detail::VerbosePayload& verbose_payload = log_record_.value().get().GetVerbosePayload();
     switch (parsing_phase_)  // LCOV_EXCL_BR_LINE: exclude the "default" branch.
     {
         case ParsingPhase::kHeader:

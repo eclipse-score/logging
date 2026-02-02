@@ -11,8 +11,8 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-#ifndef SCORE_MW_LOG_DETAIL_WAIT_FREE_ALTERNATING_CONTROL_BLOCK_H
-#define SCORE_MW_LOG_DETAIL_WAIT_FREE_ALTERNATING_CONTROL_BLOCK_H
+#ifndef SCORE_MW_LOG_DETAIL_WAIT_FREE_PRODUCER_QUEUE_ALTERNATING_CONTROL_BLOCK_H
+#define SCORE_MW_LOG_DETAIL_WAIT_FREE_PRODUCER_QUEUE_ALTERNATING_CONTROL_BLOCK_H
 
 #include "score/mw/log/detail/wait_free_producer_queue/linear_control_block.h"
 
@@ -80,4 +80,4 @@ AlternatingControlBlockSelectId SelectLinearControlBlockId(std::uint32_t count);
 }  // namespace mw
 }  // namespace score
 
-#endif
+#endif  // SCORE_MW_LOG_DETAIL_WAIT_FREE_PRODUCER_QUEUE_ALTERNATING_CONTROL_BLOCK_H
