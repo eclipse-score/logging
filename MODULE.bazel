@@ -31,7 +31,7 @@ bazel_dep(name = "score_docs_as_code", version = "2.2.0")
 git_override(
     module_name = "score_docs_as_code",
     commit = "1e0c4f5a52fbb327ec2929da00d51b080fcf6f10",
-    remote = "https://github.com/eclipse-score/docs-as-code.git",
+    remote = "https://github.com/etas-contrib/score_docs-as-code.git",
 )
 bazel_dep(name = "score_tooling", version = "1.0.4")
 bazel_dep(name = "score_rust_policies", version = "0.0.3")
@@ -41,7 +41,7 @@ bazel_dep(name = "score_platform", version = "0.5.1", dev_dependency = True)
 git_override(
     module_name = "score_platform",
     commit = "6829d691dfd4521ce376e22400bb104197967b7c",
-    remote = "https://github.com/eclipse-score/score.git",
+    remote = "https://github.com/etas-contrib/score_score.git",
 )
 
 # Toolchains and extensions
@@ -111,15 +111,17 @@ bazel_dep(name = "rapidjson", version = "1.1.0")
 # )
 
 bazel_dep(name = "score_baselibs", version = "0.2.0")
-local_path_override(
+git_override(
     module_name = "score_baselibs",
-    path = "../score_baselibs",
+    commit = "458dbd6ef269326405006222c68dc9146be119b6",
+    remote = "https://github.com/etas-contrib/score_baselibs.git",
 )
 
 # Rust dependencies
 
 bazel_dep(name = "score_baselibs_rust", version = "0.0.3")
-local_path_override(
+git_override(
     module_name = "score_baselibs_rust",
-    path = "../score_baselibs_rust",
+    commit = "70ff0888f8c5f5286c9134752f4dae9dc50b888c",
+    remote = "https://github.com/etas-contrib/score_baselibs_rust.git",
 )
