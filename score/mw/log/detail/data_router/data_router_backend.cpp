@@ -62,7 +62,7 @@ DataRouterBackend::DataRouterBackend(const std::size_t number_of_slots,
     if (writer.has_value())
     {
         // Required to retrieve and update the Configuration across
-        std::ignore = ::score::platform::logger::instance(config, {}, std::move(writer.value()));
+        std::ignore = ::score::platform::Logger::Instance(config, {}, std::move(writer.value()));
         message_client_ =
             message_client_factory.CreateOnce(writer_factory.GetIdentifier(), writer_factory.GetFileName());
         message_client_->Run();
@@ -102,22 +102,22 @@ void DataRouterBackend::FlushSlot(const SlotHandle& slot) noexcept
     switch (log_entry.log_level)
     {
         case LogLevel::kVerbose:
-            TRACE_VERBOSE(log_entry);
+            TraceVerbose(log_entry);
             break;
         case LogLevel::kDebug:
-            TRACE_DEBUG(log_entry);
+            TraceDebug(log_entry);
             break;
         case LogLevel::kInfo:
-            TRACE_INFO(log_entry);
+            TraceInfo(log_entry);
             break;
         case LogLevel::kWarn:
-            TRACE_WARN(log_entry);
+            TraceWarn(log_entry);
             break;
         case LogLevel::kError:
-            TRACE_ERROR(log_entry);
+            TraceError(log_entry);
             break;
         case LogLevel::kFatal:
-            TRACE_FATAL(log_entry);
+            TraceFatal(log_entry);
             break;
         case LogLevel::kOff:
         default:

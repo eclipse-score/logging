@@ -49,14 +49,10 @@ STRUCT_TRACEABLE(DisabledLoggerTestEntry, dummy)
 namespace
 {
 
-using ::testing::_;
-using ::testing::AnyNumber;
-using ::testing::Return;
-
 using SerializeNs = ::score::common::visitor::logging_serializer;
-const std::string ERROR_CONTENT_1_PATH =
+const std::string kErrorContent1Path =
     "score/mw/log/legacy_non_verbose_api/test/error-content-json-class-id.json";
-const std::string JSON_PATH = "score/mw/log/legacy_non_verbose_api/test/test-class-id.json";
+const std::string kJsonPath = "score/mw/log/legacy_non_verbose_api/test/test-class-id.json";
 
 // Test-specific type for dropped logs counter test
 struct DropCounterTestEntry
@@ -84,11 +80,11 @@ class LoggerFixture : public ::testing::Test
   public:
     void PrepareFixture(score::mw::log::NvConfig nv_config, uint64_t size = 1024UL)
     {
-        auto kBufferSize = size;
-        buffer1_.resize(kBufferSize);
-        buffer2_.resize(kBufferSize);
-        shared_data_.control_block.control_block_even.data = {buffer1_.data(), kBufferSize};
-        shared_data_.control_block.control_block_odd.data = {buffer2_.data(), kBufferSize};
+        auto k_buffer_size = size;
+        buffer1_.resize(k_buffer_size);
+        buffer2_.resize(k_buffer_size);
+        shared_data_.control_block.control_block_even.data = {buffer1_.data(), k_buffer_size};
+        shared_data_.control_block.control_block_odd.data = {buffer2_.data(), k_buffer_size};
         shared_data_.control_block.switch_count_points_active_for_writing = std::uint32_t{1};
 
         AlternatingReadOnlyReader read_only_reader{shared_data_.control_block,
@@ -97,59 +93,59 @@ class LoggerFixture : public ::testing::Test
         reader_ = std::make_unique<SharedMemoryReader>(shared_data_, std::move(read_only_reader), []() noexcept {});
 
         SharedMemoryWriter writer{shared_data_, []() noexcept {}};
-        const std::string_view kCtx{"STDA"};
-        const ContextLogLevelMap context_log_level_map{{LoggingIdentifier{kCtx}, LogLevel::kFatal}};
-        config_.SetContextLogLevel(context_log_level_map);
-        logger_ = std::make_unique<score::platform::logger>(config_, nv_config, std::move(writer));
-        ::score::platform::logger::InjectTestInstance(logger_.get());
+        const std::string_view k_ctx{"STDA"};
+        const ContextLogLevelMap context_log_level_map{{LoggingIdentifier{k_ctx}, LogLevel::kFatal}};
+        config.SetContextLogLevel(context_log_level_map);
+        logger = std::make_unique<score::platform::Logger>(config, nv_config, std::move(writer));
+        ::score::platform::Logger::InjectTestInstance(logger.get());
     }
 
     void PrepareContextLogLevelFixture(score::mw::log::NvConfig nv_config, const std::string_view ctxid)
     {
         SharedMemoryWriter writer{shared_data_, []() noexcept {}};
         const ContextLogLevelMap context_log_level_map{{LoggingIdentifier{ctxid}, LogLevel::kError}};
-        config_.SetContextLogLevel(context_log_level_map);
-        logger_ = std::make_unique<score::platform::logger>(config_, nv_config, std::move(writer));
-        ::score::platform::logger::InjectTestInstance(logger_.get());
+        config.SetContextLogLevel(context_log_level_map);
+        logger = std::make_unique<score::platform::Logger>(config, nv_config, std::move(writer));
+        ::score::platform::Logger::InjectTestInstance(logger.get());
     }
 
     void TearDown() override
     {
-        ::score::platform::logger::InjectTestInstance(nullptr);
+        ::score::platform::Logger::InjectTestInstance(nullptr);
     }
-    void SimulateLogging(const LogLevel logLevel = LogLevel::kError,
+    void SimulateLogging(const LogLevel log_level = LogLevel::kError,
                          const std::string& context_id = "xxxx",
                          const std::string& app_id = "xxxx")
     {
 
         const auto slot = unit_.ReserveSlot().value();
 
-        auto&& logRecord = unit_.GetLogRecord(slot);
-        auto& log_entry = logRecord.getLogEntry();
+        auto&& log_record = unit_.GetLogRecord(slot);
+        auto& log_entry = log_record.getLogEntry();
 
         log_entry.app_id = LoggingIdentifier{app_id};
         log_entry.ctx_id = LoggingIdentifier{context_id};
-        log_entry.log_level = logLevel;
+        log_entry.log_level = log_level;
         log_entry.num_of_args = 5;
-        logRecord.getVerbosePayload().Put("xyz xyz", 7);
+        log_record.getVerbosePayload().Put("xyz xyz", 7);
 
         unit_.FlushSlot(slot);
 
-        const auto acquire_result = logger_->GetSharedMemoryWriter().ReadAcquire();
-        config_ = logger_->get_config();
+        const auto acquire_result = logger->GetSharedMemoryWriter().ReadAcquire();
+        config = logger->GetConfig();
 
         reader_->NotifyAcquisitionSetReader(acquire_result);
 
         reader_->Read([](const TypeRegistration&) noexcept {},
                       [this](const SharedMemoryRecord& record) {
                           std::ignore = SerializeNs::deserialize(
-                              record.payload.data(), GetDataSizeAsLength(record.payload), header_);
+                              record.payload.data(), GetDataSizeAsLength(record.payload), header);
                       });
     }
 
-    Configuration config_{};
-    std::unique_ptr<score::platform::logger> logger_{};
-    LogEntry header_{};
+    Configuration config{};
+    std::unique_ptr<score::platform::Logger> logger{};
+    LogEntry header{};
 
   private:
     SharedData shared_data_{};
@@ -158,7 +154,7 @@ class LoggerFixture : public ::testing::Test
 
     std::vector<Byte> buffer1_{};
     std::vector<Byte> buffer2_{};
-    DataRouterBackend unit_{std::uint8_t{255UL}, LogRecord{}, message_client_factory_, config_, WriterFactory{{}}};
+    DataRouterBackend unit_{std::uint8_t{255UL}, LogRecord{}, message_client_factory_, config, WriterFactory{{}}};
 };
 
 TEST_F(LoggerFixture, WhenCreatingSharedMemoryWriterwithNotEnoughBufferSizeRegesteringNewTypeShallFail)
@@ -197,11 +193,11 @@ TEST_F(LoggerFixture, WhenProvidingCorrectNvConfigGetTypeLevelAndThreshold)
     RecordProperty("TestingTechnique", "Requirements-based test");
     RecordProperty("DerivationTechnique", "Analysis of requirements");
 
-    auto nvConfigResult = NvConfigFactory::CreateAndInit(JSON_PATH);
-    ASSERT_TRUE(nvConfigResult.has_value());
-    PrepareFixture(std::move(nvConfigResult.value()));
-    EXPECT_EQ(score::platform::LogLevel::kError, logger_->get_type_level<score::mw::log::detail::LogEntry>());
-    EXPECT_EQ(score::platform::LogLevel::kFatal, logger_->get_type_threshold<score::mw::log::detail::LogEntry>());
+    auto nv_config_result = NvConfigFactory::CreateAndInit(kJsonPath);
+    ASSERT_TRUE(nv_config_result.has_value());
+    PrepareFixture(std::move(nv_config_result.value()));
+    EXPECT_EQ(score::platform::LogLevel::kError, logger->GetTypeLevel<score::mw::log::detail::LogEntry>());
+    EXPECT_EQ(score::platform::LogLevel::kFatal, logger->GetTypeThreshold<score::mw::log::detail::LogEntry>());
 }
 
 TEST_F(LoggerFixture, WhenProvidingNvConfigWithErrorShallGetErrorContent)
@@ -224,10 +220,10 @@ TEST(LoggerFallback, WhenProperWriterNotProvidedFailSafeFallbackShallBeReturned)
     RecordProperty("DerivationTechnique", "Generation and analysis of equivalence classes");
 
     score::cpp::optional<SharedMemoryWriter> writer{score::cpp::nullopt};
-    Configuration config_{};
+    Configuration config{};
     auto nv_config = NvConfigFactory::CreateEmpty();
-    std::unique_ptr<score::platform::logger> logger{};
-    logger = std::make_unique<score::platform::logger>(config_, nv_config, std::move(writer));
+    std::unique_ptr<score::platform::Logger> logger{};
+    logger = std::make_unique<score::platform::Logger>(config, nv_config, std::move(writer));
 
     const auto acquire_result = logger->GetSharedMemoryWriter().ReadAcquire();
     EXPECT_EQ(acquire_result.acquired_buffer, 1UL);
@@ -241,8 +237,8 @@ TEST(LoggerFallback, AllArgsNulloptShallReturnFailsafeFallback)
     RecordProperty("TestType", "Interface test");
     RecordProperty("DerivationTechnique", "Generation and analysis of equivalence classes");
 
-    std::unique_ptr<score::platform::logger> logger{};
-    logger = std::make_unique<score::platform::logger>(score::cpp::nullopt, std::nullopt, score::cpp::nullopt);
+    std::unique_ptr<score::platform::Logger> logger{};
+    logger = std::make_unique<score::platform::Logger>(score::cpp::nullopt, std::nullopt, score::cpp::nullopt);
 
     const auto acquire_result = logger->GetSharedMemoryWriter().ReadAcquire();
     EXPECT_EQ(acquire_result.acquired_buffer, 1UL);
@@ -268,7 +264,7 @@ TEST_F(LoggerFixture, WhenProvidingWrongCtxIdWillLeadToVerboseLogLevelThreshold)
     RecordProperty("DerivationTechnique", "Analysis of requirements");
 
     PrepareContextLogLevelFixture(NvConfigFactory::CreateEmpty(), "not supported ctx id");
-    EXPECT_EQ(score::platform::LogLevel::kVerbose, logger_->get_type_threshold<score::mw::log::detail::LogEntry>());
+    EXPECT_EQ(score::platform::LogLevel::kVerbose, logger->GetTypeThreshold<score::mw::log::detail::LogEntry>());
 }
 
 TEST_F(LoggerFixture, GetSharedMemoryWriterShallFailWhenThereIsNoSharedMemoryAllocatedUsingLoggerInstanceInitialization)
@@ -282,10 +278,9 @@ TEST_F(LoggerFixture, GetSharedMemoryWriterShallFailWhenThereIsNoSharedMemoryAll
     RecordProperty("DerivationTechnique", "Analysis of requirements");
 
     score::cpp::optional<score::mw::log::detail::SharedMemoryWriter> shared_memory{};
-    logger_ =
-        std::make_unique<score::platform::logger>(config_, NvConfigFactory::CreateEmpty(), std::move(shared_memory));
+    logger = std::make_unique<score::platform::Logger>(config, NvConfigFactory::CreateEmpty(), std::move(shared_memory));
 
-    const auto acquire_result = logger_->GetSharedMemoryWriter().ReadAcquire();
+    const auto acquire_result = logger->GetSharedMemoryWriter().ReadAcquire();
     EXPECT_EQ(acquire_result.acquired_buffer, 1UL);
 }
 
@@ -302,11 +297,10 @@ TEST_F(
     RecordProperty("DerivationTechnique", "Analysis of requirements");
 
     score::cpp::optional<score::mw::log::detail::SharedMemoryWriter> shared_memory;
-    logger_ =
-        std::make_unique<score::platform::logger>(config_, NvConfigFactory::CreateEmpty(), std::move(shared_memory));
-    logger_->RegisterType<score::logging::FileTransferEntry>();
+    logger = std::make_unique<score::platform::Logger>(config, NvConfigFactory::CreateEmpty(), std::move(shared_memory));
+    logger->RegisterType<score::logging::FileTransferEntry>();
 
-    const auto acquire_result = logger_->GetSharedMemoryWriter().ReadAcquire();
+    const auto acquire_result = logger->GetSharedMemoryWriter().ReadAcquire();
     EXPECT_EQ(acquire_result.acquired_buffer, 1UL);
 }
 
@@ -333,8 +327,8 @@ TEST_F(LoggerFixture, WhenTraceWithLoggerIsNotEnabled)
     // PrepareFixture sets STDA context to kFatal (1)
     // Type loglevel is kError (2)
     // Since threshold (1) < level (2), logger should be disabled
-    auto& logger = LOG_ENTRY<test_data::DisabledLoggerTestEntry>();
-    EXPECT_EQ(false, logger.enabled());
+    auto& logger_instance = GetLogEntry<test_data::DisabledLoggerTestEntry>();
+    EXPECT_EQ(false, logger_instance.Enabled());
 }
 
 struct NonVerboseMessage
@@ -354,11 +348,11 @@ TEST(TraceFixtureTest, WhenTraceWithLogEnabledAndTraceLevelDoesNotExceed)
     RecordProperty("DerivationTechnique", "Analysis of requirements");
 
     NonVerboseMessage entry{false};
-    auto& logger = LOG_ENTRY<NonVerboseMessage>();
+    auto& logger = GetLogEntry<NonVerboseMessage>();
     score::platform::LogLevel level = static_cast<score::platform::LogLevel>(0x06U);
     TRACE(entry);
-    EXPECT_EQ(true, logger.enabled());
-    EXPECT_EQ(true, logger.enabled_at(level));
+    EXPECT_EQ(true, logger.Enabled());
+    EXPECT_EQ(true, logger.EnabledAt(level));
 }
 
 TEST(TraceFixtureTest, WhenTraceWithLogLevelEnabledButLevelExceeded)
@@ -369,10 +363,10 @@ TEST(TraceFixtureTest, WhenTraceWithLogLevelEnabledButLevelExceeded)
     RecordProperty("TestingTechnique", "Requirements-based test");
     RecordProperty("DerivationTechnique", "Analysis of requirements");
     LogEntry entry{};
-    auto& logger = LOG_ENTRY<score::mw::log::detail::LogEntry>();
+    auto& logger = GetLogEntry<score::mw::log::detail::LogEntry>();
     score::platform::LogLevel level = static_cast<score::platform::LogLevel>(0x08U);
-    TRACE_LEVEL(level, entry);
-    EXPECT_EQ(false, logger.enabled_at(level));
+    TraceLevel(level, entry);
+    EXPECT_EQ(false, logger.EnabledAt(level));
 }
 
 TEST_F(LoggerFixture, WhenTypeRegistrationFailsDroppedLogsCounterIsIncremented)
@@ -386,10 +380,10 @@ TEST_F(LoggerFixture, WhenTypeRegistrationFailsDroppedLogsCounterIsIncremented)
     constexpr uint64_t kInsufficientBufferSizeToForceRegistrationFailure = 1UL;
     PrepareFixture(NvConfigFactory::CreateEmpty(), kInsufficientBufferSizeToForceRegistrationFailure);
 
-    auto& log_entry_instance = LOG_ENTRY<DropCounterTestEntry>();
+    auto& log_entry_instance = GetLogEntry<DropCounterTestEntry>();
 
     // Initial counter should be 0
-    EXPECT_EQ(0U, log_entry_instance.get_dropped_logs_count());
+    EXPECT_EQ(0U, log_entry_instance.GetDroppedLogsCount());
 
     // Attempt to log several times with failed registration
     constexpr int kNumberOfLogAttempts = 5;
@@ -400,7 +394,7 @@ TEST_F(LoggerFixture, WhenTypeRegistrationFailsDroppedLogsCounterIsIncremented)
     }
 
     // Verify that the counter has been incremented for each failed attempt
-    EXPECT_EQ(static_cast<std::uint64_t>(kNumberOfLogAttempts), log_entry_instance.get_dropped_logs_count());
+    EXPECT_EQ(static_cast<std::uint64_t>(kNumberOfLogAttempts), log_entry_instance.GetDroppedLogsCount());
 }
 
 TEST_F(LoggerFixture, WhenContextIdNotInContextLogLevelMapGetTypeThresholdReturnsVerbose)
@@ -414,14 +408,14 @@ TEST_F(LoggerFixture, WhenContextIdNotInContextLogLevelMapGetTypeThresholdReturn
     RecordProperty("DerivationTechnique", "Analysis of requirements");
 
     // Create nvconfig with "score::mw::log::detail::LogEntry" type that has ctxId "STDA"
-    auto nvConfigResult = NvConfigFactory::CreateAndInit(JSON_PATH);
-    ASSERT_TRUE(nvConfigResult.has_value());
+    auto nv_config_result = NvConfigFactory::CreateAndInit(kJsonPath);
+    ASSERT_TRUE(nv_config_result.has_value());
 
     // Configure context_log_level_map with a DIFFERENT context ID (not "STDA")
     // This creates a scenario where the type exists in nvconfig but its ctxId is not configured
-    PrepareContextLogLevelFixture(nvConfigResult.value(), "DIFF");
+    PrepareContextLogLevelFixture(nv_config_result.value(), "DIFF");
 
-    const auto threshold = logger_->get_type_threshold<score::mw::log::detail::LogEntry>();
+    const auto threshold = logger->GetTypeThreshold<score::mw::log::detail::LogEntry>();
 
     // Should return kVerbose since ctxId "STDA" is not in the map
     EXPECT_EQ(score::platform::LogLevel::kVerbose, threshold);
@@ -436,9 +430,9 @@ TEST(TraceFixtureTest, TraceFatalFunctionCallsTraceLevel)
     RecordProperty("DerivationTechnique", "Analysis of requirements");
 
     LogEntry entry{};
-    auto& logger = LOG_ENTRY<score::mw::log::detail::LogEntry>();
-    TRACE_FATAL(entry);
-    EXPECT_EQ(true, logger.enabled_at(score::platform::LogLevel::kFatal));
+    auto& logger = GetLogEntry<score::mw::log::detail::LogEntry>();
+    TraceFatal(entry);
+    EXPECT_EQ(true, logger.EnabledAt(score::platform::LogLevel::kFatal));
 }
 
 TEST(TraceFixtureTest, TraceWarnFunctionCallsTraceLevel)
@@ -450,9 +444,9 @@ TEST(TraceFixtureTest, TraceWarnFunctionCallsTraceLevel)
     RecordProperty("DerivationTechnique", "Analysis of requirements");
 
     LogEntry entry{};
-    auto& logger = LOG_ENTRY<score::mw::log::detail::LogEntry>();
-    TRACE_WARN(entry);
-    EXPECT_EQ(true, logger.enabled_at(score::platform::LogLevel::kWarn));
+    auto& logger = GetLogEntry<score::mw::log::detail::LogEntry>();
+    TraceWarn(entry);
+    EXPECT_EQ(true, logger.EnabledAt(score::platform::LogLevel::kWarn));
 }
 
 TEST(TraceFixtureTest, TraceVerboseFunctionCallsTraceLevel)
@@ -464,9 +458,9 @@ TEST(TraceFixtureTest, TraceVerboseFunctionCallsTraceLevel)
     RecordProperty("DerivationTechnique", "Analysis of requirements");
 
     LogEntry entry{};
-    auto& logger = LOG_ENTRY<score::mw::log::detail::LogEntry>();
-    TRACE_VERBOSE(entry);
-    EXPECT_EQ(true, logger.enabled_at(score::platform::LogLevel::kVerbose));
+    auto& logger = GetLogEntry<score::mw::log::detail::LogEntry>();
+    TraceVerbose(entry);
+    EXPECT_EQ(true, logger.EnabledAt(score::platform::LogLevel::kVerbose));
 }
 
 TEST(TraceFixtureTest, TraceDebugFunctionCallsTraceLevel)
@@ -478,9 +472,9 @@ TEST(TraceFixtureTest, TraceDebugFunctionCallsTraceLevel)
     RecordProperty("DerivationTechnique", "Analysis of requirements");
 
     LogEntry entry{};
-    auto& logger = LOG_ENTRY<score::mw::log::detail::LogEntry>();
-    TRACE_DEBUG(entry);
-    EXPECT_EQ(true, logger.enabled_at(score::platform::LogLevel::kDebug));
+    auto& logger = GetLogEntry<score::mw::log::detail::LogEntry>();
+    TraceDebug(entry);
+    EXPECT_EQ(true, logger.EnabledAt(score::platform::LogLevel::kDebug));
 }
 
 TEST(TraceFixtureTest, TraceInfoFunctionCallsTraceLevel)
@@ -492,9 +486,9 @@ TEST(TraceFixtureTest, TraceInfoFunctionCallsTraceLevel)
     RecordProperty("DerivationTechnique", "Analysis of requirements");
 
     LogEntry entry{};
-    auto& logger = LOG_ENTRY<score::mw::log::detail::LogEntry>();
-    TRACE_INFO(entry);
-    EXPECT_EQ(true, logger.enabled_at(score::platform::LogLevel::kInfo));
+    auto& logger = GetLogEntry<score::mw::log::detail::LogEntry>();
+    TraceInfo(entry);
+    EXPECT_EQ(true, logger.EnabledAt(score::platform::LogLevel::kInfo));
 }
 
 }  // namespace

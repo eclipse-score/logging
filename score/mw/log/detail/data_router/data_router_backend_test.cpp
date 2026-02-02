@@ -128,10 +128,10 @@ class DataRouterBackendFixture : public ::testing::Test, public ::testing::WithP
         reader_ = std::make_unique<SharedMemoryReader>(shared_data_, std::move(read_only_reader), []() noexcept {});
 
         config.SetDynamicDatarouterIdentifiers(false);
-        logger = std::make_unique<score::platform::logger>(
+        logger = std::make_unique<score::platform::Logger>(
             config, score::mw::log::NvConfigFactory::CreateEmpty(), std::move(writer_));
 
-        ::score::platform::logger::InjectTestInstance(logger.get());
+        ::score::platform::Logger::InjectTestInstance(logger.get());
 
         CreateSharedMemoryWriterFactory();
 
@@ -160,7 +160,7 @@ class DataRouterBackendFixture : public ::testing::Test, public ::testing::WithP
 
     void TearDown() override
     {
-        ::score::platform::logger::InjectTestInstance(nullptr);
+        ::score::platform::Logger::InjectTestInstance(nullptr);
     }
 
     void SimulateLogging(const std::string& context_id, const LogLevel log_level = LogLevel::kError)
@@ -212,7 +212,7 @@ class DataRouterBackendFixture : public ::testing::Test, public ::testing::WithP
         unit_.FlushSlot(slot);
 
         const auto acquire_result = logger->GetSharedMemoryWriter().ReadAcquire();
-        config = logger->get_config();
+        config = logger->GetConfig();
 
         reader_->NotifyAcquisitionSetReader(acquire_result);
 
@@ -224,7 +224,7 @@ class DataRouterBackendFixture : public ::testing::Test, public ::testing::WithP
     }
 
     LogEntry header{};
-    std::unique_ptr<score::platform::logger> logger{};
+    std::unique_ptr<score::platform::Logger> logger{};
     Configuration config{};
 
     //  Mocks needed for dependency injection into SharedMemoryWriter:

@@ -72,7 +72,7 @@ std::unique_ptr<DatarouterMessageClient> DatarouterMessageClientFactoryImpl::Cre
             // coverity[autosar_cpp14_a4_7_1_violation]
             static_cast<uid_t>(config_.GetDataRouterUid()),
             uid),
-        MsgClientBackend(score::platform::logger::instance().GetSharedMemoryWriter(),
+        MsgClientBackend(score::platform::Logger::Instance().GetSharedMemoryWriter(),
                          mwsr_file_name,
                          std::move(message_passing_factory_),
                          config_.GetDynamicDatarouterIdentifiers()),
