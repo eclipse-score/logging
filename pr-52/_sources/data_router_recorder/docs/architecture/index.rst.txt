@@ -75,7 +75,7 @@ The components are designed to cover the expectations from the feature architect
    :security: YES
    :safety: ASIL_B
    :status: invalid
-   :implements: logic_arc_int__log_cpp__recorder, logic_arc_int__logging__buffer, 
+   :implements: logic_arc_int__log_cpp__recorder, logic_arc_int__logging__buffer 
 
    .. needarch::
       :scale: 50
