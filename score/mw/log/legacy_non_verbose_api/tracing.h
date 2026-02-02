@@ -11,8 +11,8 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-#ifndef AAS_MW_LOG_LEGACY_NON_VERBOSE_API_TRACING_H_
-#define AAS_MW_LOG_LEGACY_NON_VERBOSE_API_TRACING_H_
+#ifndef SCORE_MW_LOG_LEGACY_NON_VERBOSE_API_TRACING_H
+#define SCORE_MW_LOG_LEGACY_NON_VERBOSE_API_TRACING_H
 
 /// \file This file contains the legacy API for non-verbose logging.
 /// We only keep this file for legacy compatibility reasons.
@@ -38,8 +38,8 @@ Justification:
 - type alias used
 */
 // coverity[autosar_cpp14_a7_3_1_violation]
-using timestamp_t = score::os::HighResolutionSteadyClock::time_point;
-using msgsize_t = uint16_t;
+using TimestampT = score::os::HighResolutionSteadyClock::time_point;
+using MsgsizeT = uint16_t;
 
 enum class LogLevel : uint8_t
 {
@@ -52,16 +52,16 @@ enum class LogLevel : uint8_t
     kVerbose = 0x06
 };
 
-class logger
+class Logger
 {
   public:
     using AppPrefix = std::array<char, score::mw::log::detail::LoggingIdentifier::kMaxLength * 3UL>;
 
-    static logger& instance(const score::cpp::optional<const score::mw::log::detail::Configuration>& config = score::cpp::nullopt,
+    static Logger& Instance(const score::cpp::optional<const score::mw::log::detail::Configuration>& config = score::cpp::nullopt,
                             std::optional<score::mw::log::NvConfig> nv_config = std::nullopt,
                             score::cpp::optional<score::mw::log::detail::SharedMemoryWriter> = score::cpp::nullopt) noexcept;
 
-    explicit logger(const score::cpp::optional<const score::mw::log::detail::Configuration>& config,
+    explicit Logger(const score::cpp::optional<const score::mw::log::detail::Configuration>& config,
                     std::optional<score::mw::log::NvConfig> nv_config,
                     score::cpp::optional<score::mw::log::detail::SharedMemoryWriter>&&) noexcept;
 
@@ -71,7 +71,7 @@ class logger
         class TypeinfoWithPrefix
         {
           public:
-            explicit TypeinfoWithPrefix(const AppPrefix& appPref) : appPrefix_(appPref) {}
+            explicit TypeinfoWithPrefix(const AppPrefix& app_pref) : app_prefix_(app_pref) {}
             std::size_t size() const
             {
                 // LCOV_EXCL_START
@@ -81,34 +81,34 @@ class logger
                 // as large as std::numeric_limits<size_t>::max() due to memory limitations. Hence this
                 // block is excluded from LCOV.
                 if (::score::common::visitor::logger_type_info<T>().size() >
-                    std::numeric_limits<size_t>::max() - appPrefix_.size())
+                    std::numeric_limits<size_t>::max() - app_prefix_.size())
                 {
                     // If an overflow were to happen, then its safe to return
                     // maxpayload size and appPrefixsize.
-                    return appPrefix_.size() + score::mw::log::detail::SharedMemoryWriter::GetMaxPayloadSize();
+                    return app_prefix_.size() + score::mw::log::detail::SharedMemoryWriter::GetMaxPayloadSize();
                 }
                 // LCOV_EXCL_STOP
 
-                return appPrefix_.size() + ::score::common::visitor::logger_type_info<T>().size();
+                return app_prefix_.size() + ::score::common::visitor::logger_type_info<T>().size();
             }
             void Copy(score::cpp::span<score::mw::log::detail::Byte> data) const
             {
-                std::ignore = std::copy(appPrefix_.cbegin(), appPrefix_.cend(), data.begin());
+                std::ignore = std::copy(app_prefix_.cbegin(), app_prefix_.cend(), data.begin());
                 // The following condition should be always true
-                if (data.size() >= appPrefix_.size())  // LCOV_EXCL_BR_LINE : see above
+                if (data.size() >= app_prefix_.size())  // LCOV_EXCL_BR_LINE : see above
                 {
-                    const auto sub_data = data.subspan(appPrefix_.size());
+                    const auto sub_data = data.subspan(app_prefix_.size());
                     ::score::common::visitor::logger_type_info<T>().copy(sub_data.data(), sub_data.size());
                 }
             }
 
           private:
-            const AppPrefix& appPrefix_;
+            const AppPrefix& app_prefix_;
         };
 
         if (shared_memory_writer_.has_value())
         {
-            auto id = shared_memory_writer_.value().TryRegisterType(TypeinfoWithPrefix(appPrefix));
+            auto id = shared_memory_writer_.value().TryRegisterType(TypeinfoWithPrefix(app_prefix_));
             if (true == id.has_value())
             {
                 return static_cast<score::mw::log::detail::TypeIdentifier>(id.value());
@@ -119,7 +119,7 @@ class logger
     }
 
     template <typename T>
-    LogLevel get_type_level() const
+    LogLevel GetTypeLevel() const
     {
         auto log_level = LogLevel::kInfo;
         const score::mw::log::config::NvMsgDescriptor* const msg_desc =
@@ -140,20 +140,20 @@ class logger
     }
 
     template <typename T>
-    LogLevel get_type_threshold() const noexcept
+    LogLevel GetTypeThreshold() const noexcept
     {
         return GetLevelForContext(::score::common::visitor::struct_visitable<T>::name()).value_or(LogLevel::kVerbose);
     }
 
     score::mw::log::detail::SharedMemoryWriter& GetSharedMemoryWriter();
 
-    const score::mw::log::detail::Configuration& get_config() const;
+    const score::mw::log::detail::Configuration& GetConfig() const;
 
     /// \brief Only for testing to inject an instance to intercept and check the behavior.
-    static void InjectTestInstance(logger* const logger_ptr);
+    static void InjectTestInstance(Logger* const logger_ptr);
 
   private:
-    static logger** GetInjectedTestInstance();
+    static Logger** GetInjectedTestInstance();
     std::optional<LogLevel> GetLevelForContext(const std::string& name) const noexcept;
 
     score::mw::log::detail::Configuration config_;
@@ -161,24 +161,24 @@ class logger
     score::cpp::optional<score::mw::log::detail::SharedMemoryWriter> shared_memory_writer_;
     score::mw::log::detail::SharedData discard_operation_fallback_shm_data_;
     score::mw::log::detail::SharedMemoryWriter discard_operation_fallback_shm_writer_;
-    AppPrefix appPrefix;
+    AppPrefix app_prefix_;
 };
 
 template <typename T>
-class log_entry
+class LogEntry
 {
   public:
-    static log_entry& instance() noexcept
+    static LogEntry& Instance() noexcept
     {
         // It's a singleton by design hence cannot be made const
         // coverity[autosar_cpp14_a3_3_2_violation]
-        static log_entry entry{};
+        static LogEntry entry{};
         return entry;
     }
 
     std::optional<score::mw::log::detail::TypeIdentifier> RegisterTypeGetId() noexcept
     {
-        const auto registered_id = logger::instance().RegisterType<T>();
+        const auto registered_id = Logger::Instance().RegisterType<T>();
 
         // If registration failed, return empty optional
         if (!registered_id.has_value())
@@ -238,7 +238,7 @@ class log_entry
             if (!RegisterTypeGetId().has_value())
             {
                 dropped_logs_due_to_failed_registration_.fetch_add(1U, std::memory_order_relaxed);
-                logger::instance().GetSharedMemoryWriter().IncrementTypeRegistrationFailures();
+                Logger::Instance().GetSharedMemoryWriter().IncrementTypeRegistrationFailures();
                 return;
             }
         }
@@ -248,48 +248,48 @@ class log_entry
     void TryWriteIntoSharedMemory(const T& t) noexcept
     {
         TrySerializeIntoSharedMemory([&t, this]() noexcept {
-            using s = ::score::common::visitor::logging_serializer;
-            logger::instance().GetSharedMemoryWriter().AllocAndWrite(
+            using S = ::score::common::visitor::logging_serializer;
+            Logger::Instance().GetSharedMemoryWriter().AllocAndWrite(
                 [&t](const auto data_span) {
-                    return s::serialize(t, data_span.data(), data_span.size());
+                    return S::serialize(t, data_span.data(), data_span.size());
                 },
                 shared_memory_id_,
-                static_cast<uint64_t>(s::serialize_size(t)));
+                static_cast<uint64_t>(S::serialize_size(t)));
         });
     }
 
     /// \public
     /// \thread-safe
-    void log_at_time(timestamp_t timestamp, const T& t)
+    void LogAtTime(TimestampT timestamp, const T& t)
     {
         TrySerializeIntoSharedMemory([&timestamp, &t, this]() {
-            using s = ::score::common::visitor::logging_serializer;
-            logger::instance().GetSharedMemoryWriter().AllocAndWrite(
-                timestamp, shared_memory_id_, s::serialize_size(t), [&t](const auto data_span) {
-                    return s::serialize(t, data_span.data(), data_span.size());
+            using S = ::score::common::visitor::logging_serializer;
+            Logger::Instance().GetSharedMemoryWriter().AllocAndWrite(
+                timestamp, shared_memory_id_, S::serialize_size(t), [&t](const auto data_span) {
+                    return S::serialize(t, data_span.data(), data_span.size());
                 });
         });
     }
 
     static LogLevel GetThresholdForInit() noexcept
     {
-        return logger::instance().get_type_threshold<T>();
+        return Logger::Instance().GetTypeThreshold<T>();
     }
 
     static bool GetDefaultEnabledForInit() noexcept
     {
-        const auto threshold = logger::instance().get_type_threshold<T>();
-        const auto level = logger::instance().get_type_level<T>();
+        const auto threshold = Logger::Instance().GetTypeThreshold<T>();
+        const auto level = Logger::Instance().GetTypeLevel<T>();
         return threshold >= level;
     }
 
     static score::mw::log::detail::TypeIdentifier GetInitialTypeId() noexcept
     {
-        const auto registered_id = logger::instance().RegisterType<T>();
+        const auto registered_id = Logger::Instance().RegisterType<T>();
         return registered_id.value_or(score::mw::log::detail::GetRegisterTypeToken());
     }
 
-    log_entry() noexcept
+    LogEntry() noexcept
         : recorder_{score::mw::log::detail::Runtime::GetRecorder()},
           shared_memory_id_{GetInitialTypeId()},
           default_enabled_{GetDefaultEnabledForInit()},
@@ -305,10 +305,10 @@ class log_entry
 
     /// \public
     /// \thread-safe
-    void log_serialized(const char* data, const msgsize_t size)
+    void LogSerialized(const char* data, const MsgsizeT size)
     {
         TrySerializeIntoSharedMemory([&data, &size, this]() {
-            logger::instance().GetSharedMemoryWriter().AllocAndWrite(
+            Logger::Instance().GetSharedMemoryWriter().AllocAndWrite(
                 [&data, &size](const auto data_span) {
                     const auto data_pointer = data_span.data();
                     std::ignore = std::copy_n(data, size, data_pointer);
@@ -321,14 +321,14 @@ class log_entry
 
     /// \public
     /// \thread-safe
-    bool enabled() const
+    bool Enabled() const
     {
         return default_enabled_;
     }
 
     /// \public
     /// \thread-safe
-    bool enabled_at(LogLevel level) const
+    bool EnabledAt(LogLevel level) const
     {
         return level_enabled_ >= level;
     }
@@ -336,7 +336,7 @@ class log_entry
     /// \public
     /// \thread-safe
     /// \brief Returns the number of log entries dropped due to failed type registration
-    std::uint64_t get_dropped_logs_count() const noexcept
+    std::uint64_t GetDroppedLogsCount() const noexcept
     {
         return dropped_logs_due_to_failed_registration_.load(std::memory_order_relaxed);
     }
@@ -357,10 +357,10 @@ class log_entry
 template <typename T>
 // Defined in global namespace, because it is global function, used in many files in different namespaces.
 // coverity[autosar_cpp14_m7_3_1_violation]
-inline auto& LOG_ENTRY()
+inline auto& GetLogEntry()
 {
     using DecayedType = std::decay_t<T>;
-    return score::platform::log_entry<DecayedType>::instance();
+    return score::platform::LogEntry<DecayedType>::Instance();
 }
 
 /// \public
@@ -368,10 +368,10 @@ inline auto& LOG_ENTRY()
 template <typename T>
 // Defined in global namespace, because it is global function, used in many files in different namespaces.
 // coverity[autosar_cpp14_m7_3_1_violation]
-inline void TRACE_LEVEL(score::platform::LogLevel level, const T& arg)
+inline void TraceLevel(score::platform::LogLevel level, const T& arg)
 {
-    auto& logger = LOG_ENTRY<T>();
-    if (logger.enabled_at(level))
+    auto& logger = GetLogEntry<T>();
+    if (logger.EnabledAt(level))
     {
         logger.TryWriteIntoSharedMemory(arg);
     }
@@ -382,10 +382,10 @@ inline void TRACE_LEVEL(score::platform::LogLevel level, const T& arg)
 template <typename T>
 // Defined in global namespace, because it is global function, used in many files in different namespaces.
 // coverity[autosar_cpp14_m7_3_1_violation]
-inline void LOG_INTERNAL_LOGGER(const T& arg)
+inline void LogInternalLogger(const T& arg)
 {
-    auto& logger = LOG_ENTRY<T>();
-    if (logger.enabled())
+    auto& logger = GetLogEntry<T>();
+    if (logger.Enabled())
     {
         logger.TryWriteIntoSharedMemory(arg);
     }
@@ -398,7 +398,7 @@ template <typename T>
 // coverity[autosar_cpp14_m7_3_1_violation]
 inline void TRACE(const T& arg)
 {
-    LOG_INTERNAL_LOGGER(arg);
+    LogInternalLogger(arg);
 }
 
 /// \public
@@ -406,9 +406,9 @@ inline void TRACE(const T& arg)
 template <typename T>
 // Defined in global namespace, because it is global function, used in many files in different namespaces.
 // coverity[autosar_cpp14_m7_3_1_violation]
-inline void TRACE_VERBOSE(const T& arg)
+inline void TraceVerbose(const T& arg)
 {
-    TRACE_LEVEL(score::platform::LogLevel::kVerbose, arg);
+    TraceLevel(score::platform::LogLevel::kVerbose, arg);
 }
 
 /// \public
@@ -416,9 +416,9 @@ inline void TRACE_VERBOSE(const T& arg)
 template <typename T>
 // Defined in global namespace, because it is global function, used in many files in different namespaces.
 // coverity[autosar_cpp14_m7_3_1_violation]
-inline void TRACE_DEBUG(const T& arg)
+inline void TraceDebug(const T& arg)
 {
-    TRACE_LEVEL(score::platform::LogLevel::kDebug, arg);
+    TraceLevel(score::platform::LogLevel::kDebug, arg);
 }
 
 /// \public
@@ -426,9 +426,9 @@ inline void TRACE_DEBUG(const T& arg)
 template <typename T>
 // Defined in global namespace, because it is global function, used in many files in different namespaces.
 // coverity[autosar_cpp14_m7_3_1_violation]
-inline void TRACE_INFO(const T& arg)
+inline void TraceInfo(const T& arg)
 {
-    TRACE_LEVEL(score::platform::LogLevel::kInfo, arg);
+    TraceLevel(score::platform::LogLevel::kInfo, arg);
 }
 
 /// \public
@@ -436,9 +436,9 @@ inline void TRACE_INFO(const T& arg)
 template <typename T>
 // Defined in global namespace, because it is global function, used in many files in different namespaces.
 // coverity[autosar_cpp14_m7_3_1_violation]
-inline void TRACE_WARNING(const T& arg)
+inline void TraceWarning(const T& arg)
 {
-    TRACE_LEVEL(score::platform::LogLevel::kWarn, arg);
+    TraceLevel(score::platform::LogLevel::kWarn, arg);
 }
 
 /// \public
@@ -446,9 +446,9 @@ inline void TRACE_WARNING(const T& arg)
 template <typename T>
 // Defined in global namespace, because it is global function, used in many files in different namespaces.
 // coverity[autosar_cpp14_m7_3_1_violation]
-inline void TRACE_ERROR(const T& arg)
+inline void TraceError(const T& arg)
 {
-    TRACE_LEVEL(score::platform::LogLevel::kError, arg);
+    TraceLevel(score::platform::LogLevel::kError, arg);
 }
 
 /// \public
@@ -456,9 +456,9 @@ inline void TRACE_ERROR(const T& arg)
 template <typename T>
 // Defined in global namespace, because it is global function, used in many files in different namespaces.
 // coverity[autosar_cpp14_m7_3_1_violation]
-inline void TRACE_FATAL(const T& arg)
+inline void TraceFatal(const T& arg)
 {
-    TRACE_LEVEL(score::platform::LogLevel::kFatal, arg);
+    TraceLevel(score::platform::LogLevel::kFatal, arg);
 }
 
 /// \public
@@ -466,9 +466,9 @@ inline void TRACE_FATAL(const T& arg)
 template <typename T>
 // Defined in global namespace, because it is global function, used in many files in different namespaces.
 // coverity[autosar_cpp14_m7_3_1_violation]
-inline void TRACE_WARN(const T& arg)
+inline void TraceWarn(const T& arg)
 {
-    TRACE_LEVEL(score::platform::LogLevel::kWarn, arg);
+    TraceLevel(score::platform::LogLevel::kWarn, arg);
 }
 
 /// \public
@@ -477,4 +477,4 @@ inline void TRACE_WARN(const T& arg)
 // coverity[autosar_cpp14_a16_0_1_violation]
 #define STRUCT_TRACEABLE(...) STRUCT_VISITABLE(__VA_ARGS__)
 
-#endif  // AAS_MW_LOG_LEGACY_NON_VERBOSE_API_TRACING_H_
+#endif  // SCORE_MW_LOG_LEGACY_NON_VERBOSE_API_TRACING_H

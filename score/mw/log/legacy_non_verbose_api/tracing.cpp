@@ -33,7 +33,7 @@ exception is covered by SCORE_LANGUAGE_FUTURECPP_ASSERT_PRD() macro and function
 so suppressing this warning
 */
 // coverity[autosar_cpp14_a15_5_3_violation]
-logger::logger(const score::cpp::optional<const score::mw::log::detail::Configuration>& config,
+Logger::Logger(const score::cpp::optional<const score::mw::log::detail::Configuration>& config,
                std::optional<score::mw::log::NvConfig> nv_config,
                score::cpp::optional<score::mw::log::detail::SharedMemoryWriter>&& writer) noexcept
     : config_(config.has_value() ? config.value() : score::mw::log::detail::Configuration()),
@@ -45,7 +45,7 @@ logger::logger(const score::cpp::optional<const score::mw::log::detail::Configur
       discard_operation_fallback_shm_data_{},
       discard_operation_fallback_shm_writer_{InitializeSharedData(discard_operation_fallback_shm_data_),
                                              []() noexcept {}},
-      appPrefix{}
+      app_prefix_{}
 {
     /*
     Deviation from Rule A18-9-2:
@@ -60,23 +60,23 @@ logger::logger(const score::cpp::optional<const score::mw::log::detail::Configur
         // coverity[autosar_cpp14_a18_9_2_violation] see above
         std::ignore = shared_memory_writer_.emplace(std::move(writer.value()));
     }
-    constexpr auto idsize = score::mw::log::detail::LoggingIdentifier::kMaxLength;
-    std::fill(appPrefix.begin(), appPrefix.end(), 0);
-    auto appPrefixIter = appPrefix.begin();
-    static_assert(idsize < static_cast<std::size_t>(std::numeric_limits<int32_t>::max()), "Unsupported length!");
-    std::advance(appPrefixIter, static_cast<int32_t>(idsize));
-    appPrefixIter = std::copy(config_.GetEcuId().begin(), config_.GetEcuId().end(), appPrefixIter);
-    std::ignore = std::copy(config_.GetAppId().begin(), config_.GetAppId().end(), appPrefixIter);
+    constexpr auto kIdsize = score::mw::log::detail::LoggingIdentifier::kMaxLength;
+    std::fill(app_prefix_.begin(), app_prefix_.end(), 0);
+    auto* app_prefix_iter = app_prefix_.begin();
+    static_assert(kIdsize < static_cast<std::size_t>(std::numeric_limits<int32_t>::max()), "Unsupported length!");
+    std::advance(app_prefix_iter, static_cast<int32_t>(kIdsize));
+    app_prefix_iter = std::copy(config_.GetEcuId().begin(), config_.GetEcuId().end(), app_prefix_iter);
+    std::ignore = std::copy(config_.GetAppId().begin(), config_.GetAppId().end(), app_prefix_iter);
 }
 
-std::optional<LogLevel> logger::GetLevelForContext(const std::string& name) const noexcept
+std::optional<LogLevel> Logger::GetLevelForContext(const std::string& name) const noexcept
 {
     const score::mw::log::config::NvMsgDescriptor* const msg_desc = nvconfig_.GetDltMsgDesc(name);
     if (msg_desc != nullptr)
     {
-        const auto ctxId = msg_desc->GetCtxId();
+        const auto ctx_id = msg_desc->GetCtxId();
         const auto context_log_level_map = config_.GetContextLogLevel();
-        const auto context = context_log_level_map.find(ctxId);
+        const auto context = context_log_level_map.find(ctx_id);
         if (context != context_log_level_map.end())
         {
             return static_cast<LogLevel>(context->second);
@@ -85,7 +85,7 @@ std::optional<LogLevel> logger::GetLevelForContext(const std::string& name) cons
     return std::nullopt;
 }
 
-logger& logger::instance(const score::cpp::optional<const score::mw::log::detail::Configuration>& config,
+Logger& Logger::Instance(const score::cpp::optional<const score::mw::log::detail::Configuration>& config,
                          std::optional<score::mw::log::NvConfig> nv_config,
                          score::cpp::optional<score::mw::log::detail::SharedMemoryWriter> writer) noexcept
 {
@@ -95,27 +95,27 @@ logger& logger::instance(const score::cpp::optional<const score::mw::log::detail
     }
     // It's a singleton by design hence cannot be made const
     // coverity[autosar_cpp14_a3_3_2_violation]
-    static logger logger_instance{config, std::move(nv_config), std::move(writer)};
+    static Logger logger_instance{config, std::move(nv_config), std::move(writer)};
     return logger_instance;
 }
 
-logger** logger::GetInjectedTestInstance()
+Logger** Logger::GetInjectedTestInstance()
 {
-    static logger* pointer{nullptr};
+    static Logger* pointer{nullptr};
     return &pointer;
 }
 
-void logger::InjectTestInstance(logger* const logger_ptr)
+void Logger::InjectTestInstance(Logger* const logger_ptr)
 {
     *GetInjectedTestInstance() = logger_ptr;
 }
 
-const score::mw::log::detail::Configuration& logger::get_config() const
+const score::mw::log::detail::Configuration& Logger::GetConfig() const
 {
     return config_;
 }
 
-score::mw::log::detail::SharedMemoryWriter& logger::GetSharedMemoryWriter()
+score::mw::log::detail::SharedMemoryWriter& Logger::GetSharedMemoryWriter()
 {
     if (shared_memory_writer_.has_value())
     {
