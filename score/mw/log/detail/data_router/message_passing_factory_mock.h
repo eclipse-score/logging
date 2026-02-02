@@ -30,22 +30,16 @@ namespace detail
 class MessagePassingFactoryMock : public MessagePassingFactory
 {
   public:
-    MOCK_METHOD((score::cpp::pmr::unique_ptr<score::mw::com::message_passing::IReceiver>),
-                CreateReceiver,
-                (const std::string_view,
-                 concurrency::Executor&,
-                 const score::cpp::span<const uid_t>,
-                 const score::mw::com::message_passing::ReceiverConfig&,
-                 score::cpp::pmr::memory_resource*),
+    MOCK_METHOD((score::cpp::pmr::unique_ptr<score::message_passing::IServer>),
+                CreateServer,
+                (const score::message_passing::ServiceProtocolConfig& protocol_config,
+                 const score::message_passing::IServerFactory::ServerConfig& server_config),
                 (override));
 
-    MOCK_METHOD((score::cpp::pmr::unique_ptr<score::mw::com::message_passing::ISender>),
-                CreateSender,
-                (const std::string_view identifier,
-                 const score::cpp::stop_token& token,
-                 const score::mw::com::message_passing::SenderConfig& sender_config,
-                 score::mw::com::message_passing::LoggingCallback callback,
-                 score::cpp::pmr::memory_resource* memory_resource),
+    MOCK_METHOD((score::cpp::pmr::unique_ptr<score::message_passing::IClientConnection>),
+                CreateClient,
+                (const score::message_passing::ServiceProtocolConfig& protocol_config,
+                 const score::message_passing::IClientFactory::ClientConfig& client_config),
                 (override));
 };
 

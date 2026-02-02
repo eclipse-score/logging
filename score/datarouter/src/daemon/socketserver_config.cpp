@@ -196,7 +196,7 @@ score::logging::dltserver::PersistentConfig readDlt(IPersistentDictionary& pd)
     using rapidjson::ParseResult;
     score::logging::dltserver::PersistentConfig config{};
 
-    const std::string json = pd.getString(CONFIG_DATABASE_KEY, "{}");
+    const std::string json = pd.GetString(CONFIG_DATABASE_KEY, "{}");
 
     Document d = createRJDocument();
     ParseResult ok = d.Parse(json.c_str());
@@ -332,12 +332,12 @@ void writeDlt(const score::logging::dltserver::PersistentConfig& config, IPersis
     d.Accept(writer);
 
     const std::string json = buffer.GetString();
-    pd.setString(CONFIG_DATABASE_KEY, json);
+    pd.SetString(CONFIG_DATABASE_KEY, json);
 }
 
 bool readDltEnabled(IPersistentDictionary& pd)
 {
-    const bool enabled = pd.getBool(CONFIG_OUTPUT_ENABLED_KEY, true);
+    const bool enabled = pd.GetBool(CONFIG_OUTPUT_ENABLED_KEY, true);
     if constexpr (kPersistentConfigFeatureEnabled)
     {
         std::cout << "Loaded output enable = " << enabled << " from KVS" << std::endl;
@@ -347,7 +347,7 @@ bool readDltEnabled(IPersistentDictionary& pd)
 
 void writeDltEnabled(bool enabled, IPersistentDictionary& pd)
 {
-    pd.setBool(CONFIG_OUTPUT_ENABLED_KEY, enabled);
+    pd.SetBool(CONFIG_OUTPUT_ENABLED_KEY, enabled);
 }
 
 }  // namespace datarouter

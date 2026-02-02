@@ -30,7 +30,7 @@ namespace logging
 namespace dltserver
 {
 
-void DltLogServer::sendNonVerbose(const score::mw::log::config::NvMsgDescriptor& desc,
+void DltLogServer::SendNonVerbose(const score::mw::log::config::NvMsgDescriptor& desc,
                                   uint32_t tmsp,
                                   const void* data,
                                   size_t size)

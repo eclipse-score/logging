@@ -13,8 +13,16 @@
 
 load("@rules_cc//cc:defs.bzl", "cc_library")
 
+COMPILER_WARNING_FEATURES = [
+    "treat_warnings_as_errors",
+    "additional_warnings",
+    "strict_warnings",
+]
+
 cc_library(
     name = "log",
+    features = COMPILER_WARNING_FEATURES,
+    tags = ["FFI"],
     visibility = ["//visibility:public"],
     deps = [
         "//score/mw/log/detail/common:recorder_factory",

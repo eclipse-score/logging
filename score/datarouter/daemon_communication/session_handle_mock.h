@@ -24,7 +24,7 @@ namespace score::platform::internal::daemon::mock
 class SessionHandleMock : public score::platform::internal::daemon::ISessionHandle
 {
   public:
-    MOCK_METHOD(void, AcquireRequest, (), (const, override));
+    MOCK_METHOD(bool, AcquireRequest, (), (const, override));
 };
 
 }  // namespace score::platform::internal::daemon::mock

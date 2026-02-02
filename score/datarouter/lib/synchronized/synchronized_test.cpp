@@ -26,7 +26,7 @@ struct TestStruct
 {
     int value;
 
-    int sum() const
+    int Sum() const
     {
         return value + 50;
     }
@@ -69,11 +69,11 @@ struct ParameterizedObject
 
     ParameterizedObject(int x_val, int y_val, const std::string& n) : x(x_val), y(y_val), name(n) {}
 
-    int sum() const
+    int Sum() const
     {
         return x + y;
     }
-    const std::string& get_name() const
+    const std::string& GetName() const
     {
         return name;
     }
@@ -87,16 +87,16 @@ class SynchronizedUtilityTest : public ::testing::Test
     {
         Synchronized<int> sync_value(42);
 
-        int result = sync_value.with_lock([](const auto& value) noexcept {
+        int result = sync_value.WithLock([](const auto& value) noexcept {
             return value;
         });
         EXPECT_EQ(result, 42);
 
-        sync_value.with_lock([](auto& value) noexcept {
+        sync_value.WithLock([](auto& value) noexcept {
             value = 100;
         });
 
-        result = sync_value.with_lock([](const auto& value) noexcept {
+        result = sync_value.WithLock([](const auto& value) noexcept {
             return value;
         });
         EXPECT_EQ(result, 100);
@@ -123,7 +123,7 @@ TEST_F(SynchronizedUtilityTest, TestThreadSafety)
         threads.push_back(std::thread([&counter]() noexcept {
             for (int j = 0; j < increments_per_thread; ++j)
             {
-                counter.with_lock([](auto& value) noexcept {
+                counter.WithLock([](auto& value) noexcept {
                     ++value;
                 });
             }
@@ -135,7 +135,7 @@ TEST_F(SynchronizedUtilityTest, TestThreadSafety)
         thread.join();
     }
 
-    int result = counter.with_lock([](auto& value) noexcept {
+    int result = counter.WithLock([](auto& value) noexcept {
         return value;
     });
 
@@ -153,7 +153,7 @@ TEST_F(SynchronizedUtilityTest, LockMethodBasic)
         EXPECT_EQ(*locked_ptr, 100);
     }
 
-    sync_int.with_lock([](int& value) {
+    sync_int.WithLock([](int& value) {
         EXPECT_EQ(value, 100);
     });
 }
@@ -172,7 +172,7 @@ TEST_F(SynchronizedUtilityTest, TestStructLockReturnValue)
         EXPECT_EQ(locked_ptr->value, 100);
 
         EXPECT_EQ((*locked_ptr).value, 100);
-        EXPECT_EQ((*locked_ptr).sum(), 150);
+        EXPECT_EQ((*locked_ptr).Sum(), 150);
     }
 }
 
@@ -185,10 +185,10 @@ TEST_F(SynchronizedUtilityTest, TestStructConstLockBehavior)
         EXPECT_EQ(const_locked_ptr->value, 42);
         // const_locked_ptr->value = 100;  // Should not compile
         EXPECT_EQ((*const_locked_ptr).value, 42);
-        EXPECT_EQ((*const_locked_ptr).sum(), 92);
+        EXPECT_EQ((*const_locked_ptr).Sum(), 92);
     }
 
-    const_sync_struct.with_lock([](const TestStruct& s) noexcept {
+    const_sync_struct.WithLock([](const TestStruct& s) noexcept {
         EXPECT_EQ(s.value, 42);
     });
 }
@@ -197,20 +197,20 @@ TEST_F(SynchronizedUtilityTest, TestStructWithLockVariations)
 {
     Synchronized<TestStruct> sync_struct(TestStruct{42});
 
-    sync_struct.with_lock([](TestStruct& s) noexcept {
+    sync_struct.WithLock([](TestStruct& s) noexcept {
         s.value = 100;
     });
 
-    int result = sync_struct.with_lock([](const TestStruct& s) noexcept {
+    int result = sync_struct.WithLock([](const TestStruct& s) noexcept {
         return s.value;
     });
     EXPECT_EQ(result, 100);
 
-    sync_struct.with_lock([](TestStruct& s) noexcept {
+    sync_struct.WithLock([](TestStruct& s) noexcept {
         s.value = s.value * 2;
     });
 
-    result = sync_struct.with_lock([](const TestStruct& s) noexcept {
+    result = sync_struct.WithLock([](const TestStruct& s) noexcept {
         return s.value;
     });
     EXPECT_EQ(result, 200);
@@ -220,7 +220,7 @@ TEST_F(SynchronizedUtilityTest, TestStructMemberFunctionPointers)
 {
     Synchronized<TestStruct> sync_struct(TestStruct{42});
 
-    auto result = sync_struct.with_lock([](const TestStruct& s) noexcept {
+    auto result = sync_struct.WithLock([](const TestStruct& s) noexcept {
         return s.value;
     });
     EXPECT_EQ(result, 42);
@@ -234,9 +234,9 @@ TEST_F(SynchronizedUtilityTest, TestStructFreeFunctionPointers)
         s.value = 999;
     };
 
-    sync_struct.with_lock(process_struct);
+    sync_struct.WithLock(process_struct);
 
-    auto result = sync_struct.with_lock([](const TestStruct& s) noexcept {
+    auto result = sync_struct.WithLock([](const TestStruct& s) noexcept {
         return s.value;
     });
     EXPECT_EQ(result, 999);
@@ -252,7 +252,7 @@ TEST_F(SynchronizedUtilityTest, TestStructLockNonConst)
         EXPECT_EQ(locked_ptr->value, 77);
     }
 
-    auto result = sync_struct.with_lock([](const TestStruct& s) noexcept {
+    auto result = sync_struct.WithLock([](const TestStruct& s) noexcept {
         return s.value;
     });
     EXPECT_EQ(result, 77);
@@ -268,7 +268,7 @@ TEST_F(SynchronizedUtilityTest, TestStructLockConst)
         // const_sync_struct->value = 100;  // Should not compile
     }
 
-    const_sync_struct.with_lock([](const TestStruct& s) noexcept {
+    const_sync_struct.WithLock([](const TestStruct& s) noexcept {
         EXPECT_EQ(s.value, 42);
     });
 }
@@ -280,22 +280,22 @@ TEST_F(SynchronizedUtilityTest, TestStructLambdaCaptureModes)
     int external_value = 10;
 
     // Test lambda with value capture
-    sync_struct.with_lock([external_value](TestStruct& s) noexcept {
+    sync_struct.WithLock([external_value](TestStruct& s) noexcept {
         s.value = external_value * 5;
     });
 
-    auto result = sync_struct.with_lock([](const TestStruct& s) noexcept {
+    auto result = sync_struct.WithLock([](const TestStruct& s) noexcept {
         return s.value;
     });
     EXPECT_EQ(result, 50);
 
     // Test lambda with reference capture
     int multiplier = 4;
-    sync_struct.with_lock([&multiplier](TestStruct& s) noexcept {
+    sync_struct.WithLock([&multiplier](TestStruct& s) noexcept {
         s.value = s.value * multiplier;
     });
 
-    result = sync_struct.with_lock([](const TestStruct& s) noexcept {
+    result = sync_struct.WithLock([](const TestStruct& s) noexcept {
         return s.value;
     });
     EXPECT_EQ(result, 200);
@@ -305,11 +305,11 @@ TEST_F(SynchronizedUtilityTest, TestStructVoidReturningLambdas)
 {
     Synchronized<TestStruct> sync_struct(TestStruct{42});
 
-    sync_struct.with_lock([](TestStruct& s) noexcept -> void {
+    sync_struct.WithLock([](TestStruct& s) noexcept -> void {
         s.value = 123;
     });
 
-    auto result = sync_struct.with_lock([](const TestStruct& s) noexcept {
+    auto result = sync_struct.WithLock([](const TestStruct& s) noexcept {
         return s.value;
     });
     EXPECT_EQ(result, 123);
@@ -319,7 +319,7 @@ TEST_F(SynchronizedUtilityTest, TestStructCopyVsMoveSemantics)
 {
     // Test construction from temporary (move semantics)
     Synchronized<TestStruct> sync_struct1(TestStruct{42});
-    auto val = sync_struct1.with_lock([](const TestStruct& s) noexcept {
+    auto val = sync_struct1.WithLock([](const TestStruct& s) noexcept {
         return s.value;
     });
     EXPECT_EQ(val, 42);
@@ -327,14 +327,14 @@ TEST_F(SynchronizedUtilityTest, TestStructCopyVsMoveSemantics)
     // Test construction from lvalue (copy semantics)
     TestStruct temp_struct{55};
     Synchronized<TestStruct> sync_struct2(temp_struct);
-    auto val1 = sync_struct2.with_lock([](const TestStruct& s) noexcept {
+    auto val1 = sync_struct2.WithLock([](const TestStruct& s) noexcept {
         return s.value;
     });
     EXPECT_EQ(val1, 55);
 
     // Test in-place construction
     Synchronized<TestStruct> sync_struct3(TestStruct{77});
-    auto val2 = sync_struct3.with_lock([](const TestStruct& s) noexcept {
+    auto val2 = sync_struct3.WithLock([](const TestStruct& s) noexcept {
         return s.value;
     });
     EXPECT_EQ(val2, 77);
@@ -345,16 +345,16 @@ TEST_F(SynchronizedUtilityTest, TestMoveOnlyObject)
 {
     Synchronized<MoveOnlyObject> sync_obj(150);
 
-    auto result = sync_obj.with_lock([](const auto& obj) noexcept {
+    auto result = sync_obj.WithLock([](const auto& obj) noexcept {
         return obj.value;
     });
     EXPECT_EQ(result, 150);
 
-    sync_obj.with_lock([](auto& obj) noexcept {
+    sync_obj.WithLock([](auto& obj) noexcept {
         obj.value = 300;
     });
 
-    auto val = sync_obj.with_lock([](const auto& obj) noexcept {
+    auto val = sync_obj.WithLock([](const auto& obj) noexcept {
         return obj.value;
     });
     EXPECT_EQ(val, 300);
@@ -365,16 +365,16 @@ TEST_F(SynchronizedUtilityTest, TestNoCopyNoMoveObject)
 {
     Synchronized<NoCopyNoMoveObject> sync_obj(250);
 
-    auto result = sync_obj.with_lock([](const auto& obj) noexcept {
+    auto result = sync_obj.WithLock([](const auto& obj) noexcept {
         return obj.value;
     });
     EXPECT_EQ(result, 250);
 
-    sync_obj.with_lock([](auto& obj) noexcept {
+    sync_obj.WithLock([](auto& obj) noexcept {
         obj.value = 500;
     });
 
-    auto val = sync_obj.with_lock([](const auto& obj) noexcept {
+    auto val = sync_obj.WithLock([](const auto& obj) noexcept {
         return obj.value;
     });
     EXPECT_EQ(val, 500);
@@ -385,16 +385,16 @@ TEST_F(SynchronizedUtilityTest, TestDefaultConstructedObject)
 {
     Synchronized<DefaultConstructibleObject> sync_obj{};
 
-    auto result = sync_obj.with_lock([](const auto& obj) noexcept {
+    auto result = sync_obj.WithLock([](const auto& obj) noexcept {
         return obj.value;
     });
     EXPECT_EQ(result, 42);
 
-    sync_obj.with_lock([](auto& obj) noexcept {
+    sync_obj.WithLock([](auto& obj) noexcept {
         obj.value = 100;
     });
 
-    auto val = sync_obj.with_lock([](const auto& obj) noexcept {
+    auto val = sync_obj.WithLock([](const auto& obj) noexcept {
         return obj.value;
     });
     EXPECT_EQ(val, 100);
@@ -405,23 +405,23 @@ TEST_F(SynchronizedUtilityTest, TestParameterizedConstruction)
 {
     Synchronized<ParameterizedObject> sync_obj(10, 20, "test_object");
 
-    auto result = sync_obj.with_lock([](const auto& obj) noexcept {
-        return obj.sum();
+    auto result = sync_obj.WithLock([](const auto& obj) noexcept {
+        return obj.Sum();
     });
     EXPECT_EQ(result, 30);
 
-    auto name = sync_obj.with_lock([](const auto& obj) noexcept {
-        return obj.get_name();
+    auto name = sync_obj.WithLock([](const auto& obj) noexcept {
+        return obj.GetName();
     });
     EXPECT_EQ(name, "test_object");
 
-    sync_obj.with_lock([](auto& obj) noexcept {
+    sync_obj.WithLock([](auto& obj) noexcept {
         obj.x = 15;
         obj.y = 25;
     });
 
-    result = sync_obj.with_lock([](const auto& obj) noexcept {
-        return obj.sum();
+    result = sync_obj.WithLock([](const auto& obj) noexcept {
+        return obj.Sum();
     });
     EXPECT_EQ(result, 40);
 }
@@ -430,7 +430,7 @@ TEST_F(SynchronizedUtilityTest, TestConstOperations)
 {
     const Synchronized<TestStruct> const_sync_struct(TestStruct{42});
 
-    auto result = const_sync_struct.with_lock([](const TestStruct& s) noexcept {
+    auto result = const_sync_struct.WithLock([](const TestStruct& s) noexcept {
         return s.value;
     });
     EXPECT_EQ(result, 42);
@@ -451,26 +451,26 @@ TEST_F(SynchronizedUtilityTest, LockAndWithLock)
         EXPECT_EQ(locked_ptr->value, 150);
     }
 
-    sync_struct.with_lock([](TestStruct& s) noexcept {
+    sync_struct.WithLock([](TestStruct& s) noexcept {
         s.value = 200;
     });
 
-    auto result = sync_struct.with_lock([](const TestStruct& s) {
-        return s.sum();
+    auto result = sync_struct.WithLock([](const TestStruct& s) {
+        return s.Sum();
     });
     EXPECT_EQ(result, 250);
-    auto val1 = sync_struct.with_lock([](const TestStruct& s) noexcept {
+    auto val1 = sync_struct.WithLock([](const TestStruct& s) noexcept {
         return s.value;
     });
     EXPECT_EQ(val1, 200);
 
     EXPECT_NO_THROW({
-        sync_struct.with_lock([](const TestStruct& s) noexcept {
+        sync_struct.WithLock([](const TestStruct& s) noexcept {
             EXPECT_EQ(s.value, 200);
         });
     });
 
-    auto val2 = sync_struct.with_lock([](const TestStruct& s) noexcept {
+    auto val2 = sync_struct.WithLock([](const TestStruct& s) noexcept {
         return s.value;
     });
     EXPECT_EQ(val2, 200);
@@ -480,26 +480,26 @@ TEST_F(SynchronizedUtilityTest, TestStructExceptionSafetyDetailed)
 {
     Synchronized<TestStruct> sync_struct(TestStruct{42});
 
-    sync_struct.with_lock([](TestStruct& s) noexcept {
+    sync_struct.WithLock([](TestStruct& s) noexcept {
         s.value = 100;
     });
 
     EXPECT_NO_THROW({
-        sync_struct.with_lock([](TestStruct& s) noexcept {
+        sync_struct.WithLock([](TestStruct& s) noexcept {
             s.value = 999;
             EXPECT_EQ(s.value, 999);
         });
     });
 
-    auto val = sync_struct.with_lock([](const TestStruct& s) noexcept {
+    auto val = sync_struct.WithLock([](const TestStruct& s) noexcept {
         return s.value;
     });
     EXPECT_EQ(val, 999);
 
-    sync_struct.with_lock([](TestStruct& s) noexcept {
+    sync_struct.WithLock([](TestStruct& s) noexcept {
         s.value = 200;
     });
-    auto val2 = sync_struct.with_lock([](const TestStruct& s) noexcept {
+    auto val2 = sync_struct.WithLock([](const TestStruct& s) noexcept {
         return s.value;
     });
     EXPECT_EQ(val2, 200);

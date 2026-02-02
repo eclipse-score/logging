@@ -70,7 +70,6 @@ cc_test(
         "@score_baselibs//score/os/mocklib:stdlib_mock",
         "@score_baselibs//score/os/mocklib:unistd_mock",
         "@score_baselibs//score/os/utils/mocklib:signal_mock",
-        "@score_communication//score/mw/com/message_passing:mock",
     ],
 )
 

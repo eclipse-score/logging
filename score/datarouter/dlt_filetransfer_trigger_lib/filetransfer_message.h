@@ -31,7 +31,7 @@ struct FileTransferEntry
     // Unavoidable use of of union type, in future dltit_t with LoggingIdentifier.
     // coverity[autosar_cpp14_a9_5_1_violation] see above
     score::platform::dltid_t ctxid{};
-    std::string file_name = "";
+    std::string file_name{};
     uint8_t delete_file = 0;
 };
 
