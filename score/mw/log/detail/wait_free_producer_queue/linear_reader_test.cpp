@@ -33,7 +33,7 @@ TEST(LinearReaderTests, LengthExceedingMaxThresholdShouldReturnEmpty)
     RecordProperty("TestingTechnique", "Requirements-based test");
     RecordProperty("DerivationTechnique", "Analysis of requirements");
 
-    constexpr auto kBufferSize = score::mw::log::detail::GetLengthOffsetBytes() * 2u;
+    constexpr auto kBufferSize = score::mw::log::detail::GetLengthOffsetBytes() * 2U;
     std::vector<score::mw::log::detail::Byte> buffer(kBufferSize);
     auto data = score::cpp::span<score::mw::log::detail::Byte>(buffer.data(),
                                                       static_cast<score::mw::log::detail::SpanLength>(buffer.size()));

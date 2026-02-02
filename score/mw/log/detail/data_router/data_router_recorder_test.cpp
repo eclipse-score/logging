@@ -139,7 +139,7 @@ class DataRouterRecorderFixture : public ::testing::Test
 
     void TearDown() override
     {
-        const auto& log_entry = log_record_.getLogEntry();
+        const auto& log_entry = log_record_.GetLogEntry();
         const auto config_app_id = config_.GetAppId();
         const auto log_entry_app_id = log_entry.app_id.GetStringView();
         EXPECT_EQ(config_app_id, log_entry_app_id);
@@ -168,7 +168,7 @@ TEST_F(DataRouterRecorderFixture, TooManyArgumentsWillYieldTruncatedLog)
     RecordProperty("TestType", "Interface test");
 
     constexpr std::size_t kTypeInfoByteSizeAccordingToSpecification = 4;
-    const std::size_t number_of_arguments = log_record_.getLogEntry().payload.capacity() /
+    const std::size_t number_of_arguments = log_record_.GetLogEntry().payload.capacity() /
                                             (kTypeInfoByteSizeAccordingToSpecification + sizeof(std::uint32_t));
     for (std::size_t i = 0; i < number_of_arguments + 5; ++i)
     {
@@ -186,7 +186,7 @@ TEST_F(DataRouterRecorderFixture, TooLargeSinglePayloadWillYieldTruncatedLog)
     RecordProperty("TestType", "Interface test");
     RecordProperty("DerivationTechnique", "Generation and analysis of equivalence classes");
 
-    const std::size_t too_big_data_size = log_record_.getLogEntry().payload.capacity() + 1UL;
+    const std::size_t too_big_data_size = log_record_.GetLogEntry().payload.capacity() + 1UL;
     std::vector<char> vec(too_big_data_size);
     std::fill(vec.begin(), vec.end(), 'o');
     recorder_->Log(SlotHandle{}, std::string_view{vec.data(), too_big_data_size});
@@ -442,8 +442,8 @@ TEST(DataRouterRecorderTests, DatarouterRecorderShouldClearSlotOnStart)
 
     // Expect that the previous data is cleared.
     recorder->StartRecord(kContext, kActiveLogLevel);
-    EXPECT_EQ(log_record.getVerbosePayload().GetSpan().size(), 0);
-    EXPECT_EQ(log_record.getLogEntry().num_of_args, 0);
+    EXPECT_EQ(log_record.GetVerbosePayload().GetSpan().size(), 0);
+    EXPECT_EQ(log_record.GetLogEntry().num_of_args, 0);
 }
 
 }  // namespace

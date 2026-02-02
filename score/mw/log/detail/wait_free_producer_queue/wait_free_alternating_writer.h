@@ -11,8 +11,8 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-#ifndef SCORE_MW_LOG_DETAIL_WAIT_FREE_ALTERNATING_WRITER_H
-#define SCORE_MW_LOG_DETAIL_WAIT_FREE_ALTERNATING_WRITER_H
+#ifndef SCORE_MW_LOG_DETAIL_WAIT_FREE_PRODUCER_QUEUE_WAIT_FREE_ALTERNATING_WRITER_H
+#define SCORE_MW_LOG_DETAIL_WAIT_FREE_PRODUCER_QUEUE_WAIT_FREE_ALTERNATING_WRITER_H
 
 #include "score/mw/log/detail/wait_free_producer_queue/alternating_control_block.h"
 #include "score/mw/log/detail/wait_free_producer_queue/wait_free_linear_writer.h"
@@ -76,4 +76,4 @@ class WaitFreeAlternatingWriter
 }  // namespace mw
 }  // namespace score
 
-#endif
+#endif  // SCORE_MW_LOG_DETAIL_WAIT_FREE_PRODUCER_QUEUE_WAIT_FREE_ALTERNATING_WRITER_H

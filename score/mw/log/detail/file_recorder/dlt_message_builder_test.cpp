@@ -47,7 +47,7 @@ class DltMessageBuilderFixture : public ::testing::Test
   public:
     void SetUp() override
     {
-        auto& log_entry = log_record_.getLogEntry();
+        auto& log_entry = log_record_.GetLogEntry();
 
         log_entry.app_id = LoggingIdentifier{"TMB"};
         log_entry.ctx_id = LoggingIdentifier{"CTX"};

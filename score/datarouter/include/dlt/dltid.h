@@ -59,7 +59,7 @@ struct DltidT
     {
         // Determine the length of the C-string stored in bytes,
         // but do not exceed the size of the array.
-        return std::string(bytes.data_.data(), bytes.data_.size());
+        return std::string(bytes.data.data(), bytes.data.size());
     }
 
     bool operator==(const DltidT& id) const
@@ -69,12 +69,12 @@ struct DltidT
 
     char* Data()
     {
-        return bytes.data_.data();
+        return bytes.data.data();
     }
 
     const char* Data() const
     {
-        return bytes.data_.data();
+        return bytes.data.data();
     }
 
     constexpr static size_t size()

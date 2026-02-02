@@ -274,9 +274,9 @@ score::mw::log::detail::AddArgumentResult Store(score::mw::log::detail::VerboseP
                 payload.Put(byte_view.data(), static_cast<std::size_t>(byte_view.size()));
             },
             data_for_payload...);
-        return score::mw::log::detail::AddArgumentResult::Added;
+        return score::mw::log::detail::AddArgumentResult::kAdded;
     }
-    return score::mw::log::detail::AddArgumentResult::NotAdded;
+    return score::mw::log::detail::AddArgumentResult::kNotAdded;
 }
 
 score::mw::log::detail::AddArgumentResult TryStore(score::mw::log::detail::VerbosePayload& payload,
@@ -322,7 +322,7 @@ score::mw::log::detail::AddArgumentResult LogData(score::mw::log::detail::Verbos
     //  LCOV_EXCL_START :we can't cover true case as type_length are constant in the calling funcion & can't control
     if ((type_info.Set(type_length).has_value() == false) || (type_info.Set(repr).has_value() == false))
     {
-        return score::mw::log::detail::AddArgumentResult::NotAdded;
+        return score::mw::log::detail::AddArgumentResult::kNotAdded;
         //  LCOV_EXCL_STOP
     }
 
@@ -347,7 +347,7 @@ AddArgumentResult DLTFormat::Log(VerbosePayload& payload, const bool data) noexc
     //  LCOV_EXCL_START : we can't cover true case as TypeLength and TypeInfo are constant and harded code
     if (type_info.Set(TypeLength::k8Bit).has_value() == false)
     {
-        return AddArgumentResult::NotAdded;
+        return AddArgumentResult::kNotAdded;
         //  LCOV_EXCL_STOP
     }
 
@@ -472,7 +472,7 @@ AddArgumentResult DLTFormat::Log(VerbosePayload& payload, const float data) noex
     //  LCOV_EXCL_START : we can't cover true case as TypeLength and TypeInfo are constant and harded code
     if (type_info.Set(TypeLength::k32Bit).has_value() == false)
     {
-        return AddArgumentResult::NotAdded;
+        return AddArgumentResult::kNotAdded;
         //  LCOV_EXCL_STOP
     }
 
@@ -487,7 +487,7 @@ AddArgumentResult DLTFormat::Log(VerbosePayload& payload, const double data) noe
     //  LCOV_EXCL_START : we can't cover true case as TypeLength and TypeInfo are constant and harded code
     if (type_info.Set(TypeLength::k64Bit).has_value() == false)
     {
-        return AddArgumentResult::NotAdded;
+        return AddArgumentResult::kNotAdded;
         //  LCOV_EXCL_STOP
     }
 
@@ -502,7 +502,7 @@ AddArgumentResult DLTFormat::Log(VerbosePayload& payload, const std::string_view
     //  LCOV_EXCL_START : we can't cover true case as TypeLength and TypeInfo are constant and harded code
     if (type_info.Set(StringEncoding::kUTF8).has_value() == false)
     {
-        return AddArgumentResult::NotAdded;
+        return AddArgumentResult::kNotAdded;
         //  LCOV_EXCL_STOP
     }
 
@@ -524,7 +524,7 @@ AddArgumentResult DLTFormat::Log(VerbosePayload& payload, const std::string_view
     if (payload.RemainingCapacity() <= kHeaderSize)
     {
         // No space left in buffer for payload.
-        return AddArgumentResult::NotAdded;
+        return AddArgumentResult::kNotAdded;
     }
 
     // Now figure out how many bytes we can store for the string (including null terminator).
@@ -559,7 +559,7 @@ AddArgumentResult DLTFormat::Log(VerbosePayload& payload, const LogRawBuffer dat
     if (payload.RemainingCapacity() <= kHeaderSize)
     {
         // No space left in buffer for payload.
-        return AddArgumentResult::NotAdded;
+        return AddArgumentResult::kNotAdded;
     }
 
     // Calculate how many bytes can remain for the raw buffer after the header.

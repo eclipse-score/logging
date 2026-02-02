@@ -11,8 +11,8 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-#ifndef SCORE_MW_LOG_DETAIL_WAIT_FREE_ALTERNATING_READER_PROXY_H
-#define SCORE_MW_LOG_DETAIL_WAIT_FREE_ALTERNATING_READER_PROXY_H
+#ifndef SCORE_MW_LOG_DETAIL_WAIT_FREE_PRODUCER_QUEUE_ALTERNATING_READER_PROXY_H
+#define SCORE_MW_LOG_DETAIL_WAIT_FREE_PRODUCER_QUEUE_ALTERNATING_READER_PROXY_H
 
 #include "score/mw/log/detail/wait_free_producer_queue/alternating_control_block.h"
 
@@ -83,4 +83,4 @@ class TerminatingBlockReference
 }  // namespace mw
 }  // namespace score
 
-#endif  //  SCORE_MW_LOG_DETAIL_WAIT_FREE_ALTERNATING_READER_PROXY_H
+#endif  // SCORE_MW_LOG_DETAIL_WAIT_FREE_PRODUCER_QUEUE_ALTERNATING_READER_PROXY_H

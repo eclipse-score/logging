@@ -36,8 +36,8 @@ template <typename T>
 inline void LogData(const SlotHandle& slot, detail::Backend& backend, const T data) noexcept
 {
     auto& log_record = backend.GetLogRecord(slot);
-    DltArgumentCounter counter{log_record.getLogEntry().num_of_args};
-    auto& payload = log_record.getVerbosePayload();
+    DltArgumentCounter counter{log_record.GetLogEntry().num_of_args};
+    auto& payload = log_record.GetVerbosePayload();
     std::ignore = counter.TryAddArgument([data, &payload]() {
         const auto result = DLTFormat::Log(payload, data);
         return result;
@@ -65,14 +65,14 @@ score::cpp::optional<SlotHandle> FileRecorder::StartRecord(const std::string_vie
     if (slot_handle.has_value())
     {
         auto& log_record = backend_->GetLogRecord(slot_handle.value());
-        auto& log_entry = log_record.getLogEntry();
+        auto& log_entry = log_record.GetLogEntry();
 
         const auto app_id = config_.GetAppId();
         log_entry.app_id = detail::LoggingIdentifier{app_id};
         log_entry.ctx_id = detail::LoggingIdentifier{context_id};
         log_entry.num_of_args = 0U;
         log_entry.log_level = log_level;
-        log_record.getVerbosePayload().Reset();
+        log_record.GetVerbosePayload().Reset();
     }
     return slot_handle;
 }

@@ -35,14 +35,14 @@ constexpr auto kStatisticsReportInterval = std::chrono::seconds{5};
 
 void CleanLogRecord(LogRecord& log_record) noexcept
 {
-    auto& log_entry = log_record.getLogEntry();
+    auto& log_entry = log_record.GetLogEntry();
     log_entry.num_of_args = 0U;
     log_entry.payload.clear();
 }
 
 void SetContext(LogRecord& log_record, const std::string_view context_id) noexcept
 {
-    auto& log_entry = log_record.getLogEntry();
+    auto& log_entry = log_record.GetLogEntry();
     log_entry.ctx_id = LoggingIdentifier{context_id};
 }
 
@@ -50,7 +50,7 @@ void SetLogLevel(LogRecord& log_record, const LogLevel level) noexcept
 {
     static_assert(std::is_same<std::underlying_type<LogLevel>::type, std::uint8_t>::value,
                   "LogLevel is not of expected type. Static cast will be invalid.");
-    log_record.getLogEntry().log_level = level;
+    log_record.GetLogEntry().log_level = level;
 }
 
 }  // namespace
@@ -100,10 +100,10 @@ template <typename T>
 void DataRouterRecorder::LogData(const SlotHandle& slot, const T data) noexcept
 {
     auto& log_record = backend_->GetLogRecord(slot);
-    DltArgumentCounter counter{log_record.getLogEntry().num_of_args};
+    DltArgumentCounter counter{log_record.GetLogEntry().num_of_args};
     std::ignore = counter.TryAddArgument([data, &log_record, this]() noexcept {
-        const auto result = DLTFormat::Log(log_record.getVerbosePayload(), data);
-        if (result == AddArgumentResult::NotAdded)
+        const auto result = DLTFormat::Log(log_record.GetVerbosePayload(), data);
+        if (result == AddArgumentResult::kNotAdded)
         {
             this->statistics_reporter_.IncrementMessageTooLong();
         }
@@ -223,7 +223,7 @@ void DataRouterRecorder::Log(const SlotHandle& slot, const LogSlog2Message data)
 
 void DataRouterRecorder::SetApplicationId(LogRecord& log_record) noexcept
 {
-    auto& log_entry = log_record.getLogEntry();
+    auto& log_entry = log_record.GetLogEntry();
     const auto app_id = config_.GetAppId();
     log_entry.app_id = LoggingIdentifier{app_id};
 }

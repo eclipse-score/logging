@@ -102,4 +102,4 @@ Length GetDataSizeAsLength(const score::cpp::span<Byte>& data) noexcept;
 }  // namespace mw
 }  // namespace score
 
-#endif
+#endif  // SCORE_MW_LOG_DETAIL_WAIT_FREE_PRODUCER_QUEUE_LINEAR_CONTROL_BLOCK_H

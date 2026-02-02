@@ -134,7 +134,7 @@ class FileRecorderFixture : public ::testing::Test
 
     void TearDown() override
     {
-        const auto& log_entry = log_record_.getLogEntry();
+        const auto& log_entry = log_record_.GetLogEntry();
         EXPECT_EQ(log_entry.ctx_id.GetStringView(), context_id_);
         EXPECT_EQ(log_entry.log_level, log_level_);
         EXPECT_EQ(log_entry.num_of_args, expected_number_of_arguments_at_teardown_);
@@ -161,7 +161,7 @@ TEST_F(FileRecorderFixture, TooManyArgumentsWillYieldTruncatedLog)
     RecordProperty("DerivationTechnique", "Analysis of requirements");
 
     constexpr std::size_t kTypeInfoByteSizeAccordingToSpecification = 4;
-    const std::size_t number_of_arguments = log_record_.getLogEntry().payload.capacity() /
+    const std::size_t number_of_arguments = log_record_.GetLogEntry().payload.capacity() /
                                             (kTypeInfoByteSizeAccordingToSpecification + sizeof(std::uint32_t));
     for (std::size_t i = 0; i < number_of_arguments + 5; ++i)
     {
@@ -180,7 +180,7 @@ TEST_F(FileRecorderFixture, TooLargeSinglePayloadWillYieldTruncatedLog)
     RecordProperty("TestingTechnique", "Requirements-based test");
     RecordProperty("DerivationTechnique", "Analysis of requirements");
 
-    const std::size_t too_big_data_size = log_record_.getLogEntry().payload.capacity() + 1UL;
+    const std::size_t too_big_data_size = log_record_.GetLogEntry().payload.capacity() + 1UL;
     std::vector<char> vec(too_big_data_size);
     std::fill(vec.begin(), vec.end(), 'o');
     recorder_->Log(SlotHandle{}, std::string_view{vec.data(), too_big_data_size});
@@ -455,8 +455,8 @@ TEST(FileRecorderTests, FileRecorderShouldClearSlotOnStart)
 
     // Expect that the previous data is cleared.
     recorder->StartRecord(kContext, kActiveLogLevel);
-    EXPECT_EQ(log_record.getVerbosePayload().GetSpan().size(), 0);
-    EXPECT_EQ(log_record.getLogEntry().num_of_args, 0);
+    EXPECT_EQ(log_record.GetVerbosePayload().GetSpan().size(), 0);
+    EXPECT_EQ(log_record.GetLogEntry().num_of_args, 0);
 }
 
 }  // namespace

@@ -147,7 +147,7 @@ void SlogBackend::FlushSlot(const SlotHandle& slot) noexcept
 {
     // static cast from std::uint8_t to std::size_t
     auto& log_entry =
-        buffer_.GetUnderlyingBufferFor(static_cast<std::size_t>(slot.GetSlotOfSelectedRecorder())).getLogEntry();
+        buffer_.GetUnderlyingBufferFor(static_cast<std::size_t>(slot.GetSlotOfSelectedRecorder())).GetLogEntry();
 
     constexpr std::size_t kMaxIdLength{4U};
 

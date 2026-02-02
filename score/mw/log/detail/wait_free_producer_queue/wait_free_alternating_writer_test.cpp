@@ -49,7 +49,7 @@ TEST(WaitFreeAlternatingWriterTests, WriteBufferFullShouldReturnExpectedData)
     RecordProperty("TestingTechnique", "Requirements-based test");
     RecordProperty("DerivationTechnique", "Analysis of requirements");
 
-    constexpr auto kBufferSize = 10u * 64u * 1024u;
+    constexpr auto kBufferSize = 10U * 64U * 1024U;
     std::vector<score::mw::log::detail::Byte> buffer_even(kBufferSize);
     std::vector<score::mw::log::detail::Byte> buffer_odd(kBufferSize);
     score::mw::log::detail::AlternatingControlBlock control_block{};
@@ -59,15 +59,15 @@ TEST(WaitFreeAlternatingWriterTests, WriteBufferFullShouldReturnExpectedData)
 
     score::mw::log::detail::WaitFreeAlternatingWriter writer{InitializeAlternatingControlBlock(control_block)};
 
-    const auto kNumberOfWriterThreads = std::thread::hardware_concurrency();
-    std::vector<std::thread> threads(kNumberOfWriterThreads);
+    const auto k_number_of_writer_threads = std::thread::hardware_concurrency();
+    std::vector<std::thread> threads(k_number_of_writer_threads);
 
-    const auto kAcquireLength = kBufferSize / kNumberOfWriterThreads;
+    const auto k_acquire_length = kBufferSize / k_number_of_writer_threads;
     constexpr auto kNumberOfPacketsPerThread = 3;
 
-    for (auto i = 0u; i < kNumberOfWriterThreads; i++)
+    for (auto i = 0U; i < k_number_of_writer_threads; i++)
     {
-        threads[i] = std::thread([kAcquireLength, &writer]() {
+        threads[i] = std::thread([k_acquire_length, &writer]() {
             for (auto packet_number = 0; packet_number < kNumberOfPacketsPerThread; packet_number++)
             {
                 // Loop until we succeeded to reserve data on the buffer
@@ -75,18 +75,18 @@ TEST(WaitFreeAlternatingWriterTests, WriteBufferFullShouldReturnExpectedData)
 
                 while (acquire_result.has_value() == false)
                 {
-                    acquire_result = writer.Acquire(kAcquireLength);
+                    acquire_result = writer.Acquire(k_acquire_length);
                     std::this_thread::sleep_for(10us);
                 }
 
                 auto acquired_data = acquire_result.value().data;
-                if (acquired_data.size() != kAcquireLength)
+                if (acquired_data.size() != k_acquire_length)
                 {
                     std::abort();
                 }
 
                 // Write data into the complete acquired span.
-                acquired_data.data()[0] = static_cast<score::mw::log::detail::Byte>(packet_number);
+                acquired_data[0] = static_cast<score::mw::log::detail::Byte>(packet_number);
 
                 writer.Release(acquire_result.value());
             }
@@ -123,7 +123,7 @@ TEST(WaitFreeAlternatingWriterTests, WriteBufferFullShouldReturnExpectedData)
         all_packets_received = true;
         for (const auto& counter : number_of_packets_received)
         {
-            if (counter != kNumberOfWriterThreads)
+            if (counter != k_number_of_writer_threads)
             {
                 all_packets_received = false;
                 break;
@@ -210,7 +210,7 @@ TEST(AlternatingReaderTest, EnsureToNotAcquireAnyBlockAndReturnNullInCaseTheSwit
     RecordProperty("TestingTechnique", "Requirements-based test");
     RecordProperty("DerivationTechnique", "Analysis of requirements");
 
-    constexpr auto kBufferSize = 10u * 64u * 1024u;
+    constexpr auto kBufferSize = 10U * 64U * 1024U;
     std::vector<score::mw::log::detail::Byte> buffer1(kBufferSize);
     std::vector<score::mw::log::detail::Byte> buffer2(kBufferSize);
 

@@ -46,24 +46,24 @@ TEST(WaitFreeLinearWriter, WriteBufferFullShouldReturnExpectedData)
     RecordProperty("TestingTechnique", "Requirements-based test");
     RecordProperty("DerivationTechnique", "Analysis of requirements");
 
-    constexpr auto kBufferSize = 10u * 64u * 1024u;
+    constexpr auto kBufferSize = 10U * 64U * 1024U;
     std::vector<score::mw::log::detail::Byte> buffer(kBufferSize);
     score::mw::log::detail::LinearControlBlock control_block{};
     control_block.data = score::cpp::span<score::mw::log::detail::Byte>(buffer.data(), buffer.size());
 
     score::mw::log::detail::WaitFreeLinearWriter writer{control_block};
 
-    const auto kNumberOfWriterThreads = std::thread::hardware_concurrency();
-    std::vector<std::thread> threads(kNumberOfWriterThreads);
+    const auto k_number_of_writer_threads = std::thread::hardware_concurrency();
+    std::vector<std::thread> threads(k_number_of_writer_threads);
 
-    const auto kThreadAcquireFactor = kBufferSize / kNumberOfWriterThreads;
+    const auto k_thread_acquire_factor = kBufferSize / k_number_of_writer_threads;
 
-    for (auto i = 0u; i < kNumberOfWriterThreads; i++)
+    for (auto i = 0U; i < k_number_of_writer_threads; i++)
     {
-        threads[i] = std::thread([i, kThreadAcquireFactor, &writer]() {
-            const auto kAcquireLength = kThreadAcquireFactor * i;
+        threads[i] = std::thread([i, k_thread_acquire_factor, &writer]() {
+            const auto k_acquire_length = k_thread_acquire_factor * i;
 
-            const auto acquire_result = writer.Acquire(kAcquireLength);
+            const auto acquire_result = writer.Acquire(k_acquire_length);
 
             if (acquire_result.has_value() == false)
             {
@@ -73,14 +73,14 @@ TEST(WaitFreeLinearWriter, WriteBufferFullShouldReturnExpectedData)
             // Write data into the complete acquired span.
             const auto acquired_data = acquire_result.value().data;
 
-            if (acquired_data.size() != kAcquireLength)
+            if (acquired_data.size() != k_acquire_length)
             {
                 std::abort();
             }
 
-            for (auto payload_index = 0u; payload_index < acquired_data.size(); payload_index++)
+            for (auto payload_index = 0U; payload_index < acquired_data.size(); payload_index++)
             {
-                acquired_data.data()[payload_index] = static_cast<score::mw::log::detail::Byte>(payload_index);
+                acquired_data[payload_index] = static_cast<score::mw::log::detail::Byte>(payload_index);
             }
 
             writer.Release(acquire_result.value());
@@ -102,7 +102,7 @@ TEST(WaitFreeLinearWriter, WriteBufferFullShouldReturnExpectedData)
             break;
         }
 
-        for (auto payload_index = 0u; payload_index < read_result.value().size(); payload_index++)
+        for (auto payload_index = 0U; payload_index < read_result.value().size(); payload_index++)
         {
             ASSERT_EQ(read_result.value().data()[payload_index],
                       static_cast<score::mw::log::detail::Byte>(payload_index));
@@ -118,24 +118,24 @@ TEST(WaitFreeLinearWriter, WriterBigDataTest)
     RecordProperty("TestingTechnique", "Requirements-based test");
     RecordProperty("DerivationTechnique", "Analysis of requirements");
 
-    constexpr auto kBufferSize = 10u * 10u * 64u * 1024u;
+    constexpr auto kBufferSize = 10U * 10U * 64U * 1024U;
     std::vector<score::mw::log::detail::Byte> buffer(kBufferSize);
     score::mw::log::detail::LinearControlBlock control_block{};
     control_block.data = score::cpp::span<score::mw::log::detail::Byte>(buffer.data(), buffer.size());
 
     score::mw::log::detail::WaitFreeLinearWriter writer{control_block};
 
-    const auto kNumberOfWriterThreads = std::thread::hardware_concurrency();
-    std::vector<std::thread> threads(kNumberOfWriterThreads);
+    const auto k_number_of_writer_threads = std::thread::hardware_concurrency();
+    std::vector<std::thread> threads(k_number_of_writer_threads);
 
-    const auto kThreadAcquireFactor = kBufferSize / kNumberOfWriterThreads;
+    const auto k_thread_acquire_factor = kBufferSize / k_number_of_writer_threads;
 
-    for (auto i = 0u; i < kNumberOfWriterThreads; i++)
+    for (auto i = 0U; i < k_number_of_writer_threads; i++)
     {
-        threads[i] = std::thread([i, kThreadAcquireFactor, &writer]() {
-            const auto kAcquireLength = kThreadAcquireFactor * i;
+        threads[i] = std::thread([i, k_thread_acquire_factor, &writer]() {
+            const auto k_acquire_length = k_thread_acquire_factor * i;
 
-            const auto acquire_result = writer.Acquire(kAcquireLength);
+            const auto acquire_result = writer.Acquire(k_acquire_length);
 
             if (acquire_result.has_value() == false)
             {
@@ -144,7 +144,7 @@ TEST(WaitFreeLinearWriter, WriterBigDataTest)
 
             const auto acquired_data = acquire_result.value().data;
 
-            if (acquired_data.size() != kAcquireLength)
+            if (acquired_data.size() != k_acquire_length)
             {
                 std::abort();
             }
@@ -153,7 +153,7 @@ TEST(WaitFreeLinearWriter, WriterBigDataTest)
             if (acquired_data.size() >= 2)
             {
                 *acquired_data.begin() = 1;
-                acquired_data.data()[acquired_data.size() - 1] = 2;
+                acquired_data[acquired_data.size() - 1] = 2;
             }
 
             writer.Release(acquire_result.value());
@@ -192,14 +192,14 @@ TEST(WaitFreeLinearWriter, TooManyConcurrentWriterShouldReturnEmpty)
     RecordProperty("TestingTechnique", "Requirements-based test");
     RecordProperty("DerivationTechnique", "Analysis of requirements");
 
-    constexpr auto kBufferSize = 10u * 10u * 64u * 1024u;
+    constexpr auto kBufferSize = 10U * 10U * 64U * 1024U;
     std::vector<score::mw::log::detail::Byte> buffer(kBufferSize);
     score::mw::log::detail::LinearControlBlock control_block{};
     control_block.data = score::cpp::span<score::mw::log::detail::Byte>(buffer.data(), buffer.size());
     control_block.number_of_writers.store(score::mw::log::detail::GetMaxNumberOfConcurrentWriters());
 
     score::mw::log::detail::WaitFreeLinearWriter writer{control_block};
-    constexpr auto kArbitraryNumberOfBytes{42u};
+    constexpr auto kArbitraryNumberOfBytes{42U};
     ASSERT_FALSE(writer.Acquire(kArbitraryNumberOfBytes).has_value());
 }
 
@@ -211,14 +211,14 @@ TEST(WaitFreeLinearWriter, BufferSizeExceededShouldReturnEmpty)
     RecordProperty("TestingTechnique", "Requirements-based test");
     RecordProperty("DerivationTechnique", "Analysis of requirements");
 
-    constexpr auto kBufferSize = 10u * 10u * 64u * 1024u;
+    constexpr auto kBufferSize = 10U * 10U * 64U * 1024U;
     std::vector<score::mw::log::detail::Byte> buffer(kBufferSize);
     score::mw::log::detail::LinearControlBlock control_block{};
     control_block.data = score::cpp::span<score::mw::log::detail::Byte>(buffer.data(), buffer.size());
     control_block.acquired_index.store(static_cast<score::mw::log::detail::Length>(control_block.data.size()));
 
     score::mw::log::detail::WaitFreeLinearWriter writer{control_block};
-    constexpr auto kArbitraryNumberOfBytes{42u};
+    constexpr auto kArbitraryNumberOfBytes{42U};
     ASSERT_FALSE(writer.Acquire(kArbitraryNumberOfBytes).has_value());
 }
 
@@ -230,14 +230,14 @@ TEST(WaitFreeLinearWriter, BufferSizeExceededUpperLimitShouldReturnEmpty)
     RecordProperty("TestingTechnique", "Requirements-based test");
     RecordProperty("DerivationTechnique", "Analysis of requirements");
 
-    constexpr auto kBufferSize = 10u * 10u * 64u * 1024u;
+    constexpr auto kBufferSize = 10U * 10U * 64U * 1024U;
     std::vector<score::mw::log::detail::Byte> buffer(kBufferSize);
     score::mw::log::detail::LinearControlBlock control_block{};
     control_block.data = score::cpp::span<score::mw::log::detail::Byte>(buffer.data(), buffer.size());
     control_block.acquired_index.store(score::mw::log::detail::GetMaxLinearBufferCapacityBytes());
 
     score::mw::log::detail::WaitFreeLinearWriter writer{control_block};
-    constexpr auto kArbitraryNumberOfBytes{42u};
+    constexpr auto kArbitraryNumberOfBytes{42U};
     ASSERT_FALSE(writer.Acquire(kArbitraryNumberOfBytes).has_value());
 }
 
@@ -251,7 +251,7 @@ TEST(WaitFreeLinearWriter, FailedAcquireShouldTerminateBuffer)
     RecordProperty("TestingTechnique", "Requirements-based test");
     RecordProperty("DerivationTechnique", "Analysis of requirements");
 
-    constexpr auto kBufferSize = score::mw::log::detail::GetLengthOffsetBytes() * 2u;
+    constexpr auto kBufferSize = score::mw::log::detail::GetLengthOffsetBytes() * 2U;
     std::vector<score::mw::log::detail::Byte> buffer(kBufferSize);
     score::mw::log::detail::LinearControlBlock control_block{};
     control_block.data = score::cpp::span<score::mw::log::detail::Byte>(buffer.data(), buffer.size());
@@ -264,7 +264,7 @@ TEST(WaitFreeLinearWriter, FailedAcquireShouldTerminateBuffer)
             // thread tries to reserve it.
             if (i++ == 0)
             {
-                auto acquire_result = writer_callback.Acquire(0u);
+                auto acquire_result = writer_callback.Acquire(0U);
                 if (acquire_result.has_value() == false)
                 {
                     std::abort();
@@ -301,7 +301,7 @@ TEST(WaitFreeLinearWriter, FailedAcquireWithNoFreeSpaceShouldNotTerminateBuffer)
     RecordProperty("TestingTechnique", "Requirements-based test");
     RecordProperty("DerivationTechnique", "Analysis of requirements");
 
-    constexpr auto kBufferSize = score::mw::log::detail::GetLengthOffsetBytes() * 2u;
+    constexpr auto kBufferSize = score::mw::log::detail::GetLengthOffsetBytes() * 2U;
     std::vector<score::mw::log::detail::Byte> buffer(kBufferSize);
     score::mw::log::detail::LinearControlBlock control_block{};
     control_block.data = score::cpp::span<score::mw::log::detail::Byte>(buffer.data(), buffer.size());
@@ -349,7 +349,7 @@ TEST(WaitFreeLinearWriter, AcquireMoreThanMaximumShouldFail)
     RecordProperty("TestingTechnique", "Requirements-based test");
     RecordProperty("DerivationTechnique", "Analysis of requirements");
 
-    constexpr auto kBufferSize = score::mw::log::detail::GetLengthOffsetBytes() * 2u;
+    constexpr auto kBufferSize = score::mw::log::detail::GetLengthOffsetBytes() * 2U;
     std::vector<score::mw::log::detail::Byte> buffer(kBufferSize);
     score::mw::log::detail::LinearControlBlock control_block{};
     control_block.data = score::cpp::span<score::mw::log::detail::Byte>(buffer.data(), buffer.size());

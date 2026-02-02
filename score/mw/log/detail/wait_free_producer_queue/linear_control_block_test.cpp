@@ -42,13 +42,13 @@ TEST(LinearControlBlock, LengthExceedingMaxThresholdShouldReturnTruncated)
     RecordProperty("TestingTechnique", "Requirements-based test");
     RecordProperty("DerivationTechnique", "Analysis of requirements");
 
-    constexpr auto kBufferSize = 5ul;
+    constexpr auto kBufferSize = 5UL;
     std::vector<score::mw::log::detail::Byte> buffer(kBufferSize);
     auto data = score::cpp::span<score::mw::log::detail::Byte>(buffer.data(),
                                                       static_cast<score::mw::log::detail::SpanLength>(buffer.size()));
 
-    const auto invalid_offset = kBufferSize + 1ul;
-    constexpr auto kArbitraryBytesCount = 2ul;
+    const auto invalid_offset = kBufferSize + 1UL;
+    constexpr auto kArbitraryBytesCount = 2UL;
 
     ASSERT_FALSE(DoBytesFitInRemainingCapacity(data, invalid_offset, kArbitraryBytesCount));
 }

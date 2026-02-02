@@ -97,7 +97,7 @@ void DataRouterBackend::FlushSlot(const SlotHandle& slot) noexcept
 {
     // Cast from std::uint8_t to std::size_t is valid. To prevent implicit conversion.
     auto& log_entry =
-        buffer_.GetUnderlyingBufferFor(static_cast<std::size_t>(slot.GetSlotOfSelectedRecorder())).getLogEntry();
+        buffer_.GetUnderlyingBufferFor(static_cast<std::size_t>(slot.GetSlotOfSelectedRecorder())).GetLogEntry();
 
     switch (log_entry.log_level)
     {

@@ -34,18 +34,18 @@ AlternatingReadOnlyReader::AlternatingReadOnlyReader(const AlternatingControlBlo
 LinearReader AlternatingReadOnlyReader::CreateLinearReader(const std::uint32_t block_id_count) noexcept
 {
     auto block_id = SelectLinearControlBlockId(block_id_count);
-    auto& block = SelectLinearControlBlockReference(block_id, alternating_control_block_);
+    const auto& block = SelectLinearControlBlockReference(block_id, alternating_control_block_);
 
     const auto written_bytes = block.written_index.load();
 
-    auto& buffer = block_id == AlternatingControlBlockSelectId::kBlockEven ? buffer_even_ : buffer_odd_;
+    const auto& buffer = block_id == AlternatingControlBlockSelectId::kBlockEven ? buffer_even_ : buffer_odd_;
     return CreateLinearReaderFromDataAndLength(buffer, written_bytes);
 }
 
 bool AlternatingReadOnlyReader::IsBlockReleasedByWriters(const std::uint32_t block_id_count) const noexcept
 {
     auto block_id = SelectLinearControlBlockId(block_id_count);
-    auto& block = SelectLinearControlBlockReference(block_id, alternating_control_block_);
+    const auto& block = SelectLinearControlBlockReference(block_id, alternating_control_block_);
 
     const bool result = (block.number_of_writers.load() == static_cast<Length>(0)) &&
                         (block.written_index.load() == block.acquired_index.load());
