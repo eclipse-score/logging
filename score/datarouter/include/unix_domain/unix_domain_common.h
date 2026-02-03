@@ -60,7 +60,7 @@ class UnixDomainSockAddr
 
     bool is_abstract()
     {
-        return addr_.sun_path[0] == 0U;
+        return !addr_.sun_path[0];
     }
 
     struct sockaddr_un addr_;

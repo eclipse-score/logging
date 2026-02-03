@@ -15,8 +15,8 @@
 #define PAS_LOGGING_FILE_TRANSFER_HANDLER_FACTORY_STUB_H
 
 #include "logparser/logparser.h"
-#include "score/datarouter/src/file_transfer/file_transfer_handler_factory.hpp"
-#include "score/datarouter/src/file_transfer/file_transfer_stub/file_transfer_stream_handler_stub.h"
+#include "score/datarouter/file_transfer/file_transfer_handler_factory.hpp"
+#include "score/datarouter/file_transfer/file_transfer_stub/file_transfer_stream_handler_stub.h"
 
 #include <gmock/gmock.h>
 namespace score

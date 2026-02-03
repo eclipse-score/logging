@@ -18,7 +18,6 @@
 #include "score/os/sys_poll.h"
 #include "score/os/unistd.h"
 #include "score/os/utils/signal_impl.h"
-#include "score/quality/compiler_warnings/warnings.h"
 #include <sys/mman.h>
 #include <unistd.h>
 
@@ -231,11 +230,22 @@ void UnixDomainServer::process_server_iteration(ConnectionState& state,
     //  NOLINTBEGIN(score-banned-function) see comment above
     score::cpp::expected<std::int32_t, score::os::Error> poll_ret;
 #ifdef __QNX__
-    DISABLE_WARNING_PUSH
-    DISABLE_WARNING_USELESS_CAST
+// NOLINTBEGIN(score-banned-preprocessor-directives) : required due to compiler warning for qnx
+/*
+Deviation from Rule A16-7-1:
+- The #pragma directive shall not be used
+Justification:
+- required due to compiler warning for qnx
+*/
+// coverity[autosar_cpp14_a16_7_1_violation] see above
+#pragma GCC diagnostic push
+// coverity[autosar_cpp14_a16_7_1_violation] see above
+#pragma GCC diagnostic ignored "-Wuseless-cast"
     poll_ret =
         score::os::SysPoll::instance().poll(state.connection_pollfd_list.data(), static_cast<nfds_t>(size), timeout);
-    DISABLE_WARNING_POP
+// coverity[autosar_cpp14_a16_7_1_violation] see above
+#pragma GCC diagnostic pop
+// NOLINTEND(score-banned-preprocessor-directives)
 #else
     poll_ret = score::os::SysPoll::instance().poll(state.connection_pollfd_list.data(), size, timeout);
 #endif

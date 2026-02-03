@@ -182,7 +182,7 @@ class DataRouter
         void on_closed_by_peer() override;
 
         void checkAndSetQuotaEnforcement();
-        bool request_acquire();
+        void request_acquire();
 
         Synchronized<LocalSubscriberData> local_subscriber_data_;
         Synchronized<CommandData> command_data_;

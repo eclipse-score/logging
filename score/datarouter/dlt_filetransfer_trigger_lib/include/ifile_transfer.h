@@ -11,8 +11,8 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-#ifndef SCORE_PAS_LOGGING_DLT_FILETRANSFER_TRIGGER_LIB_INCLUDE_IFILE_TRANSFER_H
-#define SCORE_PAS_LOGGING_DLT_FILETRANSFER_TRIGGER_LIB_INCLUDE_IFILE_TRANSFER_H
+#ifndef AAS_PAS_LOGGING_DLT_FILETRANSFER_TRIGGER_LIB_INCLUDE_IFILE_TRANSFER_H
+#define AAS_PAS_LOGGING_DLT_FILETRANSFER_TRIGGER_LIB_INCLUDE_IFILE_TRANSFER_H
 
 #include <cstdint>
 #include <memory>
@@ -44,4 +44,4 @@ using IFileTransferPtr = std::unique_ptr<IFileTransfer>;
 
 }  // namespace score::logging
 
-#endif  // SCORE_PAS_LOGGING_DLT_FILETRANSFER_TRIGGER_LIB_INCLUDE_IFILE_TRANSFER_H
+#endif  // AAS_PAS_LOGGING_DLT_FILETRANSFER_TRIGGER_LIB_INCLUDE_IFILE_TRANSFER_H

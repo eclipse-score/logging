@@ -11,8 +11,8 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-#ifndef SCORE_PAS_LOGGING_SRC_PERSISTENCY_PERSISTENT_DICTIONARY_FACTORY_HPP
-#define SCORE_PAS_LOGGING_SRC_PERSISTENCY_PERSISTENT_DICTIONARY_FACTORY_HPP
+#ifndef SCORE_PAS_LOGGING_SRC_PERSISTENT_DICTIONARY_FACTORY_HPP
+#define SCORE_PAS_LOGGING_SRC_PERSISTENT_DICTIONARY_FACTORY_HPP
 
 #include "i_persistent_dictionary.h"
 #include <memory>
@@ -60,4 +60,4 @@ class PersistentDictionaryFactory
 }  // namespace platform
 }  // namespace score
 
-#endif  // SCORE_PAS_LOGGING_SRC_PERSISTENCY_PERSISTENT_DICTIONARY_FACTORY_HPP
+#endif  // SCORE_PAS_LOGGING_SRC_PERSISTENT_DICTIONARY_FACTORY_HPP

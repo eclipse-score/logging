@@ -122,6 +122,8 @@ std::unique_ptr<DataRouter::SourceSession> DataRouter::new_source_session_impl(
     std::unique_ptr<score::mw::log::detail::ISharedMemoryReader> reader,
     const score::mw::log::NvConfig& nvConfig)
 {
+    std::lock_guard<std::mutex> lock(subscriber_mutex_);
+
     auto sourceSession =
         std::make_unique<DataRouter::SourceSession>(*this,
                                                     std::move(reader),
@@ -132,19 +134,6 @@ std::unique_ptr<DataRouter::SourceSession> DataRouter::new_source_session_impl(
                                                     quota_enforcement_enabled,
                                                     stats_logger_,
                                                     std::make_unique<score::platform::internal::LogParser>(nvConfig));
-
-    if (!sourceSession)
-    {
-        return nullptr;
-    }
-
-    std::lock_guard<std::mutex> lock(subscriber_mutex_);
-
-    // Insert is protected by subscriber_mutex_ held by caller (new_source_session_impl).
-    // This relies on the calling convention that SourceSession is only constructed
-    // from new_source_session_impl() which acquires the lock before construction.
-    std::ignore = sources_.insert(sourceSession.get());
-
     if (sourceCallback_)
     {
         sourceCallback_(std::move(sourceSession->get_parser()));
@@ -279,8 +268,9 @@ void DataRouter::SourceSession::processAndRouteLogMessages(uint64_t& message_cou
                 if ((peek_bytes.has_value() && peek_bytes.value() > 0) ||
                     (cmd->ticks_without_write > kTicksWithoutAcquireWhileNoWrites))
                 {
-                    cmd->acquire_requested = request_acquire();
-                    needs_fast_reschedule = cmd->acquire_requested;
+                    cmd->acquire_requested = true;
+                    request_acquire();
+                    needs_fast_reschedule = true;
                 }
                 else
                 {
@@ -289,8 +279,9 @@ void DataRouter::SourceSession::processAndRouteLogMessages(uint64_t& message_cou
             }
             else
             {
-                cmd->acquire_requested = request_acquire();
-                needs_fast_reschedule = cmd->acquire_requested;
+                cmd->acquire_requested = true;
+                request_acquire();
+                needs_fast_reschedule = true;
             }
         }
     }
@@ -385,6 +376,8 @@ DataRouter::SourceSession::SourceSession(DataRouter& router,
         stats->quota_enforcement_enabled = quota_enforcement_enabled;
         stats->name = name;
     }
+
+    std::ignore = router_.sources_.insert(this);
 
     {
         auto stats = stats_data_.lock();
@@ -531,26 +524,19 @@ void DataRouter::SourceSession::show_stats()
     }
 }
 
-bool DataRouter::SourceSession::request_acquire()
+void DataRouter::SourceSession::request_acquire()
 {
-    const bool acquire_result =
-        score::cpp::visit(score::cpp::overload(
-                       [](UnixDomainServer::SessionHandle& handle) {
-                           handle.pass_message("<");
-                           return true;
-                       },
-                       [](score::cpp::pmr::unique_ptr<score::platform::internal::daemon::ISessionHandle>& handle) {
-                           return handle->AcquireRequest();
-                           // For the quality team argumentation, kindly, check Ticket-200702 and Ticket-229594.
-                       }),  // LCOV_EXCL_LINE : tooling issue. no code to test in this line.
-                   handle_);
+    ++(stats_data_.lock()->count_acquire_requests);
 
-    if (acquire_result)
-    {
-        ++(stats_data_.lock()->count_acquire_requests);
-    }
-
-    return acquire_result;
+    score::cpp::visit(score::cpp::overload(
+                   [](UnixDomainServer::SessionHandle& handle) {
+                       handle.pass_message("<");
+                   },
+                   [](score::cpp::pmr::unique_ptr<score::platform::internal::daemon::ISessionHandle>& handle) {
+                       handle->AcquireRequest();
+                       // For the quality team argumentation, kindly, check Ticket-200702 and Ticket-229594.
+                   }),  // LCOV_EXCL_LINE : tooling issue. no code to test in this line.
+               handle_);
 }
 
 void DataRouter::SourceSession::on_acquire_response(const score::mw::log::detail::ReadAcquireResult& acq)

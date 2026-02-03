@@ -36,6 +36,11 @@ bool operator!=(const ConnectMessageFromClient& lhs, const ConnectMessageFromCli
     return !(lhs == rhs);
 }
 
+score::mw::com::message_passing::MessageId ToMessageId(const DatarouterMessageIdentifier& message_id) noexcept
+{
+    return static_cast<std::underlying_type_t<DatarouterMessageIdentifier>>(message_id);
+}
+
 ConnectMessageFromClient::ConnectMessageFromClient(const LoggingIdentifier& appid,
                                                    uid_t uid,
                                                    bool use_dynamic_identifier,

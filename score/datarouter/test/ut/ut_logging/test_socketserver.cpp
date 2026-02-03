@@ -14,11 +14,8 @@
 #include "applications/datarouter_feature_config.h"
 #include "daemon/socketserver.h"
 #include "logparser/logparser.h"
-#include "score/os/mocklib/mock_pthread.h"
 #include "score/os/mocklib/unistdmock.h"
 #include "score/mw/log/configuration/invconfig_mock.h"
-#include "score/mw/log/detail/data_router/data_router_messages.h"
-#include "score/mw/log/detail/logging_identifier.h"
 #include "score/datarouter/datarouter/data_router.h"
 #include "score/datarouter/src/persistency/mock_persistent_dictionary.h"
 
@@ -26,14 +23,9 @@
 #include "gtest/gtest.h"
 
 #include <sys/stat.h>
-#include <array>
 #include <fstream>
-#include <string>
 
 using namespace testing;
-using score::mw::log::detail::ConnectMessageFromClient;
-using score::mw::log::detail::LoggingIdentifier;
-using score::platform::datarouter::SocketServer;
 
 namespace score
 {
@@ -66,7 +58,7 @@ TEST_F(SocketServerInitializePersistentStorageTest, InitializeWithDltEnabled)
     RecordProperty("DerivationTechnique", "Analysis of boundary values");
 
     // Expect readDltEnabled to be called and return true
-    EXPECT_CALL(*dynamic_cast<MockPersistentDictionary*>(mock_pd_.get()), GetBool(CONFIG_OUTPUT_ENABLED_KEY, true))
+    EXPECT_CALL(*dynamic_cast<MockPersistentDictionary*>(mock_pd_.get()), getBool(CONFIG_OUTPUT_ENABLED_KEY, true))
         .WillOnce(Return(true));
 
     auto handlers = SocketServer::InitializePersistentStorage(mock_pd_);
@@ -94,7 +86,7 @@ TEST_F(SocketServerInitializePersistentStorageTest, InitializeWithDltDisabled)
     RecordProperty("DerivationTechnique", "Analysis of boundary values");
 
     // Expect readDltEnabled to be called and return false
-    EXPECT_CALL(*dynamic_cast<MockPersistentDictionary*>(mock_pd_.get()), GetBool(CONFIG_OUTPUT_ENABLED_KEY, true))
+    EXPECT_CALL(*dynamic_cast<MockPersistentDictionary*>(mock_pd_.get()), getBool(CONFIG_OUTPUT_ENABLED_KEY, true))
         .WillOnce(Return(false));
 
     auto handlers = SocketServer::InitializePersistentStorage(mock_pd_);
@@ -122,13 +114,13 @@ TEST_F(SocketServerInitializePersistentStorageTest, LoadDltLambdaCallsReadDlt)
     RecordProperty("DerivationTechnique", "Error guessing based on knowledge or experience");
 
     // Expect readDltEnabled to be called
-    EXPECT_CALL(*dynamic_cast<MockPersistentDictionary*>(mock_pd_.get()), GetBool(CONFIG_OUTPUT_ENABLED_KEY, true))
+    EXPECT_CALL(*dynamic_cast<MockPersistentDictionary*>(mock_pd_.get()), getBool(CONFIG_OUTPUT_ENABLED_KEY, true))
         .WillOnce(Return(true));
 
     auto handlers = SocketServer::InitializePersistentStorage(mock_pd_);
 
     // Expect getString to be called when load_dlt lambda is invoked (by readDlt)
-    EXPECT_CALL(*dynamic_cast<MockPersistentDictionary*>(mock_pd_.get()), GetString(CONFIG_DATABASE_KEY, _))
+    EXPECT_CALL(*dynamic_cast<MockPersistentDictionary*>(mock_pd_.get()), getString(CONFIG_DATABASE_KEY, _))
         .WillOnce(Return("{}"));
 
     // Call the load_dlt lambda - it should successfully return a PersistentConfig
@@ -146,13 +138,13 @@ TEST_F(SocketServerInitializePersistentStorageTest, StoreDltLambdaCallsWriteDlt)
     RecordProperty("DerivationTechnique", "Error guessing based on knowledge or experience");
 
     // Expect readDltEnabled to be called
-    EXPECT_CALL(*dynamic_cast<MockPersistentDictionary*>(mock_pd_.get()), GetBool(CONFIG_OUTPUT_ENABLED_KEY, true))
+    EXPECT_CALL(*dynamic_cast<MockPersistentDictionary*>(mock_pd_.get()), getBool(CONFIG_OUTPUT_ENABLED_KEY, true))
         .WillOnce(Return(true));
 
     auto handlers = SocketServer::InitializePersistentStorage(mock_pd_);
 
     // Expect setString to be called when store_dlt lambda is invoked (by writeDlt)
-    EXPECT_CALL(*dynamic_cast<MockPersistentDictionary*>(mock_pd_.get()), SetString(CONFIG_DATABASE_KEY, _)).Times(1);
+    EXPECT_CALL(*dynamic_cast<MockPersistentDictionary*>(mock_pd_.get()), setString(CONFIG_DATABASE_KEY, _)).Times(1);
 
     // Create a test config
     score::logging::dltserver::PersistentConfig test_config;
@@ -377,7 +369,7 @@ TEST_F(SocketServerRemainingFunctionsTest, CreateEnableHandlerCreatesCallbackSuc
     DataRouter router(logger, source_setup);
 
     // Expect writeDltEnabled to be called when the handler lambda executes
-    EXPECT_CALL(*dynamic_cast<MockPersistentDictionary*>(mock_pd_.get()), SetBool(CONFIG_OUTPUT_ENABLED_KEY, _))
+    EXPECT_CALL(*dynamic_cast<MockPersistentDictionary*>(mock_pd_.get()), setBool(CONFIG_OUTPUT_ENABLED_KEY, _))
         .Times(1);
 
     // Create the enable handler - this covers lines 160-171 (function body and lambda creation)
@@ -587,100 +579,6 @@ TEST_F(SocketServerRemainingFunctionsTest, CreateMessagePassingSessionCloseFailu
 
     // Clean up the test file
     std::remove(test_shmem_file.c_str());
-}
-
-class SocketServerTest : public Test
-{
-  protected:
-    void SetUp() override
-    {
-        pthread_mock_ = std::make_unique<StrictMock<score::os::MockPthread>>();
-    }
-
-    void TearDown() override
-    {
-        pthread_mock_.reset();
-    }
-
-    std::unique_ptr<StrictMock<score::os::MockPthread>> pthread_mock_;
-};
-
-TEST_F(SocketServerTest, SetThreadNameSuccess)
-{
-    RecordProperty("Description", "Verify SetThreadName sets pthread name successfully");
-    RecordProperty("TestType", "Interface test");
-    RecordProperty("Verifies", "::score::platform::datarouter::SocketServer::SetThreadName()");
-    RecordProperty("DerivationTechnique", "Generation and analysis of equivalence classes");
-
-    pthread_t thread_id = pthread_self();
-
-    EXPECT_CALL(*pthread_mock_, self()).WillOnce(Return(thread_id));
-    EXPECT_CALL(*pthread_mock_, setname_np(thread_id, StrEq("socketserver")))
-        .WillOnce(Return(score::cpp::expected_blank<score::os::Error>{}));
-
-    EXPECT_NO_THROW(SocketServer::SetThreadName(*pthread_mock_));
-}
-
-TEST_F(SocketServerTest, SetThreadNameParameterless)
-{
-    RecordProperty("Description", "Verify SetThreadName() overload uses default pthread implementation");
-    RecordProperty("TestType", "Interface test");
-    RecordProperty("Verifies", "::score::platform::datarouter::SocketServer::SetThreadName()");
-    RecordProperty("DerivationTechnique", "Error guessing based on knowledge or experience");
-
-    EXPECT_NO_THROW(SocketServer::SetThreadName());
-}
-
-TEST_F(SocketServerTest, SetThreadNameFailureHandling)
-{
-    RecordProperty("Description", "Verify SetThreadName handles pthread failures without throwing");
-    RecordProperty("TestType", "Fault injection test");
-    RecordProperty("Verifies", "::score::platform::datarouter::SocketServer::SetThreadName()");
-    RecordProperty("DerivationTechnique", "Error guessing based on knowledge or experience");
-    RecordProperty("InjectionPoints", "score::os::Pthread::setname_np returns unexpected error");
-    RecordProperty("MeasurementPoints", "Function does not throw");
-
-    pthread_t thread_id = pthread_self();
-    const score::os::Error error = score::os::Error::createFromErrno(EINVAL);
-
-    EXPECT_CALL(*pthread_mock_, self()).WillOnce(Return(thread_id));
-    EXPECT_CALL(*pthread_mock_, setname_np(thread_id, StrEq("socketserver")))
-        .WillOnce(Return(score::cpp::unexpected<score::os::Error>(error)));
-
-    // Should not throw even on failure (prints error to stderr and continues)
-    EXPECT_NO_THROW(SocketServer::SetThreadName(*pthread_mock_));
-}
-
-TEST(SocketServerHelperTest, ResolveSharedMemoryFileNameWithDynamicIdentifier)
-{
-    RecordProperty("Description", "Verify ResolveSharedMemoryFileName uses the random identifier when requested");
-    RecordProperty("TestType", "Interface test");
-    RecordProperty("Verifies", "::score::platform::datarouter::SocketServer::ResolveSharedMemoryFileName()");
-    RecordProperty("DerivationTechnique", "Generation and analysis of equivalence classes");
-
-    LoggingIdentifier appid("TEST");
-    const std::array<std::string::value_type, 6> random_part = {'a', 'b', 'c', 'd', 'e', 'f'};
-    ConnectMessageFromClient conn(appid, 1000, true, random_part);
-
-    const std::string result = SocketServer::ResolveSharedMemoryFileName(conn, "TEST");
-
-    EXPECT_EQ(result, "/tmp/logging-abcdef.shmem");
-}
-
-TEST(SocketServerHelperTest, ResolveSharedMemoryFileNameWithStaticIdentifier)
-{
-    RecordProperty("Description", "Verify ResolveSharedMemoryFileName uses app and pid for static identifier");
-    RecordProperty("TestType", "Interface test");
-    RecordProperty("Verifies", "::score::platform::datarouter::SocketServer::ResolveSharedMemoryFileName()");
-    RecordProperty("DerivationTechnique", "Generation and analysis of equivalence classes");
-
-    LoggingIdentifier appid("MYAP");
-    const std::array<std::string::value_type, 6> random_part = {};
-    ConnectMessageFromClient conn(appid, 5000, false, random_part);
-
-    const std::string result = SocketServer::ResolveSharedMemoryFileName(conn, "MYAP");
-
-    EXPECT_EQ(result, "/tmp/logging.MYAP.5000.shmem");
 }
 
 }  // namespace

@@ -39,10 +39,9 @@ TEST(MessagePassingFactoryTests, CreateReceiverShouldReturnValue)
     MessagePassingFactoryImpl factory{};
 
     score::concurrency::ThreadPool thread_pool{2};
-    const score::message_passing::ServiceProtocolConfig service_protocol_config{};
-
-    const score::message_passing::IServerFactory::ServerConfig server_config{};
-    auto receiver = factory.CreateServer(service_protocol_config, server_config);
+    score::mw::com::message_passing::ReceiverConfig receiver_config{};
+    auto receiver =
+        factory.CreateReceiver(kIdentifier, thread_pool, {}, receiver_config, score::cpp::pmr::get_default_resource());
     EXPECT_NE(receiver, nullptr);
 }
 
@@ -55,10 +54,14 @@ TEST(MessagePassingFactoryTests, CreateSenderShouldReturnValue)
 
     MessagePassingFactoryImpl factory{};
 
-    const score::message_passing::ServiceProtocolConfig& protocol_config{kIdentifier, 9U, 0U, 0U};
-    const score::message_passing::IClientFactory::ClientConfig& client_config{0, 0, false, false, false};
-
-    auto sender = factory.CreateClient(protocol_config, client_config);
+    score::cpp::stop_source s{};
+    s.request_stop();
+    const score::mw::com::message_passing::SenderConfig sender_config{};
+    auto sender = factory.CreateSender(kIdentifier,
+                                       s.get_token(),
+                                       sender_config,
+                                       &score::mw::com::message_passing::DefaultLoggingCallback,
+                                       score::cpp::pmr::get_default_resource());
     EXPECT_NE(sender, nullptr);
 }
 

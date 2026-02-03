@@ -133,7 +133,7 @@ cc_test(
         "filetransferTest.cpp",
     ],
     defines = select({
-        "//score/datarouter/build_configuration_flags:config_file_transfer": ["DLT_FILE_TRANSFER_FEATURE"],
+        "//score/datarouter/build_configuration_flags:config_dlt_file_transfer": ["DLT_FILE_TRANSFER_FEATURE"],
         "//conditions:default": [],
     }),
     features = FEAT_COMPILER_WARNINGS_AS_ERRORS,
@@ -152,14 +152,14 @@ cc_test(
     tags = ["unit"],
     deps = [
         "//score/datarouter:datarouter_feature_config",
-        "//score/datarouter/src/file_transfer:file_transfer_handler_factory",
+        "//score/datarouter/file_transfer:file_transfer_handler_factory",
         "@googletest//:gtest_main",
     ] + select({
-        "//score/datarouter/build_configuration_flags:config_file_transfer": [
-            "//score/datarouter/src/file_transfer/file_transfer_impl:file_transfer_stream_handler_factory",
+        "//score/datarouter/build_configuration_flags:config_dlt_file_transfer": [
+            "//score/datarouter/file_transfer/file_transfer_impl:file_transfer_stream_handler_factory",
         ],
         "//conditions:default": [
-            "//score/datarouter/src/file_transfer/file_transfer_stub:file_transfer_handler_factory_stub",
+            "//score/datarouter/file_transfer/file_transfer_stub:file_transfer_handler_factory_stub",
         ],
     }),
 )
@@ -216,7 +216,7 @@ cc_test(
         ],
         "//conditions:default": [],
     }) + select({
-        "//score/datarouter/build_configuration_flags:config_file_transfer": ["test_filetransfer_stream.cpp"],
+        "//score/datarouter/build_configuration_flags:config_dlt_file_transfer": ["test_filetransfer_stream.cpp"],
         "//conditions:default": [],
     }),
     features = FEAT_COMPILER_WARNINGS_AS_ERRORS,
@@ -313,7 +313,6 @@ cc_test(
         "//score/datarouter/src/persistency:mock",
         "@googletest//:gtest_main",
         "@score_baselibs//score/mw/log/configuration:nvconfig_mock",
-        "@score_baselibs//score/os/mocklib:pthread_mock",
         "@score_baselibs//score/os/mocklib:unistd_mock",
     ],
 )
@@ -331,7 +330,7 @@ cc_test(
         "@googletest//:gtest_main",
         "@score_baselibs//score/os/mocklib:pthread_mock",
         "@score_baselibs//score/os/mocklib:unistd_mock",
-        "@score_communication//score/message_passing:mock",
+        "@score_communication//score/mw/com/message_passing:mock",
     ],
 )
 

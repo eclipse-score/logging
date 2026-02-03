@@ -32,11 +32,11 @@ class IPersistentDictionary
   public:
     // Public interface shall be thread-safe.
 
-    virtual std::string GetString(const std::string& key, const std::string& default_value) = 0;
-    virtual bool GetBool(const std::string& key, const bool default_value) = 0;
+    virtual std::string getString(const std::string& key, const std::string& defaultValue) = 0;
+    virtual bool getBool(const std::string& key, const bool defaultValue) = 0;
 
-    virtual void SetString(const std::string& key, const std::string& value) = 0;
-    virtual void SetBool(const std::string& key, const bool value) = 0;
+    virtual void setString(const std::string& key, const std::string& value) = 0;
+    virtual void setBool(const std::string& key, const bool value) = 0;
 
     virtual ~IPersistentDictionary() = default;
 };
