@@ -14,6 +14,7 @@
 #include "daemon/message_passing_server.h"
 #include "score/os/pthread.h"
 #include "score/os/unistd.h"
+#include "score/mw/log/detail/data_router/message_passing_config.h"
 
 #include "score/memory.hpp"
 #include <score/jthread.hpp>
@@ -32,34 +33,7 @@ namespace internal
 {
 
 using score::mw::log::detail::DatarouterMessageIdentifier;
-using score::mw::log::detail::ToMessageId;
-
-namespace
-{
-
-#if !defined(__QNXNTO__)
-
-// In Linux, MQueue size is usually limited to 10 for non-privileged processes
-std::int32_t kReceiverQueueMaxSize = 10;
-
-#else
-
-std::int32_t kReceiverQueueMaxSize = 128;
-
-#endif
-
-constexpr std::uint32_t kConnectionTimeoutInMs = 1000UL;
-constexpr std::int32_t kMaxNumbersOfRetry = 5;
-constexpr std::chrono::milliseconds kSendRetryDelay{};
-constexpr std::chrono::milliseconds kConnectRetryDelay = std::chrono::milliseconds{5};
-/*
-    this functions is seen by this file only.
-*/
-// LCOV_EXCL_START
-void DropLogs(const score::mw::com::message_passing::LogFunction) {}
-// LCOV_EXCL_STOP
-
-}  // namespace
+using score::mw::log::detail::MessagePassingConfig;
 
 void MessagePassingServer::SessionWrapper::enqueue_for_delete_while_locked(bool by_peer)
 {
@@ -124,12 +98,21 @@ void MessagePassingServer::SessionWrapper::enqueue_tick_while_locked()
 */
 // coverity[autosar_cpp14_a3_1_1_violation]
 MessagePassingServer::MessagePassingServer(MessagePassingServer::SessionFactory factory,
-                                           ::score::concurrency::Executor& executor)
+                                           std::shared_ptr<score::message_passing::IServerFactory> server_factory,
+                                           std::shared_ptr<score::message_passing::IClientFactory> client_factory)
     : IMessagePassingServerSessionWrapper(),
       factory_{std::move(factory)},
+      mutex_{},
+      stop_source_{},
       connection_timeout_{},
+      worker_cond_{},
+      pid_session_map_{},
+      work_queue_{},
       workers_exit_{false},
-      session_finishing_{false}
+      server_cond_{},
+      session_finishing_{false},
+      server_factory_{server_factory},
+      client_factory_{client_factory}
 {
     worker_thread_ = score::cpp::jthread([this]() {
         RunWorkerThread();
@@ -141,24 +124,47 @@ MessagePassingServer::MessagePassingServer(MessagePassingServer::SessionFactory 
         std::cerr << "setname_np: " << ret_pthread.error() << std::endl;
     }
 
-    using namespace ::score::mw::com::message_passing;
-    const std::string receiver_id{"/logging.datarouter_recv"};
-    const std::vector<uid_t> allowed_uids{};
-    score::mw::com::message_passing::ReceiverConfig receiver_config{};
-    receiver_config.max_number_message_in_queue = kReceiverQueueMaxSize;
-    receiver_ = ReceiverFactory::Create(receiver_id, executor, allowed_uids, receiver_config);
+    const score::message_passing::ServiceProtocolConfig service_protocol_config{
+        MessagePassingConfig::kDatarouterReceiverIdentifier,
+        MessagePassingConfig::kMaxMessageSize,
+        MessagePassingConfig::kMaxReplySize,
+        MessagePassingConfig::kMaxNotifySize};
 
-    receiver_->Register(ToMessageId(DatarouterMessageIdentifier::kConnect),
-                        [this](const MediumMessagePayload payload, const pid_t pid) noexcept {
-                            this->OnConnectRequest(payload, pid);
-                        });
-    receiver_->Register(ToMessageId(DatarouterMessageIdentifier::kAcquireResponse),
-                        [this](const MediumMessagePayload payload, const pid_t pid) noexcept {
-                            this->OnAcquireResponse(payload, pid);
-                        });
+    const score::message_passing::IServerFactory::ServerConfig server_config{MessagePassingConfig::kMaxReceiverQueueSize,
+                                                                           MessagePassingConfig::kPreAllocConnections,
+                                                                           MessagePassingConfig::kMaxQueuedNotifies};
+    receiver_ = server_factory_->Create(service_protocol_config, server_config);
 
-    // all callbacks shall be registered before listening starts
-    auto ret_listening = receiver_->StartListening();
+    auto connect_callback = [](score::message_passing::IServerConnection& connection) noexcept -> std::uintptr_t {
+        const pid_t client_pid = connection.GetClientIdentity().pid;
+        return static_cast<std::uintptr_t>(client_pid);
+    };
+    auto disconnect_callback = [this](score::message_passing::IServerConnection& connection) noexcept {
+        std::unique_lock<std::mutex> lock(mutex_);
+        const auto found = pid_session_map_.find(connection.GetClientIdentity().pid);
+        if (found != pid_session_map_.end())
+        {
+            SessionWrapper& wrapper = found->second;
+            wrapper.to_force_finish_ = true;
+            found->second.enqueue_for_delete_while_locked(true);
+        }
+    };
+    auto received_send_message_callback = [this](score::message_passing::IServerConnection& connection,
+                                                 const score::cpp::span<const std::uint8_t> message) noexcept -> score::cpp::blank {
+        const pid_t client_pid = connection.GetClientIdentity().pid;
+        this->MessageCallback(message, client_pid);
+        return {};
+    };
+    auto received_send_message_with_reply_callback =
+        [](score::message_passing::IServerConnection& /*connection*/,
+           score::cpp::span<const std::uint8_t> /*message*/) noexcept -> score::cpp::blank {
+        return {};
+    };
+
+    auto ret_listening = receiver_->StartListening(connect_callback,
+                                                   disconnect_callback,
+                                                   received_send_message_callback,
+                                                   received_send_message_with_reply_callback);
     if (!ret_listening)
     {
         std::cerr << "StartListening: " << ret_listening.error() << std::endl;
@@ -190,10 +196,8 @@ MessagePassingServer::~MessagePassingServer() noexcept
     receiver_.reset();
 
     // now, we can safely end the worker thread
-    {
-        std::lock_guard<std::mutex> lock(mutex_);
-        workers_exit_ = true;
-    }
+    workers_exit_.store(true);
+
     worker_cond_.notify_all();
     if (worker_thread_.joinable())
     {
@@ -286,9 +290,15 @@ void MessagePassingServer::RunWorkerThread()
                     lock.lock();
                     // LCOV_EXCL_STOP
                 }
-                pid_session_map_.erase(pid);
+                // Extract the session wrapper to destroy it outside the mutex lock
+                // to avoid deadlock when destructor blocks (e.g., ClientConnection::~ClientConnection)
+                auto node = pid_session_map_.extract(pid);
                 session_finishing_ = false;
                 server_cond_.notify_all();
+                lock.unlock();
+                // Destroy the extracted node here (destructor runs without holding mutex)
+                node = {};
+                lock.lock();
             }
             else if (wrapper.reset_running_while_locked(requeue))
             {
@@ -298,7 +308,12 @@ void MessagePassingServer::RunWorkerThread()
             }
             else if (wrapper.is_marked_for_delete())
             {
-                pid_session_map_.erase(pid);
+                // Extract the session wrapper to destroy it outside the mutex lock
+                auto node = pid_session_map_.extract(pid);
+                lock.unlock();
+                // Destroy the extracted node here (destructor runs without holding mutex)
+                node = {};
+                lock.lock();
             }
         }
     }
@@ -346,32 +361,58 @@ void MessagePassingServer::FinishPreviousSessionWhileLocked(
     });
 }
 
-void MessagePassingServer::OnConnectRequest(const score::mw::com::message_passing::MediumMessagePayload payload,
-                                            const pid_t pid)
+void MessagePassingServer::MessageCallback(const score::cpp::span<const std::uint8_t> message, const pid_t pid)
 {
-    std::unique_lock<std::mutex> lock(mutex_);
-    const auto found = pid_session_map_.find(pid);
-    if (found != pid_session_map_.end())
+    if (message.size() < 1)
     {
-        // old pid owner died without us noticing, finish the old session
-        FinishPreviousSessionWhileLocked(found, lock);
+        std::cerr << "MessagePassingServer: Empty message received from " << pid;
+        return;
     }
+
+    const auto message_type = message.front();
+    const auto payload = message.subspan(1);
+    switch (message_type)
+    {
+        case score::cpp::to_underlying(DatarouterMessageIdentifier::kConnect):
+            OnConnectRequest(payload, pid);
+            break;
+        case score::cpp::to_underlying(DatarouterMessageIdentifier::kAcquireResponse):
+            OnAcquireResponse(payload, pid);
+            break;
+        case score::cpp::to_underlying(DatarouterMessageIdentifier::kAcquireRequest):
+            std::cerr << "MessagePassingServer: Unsupported Acquire Message received from " << pid;
+            break;
+        default:
+            std::cerr << "MessagePassingServer: Unsupported MessageType received from " << pid;
+            break;
+    }
+}
+
+void MessagePassingServer::OnConnectRequest(const score::cpp::span<const std::uint8_t> message, const pid_t pid)
+{
+
     score::mw::log::detail::ConnectMessageFromClient conn;
-    static_assert(payload.size() >= sizeof(conn), "ConnectMessageFromClient too big");
+    if (message.size() < sizeof(conn))
+    {
+        std::cout << "ConnectMessageFromClient too small" << std::endl;
+        stop_source_ = score::cpp::stop_source();
+        return;
+    }
     /*
         Deviation from Rule M5-2-8:
         - Rule M5-2-8 (required, implementation, automated)
         An object with integer type or pointer to void type shall not be converted
         to an object with pointer type.
         Justification:
-        - This is safe since we convert void conn object to it's raw form to fill it from payload .
+        - This is safe since we convert void conn object to it's raw form to fill it from message .
     */
     // coverity[autosar_cpp14_m5_2_8_violation]
     score::cpp::span<std::uint8_t> conn_span{static_cast<uint8_t*>(static_cast<void*>(&conn)), sizeof(conn)};
-    std::ignore = std::copy_n(payload.begin(), sizeof(conn), conn_span.begin());
+    std::ignore = std::copy(message.begin(), message.end(), conn_span.begin());
 
     auto appid_sv = conn.GetAppId().GetStringView();
     std::string appid{appid_sv.data(), appid_sv.size()};
+
     // LCOV_EXCL_START: false positive since it is tested.
     std::string client_receiver_name;
     // LCOV_EXCL_STOP
@@ -394,21 +435,14 @@ void MessagePassingServer::OnConnectRequest(const score::mw::com::message_passin
         client_receiver_name = std::string("/logging.") + appid + "." + std::to_string(conn.GetUid());
     }
 
-    connection_timeout_ = timestamp_t::clock::now() + std::chrono::milliseconds(kConnectionTimeoutInMs);
-    auto stop_token = stop_source_.get_token();
-
-    lock.unlock();
-
     score::cpp::pmr::memory_resource* memory_resource = score::cpp::pmr::get_default_resource();
 
-    constexpr score::mw::com::message_passing::SenderConfig sender_config{
-        kMaxNumbersOfRetry, kSendRetryDelay, kConnectRetryDelay};
-    auto sender = score::mw::com::message_passing::SenderFactory::Create(
-        client_receiver_name, stop_token, sender_config, &DropLogs, memory_resource);
+    const score::message_passing::ServiceProtocolConfig& protocol_config{
+        client_receiver_name, MessagePassingConfig::kMaxMessageSize, 0U, 0U};
+    constexpr bool kTrulyAsyncSetToTrue = true;
+    const score::message_passing::IClientFactory::ClientConfig& client_config{0, 10, false, kTrulyAsyncSetToTrue, false};
 
-    lock.lock();
-
-    connection_timeout_ = timestamp_t{};
+    auto sender = client_factory_->Create(protocol_config, client_config);
 
     // check for timeout or exit request
     if (stop_source_.stop_requested())
@@ -424,7 +458,6 @@ void MessagePassingServer::OnConnectRequest(const score::mw::com::message_passin
     // situation where one thread is blocked on the message passing server and
     // another thread is blocked on the subscriber mutex, is avoided by calling
     // the factory only with unlocked mutex.
-    lock.unlock();
 
     ::score::cpp::pmr::unique_ptr<daemon::ISessionHandle> session_handle{
         ::score::cpp::pmr::make_unique<SessionHandle>(memory_resource, pid, this, std::move(sender))};
@@ -441,39 +474,39 @@ void MessagePassingServer::OnConnectRequest(const score::mw::com::message_passin
         std::cerr << "Fail to create session for pid: " << pid << std::endl;
         // LCOV_EXCL_STOP
     }
-    lock.lock();
 
     if (session)
     {
+        std::unique_lock<std::mutex> lock(mutex_);
         auto emplace_result = pid_session_map_.emplace(pid, SessionWrapper{this, pid, std::move(session)});
         // enqueue the tick to speed up processing connection
         emplace_result.first->second.enqueue_tick_while_locked();
     }
 }
 
-void MessagePassingServer::OnAcquireResponse(const score::mw::com::message_passing::MediumMessagePayload payload,
-                                             const pid_t pid)
+void MessagePassingServer::OnAcquireResponse(const score::cpp::span<const std::uint8_t> message, const pid_t pid)
 {
     std::lock_guard<std::mutex> lock(mutex_);
     const auto found = pid_session_map_.find(pid);
     if (found != pid_session_map_.end())
     {
+        auto& [key, session] = *found;
+        std::ignore = key;
         score::mw::log::detail::ReadAcquireResult acq{};
-        static_assert(payload.size() >= sizeof(acq), "MwsrDataReadAcquired too big");
         /*
             Deviation from Rule M5-2-8:
             - Rule M5-2-8 (required, implementation, automated)
             An object with integer type or pointer to void type shall not be converted
             to an object with pointer type.
             Justification:
-            - This is safe since we convert void acq_span object to it's raw form to fill it from payload .
+            - This is safe since we convert void acq_span object to it's raw form to fill it from message .
         */
         // coverity[autosar_cpp14_m5_2_8_violation]
         score::cpp::span<std::uint8_t> acq_span{static_cast<uint8_t*>(static_cast<void*>(&acq)), sizeof(acq)};
-        std::ignore = std::copy_n(payload.begin(), sizeof(acq), acq_span.begin());
-        found->second.session_->on_acquire_response(acq);
+        std::ignore = std::copy(message.begin(), message.end(), acq_span.begin());
+        session.session_->on_acquire_response(acq);
         // enqueue the tick to speed up processing acquire response
-        found->second.enqueue_tick_while_locked();
+        session.enqueue_tick_while_locked();
     }
 }
 
@@ -493,35 +526,31 @@ void MessagePassingServer::NotifyAcquireRequestFailed(std::int32_t pid)
     }
     found->second.enqueue_for_delete_while_locked(true);
 }
-/*
-    Deviation from Rule A3-1-1:
-    - It shall be possible to include any header file
-     in multiple translation units without violating the One Definition Rule.
-    Justification:
-    - This is false positive. Function is declared only once.
-*/
-// coverity[autosar_cpp14_a3_1_1_violation]
-score::mw::com::message_passing::ShortMessage MessagePassingServer::PrepareAcquireRequestMessage() noexcept
-{
-    const auto my_pid = ::score::os::Unistd::instance().getpid();
-    score::mw::com::message_passing::ShortMessage message{};
-    message.id = ToMessageId(DatarouterMessageIdentifier::kAcquireRequest);
-    message.pid = my_pid;  // the receiver will check if the pid matches the sending process
-    message.payload = 0;
-    return message;
-}
 
-void MessagePassingServer::SessionHandle::AcquireRequest() const
+bool MessagePassingServer::SessionHandle::AcquireRequest() const
 {
-    const score::mw::com::message_passing::ShortMessage message = MessagePassingServer::PrepareAcquireRequestMessage();
+    if (!sender_state_.has_value())
+    {
+        sender_->Start(score::message_passing::IClientConnection::StateCallback{},
+                       score::message_passing::IClientConnection::NotifyCallback{});
+    }
+
+    sender_state_ = sender_->GetState();
+    if (sender_state_ != score::message_passing::IClientConnection::State::kReady)
+    {
+        return false;
+    }
+    const std::array<std::uint8_t, 1> message{score::cpp::to_underlying(DatarouterMessageIdentifier::kAcquireRequest)};
     auto ret = sender_->Send(message);
     if (!ret)
     {
         if (server_ != nullptr)
         {
             server_->NotifyAcquireRequestFailed(pid_);
+            return true;
         }
     }
+    return true;
 }
 
 }  // namespace internal

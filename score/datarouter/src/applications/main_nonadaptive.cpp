@@ -16,6 +16,7 @@
 // LCOV_EXCL_START
 #include <atomic>
 
+#include "score/os/errno_logging.h"
 #include "score/os/utils/signal_impl.h"
 #include "score/mw/log/logging.h"
 
@@ -45,10 +46,23 @@ int main(std::int32_t argc, const char* argv[])
     }
 
     score::os::SignalImpl sig{};
-    // score::os wrappers are better suited for dependency injection,
-    // So suppressed here as it is safely used, and it is among safety headers.
-    // NOLINTNEXTLINE(score-banned-function) see comment above.
-    sig.signal(SIGTERM, signal_handler);
+    struct sigaction old_sigaction;
+    struct sigaction sig_handler;
+    sigset_t sig_set;
+    // NOLINTNEXTLINE(score-banned-function) This is testcode only, cf. line 3
+    auto res = sig.SigEmptySet(sig_set);
+    if (!res.has_value())
+    {
+        score::mw::log::LogError() << res.error();
+    }
+    sig_handler.sa_handler = signal_handler;
+    sig_handler.sa_mask = sig_set;
+    sig_handler.sa_flags = 0;
+    res = sig.SigAction(SIGTERM, sig_handler, old_sigaction);
+    if (!res.has_value())
+    {
+        score::mw::log::LogError() << res.error();
+    }
     score::logging::datarouter::datarouter_app_init();
     score::logging::datarouter::datarouter_app_run(exit_requested);
     score::logging::datarouter::datarouter_app_shutdown();

@@ -27,6 +27,40 @@
 #include <functional>
 #include <iostream>
 #include <memory>
+#include <string>
+
+// Forward declaration for testing
+namespace score
+{
+namespace mw
+{
+namespace log
+{
+namespace detail
+{
+class ConnectMessageFromClient;
+}
+}  // namespace log
+}  // namespace mw
+}  // namespace score
+
+namespace score
+{
+namespace os
+{
+class Pthread;
+}  // namespace os
+}  // namespace score
+
+#ifdef __QNX__
+#include "score/message_passing/qnx_dispatch/qnx_dispatch_client_factory.h"
+#include "score/message_passing/qnx_dispatch/qnx_dispatch_engine.h"
+#include "score/message_passing/qnx_dispatch/qnx_dispatch_server_factory.h"
+#else
+#include "score/message_passing/unix_domain/unix_domain_client_factory.h"
+#include "score/message_passing/unix_domain/unix_domain_engine.h"
+#include "score/message_passing/unix_domain/unix_domain_server_factory.h"
+#endif
 
 namespace score
 {
@@ -34,6 +68,14 @@ namespace platform
 {
 namespace datarouter
 {
+
+#ifdef __QNX__
+using ServerFactory = score::message_passing::QnxDispatchServerFactory;
+using ClientFactory = score::message_passing::QnxDispatchClientFactory;
+#else
+using ServerFactory = score::message_passing::UnixDomainServerFactory;
+using ClientFactory = score::message_passing::UnixDomainClientFactory;
+#endif
 
 class SocketServer
 {
@@ -50,6 +92,9 @@ class SocketServer
         static SocketServer server;
         server.doWork(exit_requested, no_adaptive_runtime);
     }
+    //  static void run(const std::atomic_bool& exit_requested, const bool no_adaptive_runtime);
+
+    /// @internal Test helpers - do not use in production code
 
     static PersistentStorageHandlers InitializePersistentStorage(
         std::unique_ptr<IPersistentDictionary>& persistent_dictionary);
@@ -93,6 +138,11 @@ class SocketServer
                              DataRouter& router,
                              score::logging::dltserver::DltLogServer& dlt_server,
                              score::mw::log::Logger& stats_logger);
+    // Testable helper functions
+    static void SetThreadName() noexcept;
+    static void SetThreadName(score::os::Pthread& pthread_instance) noexcept;
+    static std::string ResolveSharedMemoryFileName(const score::mw::log::detail::ConnectMessageFromClient& conn,
+                                                   const std::string& appid);
 
   private:
     void doWork(const std::atomic_bool& exit_requested, const bool no_adaptive_runtime);

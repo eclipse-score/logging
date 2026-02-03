@@ -43,7 +43,7 @@ class MockDltOutput : public DltNonverboseHandler::IOutput
 {
   public:
     MOCK_METHOD(void,
-                sendNonVerbose,
+                SendNonVerbose,
                 (const score::mw::log::config::NvMsgDescriptor& desc, uint32_t tmsp, const void* data, size_t size),
                 (override));
     virtual ~MockDltOutput() = default;
@@ -88,7 +88,7 @@ TEST(DltNonverboseHandler_T, HandleShouldNotCallSendNonVerboseWhenDescriptorIsNu
     MockDltOutput mockOutput;
     DltNonverboseHandler handler(mockOutput);
 
-    EXPECT_CALL(mockOutput, sendNonVerbose(_, _, _, _)).Times(0);
+    EXPECT_CALL(mockOutput, SendNonVerbose(_, _, _, _)).Times(0);
 
     handler.handle(typeInfo, timestamp, data, size);
 }
@@ -102,7 +102,7 @@ TEST(DltNonverboseHandler_T, HandleCallSendNonVerboseWhenDltMsgDesc)
                                                                   score::mw::log::detail::LoggingIdentifier{"CTX0"},
                                                                   score::mw::log::LogLevel::kOff};
 
-    EXPECT_CALL(mockOutput, sendNonVerbose(_, _, _, _)).Times(1);
+    EXPECT_CALL(mockOutput, SendNonVerbose(_, _, _, _)).Times(1);
 
     DltNonverboseHandler handler(mockOutput);
 

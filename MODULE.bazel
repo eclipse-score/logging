@@ -95,14 +95,14 @@ bazel_dep(name = "rapidjson", version = "1.1.0")
 bazel_dep(name = "score_communication", version = "0.1.2")
 git_override(
     module_name = "score_communication",
-    commit = "5a70133dd8bd632f5c07f200a5ee4bc9f507c23b",
+    commit = "42eb047495099ec70b5c8773f29783cc205bf7df",
     remote = "https://github.com/eclipse-score/communication.git",
 )
 
 bazel_dep(name = "score_baselibs", version = "0.2.0")
 git_override(
     module_name = "score_baselibs",
-    commit = "3c65b223e9f516f95935bb4cd2e83d6088ca016f",
+    commit = "99d49637a2199f33a71edc479d39970e3bdcb271",
     remote = "https://github.com/eclipse-score/baselibs.git",
 )
 

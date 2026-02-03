@@ -15,36 +15,16 @@ load("@rules_cc//cc:defs.bzl", "cc_library")
 load("@score_baselibs//score/language/safecpp:toolchain_features.bzl", "COMPILER_WARNING_FEATURES")
 
 cc_library(
-    name = "file_transfer_handler_factory_stub",
+    name = "file_transfer_handler_factory",
     hdrs = [
-        "file_transfer_handler_factory_stub.h",
+        "file_transfer_handler_factory.hpp",
     ],
     features = COMPILER_WARNING_FEATURES,
     visibility = [
-        "//score/datarouter:__pkg__",
+        "//score/datarouter/src/file_transfer:__subpackages__",
         "//score/datarouter/test:__subpackages__",
     ],
     deps = [
-        ":file_transfer_stream_handler_stub",
         "//score/datarouter:logparser",
-        "//score/datarouter/file_transfer:file_transfer_handler_factory",
-    ],
-)
-
-cc_library(
-    name = "file_transfer_stream_handler_stub",
-    hdrs = [
-        "file_transfer_stream_handler_stub.h",
-    ],
-    features = COMPILER_WARNING_FEATURES,
-    visibility = [
-        "//score/datarouter:__pkg__",
-    ],
-    deps = [
-        "//score/datarouter:dltprotocol",
-        "//score/datarouter:dltserver_common",
-        "//score/datarouter:log",
-        "//score/datarouter:logparser",
-        "@score_baselibs//score/language/futurecpp",
     ],
 )

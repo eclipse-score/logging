@@ -403,6 +403,76 @@ TEST_F(LoggerFixture, WhenTypeRegistrationFailsDroppedLogsCounterIsIncremented)
     EXPECT_EQ(static_cast<std::uint64_t>(kNumberOfLogAttempts), log_entry_instance.get_dropped_logs_count());
 }
 
+TEST(TraceFixtureTest, TraceFatalFunctionCallsTraceLevel)
+{
+    RecordProperty("Requirement", "SCR-1633147");
+    RecordProperty("ASIL", "B");
+    RecordProperty("Description", "Verifies that TRACE_FATAL calls TRACE_LEVEL with kFatal level");
+    RecordProperty("TestingTechnique", "Requirements-based test");
+    RecordProperty("DerivationTechnique", "Analysis of requirements");
+
+    LogEntry entry{};
+    auto& logger = LOG_ENTRY<score::mw::log::detail::LogEntry>();
+    TRACE_FATAL(entry);
+    EXPECT_EQ(true, logger.enabled_at(score::platform::LogLevel::kFatal));
+}
+
+TEST(TraceFixtureTest, TraceWarnFunctionCallsTraceLevel)
+{
+    RecordProperty("Requirement", "SCR-1633147");
+    RecordProperty("ASIL", "B");
+    RecordProperty("Description", "Verifies that TRACE_WARN calls TRACE_LEVEL with kWarn level");
+    RecordProperty("TestingTechnique", "Requirements-based test");
+    RecordProperty("DerivationTechnique", "Analysis of requirements");
+
+    LogEntry entry{};
+    auto& logger = LOG_ENTRY<score::mw::log::detail::LogEntry>();
+    TRACE_WARN(entry);
+    EXPECT_EQ(true, logger.enabled_at(score::platform::LogLevel::kWarn));
+}
+
+TEST(TraceFixtureTest, TraceVerboseFunctionCallsTraceLevel)
+{
+    RecordProperty("Requirement", "SCR-1633147");
+    RecordProperty("ASIL", "B");
+    RecordProperty("Description", "Verifies that TRACE_VERBOSE calls TRACE_LEVEL with kVerbose level");
+    RecordProperty("TestingTechnique", "Requirements-based test");
+    RecordProperty("DerivationTechnique", "Analysis of requirements");
+
+    LogEntry entry{};
+    auto& logger = LOG_ENTRY<score::mw::log::detail::LogEntry>();
+    TRACE_VERBOSE(entry);
+    EXPECT_EQ(true, logger.enabled_at(score::platform::LogLevel::kVerbose));
+}
+
+TEST(TraceFixtureTest, TraceDebugFunctionCallsTraceLevel)
+{
+    RecordProperty("Requirement", "SCR-1633147");
+    RecordProperty("ASIL", "B");
+    RecordProperty("Description", "Verifies that TRACE_DEBUG calls TRACE_LEVEL with kDebug level");
+    RecordProperty("TestingTechnique", "Requirements-based test");
+    RecordProperty("DerivationTechnique", "Analysis of requirements");
+
+    LogEntry entry{};
+    auto& logger = LOG_ENTRY<score::mw::log::detail::LogEntry>();
+    TRACE_DEBUG(entry);
+    EXPECT_EQ(true, logger.enabled_at(score::platform::LogLevel::kDebug));
+}
+
+TEST(TraceFixtureTest, TraceInfoFunctionCallsTraceLevel)
+{
+    RecordProperty("Requirement", "SCR-1633147");
+    RecordProperty("ASIL", "B");
+    RecordProperty("Description", "Verifies that TRACE_INFO calls TRACE_LEVEL with kInfo level");
+    RecordProperty("TestingTechnique", "Requirements-based test");
+    RecordProperty("DerivationTechnique", "Analysis of requirements");
+
+    LogEntry entry{};
+    auto& logger = LOG_ENTRY<score::mw::log::detail::LogEntry>();
+    TRACE_INFO(entry);
+    EXPECT_EQ(true, logger.enabled_at(score::platform::LogLevel::kInfo));
+}
+
 }  // namespace
 }  // namespace detail
 }  // namespace log

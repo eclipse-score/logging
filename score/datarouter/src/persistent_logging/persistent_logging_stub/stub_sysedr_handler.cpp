@@ -11,10 +11,7 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-#ifndef SCORE_PAS_LOGGING_INCLUDE_SYSEDR_STUB_SYSEDR_HANDLER_H
-#define SCORE_PAS_LOGGING_INCLUDE_SYSEDR_STUB_SYSEDR_HANDLER_H
-
-#include "score/datarouter/persistent_logging/isysedr_handler.h"
+#include "score/datarouter/src/persistent_logging/persistent_logging_stub/stub_sysedr_handler.h"
 
 namespace score
 {
@@ -23,19 +20,15 @@ namespace platform
 namespace internal
 {
 
-class StubSysedrHandler final : public ISysedrHandler
-{
+// LCOV_EXCL_START (nothing to test because there is no implementation)
+// LogParser::TypeHandler
+void StubSysedrHandler::handle(timestamp_t /* timestamp */, const char* data, bufsize_t size) {}
 
-  private:
-    // LogParser::TypeHandler
-    void handle(timestamp_t /* timestamp */, const char* data, bufsize_t size) override;
+// LogParser::AnyHandler
+void StubSysedrHandler::handle(const TypeInfo& type_info, timestamp_t timestamp, const char* data, bufsize_t size) {}
 
-    // LogParser::AnyHandler
-    void handle(const TypeInfo& typeInfo, timestamp_t timestamp, const char* data, bufsize_t size) override;
-};
+// LCOV_EXCL_STOP
 
 }  // namespace internal
 }  // namespace platform
 }  // namespace score
-
-#endif  // SCORE_PAS_LOGGING_INCLUDE_SYSEDR_STUB_SYSEDR_HANDLER_H

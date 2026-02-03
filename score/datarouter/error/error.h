@@ -11,8 +11,8 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-#ifndef DLT_LOGGING_ERROR_ERROR_H_
-#define DLT_LOGGING_ERROR_ERROR_H_
+#ifndef SCORE_PAS_LOGGING_ERROR_ERROR_H
+#define SCORE_PAS_LOGGING_ERROR_ERROR_H
 
 #include "score/result/error.h"
 
@@ -43,4 +43,4 @@ score::result::Error MakeError(const LoggingErrorCode code, const std::string_vi
 }  // namespace logging
 }  // namespace score
 
-#endif  // DLT_LOGGING_ERROR_ERROR_H_
+#endif  // SCORE_PAS_LOGGING_ERROR_ERROR_H
