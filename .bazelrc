@@ -18,14 +18,10 @@ build --tool_java_runtime_version=remotejdk_17
 common --registry=https://raw.githubusercontent.com/eclipse-score/bazel_registry/main/
 common --registry=https://bcr.bazel.build
 
-build --incompatible_strict_action_env
 test --test_tag_filters=-manual
 test --test_output=errors
+build --incompatible_strict_action_env
 build --experimental_retain_test_configuration_across_testonly #https://github.com/bazelbuild/bazel/issues/6842
-
-common --platforms=@score_bazel_platforms//:x86_64-linux-gcc_12.2.0-posix
-common --extra_toolchains=@score_gcc_x86_64_toolchain//:x86_64-linux-gcc_12.2.0-posix
-common --extra_toolchains=@score_toolchains_rust//toolchains/ferrocene:ferrocene_x86_64_unknown_linux_gnu
 
 # Common flags for all builds
 common --@score_baselibs//score/memory/shared/flags:use_typedshmd=False
@@ -38,6 +34,9 @@ common --//score/datarouter/build_configuration_flags:enable_dynamic_configurati
 common --//score/datarouter/build_configuration_flags:dlt_file_transfer_feature=False
 common --//score/datarouter/build_configuration_flags:use_local_vlan=True
 
+common:linux_x86_64_gcc --platforms=@score_bazel_platforms//:x86_64-linux-gcc_12.2.0-posix
+common:linux_x86_64_gcc --extra_toolchains=@score_gcc_x86_64_toolchain//:x86_64-linux-gcc_12.2.0-posix
+common:linux_x86_64_gcc --extra_toolchains=@score_toolchains_rust//toolchains/ferrocene:ferrocene_x86_64_unknown_linux_gnu
 
 # Base QNX config (shared flags)
 common:qnx --credential_helper=*.qnx.com=%workspace%/scripts/internal/qnx_creds.py
@@ -55,6 +54,7 @@ common:qnx_arm64 --extra_toolchains=@score_toolchains_rust//toolchains/ferrocene
 
 common:x86_64-qnx --config=qnx_x86_64
 common:arm64-qnx --config=qnx_arm64
+common:x86_64-linux --config=linux_x86_64_gcc
 
 # With this instrumentation filter for our two main components, we ensure that `bazel coverage //...` is yielding the correct results
 coverage --instrumentation_filter="^//score/datarouter[/:],^//score/mw/log[/:],-//score/mw/.*/test[/:]"
