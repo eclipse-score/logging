@@ -36,15 +36,15 @@ TEST_F(OptionsTest, ParseNoArguments)
     char* argv[] = {program_name, nullptr};
 
     // parse returns true on success
-    bool result = score::logging::options::Options::parse(argc, argv);
+    bool result = score::logging::options::Options::Parse(argc, argv);
     EXPECT_TRUE(result);
 
     // Check flags
-    score::logging::options::Options& opts = score::logging::options::Options::get();
-    EXPECT_FALSE(opts.do_nothing());
-    EXPECT_FALSE(opts.print_version());
-    EXPECT_FALSE(opts.verbose());
-    EXPECT_FALSE(opts.no_adaptive_runtime());
+    score::logging::options::Options& opts = score::logging::options::Options::Get();
+    EXPECT_FALSE(opts.DoNothing());
+    EXPECT_FALSE(opts.PrintVersion());
+    EXPECT_FALSE(opts.Verbose());
+    EXPECT_FALSE(opts.NoAdaptiveRuntime());
 }
 
 TEST_F(OptionsTest, ParseHelpShortOptionH)
@@ -56,15 +56,15 @@ TEST_F(OptionsTest, ParseHelpShortOptionH)
     char* argv[] = {program_name, help_option, nullptr};
 
     // parse should return true
-    bool result = score::logging::options::Options::parse(argc, argv);
+    bool result = score::logging::options::Options::Parse(argc, argv);
     EXPECT_TRUE(result);
 
     // Because -h triggers usage, do_nothing_ is set (and we return early)
-    score::logging::options::Options& opts = score::logging::options::Options::get();
-    EXPECT_TRUE(opts.do_nothing());
-    EXPECT_FALSE(opts.print_version());
-    EXPECT_FALSE(opts.verbose());
-    EXPECT_FALSE(opts.no_adaptive_runtime());
+    score::logging::options::Options& opts = score::logging::options::Options::Get();
+    EXPECT_TRUE(opts.DoNothing());
+    EXPECT_FALSE(opts.PrintVersion());
+    EXPECT_FALSE(opts.Verbose());
+    EXPECT_FALSE(opts.NoAdaptiveRuntime());
 }
 
 TEST_F(OptionsTest, ParseVerboseShortOptionV)
@@ -76,12 +76,12 @@ TEST_F(OptionsTest, ParseVerboseShortOptionV)
     char* argv[] = {program_name, help_option, nullptr};
 
     // parse should return true
-    bool result = score::logging::options::Options::parse(argc, argv);
+    bool result = score::logging::options::Options::Parse(argc, argv);
     EXPECT_TRUE(result);
 
-    score::logging::options::Options& opts = score::logging::options::Options::get();
-    EXPECT_TRUE(opts.verbose());
-    EXPECT_TRUE(opts.do_nothing());
+    score::logging::options::Options& opts = score::logging::options::Options::Get();
+    EXPECT_TRUE(opts.Verbose());
+    EXPECT_TRUE(opts.DoNothing());
 }
 
 TEST_F(OptionsTest, ParseVerboseLongOptionV)
@@ -93,12 +93,12 @@ TEST_F(OptionsTest, ParseVerboseLongOptionV)
     char verbose_option[] = "--verbose";
     char* argv[] = {program_name, verbose_option, nullptr};
 
-    bool result = score::logging::options::Options::parse(argc, argv);
+    bool result = score::logging::options::Options::Parse(argc, argv);
     EXPECT_TRUE(result);
 
-    score::logging::options::Options& opts = score::logging::options::Options::get();
-    EXPECT_TRUE(opts.verbose());
-    EXPECT_TRUE(opts.do_nothing());
+    score::logging::options::Options& opts = score::logging::options::Options::Get();
+    EXPECT_TRUE(opts.Verbose());
+    EXPECT_TRUE(opts.DoNothing());
 }
 
 TEST_F(OptionsTest, ParseVerboseLongOptionHelp)
@@ -109,11 +109,11 @@ TEST_F(OptionsTest, ParseVerboseLongOptionHelp)
     char verbose_option[] = "--help";
     char* argv[] = {program_name, verbose_option, nullptr};
 
-    bool result = score::logging::options::Options::parse(argc, argv);
+    bool result = score::logging::options::Options::Parse(argc, argv);
     EXPECT_TRUE(result);
 
-    score::logging::options::Options& opts = score::logging::options::Options::get();
-    EXPECT_TRUE(opts.do_nothing());
+    score::logging::options::Options& opts = score::logging::options::Options::Get();
+    EXPECT_TRUE(opts.DoNothing());
 }
 
 TEST_F(OptionsTest, ParseVerboseLongOptionNoAdaptiveRuntime)
@@ -124,11 +124,11 @@ TEST_F(OptionsTest, ParseVerboseLongOptionNoAdaptiveRuntime)
     char verbose_option[] = "--no_adaptive_runtime";
     char* argv[] = {program_name, verbose_option, nullptr};
 
-    bool result = score::logging::options::Options::parse(argc, argv);
+    bool result = score::logging::options::Options::Parse(argc, argv);
     EXPECT_TRUE(result);
 
-    score::logging::options::Options& opts = score::logging::options::Options::get();
-    EXPECT_TRUE(opts.no_adaptive_runtime());
+    score::logging::options::Options& opts = score::logging::options::Options::Get();
+    EXPECT_TRUE(opts.NoAdaptiveRuntime());
 }
 
 TEST_F(OptionsTest, ParseNoAdaptiveRuntimeShortOptionN)
@@ -139,12 +139,12 @@ TEST_F(OptionsTest, ParseNoAdaptiveRuntimeShortOptionN)
     char no_adaptive_option[] = "-n";
     char* argv[] = {program_name, no_adaptive_option, nullptr};
 
-    bool result = score::logging::options::Options::parse(argc, argv);
+    bool result = score::logging::options::Options::Parse(argc, argv);
     EXPECT_TRUE(result);
 
-    score::logging::options::Options& opts = score::logging::options::Options::get();
-    EXPECT_TRUE(opts.no_adaptive_runtime());
-    EXPECT_TRUE(opts.do_nothing());
+    score::logging::options::Options& opts = score::logging::options::Options::Get();
+    EXPECT_TRUE(opts.NoAdaptiveRuntime());
+    EXPECT_TRUE(opts.DoNothing());
 }
 
 TEST_F(OptionsTest, ParseNoAdaptiveRuntimeShortOptionV)
@@ -155,11 +155,11 @@ TEST_F(OptionsTest, ParseNoAdaptiveRuntimeShortOptionV)
     char no_adaptive_option[] = "-V";
     char* argv[] = {program_name, no_adaptive_option, nullptr};
 
-    bool result = score::logging::options::Options::parse(argc, argv);
+    bool result = score::logging::options::Options::Parse(argc, argv);
     EXPECT_TRUE(result);
 
-    score::logging::options::Options& opts = score::logging::options::Options::get();
-    EXPECT_TRUE(opts.print_version());
+    score::logging::options::Options& opts = score::logging::options::Options::Get();
+    EXPECT_TRUE(opts.PrintVersion());
 }
 
 TEST_F(OptionsTest, ParseVersionLongOption)
@@ -171,13 +171,13 @@ TEST_F(OptionsTest, ParseVersionLongOption)
     char version_option[] = "--version";
     char* argv[] = {program_name, version_option, nullptr};
 
-    bool result = score::logging::options::Options::parse(argc, argv);
+    bool result = score::logging::options::Options::Parse(argc, argv);
     EXPECT_TRUE(result);
 
     // 'print_version_' is set, parse returns early
-    score::logging::options::Options& opts = score::logging::options::Options::get();
-    EXPECT_TRUE(opts.print_version());
-    EXPECT_TRUE(opts.no_adaptive_runtime());
+    score::logging::options::Options& opts = score::logging::options::Options::Get();
+    EXPECT_TRUE(opts.PrintVersion());
+    EXPECT_TRUE(opts.NoAdaptiveRuntime());
 }
 
 TEST_F(OptionsTest, ParseUnknownOptionSimiColon)
@@ -189,13 +189,13 @@ TEST_F(OptionsTest, ParseUnknownOptionSimiColon)
     char* argv[] = {program_name, unknown_option, nullptr};
 
     // parse should return false for unknown option
-    bool result = score::logging::options::Options::parse(argc, argv);
+    bool result = score::logging::options::Options::Parse(argc, argv);
     EXPECT_TRUE(result);
 
-    score::logging::options::Options& opts = score::logging::options::Options::get();
-    EXPECT_TRUE(opts.print_version());
-    EXPECT_TRUE(opts.no_adaptive_runtime());
-    EXPECT_TRUE(opts.do_nothing());
+    score::logging::options::Options& opts = score::logging::options::Options::Get();
+    EXPECT_TRUE(opts.PrintVersion());
+    EXPECT_TRUE(opts.NoAdaptiveRuntime());
+    EXPECT_TRUE(opts.DoNothing());
 }
 
 TEST_F(OptionsTest, ParseUnknownOption)
@@ -207,7 +207,7 @@ TEST_F(OptionsTest, ParseUnknownOption)
     char* argv[] = {program_name, unknown_option, nullptr};
 
     // parse should return false for unknown option
-    bool result = score::logging::options::Options::parse(argc, argv);
+    bool result = score::logging::options::Options::Parse(argc, argv);
     EXPECT_FALSE(result);
 }
 
@@ -223,7 +223,7 @@ TEST_F(OptionsTest, ParseMissingArg)
     char missing_arg_option[] = "-d";
     char* argv[] = {program_name, missing_arg_option, nullptr};
 
-    bool result = score::logging::options::Options::parse(argc, argv);
+    bool result = score::logging::options::Options::Parse(argc, argv);
 
     EXPECT_FALSE(result);
 }
@@ -237,6 +237,6 @@ TEST_F(OptionsTest, ParseUnknownOptionDoubleQuestionDashDash)
     char* argv[] = {program_name, unknown_option, nullptr};
 
     // parse should return false for this unknown option
-    bool result = score::logging::options::Options::parse(argc, argv);
+    bool result = score::logging::options::Options::Parse(argc, argv);
     EXPECT_FALSE(result);
 }

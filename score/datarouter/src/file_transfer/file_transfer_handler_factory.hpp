@@ -34,9 +34,9 @@ template <typename DerivedFactory>
 class FileTransferHandlerFactory
 {
   public:
-    std::unique_ptr<LogParser::TypeHandler> create()
+    std::unique_ptr<LogParser::TypeHandler> Create()
     {
-        return static_cast<DerivedFactory&>(*this).createConcreteHandler();
+        return static_cast<DerivedFactory&>(*this).CreateConcreteHandler();
     }
 
   private:

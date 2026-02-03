@@ -32,7 +32,7 @@ class IDiagnosticJobHandler;  // Forward Declaration
 class IDiagnosticJobParser
 {
   public:
-    virtual std::unique_ptr<IDiagnosticJobHandler> parse(const std::string& command) = 0;
+    virtual std::unique_ptr<IDiagnosticJobHandler> Parse(const std::string& command) = 0;
 
     virtual ~IDiagnosticJobParser() = default;
 };

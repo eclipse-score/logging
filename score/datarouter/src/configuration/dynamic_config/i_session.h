@@ -11,8 +11,8 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-#ifndef I_SESSION_H
-#define I_SESSION_H
+#ifndef SCORE_DATAROUTER_SRC_CONFIGURATION_DYNAMIC_CONFIG_I_SESSION_H
+#define SCORE_DATAROUTER_SRC_CONFIGURATION_DYNAMIC_CONFIG_I_SESSION_H
 
 #include <string>
 
@@ -24,13 +24,13 @@ namespace logging
 class ISession
 {
   public:
-    virtual bool tick() = 0;
-    virtual void on_command(const std::string& /*command*/) {}
-    virtual void on_closed_by_peer() {}
+    virtual bool Tick() = 0;
+    virtual void OnCommand(const std::string& /*command*/) {}
+    virtual void OnClosedByPeer() {}
     virtual ~ISession() = default;
 };
 
 }  // namespace logging
 }  // namespace score
 
-#endif  // I_SESSION_H
+#endif  // SCORE_DATAROUTER_SRC_CONFIGURATION_DYNAMIC_CONFIG_I_SESSION_H

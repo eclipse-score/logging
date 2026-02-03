@@ -11,8 +11,8 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-#ifndef LOGGING_APPLICATIONS_DATAROUTER_APP_H_
-#define LOGGING_APPLICATIONS_DATAROUTER_APP_H_
+#ifndef SCORE_DATAROUTER_SRC_APPLICATIONS_DATAROUTER_APP_H
+#define SCORE_DATAROUTER_SRC_APPLICATIONS_DATAROUTER_APP_H
 
 #include <atomic>
 
@@ -23,12 +23,12 @@ namespace logging
 namespace datarouter
 {
 
-extern void datarouter_app_init();
-extern void datarouter_app_run(const std::atomic_bool& exit_requested);
-extern void datarouter_app_shutdown();
+extern void DatarouterAppInit();
+extern void DatarouterAppRun(const std::atomic_bool& exit_requested);
+extern void DatarouterAppShutdown();
 
 }  // namespace datarouter
 }  // namespace logging
 }  // namespace score
 
-#endif  // LOGGING_APPLICATIONS_DATAROUTER_APP_H_
+#endif  // SCORE_DATAROUTER_SRC_APPLICATIONS_DATAROUTER_APP_H

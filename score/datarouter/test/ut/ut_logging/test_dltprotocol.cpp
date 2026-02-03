@@ -81,7 +81,7 @@ TEST(DltProtocolTest, PackageFileDataShallWriteDataCorrectlyWithCorrectData)
 // Kindly, check the code, inside the "PackageFileData" method for the reasons of disabling this test.
 TEST(DltProtocolTest, DISABLED_PackageFileDataShallReturnsNulloptIfItWorkedOnAlreadyClosedFile)
 {
-    std::array<char, BUFFER_SIZE> buffer{};
+    std::array<char, kBufferSize> buffer{};
     auto data_span = score::cpp::span<char>{buffer.data(), buffer.size()};
     const uint32_t serial_number{0U};
     const uint32_t pkg_number{0};
@@ -118,10 +118,10 @@ TEST(DltProtocolTest, PackageFileEndShallWriteHeaderCorrectlyWithCorrectData)
 
 TEST(DltProtocolTest, PackageFileErrorShallReturnFLER_FILE_NORIfTheFilePathIsExist)
 {
-    std::array<char, BUFFER_SIZE> buffer{};
+    std::array<char, kBufferSize> buffer{};
     auto data_span = score::cpp::span<char>{buffer.data(), buffer.size()};
     // Any error code.
-    const int16_t error_code{DLT_FILETRANSFER_ERROR_FILE_DATA};
+    const int16_t error_code{kDltFiletransferErrorFileData};
     const uint32_t serial_number{0U};
     const std::string file_name{kFileName};
     const uint32_t file_size{0U};
@@ -132,15 +132,15 @@ TEST(DltProtocolTest, PackageFileErrorShallReturnFLER_FILE_NORIfTheFilePathIsExi
     auto result = PackageFileError(
         data_span, error_code, serial_number, file_name, file_size, creation_date, package_count, error_message);
     // Index '1' to get the 'nor' from the tuple.
-    EXPECT_EQ(std::get<1>(result.value()), FLER_FILE_NOR);
+    EXPECT_EQ(std::get<1>(result.value()), kFlerFileNor);
 }
 
 TEST(DltProtocolTest, PackageFileErrorShallReturnFLER_FILE_NORPlusOneIfTheFilePathExistAndTheErrorMessageIsNotEmpty)
 {
-    std::array<char, BUFFER_SIZE> buffer{};
+    std::array<char, kBufferSize> buffer{};
     auto data_span = score::cpp::span<char>{buffer.data(), buffer.size()};
     // Any error code.
-    const int16_t error_code{DLT_FILETRANSFER_ERROR_FILE_DATA};
+    const int16_t error_code{kDltFiletransferErrorFileData};
     const uint32_t serial_number{0U};
     const std::string file_name{kFileName};
     const uint32_t file_size{0U};
@@ -151,17 +151,17 @@ TEST(DltProtocolTest, PackageFileErrorShallReturnFLER_FILE_NORPlusOneIfTheFilePa
     auto result = PackageFileError(
         data_span, error_code, serial_number, file_name, file_size, creation_date, package_count, error_message);
     // Index '1' to get the 'nor' from the tuple.
-    EXPECT_EQ(std::get<1>(result.value()), FLER_FILE_NOR + 1);
+    EXPECT_EQ(std::get<1>(result.value()), kFlerFileNor + 1);
 }
 
 TEST(DltProtocolTest, PackageFileErrorShallReturnFLER_NO_FILE_NORIfTheFilePathIsExist)
 {
     auto temp = errno;
     errno = ENOENT;
-    std::array<char, BUFFER_SIZE> buffer{};
+    std::array<char, kBufferSize> buffer{};
     auto data_span = score::cpp::span<char>{buffer.data(), buffer.size()};
     // Any error code.
-    const int16_t error_code{DLT_FILETRANSFER_ERROR_FILE_DATA};
+    const int16_t error_code{kDltFiletransferErrorFileData};
     const uint32_t serial_number{0U};
     const std::string file_name{kFileName};
     const uint32_t file_size{0U};
@@ -173,7 +173,7 @@ TEST(DltProtocolTest, PackageFileErrorShallReturnFLER_NO_FILE_NORIfTheFilePathIs
         data_span, error_code, serial_number, file_name, file_size, creation_date, package_count, error_message);
     // Index '1' to get the 'nor' from the tuple.
     errno = temp;
-    EXPECT_EQ(std::get<1>(result.value()), FLER_NO_FILE_NOR);
+    EXPECT_EQ(std::get<1>(result.value()), kFlerNoFileNor);
 }
 
 TEST(DltProtocolTest, PackageFileInformationShallReturnNulloptDueToBufferTooSmall)
@@ -211,15 +211,15 @@ TEST(DltProtocolTest, PackageFileInformationShallReturnDataOnCorrectSize)
 TEST(DltIdTest, TestInitializeInstanceWithEmptyConstructionInTheStack)
 {
     // If it failed, the whole test proccess will fail.
-    score::platform::dltid_t dlt_id{};
+    score::platform::DltidT dlt_id{};
 }
 
 TEST(DltIdTest, TestTheSingleargumentCharPointerConstructionAndGetTheData)
 {
     const char* char_pointer_str{FOUR_CHAR_STRING};
-    score::platform::dltid_t dlt_id{char_pointer_str};
+    score::platform::DltidT dlt_id{char_pointer_str};
 
-    const char* get_data = dlt_id.data();
+    const char* get_data = dlt_id.Data();
 
     // The size of dlt id is four.
     EXPECT_EQ(get_data[0], char_pointer_str[0]);
@@ -231,8 +231,8 @@ TEST(DltIdTest, TestTheSingleargumentCharPointerConstructionAndGetTheData)
 TEST(DltIdTest, TestDltIdEqualityOperator)
 {
     const char* char_pointer_str{FOUR_CHAR_STRING};
-    score::platform::dltid_t dlt_id{char_pointer_str};
-    score::platform::dltid_t dlt_id_1{char_pointer_str};
+    score::platform::DltidT dlt_id{char_pointer_str};
+    score::platform::DltidT dlt_id_1{char_pointer_str};
 
     EXPECT_TRUE(dlt_id_1 == dlt_id);
 }
@@ -241,27 +241,27 @@ TEST(DltIdTest, TestTheSingleargumentStringConstruction)
 {
     // If it failed, the whole test proccess will fail.
     const std::string str{FOUR_CHAR_STRING};
-    score::platform::dltid_t dlt_id{str};
+    score::platform::DltidT dlt_id{str};
 }
 
 TEST(DltIdTest, TestTheSingleargumentStringViewConstruction)
 {
     // If it failed, the whole test proccess will fail.
     const score::cpp::string_view str_view{FOUR_CHAR_STRING};
-    score::platform::dltid_t dlt_id{str_view};
+    score::platform::DltidT dlt_id{str_view};
 }
 
 TEST(DltIdTest, DltIdSizeShouldBeEqualToFour)
 {
     const std::string str{FOUR_CHAR_STRING};
-    score::platform::dltid_t dlt_id{str};
+    score::platform::DltidT dlt_id{str};
 
-    EXPECT_EQ(dlt_id.size(), score::platform::dltid_t::kSize);
+    EXPECT_EQ(dlt_id.size(), score::platform::DltidT::kSize);
 }
 
 TEST(DltIdTest, TestDltIdAssignOperator)
 {
-    score::platform::dltid_t dlt_id{};
+    score::platform::DltidT dlt_id{};
 
     auto dlt_id_1 = dlt_id;
     EXPECT_TRUE(dlt_id_1 == dlt_id);
@@ -270,7 +270,7 @@ TEST(DltIdTest, TestDltIdAssignOperator)
 TEST(DltIdTest, TestDltIdStringOperator)
 {
     const std::string str{FOUR_CHAR_STRING};
-    score::platform::dltid_t dlt_id{str};
+    score::platform::DltidT dlt_id{str};
 
     // Casting to std::string.
     auto dlt_id_string = std::string(dlt_id);
@@ -282,7 +282,7 @@ TEST(DltIdTest, TestDltIdStringOperator)
 TEST(DltIdTest, TestDltIdAssignmentOperator)
 {
     const std::string str{FOUR_CHAR_STRING};
-    score::platform::dltid_t dlt_id;
+    score::platform::DltidT dlt_id;
     dlt_id = str;
 
     // Casting to std::string.
@@ -295,9 +295,9 @@ TEST(DltIdTest, TestDltIdAssignmentOperator)
 TEST(DltIdTest, TestHashStruct)
 {
     const std::string str{FOUR_CHAR_STRING};
-    score::platform::dltid_t dlt_id{str};
+    score::platform::DltidT dlt_id{str};
 
-    std::hash<score::platform::dltid_t> hash_instance;
+    std::hash<score::platform::DltidT> hash_instance;
     std::size_t dlt_id_value = hash_instance(dlt_id);  // operator()
 
     EXPECT_EQ(dlt_id_value, dlt_id.value);

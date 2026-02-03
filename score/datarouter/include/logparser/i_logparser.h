@@ -11,8 +11,8 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-#ifndef PAS_LOGGING_ILOGPARSER_H_
-#define PAS_LOGGING_ILOGPARSER_H_
+#ifndef SCORE_DATAROUTER_INCLUDE_LOGPARSER_I_LOGPARSER_H
+#define SCORE_DATAROUTER_INCLUDE_LOGPARSER_I_LOGPARSER_H
 
 #include "dlt/dltid.h"
 #include "router/data_router_types.h"
@@ -35,16 +35,16 @@ class INvConfig;
 namespace platform
 {
 
-using timestamp_t = score::os::HighResolutionSteadyClock::time_point;
+using TimestampT = score::os::HighResolutionSteadyClock::time_point;
 
 struct TypeInfo
 {
-    const score::mw::log::config::NvMsgDescriptor* nvMsgDesc;
-    bufsize_t id;
+    const score::mw::log::config::NvMsgDescriptor* nv_msg_desc;
+    BufsizeT id;
     std::string params;
-    std::string typeName;
-    dltid_t ecuId;
-    dltid_t appId;
+    std::string type_name;
+    DltidT ecu_id;
+    DltidT app_id;
 };
 
 namespace internal
@@ -56,14 +56,14 @@ class ILogParser
     class TypeHandler
     {
       public:
-        virtual void handle(timestamp_t timestamp, const char* data, bufsize_t size) = 0;
+        virtual void Handle(TimestampT timestamp, const char* data, BufsizeT size) = 0;
         virtual ~TypeHandler() = default;
     };
 
     class AnyHandler
     {
       public:
-        virtual void handle(const TypeInfo& TypeInfo, timestamp_t timestamp, const char* data, bufsize_t size) = 0;
+        virtual void Handle(const TypeInfo& type_info, TimestampT timestamp, const char* data, BufsizeT size) = 0;
 
         virtual ~AnyHandler() = default;
     };
@@ -72,29 +72,29 @@ class ILogParser
 
     // a function object to return whether the message parameter passes some encapsulted filter
     // (in order to support content-based forwarding)
-    using FilterFunction = std::function<bool(const char*, bufsize_t)>;
+    using FilterFunction = std::function<bool(const char*, BufsizeT)>;
 
     // a function to create such function objects based on the type of the message,
     // the type of the filter object, and the serialized payload of the filter object
     // (called on the request data provided by add_data_forwarder())
     using FilterFunctionFactory = std::function<FilterFunction(const std::string&, const DataFilter&)>;
 
-    virtual void set_filter_factory(FilterFunctionFactory factory) = 0;
+    virtual void SetFilterFactory(FilterFunctionFactory factory) = 0;
 
-    virtual void add_incoming_type(const bufsize_t map_index, const std::string& params) = 0;
+    virtual void AddIncomingType(const BufsizeT map_index, const std::string& params) = 0;
     virtual void AddIncomingType(const score::mw::log::detail::TypeRegistration&) = 0;
 
-    virtual void add_type_handler(const std::string& typeName, TypeHandler& handler) = 0;
-    virtual void add_global_handler(AnyHandler& handler) = 0;
+    virtual void AddTypeHandler(const std::string& type_name, TypeHandler& handler) = 0;
+    virtual void AddGlobalHandler(AnyHandler& handler) = 0;
 
-    virtual void remove_type_handler(const std::string& typeName, TypeHandler& handler) = 0;
-    virtual void remove_global_handler(AnyHandler& handler) = 0;
+    virtual void RemoveTypeHandler(const std::string& type_name, TypeHandler& handler) = 0;
+    virtual void RemoveGlobalHandler(AnyHandler& handler) = 0;
 
-    virtual bool is_type_hndl_registered(const std::string& typeName, const TypeHandler& handler) = 0;
-    virtual bool is_glb_hndl_registered(const AnyHandler& handler) = 0;
+    virtual bool IsTypeHndlRegistered(const std::string& type_name, const TypeHandler& handler) = 0;
+    virtual bool IsGlbHndlRegistered(const AnyHandler& handler) = 0;
 
-    virtual void reset_internal_mapping() = 0;
-    virtual void parse(timestamp_t timestamp, const char* data, bufsize_t size) = 0;
+    virtual void ResetInternalMapping() = 0;
+    virtual void Parse(TimestampT timestamp, const char* data, BufsizeT size) = 0;
     virtual void Parse(const score::mw::log::detail::SharedMemoryRecord& record) = 0;
 };
 
@@ -102,4 +102,4 @@ class ILogParser
 }  // namespace platform
 }  // namespace score
 
-#endif  // PAS_LOGGING_ILOGPARSER_H_
+#endif  // SCORE_DATAROUTER_INCLUDE_LOGPARSER_I_LOGPARSER_H

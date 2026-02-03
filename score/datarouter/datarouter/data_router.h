@@ -11,8 +11,8 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-#ifndef DATA_ROUTER_H_
-#define DATA_ROUTER_H_
+#ifndef SCORE_DATAROUTER_DATAROUTER_DATA_ROUTER_H
+#define SCORE_DATAROUTER_DATAROUTER_DATA_ROUTER_H
 
 #include "daemon/message_passing_server.h"
 #include "logparser/logparser.h"
@@ -51,7 +51,7 @@ struct LocalSubscriberData
     std::chrono::microseconds time_to_process_records{std::chrono::microseconds::zero()};
     std::chrono::steady_clock::time_point last_call_timestamp{std::chrono::steady_clock::now()};
     bool detach_on_closed_processed{false};
-    bool enabled_logging_at_server_{false};
+    bool enabled_logging_at_server{false};
 };
 
 struct CommandData
@@ -60,7 +60,7 @@ struct CommandData
     bool acquire_requested{false};
     uint8_t ticks_without_write{0};
     std::optional<std::uint32_t> block_expected_to_be_next{std::nullopt};
-    std::optional<score::mw::log::detail::ReadAcquireResult> data_acquired_{std::nullopt};
+    std::optional<score::mw::log::detail::ReadAcquireResult> data_acquired{std::nullopt};
 };
 
 struct StatsData
@@ -71,7 +71,7 @@ struct StatsData
     uint64_t message_count_dropped_invalid_size{0};
     uint64_t max_bytes_in_buffer{0};
     uint64_t totalsize{0};
-    double quota_KBps{0.0};
+    double quota_k_bps{0.0};
     bool quota_enforcement_enabled{false};
     bool quota_overlimit_detected{false};
     std::chrono::microseconds time_spent_reading{std::chrono::microseconds::zero()};
@@ -91,9 +91,9 @@ class DataRouter
     using SessionHandleVariant = score::cpp::variant<UnixDomainServer::SessionHandle,
                                               score::cpp::pmr::unique_ptr<score::platform::internal::daemon::ISessionHandle>>;
 
-    explicit DataRouter(score::mw::log::Logger& logger, SourceSetupCallback sourceCallback = SourceSetupCallback());
+    explicit DataRouter(score::mw::log::Logger& logger, SourceSetupCallback source_callback = SourceSetupCallback());
 
-    MessagingSessionPtr new_source_session(
+    MessagingSessionPtr NewSourceSession(
         int fd,
         const std::string name,
         const bool is_dlt_enabled,
@@ -101,24 +101,24 @@ class DataRouter
         const double quota,
         bool quota_enforcement_enabled,
         const pid_t client_pid,
-        const score::mw::log::NvConfig& nvConfig,
+        const score::mw::log::NvConfig& nv_config,
         score::mw::log::detail::ReaderFactoryPtr reader_factory =
             score::mw::log::detail::ReaderFactory::Default(score::cpp::pmr::get_default_resource()));
 
     template <typename E, typename F>
-    void for_each_source_parser(E e, F f, bool enable_logging_client)
+    void ForEachSourceParser(E e, F f, bool enable_logging_client)
     {
         std::lock_guard<std::mutex> lock(subscriber_mutex_);
-        for (auto& sourceSession : sources_)
+        for (const auto& source_session : sources_)
         {
             // No need for the extra lock - synchronization is handled by the Synchronized<T> wrapper
-            sourceSession->SetLoggingClientEnabled(enable_logging_client);
-            e(sourceSession->get_parser());
+            source_session->SetLoggingClientEnabled(enable_logging_client);
+            e(source_session->GetParser());
         }
         f();
     }
 
-    void show_source_statistics(uint16_t series_num);
+    void ShowSourceStatistics(uint16_t series_num);
 
     // for unit test only. to keep rest of functions in private
     class DataRouterForTest;
@@ -150,7 +150,7 @@ class DataRouter
 
         void SetLoggingClientEnabled(bool enable)
         {
-            local_subscriber_data_.lock()->enabled_logging_at_server_ = enable;
+            local_subscriber_data_.lock()->enabled_logging_at_server = enable;
         }
         ~SourceSession();
 
@@ -158,31 +158,31 @@ class DataRouter
         class SourceSessionForTest;
 
       private:
-        bool is_source_closed() override
+        bool IsSourceClosed() override
         {
             return local_subscriber_data_.lock()->detach_on_closed_processed;
         }
 
-        bool tick() override;
+        bool Tick() override;
 
-        bool tryFinalizeAcquisition(bool& needs_fast_reschedule);
-        void processAndRouteLogMessages(uint64_t& message_count_local,
+        bool TryFinalizeAcquisition(bool& needs_fast_reschedule);
+        void ProcessAndRouteLogMessages(uint64_t& message_count_local,
                                         std::chrono::microseconds& transport_delay_local,
                                         uint64_t& number_of_bytes_in_buffer,
                                         bool acquire_finalized_in_this_tick,
                                         bool& needs_fast_reschedule);
-        void update_and_log_stats(uint64_t message_count_local,
-                                  uint64_t number_of_bytes_in_buffer,
-                                  std::chrono::microseconds transport_delay_local,
-                                  score::os::HighResolutionSteadyClock::time_point start);
-        void process_detached_logs(uint64_t& number_of_bytes_in_buffer);
+        void UpdateAndLogStats(uint64_t message_count_local,
+                               uint64_t number_of_bytes_in_buffer,
+                               std::chrono::microseconds transport_delay_local,
+                               score::os::HighResolutionSteadyClock::time_point start);
+        void ProcessDetachedLogs(uint64_t& number_of_bytes_in_buffer);
 
-        void on_acquire_response(const score::mw::log::detail::ReadAcquireResult& acq) override;
+        void OnAcquireResponse(const score::mw::log::detail::ReadAcquireResult& acq) override;
 
-        void on_closed_by_peer() override;
+        void OnClosedByPeer() override;
 
-        void checkAndSetQuotaEnforcement();
-        bool request_acquire();
+        void CheckAndSetQuotaEnforcement();
+        bool RequestAcquire();
 
         Synchronized<LocalSubscriberData> local_subscriber_data_;
         Synchronized<CommandData> command_data_;
@@ -195,26 +195,26 @@ class DataRouter
         score::mw::log::Logger& stats_logger_;
 
       public:
-        void show_stats();
-        ILogParser& get_parser()
+        void ShowStats();
+        ILogParser& GetParser()
         {
-            return *(parser_.get());
+            return *(parser_);
         }
     };
 
-    std::unique_ptr<SourceSession> new_source_session_impl(
+    std::unique_ptr<SourceSession> NewSourceSessionImpl(
         const std::string name,
         const bool is_dlt_enabled,
         SessionHandleVariant handle,
         const double quota,
         bool quota_enforcement_enabled,
         std::unique_ptr<score::mw::log::detail::ISharedMemoryReader> reader,
-        const score::mw::log::NvConfig& nvConfig);
+        const score::mw::log::NvConfig& nv_config);
 
     score::mw::log::Logger& stats_logger_;
 
     std::unordered_set<SourceSession*> sources_;
-    SourceSetupCallback sourceCallback_;
+    SourceSetupCallback source_callback_;
 
     std::mutex subscriber_mutex_;
 };
@@ -223,4 +223,4 @@ class DataRouter
 }  // namespace platform
 }  // namespace score
 
-#endif  // DATA_ROUTER_H_
+#endif  // SCORE_DATAROUTER_DATAROUTER_DATA_ROUTER_H

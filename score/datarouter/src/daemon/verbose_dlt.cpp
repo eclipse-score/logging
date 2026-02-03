@@ -23,17 +23,17 @@ namespace logging
 namespace dltserver
 {
 
-void DltVerboseHandler::handle(timestamp_t timestamp, const char* data, bufsize_t size)
+void DltVerboseHandler::Handle(TimestampT timestamp, const char* data, BufsizeT size)
 {
     namespace dlt_server_logging = ::score::mw::log::detail::log_entry_deserialization;
-    using dlt_duration_t = std::chrono::duration<uint32_t, std::ratio<1, 10000>>;
-    uint32_t duration = std::chrono::duration_cast<dlt_duration_t>(timestamp.time_since_epoch()).count();
+    using DltDurationT = std::chrono::duration<uint32_t, std::ratio<1, 10000>>;
+    uint32_t duration = std::chrono::duration_cast<DltDurationT>(timestamp.time_since_epoch()).count();
     dlt_server_logging::LogEntryDeserializationReflection log_entry_deserialization_reflection;
-    using s = ::score::common::visitor::logging_serializer;
+    using S = ::score::common::visitor::logging_serializer;
 
-    s::deserialize(data, size, log_entry_deserialization_reflection);
+    S::deserialize(data, size, log_entry_deserialization_reflection);
 
-    output_.sendVerbose(duration, log_entry_deserialization_reflection);
+    output_.SendVerbose(duration, log_entry_deserialization_reflection);
 }
 
 }  // namespace dltserver

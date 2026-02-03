@@ -25,13 +25,13 @@
 namespace
 {
 
-void emit_message(const std::string& msg)
+void EmitMessage(const std::string& msg)
 {
     std::cerr << msg << "\n";
     score::mw::log::LogError() << "Error in command line:" << msg;
 }
 
-void report_error(const std::string& text, const char opt_char, const std::string& arg)
+void ReportError(const std::string& text, const char opt_char, const std::string& arg)
 {
     std::string msg = text;
 
@@ -50,10 +50,10 @@ void report_error(const std::string& text, const char opt_char, const std::strin
 
     msg += "\"";
 
-    emit_message(msg);
+    EmitMessage(msg);
 }
 
-void print_usage(std::string_view program)
+void PrintUsage(std::string_view program)
 {
     std::cout
         << "Usage: " << program
@@ -76,9 +76,9 @@ namespace options
 Options::Options() : do_nothing_(false), print_version_(false), verbose_(false), no_adaptive_runtime_(false) {}
 
 // NOLINTNEXTLINE(modernize-avoid-c-arrays): C style array is needed as it has to have main style arguments.
-bool Options::parse(std::int32_t argc, char* const argv[])
+bool Options::Parse(std::int32_t argc, char* const argv[])
 {
-    Options& options = Options::get();
+    Options& options = Options::Get();
 
     score::cpp::span<char* const> args(argv, static_cast<score::cpp::span<char* const>::size_type>(argc));
 
@@ -92,7 +92,7 @@ bool Options::parse(std::int32_t argc, char* const argv[])
             std::string_view long_option_name = argument_token.substr(2);
             if (long_option_name == "help")
             {
-                print_usage(args.front());
+                PrintUsage(args.front());
                 options.do_nothing_ = true;
                 return true;
             }
@@ -111,7 +111,7 @@ bool Options::parse(std::int32_t argc, char* const argv[])
             }
             else
             {
-                report_error("Unknown", '?', score::cpp::at(args, arg_index));
+                ReportError("Unknown", '?', score::cpp::at(args, arg_index));
                 return false;
             }
         }
@@ -127,7 +127,7 @@ bool Options::parse(std::int32_t argc, char* const argv[])
                 switch (short_option_char)
                 {
                     case 'h':
-                        print_usage(args.front());
+                        PrintUsage(args.front());
                         options.do_nothing_ = true;
                         return true;
 
@@ -144,7 +144,7 @@ bool Options::parse(std::int32_t argc, char* const argv[])
                         return true;
 
                     default:
-                        report_error("Unknown", short_option_char, score::cpp::at(args, arg_index));
+                        ReportError("Unknown", short_option_char, score::cpp::at(args, arg_index));
                         return false;
                 }
             }
@@ -154,7 +154,7 @@ bool Options::parse(std::int32_t argc, char* const argv[])
     return true;
 }
 
-Options& Options::get()
+Options& Options::Get()
 {
     static Options options;
     return options;

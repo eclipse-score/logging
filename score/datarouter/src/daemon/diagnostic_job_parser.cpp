@@ -30,7 +30,7 @@ constexpr auto kChannelIdSize{4UL};
 constexpr auto kTraceStateId{1UL};
 constexpr auto kStateSize{1UL};
 
-score::platform::dltid_t extractId(const std::string& message, const size_t offset)
+score::platform::DltidT ExtractId(const std::string& message, const size_t offset)
 {
     auto it = message.begin();
     if (offset > std::numeric_limits<std::string::difference_type>::max())
@@ -39,50 +39,50 @@ score::platform::dltid_t extractId(const std::string& message, const size_t offs
         return {};
     }
     std::advance(it, static_cast<std::string::difference_type>(offset));
-    auto* src = std::addressof(*it);
-    score::platform::dltid_t id(src);
+    const auto* src = std::addressof(*it);
+    score::platform::DltidT id(src);
     return id;
 }
 
-void appendId(score::platform::dltid_t name, std::string& message)
+void AppendId(score::platform::DltidT name, std::string& message)
 {
     std::string chunk = static_cast<std::string>(name).substr(0, 4);  //  Take only up to 4 characters
     chunk.resize(4, '\0');
     message.append(chunk);
 }
 
-std::unique_ptr<IDiagnosticJobHandler> DiagnosticJobParser::parse(const std::string& command)
+std::unique_ptr<IDiagnosticJobHandler> DiagnosticJobParser::Parse(const std::string& command)
 {
     if (command.empty())
     {
         return nullptr;
     }
 
-    const auto commandId = static_cast<uint8_t>(command[0]);
+    const auto command_id = static_cast<uint8_t>(command[0]);
 
-    switch (commandId)
+    switch (command_id)
     {
-        case config::READ_LOG_CHANNEL_NAMES:
+        case config::kReadLogChannelNames:
         {
             return std::make_unique<ReadLogChannelNamesHandler>();
         }
-        case config::RESET_TO_DEFAULT:
+        case config::kResetToDefault:
         {
             return std::make_unique<ResetToDefaultHandler>();
         }
-        case config::STORE_DLT_CONFIG:
+        case config::kStoreDltConfig:
         {
             return std::make_unique<StoreDltConfigHandler>();
         }
-        case config::SET_TRACE_STATE:
+        case config::kSetTraceState:
         {
             return std::make_unique<SetTraceStateHandler>();
         }
-        case config::SET_DEFAULT_TRACE_STATE:
+        case config::kSetDefaultTraceState:
         {
             return std::make_unique<SetDefaultTraceStateHandler>();
         }
-        case config::SET_LOG_CHANNEL_THRESHOLD:
+        case config::kSetLogChannelThreshold:
         {
 
             if (command.size() != kDiagnosticCommandSize + kChannelIdSize + kLogLevelSize + kTraceStateId)
@@ -95,7 +95,7 @@ std::unique_ptr<IDiagnosticJobHandler> DiagnosticJobParser::parse(const std::str
             if (read_level.has_value())
             {
                 auto diag_job_handler = std::make_unique<SetLogChannelThresholdHandler>(
-                    extractId(command, kDiagnosticCommandSize), read_level.value());
+                    ExtractId(command, kDiagnosticCommandSize), read_level.value());
                 return diag_job_handler;
             }
             else
@@ -106,7 +106,7 @@ std::unique_ptr<IDiagnosticJobHandler> DiagnosticJobParser::parse(const std::str
             // Trace state (command[kDiagnosticCommandSize + kChannelIdSize + kLogLevelSize] is ignored for now
         }
 
-        case config::SET_LOG_LEVEL:
+        case config::kSetLogLevel:
         {
 
             if (command.size() != kDiagnosticCommandSize + kAppIdSize + kCtxIdSize + kLogLevelSize)
@@ -116,15 +116,15 @@ std::unique_ptr<IDiagnosticJobHandler> DiagnosticJobParser::parse(const std::str
 
             auto threshold = static_cast<uint8_t>(command[kDiagnosticCommandSize + kAppIdSize + kCtxIdSize]);
 
-            if (threshold == static_cast<std::uint8_t>(ThresholdCmd::UseDefault))
+            if (threshold == static_cast<std::uint8_t>(ThresholdCmd::kUseDefault))
             {
                 // LCOV_EXCL_START : see below
                 // tooling issue, this part is covered by unit tests DiagnosticJobParserTest::SetLogLevel_OK_UseDefault.
                 // For the quality team argumentation, kindly, check Ticket-200702 and Ticket-229594.
                 auto diag_job_handler =
-                    std::make_unique<SetLogLevelHandler>(extractId(command, kDiagnosticCommandSize),
-                                                         extractId(command, kDiagnosticCommandSize + kAppIdSize),
-                                                         ThresholdCmd::UseDefault);
+                    std::make_unique<SetLogLevelHandler>(ExtractId(command, kDiagnosticCommandSize),
+                                                         ExtractId(command, kDiagnosticCommandSize + kAppIdSize),
+                                                         ThresholdCmd::kUseDefault);
                 // LCOV_EXCL_STOP
                 return diag_job_handler;
             }
@@ -134,8 +134,8 @@ std::unique_ptr<IDiagnosticJobHandler> DiagnosticJobParser::parse(const std::str
                 if (read_level.has_value())
                 {
                     auto diag_job_handler =
-                        std::make_unique<SetLogLevelHandler>(extractId(command, kDiagnosticCommandSize),
-                                                             extractId(command, kDiagnosticCommandSize + kAppIdSize),
+                        std::make_unique<SetLogLevelHandler>(ExtractId(command, kDiagnosticCommandSize),
+                                                             ExtractId(command, kDiagnosticCommandSize + kAppIdSize),
                                                              read_level.value());
                     return diag_job_handler;
                 }
@@ -147,7 +147,7 @@ std::unique_ptr<IDiagnosticJobHandler> DiagnosticJobParser::parse(const std::str
             }
         }
 
-        case config::SET_MESSAGING_FILTERING_STATE:
+        case config::kSetMessagingFilteringState:
         {
 
             if (command.size() != kDiagnosticCommandSize + kStateSize)
@@ -161,7 +161,7 @@ std::unique_ptr<IDiagnosticJobHandler> DiagnosticJobParser::parse(const std::str
             return diag_job_handler;
         }
 
-        case config::SET_DEFAULT_LOG_LEVEL:
+        case config::kSetDefaultLogLevel:
         {
             if (command.size() != kDiagnosticCommandSize + kLogLevelSize)
             {
@@ -185,7 +185,7 @@ std::unique_ptr<IDiagnosticJobHandler> DiagnosticJobParser::parse(const std::str
             }
         }
 
-        case config::SET_LOG_CHANNEL_ASSIGNMENT:
+        case config::kSetLogChannelAssignment:
         {
             if (command.size() != kDiagnosticCommandSize + kAppIdSize + kCtxIdSize + kChannelIdSize + kLogLevelSize)
             {
@@ -195,7 +195,7 @@ std::unique_ptr<IDiagnosticJobHandler> DiagnosticJobParser::parse(const std::str
             const auto action_byte = static_cast<std::uint8_t>(
                 static_cast<unsigned char>(command[kDiagnosticCommandSize + kAppIdSize + kCtxIdSize + kChannelIdSize]));
 
-            const auto action_opt = getAssignmentAction(action_byte);
+            const auto action_opt = GetAssignmentAction(action_byte);
             if (!action_opt.has_value())
             {
                 std::cerr << "Incorrect value of assignment received from diagnostics" << std::endl;
@@ -203,27 +203,27 @@ std::unique_ptr<IDiagnosticJobHandler> DiagnosticJobParser::parse(const std::str
             }
 
             auto diag_job_handler = std::make_unique<SetLogChannelAssignmentHandler>(
-                extractId(command, kDiagnosticCommandSize),
-                extractId(command, kDiagnosticCommandSize + kAppIdSize),
-                extractId(command, kDiagnosticCommandSize + kAppIdSize + kCtxIdSize),
+                ExtractId(command, kDiagnosticCommandSize),
+                ExtractId(command, kDiagnosticCommandSize + kAppIdSize),
+                ExtractId(command, kDiagnosticCommandSize + kAppIdSize + kCtxIdSize),
                 action_opt.value());
 
             return diag_job_handler;
         }
 
-        case config::SET_DLT_OUTPUT_ENABLE:
+        case config::kSetDltOutputEnable:
         {
             if (command.size() != kDiagnosticCommandSize + kStateSize)
             {
                 return nullptr;
             }
             auto flag = static_cast<uint8_t>(command[kDiagnosticCommandSize]);
-            if (flag != config::ENABLE && flag != config::DISABLE)
+            if (flag != config::kEnable && flag != config::kDisable)
             {
                 return nullptr;
             }
 
-            auto diag_job_handler = std::make_unique<SetDltOutputEnableHandler>(flag == config::ENABLE);
+            auto diag_job_handler = std::make_unique<SetDltOutputEnableHandler>(flag == config::kEnable);
 
             return diag_job_handler;
         }
@@ -234,9 +234,9 @@ std::unique_ptr<IDiagnosticJobHandler> DiagnosticJobParser::parse(const std::str
     }
 }
 
-std::optional<AssignmentAction> DiagnosticJobParser::getAssignmentAction(std::uint8_t value) noexcept
+std::optional<AssignmentAction> DiagnosticJobParser::GetAssignmentAction(std::uint8_t value) noexcept
 {
-    if (value <= static_cast<std::uint8_t>(AssignmentAction::Add))
+    if (value <= static_cast<std::uint8_t>(AssignmentAction::kAdd))
     {
         return static_cast<AssignmentAction>(value);
     }

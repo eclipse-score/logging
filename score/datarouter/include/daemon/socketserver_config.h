@@ -11,8 +11,8 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-#ifndef SOCKETSERVER_CONFIG_H_
-#define SOCKETSERVER_CONFIG_H_
+#ifndef SCORE_DATAROUTER_INCLUDE_DAEMON_SOCKETSERVER_CONFIG_H
+#define SCORE_DATAROUTER_INCLUDE_DAEMON_SOCKETSERVER_CONFIG_H
 
 #include "daemon/dlt_log_server_config.h"
 #include "score/datarouter/src/persistency/i_persistent_dictionary.h"
@@ -26,15 +26,15 @@ namespace platform
 namespace datarouter
 {
 
-score::Result<score::logging::dltserver::StaticConfig> readStaticDlt(const char* path);
-score::logging::dltserver::PersistentConfig readDlt(IPersistentDictionary& pd);
-void writeDlt(const score::logging::dltserver::PersistentConfig& config, IPersistentDictionary& pd);
+score::Result<score::logging::dltserver::StaticConfig> ReadStaticDlt(const char* path);
+score::logging::dltserver::PersistentConfig ReadDlt(IPersistentDictionary& pd);
+void WriteDlt(const score::logging::dltserver::PersistentConfig& config, IPersistentDictionary& pd);
 
-bool readDltEnabled(IPersistentDictionary& pd);
-void writeDltEnabled(bool enabled, IPersistentDictionary& pd);
+bool ReadDltEnabled(IPersistentDictionary& pd);
+void WriteDltEnabled(bool enabled, IPersistentDictionary& pd);
 
 }  // namespace datarouter
 }  // namespace platform
 }  // namespace score
 
-#endif  // SOCKETSERVER_CONFIG_H_
+#endif  // SCORE_DATAROUTER_INCLUDE_DAEMON_SOCKETSERVER_CONFIG_H

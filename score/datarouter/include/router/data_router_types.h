@@ -11,8 +11,8 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-#ifndef DATA_ROUTER_TYPES_H_
-#define DATA_ROUTER_TYPES_H_
+#ifndef SCORE_DATAROUTER_INCLUDE_ROUTER_DATA_ROUTER_TYPES_H
+#define SCORE_DATAROUTER_INCLUDE_ROUTER_DATA_ROUTER_TYPES_H
 
 #include <cstdint>
 #include <string>
@@ -22,15 +22,15 @@ namespace score
 namespace platform
 {
 
-using bufsize_t = std::uint32_t;
+using BufsizeT = std::uint32_t;
 
 struct DataFilter
 {
-    std::string filterType;
-    std::string filterData;
+    std::string filter_type;
+    std::string filter_data;
 };
 
 }  // namespace platform
 }  // namespace score
 
-#endif  // DATA_ROUTER_TYPES_H_
+#endif  // SCORE_DATAROUTER_INCLUDE_ROUTER_DATA_ROUTER_TYPES_H

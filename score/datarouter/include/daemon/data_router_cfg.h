@@ -11,8 +11,8 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-#ifndef DATAROUTER_ETC_H_
-#define DATAROUTER_ETC_H_
+#ifndef SCORE_DATAROUTER_INCLUDE_DAEMON_DATA_ROUTER_CFG_H
+#define SCORE_DATAROUTER_INCLUDE_DAEMON_DATA_ROUTER_CFG_H
 
 #include <score/string_view.hpp>
 
@@ -22,10 +22,10 @@ namespace logging
 {
 namespace config
 {
-static const std::string socket_address{"datarouter_socket"};
-static constexpr const score::cpp::string_view dlt_config_client_name{"_dlt_config"};
+static const std::string kSocketAddress{"datarouter_socket"};
+static constexpr const score::cpp::string_view kDltConfigClientName{"_dlt_config"};
 }  // namespace config
 }  // namespace logging
 }  // namespace score
 
-#endif  // DATAROUTER_ETC_H_
+#endif  // SCORE_DATAROUTER_INCLUDE_DAEMON_DATA_ROUTER_CFG_H

@@ -27,13 +27,13 @@ DltNonverboseHandler::DltNonverboseHandler(IOutput& output)
 {
 }
 
-void DltNonverboseHandler::handle(const TypeInfo& type_info, timestamp_t timestamp, const char* data, bufsize_t size)
+void DltNonverboseHandler::Handle(const TypeInfo& type_info, TimestampT timestamp, const char* data, BufsizeT size)
 {
-    if (type_info.nvMsgDesc != nullptr)
+    if (type_info.nv_msg_desc != nullptr)
     {
         using DltDurationT = std::chrono::duration<uint32_t, std::ratio<1, 10000>>;
         uint32_t tmsp = std::chrono::duration_cast<DltDurationT>(timestamp.time_since_epoch()).count();
-        output_.SendNonVerbose(*type_info.nvMsgDesc, tmsp, data, size);
+        output_.SendNonVerbose(*type_info.nv_msg_desc, tmsp, data, size);
     }
 }
 

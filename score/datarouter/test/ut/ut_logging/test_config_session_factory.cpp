@@ -31,10 +31,10 @@ using score::logging::dltserver::mock::UdpStreamOutput;
 TEST(ConfigSessionFactoryUT, CreateSessionsAndHandleCommands)
 {
     StrictMock<UdpStreamOutput::Tester> outputs;
-    UdpStreamOutput::Tester::instance() = &outputs;
+    UdpStreamOutput::Tester::Instance() = &outputs;
     EXPECT_CALL(outputs, construct(_, _, 3490U, Eq(std::string("")))).Times(1);
-    EXPECT_CALL(outputs, bind(_, _, 3491U)).Times(1);
-    EXPECT_CALL(outputs, destruct(_)).Times(1);
+    EXPECT_CALL(outputs, Bind(_, _, 3491U)).Times(1);
+    EXPECT_CALL(outputs, Destruct(_)).Times(1);
 
     StaticConfig s_config{};
     PersistentConfig p_config{};
@@ -47,14 +47,14 @@ TEST(ConfigSessionFactoryUT, CreateSessionsAndHandleCommands)
     std::string resp_dyn;
     auto dyn_session = dyn_factory.CreateConfigSession(
         score::platform::datarouter::ConfigSessionHandleType{0, nullptr, std::reference_wrapper<std::string>{resp_dyn}},
-        server.make_config_command_handler());
+        server.MakeConfigCommandHandler());
     ASSERT_NE(dyn_session, nullptr);
-    std::array<std::uint8_t, 2> bad_enable_dyn{score::logging::dltserver::config::SET_DLT_OUTPUT_ENABLE, 2};
-    dyn_session->on_command(std::string{bad_enable_dyn.begin(), bad_enable_dyn.end()});
+    std::array<std::uint8_t, 2> bad_enable_dyn{score::logging::dltserver::config::kSetDltOutputEnable, 2};
+    dyn_session->OnCommand(std::string{bad_enable_dyn.begin(), bad_enable_dyn.end()});
     if (!resp_dyn.empty())
     {
         EXPECT_EQ(resp_dyn.size(), 1U);
-        EXPECT_EQ(resp_dyn[0], static_cast<char>(score::logging::dltserver::config::RET_ERROR));
+        EXPECT_EQ(resp_dyn[0], static_cast<char>(score::logging::dltserver::config::kRetError));
     }
 }
 

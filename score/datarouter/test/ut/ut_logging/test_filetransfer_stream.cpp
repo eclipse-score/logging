@@ -34,8 +34,8 @@ class MockFTOutput : public FileTransferStreamHandler::IOutput
                 SendFtVerbose,
                 (score::cpp::span<const std::uint8_t> data,
                  score::mw::log::LogLevel loglevel,
-                 score::platform::dltid_t app_id,
-                 score::platform::dltid_t ctx_id,
+                 score::platform::DltidT app_id,
+                 score::platform::DltidT ctx_id,
                  uint8_t nor,
                  uint32_t time_tmsp),
                 (override));
@@ -93,10 +93,10 @@ TEST_F(FileTransferStreamTest, ShouldTransferFileSuccessfully)
     EXPECT_CALL(
         *mock_output_,
         SendFtVerbose(
-            _, score::mw::log::LogLevel::kInfo, score::platform::dltid_t("APPX"), score::platform::dltid_t("CTXX"), _, _))
+            _, score::mw::log::LogLevel::kInfo, score::platform::DltidT("APPX"), score::platform::DltidT("CTXX"), _, _))
         .Times(AtLeast(3));
 
-    handler_->handle({}, data.c_str(), static_cast<BufsizeT>(data.size()));
+    handler_->Handle({}, data.c_str(), static_cast<BufsizeT>(data.size()));
     std::this_thread::sleep_for(std::chrono::milliseconds(500));
     EXPECT_FALSE(path.empty());
     std::remove(path.c_str());
@@ -110,10 +110,10 @@ TEST_F(FileTransferStreamTest, ShouldLogErrorWhenFileNotFound)
     EXPECT_CALL(
         *mock_output_,
         SendFtVerbose(
-            _, score::mw::log::LogLevel::kError, score::platform::dltid_t("APPX"), score::platform::dltid_t("CTXX"), _, _))
+            _, score::mw::log::LogLevel::kError, score::platform::DltidT("APPX"), score::platform::DltidT("CTXX"), _, _))
         .Times(1);
 
-    handler_->handle({}, data.c_str(), static_cast<BufsizeT>(data.size()));
+    handler_->Handle({}, data.c_str(), static_cast<BufsizeT>(data.size()));
     std::this_thread::sleep_for(std::chrono::milliseconds(300));
     EXPECT_NE(data.find("abc.txt"), std::string::npos);
 }
@@ -126,10 +126,10 @@ TEST_F(FileTransferStreamTest, ShouldDeleteFileIfFlagSet)
     EXPECT_CALL(
         *mock_output_,
         SendFtVerbose(
-            _, score::mw::log::LogLevel::kInfo, score::platform::dltid_t("APPX"), score::platform::dltid_t("CTXX"), _, _))
+            _, score::mw::log::LogLevel::kInfo, score::platform::DltidT("APPX"), score::platform::DltidT("CTXX"), _, _))
         .Times(AtLeast(2));
 
-    handler_->handle({}, data.c_str(), static_cast<BufsizeT>(data.size()));
+    handler_->Handle({}, data.c_str(), static_cast<BufsizeT>(data.size()));
     std::this_thread::sleep_for(std::chrono::milliseconds(300));
     ASSERT_FALSE(std::ifstream(path).good());
     EXPECT_NE(data.find("APPX"), std::string::npos);
@@ -141,7 +141,7 @@ TEST_F(FileTransferStreamTest, ShouldIgnoreInvalidSerializedInput)
     std::fill(garbage.begin(), garbage.end(), 'Z');
 
     // No expectations because deserialization will likely fail silently
-    handler_->handle({}, garbage.data(), static_cast<BufsizeT>(garbage.size()));
+    handler_->Handle({}, garbage.data(), static_cast<BufsizeT>(garbage.size()));
     std::this_thread::sleep_for(std::chrono::milliseconds(200));
     EXPECT_EQ(garbage[0], 'Z');
 }
@@ -152,7 +152,7 @@ TEST_F(FileTransferStreamTest, ShouldReturnExtraPackageWhenFileNotDivisible)
     auto path = CreateTempFile(1500);
     auto data = SerializeFileTransferEntry(path, false);
 
-    handler_->handle({}, data.c_str(), static_cast<BufsizeT>(data.size()));
+    handler_->Handle({}, data.c_str(), static_cast<BufsizeT>(data.size()));
     std::this_thread::sleep_for(std::chrono::milliseconds(500));
     std::ifstream file(path);
     EXPECT_TRUE(file.good());

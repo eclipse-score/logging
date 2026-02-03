@@ -11,8 +11,8 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-#ifndef DLT_LOG_SERVER_CONFIG_H_
-#define DLT_LOG_SERVER_CONFIG_H_
+#ifndef SCORE_DATAROUTER_INCLUDE_DAEMON_DLT_LOG_SERVER_CONFIG_H
+#define SCORE_DATAROUTER_INCLUDE_DAEMON_DLT_LOG_SERVER_CONFIG_H
 
 #include "daemon/dltserver_common.h"
 #include "score/mw/log/log_level.h"
@@ -27,57 +27,57 @@ namespace logging
 namespace dltserver
 {
 
-using loglevel_t = mw::log::LogLevel;
+using LoglevelT = mw::log::LogLevel;
 
 struct StaticConfig
 {
     struct ChannelDescription
     {
-        dltid_t ecu;
+        DltidT ecu;
         std::string address;
         uint16_t port = 0U;
-        std::string dstAddress;
-        uint16_t dstPort = 0U;
+        std::string dst_address;
+        uint16_t dst_port = 0U;
 
-        loglevel_t channelThreshold = loglevel_t::kOff;
-        std::string multicastInterface;
+        LoglevelT channel_threshold = LoglevelT::kOff;
+        std::string multicast_interface;
     };
 
     struct ThroughputQuotas
     {
-        double overallMbps;
-        std::unordered_map<dltid_t, double> applicationsKbps;
+        double overall_mbps;
+        std::unordered_map<DltidT, double> applications_kbps;
     };
 
-    dltid_t coredumpChannel;
-    dltid_t defaultChannel;
-    std::unordered_map<dltid_t, ChannelDescription> channels;
+    DltidT coredump_channel;
+    DltidT default_channel;
+    std::unordered_map<DltidT, ChannelDescription> channels;
 
-    bool filteringEnabled = false;
-    loglevel_t defaultThreshold = loglevel_t::kOff;
-    std::unordered_map<dltid_t, std::unordered_map<dltid_t, std::vector<dltid_t>>> channelAssignments;
-    std::unordered_map<dltid_t, std::unordered_map<dltid_t, loglevel_t>> messageThresholds;
+    bool filtering_enabled = false;
+    LoglevelT default_threshold = LoglevelT::kOff;
+    std::unordered_map<DltidT, std::unordered_map<DltidT, std::vector<DltidT>>> channel_assignments;
+    std::unordered_map<DltidT, std::unordered_map<DltidT, LoglevelT>> message_thresholds;
 
     ThroughputQuotas throughput;
-    bool quotaEnforcementEnabled;
+    bool quota_enforcement_enabled;
 };
 
 struct PersistentConfig
 {
     struct ChannelDescription
     {
-        loglevel_t channelThreshold = loglevel_t::kOff;
+        LoglevelT channel_threshold = LoglevelT::kOff;
     };
     std::unordered_map<std::string, ChannelDescription> channels;
 
-    bool filteringEnabled = false;
-    loglevel_t defaultThreshold = loglevel_t::kOff;
-    std::unordered_map<dltid_t, std::unordered_map<dltid_t, std::vector<dltid_t>>> channelAssignments;
-    std::unordered_map<dltid_t, std::unordered_map<dltid_t, loglevel_t>> messageThresholds;
+    bool filtering_enabled = false;
+    LoglevelT default_threshold = LoglevelT::kOff;
+    std::unordered_map<DltidT, std::unordered_map<DltidT, std::vector<DltidT>>> channel_assignments;
+    std::unordered_map<DltidT, std::unordered_map<DltidT, LoglevelT>> message_thresholds;
 };
 
 }  // namespace dltserver
 }  // namespace logging
 }  // namespace score
 
-#endif  // DLT_LOG_SERVER_CONFIG_H_
+#endif  // SCORE_DATAROUTER_INCLUDE_DAEMON_DLT_LOG_SERVER_CONFIG_H

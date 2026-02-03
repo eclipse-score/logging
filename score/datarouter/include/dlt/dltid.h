@@ -30,24 +30,24 @@ namespace platform
 // multiple translation units shall be declared in one and only one file.
 // false positive : dltid_t is only declared once in this file.
 // coverity[autosar_cpp14_m3_2_3_violation]
-struct dltid_t
+struct DltidT
 {
     constexpr static size_t kSize{4U};
 
     score::mw::log::detail::LoggingIdentifier bytes;
     std::int32_t value;
 
-    dltid_t() noexcept : value() {}
-    explicit dltid_t(const char* str) noexcept : dltid_t(std::string_view{str}) {}
-    explicit dltid_t(const std::string_view str) noexcept : bytes{str}, value{}
+    DltidT() noexcept : value() {}
+    explicit DltidT(const char* str) noexcept : DltidT(std::string_view{str}) {}
+    explicit DltidT(const std::string_view str) noexcept : bytes{str}, value{}
     {
         value = static_cast<std::int32_t>(score::mw::log::detail::LoggingIdentifier::HashFunction{}(bytes));
     }
 
-    explicit dltid_t(const std::string& str) noexcept : dltid_t(std::string_view{str.data(), str.size()}) {}
-    explicit dltid_t(const score::cpp::string_view& str) noexcept : dltid_t(std::string_view{str.data(), str.size()}) {};
+    explicit DltidT(const std::string& str) noexcept : DltidT(std::string_view{str.data(), str.size()}) {}
+    explicit DltidT(const score::cpp::string_view& str) noexcept : DltidT(std::string_view{str.data(), str.size()}) {};
 
-    dltid_t& operator=(const std::string& str)
+    DltidT& operator=(const std::string& str)
     {
         bytes = score::mw::log::detail::LoggingIdentifier(std::string_view(str));
         value = static_cast<std::int32_t>(score::mw::log::detail::LoggingIdentifier::HashFunction{}(bytes));
@@ -62,17 +62,17 @@ struct dltid_t
         return std::string(bytes.data_.data(), bytes.data_.size());
     }
 
-    bool operator==(const dltid_t& id) const
+    bool operator==(const DltidT& id) const
     {
         return this->value == id.value;
     }
 
-    char* data()
+    char* Data()
     {
         return bytes.data_.data();
     }
 
-    const char* data() const
+    const char* Data() const
     {
         return bytes.data_.data();
     }
@@ -95,9 +95,9 @@ template <>
 // multiple translation units shall be declared in one and only one file.
 // false positive : template specialization for hash.
 // coverity[autosar_cpp14_m3_2_3_violation]
-struct hash<score::platform::dltid_t>
+struct hash<score::platform::DltidT>
 {
-    std::size_t operator()(const score::platform::dltid_t& d) const noexcept
+    std::size_t operator()(const score::platform::DltidT& d) const noexcept
     {
         return static_cast<std::size_t>(d.value);
     }

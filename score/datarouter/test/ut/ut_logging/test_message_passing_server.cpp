@@ -85,10 +85,10 @@ std::uint32_t gKReceiverQueueMaxSize = 0;
 class MockSession : public MessagePassingServer::ISession
 {
   public:
-    MOCK_METHOD(bool, tick, (), (override final));
-    MOCK_METHOD(void, on_acquire_response, (const score::mw::log::detail::ReadAcquireResult&), (override final));
-    MOCK_METHOD(void, on_closed_by_peer, (), (override final));
-    MOCK_METHOD(bool, is_source_closed, (), (override));
+    MOCK_METHOD(bool, Tick, (), (override final));
+    MOCK_METHOD(void, OnAcquireResponse, (const score::mw::log::detail::ReadAcquireResult&), (override final));
+    MOCK_METHOD(void, OnClosedByPeer, (), (override final));
+    MOCK_METHOD(bool, IsSourceClosed, (), (override));
 
     MOCK_METHOD(void, Destruct, (), ());
 
@@ -176,21 +176,21 @@ class MessagePassingServerFixture : public ::testing::Test
 
             ++construct_count;
             auto session = std::make_unique<MockSession>();
-            EXPECT_CALL(*session, tick).Times(AnyNumber()).WillRepeatedly([this, &status]() {
+            EXPECT_CALL(*session, Tick).Times(AnyNumber()).WillRepeatedly([this, &status]() {
                 ++tick_count;
                 status.IncrementTickCount();
                 CheckWaitTickUnblock();
                 return false;
             });
-            EXPECT_CALL(*session, on_acquire_response)
+            EXPECT_CALL(*session, OnAcquireResponse)
                 .Times(AnyNumber())
                 .WillRepeatedly([this](const score::mw::log::detail::ReadAcquireResult&) {
                     ++acquire_response_count;
                 });
-            EXPECT_CALL(*session, on_closed_by_peer).Times(AtMost(1)).WillOnce([this]() {
+            EXPECT_CALL(*session, OnClosedByPeer).Times(AtMost(1)).WillOnce([this]() {
                 ++closed_by_peer_count;
             });
-            EXPECT_CALL(*session, is_source_closed).Times(AnyNumber()).WillRepeatedly(Return(false));
+            EXPECT_CALL(*session, IsSourceClosed).Times(AnyNumber()).WillRepeatedly(Return(false));
             EXPECT_CALL(*session, Destruct).Times(1).WillOnce([this, &status]() {
                 ++destruct_count;
                 std::lock_guard<std::mutex> erase_lock(map_mutex);
@@ -640,16 +640,16 @@ TEST(MessagePassingServerTests, sessionWrapperCreateTest)
     MessagePassingServer::MessagePassingServerForTest::SessionWrapper session_wrapper(
         nullptr, 0, std::move(session_mock));
 
-    EXPECT_FALSE(session_wrapper.is_marked_for_delete());
-    session_wrapper.to_delete_ = true;
-    EXPECT_TRUE(session_wrapper.is_marked_for_delete());
+    EXPECT_FALSE(session_wrapper.IsMarkedForDelete());
+    session_wrapper.to_delete = true;
+    EXPECT_TRUE(session_wrapper.IsMarkedForDelete());
 
-    session_wrapper.closed_by_peer_ = true;
-    EXPECT_TRUE(session_wrapper.get_reset_closed_by_peer());
-    EXPECT_FALSE(session_wrapper.get_reset_closed_by_peer());
+    session_wrapper.closed_by_peer = true;
+    EXPECT_TRUE(session_wrapper.GetResetClosedByPeer());
+    EXPECT_FALSE(session_wrapper.GetResetClosedByPeer());
 
-    EXPECT_CALL(*session_mock_ptr, is_source_closed).WillOnce(Return(true));
-    EXPECT_CALL(*session_mock_ptr, is_source_closed).WillOnce(Return(false));
+    EXPECT_CALL(*session_mock_ptr, IsSourceClosed).WillOnce(Return(true));
+    EXPECT_CALL(*session_mock_ptr, IsSourceClosed).WillOnce(Return(false));
     EXPECT_TRUE(session_wrapper.GetIsSourceClosed());
     EXPECT_FALSE(session_wrapper.GetIsSourceClosed());
 }
@@ -724,12 +724,12 @@ TEST_P(SessionWrapperParamTest, EnqueueForDeleteWhileLockedTest)
 
     EXPECT_CALL(server_mock, EnqueueTickWhileLocked(pid)).Times(test_params.expected_enqueued_called_count);
 
-    session_wrapper.enqueued_ = test_params.input_enqueued;
-    session_wrapper.running_ = test_params.input_running;
-    session_wrapper.enqueue_for_delete_while_locked(test_params.input_closed_by_peer);
-    EXPECT_EQ(session_wrapper.running_, test_params.expected_running);
-    EXPECT_EQ(session_wrapper.enqueued_, test_params.expected_enqueued);
-    EXPECT_EQ(session_wrapper.closed_by_peer_, test_params.expected_closed_by_peer);
+    session_wrapper.enqueued = test_params.input_enqueued;
+    session_wrapper.running = test_params.input_running;
+    session_wrapper.EnqueueForDeleteWhileLocked(test_params.input_closed_by_peer);
+    EXPECT_EQ(session_wrapper.running, test_params.expected_running);
+    EXPECT_EQ(session_wrapper.enqueued, test_params.expected_enqueued);
+    EXPECT_EQ(session_wrapper.closed_by_peer, test_params.expected_closed_by_peer);
 }
 
 TEST(SessionWrapperTest, ResetRunningWhileLocked)
@@ -741,16 +741,16 @@ TEST(SessionWrapperTest, ResetRunningWhileLocked)
 
     {
         // with enqueued
-        session_wrapper.enqueued_ = false;
-        session_wrapper.reset_running_while_locked(true);
-        EXPECT_TRUE(session_wrapper.enqueued_);
+        session_wrapper.enqueued = false;
+        session_wrapper.ResetRunningWhileLocked(true);
+        EXPECT_TRUE(session_wrapper.enqueued);
     }
 
     {
         // without enqueued
-        session_wrapper.enqueued_ = false;
-        session_wrapper.reset_running_while_locked(false);
-        EXPECT_FALSE(session_wrapper.enqueued_);
+        session_wrapper.enqueued = false;
+        session_wrapper.ResetRunningWhileLocked(false);
+        EXPECT_FALSE(session_wrapper.enqueued);
     }
 }
 

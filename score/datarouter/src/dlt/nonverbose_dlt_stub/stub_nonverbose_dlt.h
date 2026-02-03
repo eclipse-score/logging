@@ -44,7 +44,7 @@ class StubDltNonverboseHandler : public LogParser::AnyHandler
 
     explicit StubDltNonverboseHandler(IOutput&) {}
 
-    void handle(const TypeInfo&, timestamp_t, const char*, bufsize_t) override
+    void Handle(const TypeInfo&, TimestampT, const char*, BufsizeT) override
     {
         // Stub implementation does nothing
     }

@@ -11,8 +11,8 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-#ifndef DIAGNOSTIC_JOB_PARSER_MOCK_H_
-#define DIAGNOSTIC_JOB_PARSER_MOCK_H_
+#ifndef SCORE_DATAROUTER_MOCKS_DAEMON_DIAGNOSTIC_JOB_PARSER_MOCK_H
+#define SCORE_DATAROUTER_MOCKS_DAEMON_DIAGNOSTIC_JOB_PARSER_MOCK_H
 
 #include <gmock/gmock.h>
 
@@ -30,7 +30,7 @@ namespace mock
 class DiagnosticJobParserMock : public IDiagnosticJobParser
 {
   public:
-    MOCK_METHOD(std::unique_ptr<IDiagnosticJobHandler>, parse, (const std::string&), (override));
+    MOCK_METHOD(std::unique_ptr<IDiagnosticJobHandler>, Parse, (const std::string&), (override));
 };
 
 }  // namespace mock
@@ -39,4 +39,4 @@ class DiagnosticJobParserMock : public IDiagnosticJobParser
 }  // namespace logging
 }  // namespace score
 
-#endif  // DIAGNOSTIC_JOB_PARSER_MOCK_H_
+#endif  // SCORE_DATAROUTER_MOCKS_DAEMON_DIAGNOSTIC_JOB_PARSER_MOCK_H

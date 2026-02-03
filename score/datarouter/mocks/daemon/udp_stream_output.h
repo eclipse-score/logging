@@ -11,8 +11,8 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-#ifndef UDP_STREAM_OUTPUT_H_
-#define UDP_STREAM_OUTPUT_H_
+#ifndef SCORE_DATAROUTER_MOCKS_DAEMON_UDP_STREAM_OUTPUT_H
+#define SCORE_DATAROUTER_MOCKS_DAEMON_UDP_STREAM_OUTPUT_H
 
 #include <arpa/inet.h>
 #include <netinet/in.h>
@@ -39,7 +39,7 @@ class UdpStreamOutput
     class Tester
     {
       public:
-        static Tester*& instance()
+        static Tester*& Instance()
         {
             static Tester instance;
             static Tester* p_instance = &instance;  // overwritable
@@ -47,38 +47,38 @@ class UdpStreamOutput
         }
 
         MOCK_METHOD(void, construct, (UdpStreamOutput*, const char*, uint16_t, const char*));
-        MOCK_METHOD(void, move_construct, (UdpStreamOutput*, UdpStreamOutput*));
-        MOCK_METHOD(void, destruct, (UdpStreamOutput*));
+        MOCK_METHOD(void, MoveConstruct, (UdpStreamOutput*, UdpStreamOutput*));
+        MOCK_METHOD(void, Destruct, (UdpStreamOutput*));
 
-        MOCK_METHOD(score::cpp::expected_blank<score::os::Error>, bind, (UdpStreamOutput*, const char*, uint16_t));
-        MOCK_METHOD((score::cpp::expected<std::int64_t, score::os::Error>), send, (UdpStreamOutput*, const iovec*, size_t));
-        MOCK_METHOD((score::cpp::expected<std::int32_t, score::os::Error>), send, (UdpStreamOutput*, score::cpp::span<mmsghdr>));
+        MOCK_METHOD(score::cpp::expected_blank<score::os::Error>, Bind, (UdpStreamOutput*, const char*, uint16_t));
+        MOCK_METHOD((score::cpp::expected<std::int64_t, score::os::Error>), Send, (UdpStreamOutput*, const iovec*, size_t));
+        MOCK_METHOD((score::cpp::expected<std::int32_t, score::os::Error>), Send, (UdpStreamOutput*, score::cpp::span<mmsghdr>));
     };
 
-    UdpStreamOutput(const char* dstAddr, uint16_t dstPort, const char* multicastInterface)
+    UdpStreamOutput(const char* dst_addr, uint16_t dst_port, const char* multicast_interface)
     {
-        Tester::instance()->construct(this, dstAddr, dstPort, multicastInterface);
+        Tester::Instance()->construct(this, dst_addr, dst_port, multicast_interface);
     }
     ~UdpStreamOutput()
     {
-        Tester::instance()->destruct(this);
+        Tester::Instance()->Destruct(this);
     }
     UdpStreamOutput(const UdpStreamOutput&) = delete;
     UdpStreamOutput(UdpStreamOutput&& from) noexcept
     {
-        Tester::instance()->move_construct(this, &from);
+        Tester::Instance()->MoveConstruct(this, &from);
     }
-    score::cpp::expected_blank<score::os::Error> bind(const char* srcAddr = nullptr, uint16_t srcPort = 0)
+    score::cpp::expected_blank<score::os::Error> Bind(const char* src_addr = nullptr, uint16_t src_port = 0)
     {
-        return Tester::instance()->bind(this, srcAddr, srcPort);
+        return Tester::Instance()->Bind(this, src_addr, src_port);
     }
-    score::cpp::expected<std::int64_t, score::os::Error> send(const iovec* data, size_t size)
+    score::cpp::expected<std::int64_t, score::os::Error> Send(const iovec* data, size_t size)
     {
-        return Tester::instance()->send(this, data, size);
+        return Tester::Instance()->Send(this, data, size);
     }
-    score::cpp::expected<std::int32_t, score::os::Error> send(score::cpp::span<mmsghdr> mmsgSpan)
+    score::cpp::expected<std::int32_t, score::os::Error> Send(score::cpp::span<mmsghdr> mmsg_span)
     {
-        return Tester::instance()->send(this, mmsgSpan);
+        return Tester::Instance()->Send(this, mmsg_span);
     }
 };
 
@@ -88,4 +88,4 @@ class UdpStreamOutput
 }  // namespace logging
 }  // namespace score
 
-#endif  // UDP_STREAM_OUTPUT_H_
+#endif  // SCORE_DATAROUTER_MOCKS_DAEMON_UDP_STREAM_OUTPUT_H

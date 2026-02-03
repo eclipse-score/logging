@@ -46,7 +46,7 @@ struct TestTypeInfo
 template <typename Message>
 TestTypeInfo CreateTypeInfo()
 {
-    constexpr static std::size_t kIdsize = score::platform::dltid_t::size();
+    constexpr static std::size_t kIdsize = score::platform::DltidT::size();
     const std::string app_prefix(kIdsize * 3, char{0});
     TestTypeInfo type_info{};
     type_info.type_params = app_prefix + ::score::common::visitor::logger_type_string<Message>();

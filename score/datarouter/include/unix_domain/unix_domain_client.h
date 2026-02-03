@@ -11,8 +11,8 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-#ifndef UNIX_DOMAIN_CLIENT_H_
-#define UNIX_DOMAIN_CLIENT_H_
+#ifndef SCORE_DATAROUTER_INCLUDE_UNIX_DOMAIN_UNIX_DOMAIN_CLIENT_H
+#define SCORE_DATAROUTER_INCLUDE_UNIX_DOMAIN_UNIX_DOMAIN_CLIENT_H
 
 #include "unix_domain/unix_domain_common.h"
 
@@ -46,24 +46,24 @@ class UnixDomainClient
     using FdCallback = std::function<void(int)>;
     using RequestCallback = std::function<void(const std::string&)>;
     UnixDomainClient(UnixDomainSockAddr addr,
-                     Callback onConnect,
-                     Callback onDisconnect,
-                     FdCallback onFd = FdCallback(),
-                     TickCallback onTick = TickCallback(),
-                     RequestCallback onRequest = RequestCallback(),
+                     Callback on_connect,
+                     Callback on_disconnect,
+                     FdCallback on_fd = FdCallback(),
+                     TickCallback on_tick = TickCallback(),
+                     RequestCallback on_request = RequestCallback(),
                      std::unique_ptr<score::os::Signal> signal = std::make_unique<score::os::SignalImpl>())
         : addr_(addr),
           exit_(false),
           commands_mutex_{},
           commands_{},
-          client_thread{},
+          client_thread_{},
           new_socket_retry_{false},
           fd_{-1},
-          on_connect_(onConnect),
-          on_disconnect_(onDisconnect),
-          on_fd_(onFd),
-          on_tick_(onTick),
-          on_request_(onRequest),
+          on_connect_(on_connect),
+          on_disconnect_(on_disconnect),
+          on_fd_(on_fd),
+          on_tick_(on_tick),
+          on_request_(on_request),
           signal_(std::move(signal))
     {
     }
@@ -71,28 +71,28 @@ class UnixDomainClient
     ~UnixDomainClient()
     {
         exit_ = true;
-        if (client_thread.joinable())
+        if (client_thread_.joinable())
         {
-            client_thread.join();
+            client_thread_.join();
         }
     }
 
-    void send_response(const std::string& response)
+    void SendResponse(const std::string& response)
     {
-        send_socket_message(fd_, response);
+        SendSocketMessage(fd_, response);
     }
 
-    void ping();
+    void Ping();
 
   private:
-    void client_routine();
-    void update_thread_name_logger();
+    void ClientRoutine();
+    void UpdateThreadNameLogger();
 
     UnixDomainSockAddr addr_;
     std::atomic<bool> exit_;
     std::mutex commands_mutex_;
     std::queue<std::string> commands_;
-    std::thread client_thread;
+    std::thread client_thread_;
     bool new_socket_retry_;
 
     // TODO: temporary workaround, remove
@@ -111,4 +111,4 @@ class UnixDomainClient
 }  // namespace platform
 }  // namespace score
 
-#endif  // UNIX_DOMAIN_CLIENT_H_
+#endif  // SCORE_DATAROUTER_INCLUDE_UNIX_DOMAIN_UNIX_DOMAIN_CLIENT_H

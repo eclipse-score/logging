@@ -11,8 +11,8 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-#ifndef DLT_LOG_SERVER_H_
-#define DLT_LOG_SERVER_H_
+#ifndef SCORE_DATAROUTER_INCLUDE_DAEMON_DLT_LOG_SERVER_H
+#define SCORE_DATAROUTER_INCLUDE_DAEMON_DLT_LOG_SERVER_H
 
 #include "applications/datarouter_feature_config.h"
 #include "daemon/diagnostic_job_handler.h"
@@ -47,9 +47,9 @@ namespace logging
 namespace dltserver
 {
 
-const std::string LOG_ENTRY_TYPE_NAME{"score::mw::log::detail::LogEntry"};
-const std::string PERSISTENT_REQUEST_TYPE_NAME{"score::logging::internal::PersistentLoggingRequestStructure"};
-const std::string FILE_TRANSFER_TYPE_NAME{"score::logging::FileTransferEntry"};
+const std::string kLogEntryTypeName{"score::mw::log::detail::LogEntry"};
+const std::string kPersistentRequestTypeName{"score::logging::internal::PersistentLoggingRequestStructure"};
+const std::string kFileTransferTypeName{"score::logging::FileTransferEntry"};
 class DltLogServer : score::platform::datarouter::DltNonverboseHandlerType::IOutput,
                      DltVerboseHandler::IOutput,
                      FileTransferStreamHandlerType::IOutput,
@@ -62,7 +62,7 @@ class DltLogServer : score::platform::datarouter::DltNonverboseHandlerType::IOut
     using ConfigWriteCallback = std::function<void(PersistentConfig)>;
     using ConfigCommandHandler = std::function<std::string(const std::string&)>;
 
-    DltLogServer(StaticConfig staticConfig,
+    DltLogServer(StaticConfig static_config,
                  ConfigReadCallback reader,
                  ConfigWriteCallback writer,
                  bool enabled,
@@ -71,28 +71,28 @@ class DltLogServer : score::platform::datarouter::DltNonverboseHandlerType::IOut
         : score::platform::datarouter::DltNonverboseHandlerType::IOutput(),
           DltVerboseHandler::IOutput(),
           FileTransferStreamHandlerType::IOutput(),
-          configMutex_{},
-          filteringEnabled_{},
-          dltOutputEnabled_{enabled},
-          defaultThreshold_{},
-          messageThresholds_{},
-          channelAssignments_{},
+          config_mutex_{},
+          filtering_enabled_{},
+          dlt_output_enabled_{enabled},
+          default_threshold_{},
+          message_thresholds_{},
+          channel_assignments_{},
           throughput_overall_{0},
           throughput_apps_{},
-          staticConfig_{std::move(staticConfig)},
+          static_config_{std::move(static_config)},
           channels_{},
-          defaultChannel_{},
-          coredumpChannel_{std::nullopt},
-          channelNums_{},
+          default_channel_{},
+          coredump_channel_{std::nullopt},
+          channel_nums_{},
           nvhandler_{*this},
           vhandler_{*this},
-          fthandler{*this},
-          readerCallback_{reader},
-          writerCallback_{writer},
+          fthandler_{*this},
+          reader_callback_{reader},
+          writer_callback_{writer},
           log_sender_(log_sender ? std::move(log_sender) : std::make_unique<LogSender>()),
           parser_(parser ? std::move(parser) : std::make_unique<DiagnosticJobParser>())
     {
-        init_log_channels();
+        InitLogChannels();
         SysedrFactoryType sysedr_factory;
         sysedr_handler_ = sysedr_factory.CreateSysedrHandler();
     }
@@ -100,122 +100,122 @@ class DltLogServer : score::platform::datarouter::DltNonverboseHandlerType::IOut
     virtual ~DltLogServer() = default;
     // Not possible to mock LogParser currently.
     // LCOV_EXCL_START
-    void add_handlers(ILogParser& parser)
+    void AddHandlers(ILogParser& parser)
     {
-        parser.add_global_handler(*sysedr_handler_);
-        parser.add_type_handler(PERSISTENT_REQUEST_TYPE_NAME, *sysedr_handler_);
+        parser.AddGlobalHandler(*sysedr_handler_);
+        parser.AddTypeHandler(kPersistentRequestTypeName, *sysedr_handler_);
 
-        if (dltOutputEnabled_)
+        if (dlt_output_enabled_)
         {
             // XXX only add handler for those which are accepted
-            parser.add_global_handler(nvhandler_);
-            parser.add_type_handler(LOG_ENTRY_TYPE_NAME, vhandler_);
-            parser.add_type_handler(FILE_TRANSFER_TYPE_NAME, fthandler);
+            parser.AddGlobalHandler(nvhandler_);
+            parser.AddTypeHandler(kLogEntryTypeName, vhandler_);
+            parser.AddTypeHandler(kFileTransferTypeName, fthandler_);
         }
     }
 
-    void update_handlers(ILogParser& parser, bool enabled)
+    void UpdateHandlers(ILogParser& parser, bool enabled)
     {
         // protected by external mutex
         if (enabled)
         {
-            parser.add_global_handler(nvhandler_);
-            parser.add_type_handler(LOG_ENTRY_TYPE_NAME, vhandler_);
-            parser.add_type_handler(FILE_TRANSFER_TYPE_NAME, fthandler);
+            parser.AddGlobalHandler(nvhandler_);
+            parser.AddTypeHandler(kLogEntryTypeName, vhandler_);
+            parser.AddTypeHandler(kFileTransferTypeName, fthandler_);
         }
         else
         {
-            parser.remove_global_handler(nvhandler_);
-            parser.remove_type_handler(LOG_ENTRY_TYPE_NAME, vhandler_);
-            parser.remove_type_handler(FILE_TRANSFER_TYPE_NAME, fthandler);
+            parser.RemoveGlobalHandler(nvhandler_);
+            parser.RemoveTypeHandler(kLogEntryTypeName, vhandler_);
+            parser.RemoveTypeHandler(kFileTransferTypeName, fthandler_);
         }
     }
     // LCOV_EXCL_STOP
 
-    void set_enabled_callback(EnabledCallback enabledCallback = EnabledCallback())
+    void SetEnabledCallback(EnabledCallback enabled_callback = EnabledCallback())
     {
-        enabledCallback_ = enabledCallback;
+        enabled_callback_ = enabled_callback;
     }
 
-    void update_handlers_final(bool enabled)
+    void UpdateHandlersFinal(bool enabled)
     {
         // protected by external mutex
-        dltOutputEnabled_ = enabled;
+        dlt_output_enabled_ = enabled;
     }
 
-    void flush()
+    void Flush()
     {
         for (auto& channel : channels_)
         {
-            channel.flush();
+            channel.Flush();
         }
     }
 
-    double get_quota(std::string name)
+    double GetQuota(std::string name)
     {
-        auto quota = throughput_apps_.find(dltid_t(name));
+        auto quota = throughput_apps_.find(DltidT(name));
         return quota == throughput_apps_.end() ? 1.0 : quota->second;
     }
 
-    bool getQuotaEnforcementEnabled() const
+    bool GetQuotaEnforcementEnabled() const
     {
-        return staticConfig_.quotaEnforcementEnabled;
+        return static_config_.quota_enforcement_enabled;
     }
 
-    SessionPtr new_config_session(score::platform::datarouter::ConfigSessionHandleType handle)
+    SessionPtr NewConfigSession(score::platform::datarouter::ConfigSessionHandleType handle)
     {
         return score::platform::datarouter::DynamicConfigurationHandlerFactoryType().CreateConfigSession(
-            std::move(handle), make_config_command_handler());
+            std::move(handle), MakeConfigCommandHandler());
     }
 
     // Provide a delegate to handle config commands without exposing private methods
-    ConfigCommandHandler make_config_command_handler()
+    ConfigCommandHandler MakeConfigCommandHandler()
     {
         return [this](const std::string& command) {
-            return on_config_command(command);
+            return OnConfigCommand(command);
         };
     }
 
     // LCOV_EXCL_START : not possible to test log info output
     template <typename Logger>
-    void show_channel_statistics(uint16_t series_num, Logger& stats_logger_)
+    void ShowChannelStatistics(uint16_t series_num, Logger& stats_logger)
     {
-        stats_logger_.LogInfo() << "log stat for the channels #" << series_num;
+        stats_logger.LogInfo() << "log stat for the channels #" << series_num;
         for (auto& dltlogchannel : channels_)
         {
-            dltlogchannel.show_stats(stats_logger_);
+            dltlogchannel.ShowStats(stats_logger);
         }
     }
     // LCOV_EXCL_STOP
 
     bool GetDltEnabled() const noexcept;
 
-    const std::string ReadLogChannelNames() override;
-    const std::string ResetToDefault() override;
-    const std::string StoreDltConfig() override;
-    const std::string SetTraceState() override;
-    const std::string SetDefaultTraceState() override;
-    const std::string SetLogChannelThreshold(dltid_t channel, loglevel_t threshold) override;
-    const std::string SetLogLevel(dltid_t appId, dltid_t ctxId, threshold_t threshold) override;
-    const std::string SetMessagingFilteringState(bool enabled) override;
-    const std::string SetDefaultLogLevel(loglevel_t level) override;
-    const std::string SetLogChannelAssignment(dltid_t appId,
-                                              dltid_t ctxId,
-                                              dltid_t channel,
-                                              AssignmentAction assignment_flag) override;
-    const std::string SetDltOutputEnable(bool enable) override;
+    std::string ReadLogChannelNames() override;
+    std::string ResetToDefault() override;
+    std::string StoreDltConfig() override;
+    std::string SetTraceState() override;
+    std::string SetDefaultTraceState() override;
+    std::string SetLogChannelThreshold(DltidT channel, LoglevelT threshold) override;
+    std::string SetLogLevel(DltidT app_id, DltidT ctx_id, ThresholdT threshold) override;
+    std::string SetMessagingFilteringState(bool enabled) override;
+    std::string SetDefaultLogLevel(LoglevelT level) override;
+    std::string SetLogChannelAssignment(DltidT app_id,
+                                        DltidT ctx_id,
+                                        DltidT channel,
+                                        AssignmentAction assignment_flag) override;
+    std::string SetDltOutputEnable(bool enable) override;
 
     // This is used for test purpose only in google tests, to have an access to the private members.
     // Do not use this calls in implementation except unit tests.
     class DltLogServerTest;
 
   private:
-    using key_t = std::pair<dltid_t, dltid_t>;
+    using KeyT = std::pair<DltidT, DltidT>;
 
-    struct key_hash
+    struct KeyHash
     {
       public:
-        std::size_t operator()(const key_t& k) const
+        std::size_t operator()(const KeyT& k) const
         {
             auto low = static_cast<uint64_t>(k.first.value);
             auto high = static_cast<uint64_t>(k.second.value) << 32;
@@ -223,23 +223,23 @@ class DltLogServer : score::platform::datarouter::DltNonverboseHandlerType::IOut
         }
     };
 
-    using channelmask_t = std::bitset<32>;
+    using ChannelmaskT = std::bitset<32>;
 
     template <typename F>
-    void filterAndCall(dltid_t appId, dltid_t ctxId, mw::log::LogLevel logLevel, F f)
+    void FilterAndCall(DltidT app_id, DltidT ctx_id, mw::log::LogLevel log_level, F f)
     {
-        channelmask_t assigned;
+        ChannelmaskT assigned;
         {
-            std::lock_guard<std::mutex> lock(configMutex_);
-            if (!isAcceptedByFiltering(appId, ctxId, logLevel))
+            std::lock_guard<std::mutex> lock(config_mutex_);
+            if (!IsAcceptedByFiltering(app_id, ctx_id, log_level))
             {
                 return;
             }
-            assigned = assignedToChannels(appId, ctxId);
+            assigned = AssignedToChannels(app_id, ctx_id);
         }
         if (assigned.none())
         {
-            f(channels_[defaultChannel_]);
+            f(channels_[default_channel_]);
         }
         else
         {
@@ -254,15 +254,15 @@ class DltLogServer : score::platform::datarouter::DltNonverboseHandlerType::IOut
     }
 
     template <typename KeyMap>
-    static std::optional<typename KeyMap::mapped_type> findInKeyMap(const KeyMap& m, dltid_t appId, dltid_t ctxId)
+    static std::optional<typename KeyMap::mapped_type> FindInKeyMap(const KeyMap& m, DltidT app_id, DltidT ctx_id)
     {
-        auto p = m.find({appId, ctxId});
+        auto p = m.find({app_id, ctx_id});
         if (p == m.end())
         {
-            p = m.find({dltid_t{}, ctxId});
+            p = m.find({DltidT{}, ctx_id});
             if (p == m.end())
             {
-                p = m.find({appId, dltid_t{}});
+                p = m.find({app_id, DltidT{}});
             }
         }
         if (p == m.end())
@@ -276,47 +276,47 @@ class DltLogServer : score::platform::datarouter::DltNonverboseHandlerType::IOut
     }
 
     // should be called under the mutex
-    bool isAcceptedByFiltering(const dltid_t appId, const dltid_t ctxId, const mw::log::LogLevel logLevel)
+    bool IsAcceptedByFiltering(const DltidT app_id, const DltidT ctx_id, const mw::log::LogLevel log_level)
     {
-        if (!filteringEnabled_)
+        if (!filtering_enabled_)
         {
             return true;
         }
-        const auto threshold = findInKeyMap(messageThresholds_, appId, ctxId).value_or(defaultThreshold_);
-        return logLevel <= threshold;
+        const auto threshold = FindInKeyMap(message_thresholds_, app_id, ctx_id).value_or(default_threshold_);
+        return log_level <= threshold;
     }
 
     // should be called under the mutex
-    channelmask_t assignedToChannels(dltid_t appId, dltid_t ctxId)
+    ChannelmaskT AssignedToChannels(DltidT app_id, DltidT ctx_id)
     {
-        return findInKeyMap(channelAssignments_, appId, ctxId).value_or(channelmask_t{});
+        return FindInKeyMap(channel_assignments_, app_id, ctx_id).value_or(ChannelmaskT{});
     }
 
-    std::mutex configMutex_;
+    std::mutex config_mutex_;
 
-    bool filteringEnabled_;
-    bool dltOutputEnabled_;
+    bool filtering_enabled_;
+    bool dlt_output_enabled_;
 
-    loglevel_t defaultThreshold_;
-    std::unordered_map<key_t, loglevel_t, key_hash> messageThresholds_;
-    std::unordered_map<key_t, channelmask_t, key_hash> channelAssignments_;
+    LoglevelT default_threshold_;
+    std::unordered_map<KeyT, LoglevelT, KeyHash> message_thresholds_;
+    std::unordered_map<KeyT, ChannelmaskT, KeyHash> channel_assignments_;
 
     double throughput_overall_;
-    std::unordered_map<dltid_t, double> throughput_apps_;
+    std::unordered_map<DltidT, double> throughput_apps_;
 
-    StaticConfig staticConfig_;
+    StaticConfig static_config_;
 
     std::vector<DltLogChannel> channels_;
-    size_t defaultChannel_;
-    std::optional<uint8_t> coredumpChannel_;
-    std::unordered_map<dltid_t, size_t> channelNums_;
+    size_t default_channel_;
+    std::optional<uint8_t> coredump_channel_;
+    std::unordered_map<DltidT, size_t> channel_nums_;
 
     score::platform::datarouter::DltNonverboseHandlerType nvhandler_;
     DltVerboseHandler vhandler_;
-    FileTransferStreamHandlerType fthandler;
-    EnabledCallback enabledCallback_;
-    ConfigReadCallback readerCallback_;
-    ConfigWriteCallback writerCallback_;
+    FileTransferStreamHandlerType fthandler_;
+    EnabledCallback enabled_callback_;
+    ConfigReadCallback reader_callback_;
+    ConfigWriteCallback writer_callback_;
     std::unique_ptr<ILogSender> log_sender_;
     std::unique_ptr<IDiagnosticJobParser> parser_;
 
@@ -326,29 +326,29 @@ class DltLogServer : score::platform::datarouter::DltNonverboseHandlerType::IOut
                         uint32_t tmsp,
                         const void* data,
                         size_t size) override final;
-    void sendVerbose(
+    void SendVerbose(
         uint32_t tmsp,
         const score::mw::log::detail::log_entry_deserialization::LogEntryDeserializationReflection& entry) override final;
     void SendFtVerbose(score::cpp::span<const std::uint8_t> data,
                        mw::log::LogLevel loglevel,
-                       dltid_t appId,
-                       dltid_t ctxId,
+                       DltidT app_id,
+                       DltidT ctx_id,
                        uint8_t nor,
                        uint32_t tmsp) override final;
 
-    void init_log_channels(const bool reloading = false);
-    void init_log_channels_default(const bool reloading = false);
+    void InitLogChannels(const bool reloading = false);
+    void InitLogChannelsDefault(const bool reloading = false);
 
-    void save_database();
-    void clear_database();
+    void SaveDatabase();
+    void ClearDatabase();
 
-    void set_output_enabled(const bool enabled);
+    void SetOutputEnabled(const bool enabled);
 
-    const std::string on_config_command(const std::string& command);
+    std::string OnConfigCommand(const std::string& command);
 };
 
 }  // namespace dltserver
 }  // namespace logging
 }  // namespace score
 
-#endif  // DLT_LOG_SERVER_H_
+#endif  // SCORE_DATAROUTER_INCLUDE_DAEMON_DLT_LOG_SERVER_H

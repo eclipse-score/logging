@@ -28,10 +28,10 @@ class StubSysedrHandler final : public ISysedrHandler
 
   private:
     // LogParser::TypeHandler
-    void handle(timestamp_t /* timestamp */, const char* data, bufsize_t size) override;
+    void Handle(TimestampT /* timestamp */, const char* data, BufsizeT size) override;
 
     // LogParser::AnyHandler
-    void handle(const TypeInfo& type_info, timestamp_t timestamp, const char* data, bufsize_t size) override;
+    void Handle(const TypeInfo& type_info, TimestampT timestamp, const char* data, BufsizeT size) override;
 };
 
 }  // namespace internal

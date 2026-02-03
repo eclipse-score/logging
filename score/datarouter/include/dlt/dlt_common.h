@@ -26,8 +26,8 @@
  Initials    Date         Comment
  aw          13.01.2010   initial
  */
-#ifndef DLT_COMMON_H
-#define DLT_COMMON_H
+#ifndef SCORE_DATAROUTER_INCLUDE_DLT_DLT_COMMON_H
+#define SCORE_DATAROUTER_INCLUDE_DLT_DLT_COMMON_H
 
 /**
   \defgroup commonapi DLT Common API
@@ -173,4 +173,4 @@ typedef struct
 #endif
 // NOLINTEND(score-banned-preprocessor-directives)
 
-#endif /* DLT_COMMON_H */
+#endif  // SCORE_DATAROUTER_INCLUDE_DLT_DLT_COMMON_H

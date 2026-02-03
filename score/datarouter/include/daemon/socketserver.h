@@ -75,10 +75,10 @@ class SocketServer
         bool is_dlt_enabled;
     };
 
-    static void run(const std::atomic_bool& exit_requested, const bool no_adaptive_runtime)
+    static void Run(const std::atomic_bool& exit_requested, const bool no_adaptive_runtime)
     {
         static SocketServer server;
-        server.doWork(exit_requested, no_adaptive_runtime);
+        server.DoWork(exit_requested, no_adaptive_runtime);
     }
     //  static void run(const std::atomic_bool& exit_requested, const bool no_adaptive_runtime);
 
@@ -133,7 +133,7 @@ class SocketServer
                                                    const std::string& appid);
 
   private:
-    void doWork(const std::atomic_bool& exit_requested, const bool no_adaptive_runtime);
+    void DoWork(const std::atomic_bool& exit_requested, const bool no_adaptive_runtime);
 };
 
 }  // namespace datarouter

@@ -11,8 +11,8 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-#ifndef LOGENTRY_TRACE_H_
-#define LOGENTRY_TRACE_H_
+#ifndef SCORE_DATAROUTER_INCLUDE_DLT_LOGENTRY_TRACE_H
+#define SCORE_DATAROUTER_INCLUDE_DLT_LOGENTRY_TRACE_H
 
 #include "dlt/dltid.h"
 #include "score/mw/log/detail/logging_identifier.h"
@@ -29,7 +29,7 @@ namespace platform
 // LCOV_EXCL_START : See above
 // MEMCPY_SERIALIZABLE won't cause data loss.
 // coverity[autosar_cpp14_a4_7_1_violation]
-MEMCPY_SERIALIZABLE(score::common::visitor::payload_tags::text, dltid_t)
+MEMCPY_SERIALIZABLE(score::common::visitor::payload_tags::text, DltidT)
 // LCOV_EXCL_STOP
 
 namespace internal
@@ -45,7 +45,7 @@ struct LogEntryFilter
     // coverity[autosar_cpp14_m11_0_1_violation]
     score::mw::log::detail::LoggingIdentifier ctx_id{""};
     // coverity[autosar_cpp14_m11_0_1_violation]
-    uint8_t logLevelThreshold = 0U;
+    uint8_t log_level_threshold = 0U;
 };
 
 // The STRUCT_TRACEABLE macro is part of the Tracing infrastructure and is tested independently.
@@ -58,11 +58,11 @@ struct LogEntryFilter
 // translation units shall be declared in one and only one file.".
 // coverity[autosar_cpp14_a18_9_4_violation]
 // coverity[autosar_cpp14_m3_2_3_violation]
-STRUCT_TRACEABLE(LogEntryFilter, app_id, ctx_id, logLevelThreshold)
+STRUCT_TRACEABLE(LogEntryFilter, app_id, ctx_id, log_level_threshold)
 // LCOV_EXCL_STOP
 
 }  // namespace internal
 }  // namespace platform
 }  // namespace score
 
-#endif  // LOGENTRY_TRACE_H_
+#endif  // SCORE_DATAROUTER_INCLUDE_DLT_LOGENTRY_TRACE_H

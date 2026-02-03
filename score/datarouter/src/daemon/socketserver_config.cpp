@@ -37,24 +37,24 @@ namespace datarouter
 namespace
 {
 
-const std::string CONFIG_DATABASE_KEY = "dltConfig";
-const std::string CONFIG_OUTPUT_ENABLED_KEY = "dltOutputEnabled";
+const std::string kConfigDatabaseKey = "dltConfig";
+const std::string kConfigOutputEnabledKey = "dltOutputEnabled";
 
-using loglevel_t = score::logging::dltserver::loglevel_t;
+using LoglevelT = score::logging::dltserver::LoglevelT;
 
-inline loglevel_t ToLogLevelT(const std::string& logLevel)
+inline LoglevelT ToLogLevelT(const std::string& log_level)
 {
-    return static_cast<loglevel_t>(logchannel_operations::ToLogLevel(logLevel));
+    return static_cast<LoglevelT>(logchannel_operations::ToLogLevel(log_level));
 }
 
-inline std::string GetStringFromLogLevelT(loglevel_t level)
+inline std::string GetStringFromLogLevelT(LoglevelT level)
 {
     return logchannel_operations::GetStringFromLogLevel(static_cast<score::mw::log::LogLevel>(level));
 }
 
 }  // namespace
 
-score::Result<score::logging::dltserver::StaticConfig> readStaticDlt(const char* path)
+score::Result<score::logging::dltserver::StaticConfig> ReadStaticDlt(const char* path)
 {
     using rapidjson::Document;
     using rapidjson::FileReadStream;
@@ -68,9 +68,9 @@ score::Result<score::logging::dltserver::StaticConfig> readStaticDlt(const char*
         std::cerr << "Could not open file: " << path << std::endl;
         return score::MakeUnexpected(score::logging::error::LoggingErrorCode::kNoFileFound, "Could not open file");
     }
-    std::array<char, JSON_READ_BUFFER_SIZE> readBuffer{};
-    FileReadStream is(fp, readBuffer.data(), readBuffer.size());
-    Document d = createRJDocument();
+    std::array<char, kJsonReadBufferSize> read_buffer{};
+    FileReadStream is(fp, read_buffer.data(), read_buffer.size());
+    Document d = CreateRjDocument();
     ParseResult ok = d.ParseStream(is);
     fclose(fp);
     if (ok.IsError())
@@ -95,110 +95,110 @@ score::Result<score::logging::dltserver::StaticConfig> readStaticDlt(const char*
         return score::MakeUnexpected(score::logging::error::LoggingErrorCode::kNoChannelsFound);
     }
 
-    config.coredumpChannel = d.HasMember("coredumpChannel") ? dltid_t{d["coredumpChannel"].GetString()} : dltid_t{};
-    config.defaultChannel = dltid_t{d["defaultChannel"].GetString()};
+    config.coredump_channel = d.HasMember("coredumpChannel") ? DltidT{d["coredumpChannel"].GetString()} : DltidT{};
+    config.default_channel = DltidT{d["defaultChannel"].GetString()};
 
     for (auto itr = channels.MemberBegin(); itr != channels.MemberEnd(); ++itr)
     {
-        const auto name = itr->name.GetString();
+        const auto* const name = itr->name.GetString();
         const auto threshold = ToLogLevelT(itr->value["channelThreshold"].GetString());
-        dltid_t ecu(itr->value["ecu"].GetString());
-        const auto addr = itr->value.HasMember("address") ? itr->value["address"].GetString() : "";
+        DltidT ecu(itr->value["ecu"].GetString());
+        const auto* const addr = itr->value.HasMember("address") ? itr->value["address"].GetString() : "";
         const auto port = static_cast<uint16_t>(itr->value["port"].GetUint());
-        const auto dstAddress =
+        const auto* const dst_address =
             itr->value.HasMember("dstAddress") ? itr->value["dstAddress"].GetString() : "239.255.42.99";
-        const auto dstPort =
+        const auto dst_port =
             static_cast<uint16_t>(itr->value.HasMember("dstPort") ? itr->value["dstPort"].GetInt() : 3490);
-        const auto multicastInterface =
+        const auto* const multicast_interface =
             itr->value.HasMember("multicastInterface") ? itr->value["multicastInterface"].GetString() : "";
         score::logging::dltserver::StaticConfig::ChannelDescription channel{
-            ecu, addr, port, dstAddress, dstPort, threshold, multicastInterface};
+            ecu, addr, port, dst_address, dst_port, threshold, multicast_interface};
         config.channels.emplace(name, std::move(channel));
     }
 
     const auto& assignments = d["channelAssignments"];
     for (auto itr1 = assignments.MemberBegin(); itr1 != assignments.MemberEnd(); ++itr1)
     {
-        const dltid_t appId(itr1->name.GetString());
+        const DltidT app_id(itr1->name.GetString());
         const auto& contexts = itr1->value;
         for (auto itr2 = contexts.MemberBegin(); itr2 != contexts.MemberEnd(); ++itr2)
         {
-            const dltid_t ctxId(itr2->name.GetString());
+            const DltidT ctx_id(itr2->name.GetString());
             const auto& assigned = itr2->value;
             for (unsigned int itr3 = 0; itr3 < assigned.Size(); ++itr3)
             {
-                config.channelAssignments[appId][ctxId].push_back(dltid_t(assigned[itr3].GetString()));
+                config.channel_assignments[app_id][ctx_id].push_back(DltidT(assigned[itr3].GetString()));
             }
         }
     }
 
     if (d.HasMember("filteringEnabled"))
     {
-        config.filteringEnabled = d["filteringEnabled"].GetBool();
+        config.filtering_enabled = d["filteringEnabled"].GetBool();
     }
     else
     {
-        config.filteringEnabled = true;
+        config.filtering_enabled = true;
     }
 
     if (d.HasMember("defaultThreshold"))
     {
-        config.defaultThreshold = ToLogLevelT(d["defaultThreshold"].GetString());
+        config.default_threshold = ToLogLevelT(d["defaultThreshold"].GetString());
     }
     else if (d.HasMember("defaultThresold"))
     {
-        config.defaultThreshold = ToLogLevelT(d["defaultThresold"].GetString());
+        config.default_threshold = ToLogLevelT(d["defaultThresold"].GetString());
     }
     else
     {
         std::cerr << "No defaultThreshold or defaultThresold found, set to kVerbose by default" << std::endl;
-        config.defaultThreshold = mw::log::LogLevel::kVerbose;
+        config.default_threshold = mw::log::LogLevel::kVerbose;
     }
 
     const auto& thresholds = d["messageThresholds"];
     for (auto itr1 = thresholds.MemberBegin(); itr1 != thresholds.MemberEnd(); ++itr1)
     {
-        const dltid_t appId(itr1->name.GetString());
+        const DltidT app_id(itr1->name.GetString());
         const auto& contexts = itr1->value;
         for (auto itr2 = contexts.MemberBegin(); itr2 != contexts.MemberEnd(); ++itr2)
         {
-            const dltid_t ctxId(itr2->name.GetString());
-            config.messageThresholds[appId][ctxId] = ToLogLevelT(itr2->value.GetString());
+            const DltidT ctx_id(itr2->name.GetString());
+            config.message_thresholds[app_id][ctx_id] = ToLogLevelT(itr2->value.GetString());
         }
     }
 
     if (d.HasMember("quotas"))
     {
-        const std::string quotaEnforcementEnabledParamName = "quotaEnforcementEnabled";
-        if (d["quotas"].HasMember(quotaEnforcementEnabledParamName.c_str()))
+        const std::string quota_enforcement_enabled_param_name = "quotaEnforcementEnabled";
+        if (d["quotas"].HasMember(quota_enforcement_enabled_param_name.c_str()))
         {
-            config.quotaEnforcementEnabled = d["quotas"][quotaEnforcementEnabledParamName.c_str()].GetBool();
+            config.quota_enforcement_enabled = d["quotas"][quota_enforcement_enabled_param_name.c_str()].GetBool();
         }
         else
         {
-            config.quotaEnforcementEnabled = false;
+            config.quota_enforcement_enabled = false;
         }
 
         const auto& throughput = d["quotas"]["throughput"];
-        config.throughput.overallMbps = throughput["overallMbps"].GetDouble();
-        const auto& applicationsKbps = throughput["applicationsKbps"];
-        for (auto itr1 = applicationsKbps.MemberBegin(); itr1 != applicationsKbps.MemberEnd(); ++itr1)
+        config.throughput.overall_mbps = throughput["overallMbps"].GetDouble();
+        const auto& applications_kbps = throughput["applicationsKbps"];
+        for (auto itr1 = applications_kbps.MemberBegin(); itr1 != applications_kbps.MemberEnd(); ++itr1)
         {
-            config.throughput.applicationsKbps.emplace(dltid_t(itr1->name.GetString()), itr1->value.GetDouble());
+            config.throughput.applications_kbps.emplace(DltidT(itr1->name.GetString()), itr1->value.GetDouble());
         }
     }
     return config;
 }
 
-score::logging::dltserver::PersistentConfig readDlt(IPersistentDictionary& pd)
+score::logging::dltserver::PersistentConfig ReadDlt(IPersistentDictionary& pd)
 {
     using rapidjson::Document;
     using rapidjson::ParseResult;
     score::logging::dltserver::PersistentConfig config{};
 
-    const std::string json = pd.GetString(CONFIG_DATABASE_KEY, "{}");
+    const std::string json = pd.GetString(kConfigDatabaseKey, "{}");
 
-    Document d = createRJDocument();
+    Document d = CreateRjDocument();
     ParseResult ok = d.Parse(json.c_str());
 
     if (ok.IsError() || !d.HasMember("channels"))
@@ -213,7 +213,7 @@ score::logging::dltserver::PersistentConfig readDlt(IPersistentDictionary& pd)
 
     for (auto itr = channels.MemberBegin(); itr != channels.MemberEnd(); ++itr)
     {
-        const auto name = itr->name.GetString();
+        const auto* const name = itr->name.GetString();
         const auto threshold = ToLogLevelT(itr->value["channelThreshold"].GetString());
         score::logging::dltserver::PersistentConfig::ChannelDescription channel{threshold};
         config.channels.emplace(name, channel);
@@ -222,122 +222,123 @@ score::logging::dltserver::PersistentConfig readDlt(IPersistentDictionary& pd)
     const auto& assignments = d["channelAssignments"];
     for (auto itr1 = assignments.MemberBegin(); itr1 != assignments.MemberEnd(); ++itr1)
     {
-        const dltid_t appId(itr1->name.GetString());
+        const DltidT app_id(itr1->name.GetString());
         const auto& contexts = itr1->value;
         for (auto itr2 = contexts.MemberBegin(); itr2 != contexts.MemberEnd(); ++itr2)
         {
-            const dltid_t ctxId(itr2->name.GetString());
+            const DltidT ctx_id(itr2->name.GetString());
             const auto& assigned = itr2->value;
             for (unsigned int itr3 = 0; itr3 < assigned.Size(); ++itr3)
             {
-                config.channelAssignments[appId][ctxId].push_back(dltid_t(assigned[itr3].GetString()));
+                config.channel_assignments[app_id][ctx_id].push_back(DltidT(assigned[itr3].GetString()));
             }
         }
     }
 
     if (d.HasMember("filteringEnabled"))
     {
-        config.filteringEnabled = d["filteringEnabled"].GetBool();
+        config.filtering_enabled = d["filteringEnabled"].GetBool();
     }
     else
     {
-        config.filteringEnabled = true;
+        config.filtering_enabled = true;
     }
     // TODO: fix typo
-    config.defaultThreshold = ToLogLevelT(d["defaultThresold"].GetString());
+    config.default_threshold = ToLogLevelT(d["defaultThresold"].GetString());
 
     const auto& thresholds = d["messageThresholds"];
     for (auto itr1 = thresholds.MemberBegin(); itr1 != thresholds.MemberEnd(); ++itr1)
     {
-        const dltid_t appId(itr1->name.GetString());
-        auto& contexts = itr1->value;
+        const DltidT app_id(itr1->name.GetString());
+        const auto& contexts = itr1->value;
         for (auto itr2 = contexts.MemberBegin(); itr2 != contexts.MemberEnd(); ++itr2)
         {
-            const dltid_t ctxId(itr2->name.GetString());
-            config.messageThresholds[appId][ctxId] = ToLogLevelT(itr2->value.GetString());
+            const DltidT ctx_id(itr2->name.GetString());
+            config.message_thresholds[app_id][ctx_id] = ToLogLevelT(itr2->value.GetString());
         }
     }
 
     return config;
 }
 
-void writeDlt(const score::logging::dltserver::PersistentConfig& config, IPersistentDictionary& pd)
+void WriteDlt(const score::logging::dltserver::PersistentConfig& config, IPersistentDictionary& pd)
 {
     using rapidjson::Document;
     using rapidjson::StringBuffer;
     using rapidjson::Value;
     using rapidjson::Writer;
-    Document d = createRJDocument();
+    Document d = CreateRjDocument();
     d.SetObject();
     auto& allocator = d.GetAllocator();
 
     // channels
     Value channels(rapidjson::kObjectType);
-    for (auto& channel : config.channels)
+    for (const auto& channel : config.channels)
     {
-        const std::string& channelName = channel.first;
-        const std::string& channelThreshold = GetStringFromLogLevelT(channel.second.channelThreshold);
-        Value channelJson(rapidjson::kObjectType);
-        channelJson.AddMember("channelThreshold", Value(channelThreshold.c_str(), allocator).Move(), allocator);
-        channels.AddMember(Value(channelName.c_str(), allocator).Move(), channelJson.Move(), allocator);
+        const std::string& channel_name = channel.first;
+        const std::string& channel_threshold = GetStringFromLogLevelT(channel.second.channel_threshold);
+        Value channel_json(rapidjson::kObjectType);
+        channel_json.AddMember("channelThreshold", Value(channel_threshold.c_str(), allocator).Move(), allocator);
+        channels.AddMember(Value(channel_name.c_str(), allocator).Move(), channel_json.Move(), allocator);
     }
     d.AddMember("channels", channels.Move(), allocator);
 
     // channel assignments
-    Value rAssignments(rapidjson::kObjectType);
-    for (const auto& app : config.channelAssignments)
+    Value r_assignments(rapidjson::kObjectType);
+    for (const auto& app : config.channel_assignments)
     {
-        const std::string& appId = std::string(app.first);
+        const std::string& app_id = std::string(app.first);
         const auto& contexts = app.second;
-        Value rContexts{rapidjson::kObjectType};
+        Value r_contexts{rapidjson::kObjectType};
         for (const auto& ctx : contexts)
         {
-            const std::string& ctxId = std::string(ctx.first);
+            const std::string& ctx_id = std::string(ctx.first);
             const auto& assigned = ctx.second;
-            Value rChannels{rapidjson::kArrayType};
+            Value r_channels{rapidjson::kArrayType};
             for (const auto& channel : assigned)
             {
-                rChannels.PushBack(Value(std::string{channel}.c_str(), allocator).Move(), allocator);
+                r_channels.PushBack(Value(std::string{channel}.c_str(), allocator).Move(), allocator);
             }
-            rContexts.AddMember(Value(ctxId.c_str(), allocator).Move(), rChannels.Move(), allocator);
+            r_contexts.AddMember(Value(ctx_id.c_str(), allocator).Move(), r_channels.Move(), allocator);
         }
-        rAssignments.AddMember(Value(appId.c_str(), allocator).Move(), rContexts.Move(), allocator);
+        r_assignments.AddMember(Value(app_id.c_str(), allocator).Move(), r_contexts.Move(), allocator);
     }
-    d.AddMember("channelAssignments", rAssignments.Move(), allocator);
+    d.AddMember("channelAssignments", r_assignments.Move(), allocator);
 
-    d.AddMember("filteringEnabled", config.filteringEnabled, allocator);
+    d.AddMember("filteringEnabled", config.filtering_enabled, allocator);
     // TODO: fix typo
-    d.AddMember(
-        "defaultThresold", Value(GetStringFromLogLevelT(config.defaultThreshold).c_str(), allocator).Move(), allocator);
+    d.AddMember("defaultThresold",
+                Value(GetStringFromLogLevelT(config.default_threshold).c_str(), allocator).Move(),
+                allocator);
 
-    Value rThresholds(rapidjson::kObjectType);
-    for (const auto& app : config.messageThresholds)
+    Value r_thresholds(rapidjson::kObjectType);
+    for (const auto& app : config.message_thresholds)
     {
-        const std::string& appId = std::string(app.first);
+        const std::string& app_id = std::string(app.first);
         const auto& contexts = app.second;
-        Value rContexts{rapidjson::kObjectType};
+        Value r_contexts{rapidjson::kObjectType};
         for (const auto& ctx : contexts)
         {
-            const std::string& ctxId = std::string(ctx.first);
+            const std::string& ctx_id = std::string(ctx.first);
             const auto& threshold = GetStringFromLogLevelT(ctx.second);
-            rContexts.AddMember(
-                Value(ctxId.c_str(), allocator).Move(), Value(threshold.c_str(), allocator).Move(), allocator);
+            r_contexts.AddMember(
+                Value(ctx_id.c_str(), allocator).Move(), Value(threshold.c_str(), allocator).Move(), allocator);
         }
-        rThresholds.AddMember(Value(appId.c_str(), allocator).Move(), rContexts.Move(), allocator);
+        r_thresholds.AddMember(Value(app_id.c_str(), allocator).Move(), r_contexts.Move(), allocator);
     }
-    d.AddMember("messageThresholds", rThresholds.Move(), allocator);
+    d.AddMember("messageThresholds", r_thresholds.Move(), allocator);
 
     StringBuffer buffer(nullptr);
     Writer<StringBuffer> writer(buffer, nullptr);
     d.Accept(writer);
 
     const std::string json = buffer.GetString();
-    pd.SetString(CONFIG_DATABASE_KEY, json);
+    pd.SetString(kConfigDatabaseKey, json);
 }
 
-bool readDltEnabled(IPersistentDictionary& pd)
+bool ReadDltEnabled(IPersistentDictionary& pd)
 {
-    const bool enabled = pd.GetBool(CONFIG_OUTPUT_ENABLED_KEY, true);
+    const bool enabled = pd.GetBool(kConfigOutputEnabledKey, true);
     if constexpr (kPersistentConfigFeatureEnabled)
     {
         std::cout << "Loaded output enable = " << enabled << " from KVS" << std::endl;
@@ -345,9 +346,9 @@ bool readDltEnabled(IPersistentDictionary& pd)
     return enabled;
 }
 
-void writeDltEnabled(bool enabled, IPersistentDictionary& pd)
+void WriteDltEnabled(bool enabled, IPersistentDictionary& pd)
 {
-    pd.SetBool(CONFIG_OUTPUT_ENABLED_KEY, enabled);
+    pd.SetBool(kConfigOutputEnabledKey, enabled);
 }
 
 }  // namespace datarouter

@@ -11,8 +11,8 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-#ifndef PAS_LOGGING_LOGPARSER_H_
-#define PAS_LOGGING_LOGPARSER_H_
+#ifndef SCORE_DATAROUTER_INCLUDE_LOGPARSER_LOGPARSER_H
+#define SCORE_DATAROUTER_INCLUDE_LOGPARSER_LOGPARSER_H
 
 #include "logparser/i_logparser.h"
 
@@ -45,26 +45,26 @@ class LogParser : public ILogParser
     explicit LogParser(const score::mw::log::INvConfig& nv_config);
     ~LogParser() = default;
 
-    void set_filter_factory(FilterFunctionFactory factory) override
+    void SetFilterFactory(FilterFunctionFactory factory) override
     {
-        filter_factory = factory;
+        filter_factory_ = factory;
     }
 
-    void add_incoming_type(const bufsize_t map_index, const std::string& params) override;
+    void AddIncomingType(const BufsizeT map_index, const std::string& params) override;
     void AddIncomingType(const score::mw::log::detail::TypeRegistration&) override;
 
-    void add_type_handler(const std::string& typeName, TypeHandler& handler) override;
-    void add_global_handler(AnyHandler& handler) override;
+    void AddTypeHandler(const std::string& type_name, TypeHandler& handler) override;
+    void AddGlobalHandler(AnyHandler& handler) override;
 
-    void remove_type_handler(const std::string& typeName, TypeHandler& handler) override;
-    void remove_global_handler(AnyHandler& handler) override;
+    void RemoveTypeHandler(const std::string& type_name, TypeHandler& handler) override;
+    void RemoveGlobalHandler(AnyHandler& handler) override;
 
-    bool is_type_hndl_registered(const std::string& typeName, const TypeHandler& handler) override;
-    bool is_glb_hndl_registered(const AnyHandler& handler) override;
+    bool IsTypeHndlRegistered(const std::string& type_name, const TypeHandler& handler) override;
+    bool IsGlbHndlRegistered(const AnyHandler& handler) override;
 
-    void reset_internal_mapping() override;
+    void ResetInternalMapping() override;
 
-    void parse(timestamp_t timestamp, const char* data, bufsize_t size) override;
+    void Parse(TimestampT timestamp, const char* data, BufsizeT size) override;
     void Parse(const score::mw::log::detail::SharedMemoryRecord& record) override;
 
   private:
@@ -87,14 +87,14 @@ class LogParser : public ILogParser
     class IndexParser
     {
       public:
-        TypeInfo info_;
+        TypeInfo info;
 
-        explicit IndexParser(TypeInfo info) : info_{info}, handlers_() {}
+        explicit IndexParser(TypeInfo type_info) : info{type_info}, handlers_{} {}
 
-        void add_handler(const HandleRequestMap::value_type& request);
-        void remove_handler(const HandleRequestMap::value_type& request);
+        void AddHandler(const HandleRequestMap::value_type& request);
+        void RemoveHandler(const HandleRequestMap::value_type& request);
 
-        void parse(const timestamp_t timestamp, const char* const data, const bufsize_t size);
+        void Parse(const TimestampT timestamp, const char* const data, const BufsizeT size);
 
       private:
         struct Handler
@@ -115,14 +115,14 @@ class LogParser : public ILogParser
         std::vector<Handler> handlers_;
     };
 
-    FilterFunctionFactory filter_factory;
+    FilterFunctionFactory filter_factory_;
 
-    HandleRequestMap handle_request_map;
+    HandleRequestMap handle_request_map_;
 
-    std::unordered_multimap<std::string, const bufsize_t> typename_to_index;
-    std::unordered_map<bufsize_t, IndexParser> index_parser_map;
+    std::unordered_multimap<std::string, const BufsizeT> typename_to_index_;
+    std::unordered_map<BufsizeT, IndexParser> index_parser_map_;
 
-    std::vector<AnyHandler*> global_handlers;
+    std::vector<AnyHandler*> global_handlers_;
     const score::mw::log::INvConfig& nv_config_;
 };
 
@@ -130,4 +130,4 @@ class LogParser : public ILogParser
 }  // namespace platform
 }  // namespace score
 
-#endif  // PAS_LOGGING_LOGPARSER_H_
+#endif  // SCORE_DATAROUTER_INCLUDE_LOGPARSER_LOGPARSER_H

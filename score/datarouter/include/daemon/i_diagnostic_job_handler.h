@@ -29,7 +29,7 @@ namespace dltserver
 class IDiagnosticJobHandler
 {
   public:
-    virtual const std::string execute(IDltLogServer& srv) = 0;
+    virtual std::string Execute(IDltLogServer& srv) = 0;
     virtual ~IDiagnosticJobHandler() = default;
 };
 

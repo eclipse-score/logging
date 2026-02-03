@@ -37,8 +37,8 @@ class Output : public StubFileTransferStreamHandler::IOutput
                 SendFtVerbose,
                 (score::cpp::span<const std::uint8_t> data,
                  mw::log::LogLevel loglevel,
-                 dltid_t appId,
-                 dltid_t ctxId,
+                 DltidT appId,
+                 DltidT ctxId,
                  uint8_t nor,
                  uint32_t time_tmsp),
                 (override));

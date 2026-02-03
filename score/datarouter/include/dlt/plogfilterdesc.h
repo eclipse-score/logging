@@ -11,8 +11,8 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-#ifndef PLOGFILTERDESC_H_
-#define PLOGFILTERDESC_H_
+#ifndef SCORE_DATAROUTER_INCLUDE_DLT_PLOGFILTERDESC_H
+#define SCORE_DATAROUTER_INCLUDE_DLT_PLOGFILTERDESC_H
 
 #include "score/mw/log/detail/log_entry.h"
 
@@ -23,15 +23,15 @@ namespace platform
 namespace internal
 {
 
-struct plogfilterdesc
+struct Plogfilterdesc
 {
-    score::mw::log::detail::LoggingIdentifier appid_;
-    score::mw::log::detail::LoggingIdentifier ctxid_;
-    uint8_t logLevel_{};
+    score::mw::log::detail::LoggingIdentifier appid;
+    score::mw::log::detail::LoggingIdentifier ctxid;
+    uint8_t log_level{};
 };
 
 }  // namespace internal
 }  // namespace platform
 }  // namespace score
 
-#endif  // PLOGFILTERDESC_H_
+#endif  // SCORE_DATAROUTER_INCLUDE_DLT_PLOGFILTERDESC_H

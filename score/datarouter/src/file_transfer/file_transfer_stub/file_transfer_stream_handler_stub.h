@@ -41,8 +41,8 @@ class StubFileTransferStreamHandler : public LogParser::TypeHandler
       public:
         virtual void SendFtVerbose(score::cpp::span<const std::uint8_t> data,
                                    mw::log::LogLevel loglevel,
-                                   dltid_t appId,
-                                   dltid_t ctxId,
+                                   DltidT appId,
+                                   DltidT ctxId,
                                    uint8_t nor,
                                    uint32_t time_tmsp) = 0;
 
@@ -58,7 +58,7 @@ class StubFileTransferStreamHandler : public LogParser::TypeHandler
 
     ~StubFileTransferStreamHandler() = default;
 
-    virtual void handle(timestamp_t /*timestamp*/, const char* /*buffer*/, bufsize_t /*size*/) override
+    virtual void Handle(TimestampT /*timestamp*/, const char* /*buffer*/, BufsizeT /*size*/) override
     {
         score::mw::log::LogWarn() << "File transfer feature is disabled!";
     }

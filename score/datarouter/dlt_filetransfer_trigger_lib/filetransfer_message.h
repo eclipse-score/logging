@@ -26,11 +26,11 @@ struct FileTransferEntry
     // Suppress "AUTOSAR C++14 A9-5-1", The rule states: "Unions shall not be used."
     // Unavoidable use of of union type, in future dltit_t with LoggingIdentifier.
     // coverity[autosar_cpp14_a9_5_1_violation] see above
-    score::platform::dltid_t appid{};
+    score::platform::DltidT appid{};
     // Suppress "AUTOSAR C++14 A9-5-1", The rule states: "Unions shall not be used."
     // Unavoidable use of of union type, in future dltit_t with LoggingIdentifier.
     // coverity[autosar_cpp14_a9_5_1_violation] see above
-    score::platform::dltid_t ctxid{};
+    score::platform::DltidT ctxid{};
     std::string file_name{};
     uint8_t delete_file = 0;
 };

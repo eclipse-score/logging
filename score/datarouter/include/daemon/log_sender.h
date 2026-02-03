@@ -11,8 +11,8 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-#ifndef LOG_SENDER_H_
-#define LOG_SENDER_H_
+#ifndef SCORE_DATAROUTER_INCLUDE_DAEMON_LOG_SENDER_H
+#define SCORE_DATAROUTER_INCLUDE_DAEMON_LOG_SENDER_H
 
 #include "score/datarouter/include/daemon/i_log_sender.h"
 
@@ -36,23 +36,23 @@ class LogSender : public ILogSender
                         size_t size,
                         DltLogChannel& c) override
     {
-        c.sendNonVerbose(desc, tmsp, data, size);
+        c.SendNonVerbose(desc, tmsp, data, size);
     }
     void SendVerbose(uint32_t tmsp,
                      const score::mw::log::detail::log_entry_deserialization::LogEntryDeserializationReflection& entry,
                      DltLogChannel& c) override
     {
-        c.sendVerbose(tmsp, entry);
+        c.SendVerbose(tmsp, entry);
     }
     void SendFTVerbose(score::cpp::span<const std::uint8_t> data,
                        mw::log::LogLevel loglevel,
-                       dltid_t appId,
-                       dltid_t ctxId,
+                       DltidT app_id,
+                       DltidT ctx_id,
                        uint8_t nor,
                        uint32_t tmsp,
                        DltLogChannel& c) override
     {
-        c.sendFTVerbose(data, loglevel, appId, ctxId, nor, tmsp);
+        c.SendFtVerbose(data, loglevel, app_id, ctx_id, nor, tmsp);
     }
 };
 // LCOV_EXCL_STOP
@@ -60,4 +60,4 @@ class LogSender : public ILogSender
 }  // namespace logging
 }  // namespace score
 
-#endif  // LOG_SENDER_H_
+#endif  // SCORE_DATAROUTER_INCLUDE_DAEMON_LOG_SENDER_H

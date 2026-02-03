@@ -21,57 +21,57 @@ namespace logging
 namespace dltserver
 {
 
-const std::string ReadLogChannelNamesHandler::execute(IDltLogServer& srv)
+std::string ReadLogChannelNamesHandler::Execute(IDltLogServer& srv)
 {
     return srv.ReadLogChannelNames();
 }
 
-const std::string ResetToDefaultHandler::execute(IDltLogServer& srv)
+std::string ResetToDefaultHandler::Execute(IDltLogServer& srv)
 {
     return srv.ResetToDefault();
 }
 
-const std::string StoreDltConfigHandler::execute(IDltLogServer& srv)
+std::string StoreDltConfigHandler::Execute(IDltLogServer& srv)
 {
     return srv.StoreDltConfig();
 }
 
-const std::string SetTraceStateHandler::execute(IDltLogServer& srv)
+std::string SetTraceStateHandler::Execute(IDltLogServer& srv)
 {
     return srv.SetTraceState();
 }
 
-const std::string SetDefaultTraceStateHandler::execute(IDltLogServer& srv)
+std::string SetDefaultTraceStateHandler::Execute(IDltLogServer& srv)
 {
     return srv.SetDefaultTraceState();
 }
 
-const std::string SetLogChannelThresholdHandler::execute(IDltLogServer& srv)
+std::string SetLogChannelThresholdHandler::Execute(IDltLogServer& srv)
 {
     return srv.SetLogChannelThreshold(channel_, threshold_);
 }
 
-const std::string SetLogLevelHandler::execute(IDltLogServer& srv)
+std::string SetLogLevelHandler::Execute(IDltLogServer& srv)
 {
-    return srv.SetLogLevel(appId_, ctxId_, threshold_);
+    return srv.SetLogLevel(app_id_, ctx_id_, threshold_);
 }
 
-const std::string SetMessagingFilteringStateHandler::execute(IDltLogServer& srv)
+std::string SetMessagingFilteringStateHandler::Execute(IDltLogServer& srv)
 {
     return srv.SetMessagingFilteringState(enabled_);
 }
 
-const std::string SetDefaultLogLevelHandler::execute(IDltLogServer& srv)
+std::string SetDefaultLogLevelHandler::Execute(IDltLogServer& srv)
 {
     return srv.SetDefaultLogLevel(level_);
 }
 
-const std::string SetLogChannelAssignmentHandler::execute(IDltLogServer& srv)
+std::string SetLogChannelAssignmentHandler::Execute(IDltLogServer& srv)
 {
-    return srv.SetLogChannelAssignment(appId_, ctxId_, channel_, assignment_flag_);
+    return srv.SetLogChannelAssignment(app_id_, ctx_id_, channel_, assignment_flag_);
 }
 
-const std::string SetDltOutputEnableHandler::execute(IDltLogServer& srv)
+std::string SetDltOutputEnableHandler::Execute(IDltLogServer& srv)
 {
     return srv.SetDltOutputEnable(enable_);
 }

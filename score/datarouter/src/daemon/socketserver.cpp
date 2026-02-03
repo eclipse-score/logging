@@ -44,17 +44,16 @@ namespace platform
 namespace datarouter
 {
 
-using score::platform::internal::LogParser;
 using score::platform::internal::MessagePassingServer;
 using score::platform::internal::UnixDomainSockAddr;
 
 namespace
 {
-constexpr auto* LOG_CHANNELS_PATH = "./etc/log-channels.json";
+constexpr auto* kLogChannelsPath = "./etc/log-channels.json";
 
-constexpr std::uint32_t statistics_log_period_us{10000000U};
-constexpr std::uint32_t dlt_flush_period_us{100000U};
-constexpr std::uint32_t throttle_time_us{100000U};
+constexpr std::uint32_t kStatisticsLogPeriodUs{10000000U};
+constexpr std::uint32_t kDltFlushPeriodUs{100000U};
+constexpr std::uint32_t kThrottleTimeUs{100000U};
 
 }  // namespace
 
@@ -105,12 +104,12 @@ SocketServer::PersistentStorageHandlers SocketServer::InitializePersistentStorag
 
     auto* pd_ptr = persistent_dictionary.get();
     handlers.load_dlt = [pd_ptr]() {
-        return readDlt(*pd_ptr);
+        return ReadDlt(*pd_ptr);
     };
     handlers.store_dlt = [pd_ptr](const score::logging::dltserver::PersistentConfig& config) {
-        writeDlt(config, *pd_ptr);
+        WriteDlt(config, *pd_ptr);
     };
-    handlers.is_dlt_enabled = readDltEnabled(*persistent_dictionary);
+    handlers.is_dlt_enabled = ReadDltEnabled(*persistent_dictionary);
 
 /*
     Deviation from Rule A16-0-1:
@@ -137,11 +136,11 @@ SocketServer::PersistentStorageHandlers SocketServer::InitializePersistentStorag
 std::unique_ptr<score::logging::dltserver::DltLogServer> SocketServer::CreateDltServer(
     const PersistentStorageHandlers& storage_handlers)
 {
-    const auto static_config = readStaticDlt(LOG_CHANNELS_PATH);
+    const auto static_config = ReadStaticDlt(kLogChannelsPath);
     if (!static_config.has_value())
     {
         score::mw::log::LogError() << static_config.error();
-        score::mw::log::LogError() << "Error during parsing file " << std::string_view{LOG_CHANNELS_PATH}
+        score::mw::log::LogError() << "Error during parsing file " << std::string_view{kLogChannelsPath}
                                  << ", static config is not available, interrupt work";
         return nullptr;
     }
@@ -168,8 +167,8 @@ DataRouter::SourceSetupCallback SocketServer::CreateSourceSetupHandler(
     */
     // coverity[autosar_cpp14_a5_1_4_violation]
     return [&dlt_server](score::platform::internal::ILogParser&& parser) {
-        parser.set_filter_factory(getFilterFactory());
-        dlt_server.add_handlers(parser);
+        parser.SetFilterFactory(GetFilterFactory());
+        dlt_server.AddHandlers(parser);
     };
 }
 
@@ -178,13 +177,13 @@ void SocketServer::UpdateParserHandlers(score::logging::dltserver::DltLogServer&
                                         score::platform::internal::ILogParser& parser,
                                         bool enable)
 {
-    dlt_server.update_handlers(parser, enable);
+    dlt_server.UpdateHandlers(parser, enable);
 }
 
 // Static helper: Final update after all parsers processed
 void SocketServer::UpdateHandlersFinal(score::logging::dltserver::DltLogServer& dlt_server, bool enable)
 {
-    dlt_server.update_handlers_final(enable);
+    dlt_server.UpdateHandlersFinal(enable);
 }
 
 // Static helper: Create a new config session from Unix domain handle
@@ -192,7 +191,7 @@ std::unique_ptr<UnixDomainServer::ISession> SocketServer::CreateConfigSession(
     score::logging::dltserver::DltLogServer& dlt_server,
     UnixDomainServer::SessionHandle handle)
 {
-    return dlt_server.new_config_session(score::platform::datarouter::ConfigSessionHandleType{std::move(handle)});
+    return dlt_server.NewConfigSession(score::platform::datarouter::ConfigSessionHandleType{std::move(handle)});
 }
 
 std::function<void(bool)> SocketServer::CreateEnableHandler(DataRouter& router,
@@ -225,8 +224,8 @@ std::function<void(bool)> SocketServer::CreateEnableHandler(DataRouter& router,
 #endif
         std::cerr << "DRCMD enable callback called with " << enable << std::endl;
         score::mw::log::LogWarn() << "Changing output enable to " << enable;
-        writeDltEnabled(enable, persistent_dictionary);
-        router.for_each_source_parser(
+        WriteDltEnabled(enable, persistent_dictionary);
+        router.ForEachSourceParser(
             std::bind(&SocketServer::UpdateParserHandlers, std::ref(dlt_server), std::placeholders::_1, enable),
             std::bind(&SocketServer::UpdateHandlersFinal, std::ref(dlt_server), enable),
             enable);
@@ -238,7 +237,7 @@ std::unique_ptr<score::platform::internal::UnixDomainServer> SocketServer::Creat
 {
     const auto factory = std::bind(&SocketServer::CreateConfigSession, std::ref(dlt_server), std::placeholders::_2);
 
-    const UnixDomainSockAddr addr(score::logging::config::socket_address, true);
+    const UnixDomainSockAddr addr(score::logging::config::kSocketAddress, true);
     /*
     Deviation from Rule A5-1-4:
     - A lambda expression object shall not outlive any of its reference captured objects.
@@ -253,15 +252,15 @@ score::mw::log::NvConfig SocketServer::LoadNvConfig(score::mw::log::Logger& stat
 {
     if constexpr (score::platform::datarouter::kNonVerboseDltEnabled)
     {
-        auto nvConfigResult = score::mw::log::NvConfigFactory::CreateAndInit(config_path);
-        if (nvConfigResult.has_value())
+        auto nv_config_result = score::mw::log::NvConfigFactory::CreateAndInit(config_path);
+        if (nv_config_result.has_value())
         {
             stats_logger.LogInfo() << "NvConfig loaded successfully";
-            return std::move(nvConfigResult.value());
+            return std::move(nv_config_result.value());
         }
         else
         {
-            stats_logger.LogWarn() << "Failed to load NvConfig: " << nvConfigResult.error().Message();
+            stats_logger.LogWarn() << "Failed to load NvConfig: " << nv_config_result.error().Message();
         }
     }
     return score::mw::log::NvConfigFactory::CreateEmpty();
@@ -293,11 +292,11 @@ std::unique_ptr<MessagePassingServer::ISession> SocketServer::CreateMessagePassi
     }
 
     const auto fd = maybe_fd.value();
-    const auto quota = dlt_server.get_quota(appid);
-    const auto quotaEnforcementEnabled = dlt_server.getQuotaEnforcementEnabled();
+    const auto quota = dlt_server.GetQuota(appid);
+    const auto quota_enforcement_enabled = dlt_server.GetQuotaEnforcementEnabled();
     const bool is_dlt_enabled = dlt_server.GetDltEnabled();
-    auto source_session = router.new_source_session(
-        fd, appid, is_dlt_enabled, std::move(handle), quota, quotaEnforcementEnabled, client_pid, nv_config);
+    auto source_session = router.NewSourceSession(
+        fd, appid, is_dlt_enabled, std::move(handle), quota, quota_enforcement_enabled, client_pid, nv_config);
     // The reason for banning is, because it's error-prone to use. One should use abstractions e.g. provided by
     // the C++ standard library. But these abstraction do not support exclusive access, which is why we created
     // this abstraction library.
@@ -324,27 +323,27 @@ void SocketServer::RunEventLoop(const std::atomic_bool& exit_requested,
                                 score::mw::log::Logger& stats_logger)
 {
     uint16_t count = 0U;
-    constexpr std::uint32_t statistics_freq_divider = statistics_log_period_us / throttle_time_us;
-    constexpr std::uint32_t dlt_freq_divider = dlt_flush_period_us / throttle_time_us;
+    constexpr std::uint32_t kStatisticsFreqDivider = kStatisticsLogPeriodUs / kThrottleTimeUs;
+    constexpr std::uint32_t kDltFreqDivider = kDltFlushPeriodUs / kThrottleTimeUs;
 
     while (!exit_requested.load())
     {
-        usleep(throttle_time_us);
+        usleep(kThrottleTimeUs);
 
-        if ((count % statistics_freq_divider) == 0U)
+        if ((count % kStatisticsFreqDivider) == 0U)
         {
-            router.show_source_statistics(static_cast<uint16_t>(count / statistics_freq_divider));
-            dlt_server.show_channel_statistics(static_cast<uint16_t>(count / statistics_freq_divider), stats_logger);
+            router.ShowSourceStatistics(static_cast<uint16_t>(count / kStatisticsFreqDivider));
+            dlt_server.ShowChannelStatistics(static_cast<uint16_t>(count / kStatisticsFreqDivider), stats_logger);
         }
-        if ((count % dlt_freq_divider) == 0U)
+        if ((count % kDltFreqDivider) == 0U)
         {
-            dlt_server.flush();
+            dlt_server.Flush();
         }
         ++count;
     }
 }
 
-void SocketServer::doWork(const std::atomic_bool& exit_requested, const bool no_adaptive_runtime)
+void SocketServer::DoWork(const std::atomic_bool& exit_requested, const bool no_adaptive_runtime)
 {
     SetThreadName();
 
@@ -374,7 +373,7 @@ void SocketServer::doWork(const std::atomic_bool& exit_requested, const bool no_
 
     // Create and set enable handler
     const auto enable_handler = CreateEnableHandler(router, *pd, *dlt_server);
-    dlt_server->set_enabled_callback(enable_handler);
+    dlt_server->SetEnabledCallback(enable_handler);
 
     // Create Unix domain server for config sessions
     auto unix_domain_server = CreateUnixDomainServer(*dlt_server);

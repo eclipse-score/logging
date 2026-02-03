@@ -67,14 +67,14 @@ score::cpp::optional<SharedMemoryFileHandle> OpenReceivedSharedMemoryFileHandle(
 #endif  //  defined(__QNXNTO__)
 }  //  namespace
 
-void UnixDomainClient::client_routine()
+void UnixDomainClient::ClientRoutine()
 {
     SetupSignals(signal_);
 
-    std::uniform_int_distribution<int32_t> reconnectMsRange(75, 125);
+    std::uniform_int_distribution<int32_t> reconnect_ms_range(75, 125);
     std::mt19937 gen{std::random_device{}()};
     // random per thread instance, constant for a thread instance, initialized early
-    const auto reconnectDelay = std::chrono::milliseconds(reconnectMsRange(gen));
+    const auto reconnect_delay = std::chrono::milliseconds(reconnect_ms_range(gen));
 
     while (false == exit_.load())
     {
@@ -99,7 +99,7 @@ void UnixDomainClient::client_routine()
 
         while (false == exit_.load())
         {
-            auto connectRetryDelay = 100ms;
+            auto connect_retry_delay = 100ms;
             std::int32_t ret =
                 connect(fd, static_cast<const sockaddr*>(static_cast<const void*>(&addr_)), sizeof(sockaddr_un));
             if (ret == -1)
@@ -115,11 +115,11 @@ void UnixDomainClient::client_routine()
                 // coverity[autosar_cpp14_m19_3_1_violation]
                 if (errno == ECONNREFUSED || errno == EAGAIN || errno == ENOENT)
                 {
-                    std::this_thread::sleep_for(connectRetryDelay);
-                    connectRetryDelay *= 2;
-                    if (connectRetryDelay > 5000ms)
+                    std::this_thread::sleep_for(connect_retry_delay);
+                    connect_retry_delay *= 2;
+                    if (connect_retry_delay > 5000ms)
                     {
-                        connectRetryDelay = 5000ms;
+                        connect_retry_delay = 5000ms;
                     }
                     /*
                     Deviation from Rule M6-6-3:
@@ -178,7 +178,7 @@ void UnixDomainClient::client_routine()
                     }
                     else
                     {
-                        send_socket_message(fd, out_string);
+                        SendSocketMessage(fd, out_string);
                         command_in_transit = true;
                     }
                 }
@@ -187,14 +187,14 @@ void UnixDomainClient::client_routine()
             score::cpp::optional<std::int32_t> pid_in;
             score::cpp::optional<std::int32_t> result_fd;
 #if defined(__QNXNTO__)
-            const auto response = recv_socket_message(fd, result_fd, pid_in, OpenReceivedSharedMemoryFileHandle);
+            const auto response = RecvSocketMessage(fd, result_fd, pid_in, OpenReceivedSharedMemoryFileHandle);
 #else
-            const auto response = recv_socket_message(fd, result_fd, pid_in);
+            const auto response = RecvSocketMessage(fd, result_fd, pid_in);
 #endif  //  defined(__QNXNTO__)
 
             if (false == response.has_value())
             {
-                std::this_thread::sleep_for(reconnectDelay);
+                std::this_thread::sleep_for(reconnect_delay);
                 break;
             }
 
@@ -245,17 +245,17 @@ void UnixDomainClient::client_routine()
     }
 }
 
-void UnixDomainClient::ping()
+void UnixDomainClient::Ping()
 {
     if (true != exit_.load() && fd_.load() != -1)
     {
-        send_socket_message(fd_.load(), std::string());
+        SendSocketMessage(fd_.load(), std::string());
     }
 }
 
-void UnixDomainClient::update_thread_name_logger()
+void UnixDomainClient::UpdateThreadNameLogger()
 {
-    auto ret = score::os::Pthread::instance().setname_np(client_thread.native_handle(), "logger");
+    auto ret = score::os::Pthread::instance().setname_np(client_thread_.native_handle(), "logger");
     if (!ret.has_value())
     {
         auto errstr = ret.error().ToString();

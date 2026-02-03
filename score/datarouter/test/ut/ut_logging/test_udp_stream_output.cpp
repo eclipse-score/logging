@@ -118,7 +118,7 @@ TEST_F(UdpStreamOutputFixture, BindMethodShallNotReturnValueInCaseOfFailure)
     stream_output_ = std::make_unique<UdpStreamOutput>(addr_, port_, multicast_interface_, std::move(sock_mock_));
 
     // And calling UdpStreamOutput's bind method.
-    auto ret = stream_output_->bind();
+    auto ret = stream_output_->Bind();
 
     // It shall fail.
     EXPECT_FALSE(ret.has_value());
@@ -135,7 +135,7 @@ TEST_F(UdpStreamOutputFixture, BindMethodShallReturnValueIfItSucceeded)
     stream_output_ = std::make_unique<UdpStreamOutput>(addr_, port_, multicast_interface_, std::move(sock_mock_));
 
     // And calling UdpStreamOutput's bind method.
-    auto ret = stream_output_->bind();
+    auto ret = stream_output_->Bind();
 
     // It shall succeed.
     EXPECT_TRUE(ret.has_value());
@@ -156,7 +156,7 @@ TEST_F(UdpStreamOutputFixture, SendMethodShallFailIfSendmmsgFailed)
 
     // And calling UdpStreamOutput's send method.
     score::cpp::span<mmsghdr> mmsg_span(mmsg_hdr_array, size);
-    auto ret = stream_output_->send(mmsg_span);
+    auto ret = stream_output_->Send(mmsg_span);
 
     // It shall fail.
     EXPECT_FALSE(ret.has_value());
@@ -181,7 +181,7 @@ TEST_F(UdpStreamOutputFixture, SendMethodShallSucceedIfSendmmsgSucceeded)
 
     // And calling UdpStreamOutput's send method.
     score::cpp::span<mmsghdr> mmsg_span(mmsg_hdr_array, size);
-    auto ret = stream_output_->send(mmsg_span);
+    auto ret = stream_output_->Send(mmsg_span);
 
     // It shall succeed.
     EXPECT_TRUE(ret.has_value());
@@ -206,7 +206,7 @@ TEST_F(UdpStreamOutputFixture, SendMethodShallSucceedIfSendmmsgSucceededWithMmsg
 
     // And calling UdpStreamOutput's send method.
     score::cpp::span<mmsghdr> mmsg_span(mmsg_hdr_array, size);
-    auto ret = stream_output_->send(mmsg_span);
+    auto ret = stream_output_->Send(mmsg_span);
 
     // It shall succeed.
     EXPECT_TRUE(ret.has_value());
@@ -226,7 +226,7 @@ TEST_F(UdpStreamOutputFixture, SendMethodShallSucceedIfSendmsgSucceeded)
     stream_output_ = std::make_unique<UdpStreamOutput>(addr_, port_, multicast_interface_, std::move(sock_mock_));
 
     // And calling UdpStreamOutput's send method.
-    auto ret = stream_output_->send(io_vec, size);
+    auto ret = stream_output_->Send(io_vec, size);
 
     // It shall fail.
     EXPECT_FALSE(ret.has_value());
@@ -250,7 +250,7 @@ TEST_F(UdpStreamOutputFixture, SendMethodShallFailIfSendmsgFailed)
     stream_output_ = std::make_unique<UdpStreamOutput>(addr_, port_, multicast_interface_, std::move(sock_mock_));
 
     // And calling UdpStreamOutput's send method.
-    auto ret = stream_output_->send(io_vec, size);
+    auto ret = stream_output_->Send(io_vec, size);
 
     // It shall succeed.
     EXPECT_TRUE(ret.has_value());

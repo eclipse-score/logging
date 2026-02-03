@@ -32,13 +32,12 @@ class ISysedrHandler : public LogParser::TypeHandler, public LogParser::AnyHandl
 
   protected:
     // LogParser::TypeHandler
-    void handle(timestamp_t /* timestamp */, const char* /*data*/, bufsize_t /*size*/) override {};
-
+    void Handle(TimestampT /* timestamp */, const char* /*data*/, BufsizeT /*size*/) override {};
     // LogParser::AnyHandler
-    void handle(const TypeInfo& /*typeInfo*/,
-                timestamp_t /*timestamp*/,
+    void Handle(const TypeInfo& /*typeInfo*/,
+                TimestampT /*timestamp*/,
                 const char* /*data*/,
-                bufsize_t /*size*/) override {};
+                BufsizeT /*size*/) override {};
 };
 
 // LCOV_EXCL_STOP

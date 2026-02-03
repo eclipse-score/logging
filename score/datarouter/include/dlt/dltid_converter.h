@@ -11,8 +11,8 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-#ifndef DLTID_CONVERTER_H_
-#define DLTID_CONVERTER_H_
+#ifndef SCORE_DATAROUTER_INCLUDE_DLT_DLTID_CONVERTER_H
+#define SCORE_DATAROUTER_INCLUDE_DLT_DLTID_CONVERTER_H
 
 #include "score/mw/log/detail/logging_identifier.h"
 #include "score/datarouter/include/dlt/dltid.h"
@@ -22,9 +22,9 @@ namespace score
 namespace platform
 {
 
-dltid_t convertToDltId(const score::mw::log::detail::LoggingIdentifier& logging_identifier);
+DltidT ConvertToDltId(const score::mw::log::detail::LoggingIdentifier& logging_identifier);
 
 }  // namespace platform
 }  // namespace score
 
-#endif  // DLTID_CONVERTER_H_
+#endif  // SCORE_DATAROUTER_INCLUDE_DLT_DLTID_CONVERTER_H

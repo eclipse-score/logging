@@ -11,8 +11,8 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-#ifndef DLT_LOG_CHANNEL_H_
-#define DLT_LOG_CHANNEL_H_
+#ifndef SCORE_DATAROUTER_INCLUDE_DAEMON_DLT_LOG_CHANNEL_H
+#define SCORE_DATAROUTER_INCLUDE_DAEMON_DLT_LOG_CHANNEL_H
 
 #include "daemon/dltserver_common.h"
 #include "daemon/udp_stream_output.h"
@@ -38,19 +38,19 @@ namespace dltserver
 class DltLogChannel
 {
   public:
-    DltLogChannel(const dltid_t channelName,
+    DltLogChannel(const DltidT channel_id,
                   const mw::log::LogLevel threshold,
-                  const dltid_t ecu,
-                  const char* srcAddr,
-                  const uint16_t srcPort,
-                  const char* dstAddr,
-                  const uint16_t dstPort,
-                  const char* multicastInterface)
-        : channelName_(channelName),
-          ecu_(ecu),
-          channelThreshold_(threshold),
+                  const DltidT ecu_id,
+                  const char* src_addr,
+                  const uint16_t src_port,
+                  const char* dst_addr,
+                  const uint16_t dst_port,
+                  const char* multicast_interface)
+        : channel_name(channel_id),
+          ecu(ecu_id),
+          channel_threshold(threshold),
           mutex_{},
-          out_(dstAddr, dstPort, multicastInterface),
+          out_(dst_addr, dst_port, multicast_interface),
           mcnt_(0),
           count_verbose_messages_in_buffer_(0),
           count_nonverbose_messages_in_buffer_(0),
@@ -59,27 +59,27 @@ class DltLogChannel
           mmsg_hdr_array_{},
           prebuf_size_(0),
           prebuf_is_verbose_(false),
-          srcport_(srcPort),
+          srcport_(src_port),
           bind_result_{},
           verbose_(),
           non_verbose_()
     {
-        bind_result_ = out_.bind(srcAddr, srcPort);
+        bind_result_ = out_.Bind(src_addr, src_port);
     }
 
-    DltLogChannel(const std::string& channelName,
+    DltLogChannel(const std::string& channel_id,
                   const mw::log::LogLevel threshold,
-                  const std::string& ecu,
-                  const char* srcAddr,
-                  const uint16_t srcPort,
-                  const char* dstAddr,
-                  const uint16_t dstPort,
-                  const char* multicastInterface)
-        : channelName_(dltid_t(channelName)),
-          ecu_(dltid_t(ecu)),
-          channelThreshold_(threshold),
+                  const std::string& ecu_id,
+                  const char* src_addr,
+                  const uint16_t src_port,
+                  const char* dst_addr,
+                  const uint16_t dst_port,
+                  const char* multicast_interface)
+        : channel_name(DltidT(channel_id)),
+          ecu(DltidT(ecu_id)),
+          channel_threshold(threshold),
           mutex_{},
-          out_(dstAddr, dstPort, multicastInterface),
+          out_(dst_addr, dst_port, multicast_interface),
           mcnt_(0),
           count_verbose_messages_in_buffer_(0),
           count_nonverbose_messages_in_buffer_(0),
@@ -88,20 +88,20 @@ class DltLogChannel
           mmsg_hdr_array_{},
           prebuf_size_(0),
           prebuf_is_verbose_(false),
-          srcport_(srcPort),
+          srcport_(src_port),
           bind_result_{},
           verbose_(),
           non_verbose_()
     {
-        bind_result_ = out_.bind(srcAddr, srcPort);
+        bind_result_ = out_.Bind(src_addr, src_port);
     }
 
     ~DltLogChannel() = default;
     DltLogChannel(const DltLogChannel&) = delete;
     DltLogChannel(DltLogChannel&& from) noexcept
-        : channelName_(from.channelName_),
-          ecu_(from.ecu_),
-          channelThreshold_(from.channelThreshold_.load()),
+        : channel_name(from.channel_name),
+          ecu(from.ecu),
+          channel_threshold(from.channel_threshold.load()),
           mutex_{},
           out_(std::move(from.out_)),
           mcnt_(0),
@@ -119,41 +119,41 @@ class DltLogChannel
     {
     }
 
-    void sendNonVerbose(const score::mw::log::config::NvMsgDescriptor& desc,
+    void SendNonVerbose(const score::mw::log::config::NvMsgDescriptor& desc,
                         uint32_t tmsp,
                         const void* data,
                         size_t size);
-    void sendVerbose(const uint32_t tmsp,
+    void SendVerbose(const uint32_t tmsp,
                      const score::mw::log::detail::log_entry_deserialization::LogEntryDeserializationReflection& entry);
     //  FT stands for 'file transfer'
-    void sendFTVerbose(score::cpp::span<const std::uint8_t> data,
+    void SendFtVerbose(score::cpp::span<const std::uint8_t> data,
                        const mw::log::LogLevel loglevel,
-                       dltid_t appId,
-                       dltid_t ctxId,
+                       DltidT app_id,
+                       DltidT ctx_id,
                        uint8_t nor,
                        uint32_t tmsp);
 
     template <typename Logger>
-    void show_stats(Logger& stat_logger)
+    void ShowStats(Logger& stat_logger)
     {
         std::lock_guard<std::mutex> lock(mutex_);
-        ShowAndClearStatsDlt(verbose_, stat_logger, channelName_);
-        ShowAndClearStatsNonVerbose(non_verbose_, stat_logger, channelName_);
+        ShowAndClearStatsDlt(verbose_, stat_logger, channel_name);
+        ShowAndClearStatsNonVerbose(non_verbose_, stat_logger, channel_name);
     }
 
-    void flush();
+    void Flush();
 
-    const dltid_t channelName_;
-    const dltid_t ecu_;
+    const DltidT channel_name;
+    const DltidT ecu;
 
-    std::atomic<mw::log::LogLevel> channelThreshold_;
+    std::atomic<mw::log::LogLevel> channel_threshold;
 
   private:
     static constexpr uint32_t kIpv4HeaderWithoutOptions = 20UL;
     static constexpr uint32_t kUdpHeader = 8UL;
     static constexpr uint32_t kMtu = 1500UL;
-    static constexpr uint32_t UDP_MAX_PAYLOAD = kMtu - (kIpv4HeaderWithoutOptions + kUdpHeader);
-    static constexpr uint16_t bandwidth_denominator_ = 10 /* show_stats() cycle_time */ * 1024 /* KiBytes */;
+    static constexpr uint32_t kUdpMaxPayload = kMtu - (kIpv4HeaderWithoutOptions + kUdpHeader);
+    static constexpr uint16_t kBandwidthDenominator = 10 /* show_stats() cycle_time */ * 1024 /* KiBytes */;
 
     std::mutex mutex_;
     UdpStreamOutput out_;
@@ -162,7 +162,7 @@ class DltLogChannel
     uint8_t count_nonverbose_messages_in_buffer_;
     static constexpr auto kVectorCount = 4UL;
     uint32_t vector_index_ = 0UL;
-    std::array<std::array<char, UDP_MAX_PAYLOAD>, kVectorCount> prebuf_data_;
+    std::array<std::array<char, kUdpMaxPayload>, kVectorCount> prebuf_data_;
     std::array<iovec, kVectorCount> io_vec_;
     std::array<mmsghdr, kVectorCount> mmsg_hdr_array_;
     size_t prebuf_size_;
@@ -203,7 +203,7 @@ class DltLogChannel
         if ((flush && vector_index_ > 0) || vector_index_ >= kVectorCount)
         {
             score::cpp::span<mmsghdr> mmsg_span(mmsg_hdr_array_.data(), vector_index_);
-            const auto send_result = out_.send(mmsg_span);
+            const auto send_result = out_.Send(mmsg_span);
             if (send_result.has_value() == false)
             {
                 if (count_verbose_messages_in_buffer_ > 0)
@@ -242,14 +242,14 @@ class DltLogChannel
     template <typename Logger>
     void ShowAndClearStatsDlt(DltLogChannelStatistics& statistics,
                               Logger& stat_logger,
-                              dltid_t channel_name,
+                              DltidT channel_id,
                               const score::cpp::string_view statistics_type = "verbose")
     {
         auto log_stream{stat_logger.LogInfo()};
         log_stream << std::string(statistics_type.data(), statistics_type.size())
-                   << " messages in the channel:" << std::string{channel_name.data(), channel_name.size()} << ": count "
+                   << " messages in the channel:" << std::string{channel_id.Data(), channel_id.size()} << ": count "
                    << statistics.stats_msgcnt << ", size " << statistics.stats_totalsize << " bytes ("
-                   << statistics.stats_totalsize / bandwidth_denominator_ << " kiB/s)"
+                   << statistics.stats_totalsize / kBandwidthDenominator << " kiB/s)"
                    << "failed to send: total count " << statistics.send_failures_count;
 
         if (statistics.send_failures_count > 0)
@@ -275,9 +275,9 @@ class DltLogChannel
     template <typename Logger>
     void ShowAndClearStatsNonVerbose(DltLogChannelNonVerboseStatistics& statistics,
                                      Logger& stat_logger,
-                                     dltid_t channel_name)
+                                     DltidT channel_id)
     {
-        ShowAndClearStatsDlt(statistics, stat_logger, channel_name, "non-verbose");
+        ShowAndClearStatsDlt(statistics, stat_logger, channel_id, "non-verbose");
 
         std::vector<std::pair<uint32_t, size_t>> dlt_non_verbose_diagnostics(begin(statistics.message_id_data_stats),
                                                                              end(statistics.message_id_data_stats));
@@ -288,12 +288,12 @@ class DltLogChannel
                   });
 
         auto&& log_stream = stat_logger.LogInfo();
-        log_stream << "dlt stats: non-verbose messages in channel:"
-                   << std::string{channel_name.data(), channel_name.size()} << " sent data by message id.";
+        log_stream << "dlt stats: non-verbose messages in channel:" << std::string{channel_id.Data(), channel_id.size()}
+                   << " sent data by message id.";
         std::for_each(
             begin(dlt_non_verbose_diagnostics), end(dlt_non_verbose_diagnostics), [&log_stream](const auto& elem) {
                 log_stream << "Msgid:" << elem.first << " bytes:" << elem.second << " ("
-                           << elem.second / bandwidth_denominator_ << "kiB/s) |";
+                           << elem.second / kBandwidthDenominator << "kiB/s) |";
             });
 
         //  Cleanup:
@@ -306,4 +306,4 @@ class DltLogChannel
 }  // namespace logging
 }  // namespace score
 
-#endif  // DLT_LOG_CHANNEL_H_
+#endif  // SCORE_DATAROUTER_INCLUDE_DAEMON_DLT_LOG_CHANNEL_H

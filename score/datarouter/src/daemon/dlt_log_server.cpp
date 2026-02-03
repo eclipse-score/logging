@@ -38,80 +38,80 @@ void DltLogServer::SendNonVerbose(const score::mw::log::config::NvMsgDescriptor&
     auto sender = [&desc, &tmsp, &data, &size, this](DltLogChannel& c) {
         log_sender_->SendNonVerbose(desc, tmsp, data, size, c);
     };
-    const auto appId = desc.GetAppId().GetStringView();
-    const auto ctxId = desc.GetCtxId().GetStringView();
-    filterAndCall(dltid_t{score::cpp::string_view{appId.data(), appId.size()}},
-                  dltid_t{score::cpp::string_view{ctxId.data(), ctxId.size()}},
+    const auto app_id = desc.GetAppId().GetStringView();
+    const auto ctx_id = desc.GetCtxId().GetStringView();
+    FilterAndCall(DltidT{score::cpp::string_view{app_id.data(), app_id.size()}},
+                  DltidT{score::cpp::string_view{ctx_id.data(), ctx_id.size()}},
                   desc.GetLogLevel(),
                   sender);
 }
 
-void DltLogServer::sendVerbose(
+void DltLogServer::SendVerbose(
     uint32_t tmsp,
     const score::mw::log::detail::log_entry_deserialization::LogEntryDeserializationReflection& entry)
 {
     const auto sender = [&tmsp, &entry, this](DltLogChannel& c) {
         log_sender_->SendVerbose(tmsp, entry, c);
     };
-    filterAndCall(
-        platform::convertToDltId(entry.app_id), platform::convertToDltId(entry.ctx_id), entry.log_level, sender);
+    FilterAndCall(
+        platform::ConvertToDltId(entry.app_id), platform::ConvertToDltId(entry.ctx_id), entry.log_level, sender);
 }
 
 void DltLogServer::SendFtVerbose(score::cpp::span<const std::uint8_t> data,
                                  mw::log::LogLevel loglevel,
-                                 dltid_t appId,
-                                 dltid_t ctxId,
+                                 DltidT app_id,
+                                 DltidT ctx_id,
                                  uint8_t nor,
                                  uint32_t tmsp)
 {
-    const auto sender = [&data, &loglevel, &appId, &ctxId, &nor, &tmsp, this](DltLogChannel& c) {
-        log_sender_->SendFTVerbose(data, loglevel, appId, ctxId, nor, tmsp, c);
+    const auto sender = [&data, &loglevel, &app_id, &ctx_id, &nor, &tmsp, this](DltLogChannel& c) {
+        log_sender_->SendFTVerbose(data, loglevel, app_id, ctx_id, nor, tmsp, c);
     };
     // Coredump channel SIZE_MAX value means that there the configuration settings
     // don't explicitly specify the coredump channel
-    if (coredumpChannel_.has_value())
+    if (coredump_channel_.has_value())
     {
-        sender(channels_[coredumpChannel_.value()]);
+        sender(channels_[coredump_channel_.value()]);
     }
     else
     {
-        filterAndCall(appId, ctxId, loglevel, sender);
+        FilterAndCall(app_id, ctx_id, loglevel, sender);
     }
 }
 
-void DltLogServer::init_log_channels(const bool reloading)
+void DltLogServer::InitLogChannels(const bool reloading)
 {
-    if (staticConfig_.channels.empty())
+    if (static_config_.channels.empty())
     {
         std::cerr << "Empty channel list" << std::endl;
-        init_log_channels_default(reloading);
+        InitLogChannelsDefault(reloading);
         return;
     }
-    if (staticConfig_.channels.size() >= channelmask_t{}.size())
+    if (static_config_.channels.size() >= ChannelmaskT{}.size())
     {
         std::cerr << "Channel list too long" << std::endl;
-        init_log_channels_default(reloading);
+        InitLogChannelsDefault(reloading);
         return;
     }
 
-    coredumpChannel_ = std::nullopt;
-    PersistentConfig config{readerCallback_()};
-    const bool hasPersistentConfig = !config.channels.empty();
+    coredump_channel_ = std::nullopt;
+    PersistentConfig config{reader_callback_()};
+    const bool has_persistent_config = !config.channels.empty();
 
     // channels
     if (reloading)
     {
         for (auto& channel : channels_)
         {
-            const auto name = channel.channelName_;
-            const loglevel_t threshold = hasPersistentConfig ? config.channels[std::string(name)].channelThreshold
-                                                             : staticConfig_.channels[name].channelThreshold;
-            channel.channelThreshold_.store(threshold, std::memory_order_relaxed);
+            const auto name = channel.channel_name;
+            const LoglevelT threshold = has_persistent_config ? config.channels[std::string(name)].channel_threshold
+                                                              : static_config_.channels[name].channel_threshold;
+            channel.channel_threshold.store(threshold, std::memory_order_relaxed);
         }
     }
     else
     {
-        const auto& channels = staticConfig_.channels;
+        const auto& channels = static_config_.channels;
         size_t i = 0;
         /*
             Deviation from Rule M5-2-10:
@@ -126,85 +126,86 @@ void DltLogServer::init_log_channels(const bool reloading)
         {
             const auto& name = itr->first;
             const auto& channel = itr->second;
-            if (staticConfig_.defaultChannel == name)
+            if (static_config_.default_channel == name)
             {
-                defaultChannel_ = i;
+                default_channel_ = i;
             }
-            if (staticConfig_.coredumpChannel == name)
+            if (static_config_.coredump_channel == name)
             {
-                coredumpChannel_ = i;
+                coredump_channel_ = i;
             }
-            const loglevel_t threshold =
-                hasPersistentConfig ? config.channels[std::string(name)].channelThreshold : channel.channelThreshold;
+            const LoglevelT threshold = has_persistent_config ? config.channels[std::string(name)].channel_threshold
+                                                              : channel.channel_threshold;
             const auto ecu = channel.ecu;
-            const auto addr = channel.address.c_str();
+            const auto* const addr = channel.address.c_str();
             const auto port = channel.port;
-            const auto dstAddress = channel.dstAddress.empty() ? "239.255.42.99" : channel.dstAddress.c_str();
-            auto dstPort = channel.dstPort != 0 ? channel.dstPort : 3490U;
-            const auto multicastInterface = channel.multicastInterface.c_str();
-            channels_.emplace_back(name, threshold, ecu, addr, port, dstAddress, dstPort, multicastInterface);
-            channelNums_[name] = i;
+            const auto* const dst_address = channel.dst_address.empty() ? "239.255.42.99" : channel.dst_address.c_str();
+            auto dst_port = channel.dst_port != 0 ? channel.dst_port : 3490U;
+            const auto* const multicast_interface = channel.multicast_interface.c_str();
+            channels_.emplace_back(name, threshold, ecu, addr, port, dst_address, dst_port, multicast_interface);
+            channel_nums_[name] = i;
         }
     }
 
-    channelAssignments_.clear();
-    const auto& assignments = hasPersistentConfig ? config.channelAssignments : staticConfig_.channelAssignments;
+    channel_assignments_.clear();
+    const auto& assignments = has_persistent_config ? config.channel_assignments : static_config_.channel_assignments;
     for (const auto& app : assignments)
     {
-        const dltid_t appId = app.first;
+        const DltidT app_id = app.first;
         const auto& contexts = app.second;
         for (const auto& ctx : contexts)
         {
-            const dltid_t ctxId = ctx.first;
+            const DltidT ctx_id = ctx.first;
             const auto& channels = ctx.second;
-            channelmask_t channelSet{};
+            ChannelmaskT channel_set{};
             for (const auto& channel : channels)
             {
-                const size_t channelNum = channelNums_[dltid_t{channel}];
-                channelSet |= channelmask_t{1U} << channelNum;
+                const size_t channel_num = channel_nums_[DltidT{channel}];
+                channel_set |= ChannelmaskT{1U} << channel_num;
             }
-            channelAssignments_.emplace(std::make_pair(appId, ctxId), channelSet);
+            channel_assignments_.emplace(std::make_pair(app_id, ctx_id), channel_set);
         }
     }
 
-    filteringEnabled_ = hasPersistentConfig ? config.filteringEnabled : staticConfig_.filteringEnabled;
+    filtering_enabled_ = has_persistent_config ? config.filtering_enabled : static_config_.filtering_enabled;
 
-    const loglevel_t defaultThreshold = hasPersistentConfig ? config.defaultThreshold : staticConfig_.defaultThreshold;
-    defaultThreshold_ = defaultThreshold;
+    const LoglevelT default_threshold =
+        has_persistent_config ? config.default_threshold : static_config_.default_threshold;
+    default_threshold_ = default_threshold;
 
-    messageThresholds_.clear();
-    const auto& thresholds = hasPersistentConfig ? config.messageThresholds : staticConfig_.messageThresholds;
+    message_thresholds_.clear();
+    const auto& thresholds = has_persistent_config ? config.message_thresholds : static_config_.message_thresholds;
     for (const auto& app : thresholds)
     {
-        const dltid_t appId = app.first;
+        const DltidT app_id = app.first;
         const auto& contexts = app.second;
         for (const auto& ctx : contexts)
         {
-            const dltid_t ctxId = ctx.first;
-            const loglevel_t threshold = ctx.second;
-            messageThresholds_.emplace(std::make_pair(appId, ctxId), threshold);
+            const DltidT ctx_id = ctx.first;
+            const LoglevelT threshold = ctx.second;
+            message_thresholds_.emplace(std::make_pair(app_id, ctx_id), threshold);
         }
     }
 
-    throughput_overall_ = staticConfig_.throughput.overallMbps;
+    throughput_overall_ = static_config_.throughput.overall_mbps;
     throughput_apps_.clear();
-    for (const auto& app : staticConfig_.throughput.applicationsKbps)
+    for (const auto& app : static_config_.throughput.applications_kbps)
     {
-        const dltid_t appId = app.first;
+        const DltidT app_id = app.first;
         const auto& kbps = app.second;
-        throughput_apps_.emplace(appId, kbps);
+        throughput_apps_.emplace(app_id, kbps);
     }
 }
 
-void DltLogServer::init_log_channels_default(const bool reloading)
+void DltLogServer::InitLogChannelsDefault(const bool reloading)
 {
-    filteringEnabled_ = false;
-    defaultThreshold_ = mw::log::LogLevel::kError;
-    defaultChannel_ = 0;
-    coredumpChannel_ = std::nullopt;
+    filtering_enabled_ = false;
+    default_threshold_ = mw::log::LogLevel::kError;
+    default_channel_ = 0;
+    coredump_channel_ = std::nullopt;
     if (reloading)
     {
-        channels_[0].channelThreshold_.store(mw::log::LogLevel::kOff, std::memory_order_relaxed);
+        channels_[0].channel_threshold.store(mw::log::LogLevel::kOff, std::memory_order_relaxed);
     }
     else
     {
@@ -212,201 +213,201 @@ void DltLogServer::init_log_channels_default(const bool reloading)
     }
 }
 
-void DltLogServer::set_output_enabled(const bool enabled)
+void DltLogServer::SetOutputEnabled(const bool enabled)
 {
-    const bool update = (dltOutputEnabled_ != enabled);
+    const bool update = (dlt_output_enabled_ != enabled);
 
     if (update)
     {
-        dltOutputEnabled_ = enabled;
-        if (enabledCallback_)
+        dlt_output_enabled_ = enabled;
+        if (enabled_callback_)
         {
-            enabledCallback_(enabled);
+            enabled_callback_(enabled);
         }
     }
 }
 bool DltLogServer::GetDltEnabled() const noexcept
 {
-    return dltOutputEnabled_;
+    return dlt_output_enabled_;
 }
 
-void DltLogServer::save_database()
+void DltLogServer::SaveDatabase()
 {
     PersistentConfig config;
 
     for (auto& channel : channels_)
     {
-        config.channels[std::string(channel.channelName_)].channelThreshold = channel.channelThreshold_.load();
+        config.channels[std::string(channel.channel_name)].channel_threshold = channel.channel_threshold.load();
     }
 
-    for (auto& assignment : channelAssignments_)
+    for (auto& assignment : channel_assignments_)
     {
-        const dltid_t appId{assignment.first.first};
-        const dltid_t ctxId{assignment.first.second};
-        const channelmask_t channelSet = assignment.second;
-        std::vector<dltid_t> assignments;
+        const DltidT app_id{assignment.first.first};
+        const DltidT ctx_id{assignment.first.second};
+        const ChannelmaskT channel_set = assignment.second;
+        std::vector<DltidT> assignments;
         for (size_t i = 0; i < channels_.size(); ++i)
         {
-            if (channelSet[i])
+            if (channel_set[i])
             {
-                assignments.push_back(channels_[i].channelName_);
+                assignments.push_back(channels_[i].channel_name);
             }
         }
-        config.channelAssignments[appId][ctxId] = std::move(assignments);
+        config.channel_assignments[app_id][ctx_id] = std::move(assignments);
     }
 
-    config.filteringEnabled = filteringEnabled_;
-    config.defaultThreshold = defaultThreshold_;
+    config.filtering_enabled = filtering_enabled_;
+    config.default_threshold = default_threshold_;
 
-    for (auto& messageThreshold : messageThresholds_)
+    for (auto& message_threshold : message_thresholds_)
     {
-        const dltid_t appId{messageThreshold.first.first};
-        const dltid_t ctxId{messageThreshold.first.second};
-        const loglevel_t threshold = messageThreshold.second;
-        config.messageThresholds[appId][ctxId] = threshold;
+        const DltidT app_id{message_threshold.first.first};
+        const DltidT ctx_id{message_threshold.first.second};
+        const LoglevelT threshold = message_threshold.second;
+        config.message_thresholds[app_id][ctx_id] = threshold;
     }
 
-    writerCallback_(std::move(config));
+    writer_callback_(std::move(config));
 }
 
-void DltLogServer::clear_database()
+void DltLogServer::ClearDatabase()
 {
-    writerCallback_(PersistentConfig{});
+    writer_callback_(PersistentConfig{});
 }
 
-const std::string DltLogServer::ReadLogChannelNames()
+std::string DltLogServer::ReadLogChannelNames()
 {
-    std::string response(1, config::RET_ERROR);
+    std::string response(1, config::kRetError);
 
-    std::lock_guard<std::mutex> lock(configMutex_);
+    std::lock_guard<std::mutex> lock(config_mutex_);
     for (auto& channel : channels_)
     {
-        appendId(channel.channelName_, response);
+        AppendId(channel.channel_name, response);
     }
 
-    response[0] = config::RET_OK;
+    response[0] = config::kRetOk;
     return response;
 }
 
-const std::string DltLogServer::ResetToDefault()
+std::string DltLogServer::ResetToDefault()
 {
-    std::string response(1, config::RET_ERROR);
+    std::string response(1, config::kRetError);
 
-    std::lock_guard<std::mutex> lock(configMutex_);
-    clear_database();
-    init_log_channels(true);
+    std::lock_guard<std::mutex> lock(config_mutex_);
+    ClearDatabase();
+    InitLogChannels(true);
 
-    response[0] = config::RET_OK;
+    response[0] = config::kRetOk;
     return response;
 }
 
-const std::string DltLogServer::StoreDltConfig()
+std::string DltLogServer::StoreDltConfig()
 {
-    std::string response(1, config::RET_ERROR);
+    std::string response(1, config::kRetError);
 
-    std::lock_guard<std::mutex> lock(configMutex_);
-    save_database();
+    std::lock_guard<std::mutex> lock(config_mutex_);
+    SaveDatabase();
 
-    response[0] = config::RET_OK;
+    response[0] = config::kRetOk;
     return response;
 }
 
-const std::string DltLogServer::SetTraceState()
+std::string DltLogServer::SetTraceState()
 {
-    std::string response(1, config::RET_ERROR);
+    std::string response(1, config::kRetError);
 
-    response[0] = config::RET_OK;
+    response[0] = config::kRetOk;
     return response;
 }
 
-const std::string DltLogServer::SetDefaultTraceState()
+std::string DltLogServer::SetDefaultTraceState()
 {
-    std::string response(1, config::RET_ERROR);
+    std::string response(1, config::kRetError);
 
-    response[0] = config::RET_OK;
+    response[0] = config::kRetOk;
     return response;
 }
 
-const std::string DltLogServer::SetLogChannelThreshold(dltid_t channel, loglevel_t threshold)
+std::string DltLogServer::SetLogChannelThreshold(DltidT channel, LoglevelT threshold)
 {
-    std::string response(1, config::RET_ERROR);
+    std::string response(1, config::kRetError);
 
-    std::lock_guard<std::mutex> lock(configMutex_);
-    auto channelIt = channelNums_.find(channel);
-    if (channelIt == channelNums_.end())
+    std::lock_guard<std::mutex> lock(config_mutex_);
+    auto channel_it = channel_nums_.find(channel);
+    if (channel_it == channel_nums_.end())
     {
-        response[0] = config::RET_ERROR;
+        response[0] = config::kRetError;
         return response;
     }
 
-    channels_[channelIt->second].channelThreshold_.store(threshold, std::memory_order_relaxed);
+    channels_[channel_it->second].channel_threshold.store(threshold, std::memory_order_relaxed);
     // Trace state (command[1 + 4 + 1] is ignored for now
-    response[0] = config::RET_OK;
+    response[0] = config::kRetOk;
     return response;
 }
 
-const std::string DltLogServer::SetLogLevel(dltid_t appId, dltid_t ctxId, threshold_t threshold)
+std::string DltLogServer::SetLogLevel(DltidT app_id, DltidT ctx_id, ThresholdT threshold)
 {
-    std::string response(1, config::RET_ERROR);
+    std::string response(1, config::kRetError);
 
-    std::lock_guard<std::mutex> lock(configMutex_);
-    messageThresholds_.erase({appId, ctxId});
-    if (std::holds_alternative<loglevel_t>(threshold))
+    std::lock_guard<std::mutex> lock(config_mutex_);
+    message_thresholds_.erase({app_id, ctx_id});
+    if (std::holds_alternative<LoglevelT>(threshold))
     {
-        messageThresholds_.emplace(std::make_pair(appId, ctxId), std::get<loglevel_t>(threshold));
+        message_thresholds_.emplace(std::make_pair(app_id, ctx_id), std::get<LoglevelT>(threshold));
     }
-    response[0] = config::RET_OK;
+    response[0] = config::kRetOk;
     return response;
 }
 
-const std::string DltLogServer::SetMessagingFilteringState(bool enabled)
+std::string DltLogServer::SetMessagingFilteringState(bool enabled)
 {
-    std::string response(1, config::RET_ERROR);
+    std::string response(1, config::kRetError);
 
-    std::lock_guard<std::mutex> lock(configMutex_);
-    filteringEnabled_ = enabled;
-    response[0] = config::RET_OK;
+    std::lock_guard<std::mutex> lock(config_mutex_);
+    filtering_enabled_ = enabled;
+    response[0] = config::kRetOk;
     return response;
 }
 
-const std::string DltLogServer::SetDefaultLogLevel(loglevel_t level)
+std::string DltLogServer::SetDefaultLogLevel(LoglevelT level)
 {
-    std::string response(1, config::RET_ERROR);
+    std::string response(1, config::kRetError);
 
-    std::lock_guard<std::mutex> lock(configMutex_);
-    defaultThreshold_ = static_cast<loglevel_t>(level);
-    response[0] = config::RET_OK;
+    std::lock_guard<std::mutex> lock(config_mutex_);
+    default_threshold_ = static_cast<LoglevelT>(level);
+    response[0] = config::kRetOk;
     return response;
 }
 
-const std::string DltLogServer::SetLogChannelAssignment(dltid_t appId,
-                                                        dltid_t ctxId,
-                                                        dltid_t channel,
-                                                        AssignmentAction assignment_flag)
+std::string DltLogServer::SetLogChannelAssignment(DltidT app_id,
+                                                  DltidT ctx_id,
+                                                  DltidT channel,
+                                                  AssignmentAction assignment_flag)
 {
-    std::string response(1, config::RET_ERROR);
+    std::string response(1, config::kRetError);
 
-    auto channelIt = channelNums_.find(channel);
-    if (channelIt == channelNums_.end())
+    auto channel_it = channel_nums_.find(channel);
+    if (channel_it == channel_nums_.end())
     {
-        response[0] = config::RET_ERROR;
+        response[0] = config::kRetError;
         return response;
     }
 
-    auto mask = channelmask_t{1U} << channelIt->second;
+    auto mask = ChannelmaskT{1U} << channel_it->second;
 
-    std::lock_guard<std::mutex> lock(configMutex_);
-    auto cap = channelAssignments_.find({appId, ctxId});
-    if (cap == channelAssignments_.end())
+    std::lock_guard<std::mutex> lock(config_mutex_);
+    auto cap = channel_assignments_.find({app_id, ctx_id});
+    if (cap == channel_assignments_.end())
     {
-        if (assignment_flag == AssignmentAction::Add)
+        if (assignment_flag == AssignmentAction::kAdd)
         {
-            channelAssignments_.emplace(std::make_pair(appId, ctxId), mask);
+            channel_assignments_.emplace(std::make_pair(app_id, ctx_id), mask);
         }
     }
     else
     {
-        if (assignment_flag == AssignmentAction::Add)
+        if (assignment_flag == AssignmentAction::kAdd)
         {
             cap->second |= mask;
         }
@@ -417,46 +418,46 @@ const std::string DltLogServer::SetLogChannelAssignment(dltid_t appId,
             {
                 // Test is available - DltServerWrongChannelsTest, but somehow it is not covered by coverage
                 // tool.
-                channelAssignments_.erase(cap);  // LCOV_EXCL_LINE
+                channel_assignments_.erase(cap);  // LCOV_EXCL_LINE
             }
         }
     }
-    response[0] = config::RET_OK;
+    response[0] = config::kRetOk;
     return response;
 }
 
-const std::string DltLogServer::SetDltOutputEnable(bool enable)
+std::string DltLogServer::SetDltOutputEnable(bool enable)
 {
-    std::string response(1, config::RET_ERROR);
+    std::string response(1, config::kRetError);
     // Justification: Explicit bool cast required to avoid implicit-conversion warning.
     // coverity[misra_cpp_2023_rule_7_0_2_violation]
-    if (enable == static_cast<bool>(config::DISABLE))
+    if (enable == static_cast<bool>(config::kDisable))
     {
         score::mw::log::LogError() << "DRCMD: disable output";
-        set_output_enabled(false);
-        response[0] = config::RET_OK;
+        SetOutputEnabled(false);
+        response[0] = config::kRetOk;
         return response;
     }
     else
     {
         score::mw::log::LogInfo() << "DRCMD: enable output";
-        set_output_enabled(true);
-        response[0] = config::RET_OK;
+        SetOutputEnabled(true);
+        response[0] = config::kRetOk;
         return response;
     }
 }
 
-const std::string DltLogServer::on_config_command(const std::string& command)
+std::string DltLogServer::OnConfigCommand(const std::string& command)
 {
-    std::unique_ptr<IDiagnosticJobHandler> cmd = parser_->parse(command);  // Parsing the command
+    std::unique_ptr<IDiagnosticJobHandler> cmd = parser_->Parse(command);  // Parsing the command
     if (cmd == nullptr)
     {
-        const std::string response(1, config::RET_ERROR);
+        const std::string response(1, config::kRetError);
         return response;
     }
     else
     {
-        const auto response = cmd->execute(*this);  // Handling the diagnostic job
+        const auto response = cmd->Execute(*this);  // Handling the diagnostic job
         return response;
     }
 }
