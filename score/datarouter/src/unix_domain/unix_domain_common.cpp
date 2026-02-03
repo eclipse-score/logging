@@ -50,7 +50,7 @@ static_assert(kSocketCmsgSpace == CMSG_SPACE(sizeof(int) * 1U), "Invalid constan
 
 }  // namespace
 
-void cmsg_len_suppress_warnings(struct cmsghdr* cmsg_, size_t num_fds_)
+void CmsgLenSuppressWarnings(struct cmsghdr* cmsg, size_t num_fds)
 {
 #ifdef __QNX__
 // NOLINTBEGIN(score-banned-preprocessor-directives) : required due to compiler warning for qnx
@@ -64,18 +64,18 @@ Justification:
 #pragma GCC diagnostic push
 // coverity[autosar_cpp14_a16_7_1_violation] see above
 #pragma GCC diagnostic ignored "-Wsign-conversion"
-    cmsg_->cmsg_len = static_cast<socklen_t>(CMSG_LEN(sizeof(std::int32_t) * num_fds_));
+    cmsg->cmsg_len = static_cast<socklen_t>(CMSG_LEN(sizeof(std::int32_t) * num_fds));
 // coverity[autosar_cpp14_a16_7_1_violation] see above
 #pragma GCC diagnostic pop
 // NOLINTEND(score-banned-preprocessor-directives)
 #else
-    cmsg_->cmsg_len = CMSG_LEN(sizeof(std::int32_t) * num_fds_);
+    cmsg->cmsg_len = CMSG_LEN(sizeof(std::int32_t) * num_fds);
 #endif
 }
 
-int32_t* cmsg_data_suppress_warning(struct cmsghdr* cmsg_)
+int32_t* CmsgDataSuppressWarning(struct cmsghdr* cmsg)
 {
-    int32_t* fdptr_ = nullptr;
+    int32_t* fdptr = nullptr;
 #ifdef __QNX__
 // NOLINTBEGIN(score-banned-preprocessor-directives) : required due to compiler warning for qnx
 // coverity[autosar_cpp14_a16_7_1_violation] see above
@@ -93,24 +93,24 @@ int32_t* cmsg_data_suppress_warning(struct cmsghdr* cmsg_)
     */
     // coverity[autosar_cpp14_m5_0_15_violation]
     // coverity[autosar_cpp14_m5_2_8_violation]
-    fdptr_ = static_cast<std::int32_t*>(static_cast<void*>(CMSG_DATA(cmsg_)));
+    fdptr = static_cast<std::int32_t*>(static_cast<void*>(CMSG_DATA(cmsg)));
 // coverity[autosar_cpp14_a16_7_1_violation] see above
 #pragma GCC diagnostic pop
 // NOLINTEND(score-banned-preprocessor-directives)
 #else
     // coverity[autosar_cpp14_m5_0_15_violation] see above
     // coverity[autosar_cpp14_m5_2_8_violation] see above
-    fdptr_ = static_cast<std::int32_t*>(static_cast<void*>(CMSG_DATA(cmsg_)));
+    fdptr = static_cast<std::int32_t*>(static_cast<void*>(CMSG_DATA(cmsg)));
 #endif
-    return fdptr_;
+    return fdptr;
 }
 
-UnixDomainSockAddr::UnixDomainSockAddr(const std::string& path, bool isAbstract) : addr_()
+UnixDomainSockAddr::UnixDomainSockAddr(const std::string& path, bool is_abstract) : addr()
 {
-    addr_.sun_family = static_cast<sa_family_t>(AF_UNIX);
-    size_t len = std::min(sizeof(addr_.sun_path) - 1U - (isAbstract ? 1U : 0U), path.length());
-    auto addr_iter = std::begin(addr_.sun_path);
-    std::advance(addr_iter, static_cast<int32_t>(isAbstract));
+    addr.sun_family = static_cast<sa_family_t>(AF_UNIX);
+    size_t len = std::min(sizeof(addr.sun_path) - 1U - (is_abstract ? 1U : 0U), path.length());
+    auto* addr_iter = std::begin(addr.sun_path);
+    std::advance(addr_iter, static_cast<int32_t>(is_abstract));
     std::copy_n(path.begin(), len, addr_iter);
 }
 
@@ -170,9 +170,9 @@ void SendAncillaryDataOverSocket(int connection_file_descriptor, score::cpp::spa
 
 /* Send message without file descriptor option *
  * One of the function is to pass a handle to shared memory file */
-void send_socket_message(std::int32_t connection_file_descriptor,
-                         score::cpp::string_view message,
-                         score::cpp::optional<SharedMemoryFileHandle> file_handle)
+void SendSocketMessage(std::int32_t connection_file_descriptor,
+                       score::cpp::string_view message,
+                       score::cpp::optional<SharedMemoryFileHandle> file_handle)
 {
     // TODO: currently checking viability. Redo in a safe way
 
@@ -250,8 +250,8 @@ void send_socket_message(std::int32_t connection_file_descriptor,
         cmsg = CMSG_FIRSTHDR(&msg);
         cmsg->cmsg_level = SOL_SOCKET;
         cmsg->cmsg_type = SCM_RIGHTS;
-        cmsg_len_suppress_warnings(cmsg, num_fds);
-        std::int32_t* fdptr = cmsg_data_suppress_warning(cmsg);
+        CmsgLenSuppressWarnings(cmsg, num_fds);
+        std::int32_t* fdptr = CmsgDataSuppressWarning(cmsg);
         if (num_fds > 0)
         {
             fdptr[0] = file_handle.value();
@@ -259,7 +259,7 @@ void send_socket_message(std::int32_t connection_file_descriptor,
 #endif  //  USE_SECURE_FILE_HANDLE_IPC
     }
 
-    bool is_ping = (num_fds == 0) && (message.size() == 0);
+    bool is_ping = (num_fds == 0) && (message.empty());
     auto ret = score::os::Socket::instance().sendmsg(
         connection_file_descriptor,
         &msg,
@@ -284,18 +284,18 @@ void send_socket_message(std::int32_t connection_file_descriptor,
     }
 }
 
-score::cpp::optional<std::string> recv_socket_message(std::int32_t socket_fd,
-                                               AncillaryDataFileHandleReceptionCallback ancillary_data_process)
+score::cpp::optional<std::string> RecvSocketMessage(std::int32_t socket_fd,
+                                             AncillaryDataFileHandleReceptionCallback ancillary_data_process)
 {
     score::cpp::optional<SharedMemoryFileHandle> discard_file_handle = score::cpp::nullopt;
     score::cpp::optional<std::int32_t> discard_pid = score::cpp::nullopt;
-    return recv_socket_message(socket_fd, discard_file_handle, discard_pid, std::move(ancillary_data_process));
+    return RecvSocketMessage(socket_fd, discard_file_handle, discard_pid, std::move(ancillary_data_process));
 }
 
-score::cpp::optional<std::string> recv_socket_message(std::int32_t socket_fd,
-                                               score::cpp::optional<SharedMemoryFileHandle>& file_handle,
-                                               score::cpp::optional<std::int32_t>& peer_pid,
-                                               AncillaryDataFileHandleReceptionCallback ancillary_data_process)
+score::cpp::optional<std::string> RecvSocketMessage(std::int32_t socket_fd,
+                                             score::cpp::optional<SharedMemoryFileHandle>& file_handle,
+                                             score::cpp::optional<std::int32_t>& peer_pid,
+                                             AncillaryDataFileHandleReceptionCallback ancillary_data_process)
 {
     score::cpp::optional<std::string> result = score::cpp::nullopt;
 
@@ -352,11 +352,11 @@ score::cpp::optional<std::string> recv_socket_message(std::int32_t socket_fd,
     cmsg = CMSG_FIRSTHDR(&msg);
     cmsg->cmsg_level = SOL_SOCKET;
     cmsg->cmsg_type = SCM_RIGHTS;
-    size_t len_ = sizeof(std::int32_t) * static_cast<size_t>(1U);
-    cmsg_len_suppress_warnings(cmsg, len_);
-    fdptr = cmsg_data_suppress_warning(cmsg);
+    size_t len = sizeof(std::int32_t) * static_cast<size_t>(1U);
+    CmsgLenSuppressWarnings(cmsg, len);
+    fdptr = CmsgDataSuppressWarning(cmsg);
     static constexpr std::int32_t kNotAssigned = -1;
-    score::cpp::span<std::int32_t>(fdptr, len_).front() = kNotAssigned;
+    score::cpp::span<std::int32_t>(fdptr, len).front() = kNotAssigned;
 
     auto ret = score::os::Socket::instance().recvmsg(socket_fd, &msg, score::os::Socket::MessageFlag::kWaitAll);
 
@@ -381,12 +381,12 @@ score::cpp::optional<std::string> recv_socket_message(std::int32_t socket_fd,
     }
     // can not be tested since no control on fdptr.
     // LCOV_EXCL_START
-    if (kNotAssigned != score::cpp::span<std::int32_t>(fdptr, len_).front())
+    if (kNotAssigned != score::cpp::span<std::int32_t>(fdptr, len).front())
     {
 #if USE_SECURE_FILE_HANDLE_IPC
         std::cerr << "Warning: received handle over Socket Ancillary Message on QNX." << std::endl;
 #endif  //  USE_SECURE_FILE_HANDLE_IPC
-        file_handle = score::cpp::span<std::int32_t>(fdptr, len_).front();
+        file_handle = score::cpp::span<std::int32_t>(fdptr, len).front();
     }
     // LCOV_EXCL_STOP
 

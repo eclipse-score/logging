@@ -29,45 +29,45 @@ class ReadLogChannelNamesHandler final : public IDiagnosticJobHandler
 {
   public:
     ReadLogChannelNamesHandler() = default;
-    const std::string execute(IDltLogServer& srv) override;
+    std::string Execute(IDltLogServer& srv) override;
 };
 
 class ResetToDefaultHandler final : public IDiagnosticJobHandler
 {
   public:
     ResetToDefaultHandler() = default;
-    const std::string execute(IDltLogServer& srv) override;
+    std::string Execute(IDltLogServer& srv) override;
 };
 
 class StoreDltConfigHandler final : public IDiagnosticJobHandler
 {
   public:
     StoreDltConfigHandler() = default;
-    const std::string execute(IDltLogServer& srv) override;
+    std::string Execute(IDltLogServer& srv) override;
 };
 
 class SetTraceStateHandler final : public IDiagnosticJobHandler
 {
   public:
     SetTraceStateHandler() = default;
-    const std::string execute(IDltLogServer& srv) override;
+    std::string Execute(IDltLogServer& srv) override;
 };
 
 class SetDefaultTraceStateHandler final : public IDiagnosticJobHandler
 {
   public:
     SetDefaultTraceStateHandler() = default;
-    const std::string execute(IDltLogServer& srv) override;
+    std::string Execute(IDltLogServer& srv) override;
 };
 
 class SetLogChannelThresholdHandler final : public IDiagnosticJobHandler
 {
   private:
-    score::platform::dltid_t channel_;
-    loglevel_t threshold_;
+    score::platform::DltidT channel_;
+    LoglevelT threshold_;
 
   public:
-    SetLogChannelThresholdHandler(score::platform::dltid_t channel, loglevel_t threshold)
+    SetLogChannelThresholdHandler(score::platform::DltidT channel, LoglevelT threshold)
         : channel_(channel), threshold_(threshold)
     {
     }
@@ -77,28 +77,28 @@ class SetLogChannelThresholdHandler final : public IDiagnosticJobHandler
         return channel_ == rhs.channel_ && threshold_ == rhs.threshold_;
     }
 
-    const std::string execute(IDltLogServer& srv) override;
+    std::string Execute(IDltLogServer& srv) override;
 };
 
 class SetLogLevelHandler final : public IDiagnosticJobHandler
 {
   private:
-    score::platform::dltid_t appId_;
-    score::platform::dltid_t ctxId_;
-    threshold_t threshold_;
+    score::platform::DltidT app_id_;
+    score::platform::DltidT ctx_id_;
+    ThresholdT threshold_;
 
   public:
-    SetLogLevelHandler(score::platform::dltid_t appId, score::platform::dltid_t ctxId, threshold_t threshold)
-        : appId_(appId), ctxId_(ctxId), threshold_(threshold)
+    SetLogLevelHandler(score::platform::DltidT app_id, score::platform::DltidT ctx_id, ThresholdT threshold)
+        : app_id_(app_id), ctx_id_(ctx_id), threshold_(threshold)
     {
     }
 
     bool operator==(const SetLogLevelHandler& rhs) const noexcept
     {
-        return appId_ == rhs.appId_ && ctxId_ == rhs.ctxId_ && threshold_ == rhs.threshold_;
+        return app_id_ == rhs.app_id_ && ctx_id_ == rhs.ctx_id_ && threshold_ == rhs.threshold_;
     }
 
-    const std::string execute(IDltLogServer& srv) override;
+    std::string Execute(IDltLogServer& srv) override;
 };
 
 class SetMessagingFilteringStateHandler final : public IDiagnosticJobHandler
@@ -114,49 +114,49 @@ class SetMessagingFilteringStateHandler final : public IDiagnosticJobHandler
         return enabled_ == rhs.enabled_;
     }
 
-    const std::string execute(IDltLogServer& srv) override;
+    std::string Execute(IDltLogServer& srv) override;
 };
 
 class SetDefaultLogLevelHandler final : public IDiagnosticJobHandler
 {
   private:
-    loglevel_t level_;
+    LoglevelT level_;
 
   public:
-    explicit SetDefaultLogLevelHandler(loglevel_t level) : level_(level) {}
+    explicit SetDefaultLogLevelHandler(LoglevelT level) : level_(level) {}
 
     bool operator==(const SetDefaultLogLevelHandler& rhs) const noexcept
     {
         return level_ == rhs.level_;
     }
 
-    const std::string execute(IDltLogServer& srv) override;
+    std::string Execute(IDltLogServer& srv) override;
 };
 
 class SetLogChannelAssignmentHandler final : public IDiagnosticJobHandler
 {
   private:
-    score::platform::dltid_t appId_;
-    score::platform::dltid_t ctxId_;
-    score::platform::dltid_t channel_;
+    score::platform::DltidT app_id_;
+    score::platform::DltidT ctx_id_;
+    score::platform::DltidT channel_;
     AssignmentAction assignment_flag_;
 
   public:
-    SetLogChannelAssignmentHandler(score::platform::dltid_t appId,
-                                   score::platform::dltid_t ctxId,
-                                   score::platform::dltid_t channel,
+    SetLogChannelAssignmentHandler(score::platform::DltidT app_id,
+                                   score::platform::DltidT ctx_id,
+                                   score::platform::DltidT channel,
                                    AssignmentAction assignment_flag)
-        : appId_(appId), ctxId_(ctxId), channel_(channel), assignment_flag_(assignment_flag)
+        : app_id_(app_id), ctx_id_(ctx_id), channel_(channel), assignment_flag_(assignment_flag)
     {
     }
 
     bool operator==(const SetLogChannelAssignmentHandler& rhs) const noexcept
     {
-        return appId_ == rhs.appId_ && ctxId_ == rhs.ctxId_ && channel_ == rhs.channel_ &&
+        return app_id_ == rhs.app_id_ && ctx_id_ == rhs.ctx_id_ && channel_ == rhs.channel_ &&
                assignment_flag_ == rhs.assignment_flag_;
     }
 
-    const std::string execute(IDltLogServer& srv) override;
+    std::string Execute(IDltLogServer& srv) override;
 };
 
 class SetDltOutputEnableHandler final : public IDiagnosticJobHandler
@@ -172,7 +172,7 @@ class SetDltOutputEnableHandler final : public IDiagnosticJobHandler
         return enable_ == rhs.enable_;
     }
 
-    const std::string execute(IDltLogServer& srv) override;
+    std::string Execute(IDltLogServer& srv) override;
 };
 
 }  // namespace dltserver

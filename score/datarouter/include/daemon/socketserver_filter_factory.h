@@ -11,8 +11,8 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-#ifndef SOCKETSERVER_FILTER_FACTORY_H_
-#define SOCKETSERVER_FILTER_FACTORY_H_
+#ifndef SCORE_DATAROUTER_INCLUDE_DAEMON_SOCKETSERVER_FILTER_FACTORY_H
+#define SCORE_DATAROUTER_INCLUDE_DAEMON_SOCKETSERVER_FILTER_FACTORY_H
 
 #include "logparser/logparser.h"
 
@@ -23,10 +23,10 @@ namespace platform
 namespace datarouter
 {
 
-internal::LogParser::FilterFunctionFactory getFilterFactory();
+internal::LogParser::FilterFunctionFactory GetFilterFactory();
 
 }  // namespace datarouter
 }  // namespace platform
 }  // namespace score
 
-#endif  // SOCKETSERVER_FILTER_FACTORY_H_
+#endif  // SCORE_DATAROUTER_INCLUDE_DAEMON_SOCKETSERVER_FILTER_FACTORY_H

@@ -44,8 +44,7 @@ UnixDomainServer::SessionWrapper::~SessionWrapper()
     }
 }
 
-bool UnixDomainServer::SessionWrapper::handle_command(const std::string& in_string,
-                                                      score::cpp::optional<std::int32_t> peer_pid)
+bool UnixDomainServer::SessionWrapper::HandleCommand(const std::string& in_string, score::cpp::optional<std::int32_t> peer_pid)
 {
     if (nullptr == session_)
     {
@@ -62,21 +61,21 @@ bool UnixDomainServer::SessionWrapper::handle_command(const std::string& in_stri
         }
         else
         {
-            return timestamp_t::clock::now() < timeout_;
+            return TimestampT::clock::now() < timeout_;
         }
     }
     else
     {
         if (!in_string.empty())
         {
-            session_->on_command(in_string);
+            session_->OnCommand(in_string);
         }
     }
-    enqueue_tick();
+    EnqueueTick();
     return true;
 }
 
-bool UnixDomainServer::SessionWrapper::try_enqueue_for_delete(bool by_peer)
+bool UnixDomainServer::SessionWrapper::TryEnqueueForDelete(bool by_peer)
 {
     if (nullptr != session_)
     {
@@ -84,7 +83,7 @@ bool UnixDomainServer::SessionWrapper::try_enqueue_for_delete(bool by_peer)
         closed_by_peer_ = by_peer;
         if (!running_ && !enqueued_)
         {
-            server_->enqueue_tick_direct(session_fd_);
+            server_->EnqueueTickDirect(session_fd_);
             enqueued_ = true;
         }
         return true;
@@ -96,24 +95,24 @@ bool UnixDomainServer::SessionWrapper::try_enqueue_for_delete(bool by_peer)
     }
 }
 
-bool UnixDomainServer::SessionWrapper::tick()
+bool UnixDomainServer::SessionWrapper::Tick()
 {
-    bool requeue = session_->tick();
+    bool requeue = session_->Tick();
     return requeue;
 }
 
-void UnixDomainServer::SessionWrapper::notify_closed_by_peer()
+void UnixDomainServer::SessionWrapper::NotifyClosedByPeer()
 {
-    session_->on_closed_by_peer();
+    session_->OnClosedByPeer();
 }
 
-void UnixDomainServer::SessionWrapper::set_running()
+void UnixDomainServer::SessionWrapper::SetRunning()
 {
     enqueued_ = false;
     running_ = true;
 }
 
-bool UnixDomainServer::SessionWrapper::reset_running(bool requeue)
+bool UnixDomainServer::SessionWrapper::ResetRunning(bool requeue)
 {
     running_ = false;
     if (requeue)
@@ -123,23 +122,23 @@ bool UnixDomainServer::SessionWrapper::reset_running(bool requeue)
     return enqueued_;
 }
 
-void UnixDomainServer::SessionWrapper::enqueue_tick()
+void UnixDomainServer::SessionWrapper::EnqueueTick()
 {
     if (!enqueued_ && !to_delete_)
     {
         if (!running_)
         {
-            server_->enqueue_tick_direct(session_fd_);
+            server_->EnqueueTickDirect(session_fd_);
         }
         enqueued_ = true;
     }
 }
 
-void UnixDomainServer::server_routine(UnixDomainSockAddr addr)
+void UnixDomainServer::ServerRoutine(UnixDomainSockAddr addr)
 {
     SetupSignals(signal_);
 
-    const std::int32_t server_fd = setup_server_socket(addr);
+    const std::int32_t server_fd = SetupServerSocket(addr);
 
     // Create connection state struct with server file descriptor
     // The first element in the pollfd list is special - it is the server file descriptor.
@@ -147,39 +146,39 @@ void UnixDomainServer::server_routine(UnixDomainSockAddr addr)
     ConnectionState state{};
     state.connection_pollfd_list.push_back({server_fd, POLLIN, 0});
 
-    using timestamp_t = std::chrono::steady_clock::time_point;
-    timestamp_t t1 = timestamp_t::clock::now() + std::chrono::milliseconds(100);
+    using TimestampT = std::chrono::steady_clock::time_point;
+    TimestampT t1 = TimestampT::clock::now() + std::chrono::milliseconds(100);
     while (false == server_exit_.load())
     {
         std::int32_t timeout = static_cast<std::int32_t>(
-            std::chrono::duration_cast<std::chrono::milliseconds>(t1 - timestamp_t::clock::now()).count());
+            std::chrono::duration_cast<std::chrono::milliseconds>(t1 - TimestampT::clock::now()).count());
 
         if (timeout <= 0)
         {
             timeout = 0;
-            t1 = timestamp_t::clock::now() + std::chrono::milliseconds(100);
+            t1 = TimestampT::clock::now() + std::chrono::milliseconds(100);
         }
 
-        process_server_iteration(state, server_fd, timeout);
+        ProcessServerIteration(state, server_fd, timeout);
     }  //  while (false == server_exit_.load())
 
     // Cleanup all connections on shutdown
-    cleanup_all_connections(state);
+    CleanupAllConnections(state);
 
     // Suppressed here as it is safely used, and it is among safety headers.
     // NOLINTNEXTLINE(score-banned-function) see comment above
     score::cpp::ignore = score::os::Unistd::instance().close(server_fd);
 }
 
-std::int32_t UnixDomainServer::setup_server_socket(UnixDomainSockAddr& addr)
+std::int32_t UnixDomainServer::SetupServerSocket(UnixDomainSockAddr& addr)
 {
-    if (!addr.is_abstract())
+    if (!addr.IsAbstract())
     {
-        const auto unlink_ret = score::os::Unistd::instance().unlink(static_cast<const char*>(addr.addr_.sun_path));
+        const auto unlink_ret = score::os::Unistd::instance().unlink(static_cast<const char*>(addr.addr.sun_path));
         if (!unlink_ret.has_value())
         {
             std::perror("unlink");
-            std::fprintf(stderr, "address: %s\n", static_cast<const char*>(addr.addr_.sun_path));
+            std::fprintf(stderr, "address: %s\n", static_cast<const char*>(addr.addr.sun_path));
         }
     }
     const auto socket_ret = score::os::Socket::instance().socket(score::os::Socket::Domain::kUnix, SOCK_STREAM, 0);
@@ -206,7 +205,7 @@ std::int32_t UnixDomainServer::setup_server_socket(UnixDomainSockAddr& addr)
     if (!bind_ret.has_value())
     {
         std::perror("bind");
-        std::cerr << "address: " << addr.get_address_string() << std::endl;
+        std::cerr << "address: " << addr.GetAddressString() << std::endl;
         // NOLINTNEXTLINE(score-banned-function): Suppressed here because of error handling
         std::exit(EXIT_FAILURE);
     }
@@ -222,9 +221,9 @@ std::int32_t UnixDomainServer::setup_server_socket(UnixDomainSockAddr& addr)
     return server_fd;
 }
 
-void UnixDomainServer::process_server_iteration(ConnectionState& state,
-                                                const std::int32_t server_fd,
-                                                const std::int32_t timeout)
+void UnixDomainServer::ProcessServerIteration(ConnectionState& state,
+                                              const std::int32_t server_fd,
+                                              const std::int32_t timeout)
 {
     const auto size = state.connection_pollfd_list.size();
     //  Suppressed here as it is safely used, and it is among safety headers.
@@ -263,9 +262,9 @@ void UnixDomainServer::process_server_iteration(ConnectionState& state,
     }
 
     // Process connections with incoming data
-    process_active_connections(state);
+    ProcessActiveConnections(state);
 
-    process_queue(state.connection_fd_map);
+    ProcessQueue(state.connection_fd_map);
 
     if (timeout > 0)
     {
@@ -273,12 +272,12 @@ void UnixDomainServer::process_server_iteration(ConnectionState& state,
     }
 
     // Process idle connections
-    process_idle_connections(state);
+    ProcessIdleConnections(state);
 
-    process_queue(state.connection_fd_map);
+    ProcessQueue(state.connection_fd_map);
 }
 
-void UnixDomainServer::process_active_connections(ConnectionState& state)
+void UnixDomainServer::ProcessActiveConnections(ConnectionState& state)
 {
     auto server_fd_advance_iterator = state.connection_pollfd_list.begin();
     if (server_fd_advance_iterator != state.connection_pollfd_list.end())
@@ -303,10 +302,10 @@ void UnixDomainServer::process_active_connections(ConnectionState& state)
                     score::cpp::optional<std::int32_t> file_handle = score::cpp::nullopt;
                     //  File descriptor is no longer sent from client to server and server uses universal API and
                     //  thus FD is discarded
-                    const auto response = recv_socket_message(session_fd, file_handle, in_pid);
-                    if (!response.has_value() || !session.handle_command(response.value(), in_pid))
+                    const auto response = RecvSocketMessage(session_fd, file_handle, in_pid);
+                    if (!response.has_value() || !session.HandleCommand(response.value(), in_pid))
                     {
-                        const bool delayed = session.try_enqueue_for_delete(true);
+                        const bool delayed = session.TryEnqueueForDelete(true);
                         it = state.connection_pollfd_list.erase(it);
 
                         if (!delayed)
@@ -334,7 +333,7 @@ void UnixDomainServer::process_active_connections(ConnectionState& state)
     }
 }
 
-void UnixDomainServer::process_idle_connections(ConnectionState& state)
+void UnixDomainServer::ProcessIdleConnections(ConnectionState& state)
 {
     //  Process elements that are idle i.e. pollfd did not report any events for those elements:
     auto server_fd_advance_iterator = state.connection_pollfd_list.begin();
@@ -357,9 +356,9 @@ void UnixDomainServer::process_idle_connections(ConnectionState& state)
                 {
                     auto& [fd_map, session] = *session_it;
                     std::string in_string;
-                    if (!session.handle_command(in_string))
+                    if (!session.HandleCommand(in_string))
                     {
-                        const bool delayed = session.try_enqueue_for_delete();
+                        const bool delayed = session.TryEnqueueForDelete();
                         it = state.connection_pollfd_list.erase(it);
                         if (!delayed)
                         {
@@ -384,7 +383,7 @@ void UnixDomainServer::process_idle_connections(ConnectionState& state)
     }
 }
 
-void UnixDomainServer::cleanup_all_connections(ConnectionState& state)
+void UnixDomainServer::CleanupAllConnections(ConnectionState& state)
 {
     //  Go over all elements
     auto server_fd_advance_iterator = state.connection_pollfd_list.begin();
@@ -404,7 +403,7 @@ void UnixDomainServer::cleanup_all_connections(ConnectionState& state)
             if (session_it != state.connection_fd_map.end())
             {
                 auto& [fd_map, session] = *session_it;
-                const bool delayed = session.try_enqueue_for_delete();
+                const bool delayed = session.TryEnqueueForDelete();
                 if (!delayed)
                 {
                     state.connection_fd_map.erase(session_fd);
@@ -416,7 +415,7 @@ void UnixDomainServer::cleanup_all_connections(ConnectionState& state)
     state.connection_fd_map.clear();
 }
 
-bool UnixDomainServer::process_queue(std::unordered_map<int, SessionWrapper>& connection_fd_map)
+bool UnixDomainServer::ProcessQueue(std::unordered_map<int, SessionWrapper>& connection_fd_map)
 {
     // Deviation from Rule A6-5-2:
     // - Numeric loop counter cannot be used because work_queue_ is popped inside the loop
@@ -430,19 +429,19 @@ bool UnixDomainServer::process_queue(std::unordered_map<int, SessionWrapper>& co
         if (wrapper_iterator != connection_fd_map.end())
         {
             auto& [fd_map, wrapper] = *wrapper_iterator;
-            wrapper.set_running();
-            const bool closed_by_peer = wrapper.get_reset_closed_by_peer();
+            wrapper.SetRunning();
+            const bool closed_by_peer = wrapper.GetResetClosedByPeer();
             if (closed_by_peer)
             {
-                wrapper.notify_closed_by_peer();
+                wrapper.NotifyClosedByPeer();
             }
-            const bool requeue = wrapper.tick();
+            const bool requeue = wrapper.Tick();
 
-            if (wrapper.reset_running(requeue))
+            if (wrapper.ResetRunning(requeue))
             {
-                enqueue_tick_direct(fd);
+                EnqueueTickDirect(fd);
             }
-            else if (wrapper.is_marked_for_delete())
+            else if (wrapper.IsMarkedForDelete())
             {
                 connection_fd_map.erase(fd);
             }
@@ -455,17 +454,17 @@ bool UnixDomainServer::process_queue(std::unordered_map<int, SessionWrapper>& co
     return false;
 }
 
-void UnixDomainServer::enqueue_tick_direct(std::int32_t fd)
+void UnixDomainServer::EnqueueTickDirect(std::int32_t fd)
 {
     work_queue_.push(fd);
 }
 
-void UnixDomainServer::pass_message(std::int32_t fd, const std::string& message)
+void UnixDomainServer::PassMessage(std::int32_t fd, const std::string& message)
 {
-    send_socket_message(fd, message);
+    SendSocketMessage(fd, message);
 }
 
-void UnixDomainServer::update_thread_name_server_routine() noexcept
+void UnixDomainServer::UpdateThreadNameServerRoutine() noexcept
 {
     auto ret = score::os::Pthread::instance().setname_np(server_thread_.native_handle(), "server_routine");
     if (!ret.has_value())

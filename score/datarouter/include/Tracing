@@ -11,10 +11,10 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-#ifndef AAS_PAS_LOGGING_TRACING_
-#define AAS_PAS_LOGGING_TRACING_
+#ifndef PLATFORM_AAS_PAS_LOGGING_INCLUDE_TRACING
+#define PLATFORM_AAS_PAS_LOGGING_INCLUDE_TRACING
 
 /// \file This file shall be replaced by the mw::log package.
 #include "score/mw/log/legacy_non_verbose_api/tracing.h"
 
-#endif  // AAS_PAS_LOGGING_TRACING_
+#endif  // PLATFORM_AAS_PAS_LOGGING_INCLUDE_TRACING

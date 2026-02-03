@@ -52,45 +52,45 @@ using namespace score::logging::dltserver;
 TEST_F(DiagnosticJobParserTest, ReadLogChannelNames_OK)
 {
     auto correct_handler = std::make_unique<ReadLogChannelNamesHandler>();
-    auto handler = uut.parse(std::string{char(config::READ_LOG_CHANNEL_NAMES)});
+    auto handler = uut.Parse(std::string{char(config::kReadLogChannelNames)});
     EXPECT_NE(ConvertHandlerTypeTo<ReadLogChannelNamesHandler>(handler), nullptr);
 }
 
 TEST_F(DiagnosticJobParserTest, ResetToDefault_OK)
 {
     auto correct_handler = std::make_unique<ResetToDefaultHandler>();
-    auto handler = uut.parse(std::string{char(config::RESET_TO_DEFAULT)});
+    auto handler = uut.Parse(std::string{char(config::kResetToDefault)});
     EXPECT_NE(ConvertHandlerTypeTo<ResetToDefaultHandler>(handler), nullptr);
 }
 
 TEST_F(DiagnosticJobParserTest, StoreDltConfig_OK)
 {
     auto correct_handler = std::make_unique<StoreDltConfigHandler>();
-    auto handler = uut.parse(std::string{char(config::STORE_DLT_CONFIG)});
+    auto handler = uut.Parse(std::string{char(config::kStoreDltConfig)});
     EXPECT_NE(ConvertHandlerTypeTo<StoreDltConfigHandler>(handler), nullptr);
 }
 
 TEST_F(DiagnosticJobParserTest, SetTraceState_OK)
 {
     auto correct_handler = std::make_unique<SetTraceStateHandler>();
-    auto handler = uut.parse(std::string{char(config::SET_TRACE_STATE)});
+    auto handler = uut.Parse(std::string{char(config::kSetTraceState)});
     EXPECT_NE(ConvertHandlerTypeTo<SetTraceStateHandler>(handler), nullptr);
 }
 
 TEST_F(DiagnosticJobParserTest, SetDefaultTraceState_OK)
 {
     auto correct_handler = std::make_unique<SetDefaultTraceStateHandler>();
-    auto handler = uut.parse(std::string{char(config::SET_DEFAULT_TRACE_STATE)});
+    auto handler = uut.Parse(std::string{char(config::kSetDefaultTraceState)});
     EXPECT_NE(ConvertHandlerTypeTo<SetDefaultTraceStateHandler>(handler), nullptr);
 }
 
 TEST_F(DiagnosticJobParserTest, SetLogChannelThreshold_OK)
 {
-    score::platform::dltid_t id("CORE");
+    score::platform::DltidT id("CORE");
     auto correct_handler = std::make_unique<SetLogChannelThresholdHandler>(id, score::mw::log::LogLevel::kDebug);
-    std::array<std::uint8_t, 7> command_buffer{config::SET_LOG_CHANNEL_THRESHOLD, 0x43, 0x4f, 0x52, 0x45, 5, 6};
+    std::array<std::uint8_t, 7> command_buffer{config::kSetLogChannelThreshold, 0x43, 0x4f, 0x52, 0x45, 5, 6};
     const std::string command{command_buffer.begin(), command_buffer.end()};
-    auto handler = uut.parse(command);
+    auto handler = uut.Parse(command);
     const auto* actual = ConvertHandlerTypeTo<SetLogChannelThresholdHandler>(handler);
     EXPECT_NE(actual, nullptr);
     EXPECT_EQ(*actual, *correct_handler);
@@ -98,10 +98,10 @@ TEST_F(DiagnosticJobParserTest, SetLogChannelThreshold_OK)
 
 TEST_F(DiagnosticJobParserTest, SetLogLevel_OK_UseDefault)
 {
-    score::platform::dltid_t id_1("CORE");
-    score::platform::dltid_t id_2("APP0");
-    auto correct_handler = std::make_unique<SetLogLevelHandler>(id_1, id_2, ThresholdCmd::UseDefault);
-    std::array<std::uint8_t, 10> command_buffer{config::SET_LOG_LEVEL,
+    score::platform::DltidT id_1("CORE");
+    score::platform::DltidT id_2("APP0");
+    auto correct_handler = std::make_unique<SetLogLevelHandler>(id_1, id_2, ThresholdCmd::kUseDefault);
+    std::array<std::uint8_t, 10> command_buffer{config::kSetLogLevel,
                                                 0x43,
                                                 0x4f,
                                                 0x52,
@@ -110,9 +110,9 @@ TEST_F(DiagnosticJobParserTest, SetLogLevel_OK_UseDefault)
                                                 0x50,
                                                 0x50,
                                                 0x30,
-                                                static_cast<uint8_t>(ThresholdCmd::UseDefault)};
+                                                static_cast<uint8_t>(ThresholdCmd::kUseDefault)};
     const std::string command{command_buffer.begin(), command_buffer.end()};
-    auto handler = uut.parse(command);
+    auto handler = uut.Parse(command);
     const auto* actual = ConvertHandlerTypeTo<SetLogLevelHandler>(handler);
     EXPECT_NE(actual, nullptr);
     EXPECT_EQ(*actual, *correct_handler);
@@ -120,13 +120,13 @@ TEST_F(DiagnosticJobParserTest, SetLogLevel_OK_UseDefault)
 
 TEST_F(DiagnosticJobParserTest, SetLogLevel_OK_ExplicitLevel)
 {
-    score::platform::dltid_t id_1("CORE");
-    score::platform::dltid_t id_2("APP0");
+    score::platform::DltidT id_1("CORE");
+    score::platform::DltidT id_2("APP0");
     auto correct_handler = std::make_unique<SetLogLevelHandler>(id_1, id_2, score::mw::log::LogLevel::kVerbose);
     std::array<std::uint8_t, 10> command_buffer{
-        config::SET_LOG_LEVEL, 0x43, 0x4f, 0x52, 0x45, 0x41, 0x50, 0x50, 0x30, 6};
+        config::kSetLogLevel, 0x43, 0x4f, 0x52, 0x45, 0x41, 0x50, 0x50, 0x30, 6};
     const std::string command{command_buffer.begin(), command_buffer.end()};
-    auto handler = uut.parse(command);
+    auto handler = uut.Parse(command);
     const auto* actual = ConvertHandlerTypeTo<SetLogLevelHandler>(handler);
     EXPECT_NE(actual, nullptr);
     EXPECT_EQ(*actual, *correct_handler);
@@ -135,9 +135,9 @@ TEST_F(DiagnosticJobParserTest, SetLogLevel_OK_ExplicitLevel)
 TEST_F(DiagnosticJobParserTest, SetMessagingFilteringState_OK)
 {
     auto correct_handler = std::make_unique<SetMessagingFilteringStateHandler>(true);
-    std::array<std::uint8_t, 2> command_buffer{config::SET_MESSAGING_FILTERING_STATE, 1};
+    std::array<std::uint8_t, 2> command_buffer{config::kSetMessagingFilteringState, 1};
     const std::string command{command_buffer.begin(), command_buffer.end()};
-    auto handler = uut.parse(command);
+    auto handler = uut.Parse(command);
     const auto* actual = ConvertHandlerTypeTo<SetMessagingFilteringStateHandler>(handler);
     EXPECT_NE(actual, nullptr);
     EXPECT_EQ(*actual, *correct_handler);
@@ -146,9 +146,9 @@ TEST_F(DiagnosticJobParserTest, SetMessagingFilteringState_OK)
 TEST_F(DiagnosticJobParserTest, SetDefaultLogLevel_OK)
 {
     auto correct_handler = std::make_unique<SetDefaultLogLevelHandler>(score::mw::log::LogLevel::kFatal);
-    std::array<std::uint8_t, 2> command_buffer{config::SET_DEFAULT_LOG_LEVEL, 1};
+    std::array<std::uint8_t, 2> command_buffer{config::kSetDefaultLogLevel, 1};
     const std::string command{command_buffer.begin(), command_buffer.end()};
-    auto handler = uut.parse(command);
+    auto handler = uut.Parse(command);
     const auto* actual = ConvertHandlerTypeTo<SetDefaultLogLevelHandler>(handler);
     EXPECT_NE(actual, nullptr);
     EXPECT_EQ(*actual, *correct_handler);
@@ -156,14 +156,14 @@ TEST_F(DiagnosticJobParserTest, SetDefaultLogLevel_OK)
 
 TEST_F(DiagnosticJobParserTest, SetLogChannelAssignment_OK)
 {
-    score::platform::dltid_t id_1("APP0");
-    score::platform::dltid_t id_2("CTX0");
-    score::platform::dltid_t id_3("CORE");
-    auto correct_handler = std::make_unique<SetLogChannelAssignmentHandler>(id_1, id_2, id_3, AssignmentAction::Add);
+    score::platform::DltidT id_1("APP0");
+    score::platform::DltidT id_2("CTX0");
+    score::platform::DltidT id_3("CORE");
+    auto correct_handler = std::make_unique<SetLogChannelAssignmentHandler>(id_1, id_2, id_3, AssignmentAction::kAdd);
     std::array<std::uint8_t, 14> command_buffer{
-        config::SET_LOG_CHANNEL_ASSIGNMENT, 0x41, 0x50, 0x50, 0x30, 0x43, 0x54, 0x58, 0x30, 0x43, 0x4f, 0x52, 0x45, 1};
+        config::kSetLogChannelAssignment, 0x41, 0x50, 0x50, 0x30, 0x43, 0x54, 0x58, 0x30, 0x43, 0x4f, 0x52, 0x45, 1};
     const std::string command{command_buffer.begin(), command_buffer.end()};
-    auto handler = uut.parse(command);
+    auto handler = uut.Parse(command);
     const auto* actual = ConvertHandlerTypeTo<SetLogChannelAssignmentHandler>(handler);
     EXPECT_NE(actual, nullptr);
     EXPECT_EQ(*actual, *correct_handler);
@@ -172,9 +172,9 @@ TEST_F(DiagnosticJobParserTest, SetLogChannelAssignment_OK)
 TEST_F(DiagnosticJobParserTest, SetDltOutputEnable_OK)
 {
     auto correct_handler = std::make_unique<SetDltOutputEnableHandler>(true);
-    std::array<std::uint8_t, 2> command_buffer{config::SET_DLT_OUTPUT_ENABLE, 1};
+    std::array<std::uint8_t, 2> command_buffer{config::kSetDltOutputEnable, 1};
     const std::string command{command_buffer.begin(), command_buffer.end()};
-    auto handler = uut.parse(command);
+    auto handler = uut.Parse(command);
     const auto* actual = ConvertHandlerTypeTo<SetDltOutputEnableHandler>(handler);
     EXPECT_NE(actual, nullptr);
     EXPECT_EQ(*actual, *correct_handler);
@@ -185,101 +185,101 @@ TEST_F(DiagnosticJobParserTest, SetDltOutputEnable_OK)
  *----------------------------------------------------------------*/
 TEST_F(DiagnosticJobParserTest, EmptyCommandWillReturnNullPtr)
 {
-    auto handler = uut.parse("");
+    auto handler = uut.Parse("");
     ASSERT_EQ(nullptr, handler);
 }
 
 TEST_F(DiagnosticJobParserTest, UnknownCommand_ReturnsNull)
 {
-    auto handler = uut.parse("\x7F");
+    auto handler = uut.Parse("\x7F");
     ASSERT_EQ(nullptr, handler);
 }
 
 TEST_F(DiagnosticJobParserTest, Threshold_WrongSize_ReturnsNull)
 {
-    std::string command_buffer{char(config::SET_LOG_CHANNEL_THRESHOLD)};
-    auto handler = uut.parse(command_buffer);
+    std::string command_buffer{char(config::kSetLogChannelThreshold)};
+    auto handler = uut.Parse(command_buffer);
     ASSERT_EQ(nullptr, handler);
 }
 
 TEST_F(DiagnosticJobParserTest, Threshold_InvalidLevel_ReturnsNull)
 {
-    std::array<std::uint8_t, 7> command_buffer{config::SET_LOG_CHANNEL_THRESHOLD, 1, 2, 3, 4, 0xFF, 6};
+    std::array<std::uint8_t, 7> command_buffer{config::kSetLogChannelThreshold, 1, 2, 3, 4, 0xFF, 6};
     const std::string command{command_buffer.begin(), command_buffer.end()};
-    auto handler = uut.parse(command);
+    auto handler = uut.Parse(command);
     ASSERT_EQ(nullptr, handler);
 }
 
 TEST_F(DiagnosticJobParserTest, LogLevel_WrongSize_ReturnsNull)
 {
-    std::string command_buffer{char(config::SET_LOG_LEVEL)};
+    std::string command_buffer{char(config::kSetLogLevel)};
     const std::string command{command_buffer.begin(), command_buffer.end()};
-    auto handler = uut.parse(command);
+    auto handler = uut.Parse(command);
     ASSERT_EQ(nullptr, handler);
 }
 
 TEST_F(DiagnosticJobParserTest, LogLevel_InvalidThresholdByte_ReturnsNull)
 {
-    std::array<std::uint8_t, 10> command_buffer{config::SET_LOG_LEVEL, 1, 2, 3, 4, 5, 6, 7, 8, 9};
+    std::array<std::uint8_t, 10> command_buffer{config::kSetLogLevel, 1, 2, 3, 4, 5, 6, 7, 8, 9};
     const std::string command{command_buffer.begin(), command_buffer.end()};
-    auto handler = uut.parse(command);
+    auto handler = uut.Parse(command);
     ASSERT_EQ(nullptr, handler);
 }
 
 TEST_F(DiagnosticJobParserTest, MessagingFiltering_WrongSize_ReturnsNull)
 {
-    std::string command_buffer{char(config::SET_MESSAGING_FILTERING_STATE)};
+    std::string command_buffer{char(config::kSetMessagingFilteringState)};
     const std::string command{command_buffer.begin(), command_buffer.end()};
-    auto handler = uut.parse(command);
+    auto handler = uut.Parse(command);
     ASSERT_EQ(nullptr, handler);
 }
 
 TEST_F(DiagnosticJobParserTest, DefaultLogLevel_WrongSize_ReturnsNull)
 {
-    std::string command_buffer{char(config::SET_DEFAULT_LOG_LEVEL)};
+    std::string command_buffer{char(config::kSetDefaultLogLevel)};
     const std::string command{command_buffer.begin(), command_buffer.end()};
-    auto handler = uut.parse(command);
+    auto handler = uut.Parse(command);
     ASSERT_EQ(nullptr, handler);
 }
 
 TEST_F(DiagnosticJobParserTest, DefaultLogLevel_InvalidLevel_ReturnsNull)
 {
-    std::array<std::uint8_t, 2> command_buffer{config::SET_DEFAULT_LOG_LEVEL, 7};
+    std::array<std::uint8_t, 2> command_buffer{config::kSetDefaultLogLevel, 7};
     const std::string command{command_buffer.begin(), command_buffer.end()};
-    auto handler = uut.parse(command);
+    auto handler = uut.Parse(command);
     ASSERT_EQ(nullptr, handler);
 }
 
 TEST_F(DiagnosticJobParserTest, Assignment_WrongSize_ReturnsNull)
 {
-    std::string command_buffer{char(config::SET_LOG_CHANNEL_ASSIGNMENT)};
+    std::string command_buffer{char(config::kSetLogChannelAssignment)};
     const std::string command{command_buffer.begin(), command_buffer.end()};
-    auto handler = uut.parse(command);
+    auto handler = uut.Parse(command);
     ASSERT_EQ(nullptr, handler);
 }
 
 TEST_F(DiagnosticJobParserTest, Assignment_InvalidAction_ReturnsNull)
 {
     std::array<std::uint8_t, 14> command_buffer{
-        config::SET_LOG_CHANNEL_ASSIGNMENT, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13};
+        config::kSetLogChannelAssignment, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13};
     const std::string command{command_buffer.begin(), command_buffer.end()};
-    auto handler = uut.parse(command);
+    auto handler = uut.Parse(command);
     ASSERT_EQ(nullptr, handler);
 }
 
 TEST_F(DiagnosticJobParserTest, OutputEnable_WrongSize_ReturnsNull)
 {
-    std::string command_buffer{char(config::SET_DLT_OUTPUT_ENABLE)};
+    std::string command_buffer{char(config::kSetDltOutputEnable)};
     const std::string command{command_buffer.begin(), command_buffer.end()};
-    auto handler = uut.parse(command);
+    auto handler = uut.Parse(command);
     ASSERT_EQ(nullptr, handler);
 }
 
 TEST_F(DiagnosticJobParserTest, OutputEnable_InvalidFlag_ReturnsNull1)
 {
-    std::array<std::uint8_t, 2> command_buffer{config::SET_DLT_OUTPUT_ENABLE, 2};
+    std::array<std::uint8_t, 2> command_buffer{config::kSetDltOutputEnable, 2};
     const std::string command{command_buffer.begin(), command_buffer.end()};
-    auto handler = uut.parse(command);
+    auto handler = uut.Parse(command);
     ASSERT_EQ(nullptr, handler);
 }
 

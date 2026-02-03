@@ -11,8 +11,8 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-#ifndef SCORE_DATAROUTER_DAEMON_COMMUNICATION_SESION_HANDLE_MOCK_H_
-#define SCORE_DATAROUTER_DAEMON_COMMUNICATION_SESION_HANDLE_MOCK_H_
+#ifndef SCORE_DATAROUTER_DAEMON_COMMUNICATION_SESION_HANDLE_MOCK_H
+#define SCORE_DATAROUTER_DAEMON_COMMUNICATION_SESION_HANDLE_MOCK_H
 
 #include "score/datarouter/daemon_communication/session_handle_interface.h"
 
@@ -29,4 +29,4 @@ class SessionHandleMock : public score::platform::internal::daemon::ISessionHand
 
 }  // namespace score::platform::internal::daemon::mock
 
-#endif  //  SCORE_DATAROUTER_DAEMON_COMMUNICATION_SESION_HANDLE_MOCK_H_
+#endif  //  SCORE_DATAROUTER_DAEMON_COMMUNICATION_SESION_HANDLE_MOCK_H

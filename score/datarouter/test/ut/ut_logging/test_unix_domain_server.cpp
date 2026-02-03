@@ -34,9 +34,9 @@ class ISessionMock : public UnixDomainServer::ISession
   public:
     ISessionMock(UnixDomainServer::SessionHandle /*h*/) {}
 
-    MOCK_METHOD(bool, tick, (), (override));
-    MOCK_METHOD(void, on_closed_by_peer, (), (override));
-    MOCK_METHOD(void, on_command, (const std::string&), (override));
+    MOCK_METHOD(bool, Tick, (), (override));
+    MOCK_METHOD(void, OnClosedByPeer, (), (override));
+    MOCK_METHOD(void, OnCommand, (const std::string&), (override));
 };
 
 class UnixDomainServer::SessionWrapper::SessionWrapperTest : public UnixDomainServer::SessionWrapper
@@ -63,16 +63,16 @@ class UnixDomainServer::UnixDomainServerTest : public UnixDomainServer
     }
 
     using UnixDomainServer::ConnectionState;
-    using UnixDomainServer::enqueue_tick_direct;
-    using UnixDomainServer::process_queue;
+    using UnixDomainServer::EnqueueTickDirect;
+    using UnixDomainServer::ProcessQueue;
     using UnixDomainServer::work_queue_;
 
     // Expose extracted methods for testing
-    using UnixDomainServer::cleanup_all_connections;
-    using UnixDomainServer::process_active_connections;
-    using UnixDomainServer::process_idle_connections;
-    using UnixDomainServer::process_server_iteration;
-    using UnixDomainServer::setup_server_socket;
+    using UnixDomainServer::CleanupAllConnections;
+    using UnixDomainServer::ProcessActiveConnections;
+    using UnixDomainServer::ProcessIdleConnections;
+    using UnixDomainServer::ProcessServerIteration;
+    using UnixDomainServer::SetupServerSocket;
 };
 
 class UnixDomainServerMock : public UnixDomainServer
@@ -84,7 +84,7 @@ class UnixDomainServerMock : public UnixDomainServer
     {
     }
 
-    MOCK_METHOD(void, enqueue_tick_direct, (std::int32_t fd), (override));
+    MOCK_METHOD(void, EnqueueTickDirect, (std::int32_t fd), (override));
 };
 
 namespace dummy_namespace
@@ -92,36 +92,36 @@ namespace dummy_namespace
 
 TEST(TempMarker, TickAlwaysFalse)
 {
-    temp_marker m;
-    EXPECT_FALSE(m.tick());
-    EXPECT_NO_FATAL_FAILURE(m.on_command("anything"));
-    EXPECT_NO_FATAL_FAILURE(m.on_closed_by_peer());
+    TempMarker m;
+    EXPECT_FALSE(m.Tick());
+    EXPECT_NO_FATAL_FAILURE(m.OnCommand("anything"));
+    EXPECT_NO_FATAL_FAILURE(m.OnClosedByPeer());
 }
 
 TEST(TempMarker, PolymorphicThroughISession)
 {
-    std::unique_ptr<UnixDomainServer::ISession> p = std::make_unique<temp_marker>();
-    EXPECT_FALSE(p->tick());
-    EXPECT_NO_FATAL_FAILURE(p->on_command("cmd"));
-    EXPECT_NO_FATAL_FAILURE(p->on_closed_by_peer());
+    std::unique_ptr<UnixDomainServer::ISession> p = std::make_unique<TempMarker>();
+    EXPECT_FALSE(p->Tick());
+    EXPECT_NO_FATAL_FAILURE(p->OnCommand("cmd"));
+    EXPECT_NO_FATAL_FAILURE(p->OnClosedByPeer());
 }
 
 class StubISession : public UnixDomainServer::ISession
 {
   public:
-    bool tick() override
+    bool Tick() override
     {
         return true;
     }
-    // no overrides for on_command() or on_closed_by_peer()
+    // no overrides for OnCommand() or OnClosedByPeer()
 };
 
 TEST(ISessionTest, ISessionTestSuccessfully)
 {
     StubISession m;
-    EXPECT_TRUE(m.tick());
-    EXPECT_NO_FATAL_FAILURE(m.on_command("anything"));
-    EXPECT_NO_FATAL_FAILURE(m.on_closed_by_peer());
+    EXPECT_TRUE(m.Tick());
+    EXPECT_NO_FATAL_FAILURE(m.OnCommand("anything"));
+    EXPECT_NO_FATAL_FAILURE(m.OnClosedByPeer());
 }
 
 TEST(SessionWrapperTest, HandleCommand)
@@ -132,41 +132,41 @@ TEST(SessionWrapperTest, HandleCommand)
     bool tick_called = false;
     std::string last_command{};
     bool closed_by_peer_called = false;
-    EXPECT_CALL(server_mock, enqueue_tick_direct(kServerFd));
+    EXPECT_CALL(server_mock, EnqueueTickDirect(kServerFd));
     UnixDomainServer::SessionWrapper::SessionWrapperTest session_test(&server_mock, kServerFd);
 
     auto isession_mock = std::make_unique<ISessionMock>(UnixDomainServer::SessionHandle{kServerFd});
     ISessionMock* raw_isession_mock_ptr = isession_mock.get();
-    EXPECT_CALL(*raw_isession_mock_ptr, tick()).WillRepeatedly([&tick_called]() {
+    EXPECT_CALL(*raw_isession_mock_ptr, Tick()).WillRepeatedly([&tick_called]() {
         tick_called = true;
         return false;
     });
-    EXPECT_CALL(*raw_isession_mock_ptr, on_closed_by_peer()).WillRepeatedly([&closed_by_peer_called]() {
+    EXPECT_CALL(*raw_isession_mock_ptr, OnClosedByPeer()).WillRepeatedly([&closed_by_peer_called]() {
         closed_by_peer_called = true;
     });
     session_test.session_ = std::move(isession_mock);
 
     std::string test_command = "test_command";
-    EXPECT_CALL(*raw_isession_mock_ptr, on_command(test_command))
+    EXPECT_CALL(*raw_isession_mock_ptr, OnCommand(test_command))
         .WillRepeatedly([&last_command](const std::string& command) {
             last_command = command;
         });
-    bool result = session_test.handle_command(test_command, kPeerPid);
+    bool result = session_test.HandleCommand(test_command, kPeerPid);
     EXPECT_TRUE(result);
     EXPECT_EQ(last_command, test_command);
 
-    bool tick_result = session_test.tick();
+    bool tick_result = session_test.Tick();
     EXPECT_FALSE(tick_result);
     EXPECT_TRUE(tick_called);
 
-    session_test.notify_closed_by_peer();
+    session_test.NotifyClosedByPeer();
     EXPECT_TRUE(closed_by_peer_called);
 }
 
 class EnqueueSession : public UnixDomainServer::ISession
 {
   public:
-    bool tick() override
+    bool Tick() override
     {
         return true;
     }
@@ -181,7 +181,7 @@ TEST(SessionWrapperTest, TryEnqueueForDeleteWithSessionAlreadyRunningNoEnqueue)
     wrapper.running_ = true;
     wrapper.enqueued_ = false;
 
-    bool result = wrapper.try_enqueue_for_delete(false);
+    bool result = wrapper.TryEnqueueForDelete(false);
     EXPECT_TRUE(result);
 }
 
@@ -191,7 +191,7 @@ TEST(SessionWrapperTest, TryEnqueueForDeleteWithSessionTriggersEnqueue)
     constexpr std::uint8_t kServerFd = 42U;
     uint8_t enqueue_call_count = 0U;
     std::int32_t last_fd = 0U;
-    EXPECT_CALL(server_mock, enqueue_tick_direct(kServerFd))
+    EXPECT_CALL(server_mock, EnqueueTickDirect(kServerFd))
         .WillRepeatedly([&enqueue_call_count, &last_fd](std::int32_t fd) {
             ++enqueue_call_count;
             last_fd = fd;
@@ -201,7 +201,7 @@ TEST(SessionWrapperTest, TryEnqueueForDeleteWithSessionTriggersEnqueue)
     wrapper.running_ = false;
     wrapper.enqueued_ = false;
 
-    bool result = wrapper.try_enqueue_for_delete(true);
+    bool result = wrapper.TryEnqueueForDelete(true);
     EXPECT_TRUE(result);
     EXPECT_EQ(enqueue_call_count, 1);
     EXPECT_EQ(last_fd, kServerFd);
@@ -215,12 +215,12 @@ TEST(SessionWrapperTest, TryEnqueueForDeleteWithSessionTriggersEnqueue)
 namespace
 {
 
-// we will reuse your temp_marker
-using dummy_namespace::temp_marker;
+// we will reuse your TempMarker
+using dummy_namespace::TempMarker;
 
-// a tiny factory that always returns a temp_marker
+// a tiny factory that always returns a TempMarker
 const UnixDomainServer::SessionFactory kFactory = [](const std::string&, UnixDomainServer::SessionHandle) {
-    return std::make_unique<temp_marker>();
+    return std::make_unique<TempMarker>();
 };
 
 class CountingSession : public UnixDomainServer::ISession
@@ -230,12 +230,12 @@ class CountingSession : public UnixDomainServer::ISession
     {
         ++gConstructed;
     }
-    bool tick() override
+    bool Tick() override
     {
         ++gTicks;
         return false;
     }
-    void on_command(const std::string&) override
+    void OnCommand(const std::string&) override
     {
         ++gCommands;
     }
@@ -271,11 +271,11 @@ UnixDomainSockAddr MakeTempAddrAbstractFalse(std::string& name)
 TEST(UnixDomainSockAddr, NonAbstractRoundTrip)
 {
     UnixDomainSockAddr addr("datarouter_socket", false);
-    EXPECT_FALSE(addr.is_abstract());
-    const char* s = addr.get_address_string();
+    EXPECT_FALSE(addr.IsAbstract());
+    const char* s = addr.GetAddressString();
     // since we constructed with isAbstract=false, sun_path[0] ≠ '\0'
     EXPECT_NE(s[0], '\0');
-    EXPECT_STREQ(s, addr.addr_.sun_path);
+    EXPECT_STREQ(s, addr.addr.sun_path);
 }
 
 TEST(UnixDomainServerSessionWrapper, BasicFlagsAndTimeout)
@@ -284,17 +284,17 @@ TEST(UnixDomainServerSessionWrapper, BasicFlagsAndTimeout)
     UnixDomainServer server(addr, UnixDomainServer::SessionFactory());
     UnixDomainServer::SessionWrapper w(&server, /*fd=*/7);
 
-    EXPECT_FALSE(w.is_marked_for_delete());
-    EXPECT_FALSE(w.get_reset_closed_by_peer());
+    EXPECT_FALSE(w.IsMarkedForDelete());
+    EXPECT_FALSE(w.GetResetClosedByPeer());
 
     // before a real session_ is constructed, handle_command("") returns now<timeout
-    EXPECT_TRUE(w.handle_command("", /*peer_pid=*/score::cpp::nullopt));
-    EXPECT_TRUE(w.handle_command("TT", /*peer_pid=*/score::cpp::nullopt));
-    EXPECT_FALSE(w.try_enqueue_for_delete(/*by_peer=*/false));
+    EXPECT_TRUE(w.HandleCommand("", /*peer_pid=*/score::cpp::nullopt));
+    EXPECT_TRUE(w.HandleCommand("TT", /*peer_pid=*/score::cpp::nullopt));
+    EXPECT_FALSE(w.TryEnqueueForDelete(/*by_peer=*/false));
 
-    w.set_running();
-    EXPECT_FALSE(w.reset_running(/*requeue=*/false));
-    EXPECT_TRUE(w.reset_running(/*requeue=*/true));
+    w.SetRunning();
+    EXPECT_FALSE(w.ResetRunning(/*requeue=*/false));
+    EXPECT_TRUE(w.ResetRunning(/*requeue=*/true));
 }
 
 TEST(SessionHandle, PassMessage)
@@ -304,7 +304,7 @@ TEST(SessionHandle, PassMessage)
     UnixDomainServer server(addr, UnixDomainServer::SessionFactory());
 
     UnixDomainServer::SessionHandle h(fake_fd);
-    EXPECT_NO_FATAL_FAILURE(h.pass_message("HelloTest"));
+    EXPECT_NO_FATAL_FAILURE(h.PassMessage("HelloTest"));
 }
 
 TEST(SessionWrapperMove, CanMoveAndDestructWithoutCrash)
@@ -312,13 +312,13 @@ TEST(SessionWrapperMove, CanMoveAndDestructWithoutCrash)
     UnixDomainSockAddr addr("datarouter_socket", true);
     UnixDomainServer server(addr, {});
     UnixDomainServer::SessionWrapper orig(&server, 42);
-    EXPECT_FALSE(orig.is_marked_for_delete());
-    EXPECT_FALSE(orig.get_reset_closed_by_peer());
+    EXPECT_FALSE(orig.IsMarkedForDelete());
+    EXPECT_FALSE(orig.GetResetClosedByPeer());
 
     EXPECT_NO_FATAL_FAILURE({
         UnixDomainServer::SessionWrapper moved(std::move(orig));
-        EXPECT_FALSE(moved.is_marked_for_delete());
-        EXPECT_FALSE(moved.get_reset_closed_by_peer());
+        EXPECT_FALSE(moved.IsMarkedForDelete());
+        EXPECT_FALSE(moved.GetResetClosedByPeer());
     });
 }
 
@@ -330,12 +330,12 @@ TEST(UnixDomainServerSessionWrapper, ServerSessionWrapperWithRealFactory)
 
     UnixDomainServer::SessionWrapper w(&server, /*fd*/ 7);
 
-    EXPECT_FALSE(w.is_marked_for_delete());
-    EXPECT_FALSE(w.get_reset_closed_by_peer());
+    EXPECT_FALSE(w.IsMarkedForDelete());
+    EXPECT_FALSE(w.GetResetClosedByPeer());
 
-    EXPECT_TRUE(w.handle_command("someName", score::cpp::nullopt));
-    EXPECT_TRUE(w.handle_command("someName", score::cpp::nullopt));
-    EXPECT_TRUE(w.handle_command("subscriberName", /*peer_pid=*/static_cast<int>(::getpid())));
+    EXPECT_TRUE(w.HandleCommand("someName", score::cpp::nullopt));
+    EXPECT_TRUE(w.HandleCommand("someName", score::cpp::nullopt));
+    EXPECT_TRUE(w.HandleCommand("subscriberName", /*peer_pid=*/static_cast<int>(::getpid())));
 }
 
 TEST(UnixDomainServerAcceptTest, AcceptsOneClientConnection)
@@ -436,9 +436,9 @@ TEST(UnixDomainServerHandleCmd, AllBranchesViaFramedMessages)
     ASSERT_EQ(::connect(cfd, reinterpret_cast<sockaddr*>(&su), sizeof(su)), 0) << strerror(errno);
 
     // send messages using the correct framing helper
-    send_socket_message(cfd, std::string("subName"));
-    send_socket_message(cfd, std::string("cmd1"));
-    send_socket_message(cfd, std::string("cmd2"));
+    SendSocketMessage(cfd, std::string("subName"));
+    SendSocketMessage(cfd, std::string("cmd1"));
+    SendSocketMessage(cfd, std::string("cmd2"));
 
     // give the worker thread some time to dequeue & process
     for (int i = 0; i < 50 && CountingSession::gTicks.load() == 0; ++i)
@@ -496,11 +496,11 @@ class CommandErrorInjectingSession : public UnixDomainServer::ISession
 {
   public:
     explicit CommandErrorInjectingSession(UnixDomainServer::SessionHandle) {}
-    bool tick() override
+    bool Tick() override
     {
         return false;
     }
-    void on_command(const std::string&) override
+    void OnCommand(const std::string&) override
     {
         throw std::runtime_error("boom!");
     }
@@ -535,7 +535,7 @@ TEST(UnixDomainServerExceptions, CatchStdExceptionInServerRoutine)
     const char* subscribe = "subName";
     ASSERT_EQ(::send(cfd, subscribe, strlen(subscribe), 0), static_cast<ssize_t>(strlen(subscribe)));
 
-    /* second message -> on_command() causes error */
+    /* second message -> OnCommand() causes error */
     const char* bad_msg = "this_will_cause_error";
     ASSERT_EQ(::send(cfd, bad_msg, strlen(bad_msg), 0), static_cast<ssize_t>(strlen(bad_msg)));
 
@@ -557,11 +557,11 @@ class CloseAwareSession : public UnixDomainServer::ISession
   public:
     explicit CloseAwareSession(UnixDomainServer::SessionHandle /*h*/) {}
 
-    bool tick() override
+    bool Tick() override
     {
         return false;
     }  // no re‑queue
-    void on_closed_by_peer() override
+    void OnClosedByPeer() override
     {
         ++gPeerClosed;
     }  // mark call
@@ -598,7 +598,7 @@ TEST(UnixDomainServer, NotifiesClosedByPeer)
 
     ASSERT_EQ(::connect(cfd, reinterpret_cast<sockaddr*>(&su), sizeof(su)), 0) << strerror(errno);
 
-    send_socket_message(cfd, std::string("subscriber"));
+    SendSocketMessage(cfd, std::string("subscriber"));
 
     // grace interval for server to accept and build the session
     std::this_thread::sleep_for(std::chrono::milliseconds(80));
@@ -620,7 +620,7 @@ class RequeueSession : public UnixDomainServer::ISession
   public:
     explicit RequeueSession(UnixDomainServer::SessionHandle /*h*/) {}
 
-    bool tick() override
+    bool Tick() override
     {
         ++gTicks;
         return gTicks.load() == 1;  // true once, false afterwards
@@ -659,7 +659,7 @@ TEST(UnixDomainServer, WorkerRequeuesOnTrueTick)
     ASSERT_EQ(::connect(cfd, reinterpret_cast<sockaddr*>(&su), sizeof(su)), 0) << strerror(errno);
 
     // send a name so server builds the session
-    send_socket_message(cfd, std::string("subscriber"));
+    SendSocketMessage(cfd, std::string("subscriber"));
 
     // wait until the worker thread has processed the session at least twice
     // (first tick returns true -> re‑queue, second tick returns false)
@@ -677,11 +677,11 @@ class ErrorInjectingSession : public UnixDomainServer::ISession
 {
   public:
     explicit ErrorInjectingSession(UnixDomainServer::SessionHandle /*h*/) {}
-    bool tick() override
+    bool Tick() override
     {
-        throw std::runtime_error("boom from tick()");
+        throw std::runtime_error("boom from Tick()");
     }
-    void on_command(const std::string&) override {}
+    void OnCommand(const std::string&) override {}
 };
 
 // simple factory that builds a ErrorInjectingSession
@@ -711,7 +711,7 @@ TEST(UnixDomainServer, ServerCatchesSessionFailure)
     ssize_t n = ::send(cfd, sub, std::strlen(sub), 0);
     ASSERT_EQ(n, static_cast<ssize_t>(std::strlen(sub))) << strerror(errno);
 
-    /* give the server thread enough time to dequeue & run tick() (⇒ error) */
+    /* give the server thread enough time to dequeue & run Tick() (⇒ error) */
     std::this_thread::sleep_for(std::chrono::milliseconds(250));
 
     /* clean up the client socket */
@@ -954,7 +954,7 @@ TEST(UnixDomainCommon, SetupSignalsFailurePath)
 
 TEST(UnixDomainServerExtractedMethods, ProcessIdleConnectionsRemovesOrphanedFd)
 {
-    // Test orphaned FD cleanup in process_idle_connections
+    // Test orphaned FD cleanup in ProcessIdleConnections
     UnixDomainServer::UnixDomainServerTest::ConnectionState state;
 
     // Add server FD at index 0 (skipped by loop)
@@ -974,7 +974,7 @@ TEST(UnixDomainServerExtractedMethods, ProcessIdleConnectionsRemovesOrphanedFd)
     ASSERT_EQ(state.connection_pollfd_list.size(), 2U);
     ASSERT_EQ(state.connection_fd_map.size(), 0U);
 
-    UnixDomainServer::UnixDomainServerTest::process_idle_connections(state);
+    UnixDomainServer::UnixDomainServerTest::ProcessIdleConnections(state);
 
     // Orphaned FD removed, only server FD remains
     ASSERT_EQ(state.connection_pollfd_list.size(), 1U);
@@ -988,7 +988,7 @@ TEST(UnixDomainServerExtractedMethods, ProcessIdleConnectionsRemovesOrphanedFd)
 
 TEST(UnixDomainServerExtractedMethods, ProcessIdleConnectionsSkipsActiveConnections)
 {
-    // Test that active connections (with POLLIN) are skipped by process_idle_connections
+    // Test that active connections (with POLLIN) are skipped by ProcessIdleConnections
     UnixDomainServer::UnixDomainServerTest::ConnectionState state;
 
     pollfd server_pfd{};
@@ -1006,16 +1006,16 @@ TEST(UnixDomainServerExtractedMethods, ProcessIdleConnectionsSkipsActiveConnecti
 
     ASSERT_EQ(state.connection_pollfd_list.size(), 2U);
 
-    UnixDomainServer::UnixDomainServerTest::process_idle_connections(state);
+    UnixDomainServer::UnixDomainServerTest::ProcessIdleConnections(state);
 
-    // Size unchanged: process_idle_connections() should skip active connections (POLLIN set)
+    // Size unchanged: ProcessIdleConnections() should skip active connections (POLLIN set)
     // and only process idle ones, so both FDs remain in the list
     EXPECT_EQ(state.connection_pollfd_list.size(), 2U);
 }
 
 TEST(UnixDomainServerExtractedMethods, ProcessActiveConnectionsRemovesOrphanedFd)
 {
-    // Test orphaned FD cleanup in process_active_connections
+    // Test orphaned FD cleanup in ProcessActiveConnections
     UnixDomainServer::UnixDomainServerTest::ConnectionState state;
 
     pollfd server_pfd{};
@@ -1033,7 +1033,7 @@ TEST(UnixDomainServerExtractedMethods, ProcessActiveConnectionsRemovesOrphanedFd
     ASSERT_EQ(state.connection_pollfd_list.size(), 2U);
     ASSERT_EQ(state.connection_fd_map.size(), 0U);
 
-    UnixDomainServer::UnixDomainServerTest::process_active_connections(state);
+    UnixDomainServer::UnixDomainServerTest::ProcessActiveConnections(state);
 
     ASSERT_EQ(state.connection_pollfd_list.size(), 1U);
     EXPECT_EQ(state.connection_pollfd_list[0].fd, 1);

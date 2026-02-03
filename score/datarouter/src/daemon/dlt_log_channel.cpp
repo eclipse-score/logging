@@ -29,12 +29,12 @@ namespace
 constexpr auto kBurstFileTransferControlCount{5UL};
 }  // namespace
 
-void DltLogChannel::sendNonVerbose(const score::mw::log::config::NvMsgDescriptor& desc,
+void DltLogChannel::SendNonVerbose(const score::mw::log::config::NvMsgDescriptor& desc,
                                    uint32_t tmsp,
                                    const void* data,
                                    size_t size)
 {
-    if (desc.GetLogLevel() > channelThreshold_.load(std::memory_order_relaxed))
+    if (desc.GetLogLevel() > channel_threshold.load(std::memory_order_relaxed))
     {
         return;
     }
@@ -51,13 +51,13 @@ void DltLogChannel::sendNonVerbose(const score::mw::log::config::NvMsgDescriptor
         prebuf_is_verbose_ = false;
     }
 
-    if (prebuf_size_ + full_size <= UDP_MAX_PAYLOAD)  // add to current buffer as it fits
+    if (prebuf_size_ + full_size <= kUdpMaxPayload)  // add to current buffer as it fits
     {
         // Use .at() to avoid "non-constant subscript" warning generated from clang
         auto& buffer = prebuf_data_.at(vector_index_);
 
         // Use iterator arithmetic (not pointer arithmetic) to solve warning generated from clang
-        auto it = buffer.begin();
+        auto* it = buffer.begin();
         if (prebuf_size_ > std::numeric_limits<decltype(prebuf_data_)::value_type::difference_type>::max())
         {
             // This check ensures that `prebuf_size_` can be safely converted to a signed type
@@ -83,14 +83,14 @@ void DltLogChannel::sendNonVerbose(const score::mw::log::config::NvMsgDescriptor
         */
         // coverity[autosar_cpp14_m5_2_10_violation]
         score::platform::internal::ConstructNonVerbosePacket(
-            dest, data, size, desc.GetIdMsgDescriptor(), ecu_, mcnt_++, tmsp);
+            dest, data, size, desc.GetIdMsgDescriptor(), ecu, mcnt_++, tmsp);
 
         prebuf_size_ += full_size;
     }
     else  // doesn't fit in current buffer
     {
         SendUdp();
-        if (full_size < UDP_MAX_PAYLOAD)  //  fits in our prebuf
+        if (full_size < kUdpMaxPayload)  //  fits in our prebuf
         {
             // Use .at() to avoid "non-constant subscript" warning generated from clang
             auto& buffer = prebuf_data_.at(vector_index_);
@@ -98,7 +98,7 @@ void DltLogChannel::sendNonVerbose(const score::mw::log::config::NvMsgDescriptor
 
             // coverity[autosar_cpp14_m5_2_10_violation]
             score::platform::internal::ConstructNonVerbosePacket(
-                dest, data, size, desc.GetIdMsgDescriptor(), ecu_, mcnt_++, tmsp);
+                dest, data, size, desc.GetIdMsgDescriptor(), ecu, mcnt_++, tmsp);
 
             prebuf_size_ += full_size;
         }
@@ -111,7 +111,7 @@ void DltLogChannel::sendNonVerbose(const score::mw::log::config::NvMsgDescriptor
             score::platform::internal::DltNvHeaderWithMsgid header;
             // coverity[autosar_cpp14_m5_2_10_violation]
             const auto header_size = score::platform::internal::ConstructNonVerboseHeader(
-                header, size, desc.GetIdMsgDescriptor(), ecu_, mcnt_++, tmsp);
+                header, size, desc.GetIdMsgDescriptor(), ecu, mcnt_++, tmsp);
             // NOLINTNEXTLINE(cppcoreguidelines-pro-type-union-access) iovec is unchangable, It's (POSIX standard)
             io_vec[0].iov_base = static_cast<void*>(&header);
             io_vec[0].iov_len = header_size;
@@ -121,7 +121,7 @@ void DltLogChannel::sendNonVerbose(const score::mw::log::config::NvMsgDescriptor
             io_vec[1].iov_base = const_cast<void*>(data);
             // NOLINTEND(cppcoreguidelines-pro-type-union-access)
             io_vec[1].iov_len = size;
-            const auto send_result = out_.send(io_vec.data(), kVectorStackCount);
+            const auto send_result = out_.Send(io_vec.data(), kVectorStackCount);
             if (send_result.has_value() == false)
             {
                 ++non_verbose_.send_failures_count;
@@ -132,11 +132,11 @@ void DltLogChannel::sendNonVerbose(const score::mw::log::config::NvMsgDescriptor
     }
 }
 
-void DltLogChannel::sendVerbose(
+void DltLogChannel::SendVerbose(
     const uint32_t tmsp,
     const score::mw::log::detail::log_entry_deserialization::LogEntryDeserializationReflection& entry)
 {
-    if (entry.log_level > channelThreshold_.load(std::memory_order_relaxed))
+    if (entry.log_level > channel_threshold.load(std::memory_order_relaxed))
     {
         return;
     }
@@ -153,13 +153,13 @@ void DltLogChannel::sendVerbose(
         SendUdp();
         prebuf_is_verbose_ = true;
     }
-    if (prebuf_size_ + full_size <= UDP_MAX_PAYLOAD)
+    if (prebuf_size_ + full_size <= kUdpMaxPayload)
     {
         // Use .at() to avoid "non-constant subscript" warning generated from clang
         auto& buffer = prebuf_data_.at(vector_index_);
 
         // Use iterator arithmetic (not pointer arithmetic) to solve warning generated from clang
-        auto it = buffer.begin();
+        auto* it = buffer.begin();
         if (prebuf_size_ > std::numeric_limits<decltype(prebuf_data_)::value_type::difference_type>::max())
         {
             // This check ensures that `prebuf_size_` can be safely converted to a signed type
@@ -176,7 +176,7 @@ void DltLogChannel::sendVerbose(
         auto* dest = std::addressof(*it);
 
         // coverity[autosar_cpp14_m5_2_10_violation]
-        score::platform::internal::ConstructVerbosePacket(dest, entry, ecu_, mcnt_++, tmsp);
+        score::platform::internal::ConstructVerbosePacket(dest, entry, ecu, mcnt_++, tmsp);
 
         prebuf_size_ += full_size;
     }
@@ -184,13 +184,13 @@ void DltLogChannel::sendVerbose(
     {
         SendUdp();
 
-        if (full_size < UDP_MAX_PAYLOAD)  //  just add it into the buffer if it is less than the buffer size
+        if (full_size < kUdpMaxPayload)  //  just add it into the buffer if it is less than the buffer size
         {
             // Use .at() to avoid "non-constant subscript" warning generated from clang
             auto& buffer = prebuf_data_.at(vector_index_);
             auto* dest = buffer.data();
             // coverity[autosar_cpp14_m5_2_10_violation]
-            score::platform::internal::ConstructVerbosePacket(dest, entry, ecu_, mcnt_++, tmsp);
+            score::platform::internal::ConstructVerbosePacket(dest, entry, ecu, mcnt_++, tmsp);
 
             prebuf_size_ += full_size;
         }
@@ -203,8 +203,7 @@ void DltLogChannel::sendVerbose(
             std::array<iovec, kVectorStackCount> io_vec{};
             score::platform::internal::DltVerboseHeader header;
             // coverity[autosar_cpp14_m5_2_10_violation]
-            const auto header_size =
-                score::platform::internal::ConstructVerboseHeader(header, entry, ecu_, mcnt_++, tmsp);
+            const auto header_size = score::platform::internal::ConstructVerboseHeader(header, entry, ecu, mcnt_++, tmsp);
             // NOLINTNEXTLINE(cppcoreguidelines-pro-type-union-access) iovec is unchangable, It's (POSIX standard)
             io_vec[0].iov_base = static_cast<void*>(&header);
             io_vec[0].iov_len = header_size;
@@ -214,7 +213,7 @@ void DltLogChannel::sendVerbose(
             io_vec[1].iov_base = const_cast<void*>(static_cast<const void*>(entry.GetPayload().data()));
             // NOLINTEND(cppcoreguidelines-pro-type-union-access)
             io_vec[1].iov_len = static_cast<std::size_t>(entry.GetPayload().size());
-            const auto send_result = out_.send(io_vec.data(), kVectorStackCount);
+            const auto send_result = out_.Send(io_vec.data(), kVectorStackCount);
             if (send_result.has_value() == false)
             {
                 ++verbose_.send_failures_count;
@@ -225,29 +224,29 @@ void DltLogChannel::sendVerbose(
     }
 }
 
-void DltLogChannel::sendFTVerbose(score::cpp::span<const std::uint8_t> data,
+void DltLogChannel::SendFtVerbose(score::cpp::span<const std::uint8_t> data,
                                   const mw::log::LogLevel loglevel,
-                                  dltid_t appId,
-                                  dltid_t ctxId,
+                                  DltidT app_id,
+                                  DltidT ctx_id,
                                   uint8_t nor,
                                   uint32_t tmsp)
 {
     static auto start = std::chrono::system_clock::now();
-    constexpr auto wait = std::chrono::milliseconds{kBurstFileTransferControlCount};
+    constexpr auto kWait = std::chrono::milliseconds{kBurstFileTransferControlCount};
 
     static auto iteration_counter = uint32_t{0UL};
     iteration_counter++;
     if (iteration_counter % kBurstFileTransferControlCount == 0UL)
     {
-        std::this_thread::sleep_until(start + wait);
+        std::this_thread::sleep_until(start + kWait);
     }
 
     const auto data_size = static_cast<size_t>(data.size());
     score::platform::internal::DltVerboseHeader hdr;
     // coverity[autosar_cpp14_m5_2_10_violation]
     score::platform::internal::ConstructDltStandardHeader(hdr.std, data_size + sizeof(hdr), mcnt_++, true);
-    score::platform::internal::ConstructDltStandardHeaderExtra(hdr.stde, ecu_, tmsp);
-    score::platform::internal::ConstructDltExtendedHeader(hdr.ext, loglevel, nor, appId, ctxId);
+    score::platform::internal::ConstructDltStandardHeaderExtra(hdr.stde, ecu, tmsp);
+    score::platform::internal::ConstructDltExtendedHeader(hdr.ext, loglevel, nor, app_id, ctx_id);
 
     static constexpr auto kVectorStackCount = 2UL;
     std::array<iovec, kVectorStackCount> io_vec{};
@@ -264,7 +263,7 @@ void DltLogChannel::sendFTVerbose(score::cpp::span<const std::uint8_t> data,
     {  //  lock scope
         std::lock_guard<std::mutex> lock(mutex_);
         FlushUnprotected();
-        const auto send_result = out_.send(io_vec.data(), kVectorStackCount);
+        const auto send_result = out_.Send(io_vec.data(), kVectorStackCount);
         if (send_result.has_value() == false)
         {
             ++verbose_.send_failures_count;
@@ -282,7 +281,7 @@ void DltLogChannel::FlushUnprotected()
     SendUdp(true);
 }
 
-void DltLogChannel::flush()
+void DltLogChannel::Flush()
 {
     std::lock_guard<std::mutex> lock(mutex_);
     FlushUnprotected();

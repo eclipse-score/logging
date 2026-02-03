@@ -11,8 +11,8 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-#ifndef UNIX_DOMAIN_SERVER_H_
-#define UNIX_DOMAIN_SERVER_H_
+#ifndef SCORE_DATAROUTER_MOCKS_UNIX_DOMAIN_UNIX_DOMAIN_SERVER_H
+#define SCORE_DATAROUTER_MOCKS_UNIX_DOMAIN_UNIX_DOMAIN_SERVER_H
 
 #include "i_session.h"
 #include "unix_domain/unix_domain_common.h"
@@ -45,7 +45,7 @@ class UnixDomainServer
         {
         }
 
-        void pass_message(const std::string& message) const
+        void PassMessage(const std::string& message) const
         {
             if (last_message_.has_value())
             {
@@ -70,14 +70,14 @@ class UnixDomainServer
 namespace dummy_namespace
 {
 // dummy type to avoid warnings Wsuggest-final-types and Wsuggest-final-methods
-struct temp_marker final : UnixDomainServer::ISession
+struct TempMarker final : UnixDomainServer::ISession
 {
-    bool tick() override
+    bool Tick() override
     {
         return false;
     };
-    void on_command(const std::string&) override {}
-    void on_closed_by_peer() override {}
+    void OnCommand(const std::string&) override {}
+    void OnClosedByPeer() override {}
 };
 }  // namespace dummy_namespace
 
@@ -87,4 +87,4 @@ struct temp_marker final : UnixDomainServer::ISession
 }  // namespace platform
 }  // namespace score
 
-#endif  // UNIX_DOMAIN_SERVER_H_
+#endif  // SCORE_DATAROUTER_MOCKS_UNIX_DOMAIN_UNIX_DOMAIN_SERVER_H

@@ -26,8 +26,8 @@
  Initials    Date         Comment
  aw          13.01.2010   initial
  */
-#ifndef DLT_PROTOCOL_H
-#define DLT_PROTOCOL_H
+#ifndef SCORE_DATAROUTER_INCLUDE_DLT_DLT_PROTOCOL_H
+#define SCORE_DATAROUTER_INCLUDE_DLT_DLT_PROTOCOL_H
 #include "dlt/dlt_common.h"
 /**
   \defgroup protocolapi DLT Protocol API
@@ -193,42 +193,42 @@
 /**
   \}
 */
-static constexpr uint8_t FLST_NOR = 8;
-static constexpr uint8_t FLDA_NOR = 5;
-static constexpr uint8_t FLFI_NOR = 3;
-static constexpr uint8_t FLIF_NOR = 7;
-static constexpr uint8_t FLER_FILE_NOR = 9;
-static constexpr uint8_t FLER_NO_FILE_NOR = 5;
+static constexpr uint8_t kFlstNor = 8;
+static constexpr uint8_t kFldaNor = 5;
+static constexpr uint8_t kFlfiNor = 3;
+static constexpr uint8_t kFlifNor = 7;
+static constexpr uint8_t kFlerFileNor = 9;
+static constexpr uint8_t kFlerNoFileNor = 5;
 
 //! Defines the buffer size of a single file package which will be logged to dlt
-static constexpr uint16_t BUFFER_SIZE = 1024;
+static constexpr uint16_t kBufferSize = 1024;
 //! Defines the data package size  which will be logged to dlt
-static constexpr uint16_t PKG_FLAG_BYTES = 2 + 5 + 4;
-static constexpr uint16_t PKG_SERIALNO_BYTES = 4 + 4;
-static constexpr uint16_t PKG_PKGNO_BYTES = 4 + 4;
-static constexpr uint16_t PKG_RAWDATA_BYTES = 4 + 2 + BUFFER_SIZE;
-static constexpr uint16_t DATAPKGSIZE =
-    PKG_FLAG_BYTES + PKG_SERIALNO_BYTES + PKG_PKGNO_BYTES + PKG_RAWDATA_BYTES + PKG_FLAG_BYTES;
+static constexpr uint16_t kPkgFlagBytes = 2 + 5 + 4;
+static constexpr uint16_t kPkgSerialnoBytes = 4 + 4;
+static constexpr uint16_t kPkgPkgnoBytes = 4 + 4;
+static constexpr uint16_t kPkgRawdataBytes = 4 + 2 + kBufferSize;
+static constexpr uint16_t kDatapkgsize =
+    kPkgFlagBytes + kPkgSerialnoBytes + kPkgPkgnoBytes + kPkgRawdataBytes + kPkgFlagBytes;
 /* ! Error code for dlt_user_log_file_complete */
-static constexpr int16_t DLT_FILETRANSFER_ERROR_FILE_COMPLETE = -300;
+static constexpr int16_t kDltFiletransferErrorFileComplete = -300;
 /* ! Error code for dlt_user_log_file_complete */
-static constexpr int16_t DLT_FILETRANSFER_ERROR_FILE_COMPLETE1 = -301;
+static constexpr int16_t kDltFiletransferErrorFileCompletE1 = -301;
 /* ! Error code for dlt_user_log_file_complete */
-static constexpr int16_t DLT_FILETRANSFER_ERROR_FILE_COMPLETE2 = -302;
+static constexpr int16_t kDltFiletransferErrorFileCompletE2 = -302;
 /* ! Error code for dlt_user_log_file_complete */
-static constexpr int16_t DLT_FILETRANSFER_ERROR_FILE_COMPLETE3 = -303;
+static constexpr int16_t kDltFiletransferErrorFileCompletE3 = -303;
 /* ! Error code for dlt_user_log_file_head */
-static constexpr int16_t DLT_FILETRANSFER_ERROR_FILE_HEAD = -400;
+static constexpr int16_t kDltFiletransferErrorFileHead = -400;
 /* ! Error code for dlt_user_log_file_data */
-static constexpr int16_t DLT_FILETRANSFER_ERROR_FILE_DATA = -500;
+static constexpr int16_t kDltFiletransferErrorFileData = -500;
 /* ! Error code for dlt_user_log_file_data */
-static constexpr int16_t DLT_FILETRANSFER_ERROR_FILE_DATA_USER_BUFFER_FAILED = -501;
+static constexpr int16_t kDltFiletransferErrorFileDataUserBufferFailed = -501;
 /* ! Error code for dlt_user_log_file_end */
-static constexpr int16_t DLT_FILETRANSFER_ERROR_FILE_END = -600;
+static constexpr int16_t kDltFiletransferErrorFileEnd = -600;
 /* ! Error code for dlt_user_log_file_infoAbout */
-static constexpr int16_t DLT_FILETRANSFER_ERROR_INFO_ABOUT = -700;
+static constexpr int16_t kDltFiletransferErrorInfoAbout = -700;
 /* ! Error code for dlt_user_log_file_packagesCount */
-static constexpr int16_t DLT_FILETRANSFER_ERROR_PACKAGE_COUNT = -800;
+static constexpr int16_t kDltFiletransferErrorPackageCount = -800;
 
 inline std::optional<std::tuple<score::cpp::span<char> /*buffer*/, uint8_t /*args count*/>> PackageFileHeader(
     score::cpp::span<char> data_span,
@@ -321,7 +321,7 @@ inline std::optional<std::tuple<score::cpp::span<char> /*buffer*/, uint8_t /*arg
     type_info = DLT_TYPE_INFO_UINT | DLT_TYLE_16BIT;
     std::memcpy(std::next(buffer, buffersize), &(type_info), sizeof(type_info));
     buffersize += static_cast<uint32_t>(sizeof(type_info));
-    std::memcpy(std::next(buffer, buffersize), &BUFFER_SIZE, sizeof(uint16_t));
+    std::memcpy(std::next(buffer, buffersize), &kBufferSize, sizeof(uint16_t));
     buffersize += static_cast<uint32_t>(sizeof(uint16_t));
 
     // package flag "FLST"
@@ -334,7 +334,7 @@ inline std::optional<std::tuple<score::cpp::span<char> /*buffer*/, uint8_t /*arg
     buffersize += static_cast<uint32_t>(sizeof(transfer_type));
     // NOLINTEND(score-banned-function)
 
-    return std::tuple{data_span.subspan(0, buffersize), FLST_NOR};
+    return std::tuple{data_span.subspan(0, buffersize), kFlstNor};
 }
 
 inline std::optional<std::tuple<score::cpp::span<char> /*buffer*/, uint8_t /*args count*/>>
@@ -352,7 +352,7 @@ PackageFileData(score::cpp::span<char> buffer_in, FILE* file, const uint32_t ser
     // - Work with already closed file. A unit test already implemented but it sporadically raises a memory leak.
     // - Providing a value for the whence argument that is not SEEK_SET, SEEK_CUR, or SEEK_END(it's fixed to SEEK_SET).
     // So, safer to suppress it.
-    if (0 != fseek(file, (pkgno - 1) * BUFFER_SIZE, SEEK_SET))  // LCOV_EXCL_BR_LINE
+    if (0 != fseek(file, (pkgno - 1) * kBufferSize, SEEK_SET))  // LCOV_EXCL_BR_LINE
     {
         //  File access error:
         return std::nullopt;  // LCOV_EXCL_LINE
@@ -363,7 +363,7 @@ PackageFileData(score::cpp::span<char> buffer_in, FILE* file, const uint32_t ser
             static_cast<uint32_t>(sizeof(transfer_type)) + static_cast<uint32_t>(sizeof(type_info)) +
             static_cast<uint32_t>(sizeof(serialno)) + static_cast<uint32_t>(sizeof(type_info)) +
             static_cast<uint32_t>(sizeof(pkgno)) + static_cast<uint32_t>(sizeof(type_info)) +
-            static_cast<uint32_t>(sizeof(uint16_t)) + BUFFER_SIZE + static_cast<uint32_t>(sizeof(type_info)) +
+            static_cast<uint32_t>(sizeof(uint16_t)) + kBufferSize + static_cast<uint32_t>(sizeof(type_info)) +
             static_cast<uint32_t>(sizeof(string_length_data_1)) + static_cast<uint32_t>(sizeof(transfer_type));
         buffersize_max > buffer_in.size())
     {
@@ -402,7 +402,7 @@ PackageFileData(score::cpp::span<char> buffer_in, FILE* file, const uint32_t ser
     std::memcpy(std::next(buffer, buffersize), &(type_info), sizeof(type_info));
     buffersize += static_cast<uint32_t>(sizeof(type_info));
     readbytes = static_cast<uint32_t>(fread(
-        std::next(buffer, buffersize + static_cast<uint32_t>(sizeof(uint16_t))), sizeof(char), BUFFER_SIZE, file));
+        std::next(buffer, buffersize + static_cast<uint32_t>(sizeof(uint16_t))), sizeof(char), kBufferSize, file));
     std::memcpy(std::next(buffer, buffersize), &readbytes, sizeof(uint16_t));
     buffersize += static_cast<uint32_t>(sizeof(uint16_t));
     buffersize += readbytes;
@@ -418,7 +418,7 @@ PackageFileData(score::cpp::span<char> buffer_in, FILE* file, const uint32_t ser
     buffersize += static_cast<uint32_t>(sizeof(transfer_type));
     // NOLINTEND(score-banned-function)
 
-    return std::tuple{buffer_in.subspan(0, buffersize), FLDA_NOR};
+    return std::tuple{buffer_in.subspan(0, buffersize), kFldaNor};
 }
 
 inline std::optional<std::tuple<score::cpp::span<char> /*buffersize*/, uint8_t /*args count*/>> PackageFileEnd(
@@ -475,7 +475,7 @@ inline std::optional<std::tuple<score::cpp::span<char> /*buffersize*/, uint8_t /
     buffersize += static_cast<uint32_t>(sizeof(transfer_type));
     // NOLINTEND(score-banned-function)
 
-    return std::tuple(data_buffer.first(buffersize), FLFI_NOR);
+    return std::tuple(data_buffer.first(buffersize), kFlfiNor);
 }
 
 inline std::optional<std::tuple<score::cpp::span<char> /*buffer*/, uint8_t /*args count*/>> PackageFileError(
@@ -496,7 +496,7 @@ inline std::optional<std::tuple<score::cpp::span<char> /*buffer*/, uint8_t /*arg
     const auto alias_string_length = static_cast<uint16_t>(alias.size() + 1);
     uint32_t buffersize = 0;
     char* buffer = data_span.data();
-    uint8_t nor = FLER_FILE_NOR;
+    uint8_t nor = kFlerFileNor;
 
     // NOLINTBEGIN(score-banned-function) see below
     // memcpy used to copy construct FileEnd packet in raw memory
@@ -566,7 +566,7 @@ inline std::optional<std::tuple<score::cpp::span<char> /*buffer*/, uint8_t /*arg
         std::memcpy(std::next(buffer, buffersize), &packagecount, sizeof(packagecount));
         buffersize += static_cast<uint32_t>(sizeof(packagecount));
 
-        if (error_msg != "")
+        if (!error_msg.empty())
         {
             type_info = DLT_TYPE_INFO_STRG | DLT_SCOD_UTF8;
             const auto string_length_err = static_cast<uint16_t>(error_msg.size() + 1);
@@ -630,7 +630,7 @@ inline std::optional<std::tuple<score::cpp::span<char> /*buffer*/, uint8_t /*arg
         std::memcpy(std::next(buffer, buffersize), &transfer_type, sizeof(transfer_type));
         buffersize += static_cast<uint32_t>(sizeof(transfer_type));
 
-        nor = FLER_NO_FILE_NOR;
+        nor = kFlerNoFileNor;
     }
     // NOLINTEND(score-banned-function)
     return std::tuple{data_span.subspan(0, buffersize), nor};
@@ -734,7 +734,7 @@ inline std::optional<std::tuple<score::cpp::span<char> /*buffer*/, uint8_t /*arg
     buffersize += static_cast<uint32_t>(sizeof(transfer_type));
     // NOLINTEND(score-banned-function)
 
-    return std::tuple{data_span.subspan(0, buffersize), FLIF_NOR};
+    return std::tuple{data_span.subspan(0, buffersize), kFlifNor};
 }
 
-#endif /* DLT_PROTOCOL_H */
+#endif  // SCORE_DATAROUTER_INCLUDE_DLT_DLT_PROTOCOL_H

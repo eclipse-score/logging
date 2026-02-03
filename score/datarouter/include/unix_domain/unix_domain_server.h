@@ -11,8 +11,8 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-#ifndef UNIX_DOMAIN_SERVER_H_
-#define UNIX_DOMAIN_SERVER_H_
+#ifndef SCORE_DATAROUTER_INCLUDE_UNIX_DOMAIN_UNIX_DOMAIN_SERVER_H
+#define SCORE_DATAROUTER_INCLUDE_UNIX_DOMAIN_UNIX_DOMAIN_SERVER_H
 
 #include "i_session.h"
 #include "unix_domain/unix_domain_common.h"
@@ -46,9 +46,9 @@ class UnixDomainServer
       public:
         explicit SessionHandle(int fd) : socket_descriptor_(fd) {}
 
-        void pass_message(const std::string& message) const
+        void PassMessage(const std::string& message) const
         {
-            UnixDomainServer::pass_message(socket_descriptor_, message);
+            UnixDomainServer::PassMessage(socket_descriptor_, message);
         }
 
       private:
@@ -65,7 +65,7 @@ class UnixDomainServer
         SessionWrapper(UnixDomainServer* server, int fd)
             : server_(server),
               session_fd_(fd),
-              timeout_(timestamp_t::clock::now() + std::chrono::milliseconds(500)),
+              timeout_(TimestampT::clock::now() + std::chrono::milliseconds(500)),
               enqueued_(false),
               running_(false),
               to_delete_(false),
@@ -89,36 +89,36 @@ class UnixDomainServer
         }
 
         //  returns `false` when the session shall finish
-        bool handle_command(const std::string& in_string, score::cpp::optional<std::int32_t> peer_pid = score::cpp::nullopt);
+        bool HandleCommand(const std::string& in_string, score::cpp::optional<std::int32_t> peer_pid = score::cpp::nullopt);
         // returns information about `session_` existance. If the session does not exists (false), any associated
         // context can be deleted outright, otherwise(true) delay erasing.
-        bool try_enqueue_for_delete(bool by_peer = false);
-        bool is_marked_for_delete()
+        bool TryEnqueueForDelete(bool by_peer = false);
+        bool IsMarkedForDelete() const
         {
             return to_delete_;
         }
 
-        bool get_reset_closed_by_peer()
+        bool GetResetClosedByPeer()
         {
             bool by_peer = closed_by_peer_;
             closed_by_peer_ = false;
             return by_peer;
         }
 
-        bool tick();
-        void notify_closed_by_peer();
+        bool Tick();
+        void NotifyClosedByPeer();
 
-        void set_running();
-        bool reset_running(bool requeue);
+        void SetRunning();
+        bool ResetRunning(bool requeue);
 
         class SessionWrapperTest;
 
       private:
-        using timestamp_t = std::chrono::steady_clock::time_point;
+        using TimestampT = std::chrono::steady_clock::time_point;
 
         UnixDomainServer* server_;
         int session_fd_;
-        timestamp_t timeout_;
+        TimestampT timeout_;
 
         bool enqueued_;
         bool running_;
@@ -127,7 +127,7 @@ class UnixDomainServer
 
         std::unique_ptr<ISession> session_;
 
-        void enqueue_tick();
+        void EnqueueTick();
     };
 
     explicit UnixDomainServer(UnixDomainSockAddr addr,
@@ -136,9 +136,9 @@ class UnixDomainServer
         : server_exit_{false}, server_thread_{}, work_queue_{}, factory_(factory), signal_(std::move(signal))
     {
         server_thread_ = score::cpp::jthread([this, addr]() {
-            server_routine(addr);
+            ServerRoutine(addr);
         });
-        update_thread_name_server_routine();
+        UpdateThreadNameServerRoutine();
     }
 
     virtual ~UnixDomainServer()
@@ -166,23 +166,23 @@ class UnixDomainServer
         std::vector<pollfd> connection_pollfd_list;
     };
 
-    static void pass_message(std::int32_t fd, const std::string& message);
+    static void PassMessage(std::int32_t fd, const std::string& message);
 
-    void server_routine(UnixDomainSockAddr addr);
+    void ServerRoutine(UnixDomainSockAddr addr);
 
-    virtual void enqueue_tick_direct(std::int32_t fd);
+    virtual void EnqueueTickDirect(std::int32_t fd);
 
     //  returns true if the queue is still not empty:
-    bool process_queue(std::unordered_map<int, SessionWrapper>& connection_fd_map);
+    bool ProcessQueue(std::unordered_map<int, SessionWrapper>& connection_fd_map);
 
     // Methods to process connections
-    static void process_active_connections(ConnectionState& state);
-    static void process_idle_connections(ConnectionState& state);
-    void cleanup_all_connections(ConnectionState& state);
-    std::int32_t setup_server_socket(UnixDomainSockAddr& addr);
-    void process_server_iteration(ConnectionState& state, const std::int32_t server_fd, const std::int32_t timeout);
+    static void ProcessActiveConnections(ConnectionState& state);
+    static void ProcessIdleConnections(ConnectionState& state);
+    void CleanupAllConnections(ConnectionState& state);
+    std::int32_t SetupServerSocket(UnixDomainSockAddr& addr);
+    void ProcessServerIteration(ConnectionState& state, const std::int32_t server_fd, const std::int32_t timeout);
 
-    void update_thread_name_server_routine() noexcept;
+    void UpdateThreadNameServerRoutine() noexcept;
     std::atomic_bool server_exit_;
 
     score::cpp::jthread server_thread_;
@@ -196,14 +196,14 @@ class UnixDomainServer
 namespace dummy_namespace
 {
 // dummy type to avoid warnings Wsuggest-final-types and Wsuggest-final-methods
-struct temp_marker final : UnixDomainServer::ISession
+struct TempMarker final : UnixDomainServer::ISession
 {
-    bool tick() override
+    bool Tick() override
     {
         return false;
     };
-    void on_command(const std::string&) override {}
-    void on_closed_by_peer() override {}
+    void OnCommand(const std::string&) override {}
+    void OnClosedByPeer() override {}
 };
 }  // namespace dummy_namespace
 
@@ -211,4 +211,4 @@ struct temp_marker final : UnixDomainServer::ISession
 }  // namespace platform
 }  // namespace score
 
-#endif  // UNIX_DOMAIN_SERVER_H_
+#endif  // SCORE_DATAROUTER_INCLUDE_UNIX_DOMAIN_UNIX_DOMAIN_SERVER_H

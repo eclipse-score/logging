@@ -18,9 +18,9 @@ namespace score
 namespace platform
 {
 
-dltid_t convertToDltId(const score::mw::log::detail::LoggingIdentifier& logging_identifier)
+DltidT ConvertToDltId(const score::mw::log::detail::LoggingIdentifier& logging_identifier)
 {
-    return dltid_t{logging_identifier.GetStringView()};
+    return DltidT{logging_identifier.GetStringView()};
 }
 
 }  // namespace platform

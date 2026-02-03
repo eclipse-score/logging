@@ -24,7 +24,7 @@
 namespace score::logging
 {
 
-MEMCPY_SERIALIZABLE(score::common::visitor::payload_tags::text, score::platform::dltid_t)
+MEMCPY_SERIALIZABLE(score::common::visitor::payload_tags::text, score::platform::DltidT)
 // Suppress "AUTOSAR C++14 A18-9-4". The rule states: An argument to std::forward shall not be subsequently used.
 // Rationale: STRUCT_TRACEABLE is a macro, std::forward is from the macro definition
 // Suppress "AUTOSAR C++14 M3-2-3". The rule states: "A type, object or function that is used in

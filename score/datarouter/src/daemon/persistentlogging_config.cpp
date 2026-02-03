@@ -34,23 +34,23 @@ namespace platform
 namespace internal
 {
 
-const std::string DEFAULT_PERSISTENT_LOGGING_JSON_FILEPATH = "etc/persistent-logging.json";
+const std::string kDefaultPersistentLoggingJsonFilepath = "etc/persistent-logging.json";
 
-PersistentLoggingConfig readPersistentLoggingConfig(const std::string& filePath)
+PersistentLoggingConfig ReadPersistentLoggingConfig(const std::string& file_path)
 {
     using ReadResult = PersistentLoggingConfig::ReadResult;
 
     PersistentLoggingConfig config;
-    using unique_file_t = std::unique_ptr<std::FILE, decltype(&fclose)>;
-    unique_file_t fp(std::fopen(filePath.c_str(), "r"), &fclose);
+    using UniqueFileT = std::unique_ptr<std::FILE, decltype(&fclose)>;
+    UniqueFileT fp(std::fopen(file_path.c_str(), "r"), &fclose);
     if (nullptr == fp)
     {
-        config.readResult_ = ReadResult::ERROR_OPEN;
+        config.read_result = ReadResult::kErrorOpen;
         return config;
     }
-    std::string readBuffer(datarouter::JSON_READ_BUFFER_SIZE, '\0');
-    rapidjson::FileReadStream is(fp.get(), readBuffer.data(), readBuffer.size());
-    rapidjson::Document d = datarouter::createRJDocument();
+    std::string read_buffer(datarouter::kJsonReadBufferSize, '\0');
+    rapidjson::FileReadStream is(fp.get(), read_buffer.data(), read_buffer.size());
+    rapidjson::Document d = datarouter::CreateRjDocument();
     rapidjson::ParseResult ok = d.ParseStream(is);
     fp.reset();
 
@@ -58,13 +58,13 @@ PersistentLoggingConfig readPersistentLoggingConfig(const std::string& filePath)
     {
         score::mw::log::LogError() << "PersistentLoggingConfig:json parser error: "
                                  << std::string_view{rapidjson::GetParseError_En(ok.Code())};
-        config.readResult_ = ReadResult::ERROR_PARSE;
+        config.read_result = ReadResult::kErrorParse;
         return config;
     }
     if (false == d.HasMember("verbose_filters") || false == d.HasMember("nonverbose_filters"))
     {
         score::mw::log::LogError() << "PersistentLoggingConfig: json filter members not found.";
-        config.readResult_ = ReadResult::ERROR_CONTENT;
+        config.read_result = ReadResult::kErrorContent;
         return config;
     }
     const auto& verbose_filters = d["verbose_filters"];
@@ -72,7 +72,7 @@ PersistentLoggingConfig readPersistentLoggingConfig(const std::string& filePath)
     if (false == verbose_filters.IsArray() || false == nonverbose_filters.IsArray())
     {
         score::mw::log::LogError() << "PersistentLoggingConfig: json filters not array type.";
-        config.readResult_ = ReadResult::ERROR_CONTENT;
+        config.read_result = ReadResult::kErrorContent;
         return config;
     }
 
@@ -81,22 +81,22 @@ PersistentLoggingConfig readPersistentLoggingConfig(const std::string& filePath)
         if (false == itr.HasMember("appId") || false == itr.HasMember("ctxId") || false == itr.HasMember("logLevel"))
         {
             score::mw::log::LogError() << "PersistentLoggingConfig: json appid, ctxid, ll not found.";
-            config.readResult_ = ReadResult::ERROR_CONTENT;
+            config.read_result = ReadResult::kErrorContent;
             return config;
         }
-        const auto& appidValue = itr.FindMember("appId")->value;
-        const auto& ctxidValue = itr.FindMember("ctxId")->value;
-        const auto& loglevelValue = itr.FindMember("logLevel")->value;
-        if (false == appidValue.IsString() || false == ctxidValue.IsString() || false == loglevelValue.IsString())
+        const auto& appid_value = itr.FindMember("appId")->value;
+        const auto& ctxid_value = itr.FindMember("ctxId")->value;
+        const auto& loglevel_value = itr.FindMember("logLevel")->value;
+        if (false == appid_value.IsString() || false == ctxid_value.IsString() || false == loglevel_value.IsString())
         {
             score::mw::log::LogError() << "PersistentLoggingConfig: json appid, ctxid, ll not string type.";
-            config.readResult_ = ReadResult::ERROR_CONTENT;
+            config.read_result = ReadResult::kErrorContent;
             return config;
         }
-        config.verboseFilters_.emplace_back(
-            plogfilterdesc{score::mw::log::detail::LoggingIdentifier{appidValue.GetString()},
-                           score::mw::log::detail::LoggingIdentifier{ctxidValue.GetString()},
-                           static_cast<uint8_t>(logchannel_operations::ToLogLevel(loglevelValue.GetString()))});
+        config.verbose_filters.emplace_back(
+            Plogfilterdesc{score::mw::log::detail::LoggingIdentifier{appid_value.GetString()},
+                           score::mw::log::detail::LoggingIdentifier{ctxid_value.GetString()},
+                           static_cast<uint8_t>(logchannel_operations::ToLogLevel(loglevel_value.GetString()))});
     }
 
     for (const auto& itr : nonverbose_filters.GetArray())
@@ -104,12 +104,12 @@ PersistentLoggingConfig readPersistentLoggingConfig(const std::string& filePath)
         if (false == itr.IsString())
         {
             score::mw::log::LogError() << "PersistentLoggingConfig: non verbose filter not string type.";
-            config.readResult_ = ReadResult::ERROR_CONTENT;
+            config.read_result = ReadResult::kErrorContent;
             return config;
         }
-        config.nonVerboseFilters_.emplace_back(itr.GetString());
+        config.non_verbose_filters.emplace_back(itr.GetString());
     }
-    config.readResult_ = ReadResult::OK;
+    config.read_result = ReadResult::kOk;
     return config;
 }
 

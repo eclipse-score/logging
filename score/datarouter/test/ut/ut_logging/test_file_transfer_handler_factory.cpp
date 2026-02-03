@@ -57,7 +57,7 @@ TEST(FileTransferStreamHandlerFactoryTest,
 #else
     StubFileTransferHandlerFactory factory(output);
 #endif
-    std::unique_ptr<LogParser::TypeHandler> stream_handler = factory.create();
+    std::unique_ptr<LogParser::TypeHandler> stream_handler = factory.Create();
 
     // Check that the returned unique_ptr is not null
     ASSERT_NE(stream_handler, nullptr);

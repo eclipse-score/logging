@@ -19,7 +19,7 @@ namespace logging_daemon
 namespace logchannel_utility
 {
 
-const std::unordered_map<std::string, score::mw::log::LogLevel> loglevel_map = {
+const std::unordered_map<std::string, score::mw::log::LogLevel> kLoglevelMap = {
     {"kOff", score::mw::log::LogLevel::kOff},
     {"kFatal", score::mw::log::LogLevel::kFatal},
     {"kError", score::mw::log::LogLevel::kError},
@@ -28,19 +28,19 @@ const std::unordered_map<std::string, score::mw::log::LogLevel> loglevel_map = {
     {"kDebug", score::mw::log::LogLevel::kDebug},
     {"kVerbose", score::mw::log::LogLevel::kVerbose}};
 
-score::mw::log::LogLevel ToLogLevel(const std::string& logLevel)
+score::mw::log::LogLevel ToLogLevel(const std::string& log_level)
 {
-    score::mw::log::LogLevel mappedLevel = score::mw::log::LogLevel::kOff;
-    auto it = loglevel_map.find(logLevel);
-    if (it != loglevel_map.end())
+    score::mw::log::LogLevel mapped_level = score::mw::log::LogLevel::kOff;
+    auto it = kLoglevelMap.find(log_level);
+    if (it != kLoglevelMap.end())
     {
-        mappedLevel = it->second;
+        mapped_level = it->second;
     }
     else
     {
-        std::cerr << "Invalid Log Level String!!!:" << logLevel << std::endl;
+        std::cerr << "Invalid Log Level String!!!:" << log_level << std::endl;
     }
-    return mappedLevel;
+    return mapped_level;
 }
 std::string ToString(const score::mw::log::LogLevel level)
 {

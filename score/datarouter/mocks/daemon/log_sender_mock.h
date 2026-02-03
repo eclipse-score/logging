@@ -11,8 +11,8 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-#ifndef LOG_SENDER_MOCK_H_
-#define LOG_SENDER_MOCK_H_
+#ifndef SCORE_DATAROUTER_MOCKS_DAEMON_LOG_SENDER_MOCK_H
+#define SCORE_DATAROUTER_MOCKS_DAEMON_LOG_SENDER_MOCK_H
 
 #include <gmock/gmock.h>
 
@@ -48,8 +48,8 @@ class LogSenderMock : public ILogSender
                 SendFTVerbose,
                 (score::cpp::span<const std::uint8_t> data,
                  score::mw::log::LogLevel loglevel,
-                 dltid_t appId,
-                 dltid_t ctxId,
+                 DltidT app_id,
+                 DltidT ctx_id,
                  uint8_t nor,
                  uint32_t tmsp,
                  DltLogChannel& c),
@@ -62,4 +62,4 @@ class LogSenderMock : public ILogSender
 }  // namespace logging
 }  // namespace score
 
-#endif  // LOG_SENDER_MOCK_H_
+#endif  // SCORE_DATAROUTER_MOCKS_DAEMON_LOG_SENDER_MOCK_H

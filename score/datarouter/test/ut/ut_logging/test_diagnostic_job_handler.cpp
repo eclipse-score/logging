@@ -47,7 +47,7 @@ TEST_F(DiagnosticJobHandlerTest, ReadLogChannelNamesHandler_OK)
 
     EXPECT_CALL(dltlogserver_mock, ReadLogChannelNames()).Times(1);
 
-    handler->execute(dltlogserver_mock);
+    handler->Execute(dltlogserver_mock);
 }
 
 TEST_F(DiagnosticJobHandlerTest, ResetToDefaultHandler_OK)
@@ -56,7 +56,7 @@ TEST_F(DiagnosticJobHandlerTest, ResetToDefaultHandler_OK)
 
     EXPECT_CALL(dltlogserver_mock, ResetToDefault()).Times(1);
 
-    handler->execute(dltlogserver_mock);
+    handler->Execute(dltlogserver_mock);
 }
 
 TEST_F(DiagnosticJobHandlerTest, StoreDltConfigHandler_OK)
@@ -65,7 +65,7 @@ TEST_F(DiagnosticJobHandlerTest, StoreDltConfigHandler_OK)
 
     EXPECT_CALL(dltlogserver_mock, StoreDltConfig()).Times(1);
 
-    handler->execute(dltlogserver_mock);
+    handler->Execute(dltlogserver_mock);
 }
 
 TEST_F(DiagnosticJobHandlerTest, SetTraceStateHandler_OK)
@@ -74,7 +74,7 @@ TEST_F(DiagnosticJobHandlerTest, SetTraceStateHandler_OK)
 
     EXPECT_CALL(dltlogserver_mock, SetTraceState()).Times(1);
 
-    handler->execute(dltlogserver_mock);
+    handler->Execute(dltlogserver_mock);
 }
 
 TEST_F(DiagnosticJobHandlerTest, SetDefaultTraceStateHandler_OK)
@@ -83,33 +83,33 @@ TEST_F(DiagnosticJobHandlerTest, SetDefaultTraceStateHandler_OK)
 
     EXPECT_CALL(dltlogserver_mock, SetDefaultTraceState()).Times(1);
 
-    handler->execute(dltlogserver_mock);
+    handler->Execute(dltlogserver_mock);
 }
 
 TEST_F(DiagnosticJobHandlerTest, SetLogChannelThresholdHandler_OK)
 {
-    loglevel_t threshold = loglevel_t::kFatal;
-    score::platform::dltid_t channel = extractId("1", 1);
+    LoglevelT threshold = LoglevelT::kFatal;
+    score::platform::DltidT channel = ExtractId("1", 1);
 
     std::unique_ptr<IDiagnosticJobHandler> handler =
         std::make_unique<SetLogChannelThresholdHandler>(channel, threshold);
 
     EXPECT_CALL(dltlogserver_mock, SetLogChannelThreshold(channel, threshold)).Times(1);
 
-    handler->execute(dltlogserver_mock);
+    handler->Execute(dltlogserver_mock);
 }
 
 TEST_F(DiagnosticJobHandlerTest, SetLogLevelHandler_OK)
 {
-    score::platform::dltid_t app_id = extractId("1", 1);
-    score::platform::dltid_t ctx_id = extractId("2", 1);
-    threshold_t threshold = ThresholdCmd::UseDefault;
+    score::platform::DltidT app_id = ExtractId("1", 1);
+    score::platform::DltidT ctx_id = ExtractId("2", 1);
+    ThresholdT threshold = ThresholdCmd::kUseDefault;
 
     std::unique_ptr<IDiagnosticJobHandler> handler = std::make_unique<SetLogLevelHandler>(app_id, ctx_id, threshold);
 
     EXPECT_CALL(dltlogserver_mock, SetLogLevel(app_id, ctx_id, threshold)).Times(1);
 
-    handler->execute(dltlogserver_mock);
+    handler->Execute(dltlogserver_mock);
 }
 
 TEST_F(DiagnosticJobHandlerTest, SetMessagingFilteringStateHandler_OK)
@@ -120,45 +120,45 @@ TEST_F(DiagnosticJobHandlerTest, SetMessagingFilteringStateHandler_OK)
 
     EXPECT_CALL(dltlogserver_mock, SetMessagingFilteringState(enabled)).Times(1);
 
-    handler->execute(dltlogserver_mock);
+    handler->Execute(dltlogserver_mock);
 }
 
 TEST_F(DiagnosticJobHandlerTest, SetDefaultLogLevelHandler_OK)
 {
-    loglevel_t threshold = loglevel_t::kFatal;
+    LoglevelT threshold = LoglevelT::kFatal;
 
     std::unique_ptr<IDiagnosticJobHandler> handler = std::make_unique<SetDefaultLogLevelHandler>(threshold);
 
     EXPECT_CALL(dltlogserver_mock, SetDefaultLogLevel(threshold)).Times(1);
 
-    handler->execute(dltlogserver_mock);
+    handler->Execute(dltlogserver_mock);
 }
 
 TEST_F(DiagnosticJobHandlerTest, SetLogChannelAssignmentHandler_OK)
 {
-    score::platform::dltid_t app_id = extractId("1", 1);
-    score::platform::dltid_t ctx_id = extractId("2", 1);
-    score::platform::dltid_t channel = extractId("2", 1);
+    score::platform::DltidT app_id = ExtractId("1", 1);
+    score::platform::DltidT ctx_id = ExtractId("2", 1);
+    score::platform::DltidT channel = ExtractId("2", 1);
 
-    AssignmentAction assignment_flag = AssignmentAction::Add;
+    AssignmentAction assignment_flag = AssignmentAction::kAdd;
 
     std::unique_ptr<IDiagnosticJobHandler> handler =
         std::make_unique<SetLogChannelAssignmentHandler>(app_id, ctx_id, channel, assignment_flag);
 
     EXPECT_CALL(dltlogserver_mock, SetLogChannelAssignment(app_id, ctx_id, channel, assignment_flag)).Times(1);
 
-    handler->execute(dltlogserver_mock);
+    handler->Execute(dltlogserver_mock);
 }
 
 TEST_F(DiagnosticJobHandlerTest, SetDltOutputEnableHandler_OK)
 {
-    auto flag = config::DISABLE;
+    auto flag = config::kDisable;
 
     std::unique_ptr<IDiagnosticJobHandler> handler = std::make_unique<SetDltOutputEnableHandler>(flag);
 
     EXPECT_CALL(dltlogserver_mock, SetDltOutputEnable(flag)).Times(1);
 
-    handler->execute(dltlogserver_mock);
+    handler->Execute(dltlogserver_mock);
 }
 
 }  // namespace test

@@ -11,8 +11,8 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-#ifndef DLT_LOG_SERVER_MOCK_H_
-#define DLT_LOG_SERVER_MOCK_H_
+#ifndef SCORE_DATAROUTER_MOCKS_DAEMON_DLT_LOG_SERVER_MOCK_H
+#define SCORE_DATAROUTER_MOCKS_DAEMON_DLT_LOG_SERVER_MOCK_H
 
 #include <gmock/gmock.h>
 
@@ -30,23 +30,20 @@ namespace mock
 class DltLogServerMock : public IDltLogServer
 {
   public:
-    MOCK_METHOD(const std::string, ReadLogChannelNames, (), (override));
-    MOCK_METHOD(const std::string, ResetToDefault, (), (override));
-    MOCK_METHOD(const std::string, StoreDltConfig, (), (override));
-    MOCK_METHOD(const std::string, SetTraceState, (), (override));
-    MOCK_METHOD(const std::string, SetDefaultTraceState, (), (override));
-    MOCK_METHOD(const std::string, SetLogChannelThreshold, (score::platform::dltid_t, loglevel_t), (override));
-    MOCK_METHOD(const std::string,
-                SetLogLevel,
-                (score::platform::dltid_t, score::platform::dltid_t, threshold_t),
-                (override));
-    MOCK_METHOD(const std::string, SetMessagingFilteringState, (bool), (override));
-    MOCK_METHOD(const std::string, SetDefaultLogLevel, (loglevel_t), (override));
-    MOCK_METHOD(const std::string,
+    MOCK_METHOD(std::string, ReadLogChannelNames, (), (override));
+    MOCK_METHOD(std::string, ResetToDefault, (), (override));
+    MOCK_METHOD(std::string, StoreDltConfig, (), (override));
+    MOCK_METHOD(std::string, SetTraceState, (), (override));
+    MOCK_METHOD(std::string, SetDefaultTraceState, (), (override));
+    MOCK_METHOD(std::string, SetLogChannelThreshold, (score::platform::DltidT, LoglevelT), (override));
+    MOCK_METHOD(std::string, SetLogLevel, (score::platform::DltidT, score::platform::DltidT, ThresholdT), (override));
+    MOCK_METHOD(std::string, SetMessagingFilteringState, (bool), (override));
+    MOCK_METHOD(std::string, SetDefaultLogLevel, (LoglevelT), (override));
+    MOCK_METHOD(std::string,
                 SetLogChannelAssignment,
-                (score::platform::dltid_t, score::platform::dltid_t, score::platform::dltid_t, AssignmentAction),
+                (score::platform::DltidT, score::platform::DltidT, score::platform::DltidT, AssignmentAction),
                 (override));
-    MOCK_METHOD(const std::string, SetDltOutputEnable, (bool), (override));
+    MOCK_METHOD(std::string, SetDltOutputEnable, (bool), (override));
 };
 
 }  // namespace mock
@@ -55,4 +52,4 @@ class DltLogServerMock : public IDltLogServer
 }  // namespace logging
 }  // namespace score
 
-#endif  // DLT_LOG_SERVER_MOCK_H_
+#endif  // SCORE_DATAROUTER_MOCKS_DAEMON_DLT_LOG_SERVER_MOCK_H

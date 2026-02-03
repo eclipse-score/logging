@@ -23,7 +23,7 @@ class MockDltVerboseHandlerOutput : public DltVerboseHandler::IOutput
 {
   public:
     MOCK_METHOD(void,
-                sendVerbose,
+                SendVerbose,
                 (uint32_t, const score::mw::log::detail::log_entry_deserialization::LogEntryDeserializationReflection&),
                 (override));
     virtual ~MockDltVerboseHandlerOutput() = default;
@@ -34,11 +34,11 @@ TEST(DltVerboseHandlerTest, sendVerboseTest)
     MockDltVerboseHandlerOutput mock_dlt_output;
     DltVerboseHandler handler(mock_dlt_output);
 
-    const timestamp_t timestamp = score::os::HighResolutionSteadyClock::time_point{};
+    const TimestampT timestamp = score::os::HighResolutionSteadyClock::time_point{};
     const char* data = "data";
-    const bufsize_t data_size = static_cast<bufsize_t>(strlen(data));
+    const BufsizeT data_size = static_cast<BufsizeT>(strlen(data));
 
-    EXPECT_CALL(mock_dlt_output, sendVerbose(_, _)).Times(1);
+    EXPECT_CALL(mock_dlt_output, SendVerbose(_, _)).Times(1);
 
-    handler.handle(timestamp, data, data_size);
+    handler.Handle(timestamp, data, data_size);
 }

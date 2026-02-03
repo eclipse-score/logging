@@ -22,10 +22,10 @@ namespace internal
 
 // LCOV_EXCL_START (nothing to test because there is no implementation)
 // LogParser::TypeHandler
-void StubSysedrHandler::handle(timestamp_t /* timestamp */, const char* data, bufsize_t size) {}
+void StubSysedrHandler::Handle(TimestampT /* timestamp */, const char* data, BufsizeT size) {}
 
 // LogParser::AnyHandler
-void StubSysedrHandler::handle(const TypeInfo& type_info, timestamp_t timestamp, const char* data, bufsize_t size) {}
+void StubSysedrHandler::Handle(const TypeInfo& type_info, TimestampT timestamp, const char* data, BufsizeT size) {}
 
 // LCOV_EXCL_STOP
 

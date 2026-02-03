@@ -26,18 +26,18 @@
 
 namespace
 {
-std::atomic_bool exit_requested;
+std::atomic_bool gExitRequested;
 
-void signal_handler(std::int32_t /* signal */)
+void SignalHandler(std::int32_t /* signal */)
 {
-    exit_requested = true;
+    gExitRequested = true;
 }
 }  // namespace
 
 int main(std::int32_t argc, const char* argv[])
 {
     score::cpp::span<const char*> args(argv, static_cast<score::cpp::span<const char*>::size_type>(argc));
-    if (!score::logging::options::Options::parse(argc, const_cast<char* const*>(argv)))
+    if (!score::logging::options::Options::Parse(argc, const_cast<char* const*>(argv)))
     {
         //  Error messages have already been logged, just say goodbye.
         score::mw::log::LogError() << std::string_view(args.front()) << "Terminating because of errors in command line";
@@ -55,7 +55,7 @@ int main(std::int32_t argc, const char* argv[])
     {
         score::mw::log::LogError() << res.error();
     }
-    sig_handler.sa_handler = signal_handler;
+    sig_handler.sa_handler = SignalHandler;
     sig_handler.sa_mask = sig_set;
     sig_handler.sa_flags = 0;
     res = sig.SigAction(SIGTERM, sig_handler, old_sigaction);
@@ -63,9 +63,9 @@ int main(std::int32_t argc, const char* argv[])
     {
         score::mw::log::LogError() << res.error();
     }
-    score::logging::datarouter::datarouter_app_init();
-    score::logging::datarouter::datarouter_app_run(exit_requested);
-    score::logging::datarouter::datarouter_app_shutdown();
+    score::logging::datarouter::DatarouterAppInit();
+    score::logging::datarouter::DatarouterAppRun(gExitRequested);
+    score::logging::datarouter::DatarouterAppShutdown();
 
     return 0;
 }

@@ -74,12 +74,12 @@ std::string QuotaValueAsString(double quota) noexcept
     return ss.str();
 }
 
-DataRouter::DataRouter(score::mw::log::Logger& logger, SourceSetupCallback sourceCallback)
-    : stats_logger_(logger), sourceCallback_(sourceCallback)
+DataRouter::DataRouter(score::mw::log::Logger& logger, SourceSetupCallback source_callback)
+    : stats_logger_(logger), source_callback_(source_callback)
 {
 }
 
-DataRouter::MessagingSessionPtr DataRouter::new_source_session(
+DataRouter::MessagingSessionPtr DataRouter::NewSourceSession(
     int fd,
     const std::string name,
     const bool is_dlt_enabled,
@@ -87,7 +87,7 @@ DataRouter::MessagingSessionPtr DataRouter::new_source_session(
     const double quota,
     bool quota_enforcement_enabled,
     const pid_t client_pid,
-    const score::mw::log::NvConfig& nvConfig,
+    const score::mw::log::NvConfig& nv_config,
     score::mw::log::detail::ReaderFactoryPtr reader_factory)
 {
     //  It shall be safe to create shared memory reader as only single process - Datarouter daemon, shall be running
@@ -99,30 +99,30 @@ DataRouter::MessagingSessionPtr DataRouter::new_source_session(
         return nullptr;
     }
 
-    return new_source_session_impl(
-        name, is_dlt_enabled, std::move(handle), quota, quota_enforcement_enabled, std::move(reader), nvConfig);
+    return NewSourceSessionImpl(
+        name, is_dlt_enabled, std::move(handle), quota, quota_enforcement_enabled, std::move(reader), nv_config);
 }
 
-void DataRouter::show_source_statistics(uint16_t series_num)
+void DataRouter::ShowSourceStatistics(uint16_t series_num)
 {
     std::lock_guard<std::mutex> lock(subscriber_mutex_);
     stats_logger_.LogInfo() << "log stat #" << series_num;
-    for (auto& sourceSession : sources_)
+    for (const auto& source_session : sources_)
     {
-        sourceSession->show_stats();
+        source_session->ShowStats();
     }
 }
 
-std::unique_ptr<DataRouter::SourceSession> DataRouter::new_source_session_impl(
+std::unique_ptr<DataRouter::SourceSession> DataRouter::NewSourceSessionImpl(
     const std::string name,
     const bool is_dlt_enabled,
     SessionHandleVariant handle,
     const double quota,
     bool quota_enforcement_enabled,
     std::unique_ptr<score::mw::log::detail::ISharedMemoryReader> reader,
-    const score::mw::log::NvConfig& nvConfig)
+    const score::mw::log::NvConfig& nv_config)
 {
-    auto sourceSession =
+    auto source_session =
         std::make_unique<DataRouter::SourceSession>(*this,
                                                     std::move(reader),
                                                     name,
@@ -131,9 +131,9 @@ std::unique_ptr<DataRouter::SourceSession> DataRouter::new_source_session_impl(
                                                     quota,
                                                     quota_enforcement_enabled,
                                                     stats_logger_,
-                                                    std::make_unique<score::platform::internal::LogParser>(nvConfig));
+                                                    std::make_unique<score::platform::internal::LogParser>(nv_config));
 
-    if (!sourceSession)
+    if (!source_session)
     {
         return nullptr;
     }
@@ -143,17 +143,17 @@ std::unique_ptr<DataRouter::SourceSession> DataRouter::new_source_session_impl(
     // Insert is protected by subscriber_mutex_ held by caller (new_source_session_impl).
     // This relies on the calling convention that SourceSession is only constructed
     // from new_source_session_impl() which acquires the lock before construction.
-    std::ignore = sources_.insert(sourceSession.get());
+    std::ignore = sources_.insert(source_session.get());
 
-    if (sourceCallback_)
+    if (source_callback_)
     {
-        sourceCallback_(std::move(sourceSession->get_parser()));
+        source_callback_(std::move(source_session->GetParser()));
     }
     // persistent subscribers
-    return sourceSession;
+    return source_session;
 }
 
-bool DataRouter::SourceSession::tick()
+bool DataRouter::SourceSession::Tick()
 {
     if (local_subscriber_data_.lock()->detach_on_closed_processed)
     {
@@ -162,38 +162,38 @@ bool DataRouter::SourceSession::tick()
 
     // Phase 1: finalize a pending acquire if possible
     bool needs_fast_reschedule{false};
-    const bool acquire_finalized = tryFinalizeAcquisition(needs_fast_reschedule);
+    const bool acquire_finalized = TryFinalizeAcquisition(needs_fast_reschedule);
 
     uint64_t message_count_local = 0;
     uint64_t number_of_bytes_in_buffer = 0;
     std::chrono::microseconds transport_delay_local = std::chrono::microseconds::zero();
     auto start = score::os::HighResolutionSteadyClock::now();
 
-    processAndRouteLogMessages(message_count_local,
+    ProcessAndRouteLogMessages(message_count_local,
                                transport_delay_local,
                                number_of_bytes_in_buffer,
                                acquire_finalized,
                                needs_fast_reschedule);
 
-    update_and_log_stats(message_count_local, number_of_bytes_in_buffer, transport_delay_local, start);
+    UpdateAndLogStats(message_count_local, number_of_bytes_in_buffer, transport_delay_local, start);
 
     // NOTE: keep historical external API: tick() returns false.
     // Scheduler/tests rely on this; internal reschedule hint is tracked via needs_fast_reschedule.
     return false;
 }
 
-bool DataRouter::SourceSession::tryFinalizeAcquisition(bool& needs_fast_reschedule)
+bool DataRouter::SourceSession::TryFinalizeAcquisition(bool& needs_fast_reschedule)
 {
     std::optional<score::mw::log::detail::ReadAcquireResult> data_acquired_local;
 
-    data_acquired_local = command_data_.lock()->data_acquired_;
+    data_acquired_local = command_data_.lock()->data_acquired;
 
     if (data_acquired_local.has_value())
     {
         if (reader_->IsBlockReleasedByWriters(data_acquired_local.value().acquired_buffer))
         {
             std::ignore = reader_->NotifyAcquisitionSetReader(data_acquired_local.value());
-            command_data_.lock()->data_acquired_ = std::nullopt;
+            command_data_.lock()->data_acquired = std::nullopt;
 
             return true;
         }
@@ -206,7 +206,7 @@ bool DataRouter::SourceSession::tryFinalizeAcquisition(bool& needs_fast_reschedu
     return false;
 }
 
-void DataRouter::SourceSession::processAndRouteLogMessages(uint64_t& message_count_local,
+void DataRouter::SourceSession::ProcessAndRouteLogMessages(uint64_t& message_count_local,
                                                            std::chrono::microseconds& transport_delay_local,
                                                            uint64_t& number_of_bytes_in_buffer,
                                                            bool acquire_finalized_in_this_tick,
@@ -257,10 +257,10 @@ void DataRouter::SourceSession::processAndRouteLogMessages(uint64_t& message_cou
     if (detach_needed)
     {
         local_subscriber_data_.lock()->detach_on_closed_processed = true;
-        process_detached_logs(number_of_bytes_in_buffer);
+        ProcessDetachedLogs(number_of_bytes_in_buffer);
     }
 
-    bool enabled_logging = local_subscriber_data_.lock()->enabled_logging_at_server_;
+    bool enabled_logging = local_subscriber_data_.lock()->enabled_logging_at_server;
 
     {
         auto cmd = command_data_.lock();
@@ -279,7 +279,7 @@ void DataRouter::SourceSession::processAndRouteLogMessages(uint64_t& message_cou
                 if ((peek_bytes.has_value() && peek_bytes.value() > 0) ||
                     (cmd->ticks_without_write > kTicksWithoutAcquireWhileNoWrites))
                 {
-                    cmd->acquire_requested = request_acquire();
+                    cmd->acquire_requested = RequestAcquire();
                     needs_fast_reschedule = cmd->acquire_requested;
                 }
                 else
@@ -290,7 +290,7 @@ void DataRouter::SourceSession::processAndRouteLogMessages(uint64_t& message_cou
             }
             else
             {
-                cmd->acquire_requested = request_acquire();
+                cmd->acquire_requested = RequestAcquire();
                 needs_fast_reschedule = cmd->acquire_requested;
             }
         }
@@ -300,7 +300,7 @@ void DataRouter::SourceSession::processAndRouteLogMessages(uint64_t& message_cou
         std::chrono::duration_cast<std::chrono::microseconds>(std::chrono::steady_clock::now() - current_timestamp);
 }
 
-void DataRouter::SourceSession::process_detached_logs(uint64_t& number_of_bytes_in_buffer)
+void DataRouter::SourceSession::ProcessDetachedLogs(uint64_t& number_of_bytes_in_buffer)
 {
     const auto number_of_bytes_in_buffer_result_detached = reader_->ReadDetached(
         [this](const auto& registration) noexcept {
@@ -319,10 +319,10 @@ void DataRouter::SourceSession::process_detached_logs(uint64_t& number_of_bytes_
     stats_logger_.LogError() << name << ": detached logs processed: " << number_of_bytes_in_buffer_result_detached;
 }
 
-void DataRouter::SourceSession::update_and_log_stats(uint64_t message_count_local,
-                                                     uint64_t number_of_bytes_in_buffer,
-                                                     std::chrono::microseconds transport_delay_local,
-                                                     score::os::HighResolutionSteadyClock::time_point start)
+void DataRouter::SourceSession::UpdateAndLogStats(uint64_t message_count_local,
+                                                  uint64_t number_of_bytes_in_buffer,
+                                                  std::chrono::microseconds transport_delay_local,
+                                                  score::os::HighResolutionSteadyClock::time_point start)
 {
     {
         auto stats = stats_data_.lock();
@@ -353,10 +353,10 @@ void DataRouter::SourceSession::update_and_log_stats(uint64_t message_count_loca
         stats->max_bytes_in_buffer = std::max(stats->max_bytes_in_buffer, number_of_bytes_in_buffer);
         stats->transport_delay = std::max(stats->transport_delay, transport_delay_local);
         stats->time_spent_reading +=
-            std::chrono::duration_cast<std::chrono::microseconds>(score::platform::timestamp_t::clock::now() - start);
+            std::chrono::duration_cast<std::chrono::microseconds>(score::platform::TimestampT::clock::now() - start);
     }
 
-    checkAndSetQuotaEnforcement();
+    CheckAndSetQuotaEnforcement();
 }
 
 DataRouter::SourceSession::SourceSession(DataRouter& router,
@@ -379,10 +379,10 @@ DataRouter::SourceSession::SourceSession(DataRouter& router,
       handle_(std::move(handle)),
       stats_logger_(stats_logger)
 {
-    local_subscriber_data_.lock()->enabled_logging_at_server_ = is_dlt_enabled;
+    local_subscriber_data_.lock()->enabled_logging_at_server = is_dlt_enabled;
     {
         auto stats = stats_data_.lock();
-        stats->quota_KBps = quota;
+        stats->quota_k_bps = quota;
         stats->quota_enforcement_enabled = quota_enforcement_enabled;
         stats->name = name;
     }
@@ -391,11 +391,11 @@ DataRouter::SourceSession::SourceSession(DataRouter& router,
         auto stats = stats_data_.lock();
         if (stats->name == "DR")
         {
-            constexpr double newQuotaValue = std::numeric_limits<double>::max();
+            constexpr double kNewQuotaValue = std::numeric_limits<double>::max();
             stats_logger_.LogInfo() << "Override quota value for Datarouter (to be unlimited). Old value: "
-                                    << QuotaValueAsString(stats->quota_KBps)
-                                    << ", new value: " << QuotaValueAsString(newQuotaValue);
-            stats->quota_KBps = newQuotaValue;
+                                    << QuotaValueAsString(stats->quota_k_bps)
+                                    << ", new value: " << QuotaValueAsString(kNewQuotaValue);
+            stats->quota_k_bps = kNewQuotaValue;
         }
     }
 }
@@ -410,7 +410,7 @@ DataRouter::SourceSession::~SourceSession()
     stats_logger_.LogInfo() << "Cleaning up source session for " << stats_data_.lock()->name;
 }
 
-void DataRouter::SourceSession::checkAndSetQuotaEnforcement()
+void DataRouter::SourceSession::CheckAndSetQuotaEnforcement()
 {
     auto stats = stats_data_.lock();
     if (!stats->quota_overlimit_detected && stats->quota_enforcement_enabled)
@@ -427,28 +427,28 @@ void DataRouter::SourceSession::checkAndSetQuotaEnforcement()
             return;
         }
 
-        const auto rate_KBps =
+        const auto rate_k_bps =
             static_cast<double>(stats->totalsize) * 1000. / 1024. / static_cast<double>(tstat_in_msec);
 
-        stats_logger_.LogInfo() << stats->name << "quota status. rate: " << rate_KBps
-                                << ", quota_KBps_: " << QuotaValueAsString(stats->quota_KBps)
+        stats_logger_.LogInfo() << stats->name << "quota status. rate: " << rate_k_bps
+                                << ", quota_KBps_: " << QuotaValueAsString(stats->quota_k_bps)
                                 << ", totalsize_: " << stats->totalsize << ", tstat_in_msec: " << tstat_in_msec;
 
-        if (rate_KBps > stats->quota_KBps)
+        if (rate_k_bps > stats->quota_k_bps)
         {
             stats_logger_.LogError() << stats->name
-                                     << ": exceeded the quota. quota enforcement set. rate: " << rate_KBps
-                                     << ", quota_KBps: " << QuotaValueAsString(stats->quota_KBps);
+                                     << ": exceeded the quota. quota enforcement set. rate: " << rate_k_bps
+                                     << ", quota_KBps: " << QuotaValueAsString(stats->quota_k_bps);
             stats->quota_overlimit_detected = true;
         }
     }
 }
 
-void DataRouter::SourceSession::show_stats()
+void DataRouter::SourceSession::ShowStats()
 {
     uint64_t message_count{0};
     uint64_t totalsize{0};
-    double quota_KBps{0.0};
+    double quota_k_bps{0.0};
     bool quota_enforcement_enabled{false};
     bool quota_overlimit_detected{false};
     std::chrono::microseconds time_spent_reading{};
@@ -462,7 +462,7 @@ void DataRouter::SourceSession::show_stats()
         auto stats = stats_data_.lock();
         message_count = stats->message_count;
         totalsize = stats->totalsize;
-        quota_KBps = stats->quota_KBps;
+        quota_k_bps = stats->quota_k_bps;
         quota_enforcement_enabled = stats->quota_enforcement_enabled;
         quota_overlimit_detected = stats->quota_overlimit_detected;
         time_spent_reading = stats->time_spent_reading;
@@ -501,7 +501,7 @@ void DataRouter::SourceSession::show_stats()
     }
 
     auto tstat_in_msec = std::chrono::duration_cast<std::chrono::milliseconds>(current_time - last_start);
-    auto rate_KBps = static_cast<double>(totalsize) * 1000. / 1024. / static_cast<double>(tstat_in_msec.count());
+    auto rate_k_bps = static_cast<double>(totalsize) * 1000. / 1024. / static_cast<double>(tstat_in_msec.count());
 
     auto [time_between_calls, time_to_process] = [this]() noexcept {
         auto subs_data = local_subscriber_data_.lock();
@@ -509,8 +509,8 @@ void DataRouter::SourceSession::show_stats()
     }();
 
     stats_logger_.LogInfo() << name << ": count " << message_count << ", size " << totalsize
-                            << " B, rate: " << rate_KBps << " KBps"
-                            << ", quota rate: " << QuotaValueAsString(quota_KBps)
+                            << " B, rate: " << rate_k_bps << " KBps"
+                            << ", quota rate: " << QuotaValueAsString(quota_k_bps)
                             << ", quota enforcement: " << quota_overlimit_detected
                             << ", read_time:" << time_spent_reading.count() << " us"
                             << ", transp_delay:" << transport_delay.count() << " us"
@@ -521,10 +521,10 @@ void DataRouter::SourceSession::show_stats()
                             << ", messages dropped: " << message_count_dropped << " (accumulated)"
                             << ", IPC count: " << count_acquire_requests;
 
-    if (rate_KBps > quota_KBps && quota_enforcement_enabled)
+    if (rate_k_bps > quota_k_bps && quota_enforcement_enabled)
     {
-        stats_logger_.LogError() << name << ": exceeded the quota of " << QuotaValueAsString(quota_KBps)
-                                 << "KBps, rate " << rate_KBps << " KBps";
+        stats_logger_.LogError() << name << ": exceeded the quota of " << QuotaValueAsString(quota_k_bps)
+                                 << "KBps, rate " << rate_k_bps << " KBps";
     }
     if (quota_overlimit_detected)
     {
@@ -532,12 +532,12 @@ void DataRouter::SourceSession::show_stats()
     }
 }
 
-bool DataRouter::SourceSession::request_acquire()
+bool DataRouter::SourceSession::RequestAcquire()
 {
     const bool acquire_result =
         score::cpp::visit(score::cpp::overload(
                        [](UnixDomainServer::SessionHandle& handle) {
-                           handle.pass_message("<");
+                           handle.PassMessage("<");
                            return true;
                        },
                        [](score::cpp::pmr::unique_ptr<score::platform::internal::daemon::ISessionHandle>& handle) {
@@ -556,14 +556,14 @@ bool DataRouter::SourceSession::request_acquire()
     return acquire_result;
 }
 
-void DataRouter::SourceSession::on_acquire_response(const score::mw::log::detail::ReadAcquireResult& acq)
+void DataRouter::SourceSession::OnAcquireResponse(const score::mw::log::detail::ReadAcquireResult& acq)
 {
     auto cmd = command_data_.lock();
-    cmd->data_acquired_ = acq;
+    cmd->data_acquired = acq;
     cmd->block_expected_to_be_next = GetExpectedNextAcquiredBlockId(acq);
 }
 
-void DataRouter::SourceSession::on_closed_by_peer()
+void DataRouter::SourceSession::OnClosedByPeer()
 {
     command_data_.lock()->command_detach_on_closed = true;
 }

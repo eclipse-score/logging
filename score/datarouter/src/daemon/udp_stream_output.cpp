@@ -22,16 +22,16 @@
 #include <sys/socket.h>
 #include <system_error>
 
-score::logging::dltserver::UdpStreamOutput::UdpStreamOutput(const char* dstAddr,
-                                                          uint16_t dstPort,
-                                                          const char* multicastInterface,
+score::logging::dltserver::UdpStreamOutput::UdpStreamOutput(const char* dst_addr,
+                                                          uint16_t dst_port,
+                                                          const char* multicast_interface,
                                                           std::unique_ptr<score::os::Socket> socket_instance,
                                                           score::os::Vlan& vlan)
     : socket_{-1}, dst_{}, pthread_{score::os::Pthread::Default()}, socket_instance_{std::move(socket_instance)}
 {
     dst_.sin_family = AF_INET;
-    dst_.sin_port = htons(dstPort);
-    if (dstAddr == nullptr || inet_aton(dstAddr, &dst_.sin_addr) == 0)
+    dst_.sin_port = htons(dst_port);
+    if (dst_addr == nullptr || inet_aton(dst_addr, &dst_.sin_addr) == 0)
     {
         dst_.sin_addr.s_addr = INADDR_ANY;
     }
@@ -55,9 +55,9 @@ score::logging::dltserver::UdpStreamOutput::UdpStreamOutput(const char* dstAddr,
     }
 
     {
-        constexpr int32_t SOCK_OPT_ENABLE = 1;
+        constexpr int32_t kSockOptEnable = 1;
         const auto ret_setsockopt_reuseport =
-            socket_instance_->setsockopt(socket_, SOL_SOCKET, SO_REUSEPORT, &SOCK_OPT_ENABLE, sizeof(int));
+            socket_instance_->setsockopt(socket_, SOL_SOCKET, SO_REUSEPORT, &kSockOptEnable, sizeof(int));
         if (!ret_setsockopt_reuseport.has_value())
         {
             const auto error_string = ret_setsockopt_reuseport.error().ToString();
@@ -68,9 +68,9 @@ score::logging::dltserver::UdpStreamOutput::UdpStreamOutput(const char* dstAddr,
     {
         //  On QNX when the buffer is smaller than the message we are trying to send _sendto_ failes with negative
         //  code 64 K is the maximum length of the DLT message.
-        constexpr std::int32_t socket_sndbuf_size = 64L * 1024UL;
-        const auto ret_setsockopt_sndbuf = socket_instance_->setsockopt(
-            socket_, SOL_SOCKET, SO_SNDBUF, &socket_sndbuf_size, sizeof(socket_sndbuf_size));
+        constexpr std::int32_t kSocketSndbufSize = 64L * 1024UL;
+        const auto ret_setsockopt_sndbuf =
+            socket_instance_->setsockopt(socket_, SOL_SOCKET, SO_SNDBUF, &kSocketSndbufSize, sizeof(kSocketSndbufSize));
         if (!ret_setsockopt_sndbuf.has_value())
         {
             const auto error_string = ret_setsockopt_sndbuf.error().ToString();
@@ -79,9 +79,9 @@ score::logging::dltserver::UdpStreamOutput::UdpStreamOutput(const char* dstAddr,
     }
 
     {
-        constexpr int32_t SOCK_OPT_ENABLE_REUSEADDR = 1;
+        constexpr int32_t kSockOptEnableReuseaddr = 1;
         const auto ret_setsockopt_reuseaddress =
-            socket_instance_->setsockopt(socket_, SOL_SOCKET, SO_REUSEADDR, &SOCK_OPT_ENABLE_REUSEADDR, sizeof(int));
+            socket_instance_->setsockopt(socket_, SOL_SOCKET, SO_REUSEADDR, &kSockOptEnableReuseaddr, sizeof(int));
         if (!ret_setsockopt_reuseaddress.has_value())
         {
             const auto error_string = ret_setsockopt_reuseaddress.error().ToString();
@@ -89,13 +89,13 @@ score::logging::dltserver::UdpStreamOutput::UdpStreamOutput(const char* dstAddr,
         }
     }
 
-    if (multicastInterface != nullptr)
+    if (multicast_interface != nullptr)
     {
-        const std::string_view strViewMulticastInterface{multicastInterface};
-        if (strViewMulticastInterface.length() != 0)
+        const std::string_view str_view_multicast_interface{multicast_interface};
+        if (!str_view_multicast_interface.empty())
         {
             struct in_addr addr{};
-            if (inet_aton(multicastInterface, &addr) != 0)
+            if (inet_aton(multicast_interface, &addr) != 0)
             {
                 if (setsockopt(socket_, IPPROTO_IP, IP_MULTICAST_IF, &addr, sizeof(addr)) == -1)
                 {
@@ -112,7 +112,7 @@ score::logging::dltserver::UdpStreamOutput::UdpStreamOutput(const char* dstAddr,
             }
             else
             {
-                std::cerr << "ERROR: Invalid multicast interface address: " << multicastInterface
+                std::cerr << "ERROR: Invalid multicast interface address: " << multicast_interface
                           << " "
                           // coverity[autosar_cpp14_m19_3_1_violation]
                           << std::system_category().message(errno) << std::endl;
@@ -136,7 +136,7 @@ Justification:
     static_cast<void>(vlan);
 // coverity[autosar_cpp14_a16_0_1_violation] see above
 #else
-    constexpr std::uint8_t kDltPcpPriority = 1u;
+    constexpr std::uint8_t kDltPcpPriority = 1U;
     const auto pcp_result = vlan.SetVlanPriorityOfSocket(kDltPcpPriority, socket_);
     if (!pcp_result.has_value())
     {
@@ -168,13 +168,13 @@ score::logging::dltserver::UdpStreamOutput::UdpStreamOutput(UdpStreamOutput&& fr
     from.socket_ = -1;
 }
 
-score::cpp::expected_blank<score::os::Error> score::logging::dltserver::UdpStreamOutput::bind(const char* srcAddr,
-                                                                                   uint16_t srcPort) noexcept
+score::cpp::expected_blank<score::os::Error> score::logging::dltserver::UdpStreamOutput::Bind(const char* src_addr,
+                                                                                   uint16_t src_port) noexcept
 {
     struct sockaddr_in src{};
     src.sin_family = AF_INET;
-    src.sin_port = htons(srcPort);
-    if (srcAddr == nullptr || inet_aton(srcAddr, &src.sin_addr) == 0)
+    src.sin_port = htons(src_port);
+    if (src_addr == nullptr || inet_aton(src_addr, &src.sin_addr) == 0)
     {
         src.sin_addr.s_addr = INADDR_ANY;
     }
@@ -195,19 +195,19 @@ score::cpp::expected_blank<score::os::Error> score::logging::dltserver::UdpStrea
         - This is safe because sockaddr_in and sockaddr have the same initial structure (`__SOCKADDR_COMMON`).
     */
     // coverity[autosar_cpp14_m5_2_8_violation]
-    const auto addr = static_cast<const struct sockaddr*>(sockaddr_void_ptr);
+    const auto* const addr = static_cast<const struct sockaddr*>(sockaddr_void_ptr);
 
     const auto ret = socket_instance_->bind(socket_, addr, sizeof(src));
     if (!ret.has_value())
     {
         auto errstr = ret.error().ToString();
-        std::cerr << "ERROR: (UDP) socket cannot bind to (" << (srcAddr != nullptr ? srcAddr : "any") << ":" << srcPort
-                  << "): " << errstr << std::endl;
+        std::cerr << "ERROR: (UDP) socket cannot bind to (" << (src_addr != nullptr ? src_addr : "any") << ":"
+                  << src_port << "): " << errstr << std::endl;
     }
     return ret;
 }
 
-score::cpp::expected<std::int32_t, score::os::Error> score::logging::dltserver::UdpStreamOutput::send(
+score::cpp::expected<std::int32_t, score::os::Error> score::logging::dltserver::UdpStreamOutput::Send(
     score::cpp::span<mmsghdr> mmsg) noexcept
 {
     for (auto& msg : mmsg)
@@ -223,7 +223,7 @@ score::cpp::expected<std::int32_t, score::os::Error> score::logging::dltserver::
 }
 
 // Used to send single big message:
-score::cpp::expected<std::int64_t, score::os::Error> score::logging::dltserver::UdpStreamOutput::send(const iovec* iovec_tab,
+score::cpp::expected<std::int64_t, score::os::Error> score::logging::dltserver::UdpStreamOutput::Send(const iovec* iovec_tab,
                                                                                            const size_t size) noexcept
 {
     struct msghdr msg{};

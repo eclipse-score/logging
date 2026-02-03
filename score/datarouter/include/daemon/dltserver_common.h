@@ -11,8 +11,8 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-#ifndef DLTSERVER_COMMON_H
-#define DLTSERVER_COMMON_H
+#ifndef SCORE_DATAROUTER_INCLUDE_DAEMON_DLTSERVER_COMMON_H
+#define SCORE_DATAROUTER_INCLUDE_DAEMON_DLTSERVER_COMMON_H
 
 #include "dlt/dltid.h"
 #include "logparser/logparser.h"
@@ -24,9 +24,9 @@ namespace logging
 namespace dltserver
 {
 
-using score::platform::bufsize_t;
-using score::platform::dltid_t;
-using score::platform::timestamp_t;
+using score::platform::BufsizeT;
+using score::platform::DltidT;
+using score::platform::TimestampT;
 using score::platform::TypeInfo;
 using score::platform::internal::LogParser;
 
@@ -34,4 +34,4 @@ using score::platform::internal::LogParser;
 }  // namespace logging
 }  // namespace score
 
-#endif  // DLTSERVER_COMMON_H
+#endif  // SCORE_DATAROUTER_INCLUDE_DAEMON_DLTSERVER_COMMON_H

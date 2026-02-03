@@ -69,38 +69,38 @@ class DltSetLogLevelTest : public ::testing::Test
     {
         const std::string complete_test_path = "score/datarouter/test/ut/etc/datarouter/";
 
-        gPerLogConfOk = readPersistentLoggingConfig(complete_test_path + std::string("persistent-logging.json"));
-        gPerLogConfErrOpn = readPersistentLoggingConfig("persistent-ln");
+        gPerLogConfOk = ReadPersistentLoggingConfig(complete_test_path + std::string("persistent-logging.json"));
+        gPerLogConfErrOpn = ReadPersistentLoggingConfig("persistent-ln");
         gPerLogConfErrParse =
-            readPersistentLoggingConfig(complete_test_path + std::string("persistent-logging_test_1.json"));
+            ReadPersistentLoggingConfig(complete_test_path + std::string("persistent-logging_test_1.json"));
         gPerLogConfErrContent1 =
-            readPersistentLoggingConfig(complete_test_path + std::string("persistent-logging_test_2.json"));
+            ReadPersistentLoggingConfig(complete_test_path + std::string("persistent-logging_test_2.json"));
         gPerLogConfErrContent2 =
-            readPersistentLoggingConfig(complete_test_path + std::string("persistent-logging_test_3.json"));
+            ReadPersistentLoggingConfig(complete_test_path + std::string("persistent-logging_test_3.json"));
         gPerLogConfErrContent3 =
-            readPersistentLoggingConfig(complete_test_path + std::string("persistent-logging_test_4.json"));
+            ReadPersistentLoggingConfig(complete_test_path + std::string("persistent-logging_test_4.json"));
         gPerLogConfErrContent4 =
-            readPersistentLoggingConfig(complete_test_path + std::string("persistent-logging_test_5.json"));
+            ReadPersistentLoggingConfig(complete_test_path + std::string("persistent-logging_test_5.json"));
         gPerLogConfErrContent5 =
-            readPersistentLoggingConfig(complete_test_path + std::string("persistent-logging_test_6.json"));
+            ReadPersistentLoggingConfig(complete_test_path + std::string("persistent-logging_test_6.json"));
     }
     virtual void TearDown() override {}
 };
 
 TEST_F(DltSetLogLevelTest, JSON_OK)
 {
-    EXPECT_TRUE(gPerLogConfOk.readResult_ == score::platform::internal::PersistentLoggingConfig::ReadResult::OK);
-    auto& verbose_filters = gPerLogConfOk.verboseFilters_;
-    auto& non_verbose_filters = gPerLogConfOk.nonVerboseFilters_;
+    EXPECT_TRUE(gPerLogConfOk.read_result == score::platform::internal::PersistentLoggingConfig::ReadResult::kOk);
+    auto& verbose_filters = gPerLogConfOk.verbose_filters;
+    auto& non_verbose_filters = gPerLogConfOk.non_verbose_filters;
     VerbFilterType conv_verbose_filter;
     for (const auto& filter : verbose_filters)
     {
         char temp_buf[8] = {0};
-        std::memcpy(temp_buf, filter.appid_.GetStringView().data(), 4);
+        std::memcpy(temp_buf, filter.appid.GetStringView().data(), 4);
         std::string app_id(temp_buf);
-        std::memcpy(temp_buf, filter.ctxid_.GetStringView().data(), 4);
+        std::memcpy(temp_buf, filter.ctxid.GetStringView().data(), 4);
         std::string ctxid(temp_buf);
-        conv_verbose_filter.emplace_back(app_id, ctxid, filter.logLevel_);
+        conv_verbose_filter.emplace_back(app_id, ctxid, filter.log_level);
     }
 
     using LmbTpl = std::tuple<const std::string, const std::string, const int>;
@@ -123,44 +123,44 @@ TEST_F(DltSetLogLevelTest, JSON_OK)
 
 TEST_F(DltSetLogLevelTest, NO_JSON_FILE)
 {
-    EXPECT_TRUE(gPerLogConfErrOpn.readResult_ ==
-                score::platform::internal::PersistentLoggingConfig::ReadResult::ERROR_OPEN);
+    EXPECT_TRUE(gPerLogConfErrOpn.read_result ==
+                score::platform::internal::PersistentLoggingConfig::ReadResult::kErrorOpen);
 }
 
 TEST_F(DltSetLogLevelTest, JSON_FILE_ERROR)
 {
-    EXPECT_TRUE(gPerLogConfErrParse.readResult_ ==
-                score::platform::internal::PersistentLoggingConfig::ReadResult::ERROR_PARSE);
+    EXPECT_TRUE(gPerLogConfErrParse.read_result ==
+                score::platform::internal::PersistentLoggingConfig::ReadResult::kErrorParse);
 }
 
 TEST_F(DltSetLogLevelTest, JSON_ERROR_NO_FILTERS)
 {
-    EXPECT_TRUE(gPerLogConfErrContent1.readResult_ ==
-                score::platform::internal::PersistentLoggingConfig::ReadResult::ERROR_CONTENT);
+    EXPECT_TRUE(gPerLogConfErrContent1.read_result ==
+                score::platform::internal::PersistentLoggingConfig::ReadResult::kErrorContent);
 }
 
 TEST_F(DltSetLogLevelTest, JSON_ERROR_VERBOSE_FILTERS)
 {
-    EXPECT_TRUE(gPerLogConfErrContent2.readResult_ ==
-                score::platform::internal::PersistentLoggingConfig::ReadResult::ERROR_CONTENT);
+    EXPECT_TRUE(gPerLogConfErrContent2.read_result ==
+                score::platform::internal::PersistentLoggingConfig::ReadResult::kErrorContent);
 }
 
 TEST_F(DltSetLogLevelTest, JSON_ERROR_VERBOSE_FILTERS_NOT_STRING)
 {
-    EXPECT_TRUE(gPerLogConfErrContent3.readResult_ ==
-                score::platform::internal::PersistentLoggingConfig::ReadResult::ERROR_CONTENT);
+    EXPECT_TRUE(gPerLogConfErrContent3.read_result ==
+                score::platform::internal::PersistentLoggingConfig::ReadResult::kErrorContent);
 }
 
 TEST_F(DltSetLogLevelTest, JSON_ERROR_NON_VERBOSE_FILTERS_NOT_STRING)
 {
-    EXPECT_TRUE(gPerLogConfErrContent4.readResult_ ==
-                score::platform::internal::PersistentLoggingConfig::ReadResult::ERROR_CONTENT);
+    EXPECT_TRUE(gPerLogConfErrContent4.read_result ==
+                score::platform::internal::PersistentLoggingConfig::ReadResult::kErrorContent);
 }
 
 TEST_F(DltSetLogLevelTest, JSON_ERROR_NON_VERBOSE_FILTERS)
 {
-    EXPECT_TRUE(gPerLogConfErrContent5.readResult_ ==
-                score::platform::internal::PersistentLoggingConfig::ReadResult::ERROR_CONTENT);
+    EXPECT_TRUE(gPerLogConfErrContent5.read_result ==
+                score::platform::internal::PersistentLoggingConfig::ReadResult::kErrorContent);
 }
 
 }  // namespace internal

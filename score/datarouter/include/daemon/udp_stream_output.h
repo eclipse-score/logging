@@ -11,8 +11,8 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-#ifndef UDP_STREAM_OUTPUT_H_
-#define UDP_STREAM_OUTPUT_H_
+#ifndef SCORE_DATAROUTER_INCLUDE_DAEMON_UDP_STREAM_OUTPUT_H
+#define SCORE_DATAROUTER_INCLUDE_DAEMON_UDP_STREAM_OUTPUT_H
 
 #include "score/os/pthread.h"
 #include "score/os/socket_impl.h"
@@ -39,9 +39,9 @@ namespace dltserver
 class UdpStreamOutput
 {
   public:
-    UdpStreamOutput(const char* dstAddr,
-                    uint16_t dstPort,
-                    const char* multicastInterface,
+    UdpStreamOutput(const char* dst_addr,
+                    uint16_t dst_port,
+                    const char* multicast_interface,
                     std::unique_ptr<score::os::Socket> socket_instance = std::make_unique<score::os::SocketImpl>(),
                     score::os::Vlan& vlan = score::os::Vlan::instance());
 
@@ -49,12 +49,12 @@ class UdpStreamOutput
     UdpStreamOutput(const UdpStreamOutput&) = delete;
     UdpStreamOutput(UdpStreamOutput&& from) noexcept;
 
-    score::cpp::expected_blank<score::os::Error> bind(const char* srcAddr = nullptr, uint16_t srcPort = 0) noexcept;
+    score::cpp::expected_blank<score::os::Error> Bind(const char* src_addr = nullptr, uint16_t src_port = 0) noexcept;
 
-    score::cpp::expected<std::int32_t, score::os::Error> send(score::cpp::span<mmsghdr> mmsg) noexcept;
+    score::cpp::expected<std::int32_t, score::os::Error> Send(score::cpp::span<mmsghdr> mmsg) noexcept;
 
     // Used to send single big message:
-    score::cpp::expected<std::int64_t, score::os::Error> send(const iovec* iovec_tab, const size_t size) noexcept;
+    score::cpp::expected<std::int64_t, score::os::Error> Send(const iovec* iovec_tab, const size_t size) noexcept;
 
   private:
     int socket_;
@@ -67,4 +67,4 @@ class UdpStreamOutput
 }  // namespace logging
 }  // namespace score
 
-#endif  // UDP_STREAM_OUTPUT_H_
+#endif  // SCORE_DATAROUTER_INCLUDE_DAEMON_UDP_STREAM_OUTPUT_H

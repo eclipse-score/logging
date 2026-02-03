@@ -65,32 +65,32 @@ class DltNonverboseHandlerTest : public ::testing::Test
 TEST_F(DltNonverboseHandlerTest, HandleShouldCallSendNonVerbose)
 {
     TypeInfo type_info;
-    type_info.typeName = "score::platform::datarouter::test::TestTraceableStruct";
-    timestamp_t timestamp = score::os::HighResolutionSteadyClock::now();
+    type_info.type_name = "score::platform::datarouter::test::TestTraceableStruct";
+    TimestampT timestamp = score::os::HighResolutionSteadyClock::now();
     const char* data = "TestData";
-    bufsize_t size = 10;
+    BufsizeT size = 10;
 
     score::mw::log::config::NvMsgDescriptor descriptor;
-    type_info.nvMsgDesc = &descriptor;
+    type_info.nv_msg_desc = &descriptor;
 
-    handler_->handle(type_info, timestamp, data, size);
+    handler_->Handle(type_info, timestamp, data, size);
 }
 
 TEST(DltNonverboseHandler_T, HandleShouldNotCallSendNonVerboseWhenDescriptorIsNull)
 {
     TypeInfo type_info;
-    type_info.typeName = "score::platform::datarouter::test::TestTraceableStruct";
-    type_info.nvMsgDesc = nullptr;
-    timestamp_t timestamp = score::os::HighResolutionSteadyClock::now();
+    type_info.type_name = "score::platform::datarouter::test::TestTraceableStruct";
+    type_info.nv_msg_desc = nullptr;
+    TimestampT timestamp = score::os::HighResolutionSteadyClock::now();
     const char data[] = "TestLogData";
-    bufsize_t size = sizeof(data);
+    BufsizeT size = sizeof(data);
 
     MockDltOutput mock_output;
     DltNonverboseHandler handler(mock_output);
 
     EXPECT_CALL(mock_output, SendNonVerbose(_, _, _, _)).Times(0);
 
-    handler.handle(type_info, timestamp, data, size);
+    handler.Handle(type_info, timestamp, data, size);
 }
 
 TEST(DltNonverboseHandler_T, HandleCallSendNonVerboseWhenDltMsgDesc)
@@ -107,11 +107,11 @@ TEST(DltNonverboseHandler_T, HandleCallSendNonVerboseWhenDltMsgDesc)
     DltNonverboseHandler handler(mock_output);
 
     TypeInfo type_info;
-    type_info.typeName = "score::platform::datarouter::test::TestTraceableStruct";
-    type_info.nvMsgDesc = &kDescriptor;
+    type_info.type_name = "score::platform::datarouter::test::TestTraceableStruct";
+    type_info.nv_msg_desc = &kDescriptor;
 
-    timestamp_t timestamp = score::os::HighResolutionSteadyClock::now();
+    TimestampT timestamp = score::os::HighResolutionSteadyClock::now();
     const char data[] = "TestData";
-    bufsize_t size = sizeof(data);
-    handler.handle(type_info, timestamp, data, size);
+    BufsizeT size = sizeof(data);
+    handler.Handle(type_info, timestamp, data, size);
 }

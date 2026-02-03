@@ -23,7 +23,7 @@ namespace logging_daemon
 namespace logchannel_utility
 {
 
-score::mw::log::LogLevel ToLogLevel(const std::string& logLevel);
+score::mw::log::LogLevel ToLogLevel(const std::string& log_level);
 
 std::string ToString(const score::mw::log::LogLevel level);
 

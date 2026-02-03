@@ -11,8 +11,8 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-#ifndef SCORE_DATAROUTER_INCLUDE_DAEMON_LOG_ENTRY_DESERIALIZATION_VISITOR_H_
-#define SCORE_DATAROUTER_INCLUDE_DAEMON_LOG_ENTRY_DESERIALIZATION_VISITOR_H_
+#ifndef SCORE_DATAROUTER_INCLUDE_DAEMON_LOG_ENTRY_DESERIALIZATION_VISITOR_H
+#define SCORE_DATAROUTER_INCLUDE_DAEMON_LOG_ENTRY_DESERIALIZATION_VISITOR_H
 
 #include "score/mw/log/detail/common/log_entry_deserialize.h"
 #include "static_reflection_with_serialization/serialization/for_logging.h"
@@ -26,6 +26,9 @@ namespace visitor
 
 namespace dlt_server_logging = ::score::mw::log::detail::log_entry_deserialization;
 
+// NOLINTBEGIN(readability-identifier-naming): follow naming convention in visit.h and for_logging.h under the
+// score::common::visitor namespace
+
 //  Design rationale: It was decided to provide overload of the custom type i.e. SerializedVectorData instead of generic
 //  solution due to simplicity of implementation. The goal of the change is to optimize passing data as pointer to
 //  shared memory data instead of allocating and passing it through std::vector which happens when using default
@@ -37,7 +40,7 @@ inline void deserialize(const vector_serialized<A, S>& serial,
                         deserializer_helper<A>& a,
                         dlt_server_logging::SerializedVectorData& t)
 {
-    using subsize_s_t = const subsize_serialized<A>;
+    using SubsizeST = const subsize_serialized<A>;
     typename A::offset_t offset;
     deserialize(serial.offset, a, offset);
     if (offset == 0)
@@ -46,7 +49,7 @@ inline void deserialize(const vector_serialized<A, S>& serial,
         detail::clear(t);
         return;
     }
-    const auto vector_size_location = a.template address<subsize_s_t>(offset);
+    const auto vector_size_location = a.template address<SubsizeST>(offset);
     if (vector_size_location == nullptr)
     {
         // error condition already set by a.address()
@@ -57,7 +60,7 @@ inline void deserialize(const vector_serialized<A, S>& serial,
     deserialize(*vector_size_location, a, subsize);
     const std::size_t n = subsize / sizeof(S);
 
-    const auto vector_contents_offset = static_cast<typename A::offset_t>(offset + sizeof(subsize_s_t));
+    const auto vector_contents_offset = static_cast<typename A::offset_t>(offset + sizeof(SubsizeST));
     const S* const vector_contents_address = a.template address<const S>(vector_contents_offset, n);
     if (vector_contents_address == nullptr)
     {
@@ -68,7 +71,7 @@ inline void deserialize(const vector_serialized<A, S>& serial,
     //  data from series of bytes to C++ structures. This is the crucial place where it is done.
     //  It is safe because the serialization method encodes the length of the payload.
     //  Serialized payload in this case is just a series of elements which have the size of one byte.
-    const auto vector_data_address =
+    const auto* const vector_data_address =
         // coverity[autosar_cpp14_m5_2_8_violation]
         static_cast<const std::uint8_t*>(static_cast<const void*>(vector_contents_address));
     t.data = score::cpp::span{vector_data_address, static_cast<std::uint32_t>(n)};
@@ -85,8 +88,10 @@ inline auto visit_as(serialized_visitor<A>& /*unused*/, const T& /*unused*/)
     return vector_serialized_descriptor<A, std::uint8_t>();
 }
 
+// NOLINTEND(readability-identifier-naming)
+
 }  //  namespace visitor
 }  //  namespace common
 }  //  namespace score
 
-#endif  //  SCORE_DATAROUTER_INCLUDE_DAEMON_LOG_ENTRY_DESERIALIZATION_VISITOR_H_
+#endif  //  SCORE_DATAROUTER_INCLUDE_DAEMON_LOG_ENTRY_DESERIALIZATION_VISITOR_H

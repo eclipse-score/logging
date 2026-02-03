@@ -11,8 +11,8 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-#ifndef I_LOG_SENDER_H_
-#define I_LOG_SENDER_H_
+#ifndef SCORE_DATAROUTER_INCLUDE_DAEMON_I_LOG_SENDER_H
+#define SCORE_DATAROUTER_INCLUDE_DAEMON_I_LOG_SENDER_H
 
 #include "score/mw/log/log_level.h"
 #include "score/datarouter/include/daemon/dlt_log_channel.h"
@@ -42,8 +42,8 @@ class ILogSender
         DltLogChannel& c) = 0;
     virtual void SendFTVerbose(score::cpp::span<const std::uint8_t> data,
                                mw::log::LogLevel loglevel,
-                               dltid_t appId,
-                               dltid_t ctxId,
+                               DltidT app_id,
+                               DltidT ctx_id,
                                uint8_t nor,
                                uint32_t tmsp,
                                DltLogChannel& c) = 0;
@@ -54,4 +54,4 @@ class ILogSender
 }  // namespace logging
 }  // namespace score
 
-#endif  // I_LOG_SENDER_H_
+#endif  // SCORE_DATAROUTER_INCLUDE_DAEMON_I_LOG_SENDER_H

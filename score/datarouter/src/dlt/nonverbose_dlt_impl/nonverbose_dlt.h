@@ -43,7 +43,7 @@ class DltNonverboseHandler : public LogParser::AnyHandler
     };
     explicit DltNonverboseHandler(IOutput& output);
 
-    virtual void handle(const TypeInfo& type_info, timestamp_t timestamp, const char* data, bufsize_t size) override;
+    virtual void Handle(const TypeInfo& type_info, TimestampT timestamp, const char* data, BufsizeT size) override;
 
   private:
     score::mw::log::Logger& logger_;

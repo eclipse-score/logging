@@ -11,8 +11,8 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-#ifndef VERBOSE_DLT_H_
-#define VERBOSE_DLT_H_
+#ifndef SCORE_DATAROUTER_INCLUDE_DAEMON_VERBOSE_DLT_H
+#define SCORE_DATAROUTER_INCLUDE_DAEMON_VERBOSE_DLT_H
 
 #include "dlt/logentry_trace.h"
 #include "logparser/logparser.h"
@@ -35,7 +35,7 @@ class DltVerboseHandler : public LogParser::TypeHandler
     class IOutput
     {
       public:
-        virtual void sendVerbose(
+        virtual void SendVerbose(
             uint32_t tmsp,
             const score::mw::log::detail::log_entry_deserialization::LogEntryDeserializationReflection& entry) = 0;
 
@@ -46,7 +46,7 @@ class DltVerboseHandler : public LogParser::TypeHandler
         : LogParser::TypeHandler(), logger_(score::mw::log::CreateLogger("vL", "Verbose logging")), output_(output)
     {
     }
-    virtual void handle(timestamp_t timestamp, const char* data, bufsize_t size) override;
+    virtual void Handle(TimestampT timestamp, const char* data, BufsizeT size) override;
 
   private:
     score::mw::log::Logger& logger_;
@@ -57,4 +57,4 @@ class DltVerboseHandler : public LogParser::TypeHandler
 }  // namespace logging
 }  // namespace score
 
-#endif  // VERBOSE_DLT_H_
+#endif  // SCORE_DATAROUTER_INCLUDE_DAEMON_VERBOSE_DLT_H

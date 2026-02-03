@@ -49,17 +49,17 @@ std::string TypeName()
 
 TEST(SocketserverConfigTest, FilterFactoryDefault)
 {
-    const auto factory = ::score::platform::datarouter::getFilterFactory();
+    const auto factory = ::score::platform::datarouter::GetFilterFactory();
     EXPECT_TRUE(factory);
     EXPECT_FALSE(factory("", ::score::platform::DataFilter{}));
 }
 
 TEST(SocketserverConfigTest, FilterFactoryLogEntry)
 {
-    const auto factory = ::score::platform::datarouter::getFilterFactory();
+    const auto factory = ::score::platform::datarouter::GetFilterFactory();
 
     using ::score::mw::log::detail::LogEntry;
-    using ::score::platform::dltid_t;
+    using ::score::platform::DltidT;
     using ::score::platform::internal::LogEntryFilter;
     using S = ::score::common::visitor::logging_serializer;
 
@@ -114,85 +114,85 @@ std::string PrepareLogChannelsPath(const std::string& file_name)
     return override_path;
 }
 
-// readStaticDlt unit tests
+// ReadStaticDlt unit tests
 
 TEST(SocketserverConfigTest, ReadCorrectLogChannelsNoErrorsExpected)
 {
-    const auto result = readStaticDlt(PrepareLogChannelsPath("log-channels.json").c_str());
+    const auto result = ReadStaticDlt(PrepareLogChannelsPath("log-channels.json").c_str());
     EXPECT_TRUE(result.has_value());
     EXPECT_THAT(result.value().channels, SizeIs(3));
-    EXPECT_THAT(result.value().channelAssignments, SizeIs(2));
-    EXPECT_THAT(result.value().messageThresholds, SizeIs(3));
-    EXPECT_TRUE(result.value().filteringEnabled);
+    EXPECT_THAT(result.value().channel_assignments, SizeIs(2));
+    EXPECT_THAT(result.value().message_thresholds, SizeIs(3));
+    EXPECT_TRUE(result.value().filtering_enabled);
 }
 
 TEST(SocketserverConfigTest, ReadNonExistingPathErrorExpected)
 {
-    const auto result = readStaticDlt("");
+    const auto result = ReadStaticDlt("");
     EXPECT_FALSE(result.has_value());
 }
 
 TEST(SocketserverConfigTest, ReadEmptyLogChannelErrorExpected)
 {
-    const auto result = readStaticDlt(PrepareLogChannelsPath("log-channels-empty.json").c_str());
+    const auto result = ReadStaticDlt(PrepareLogChannelsPath("log-channels-empty.json").c_str());
     EXPECT_FALSE(result.has_value());
 }
 
 TEST(SocketserverConfigTest, JsonWithoutChannelsErrorExpected)
 {
-    const auto result = readStaticDlt(PrepareLogChannelsPath("log-channels-without-channels.json").c_str());
+    const auto result = ReadStaticDlt(PrepareLogChannelsPath("log-channels-without-channels.json").c_str());
     EXPECT_FALSE(result.has_value());
 }
 
 TEST(SocketserverConfigTest, JsonEmptyChannelsErrorExpected)
 {
-    const auto result = readStaticDlt(PrepareLogChannelsPath("log-channels-empty-channels.json").c_str());
+    const auto result = ReadStaticDlt(PrepareLogChannelsPath("log-channels-empty-channels.json").c_str());
     EXPECT_FALSE(result.has_value());
 }
 
 TEST(SocketserverConfigTest, JsonFilteringEnabledExpectConfigFilterTrue)
 {
-    const auto result = readStaticDlt(PrepareLogChannelsPath("log-channels-filtering-enabled.json").c_str());
+    const auto result = ReadStaticDlt(PrepareLogChannelsPath("log-channels-filtering-enabled.json").c_str());
     EXPECT_TRUE(result.has_value());
-    EXPECT_TRUE(result.value().filteringEnabled);
+    EXPECT_TRUE(result.value().filtering_enabled);
 }
 
 TEST(SocketserverConfigTest, JsonQuotasEnabledExpectConfigFilterTrue)
 {
-    const auto result = readStaticDlt(PrepareLogChannelsPath("log-channels-quotas.json").c_str());
+    const auto result = ReadStaticDlt(PrepareLogChannelsPath("log-channels-quotas.json").c_str());
     ASSERT_TRUE(result.has_value());
-    EXPECT_EQ(result.value().throughput.overallMbps, 100);
-    EXPECT_FALSE(result.value().quotaEnforcementEnabled);
-    EXPECT_THAT(result.value().throughput.applicationsKbps, SizeIs(1));
+    EXPECT_EQ(result.value().throughput.overall_mbps, 100);
+    EXPECT_FALSE(result.value().quota_enforcement_enabled);
+    EXPECT_THAT(result.value().throughput.applications_kbps, SizeIs(1));
 }
 
 TEST(SocketserverConfigTest, JsonQuotasEnabledActivated)
 {
-    const auto result = readStaticDlt(PrepareLogChannelsPath("log-channels-quotas-activated.json").c_str());
+    const auto result = ReadStaticDlt(PrepareLogChannelsPath("log-channels-quotas-activated.json").c_str());
     ASSERT_TRUE(result.has_value());
-    EXPECT_TRUE(result.value().quotaEnforcementEnabled);
+    EXPECT_TRUE(result.value().quota_enforcement_enabled);
 }
 
 TEST(SocketserverConfigTest, JsonQuotasEnabledDeactivated)
 {
-    const auto result = readStaticDlt(PrepareLogChannelsPath("log-channels-quotas-deactivated.json").c_str());
+    const auto result = ReadStaticDlt(PrepareLogChannelsPath("log-channels-quotas-deactivated.json").c_str());
     ASSERT_TRUE(result.has_value());
-    EXPECT_FALSE(result.value().quotaEnforcementEnabled);
+    EXPECT_FALSE(result.value().quota_enforcement_enabled);
 }
 
 TEST(SocketserverConfigTest, JsonOldFormatErrorExpected)
 {
-    const auto result = readStaticDlt(PrepareLogChannelsPath("log-channels-old-format.json").c_str());
+    const auto result = ReadStaticDlt(PrepareLogChannelsPath("log-channels-old-format.json").c_str());
     EXPECT_FALSE(result.has_value());
 }
 
-// readDlt unit tests
+// ReadDlt unit tests
 
 TEST(SocketserverConfigTest, PersistentDictionaryEmptyJsonErrorExpected)
 {
     StrictMock<MockPersistentDictionary> pd;
     EXPECT_CALL(pd, GetString(StrEq("dltConfig"), "{}")).Times(1).WillOnce(Return("{}"));
-    const auto result = readDlt(pd);
+    const auto result = ReadDlt(pd);
     EXPECT_THAT(result.channels, SizeIs(0));
 }
 
@@ -210,11 +210,11 @@ TEST(SocketserverConfigTest, PersistentDictionaryCorrectJsonNoErrorsExpected)
 
     StrictMock<MockPersistentDictionary> pd;
     EXPECT_CALL(pd, GetString(StrEq("dltConfig"), "{}")).Times(1).WillOnce(Return(expected_json));
-    const auto result = readDlt(pd);
-    EXPECT_TRUE(result.filteringEnabled);
+    const auto result = ReadDlt(pd);
+    EXPECT_TRUE(result.filtering_enabled);
     EXPECT_THAT(result.channels, SizeIs(3));
-    EXPECT_THAT(result.channelAssignments, SizeIs(2));
-    EXPECT_THAT(result.messageThresholds, SizeIs(3));
+    EXPECT_THAT(result.channel_assignments, SizeIs(2));
+    EXPECT_THAT(result.message_thresholds, SizeIs(3));
 }
 
 TEST(SocketserverConfigTest, PersistentDictionaryEmptyChannelsErrorExpected)
@@ -227,7 +227,7 @@ TEST(SocketserverConfigTest, PersistentDictionaryEmptyChannelsErrorExpected)
 
     StrictMock<MockPersistentDictionary> pd;
     EXPECT_CALL(pd, GetString(StrEq("dltConfig"), "{}")).Times(1).WillOnce(Return(expected_json));
-    const auto result = readDlt(pd);
+    const auto result = ReadDlt(pd);
     EXPECT_THAT(result.channels, SizeIs(0));
 }
 
@@ -245,26 +245,26 @@ TEST(SocketserverConfigTest, PersistentDictionaryNoFilteringEnabledExpectTrueByD
 
     StrictMock<MockPersistentDictionary> pd;
     EXPECT_CALL(pd, GetString(StrEq("dltConfig"), "{}")).Times(1).WillOnce(Return(expected_json));
-    const auto result = readDlt(pd);
-    EXPECT_TRUE(result.filteringEnabled);
+    const auto result = ReadDlt(pd);
+    EXPECT_TRUE(result.filtering_enabled);
 }
 
-// writeDltEnabled unit test
+// WriteDltEnabled unit test
 
 TEST(SocketserverConfigTest, WriteDltEnabledCallSetBoolExpected)
 {
     StrictMock<MockPersistentDictionary> pd;
     EXPECT_CALL(pd, SetBool(StrEq("dltOutputEnabled"), true)).Times(1);
-    writeDltEnabled(true, pd);
+    WriteDltEnabled(true, pd);
 }
 
-// readDltEnabled unit test
+// ReadDltEnabled unit test
 
 TEST(SocketserverConfigTest, ReadDltEnabledTrueResultExpected)
 {
     StrictMock<MockPersistentDictionary> pd;
     EXPECT_CALL(pd, GetBool(StrEq("dltOutputEnabled"), true)).WillOnce(Return(true));
-    const auto result = readDltEnabled(pd);
+    const auto result = ReadDltEnabled(pd);
     EXPECT_TRUE(result);
 }
 
@@ -278,13 +278,13 @@ TEST(SocketserverConfigTest, WriteDltFilledPersistentConfigNoErrorExpected)
         "\"111\":\"kVerbose\"}}}"};
     StrictMock<MockPersistentDictionary> pd;
     score::logging::dltserver::PersistentConfig config;
-    config.filteringEnabled = true;
+    config.filtering_enabled = true;
     config.channels["3491"] = {mw::log::LogLevel::kVerbose};
-    config.defaultThreshold = mw::log::LogLevel::kVerbose;
-    config.channelAssignments[dltid_t("000")][dltid_t("111")].push_back(dltid_t("22222"));
-    config.messageThresholds[dltid_t("000")][dltid_t("111")] = mw::log::LogLevel::kVerbose;
+    config.default_threshold = mw::log::LogLevel::kVerbose;
+    config.channel_assignments[DltidT("000")][DltidT("111")].push_back(DltidT("22222"));
+    config.message_thresholds[DltidT("000")][DltidT("111")] = mw::log::LogLevel::kVerbose;
     EXPECT_CALL(pd, SetString(StrEq("dltConfig"), expected_json)).Times(1);
-    writeDlt(config, pd);
+    WriteDlt(config, pd);
 }
 
 // defaultThresold typo tests
@@ -293,34 +293,34 @@ TEST(SocketserverConfigTest, WriteDltFilledPersistentConfigNoErrorExpected)
 
 TEST(SocketserverConfigTest, DefaultThresholdValuePresentTakeIt)
 {
-    const auto result = readStaticDlt(PrepareLogChannelsPath("log-channels-default-threshold.json").c_str());
+    const auto result = ReadStaticDlt(PrepareLogChannelsPath("log-channels-default-threshold.json").c_str());
     EXPECT_TRUE(result.has_value());
     const auto expected_log_level_threshold = mw::log::LogLevel::kDebug;
-    EXPECT_EQ(result.value().defaultThreshold, expected_log_level_threshold);
+    EXPECT_EQ(result.value().default_threshold, expected_log_level_threshold);
 }
 
 TEST(SocketserverConfigTest, DefaultThresoldValuePresentTakeIt)
 {
-    const auto result = readStaticDlt(PrepareLogChannelsPath("log-channels-default-thresold.json").c_str());
+    const auto result = ReadStaticDlt(PrepareLogChannelsPath("log-channels-default-thresold.json").c_str());
     EXPECT_TRUE(result.has_value());
     const auto expected_log_level_threshold = mw::log::LogLevel::kDebug;
-    EXPECT_EQ(result.value().defaultThreshold, expected_log_level_threshold);
+    EXPECT_EQ(result.value().default_threshold, expected_log_level_threshold);
 }
 
 TEST(SocketserverConfigTest, BothValuesPresentTakeDefaultThreshold)
 {
-    const auto result = readStaticDlt(PrepareLogChannelsPath("log-channels-thresold-and-threshold.json").c_str());
+    const auto result = ReadStaticDlt(PrepareLogChannelsPath("log-channels-thresold-and-threshold.json").c_str());
     EXPECT_TRUE(result.has_value());
     const auto expected_log_level_threshold = mw::log::LogLevel::kInfo;
-    EXPECT_EQ(result.value().defaultThreshold, expected_log_level_threshold);
+    EXPECT_EQ(result.value().default_threshold, expected_log_level_threshold);
 }
 
 TEST(SocketserverConfigTest, NoValuesSetkVerboseAsDefault)
 {
-    const auto result = readStaticDlt(PrepareLogChannelsPath("log-channels-no-default-threshold.json").c_str());
+    const auto result = ReadStaticDlt(PrepareLogChannelsPath("log-channels-no-default-threshold.json").c_str());
     EXPECT_TRUE(result.has_value());
     const auto expected_log_level_threshold = mw::log::LogLevel::kVerbose;
-    EXPECT_EQ(result.value().defaultThreshold, expected_log_level_threshold);
+    EXPECT_EQ(result.value().default_threshold, expected_log_level_threshold);
 }
 
 TEST(SocketserverConfigTest, GetStringCallExpected)

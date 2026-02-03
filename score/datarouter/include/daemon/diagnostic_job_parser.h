@@ -28,9 +28,9 @@ namespace logging
 namespace dltserver
 {
 
-score::platform::dltid_t extractId(const std::string& message, const size_t offset);
+score::platform::DltidT ExtractId(const std::string& message, const size_t offset);
 
-void appendId(score::platform::dltid_t name, std::string& message);
+void AppendId(score::platform::DltidT name, std::string& message);
 
 // This class is responsible for converting a raw byte string into a clean
 // IDiagnosticJob object.
@@ -41,10 +41,10 @@ class DiagnosticJobParser : public IDiagnosticJobParser
     // Returns a unique pointer of type IDiagnosticJobHandler (Not an instance because it's abstract)
     // pointing to a derived class of the diagnostic job on success.
     // Returns nullptr if parsing fails (e.g., wrong size, unknown command).
-    std::unique_ptr<IDiagnosticJobHandler> parse(const std::string& command) override;
+    std::unique_ptr<IDiagnosticJobHandler> Parse(const std::string& command) override;
 
   private:
-    [[nodiscard]] std::optional<AssignmentAction> getAssignmentAction(std::uint8_t value) noexcept;
+    [[nodiscard]] std::optional<AssignmentAction> GetAssignmentAction(std::uint8_t value) noexcept;
 };
 
 }  // namespace dltserver

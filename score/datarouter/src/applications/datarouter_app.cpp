@@ -22,7 +22,7 @@
 
 namespace
 {
-const std::string program_version{"Version 0.1s"};
+const std::string kProgramVersion{"Version 0.1s"};
 }  // namespace
 
 namespace score
@@ -34,27 +34,27 @@ namespace datarouter
 
 using namespace score::platform::datarouter;
 
-void datarouter_app_init()
+void DatarouterAppInit()
 {
-    score::mw::log::LogInfo() << "datarouter application" << program_version << "starting";
+    score::mw::log::LogInfo() << "datarouter application" << kProgramVersion << "starting";
 }
 
-void datarouter_app_run(const std::atomic_bool& exit_requested)
+void DatarouterAppRun(const std::atomic_bool& exit_requested)
 {
-    const score::logging::options::Options& opts = score::logging::options::Options::get();
+    const score::logging::options::Options& opts = score::logging::options::Options::Get();
 
-    if (opts.do_nothing())
+    if (opts.DoNothing())
     {
         return;
     }
 
-    if (opts.print_version())
+    if (opts.PrintVersion())
     {
-        std::cout << program_version << "\n";
+        std::cout << kProgramVersion << "\n";
         return;
     }
 
-    if (opts.no_adaptive_runtime())
+    if (opts.NoAdaptiveRuntime())
     {
         score::mw::log::LogInfo()
             << "datarouter will not use the Vector stack. Persistency features will not be available.";
@@ -62,10 +62,10 @@ void datarouter_app_run(const std::atomic_bool& exit_requested)
 
     score::mw::log::LogInfo() << "datarouter successfully completed initialization and goes live!";
 
-    SocketServer::run(exit_requested, opts.no_adaptive_runtime());
+    SocketServer::Run(exit_requested, opts.NoAdaptiveRuntime());
 }
 
-void datarouter_app_shutdown()
+void DatarouterAppShutdown()
 {
     score::mw::log::LogInfo() << "shutting down";
 }

@@ -11,8 +11,8 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-#ifndef UNIX_DOMAIN_COMMON_H_
-#define UNIX_DOMAIN_COMMON_H_
+#ifndef SCORE_DATAROUTER_INCLUDE_UNIX_DOMAIN_UNIX_DOMAIN_COMMON_H
+#define SCORE_DATAROUTER_INCLUDE_UNIX_DOMAIN_UNIX_DOMAIN_COMMON_H
 
 #include <sys/socket.h>
 #include <sys/un.h>
@@ -50,29 +50,29 @@ struct SocketMessangerHeader  //  __attribute__((packed))  //  TODO: deal with p
 class UnixDomainSockAddr
 {
   public:
-    UnixDomainSockAddr(const std::string& path, bool isAbstract);
-    const char* get_address_string()
+    UnixDomainSockAddr(const std::string& path, bool is_abstract);
+    const char* GetAddressString()
     {
-        std::uint8_t offset = is_abstract() ? 1U : 0U;
+        std::uint8_t offset = IsAbstract() ? 1U : 0U;
         // NOLINTNEXTLINE(cppcoreguidelines-pro-bounds-constant-array-index) -bounds already checked via is_abstract()
-        return &(addr_.sun_path[offset]);
+        return &(addr.sun_path[offset]);
     }
 
-    bool is_abstract()
+    bool IsAbstract()
     {
-        return addr_.sun_path[0] == 0U;
+        return addr.sun_path[0] == 0U;
     }
 
-    struct sockaddr_un addr_;
+    struct sockaddr_un addr;
 };
 
 using AncillaryDataFileHandleReceptionCallback =
     score::cpp::callback<score::cpp::optional<SharedMemoryFileHandle>(const score::cpp::span<std::uint8_t> buffer)>;
 
 /* @file_handle - is optional and used to pass file descriptor on Linux */
-void send_socket_message(std::int32_t connection_file_descriptor,
-                         score::cpp::string_view message,
-                         score::cpp::optional<SharedMemoryFileHandle> file_handle = score::cpp::nullopt);
+void SendSocketMessage(std::int32_t connection_file_descriptor,
+                       score::cpp::string_view message,
+                       score::cpp::optional<SharedMemoryFileHandle> file_handle = score::cpp::nullopt);
 
 /* @data - data to be send over the socket */
 void SendAncillaryDataOverSocket(int connection_file_descriptor, score::cpp::span<std::uint8_t> data);
@@ -83,11 +83,11 @@ void SendAncillaryDataOverSocket(int connection_file_descriptor, score::cpp::spa
  * way to retrive fd. For Linux part of the implementation it may be passed by native socket ancillary data. Overload
  * function with reduced number of arguments is provided when file handle is not expected.
  */
-score::cpp::optional<std::string> recv_socket_message(
+score::cpp::optional<std::string> RecvSocketMessage(
     std::int32_t socket_fd,
     AncillaryDataFileHandleReceptionCallback ancillary_data_process = AncillaryDataFileHandleReceptionCallback{});
 
-score::cpp::optional<std::string> recv_socket_message(
+score::cpp::optional<std::string> RecvSocketMessage(
     std::int32_t socket_fd,
     score::cpp::optional<SharedMemoryFileHandle>& file_handle,
     score::cpp::optional<std::int32_t>& peer_pid,
@@ -99,4 +99,4 @@ void SetupSignals(const std::unique_ptr<score::os::Signal>& signal);
 }  // namespace platform
 }  // namespace score
 
-#endif  // UNIX_DOMAIN_COMMON_H_
+#endif  // SCORE_DATAROUTER_INCLUDE_UNIX_DOMAIN_UNIX_DOMAIN_COMMON_H

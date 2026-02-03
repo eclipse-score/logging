@@ -11,8 +11,8 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-#ifndef PERSISTENTLOGGING_CONFIG_H_
-#define PERSISTENTLOGGING_CONFIG_H_
+#ifndef SCORE_DATAROUTER_INCLUDE_DAEMON_PERSISTENTLOGGING_CONFIG_H
+#define SCORE_DATAROUTER_INCLUDE_DAEMON_PERSISTENTLOGGING_CONFIG_H
 
 #include "dlt/plogfilterdesc.h"
 
@@ -31,24 +31,24 @@ struct PersistentLoggingConfig
 {
     enum class ReadResult
     {
-        OK,
-        ERROR_OPEN,
-        ERROR_PARSE,
-        ERROR_CONTENT
+        kOk,
+        kErrorOpen,
+        kErrorParse,
+        kErrorContent
     };
 
-    ReadResult readResult_ = ReadResult::ERROR_OPEN;
-    std::vector<plogfilterdesc> verboseFilters_;
-    std::vector<std::string> nonVerboseFilters_;
+    ReadResult read_result = ReadResult::kErrorOpen;
+    std::vector<Plogfilterdesc> verbose_filters;
+    std::vector<std::string> non_verbose_filters;
 };
 
-extern const std::string DEFAULT_PERSISTENT_LOGGING_JSON_FILEPATH;
+extern const std::string kDefaultPersistentLoggingJsonFilepath;
 
-PersistentLoggingConfig readPersistentLoggingConfig(
-    const std::string& filePath = DEFAULT_PERSISTENT_LOGGING_JSON_FILEPATH);
+PersistentLoggingConfig ReadPersistentLoggingConfig(
+    const std::string& file_path = kDefaultPersistentLoggingJsonFilepath);
 
 }  // namespace internal
 }  // namespace platform
 }  // namespace score
 
-#endif  // PERSISTENTLOGGING_CONFIG_H_
+#endif  // SCORE_DATAROUTER_INCLUDE_DAEMON_PERSISTENTLOGGING_CONFIG_H

@@ -11,8 +11,8 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-#ifndef LOGGING_APPLICATIONS_OPTIONS_H_
-#define LOGGING_APPLICATIONS_OPTIONS_H_
+#ifndef SCORE_DATAROUTER_SRC_APPLICATIONS_OPTIONS_H
+#define SCORE_DATAROUTER_SRC_APPLICATIONS_OPTIONS_H
 
 #include <cstdint>
 
@@ -35,22 +35,22 @@ class Options
 {
   public:
     // NOLINTNEXTLINE(modernize-avoid-c-arrays): C style array is needed as it has to have main style arguments.
-    static bool parse(std::int32_t argc, char* const argv[]);
-    static Options& get();
+    static bool Parse(std::int32_t argc, char* const argv[]);
+    static Options& Get();
 
-    bool do_nothing() const
+    bool DoNothing() const
     {
         return do_nothing_;
     }
-    bool print_version() const
+    bool PrintVersion() const
     {
         return print_version_;
     }
-    bool verbose() const
+    bool Verbose() const
     {
         return verbose_;
     }
-    bool no_adaptive_runtime() const
+    bool NoAdaptiveRuntime() const
     {
         return no_adaptive_runtime_;
     }
@@ -72,4 +72,4 @@ class Options
 }  // namespace logging
 }  // namespace score
 
-#endif  // LOGGING_APPLICATIONS_OPTIONS_H_
+#endif  // SCORE_DATAROUTER_SRC_APPLICATIONS_OPTIONS_H
