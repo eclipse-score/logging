@@ -79,20 +79,21 @@ TEST(DltProtocolTest, PackageFileDataShallWriteDataCorrectlyWithCorrectData)
 }
 
 // Kindly, check the code, inside the "PackageFileData" method for the reasons of disabling this test.
-TEST(DltProtocolTest, DISABLED_PackageFileDataShallReturnsNulloptIfItWorkedOnAlreadyClosedFile)
-{
-    std::array<char, BUFFER_SIZE> buffer{};
-    auto data_span = score::cpp::span<char>{buffer.data(), buffer.size()};
-    const uint32_t serial_number{0U};
-    const uint32_t pkg_number{0};
+// Commented out test to avoid build failure due to use `file` after close compiler error
+// TEST(DltProtocolTest, DISABLED_PackageFileDataShallReturnsNulloptIfItWorkedOnAlreadyClosedFile)
+// {
+//     std::array<char, BUFFER_SIZE> buffer{};
+//     auto data_span = score::cpp::span<char>{buffer.data(), buffer.size()};
+//     const uint32_t serial_number{0U};
+//     const uint32_t pkg_number{0};
 
-    FILE* file = fopen(FILE_NAME.c_str(), "rb");
-    ASSERT_TRUE(file != nullptr) << "The file used in the unit test is missed! The file: " << FILE_NAME;
-    fclose(file);  // Close the file immediately.
+//     FILE* file = fopen(FILE_NAME.c_str(), "rb");
+//     ASSERT_TRUE(file != nullptr) << "The file used in the unit test is missed! The file: " << FILE_NAME;
+//     fclose(file);  // Close the file immediately.
 
-    auto result = PackageFileData(data_span, file, serial_number, pkg_number);
-    EXPECT_EQ(result, std::nullopt);
-}
+//     auto result = PackageFileData(data_span, file, serial_number, pkg_number);
+//     EXPECT_EQ(result, std::nullopt);
+// }
 
 TEST(DltProtocolTest, PackageFileEndShallReturnsNulloptIftheBufferSizeIsSmallerThanTheDataSize)
 {
