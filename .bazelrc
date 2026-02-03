@@ -23,6 +23,9 @@ test --test_output=errors
 build --incompatible_strict_action_env
 build --experimental_retain_test_configuration_across_testonly #https://github.com/bazelbuild/bazel/issues/6842
 
+# Ferrocene must be common compiler for HOST. To ensure metadata compatibility for proc macro crates!
+build:_common --extra_toolchains=@score_toolchains_rust//toolchains/ferrocene:ferrocene_x86_64_unknown_linux_gnu
+
 # Common flags for all builds
 common --@score_baselibs//score/memory/shared/flags:use_typedshmd=False
 common --@score_baselibs//score/mw/log/flags:KRemote_Logging=False
@@ -34,29 +37,43 @@ common --//score/datarouter/build_configuration_flags:enable_dynamic_configurati
 common --//score/datarouter/build_configuration_flags:file_transfer=False
 common --//score/datarouter/build_configuration_flags:use_local_vlan=True
 
-common:linux_x86_64_gcc --platforms=@score_bazel_platforms//:x86_64-linux-gcc_12.2.0-posix
-common:linux_x86_64_gcc --extra_toolchains=@score_gcc_x86_64_toolchain//:x86_64-linux-gcc_12.2.0-posix
-common:linux_x86_64_gcc --extra_toolchains=@score_toolchains_rust//toolchains/ferrocene:ferrocene_x86_64_unknown_linux_gnu
-
 # Base QNX config (shared flags)
 common:qnx --credential_helper=*.qnx.com=%workspace%/scripts/internal/qnx_creds.py
+common:qnx --credential_helper_timeout="60s"
 common:qnx --sandbox_writable_path=/var/tmp
 
-common:qnx_x86_64 --config=qnx
-common:qnx_x86_64 --platforms=@score_bazel_platforms//:x86_64-qnx-sdp_8.0.0-posix
-common:qnx_x86_64 --extra_toolchains=@score_qcc_x86_64_toolchain//:x86_64-qnx-sdp_8.0.0-posix
-common:qnx_x86_64 --extra_toolchains=@score_toolchains_rust//toolchains/ferrocene:ferrocene_x86_64_pc_nto_qnx800
+# -------------------------------------------------------------------------------
+# Config dedicated to target platform CPU:arm64 and OS:QNX
+# -------------------------------------------------------------------------------
+build:arm64-qnx --config=qnx
+build:arm64-qnx --config=_common
+build:arm64-qnx --platforms=@score_bazel_platforms//:aarch64-qnx-sdp_8.0.0-posix
+build:arm64-qnx --extra_toolchains=@score_qcc_aarch64_toolchain//:aarch64-qnx-sdp_8.0.0-posix
+build:arm64-qnx --extra_toolchains=@score_toolchains_rust//toolchains/ferrocene:ferrocene_aarch64_unknown_nto_qnx800
 
-common:qnx_arm64 --config=qnx
-common:qnx_arm64 --platforms=@score_bazel_platforms//:aarch64-qnx-sdp_8.0.0-posix
-common:qnx_arm64 --extra_toolchains=@score_qcc_aarch64_toolchain//:aarch64-qnx-sdp_8.0.0-posix
-common:qnx_arm64 --extra_toolchains=@score_toolchains_rust//toolchains/ferrocene:ferrocene_aarch64_unknown_nto_qnx800
+# -------------------------------------------------------------------------------
+# Config dedicated to target platform CPU:x86_64 and OS:QNX
+# -------------------------------------------------------------------------------
+build:x86_64-qnx --config=qnx
+build:x86_64-qnx --config=_common
+build:x86_64-qnx --platforms=@score_bazel_platforms//:x86_64-qnx-sdp_8.0.0-posix
+build:x86_64-qnx --extra_toolchains=@score_qcc_x86_64_toolchain//:x86_64-qnx-sdp_8.0.0-posix
+build:x86_64-qnx --extra_toolchains=@score_toolchains_rust//toolchains/ferrocene:ferrocene_x86_64_pc_nto_qnx800
 
-common:x86_64-qnx --config=qnx_x86_64
-common:arm64-qnx --config=qnx_arm64
-common:x86_64-linux --config=linux_x86_64_gcc
+# TODO arm64 when rust support is there
+
+# -------------------------------------------------------------------------------
+# Config dedicated to host platform CPU:x86_64 and OS:Linux
+# -------------------------------------------------------------------------------
+build:x86_64-linux --config=_common
+build:x86_64-linux --platforms=@score_bazel_platforms//:x86_64-linux-gcc_12.2.0-posix
+build:x86_64-linux --extra_toolchains=@score_gcc_x86_64_toolchain//:x86_64-linux-gcc_12.2.0-posix
+build:x86_64-linux --extra_toolchains=@score_toolchains_rust//toolchains/ferrocene:ferrocene_x86_64_unknown_linux_gnu
+
+
 
 # With this instrumentation filter for our two main components, we ensure that `bazel coverage //...` is yielding the correct results
+coverage --config=x86_64-linux
 coverage --instrumentation_filter="^//score/datarouter[/:],^//score/mw/log[/:],-//score/mw/.*/test[/:]"
 coverage --experimental_generate_llvm_lcov
 coverage --experimental_use_llvm_covmap
