@@ -11,10 +11,10 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-#ifndef SCORE_PAS_LOGGING_SRC_PERSISTENT_LOGGING_SYSEDR_FACTORY_HPP
-#define SCORE_PAS_LOGGING_SRC_PERSISTENT_LOGGING_SYSEDR_FACTORY_HPP
+#ifndef SCORE_PAS_LOGGING_INCLUDE_SYSEDR_SYSEDR_FACTORY_H
+#define SCORE_PAS_LOGGING_INCLUDE_SYSEDR_SYSEDR_FACTORY_H
 
-#include "score/datarouter/src/persistent_logging/isysedr_handler.h"
+#include "score/datarouter/persistent_logging/isysedr_handler.h"
 #include <memory>
 
 namespace score
@@ -54,4 +54,4 @@ class SysedrFactory
 }  // namespace platform
 }  // namespace score
 
-#endif  // SCORE_PAS_LOGGING_SRC_PERSISTENT_LOGGING_SYSEDR_FACTORY_HPP
+#endif  // SCORE_PAS_LOGGING_INCLUDE_SYSEDR_SYSEDR_FACTORY_H

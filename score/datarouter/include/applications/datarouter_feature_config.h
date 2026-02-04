@@ -38,15 +38,15 @@
 #endif
 
 #if defined(DLT_FILE_TRANSFER_FEATURE)
-#include "score/datarouter/src/file_transfer/file_transfer_impl/filetransfer_stream.h"
+#include "score/datarouter/file_transfer/file_transfer_impl/filetransfer_stream.h"
 #else
-#include "score/datarouter/src/file_transfer/file_transfer_stub/file_transfer_stream_handler_stub.h"
+#include "score/datarouter/file_transfer/file_transfer_stub/file_transfer_stream_handler_stub.h"
 #endif
 
 #if defined(PERSISTENT_LOGGING)
-#include "score/datarouter/src/persistent_logging/persistent_logging/sysedr_concrete_factory.h"
+#include "score/datarouter/persistent_logging/persistent_logging/sysedr_concrete_factory.h"
 #else
-#include "score/datarouter/src/persistent_logging/persistent_logging_stub/stub_sysedr_factory.h"
+#include "score/datarouter/persistent_logging/persistent_logging_stub/stub_sysedr_factory.h"
 #endif
 
 namespace score

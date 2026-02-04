@@ -13,7 +13,7 @@
 
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
-#include "score/datarouter/src/file_transfer/file_transfer_impl/filetransfer_stream.h"
+#include "score/datarouter/file_transfer/file_transfer_impl/filetransfer_stream.h"
 #include <array>
 #include <chrono>
 #include <fstream>

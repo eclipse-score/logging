@@ -15,13 +15,12 @@
 
 #include "score/assert.hpp"
 #include "score/os/utils/signal.h"
-#include "score/mw/log/detail/data_router/message_passing_config.h"
+#include "score/mw/log/detail/data_router/data_router_messages.h"
 #include "score/mw/log/detail/error.h"
 #include "score/mw/log/detail/initialization_reporter.h"
 
-#include "score/os/utils/signal_impl.h"
-#include "score/mw/log/detail/utils/signal_handling/signal_handling.h"
 #include <array>
+#include <iostream>
 #include <thread>
 
 namespace score
@@ -34,6 +33,31 @@ namespace detail
 {
 
 using std::chrono_literals::operator"" ms;
+
+namespace
+{
+
+constexpr std::size_t kNumberOfThread{1UL};
+constexpr std::size_t kMaxNumberMessagesInReceiverQueue{1UL};
+constexpr std::int32_t kSenderMaxNumberOfSendRetries{1000};
+constexpr std::chrono::milliseconds kSenderRetrySendDelay = std::chrono::milliseconds(100);
+constexpr std::chrono::milliseconds kSenderRetryConnectDelay = std::chrono::milliseconds(100);
+constexpr std::chrono::milliseconds kReceiverMessageLoopDelay = std::chrono::milliseconds(10);
+constexpr std::size_t kStartIndexOfRandomFileName{13UL};
+
+template <typename Message, typename Payload>
+auto BuildMessageImpl(const DatarouterMessageIdentifier id, const Payload& payload, const pid_t pid) -> Message
+{
+    Message message;
+    message.payload = payload;
+    message.id = ToMessageId(id);
+    message.pid = pid;
+    return message;
+}
+
+void SenderLoggerCallback(score::mw::com::message_passing::LogFunction) {}
+
+}  // namespace
 
 DatarouterMessageClientImpl::DatarouterMessageClientImpl(const MsgClientIdentifiers& ids,
                                                          MsgClientBackend backend,
@@ -49,13 +73,15 @@ DatarouterMessageClientImpl::DatarouterMessageClientImpl(const MsgClientIdentifi
       shared_memory_writer_{backend.GetShMemWriter()},
       writer_file_name_{backend.GetWriterFilename()},
       message_passing_factory_{std::move(backend.GetMsgPassingFactory())},
+      monotonic_resource_buffer_{},
+      monotonic_resource_{monotonic_resource_buffer_.data(),
+                          monotonic_resource_buffer_.size(),
+                          score::cpp::pmr::null_memory_resource()},
       stop_source_{stop_source},
-      sender_state_change_mutex_{},
-      state_condition_{},
-      sender_state_{},
+      thread_pool_{kNumberOfThread, &monotonic_resource_},
       sender_{nullptr},
       receiver_{nullptr},
-      connect_thread_{}
+      connect_task_{}
 {
 }
 
@@ -77,47 +103,20 @@ void DatarouterMessageClientImpl::Run()
 void DatarouterMessageClientImpl::RunConnectTask()
 {
     // Since waiting for Datarouter to connect is a blocking operation we have to do this asynchronously.
-    connect_thread_ = score::cpp::jthread([this]() noexcept {
-        ConnectToDatarouter();
-    });
+    // clang-format off
+    connect_task_ = thread_pool_.Submit(
+        [this](const score::cpp::stop_token&) noexcept
+        {
+            ConnectToDatarouter();
+        });
 }
 
 void DatarouterMessageClientImpl::ConnectToDatarouter() noexcept
 {
     BlockTermSignal();
+
     SetThreadName();
-
-    if (!CreateSender().has_value())
-    {
-        ReportInitializationError(score::mw::log::detail::Error::kFailedToCreateMessagePassingClient,
-                                  "Failed to create Message Passing Client.",
-                                  msg_client_ids_.GetAppID().GetStringView());
-        RequestInternalShutdown();
-        return;
-    }
-
-    // Wait for the sender to be in Ready state before starting receiver
-    {
-        std::unique_lock<std::mutex> lock(sender_state_change_mutex_);
-        state_condition_.wait(lock, [this]() {
-            return (sender_state_.has_value() &&
-                    sender_state_.value() == score::message_passing::IClientConnection::State::kReady) ||
-                   stop_source_.stop_requested();
-        });
-    }
-
-    if (stop_source_.stop_requested())
-    {
-        RequestInternalShutdown();
-        return;
-    }
-
-    if (!sender_state_.has_value() || sender_state_.value() != score::message_passing::IClientConnection::State::kReady)
-    {
-        RequestInternalShutdown();
-        return;
-    }
-
+    CreateSender();
     if (StartReceiver() == false)
     {
         RequestInternalShutdown();
@@ -178,46 +177,31 @@ void DatarouterMessageClientImpl::SetThreadName() noexcept
 
 void DatarouterMessageClientImpl::SetupReceiver() noexcept
 {
-    const score::message_passing::ServiceProtocolConfig service_protocol_config{
-        msg_client_ids_.GetReceiverID(), MessagePassingConfig::kMaxMessageSize, 0U, 0U};
+    // Initialization of Array with client ids
+    // coverity[autosar_cpp14_m8_5_2_violation]
+    const std::array<uid_t, 1UL> allowed_uids{msg_client_ids_.GetDatarouterUID()};
+    const score::mw::com::message_passing::ReceiverConfig receiver_config{
+        static_cast<std::int32_t>(kMaxNumberMessagesInReceiverQueue), kReceiverMessageLoopDelay};
+    receiver_ = message_passing_factory_->CreateReceiver(
+        msg_client_ids_.GetReceiverID(), thread_pool_, allowed_uids, receiver_config, &monotonic_resource_);
 
-    const score::message_passing::IServerFactory::ServerConfig server_config{
-        MessagePassingConfig::kMaxReceiverQueueSize, 0U, 0U};
-    receiver_ = message_passing_factory_->CreateServer(service_protocol_config, server_config);
+    // clang-format off
+    receiver_->Register(ToMessageId(DatarouterMessageIdentifier::kAcquireRequest),
+                        [this](std::uint64_t, pid_t) noexcept
+                        {
+                            this->OnAcquireRequest();
+                        });
 }
 
 bool DatarouterMessageClientImpl::StartReceiver()
 {
     // When the receiver starts listening, receive callbacks may be called that use the sender to reply.
     // Thus we must create the sender before starting to listen to messages.
-    // Note that the receiver callback may only be called after the connect task finished.
+    // Note since the thread_pool_ shall only have one thread, the receiver callback may only be called after the
+    // connect task finished.
     SCORE_LANGUAGE_FUTURECPP_PRECONDITION_PRD_MESSAGE(sender_ != nullptr, "The sender must be created before the receiver.");
 
-    auto connect_callback = [this](score::message_passing::IServerConnection& connection) noexcept -> std::uintptr_t {
-        const auto result = SignalHandling::PThreadBlockSigTerm(this->utils_.GetSignal());
-        const pid_t client_pid = connection.GetClientIdentity().pid;
-        return static_cast<std::uintptr_t>(client_pid);
-    };
-    auto disconnect_callback = [this](score::message_passing::IServerConnection& /*connection*/) noexcept {
-        this->RequestInternalShutdown();
-    };
-    auto received_send_message_callback = [this](
-                                              score::message_passing::IServerConnection& /*connection*/,
-                                              const score::cpp::span<const std::uint8_t> /*message*/) noexcept -> score::cpp::blank {
-        this->OnAcquireRequest();
-        return {};
-    };
-    auto received_send_message_with_reply_callback =
-        [](score::message_passing::IServerConnection& /*connection*/,
-           score::cpp::span<const std::uint8_t> /*message*/) noexcept -> score::cpp::blank {
-        return {};
-    };
-
-    const auto result = receiver_->StartListening(connect_callback,
-                                                  disconnect_callback,
-                                                  received_send_message_callback,
-                                                  received_send_message_with_reply_callback);
-
+    const auto result = receiver_->StartListening();
     if (result.has_value() == false)
     {
         const std::string underlying_error = result.error().ToString();
@@ -247,6 +231,7 @@ void DatarouterMessageClientImpl::RequestInternalShutdown() noexcept
     UnlinkSharedMemoryFile();
 
     std::ignore = stop_source_.request_stop();
+    thread_pool_.Shutdown();
 }
 
 void DatarouterMessageClientImpl::CheckExitRequestAndSendConnectMessage() noexcept
@@ -270,18 +255,28 @@ void DatarouterMessageClientImpl::SendConnectMessage() noexcept
 
     if (use_dynamic_datarouter_ids_ &&
         (writer_file_name_.size() >
-         (MessagePassingConfig::kRandomFilenameStartIndex + msg.GetRandomPart().size() + static_cast<std::size_t>(1))))
+         (kStartIndexOfRandomFileName + msg.GetRandomPart().size() + static_cast<std::size_t>(1))))
     {
         auto start_iter = writer_file_name_.begin();
-        std::advance(start_iter, static_cast<int>(MessagePassingConfig::kRandomFilenameStartIndex));
+        std::advance(start_iter, static_cast<int>(kStartIndexOfRandomFileName));
         auto random_part = msg.GetRandomPart();
         std::ignore = std::copy_n(start_iter, random_part.size(), random_part.begin());
         msg.SetRandomPart(random_part);
     }
 
-    const auto message = SerializeMessage(DatarouterMessageIdentifier::kConnect, msg);
+    score::mw::com::message_passing::MediumMessagePayload payload{};
+    static_assert(sizeof(msg) <= payload.size(), "Connect message too large");
+    static_assert(std::is_trivially_copyable<decltype(msg)>::value, "Message must be copyable");
+    // Suppress "AUTOSAR C++14 M5-2-8" rule. The rule declares:
+    // An object with integer type or pointer to void type shall not be converted to an object with pointer type.
+    // But we need to convert void pointer to bytes for serialization purposes, no out of bounds there
+    // coverity[autosar_cpp14_m5_2_8_violation]
+    const score::cpp::span<const std::uint8_t> message_span{static_cast<const uint8_t*>(static_cast<const void*>(&msg)),
+                                                     sizeof(msg)};
+    // coverity[autosar_cpp14_m5_0_16_violation:FALSE]
+    std::ignore = std::copy(message_span.begin(), message_span.end(), payload.begin());
 
-    SendMessage(message);
+    SendMessage(BuildMessage(DatarouterMessageIdentifier::kConnect, payload));
 }
 
 void DatarouterMessageClientImpl::Shutdown() noexcept
@@ -291,52 +286,35 @@ void DatarouterMessageClientImpl::Shutdown() noexcept
         std::this_thread::sleep_for(std::chrono::milliseconds(100));
     }
     std::ignore = stop_source_.request_stop();
-    // Notify waiting threads in case they are waiting for state change
-    state_condition_.notify_all();
-
-    // Request the jthread to stop and wait for it to finish
-    if (connect_thread_.joinable())
+    thread_pool_.Shutdown();
+    if (connect_task_.Valid() == true)
     {
-        connect_thread_.request_stop();
-        connect_thread_.join();
+        connect_task_.Abort();
+        std::ignore = connect_task_.Wait();
     }
-
     receiver_.reset();
-    {
-        std::unique_lock<std::mutex> lock(sender_mutex_);
-        sender_.reset();
-    }
+    sender_.reset();
     // Block until all pending tasks and threads have finished.
     UnlinkSharedMemoryFile();
 }
 
-score::cpp::expected_blank<score::os::Error> DatarouterMessageClientImpl::CreateSender() noexcept
+void DatarouterMessageClientImpl::CreateSender() noexcept
 {
-    const score::message_passing::ServiceProtocolConfig& protocol_config{
-        MessagePassingConfig::kDatarouterReceiverIdentifier,
-        MessagePassingConfig::kMaxMessageSize,
-        MessagePassingConfig::kMaxReplySize,
-        MessagePassingConfig::kMaxNotifySize};
-    const score::message_passing::IClientFactory::ClientConfig& client_config{0, 10, false, true, false};
-    sender_ = message_passing_factory_->CreateClient(protocol_config, client_config);
+    // We are not using the stop token from the current task, because the sender shall be used even after the
+    // current task exited. The connect task thus can only be stopped if the stop_source_ is triggered.
+    const score::mw::com::message_passing::SenderConfig sender_config{
+        kSenderMaxNumberOfSendRetries, kSenderRetrySendDelay, kSenderRetryConnectDelay};
+    constexpr std::string_view kDatarouterReceiverIdentifier{"/logging.datarouter_recv"};
+    sender_ = message_passing_factory_->CreateSender(kDatarouterReceiverIdentifier,
+                                                     stop_source_.get_token(),
+                                                     sender_config,
+                                                     &SenderLoggerCallback,
+                                                     &monotonic_resource_);
 
-    if (sender_ == nullptr)
-    {
-        std::cerr << "[[mw::log]] Application (PID: " << msg_client_ids_.GetThisProcID()
-                  << ") failed to create Message Passing Client." << '\n';
-        return score::cpp::make_unexpected(score::os::Error::createFromErrno(ENOMEM));
-    }
-
-    auto state_callback = [this](score::message_passing::IClientConnection::State state) noexcept {
-        {
-            std::lock_guard<std::mutex> callback_lock(sender_state_change_mutex_);
-            sender_state_ = state;
-        }
-        state_condition_.notify_all();
-    };
-
-    sender_->Start(state_callback, score::message_passing::IClientConnection::NotifyCallback{});
-    return {};
+    // The creation of the sender is blocking until Datarouter is available.
+    // Thus at this point, either Datarouter was available, or the stop_source_ was triggered.
+    // The Sender interface currently does not expose the information if the Sender could be connected successfully to a
+    // receiver.
 }
 
 void DatarouterMessageClientImpl::OnAcquireRequest() noexcept
@@ -346,9 +324,19 @@ void DatarouterMessageClientImpl::OnAcquireRequest() noexcept
 
     // Acquire data and prepare the response.
     const auto acquire_result = shared_memory_writer_.ReadAcquire();
-    const auto message = SerializeMessage(DatarouterMessageIdentifier::kAcquireResponse, acquire_result);
-
-    SendMessage(message);
+    //  TODO: Use ShortMessagePayload instead:
+    score::mw::com::message_passing::MediumMessagePayload payload{};
+    static_assert(sizeof(payload) >= sizeof(acquire_result), "payload shall be large enough");
+    const score::cpp::span<const std::uint8_t> acquire_result_span{
+        // Suppress "AUTOSAR C++14 M5-2-8" rule. The rule declares:
+        // An object with integer type or pointer to void type shall not be converted to an object with pointer type.
+        // But we need to convert void pointer to bytes for serialization purposes, no out of bounds there
+        // coverity[autosar_cpp14_m5_2_8_violation]
+        static_cast<const uint8_t*>(static_cast<const void*>(&acquire_result)),
+        sizeof(acquire_result)};
+    // coverity[autosar_cpp14_m5_0_16_violation:FALSE]
+    std::ignore = std::copy(acquire_result_span.begin(), acquire_result_span.end(), payload.begin());
+    SendMessage(BuildMessage(DatarouterMessageIdentifier::kAcquireResponse, payload));
 }
 
 void DatarouterMessageClientImpl::HandleFirstMessageReceived() noexcept
@@ -362,22 +350,15 @@ void DatarouterMessageClientImpl::HandleFirstMessageReceived() noexcept
     UnlinkSharedMemoryFile();
 }
 
-void DatarouterMessageClientImpl::SendMessage(const score::cpp::span<const std::uint8_t>& message) noexcept
+template <typename Message>
+void DatarouterMessageClientImpl::SendMessage(const Message& message) noexcept
 {
-    score::cpp::expected_blank<score::os::Error> result;
-    {
-        std::unique_lock<std::mutex> lock(sender_mutex_);
-        if (sender_ != nullptr)
-        {
-            result = sender_->Send(message);
-        }
-    }
+    auto result = sender_->Send(message);
     if (result.has_value() == false)
     {
         // The sender will retry sending the message for 10 s (retry_delay * number_of_retries).
         // If sending the message does not succeed despite all retries we assume Datarouter has crashed or is hanging
         // and consequently shutdown the logging in the client.
-        // Send() already checks if the sender is in kReady state and returns EINVAL if not.
 
         const auto error_details = result.error().ToStringContainer(result.error());
         ReportInitializationError(score::mw::log::detail::Error::kFailedToSendMessageToDatarouter,
@@ -386,6 +367,15 @@ void DatarouterMessageClientImpl::SendMessage(const score::cpp::span<const std::
 
         RequestInternalShutdown();
     }
+}
+
+score::mw::com::message_passing::MediumMessage DatarouterMessageClientImpl::BuildMessage(
+    const DatarouterMessageIdentifier& id,
+    const score::mw::com::message_passing::MediumMessagePayload& payload) const noexcept
+{
+    return BuildMessageImpl<score::mw::com::message_passing::MediumMessage,
+                            score::mw::com::message_passing::MediumMessagePayload>(
+        id, payload, msg_client_ids_.GetThisProcID());
 }
 
 void DatarouterMessageClientImpl::UnlinkSharedMemoryFile() noexcept

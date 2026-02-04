@@ -37,8 +37,8 @@ cc_library(
     strip_include_prefix = "include",
     visibility = [
         "//score/datarouter/dlt_filetransfer_trigger_lib:__pkg__",
-        "//score/datarouter/src/file_transfer:__subpackages__",
-        "//score/datarouter/src/persistent_logging/persistent_logging:__pkg__",
+        "//score/datarouter/file_transfer:__subpackages__",
+        "//score/datarouter/persistent_logging/persistent_logging:__pkg__",
         "//score/datarouter/test:__subpackages__",
     ],
     deps = [
@@ -109,7 +109,6 @@ cc_library(
         "//score/datarouter/dynamic_configuration/i_session",
         "@score_baselibs//score/os:pthread",
         "@score_baselibs//score/os:sys_poll",
-        "@score_baselibs//score/quality/compiler_warnings",
     ],
 )
 
@@ -129,7 +128,6 @@ cc_library(
         "//score/datarouter/dynamic_configuration/i_session",
         "@score_baselibs//score/os:pthread",
         "@score_baselibs//score/os:sys_poll",
-        "@score_baselibs//score/quality/compiler_warnings",
     ],
 )
 
@@ -164,11 +162,11 @@ cc_library(
     features = COMPILER_WARNING_FEATURES,
     strip_include_prefix = "include",
     visibility = [
+        "//score/datarouter/file_transfer:__subpackages__",
         "//score/datarouter/nonverbose_dlt:__pkg__",
         "//score/datarouter/nonverbose_dlt_stub:__pkg__",
-        "//score/datarouter/src/file_transfer:__subpackages__",
-        "//score/datarouter/src/persistent_logging:__pkg__",
-        "//score/datarouter/src/persistent_logging/persistent_logging:__pkg__",
+        "//score/datarouter/persistent_logging:__pkg__",
+        "//score/datarouter/persistent_logging/persistent_logging:__pkg__",
         "//score/datarouter/test:__subpackages__",
     ],
     deps = [
@@ -187,11 +185,11 @@ cc_library(
     features = COMPILER_WARNING_FEATURES,
     strip_include_prefix = "include",
     visibility = [
+        "//score/datarouter/file_transfer:__subpackages__",
         "//score/datarouter/nonverbose_dlt:__pkg__",
         "//score/datarouter/nonverbose_dlt_stub:__pkg__",
-        "//score/datarouter/src/file_transfer:__subpackages__",
-        "//score/datarouter/src/persistent_logging:__pkg__",
-        "//score/datarouter/src/persistent_logging/persistent_logging:__pkg__",
+        "//score/datarouter/persistent_logging:__pkg__",
+        "//score/datarouter/persistent_logging/persistent_logging:__pkg__",
     ],
     deps = [
         ":datarouter_types",
@@ -450,7 +448,7 @@ cc_library(
     features = COMPILER_WARNING_FEATURES,
     strip_include_prefix = "include",
     visibility = [
-        "//score/datarouter/src/file_transfer:__subpackages__",
+        "//score/datarouter/file_transfer:__subpackages__",
     ],
     deps = [
         ":dltprotocol",
@@ -494,7 +492,7 @@ cc_library(
             ],
             "//conditions:default": [],
         }) + select({
-            "//score/datarouter/build_configuration_flags:config_file_transfer": ["DLT_FILE_TRANSFER_FEATURE"],
+            "//score/datarouter/build_configuration_flags:config_dlt_file_transfer": ["DLT_FILE_TRANSFER_FEATURE"],
             "//conditions:default": [],
         }) + select({
             "//score/datarouter/build_configuration_flags:config_persistent_logging": ["PERSISTENT_LOGGING"],
@@ -510,11 +508,11 @@ cc_library(
             ],
             "//conditions:default": ["//score/datarouter/src/persistency/stub_persistent_dictionary:stub_persistent_dictionary_factory"],
         }) + select({
-            "//score/datarouter/build_configuration_flags:config_file_transfer": [
-                "//score/datarouter/src/file_transfer/file_transfer_impl:file_transfer_stream_handler",
+            "//score/datarouter/build_configuration_flags:config_dlt_file_transfer": [
+                "//score/datarouter/file_transfer/file_transfer_impl:file_transfer_stream_handler",
             ],
             "//conditions:default": [
-                "//score/datarouter/src/file_transfer/file_transfer_stub:file_transfer_stream_handler_stub",
+                "//score/datarouter/file_transfer/file_transfer_stub:file_transfer_stream_handler_stub",
             ],
         }) + select({
             "//score/datarouter/build_configuration_flags:config_datarouter_nonverbose_dlt": [
@@ -532,10 +530,10 @@ cc_library(
             ],
         }) + select({
             "//score/datarouter/build_configuration_flags:config_persistent_logging": [
-                "//score/datarouter/src/persistent_logging/persistent_logging_stub:sysedr_stub",
+                "//score/datarouter/persistent_logging/persistent_logging_stub:sysedr_stub",
             ],
             "//conditions:default": [
-                "//score/datarouter/src/persistent_logging/persistent_logging_stub:sysedr_stub",
+                "//score/datarouter/persistent_logging/persistent_logging_stub:sysedr_stub",
             ],
         }),
     )
@@ -595,7 +593,7 @@ cc_library(
         ":udp_stream_output",
         ":unixdomain_server",
         "//score/datarouter/network:vlan",
-        "//score/datarouter/src/persistent_logging/persistent_logging_stub:sysedr_stub",
+        "//score/datarouter/persistent_logging/persistent_logging_stub:sysedr_stub",
         "@score_baselibs//score/language/futurecpp",
         "@score_baselibs//score/mw/log/configuration:nvconfig",
         "@score_baselibs//score/os:socket",
@@ -762,10 +760,7 @@ cc_library(
         "//conditions:default": [],
     }),
     strip_include_prefix = "include",
-    visibility = [
-        "//score/datarouter:__pkg__",
-        "//score/datarouter/test:__subpackages__",
-    ],
+    visibility = ["//visibility:private"],
     deps = [
         ":datarouter_feature_config",
         ":datarouter_lib",
@@ -775,7 +770,7 @@ cc_library(
         "@score_baselibs//score/mw/log/configuration:nvconfigfactory",
     ] + select({
         "//score/datarouter/build_configuration_flags:config_persistent_logging": [
-            "//score/datarouter/src/persistent_logging/persistent_logging_stub:sysedr_stub",
+            "//score/datarouter/persistent_logging/persistent_logging_stub:sysedr_stub",
         ],
         "//conditions:default": [],
     }),
@@ -807,7 +802,7 @@ cc_library(
         "@score_baselibs//score/mw/log/configuration:nvconfigfactory",
     ] + select({
         "//score/datarouter/build_configuration_flags:config_persistent_logging": [
-            "//score/datarouter/src/persistent_logging/persistent_logging_stub:sysedr_stub",
+            "//score/datarouter/persistent_logging/persistent_logging_stub:sysedr_stub",
         ],
         "//conditions:default": [],
     }),
@@ -863,9 +858,8 @@ cc_library(
         "//score/datarouter/daemon_communication:daemon_session_handle_interface",
         "//score/mw/log/detail/data_router:message_passing_interface",
         "//score/mw/log/detail/data_router/shared_memory:reader",
-        "@score_baselibs//score/concurrency",
         "@score_baselibs//score/os:pthread",
-        "@score_communication//score/message_passing",
+        "@score_communication//score/mw/com/message_passing",
     ],
 )
 
@@ -1043,7 +1037,7 @@ cc_library(
         ":log",
         "@score_baselibs//score/mw/log/configuration:nvconfig",
         "//score/datarouter/dlt_filetransfer_trigger_lib:filetransfer_message_types",
-        "//score/datarouter/src/persistent_logging/persistent_logging_stub:sysedr_stub",
+        "//score/datarouter/persistent_logging/persistent_logging_stub:sysedr_stub",
     ],
 )
 
@@ -1054,7 +1048,6 @@ cc_library(
 test_suite(
     name = "unit_tests",
     tests = [
-        "//score/datarouter/lib/synchronized:synchronized_test",
         #"//score/datarouter/persistent_log_request:unit_tests",
         #"//score/datarouter/test:unit_tests",
         #"//score/datarouter/tools/generator:unit_tests",

@@ -71,14 +71,14 @@ config_setting(
 )
 
 bool_flag(
-    name = "file_transfer",
+    name = "dlt_file_transfer_feature",
     build_setting_default = True,
 )
 
 config_setting(
-    name = "config_file_transfer",
+    name = "config_dlt_file_transfer",
     flag_values = {
-        ":file_transfer": "True",
+        ":dlt_file_transfer_feature": "True",
     },
     visibility = [
         "//score/datarouter:__subpackages__",

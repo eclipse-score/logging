@@ -11,18 +11,29 @@
 # SPDX-License-Identifier: Apache-2.0
 # *******************************************************************************
 
-load("@score_baselibs//score/language/safecpp:toolchain_features.bzl", "COMPILER_WARNING_FEATURES")
+load("@rules_cc//cc:defs.bzl", "cc_library")
 
 cc_library(
-    name = "fake_recorder",
-    testonly = True,
-    srcs = ["fake_recorder.cpp"],
-    hdrs = ["fake_recorder.h"],
-    features = COMPILER_WARNING_FEATURES,
-    visibility = ["//visibility:public"],
+    name = "sysedr_handler_interface",
+    hdrs = [
+        "isysedr_handler.h",
+    ],
+    visibility = ["//score/datarouter/persistent_logging:__subpackages__"],
     deps = [
-        "//score/datarouter/lib/synchronized:synchronized_utility",
-        "@score_baselibs//score/language/futurecpp",
-        "@score_baselibs//score/mw/log:recorder",
+        "//score/datarouter:logparser",
+    ],
+)
+
+cc_library(
+    name = "sysedr_factory",
+    hdrs = [
+        "sysedr_factory.hpp",
+    ],
+    visibility = [
+        "//score/datarouter/persistent_logging:__subpackages__",
+        "//score/datarouter/test:__subpackages__",
+    ],
+    deps = [
+        ":sysedr_handler_interface",
     ],
 )

@@ -10,21 +10,25 @@
  *
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
-#include "score/mw/log/test/fake_recorder_environment/fake_recorder_environment.h"
 
-#include <gtest/gtest.h>
+#include "score/datarouter/persistent_logging/persistent_logging_stub/stub_sysedr_handler.h"
 
-namespace
+namespace score
+{
+namespace platform
+{
+namespace internal
 {
 
-struct AutoRegisterFakeRecorderEnvironment
-{
-    AutoRegisterFakeRecorderEnvironment()
-    {
-        ::testing::AddGlobalTestEnvironment(new score::mw::log::test::FakeRecorderEnvironment());
-    }
-};
+// LCOV_EXCL_START (nothing to test because there is no implementation)
+// LogParser::TypeHandler
+void StubSysedrHandler::handle(timestamp_t /* timestamp */, const char* data, bufsize_t size) {}
 
-static AutoRegisterFakeRecorderEnvironment auto_register_instance;
+// LogParser::AnyHandler
+void StubSysedrHandler::handle(const TypeInfo& typeInfo, timestamp_t timestamp, const char* data, bufsize_t size) {}
 
-}  // namespace
+// LCOV_EXCL_STOP
+
+}  // namespace internal
+}  // namespace platform
+}  // namespace score

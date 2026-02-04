@@ -33,7 +33,7 @@ class StubDltNonverboseHandler : public LogParser::AnyHandler
     class IOutput
     {
       public:
-        virtual void SendNonVerbose(const score::mw::log::config::NvMsgDescriptor& desc,
+        virtual void sendNonVerbose(const score::mw::log::config::NvMsgDescriptor& desc,
                                     uint32_t tmsp,
                                     const void* data,
                                     size_t size) = 0;

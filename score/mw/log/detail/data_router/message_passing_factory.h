@@ -15,11 +15,11 @@
 #define SCORE_MW_LOG_DETAIL_DATA_ROUTER_MESSAGE_PASSING_FACTORY_H
 
 #include "score/span.hpp"
-#include "score/message_passing/i_client_connection.h"
-#include "score/message_passing/i_client_factory.h"
-#include "score/message_passing/i_server.h"
-#include "score/message_passing/i_server_factory.h"
-#include "score/message_passing/service_protocol_config.h"
+#include "score/concurrency/executor.h"
+#include "score/mw/com/message_passing/i_receiver.h"
+#include "score/mw/com/message_passing/i_sender.h"
+#include "score/mw/com/message_passing/receiver_config.h"
+#include "score/mw/com/message_passing/sender_config.h"
 #include <string_view>
 
 #include <memory>
@@ -43,13 +43,19 @@ class MessagePassingFactory
     MessagePassingFactory& operator=(const MessagePassingFactory&) = delete;
     MessagePassingFactory& operator=(MessagePassingFactory&&) = delete;
 
-    virtual score::cpp::pmr::unique_ptr<score::message_passing::IServer> CreateServer(
-        const score::message_passing::ServiceProtocolConfig& protocol_config,
-        const score::message_passing::IServerFactory::ServerConfig& server_config) = 0;
+    virtual score::cpp::pmr::unique_ptr<score::mw::com::message_passing::IReceiver> CreateReceiver(
+        const std::string_view identifier,
+        concurrency::Executor& executor,
+        const score::cpp::span<const uid_t> allowed_user_ids,
+        const score::mw::com::message_passing::ReceiverConfig& receiver_config,
+        score::cpp::pmr::memory_resource* memory_resource) = 0;
 
-    virtual score::cpp::pmr::unique_ptr<score::message_passing::IClientConnection> CreateClient(
-        const score::message_passing::ServiceProtocolConfig& protocol_config,
-        const score::message_passing::IClientFactory::ClientConfig& client_config) = 0;
+    virtual score::cpp::pmr::unique_ptr<score::mw::com::message_passing::ISender> CreateSender(
+        const std::string_view identifier,
+        const score::cpp::stop_token& token,
+        const score::mw::com::message_passing::SenderConfig& sender_config,
+        score::mw::com::message_passing::LoggingCallback callback,
+        score::cpp::pmr::memory_resource* memory_resource) = 0;
 };
 
 }  // namespace detail

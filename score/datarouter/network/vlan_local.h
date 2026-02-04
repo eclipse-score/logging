@@ -29,10 +29,6 @@ class Vlan : public ObjectSeam<Vlan>
   public:
     /// \brief thread-safe singleton accessor
     /// \return Either concrete OS-dependent instance or respective set mock instance
-
-    // Follows naming convention of public Vlan API defined in score/network/vlan.h
-    // As this class serves as internal implementation stub
-    // NOLINTNEXTLINE(readability-identifier-naming): Justification above
     static Vlan& instance() noexcept;
 
     /// \brief Sets the IEEE 802.1Q PCP field for a given file descriptor to define the priority of the packets sent by

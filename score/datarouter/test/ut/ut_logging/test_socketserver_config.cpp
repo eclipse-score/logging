@@ -191,7 +191,7 @@ TEST(SocketserverConfigTest, JsonOldFormatErrorExpected)
 TEST(SocketserverConfigTest, PersistentDictionaryEmptyJsonErrorExpected)
 {
     StrictMock<MockPersistentDictionary> pd;
-    EXPECT_CALL(pd, GetString(StrEq("dltConfig"), "{}")).Times(1).WillOnce(Return("{}"));
+    EXPECT_CALL(pd, getString(StrEq("dltConfig"), "{}")).Times(1).WillOnce(Return("{}"));
     const auto result = readDlt(pd);
     EXPECT_THAT(result.channels, SizeIs(0));
 }
@@ -209,7 +209,7 @@ TEST(SocketserverConfigTest, PersistentDictionaryCorrectJsonNoErrorsExpected)
         "\"STAT\":\"kDebug\"},\"-NI-\":{\"\":\"kVerbose\"}}}"};
 
     StrictMock<MockPersistentDictionary> pd;
-    EXPECT_CALL(pd, GetString(StrEq("dltConfig"), "{}")).Times(1).WillOnce(Return(expected_json));
+    EXPECT_CALL(pd, getString(StrEq("dltConfig"), "{}")).Times(1).WillOnce(Return(expected_json));
     const auto result = readDlt(pd);
     EXPECT_TRUE(result.filteringEnabled);
     EXPECT_THAT(result.channels, SizeIs(3));
@@ -226,7 +226,7 @@ TEST(SocketserverConfigTest, PersistentDictionaryEmptyChannelsErrorExpected)
         "\"kDebug\"},\"-NI-\":{\"\":\"kVerbose\"}}}"};
 
     StrictMock<MockPersistentDictionary> pd;
-    EXPECT_CALL(pd, GetString(StrEq("dltConfig"), "{}")).Times(1).WillOnce(Return(expected_json));
+    EXPECT_CALL(pd, getString(StrEq("dltConfig"), "{}")).Times(1).WillOnce(Return(expected_json));
     const auto result = readDlt(pd);
     EXPECT_THAT(result.channels, SizeIs(0));
 }
@@ -244,7 +244,7 @@ TEST(SocketserverConfigTest, PersistentDictionaryNoFilteringEnabledExpectTrueByD
         "\"kDebug\"},\"-NI-\":{\"\":\"kVerbose\"}}}"};
 
     StrictMock<MockPersistentDictionary> pd;
-    EXPECT_CALL(pd, GetString(StrEq("dltConfig"), "{}")).Times(1).WillOnce(Return(expected_json));
+    EXPECT_CALL(pd, getString(StrEq("dltConfig"), "{}")).Times(1).WillOnce(Return(expected_json));
     const auto result = readDlt(pd);
     EXPECT_TRUE(result.filteringEnabled);
 }
@@ -254,7 +254,7 @@ TEST(SocketserverConfigTest, PersistentDictionaryNoFilteringEnabledExpectTrueByD
 TEST(SocketserverConfigTest, WriteDltEnabledCallSetBoolExpected)
 {
     StrictMock<MockPersistentDictionary> pd;
-    EXPECT_CALL(pd, SetBool(StrEq("dltOutputEnabled"), true)).Times(1);
+    EXPECT_CALL(pd, setBool(StrEq("dltOutputEnabled"), true)).Times(1);
     writeDltEnabled(true, pd);
 }
 
@@ -263,7 +263,7 @@ TEST(SocketserverConfigTest, WriteDltEnabledCallSetBoolExpected)
 TEST(SocketserverConfigTest, ReadDltEnabledTrueResultExpected)
 {
     StrictMock<MockPersistentDictionary> pd;
-    EXPECT_CALL(pd, GetBool(StrEq("dltOutputEnabled"), true)).WillOnce(Return(true));
+    EXPECT_CALL(pd, getBool(StrEq("dltOutputEnabled"), true)).WillOnce(Return(true));
     const auto result = readDltEnabled(pd);
     EXPECT_TRUE(result);
 }
@@ -283,7 +283,7 @@ TEST(SocketserverConfigTest, WriteDltFilledPersistentConfigNoErrorExpected)
     config.defaultThreshold = mw::log::LogLevel::kVerbose;
     config.channelAssignments[dltid_t("000")][dltid_t("111")].push_back(dltid_t("22222"));
     config.messageThresholds[dltid_t("000")][dltid_t("111")] = mw::log::LogLevel::kVerbose;
-    EXPECT_CALL(pd, SetString(StrEq("dltConfig"), expected_json)).Times(1);
+    EXPECT_CALL(pd, setString(StrEq("dltConfig"), expected_json)).Times(1);
     writeDlt(config, pd);
 }
 
@@ -327,7 +327,7 @@ TEST(SocketserverConfigTest, GetStringCallExpected)
 {
     StubPersistentDictionary pd;
     const std::string json{};
-    auto default_return = pd.GetString(CONFIG_DATABASE_KEY, json);
+    auto default_return = pd.getString(CONFIG_DATABASE_KEY, json);
     ASSERT_EQ(default_return, json);
 }
 
@@ -336,7 +336,7 @@ TEST(SocketserverConfigTest, GetBoolCallExpected)
     StubPersistentDictionary pd;
     const std::string key{};
     const bool defaultBoolValue{};
-    auto default_return = pd.GetBool(key, defaultBoolValue);
+    auto default_return = pd.getBool(key, defaultBoolValue);
     ASSERT_EQ(default_return, defaultBoolValue);
 }
 

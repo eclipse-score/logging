@@ -11,27 +11,22 @@
 # SPDX-License-Identifier: Apache-2.0
 # *******************************************************************************
 
-COMPILER_WARNING_FEATURES = [
-    "treat_warnings_as_errors",
-    "additional_warnings",
-    "strict_warnings",
-]
+load("@rules_cc//cc:defs.bzl", "cc_library")
 
 cc_library(
-    name = "signal_handling",
+    name = "sysedr_stub",
     srcs = [
-        "signal_handling.cpp",
+        "stub_sysedr_factory.cpp",
+        "stub_sysedr_handler.cpp",
     ],
     hdrs = [
-        "signal_handling.h",
+        "stub_sysedr_factory.h",
+        "stub_sysedr_handler.h",
     ],
-    features = COMPILER_WARNING_FEATURES,
-    tags = ["FFI"],
-    visibility = [
-        "//score/mw/log:__subpackages__",
-        "@score_baselibs//score/mw/log:__subpackages__",
-    ],
+    visibility = ["//score/datarouter:__subpackages__"],
     deps = [
-        "@score_baselibs//score/os/utils:signal",
+        "//score/datarouter:log",
+        "//score/datarouter/persistent_logging:sysedr_factory",
+        "//score/datarouter/persistent_logging:sysedr_handler_interface",
     ],
 )

@@ -11,8 +11,8 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-#ifndef SCORE_PAS_LOGGING_LIB_SYNCHRONIZED_SYNCHRONIZED_H
-#define SCORE_PAS_LOGGING_LIB_SYNCHRONIZED_SYNCHRONIZED_H
+#ifndef SCORE_PAS_LOGGING_LIB_SYNCHRONIZED_SYNCHRONIZED_H_
+#define SCORE_PAS_LOGGING_LIB_SYNCHRONIZED_SYNCHRONIZED_H_
 
 #include <functional>
 #include <memory>
@@ -48,7 +48,7 @@ class Synchronized
   public:
     template <typename... Args>
     explicit Synchronized(Args&&... args) noexcept(std::is_nothrow_constructible_v<T, Args...>)
-        : obj_(std::forward<Args>(args)...)
+        : obj(std::forward<Args>(args)...)
     {
     }
 
@@ -60,37 +60,37 @@ class Synchronized
 
     [[nodiscard]] auto lock()
     {
-        auto unlocker = [ul = std::unique_lock(mut_)](T*) mutable {};
-        return std::unique_ptr<T, decltype(unlocker)>(&obj_, std::move(unlocker));
+        auto unlocker = [ul = std::unique_lock(mut)](T*) mutable {};
+        return std::unique_ptr<T, decltype(unlocker)>(&obj, std::move(unlocker));
     }
 
     [[nodiscard]] auto lock() const
     {
-        auto unlocker = [ul = std::unique_lock(mut_)](const T*) mutable {};
-        return std::unique_ptr<const T, decltype(unlocker)>(&obj_, std::move(unlocker));
+        auto unlocker = [ul = std::unique_lock(mut)](const T*) mutable {};
+        return std::unique_ptr<const T, decltype(unlocker)>(&obj, std::move(unlocker));
     }
 
     template <typename Func>
-    auto WithLock(Func&& f)
+    auto with_lock(Func&& f)
     {
         auto guard = lock();
         return std::invoke(std::forward<Func>(f), *guard);
     }
 
     template <typename Func>
-    auto WithLock(Func&& f) const
+    auto with_lock(Func&& f) const
     {
         auto guard = lock();
         return std::invoke(std::forward<Func>(f), *guard);
     }
 
   private:
-    mutable Mutex mut_;
-    T obj_;
+    mutable Mutex mut;
+    T obj;
 };
 
 }  // namespace datarouter
 }  // namespace platform
 }  // namespace score
 
-#endif  // SCORE_PAS_LOGGING_LIB_SYNCHRONIZED_SYNCHRONIZED_H
+#endif  // SCORE_PAS_LOGGING_LIB_SYNCHRONIZED_SYNCHRONIZED_H_

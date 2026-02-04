@@ -55,17 +55,13 @@ constexpr auto* LOG_CHANNELS_PATH = "./etc/log-channels.json";
 constexpr std::uint32_t statistics_log_period_us{10000000U};
 constexpr std::uint32_t dlt_flush_period_us{100000U};
 constexpr std::uint32_t throttle_time_us{100000U};
-
-}  // namespace
-
-void SocketServer::SetThreadName() noexcept
+/*
+    - this is local functions in this file so it cannot be tested
+*/
+// LCOV_EXCL_START
+void SetThreadName() noexcept
 {
-    SetThreadName(score::os::Pthread::instance());
-}
-
-void SocketServer::SetThreadName(score::os::Pthread& pthread_instance) noexcept
-{
-    auto ret = pthread_instance.setname_np(pthread_instance.self(), "socketserver");
+    auto ret = score::os::Pthread::instance().setname_np(score::os::Pthread::instance().self(), "socketserver");
     if (!ret.has_value())
     {
         auto errstr = ret.error().ToString();
@@ -73,17 +69,15 @@ void SocketServer::SetThreadName(score::os::Pthread& pthread_instance) noexcept
     }
 }
 
-std::string SocketServer::ResolveSharedMemoryFileName(const score::mw::log::detail::ConnectMessageFromClient& conn,
-                                                      const std::string& appid)
+std::string ResolveSharedMemoryFileName(const score::mw::log::detail::ConnectMessageFromClient& conn,
+                                        const std::string& appid)
 {
     std::string return_file_name_string;
 
     // constuct the file from the 6 random chars
     if (true == conn.GetUseDynamicIdentifier())
     {
-        // The LCOV considered the below line as uncovered which impossible according to the code flow, For the quality
-        // team argumentation, it may related to Ticket-213937
-        std::string random_part{};  // LCOV_EXCL_LINE
+        std::string random_part;
         for (const auto& s : conn.GetRandomPart())
         {
             random_part += s;
@@ -97,6 +91,9 @@ std::string SocketServer::ResolveSharedMemoryFileName(const score::mw::log::deta
     return_file_name_string += ".shmem";
     return return_file_name_string;
 }
+// LCOV_EXCL_STOP
+
+}  // namespace
 
 SocketServer::PersistentStorageHandlers SocketServer::InitializePersistentStorage(
     std::unique_ptr<IPersistentDictionary>& persistent_dictionary)
@@ -106,9 +103,11 @@ SocketServer::PersistentStorageHandlers SocketServer::InitializePersistentStorag
     handlers.load_dlt = [&persistent_dictionary]() {
         return readDlt(*persistent_dictionary);
     };
+
     handlers.store_dlt = [&persistent_dictionary](const score::logging::dltserver::PersistentConfig& config) {
         writeDlt(config, *persistent_dictionary);
     };
+
     handlers.is_dlt_enabled = readDltEnabled(*persistent_dictionary);
 
 /*
@@ -390,10 +389,12 @@ void SocketServer::doWork(const std::atomic_bool& exit_requested, const bool no_
                                       std::placeholders::_2,   // conn
                                       std::placeholders::_3);  // handle
 
-    std::shared_ptr<ServerFactory> server_factory = std::make_shared<ServerFactory>();
-    std::shared_ptr<ClientFactory> client_factory =
-        std::make_shared<ClientFactory>(/*server_factory_->GetEngine() Ticket-234313*/);
-
+    // Create message passing server with thread pool
+    // As documented in aas/mw/com/message_passing/design/README.md, the Receiver implementation will use just 1 thread
+    // from the thread pool for MQueue (Linux). For Resource Manager (QNX), it is supposed to use 2 threads. If it
+    // cannot allocate the second thread, it will work with just one thread, with reduced functionality (still enough
+    // for our use case, where every client's Sender runs on a dedicated thread) and likely with higher latency.
+    score::concurrency::ThreadPool executor{2};
     /*
     Deviation from Rule A5-1-4:
     - A lambda expression object shall not outlive any of its reference captured objects.
@@ -401,7 +402,7 @@ void SocketServer::doWork(const std::atomic_bool& exit_requested, const bool no_
     - mp_server does not exist inside any lambda.
     */
     // coverity[autosar_cpp14_a5_1_4_violation: FALSE]
-    MessagePassingServer mp_server(mp_factory, std::move(server_factory), std::move(client_factory));
+    MessagePassingServer mp_server(mp_factory, executor);
 
     // Run main event loop
     RunEventLoop(exit_requested, router, *dlt_server, stats_logger);

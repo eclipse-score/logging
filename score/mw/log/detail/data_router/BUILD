@@ -56,10 +56,7 @@ cc_library(
         "//score/mw/log/detail/common:dlt_content_formatting",
         "//score/mw/log/detail/common:statistics_reporter",
         "//score/mw/log/detail/data_router/shared_memory:writer",
-        "//score/mw/log/detail/utils/signal_handling",
         "//score/mw/log/legacy_non_verbose_api",
-        "@score_baselibs//score/concurrency",
-        "@score_baselibs//score/concurrency:thread_pool",
         "@score_baselibs//score/language/futurecpp",
         "@score_baselibs//score/memory/shared",  # Preperation for full rollout of (Ticket-105741), build cyclic dependency is broken (runtime, in next commit)
         "@score_baselibs//score/mw/log:recorder",
@@ -74,7 +71,7 @@ cc_library(
         "@score_baselibs//score/os:pthread",
         "@score_baselibs//score/os:stdlib",
         "@score_baselibs//score/os/utils:signal",
-        "@score_communication//score/message_passing",
+        "@score_communication//score/mw/com/message_passing",
     ],
 )
 
@@ -137,7 +134,7 @@ cc_test(
         "@score_baselibs//score/os/mocklib:stdlib_mock",
         "@score_baselibs//score/os/mocklib:unistd_mock",
         "@score_baselibs//score/os/utils/mocklib:signal_mock",
-        "@score_communication//score/message_passing:mock",
+        "@score_communication//score/mw/com/message_passing:mock",
     ],
 )
 
@@ -157,16 +154,15 @@ cc_library(
     ],
     hdrs = [
         "data_router_messages.h",
-        "message_passing_config.h",
     ],
     features = COMPILER_WARNING_FEATURES,
     tags = ["FFI"],
     visibility = [
         "//score/datarouter:__pkg__",
-        "//score/datarouter/test:__subpackages__",
         "//score/mw/log/detail/slog:__pkg__",
     ],
     deps = [
         "@score_baselibs//score/mw/log/detail:logging_identifier",
+        "@score_communication//score/mw/com/message_passing",
     ],
 )
