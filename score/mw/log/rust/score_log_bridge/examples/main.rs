@@ -12,7 +12,7 @@
 //
 
 use score_log::{debug, error, fatal, info, trace, warn, Log};
-use score_log_bridge::ScoreLogBridgeBuilder;
+use score_log_bridge::ScoreLoggerBuilder;
 use std::path::PathBuf;
 
 fn main() {
@@ -24,8 +24,8 @@ fn main() {
         .join("config")
         .join("logging.json");
 
-    // Initialize `ScoreLogBridge` as a default logger.
-    ScoreLogBridgeBuilder::new()
+    // Initialize `ScoreLogger` as a default logger.
+    ScoreLoggerBuilder::new()
         .show_module(false)
         .show_file(true)
         .show_line(false)
@@ -59,7 +59,7 @@ fn main() {
     );
 
     // Use logger instance with modified context.
-    let logger = ScoreLogBridgeBuilder::new()
+    let logger = ScoreLoggerBuilder::new()
         .context("ALFA")
         .show_module(false)
         .show_file(true)

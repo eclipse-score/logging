@@ -80,3 +80,47 @@ Example:
    }
 
 This enables conditional behavior (e.g., choosing `clang-tidy` for C++ or `clippy` for Rust).
+
+
+Module Documents
+================
+
+.. mod:: logging
+   :id: mod__logging
+   :includes: comp__log_bridge, comp__datarouter, comp__recorders
+   :status: valid
+   :safety: ASIL_B
+   :security: YES
+
+   .. needarch::
+      :scale: 50
+      :align: center
+
+      {{ draw_module(need(), needs) }}
+
+.. _logging_module_docs:
+
+Features 
+========
+
+.. toctree::
+   :titlesonly:
+   :maxdepth: 1
+   :glob:
+
+   ./features/*/index
+
+Components
+==========
+
+.. toctree::
+   :titlesonly:
+   :maxdepth: 2
+   :glob:
+
+   ./data_router_recorder/docs/index
+   ./recorders/docs/index
+   ./datarouter/docs/index
+   ./file_recorder/docs/index
+   ./log_bridge/docs/index
+
