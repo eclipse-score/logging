@@ -131,17 +131,12 @@ cc_test(
         "additional_warnings",
         "strict_warnings",
     ],
-    linkopts = select({
-        "@platforms//os:linux": ["-latomic"],  # needed for spp-host-clang
-        "//conditions:default": [],
-    }),
     tags = ["unit"],
     visibility = ["//score/mw/log/detail/data_router:__pkg__"],
     deps = [
         ":reader",
         ":writer",
         "//score/mw/log/test/console_logging_environment",
-        "//third_party/libatomic",
         "@googletest//:gtest_main",
         "@score_baselibs//score/os/mocklib:fcntl_mock",
         "@score_baselibs//score/os/mocklib:mman_mock",

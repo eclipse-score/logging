@@ -98,10 +98,6 @@ cc_test(
     features = COMPILER_WARNING_FEATURES + [
         "aborts_upon_exception",
     ],
-    linkopts = select({
-        "@platforms//os:linux": ["-latomic"],  # needed for spp-host-clang
-        "//conditions:default": [],
-    }),
     tags = ["unit"],
     visibility = ["@score_baselibs//score/mw/log/detail:__pkg__"],
     deps = [
@@ -109,7 +105,6 @@ cc_test(
         "alternating_writer",
         "read_only_reader",
         "//score/mw/log/test/console_logging_environment",
-        "//third_party/libatomic",
         "@googletest//:gtest_main",
     ],
 )
