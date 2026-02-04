@@ -32,7 +32,7 @@ cc_library(
         "session_handle_interface.h",
     ],
     features = COMPILER_WARNING_FEATURES,
-    visibility = ["//score/datarouter:__subpackages__"],
+    visibility = ["@score_logging//score/datarouter:__subpackages__"],
 )
 
 cc_library(
@@ -43,7 +43,7 @@ cc_library(
     ],
     features = COMPILER_WARNING_FEATURES,
     visibility = [
-        "//score/datarouter:__subpackages__",
+        "@score_logging//score/datarouter:__subpackages__",
     ],
     deps = [
         "@googletest//:gtest",

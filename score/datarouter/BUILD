@@ -322,7 +322,7 @@ cc_library(
     ],
     visibility = [
         "//platform/aas/pas/datarouterconf:__subpackages__",
-        "//score/datarouter:__subpackages__",
+        "@score_logging//score/datarouter:__subpackages__",
     ],
 )
 
@@ -335,11 +335,11 @@ filegroup(
         "etc/persistent-logging.json",
     ],
     visibility = [
-        "//ecu/xpad/xpad-shared/config/common/pas/datarouter:__subpackages__",
+        "//pqr/abc/abc-lmn/config/common/pas/datarouter:__subpackages__",
         "//score/datarouter/test:__subpackages__",
         "//platform/aas/tools/itf:__subpackages__",
         "//platform/aas/tools/sctf:__subpackages__",
-        # "@ddad//ecu/xpad/xpad-shared/config/common/pas/datarouter:__subpackages__",
+        # "@xyz//pqr/abc/abc-lmn/config/common/pas/datarouter:__subpackages__",
     ],
 )
 
@@ -369,7 +369,7 @@ cc_library(
     ],
     features = COMPILER_WARNING_FEATURES,
     visibility = [
-        "//score/datarouter:__subpackages__",
+        "@score_logging//score/datarouter:__subpackages__",
     ],
     deps = [
         ":log",
@@ -429,7 +429,7 @@ cc_library(
     ],
     features = COMPILER_WARNING_FEATURES,
     visibility = [
-        "//score/datarouter:__subpackages__",
+        "@score_logging//score/datarouter:__subpackages__",
     ],
     deps = [
         ":datarouter_types",
@@ -502,7 +502,7 @@ cc_library(
         }),
         strip_include_prefix = "include",
         visibility = [
-            "//score/datarouter:__subpackages__",
+            "@score_logging//score/datarouter:__subpackages__",
         ],
         deps = select({
             "//score/datarouter/build_configuration_flags:config_persistent_configuration": [
@@ -677,7 +677,7 @@ cc_library(
     features = COMPILER_WARNING_FEATURES,
     strip_include_prefix = "include",
     visibility = [
-        "//score/datarouter:__subpackages__",
+        "@score_logging//score/datarouter:__subpackages__",
     ],
     deps = [
         ":dltprotocol",
@@ -708,13 +708,13 @@ cc_library(
         ":dltserver_common",
         ":persistentlogconfig",
         ":socketserver_config_helpers",
-        "//score/datarouter:datarouter_types",
         "//score/datarouter/error:logging_error",
         "//score/datarouter/src/persistency:interface",
         "@rapidjson",
         "@score_baselibs//score/language/futurecpp",
         "@score_baselibs//score/static_reflection_with_serialization/serialization",
         "@score_baselibs//score/static_reflection_with_serialization/visitor",
+        "@score_logging//score/datarouter:datarouter_types",
     ],
 )
 
@@ -737,13 +737,13 @@ cc_library(
         ":datarouter_testing",
         ":dltserver_common",
         ":persistentlogconfig",
-        "//score/datarouter:datarouter_types",
         "//score/datarouter/error:logging_error",
         "//score/datarouter/src/persistency:mock",
         "@rapidjson",
         "@score_baselibs//score/language/futurecpp",
         "@score_baselibs//score/static_reflection_with_serialization/serialization",
         "@score_baselibs//score/static_reflection_with_serialization/visitor",
+        "@score_logging//score/datarouter:datarouter_types",
     ],
 )
 
@@ -755,7 +755,6 @@ cc_library(
     hdrs = [
         "include/daemon/socketserver.h",
     ],
-    # TODO: will be reworked in Ticket-207823
     features = COMPILER_WARNING_FEATURES,
     local_defines = select({
         "//score/datarouter/build_configuration_flags:config_persistent_logging": ["PERSISTENT_LOGGING"],
@@ -763,8 +762,8 @@ cc_library(
     }),
     strip_include_prefix = "include",
     visibility = [
-        "//score/datarouter:__pkg__",
         "//score/datarouter/test:__subpackages__",
+        "@score_logging//score/datarouter:__pkg__",
     ],
     deps = [
         ":datarouter_feature_config",
@@ -790,7 +789,6 @@ cc_library(
     hdrs = [
         "include/daemon/socketserver.h",
     ],
-    # TODO: will be reworked in Ticket-207823
     features = COMPILER_WARNING_FEATURES,
     local_defines = select({
         "//score/datarouter/build_configuration_flags:config_persistent_logging": ["PERSISTENT_LOGGING"],
@@ -891,7 +889,7 @@ cc_library(
     ],
     features = COMPILER_WARNING_FEATURES,
     strip_include_prefix = "include",
-    visibility = ["//score/datarouter:__subpackages__"],
+    visibility = ["@score_logging//score/datarouter:__subpackages__"],
     deps = [
         ":dltserver_common",
         "//score/datarouter/network:vlan",
@@ -1016,7 +1014,7 @@ cc_library(
     features = COMPILER_WARNING_FEATURES,
     strip_include_prefix = "include",
     visibility = [
-        "//score/datarouter:__subpackages__",
+        "@score_logging//score/datarouter:__subpackages__",
     ],
     deps = [
         # It's being conflicted with the real udp_stream_output target that used

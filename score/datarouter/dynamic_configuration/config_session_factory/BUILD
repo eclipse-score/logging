@@ -36,7 +36,7 @@ clang_tidy_extra_checks(
         features = COMPILER_WARNING_FEATURES,
         strip_include_prefix = ".",
         visibility = [
-            "//score/datarouter:__subpackages__",
+            "@score_logging//score/datarouter:__subpackages__",
         ],
         deps = deps,
     )

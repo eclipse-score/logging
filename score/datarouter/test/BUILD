@@ -34,7 +34,7 @@ test_suite(
     tests = [
         "//score/datarouter/test/ut:unit_tests",
     ],
-    visibility = ["//score/datarouter:__pkg__"],
+    visibility = ["@score_logging//score/datarouter:__pkg__"],
 )
 
 py_unittest_qnx_test(

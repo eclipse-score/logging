@@ -36,26 +36,26 @@ clang_tidy_extra_checks(
         features = COMPILER_WARNING_FEATURES,
         strip_include_prefix = ".",
         visibility = [
-            "//score/datarouter:__subpackages__",
+            "@score_logging//score/datarouter:__subpackages__",
         ],
         deps = [
-            "//score/datarouter:log",
-            "//score/datarouter:logparser",
             "@score_baselibs//score/mw/log/configuration:nvconfig",
+            "@score_logging//score/datarouter:log",
+            "@score_logging//score/datarouter:logparser",
         ] + dep,
     )
     for name, dep, test_only in [
         (
             "",
             [
-                "//score/datarouter:dlt_log_channel_lib",
+                "@score_logging//score/datarouter:dlt_log_channel_lib",
             ],
             False,
         ),
         (
             "_testing",
             [
-                "//score/datarouter:dlt_log_channel_lib_testing",
+                "@score_logging//score/datarouter:dlt_log_channel_lib_testing",
             ],
             True,
         ),

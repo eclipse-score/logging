@@ -11,22 +11,15 @@
 # SPDX-License-Identifier: Apache-2.0
 # *******************************************************************************
 
-load("@rules_cc//cc:defs.bzl", "cc_library")
-
-cc_library(
-    name = "sysedr_stub",
+filegroup(
+    name = "model",
     srcs = [
-        "stub_sysedr_factory.cpp",
-        "stub_sysedr_handler.cpp",
+        "datarouter.fcdl",
+        "//platform/aas/intc/lifecycle_state_machine/adaptive_model/interfaces:machinefgstate_interface",
+        "//score/datarouter/model/interface:persistency",
     ],
-    hdrs = [
-        "stub_sysedr_factory.h",
-        "stub_sysedr_handler.h",
-    ],
-    visibility = ["@score_logging//score/datarouter:__subpackages__"],
-    deps = [
-        "//score/datarouter/src/persistent_logging:sysedr_factory",
-        "//score/datarouter/src/persistent_logging:sysedr_handler_interface",
-        "@score_logging//score/datarouter:log",
+    visibility = [
+        "//pqr/abc/abc-lmn/config/common/pas/datarouter:__subpackages__",
+        # "@xyz//pqr/abc/abc-lmn/config/common/pas/datarouter:__subpackages__",
     ],
 )

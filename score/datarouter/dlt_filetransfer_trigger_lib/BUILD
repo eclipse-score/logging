@@ -47,7 +47,7 @@ cc_library(
     ],
     deps = [
         "filetransfer_message_types",
-        "//score/datarouter:log",
+        "@score_logging//score/datarouter:log",
     ],
 )
 
@@ -61,11 +61,11 @@ cc_library(
     visibility = [
         "//platform/aas/pas/crash_handler:__subpackages__",
         "//platform/aas/pas/datarouterconf/src/filetransfer:__subpackages__",
-        "//score/datarouter:__subpackages__",
         "//score/mw/log/legacy_non_verbose_api:__pkg__",
+        "@score_logging//score/datarouter:__subpackages__",
     ],
     deps = [
-        "//score/datarouter:dltprotocol",
+        "@score_logging//score/datarouter:dltprotocol",
     ],
 )
 

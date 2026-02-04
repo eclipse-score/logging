@@ -44,7 +44,7 @@ test_suite(
         ":unix_domain_server_test",
         ":utility_test",
     ],
-    visibility = ["//score/datarouter:__pkg__"],
+    visibility = ["@score_logging//score/datarouter:__pkg__"],
 )
 
 cc_test(
@@ -60,9 +60,9 @@ cc_test(
     ],
     tags = ["unit"],
     deps = [
-        "//score/datarouter:log_entry_deserialization",
         "@googletest//:gtest_main",
         "@score_baselibs//score/static_reflection_with_serialization/serialization",
+        "@score_logging//score/datarouter:log_entry_deserialization",
     ],
 )
 
@@ -79,8 +79,8 @@ cc_test(
     ],
     tags = ["unit"],
     deps = [
-        "//score/datarouter:logchannel_utility",
         "@googletest//:gtest_main",
+        "@score_logging//score/datarouter:logchannel_utility",
     ],
 )
 
@@ -92,9 +92,9 @@ cc_test(
     features = FEAT_COMPILER_WARNINGS_AS_ERRORS,
     tags = ["unit"],
     deps = [
-        "//score/datarouter:logparser_testing",
         "@googletest//:gtest_main",
         "@score_baselibs//score/mw/log/configuration:nvconfig_mock",
+        "@score_logging//score/datarouter:logparser_testing",
     ],
 )
 
@@ -122,8 +122,8 @@ cc_test(
     features = FEAT_COMPILER_WARNINGS_AS_ERRORS,
     tags = ["unit"],
     deps = [
-        "//score/datarouter:dltprotocol",
         "@googletest//:gtest_main",
+        "@score_logging//score/datarouter:dltprotocol",
     ],
 )
 
@@ -151,9 +151,9 @@ cc_test(
     features = FEAT_COMPILER_WARNINGS_AS_ERRORS,
     tags = ["unit"],
     deps = [
-        "//score/datarouter:datarouter_feature_config",
         "//score/datarouter/src/file_transfer:file_transfer_handler_factory",
         "@googletest//:gtest_main",
+        "@score_logging//score/datarouter:datarouter_feature_config",
     ] + select({
         "//score/datarouter/build_configuration_flags:config_file_transfer": [
             "//score/datarouter/src/file_transfer/file_transfer_impl:file_transfer_stream_handler_factory",
@@ -197,9 +197,9 @@ cc_test(
     features = FEAT_COMPILER_WARNINGS_AS_ERRORS,
     tags = ["unit"],
     deps = [
-        "//score/datarouter:dltserver_testing",
-        "//score/datarouter:log",
         "@googletest//:gtest_main",
+        "@score_logging//score/datarouter:dltserver_testing",
+        "@score_logging//score/datarouter:log",
     ],
 )
 
@@ -225,10 +225,10 @@ cc_test(
         # It's being conflicted with the real udp_stream_output target that used
         # by earlier targets here. "dltserver_testing" shall be at the first.
         # buildifier off
-        "//score/datarouter:dltserver_testing",
+        "@score_logging//score/datarouter:dltserver_testing",
         # buildifier on
-        "//score/datarouter:log",
-        "//score/datarouter:datarouter_feature_config_testing",
+        "@score_logging//score/datarouter:log",
+        "@score_logging//score/datarouter:datarouter_feature_config_testing",
         "//score/datarouter/dlt_filetransfer_trigger_lib",
         "@googletest//:gtest_main",
     ],
@@ -242,9 +242,9 @@ cc_test(
     features = FEAT_COMPILER_WARNINGS_AS_ERRORS,
     tags = ["unit"],
     deps = [
-        "//score/datarouter:datarouter_options",
-        "//score/datarouter:log",
         "@googletest//:gtest_main",
+        "@score_logging//score/datarouter:datarouter_options",
+        "@score_logging//score/datarouter:log",
     ],
 )
 
@@ -256,9 +256,9 @@ cc_test(
     features = FEAT_COMPILER_WARNINGS_AS_ERRORS,
     tags = ["unit"],
     deps = [
-        "//score/datarouter:datarouter_app",
-        "//score/datarouter:log",
         "@googletest//:gtest_main",
+        "@score_logging//score/datarouter:datarouter_app",
+        "@score_logging//score/datarouter:log",
     ],
 )
 
@@ -273,9 +273,9 @@ cc_test(
     features = FEAT_COMPILER_WARNINGS_AS_ERRORS,
     tags = ["unit"],
     deps = [
-        "//score/datarouter:log",
-        "//score/datarouter:persistentlogconfig",
         "@googletest//:gtest_main",
+        "@score_logging//score/datarouter:log",
+        "@score_logging//score/datarouter:persistentlogconfig",
     ],
 )
 
@@ -291,10 +291,10 @@ cc_test(
     features = FEAT_COMPILER_WARNINGS_AS_ERRORS,
     tags = ["unit"],
     deps = [
-        "//score/datarouter:log",
-        "//score/datarouter:socketserver_config_lib_testing",
         "//score/datarouter/src/persistency/stub_persistent_dictionary:stub",
         "@googletest//:gtest_main",
+        "@score_logging//score/datarouter:log",
+        "@score_logging//score/datarouter:socketserver_config_lib_testing",
     ],
 )
 
@@ -309,12 +309,12 @@ cc_test(
     features = FEAT_COMPILER_WARNINGS_AS_ERRORS,
     tags = ["unit"],
     deps = [
-        "//score/datarouter:datarouter_socketserver_testing",
         "//score/datarouter/src/persistency:mock",
         "@googletest//:gtest_main",
         "@score_baselibs//score/mw/log/configuration:nvconfig_mock",
         "@score_baselibs//score/os/mocklib:pthread_mock",
         "@score_baselibs//score/os/mocklib:unistd_mock",
+        "@score_logging//score/datarouter:datarouter_socketserver_testing",
     ],
 )
 
@@ -326,12 +326,12 @@ cc_test(
     features = FEAT_COMPILER_WARNINGS_AS_ERRORS,
     tags = ["unit"],
     deps = [
-        "//score/datarouter:message_passing_server",
         "//score/datarouter/daemon_communication:mock",
         "@googletest//:gtest_main",
         "@score_baselibs//score/os/mocklib:pthread_mock",
         "@score_baselibs//score/os/mocklib:unistd_mock",
         "@score_communication//score/message_passing:mock",
+        "@score_logging//score/datarouter:message_passing_server",
     ],
 )
 
@@ -343,9 +343,9 @@ cc_test(
     features = FEAT_COMPILER_WARNINGS_AS_ERRORS,
     tags = ["unit"],
     deps = [
-        "//score/datarouter:udp_stream_output",
         "@googletest//:gtest_main",
         "@score_baselibs//score/os/mocklib:socket_mock",
+        "@score_logging//score/datarouter:udp_stream_output",
     ],
 )
 
@@ -357,12 +357,12 @@ cc_test(
     features = FEAT_COMPILER_WARNINGS_AS_ERRORS,
     tags = ["unit"],
     deps = [
-        "//score/datarouter:unixdomain_server",
         "@googletest//:gtest_main",
         "@score_baselibs//score/os/mocklib:pthread_mock",
         "@score_baselibs//score/os/mocklib:socket_mock",
         "@score_baselibs//score/os/mocklib:sys_poll_mock",
         "@score_baselibs//score/os/utils/mocklib:signal_mock",
+        "@score_logging//score/datarouter:unixdomain_server",
     ],
 )
 
@@ -382,9 +382,9 @@ cc_test(
             "@googletest//:gtest_main",
         ],
         "//conditions:default": [
-            "//score/datarouter:datarouter_feature_config_testing",
             "//score/datarouter/dynamic_configuration/config_session_stub:config_session_stub_testing",
             "@googletest//:gtest_main",
+            "@score_logging//score/datarouter:datarouter_feature_config_testing",
         ],
     }),
 )
@@ -401,10 +401,10 @@ cc_test(
         # It's being conflicted with the real udp_stream_output target that used
         # by earlier targets here. "udpoutput_mock" shall be at the first.
         # buildifier off
-        "//score/datarouter:udpoutput_mock",
+        "@score_logging//score/datarouter:udpoutput_mock",
         # buildifier on
-        "//score/datarouter:datarouter_feature_config_testing",
-        "//score/datarouter:dltserver_testing",
+        "@score_logging//score/datarouter:datarouter_feature_config_testing",
+        "@score_logging//score/datarouter:dltserver_testing",
         # "//score/datarouter/dynamic_configuration/dynamic_config_session:dynamic_config_session_testing",
         "//score/datarouter/dynamic_configuration/config_session_stub:config_session_stub_testing",
         "@googletest//:gtest_main",

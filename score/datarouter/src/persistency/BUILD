@@ -30,7 +30,7 @@ cc_library(
     name = "interface",
     hdrs = ["i_persistent_dictionary.h"],
     features = COMPILER_WARNING_FEATURES,
-    visibility = ["//score/datarouter:__subpackages__"],
+    visibility = ["@score_logging//score/datarouter:__subpackages__"],
 )
 
 cc_library(
@@ -39,7 +39,7 @@ cc_library(
         "persistent_dictionary_factory.hpp",
     ],
     features = COMPILER_WARNING_FEATURES,
-    visibility = ["//score/datarouter:__subpackages__"],
+    visibility = ["@score_logging//score/datarouter:__subpackages__"],
     deps = [
         ":interface",
     ],
@@ -52,7 +52,7 @@ cc_library(
         "mock_persistent_dictionary.h",
     ],
     features = COMPILER_WARNING_FEATURES,
-    visibility = ["//score/datarouter:__subpackages__"],
+    visibility = ["@score_logging//score/datarouter:__subpackages__"],
     deps = [
         ":interface",
         "@googletest//:gtest",

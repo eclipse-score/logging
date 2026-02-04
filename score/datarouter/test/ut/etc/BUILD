@@ -24,7 +24,7 @@ filegroup(
     ],
     visibility = [
         "//platform/aas/pas/datarouterconf:__subpackages__",
-        "//score/datarouter:__subpackages__",
+        "@score_logging//score/datarouter:__subpackages__",
     ],
 )
 

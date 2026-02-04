@@ -84,9 +84,9 @@ cc_library(
     ],
     tags = ["FFI"],
     visibility = [
-        "//score/datarouter:__subpackages__",
         "//score/mw/log/detail/data_router:__subpackages__",
         "//score/mw/log/legacy_non_verbose_api:__subpackages__",
+        "@score_logging//score/datarouter:__subpackages__",
     ],
     deps = [
         ":common",
