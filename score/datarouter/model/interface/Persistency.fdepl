@@ -1,0 +1,22 @@
+package bmw.platform.datarouter.PortInterfaces
+
+import "platform:/resource/AASModel/platform/aas/tools/franca/deployment_specifications/persistency_deployment_spec.fdepl"
+
+import "Persistency.fidl"
+
+define persistency for interface bmw.platform.datarouter.PortInterfaces.PersistencyNvmblockInterface as persistencyNvmblockDepl {
+    UpdateStrategy = KeepExisting
+    Redundancy = None
+
+    attribute dataRouter {
+        UpdateStrategy = Overwrite
+    }
+
+    attribute dltConfig {
+        UpdateStrategy = Overwrite
+    }
+
+    attribute dltOutputEnabled {
+        UpdateStrategy = Overwrite
+    }
+}

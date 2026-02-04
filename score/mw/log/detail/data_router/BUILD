@@ -162,9 +162,9 @@ cc_library(
     features = COMPILER_WARNING_FEATURES,
     tags = ["FFI"],
     visibility = [
-        "//score/datarouter:__pkg__",
         "//score/datarouter/test:__subpackages__",
         "//score/mw/log/detail/slog:__pkg__",
+        "@score_logging//score/datarouter:__pkg__",
     ],
     deps = [
         "@score_baselibs//score/mw/log/detail:logging_identifier",

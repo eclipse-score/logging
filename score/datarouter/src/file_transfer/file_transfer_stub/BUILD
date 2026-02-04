@@ -21,13 +21,13 @@ cc_library(
     ],
     features = COMPILER_WARNING_FEATURES,
     visibility = [
-        "//score/datarouter:__pkg__",
         "//score/datarouter/test:__subpackages__",
+        "@score_logging//score/datarouter:__pkg__",
     ],
     deps = [
         ":file_transfer_stream_handler_stub",
-        "//score/datarouter:logparser",
         "//score/datarouter/src/file_transfer:file_transfer_handler_factory",
+        "@score_logging//score/datarouter:logparser",
     ],
 )
 
@@ -38,13 +38,13 @@ cc_library(
     ],
     features = COMPILER_WARNING_FEATURES,
     visibility = [
-        "//score/datarouter:__pkg__",
+        "@score_logging//score/datarouter:__pkg__",
     ],
     deps = [
-        "//score/datarouter:dltprotocol",
-        "//score/datarouter:dltserver_common",
-        "//score/datarouter:log",
-        "//score/datarouter:logparser",
         "@score_baselibs//score/language/futurecpp",
+        "@score_logging//score/datarouter:dltprotocol",
+        "@score_logging//score/datarouter:dltserver_common",
+        "@score_logging//score/datarouter:log",
+        "@score_logging//score/datarouter:logparser",
     ],
 )

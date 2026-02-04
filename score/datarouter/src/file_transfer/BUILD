@@ -37,6 +37,6 @@ cc_library(
         "//score/datarouter/test:__subpackages__",
     ],
     deps = [
-        "//score/datarouter:logparser",
+        "@score_logging//score/datarouter:logparser",
     ],
 )

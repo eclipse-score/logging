@@ -45,8 +45,8 @@ clang_tidy_extra_checks(
             "",
             False,
             [
-                "//score/datarouter:__pkg__",
-                "//score/datarouter:__subpackages__",
+                "@score_logging//score/datarouter:__pkg__",
+                "@score_logging//score/datarouter:__subpackages__",
             ],
             [
                 "//score/datarouter/dynamic_configuration/config_session_factory",
@@ -57,7 +57,7 @@ clang_tidy_extra_checks(
             "_testing",
             True,
             [
-                "//score/datarouter:__pkg__",
+                "@score_logging//score/datarouter:__pkg__",
                 "//score/datarouter/test:__subpackages__",
             ],
             [

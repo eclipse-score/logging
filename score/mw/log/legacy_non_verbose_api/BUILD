@@ -23,12 +23,11 @@ cc_library(
     tags = ["FFI"],
     visibility = [
         "//platform/aas/ara/log:__subpackages__",
-        "//score/datarouter:__pkg__",
         "//score/mw/log:__subpackages__",
         "@score_baselibs//score/mw/log:__subpackages__",
+        "@score_logging//score/datarouter:__pkg__",
     ],
     deps = [
-        "//score/datarouter:libtracing_legacy_public_headers",
         "//score/mw/log/detail/data_router/shared_memory:writer",
         "@score_baselibs//score/language/futurecpp",
         "@score_baselibs//score/mw/log:frontend",
@@ -37,6 +36,7 @@ cc_library(
         "@score_baselibs//score/mw/log/configuration:nvconfigfactory",
         "@score_baselibs//score/mw/log/detail/wait_free_stack",
         "@score_baselibs//score/static_reflection_with_serialization/serialization",
+        "@score_logging//score/datarouter:libtracing_legacy_public_headers",
     ],
 )
 

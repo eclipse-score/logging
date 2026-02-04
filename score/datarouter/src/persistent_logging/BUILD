@@ -32,7 +32,7 @@ cc_library(
     ],
     visibility = ["//score/datarouter/src/persistent_logging:__subpackages__"],
     deps = [
-        "//score/datarouter:logparser",
+        "@score_logging//score/datarouter:logparser",
     ],
 )
 

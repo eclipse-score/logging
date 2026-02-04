@@ -23,7 +23,7 @@ cc_library(
         "stub_persistent_dictionary.h",
     ],
     features = COMPILER_WARNING_FEATURES,
-    visibility = ["//score/datarouter:__subpackages__"],
+    visibility = ["@score_logging//score/datarouter:__subpackages__"],
     deps = [
         "//score/datarouter/src/persistency:interface",
     ],
@@ -37,7 +37,7 @@ cc_library(
     hdrs = [
         "stub_persistent_dictionary_factory.h",
     ],
-    visibility = ["//score/datarouter:__subpackages__"],
+    visibility = ["@score_logging//score/datarouter:__subpackages__"],
     deps = [
         ":stub",
         "//score/datarouter/src/persistency:persistency_factory",

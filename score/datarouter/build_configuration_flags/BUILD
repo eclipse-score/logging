@@ -25,7 +25,7 @@ config_setting(
     },
     visibility = [
         "//platform/aas/test/pas/datarouterconf:__subpackages__",
-        "//score/datarouter:__subpackages__",
+        "@score_logging//score/datarouter:__subpackages__",
     ],
 )
 
@@ -37,7 +37,7 @@ bool_flag(
 config_setting(
     name = "config_persistent_configuration",
     flag_values = {":persistent_config_feature_enabled": "True"},
-    visibility = ["//score/datarouter:__subpackages__"],
+    visibility = ["@score_logging//score/datarouter:__subpackages__"],
 )
 
 bool_flag(
@@ -51,7 +51,7 @@ config_setting(
         ":enable_nonverbose_dlt": "True",
     },
     visibility = [
-        "//score/datarouter:__subpackages__",
+        "@score_logging//score/datarouter:__subpackages__",
     ],
 )
 
@@ -66,7 +66,7 @@ config_setting(
         ":enable_dynamic_configuration_in_datarouter": "True",
     },
     visibility = [
-        "//score/datarouter:__subpackages__",
+        "@score_logging//score/datarouter:__subpackages__",
     ],
 )
 
@@ -81,7 +81,7 @@ config_setting(
         ":file_transfer": "True",
     },
     visibility = [
-        "//score/datarouter:__subpackages__",
+        "@score_logging//score/datarouter:__subpackages__",
     ],
 )
 
@@ -96,7 +96,7 @@ config_setting(
         ":enable_thin_network_sender": "False",
     },
     visibility = [
-        "//score/datarouter:__subpackages__",
+        "@score_logging//score/datarouter:__subpackages__",
     ],
 )
 

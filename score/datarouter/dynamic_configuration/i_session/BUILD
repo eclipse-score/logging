@@ -34,6 +34,6 @@ cc_library(
     features = COMPILER_WARNING_FEATURES,
     strip_include_prefix = ".",
     visibility = [
-        "//score/datarouter:__subpackages__",
+        "@score_logging//score/datarouter:__subpackages__",
     ],
 )

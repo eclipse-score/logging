@@ -99,8 +99,8 @@ cc_library(
     srcs = ["log_entry_deserialize.h"],
     features = COMPILER_WARNING_FEATURES,
     visibility = [
-        "//score/datarouter:__pkg__",
         "//score/datarouter/test:__subpackages__",
+        "@score_logging//score/datarouter:__pkg__",
     ],
     deps = [
         "@score_baselibs//score/mw/log:shared_types",
