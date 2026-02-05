@@ -325,13 +325,15 @@ score::cpp::expected_blank<score::os::Error> DatarouterMessageClientImpl::Create
         return score::cpp::make_unexpected(score::os::Error::createFromErrno(ENOMEM));
     }
 
-    auto state_callback = [this](score::message_passing::IClientConnection::State state) noexcept {
-        {
-            std::lock_guard<std::mutex> callback_lock(sender_state_change_mutex_);
-            sender_state_ = state;
-        }
-        state_condition_.notify_all();
-    };
+    auto state_callback =
+        [&state_mutex = sender_state_change_mutex_, &state = sender_state_, &condition = state_condition_](
+            score::message_passing::IClientConnection::State new_state) noexcept {
+            {
+                std::lock_guard<std::mutex> callback_lock(state_mutex);
+                state = new_state;
+            }
+            condition.notify_all();
+        };
 
     sender_->Start(state_callback, score::message_passing::IClientConnection::NotifyCallback{});
     return {};
