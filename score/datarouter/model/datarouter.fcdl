@@ -1,7 +1,0 @@
-package bmw.platform.datarouter
-
-import bmw.platform.datarouter.PortInterfaces.* from "interface/Persistency.fidl"
-
-service component datarouter {
-    provides PersistencyNvmblockInterface as PersistencyNvmblockPPort
-}

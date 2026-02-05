@@ -39,7 +39,7 @@ class UnixDomainServer
     {
       public:
         SessionHandle(int,
-                      UnixDomainServer*,
+                      UnixDomainServer* = nullptr,
                       std::optional<std::reference_wrapper<std::string>> set_response_reference = std::nullopt)
             : last_message_{set_response_reference}
         {

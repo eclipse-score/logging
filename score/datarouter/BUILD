@@ -335,11 +335,10 @@ filegroup(
         "etc/persistent-logging.json",
     ],
     visibility = [
-        "//pqr/abc/abc-lmn/config/common/pas/datarouter:__subpackages__",
-        "//score/datarouter/test:__subpackages__",
         "//platform/aas/tools/itf:__subpackages__",
         "//platform/aas/tools/sctf:__subpackages__",
-        # "@xyz//pqr/abc/abc-lmn/config/common/pas/datarouter:__subpackages__",
+        "//pqr/abc/abc-lmn/config/iproject/corepas/datarouter:__pkg__",
+        "//score/datarouter/test:__subpackages__",
     ],
 )
 
@@ -733,7 +732,7 @@ cc_library(
     strip_include_prefix = "include",
     visibility = ["//score/datarouter/test:__subpackages__"],
     deps = [
-        ":datarouter_feature_config",
+        ":datarouter_feature_config_testing",
         ":datarouter_testing",
         ":dltserver_common",
         ":persistentlogconfig",
@@ -797,7 +796,7 @@ cc_library(
     strip_include_prefix = "include",
     visibility = ["//score/datarouter/test:__subpackages__"],
     deps = [
-        ":datarouter_feature_config",
+        ":datarouter_feature_config_testing",
         ":datarouter_lib",
         ":dltserver",
         ":persistentlogconfig",
@@ -811,23 +810,41 @@ cc_library(
     }),
 )
 
-cc_library(
-    name = "datarouter_app",
-    srcs = [
-        "src/applications/datarouter_app.cpp",
-    ],
-    hdrs = [
-        "src/applications/datarouter_app.h",
-    ],
-    features = COMPILER_WARNING_FEATURES,
-    strip_include_prefix = "src/applications",
-    visibility = ["//score/datarouter/test:__subpackages__"],
-    deps = [
-        ":datarouter_options",
-        ":datarouter_socketserver",
-        ":log",
-    ],
-)
+[
+    cc_library(
+        name = "datarouter_app" + name,
+        testonly = test_only,
+        srcs = [
+            "src/applications/datarouter_app.cpp",
+        ],
+        hdrs = [
+            "src/applications/datarouter_app.h",
+        ],
+        features = COMPILER_WARNING_FEATURES,
+        strip_include_prefix = "src/applications",
+        visibility = ["//score/datarouter/test:__subpackages__"],
+        deps = [
+            ":datarouter_options",
+            ":log",
+        ] + deps,
+    )
+    for (name, deps, test_only) in [
+        (
+            "",
+            [
+                ":datarouter_socketserver",
+            ],
+            False,
+        ),
+        (
+            "_testing",
+            [
+                ":datarouter_socketserver_testing",
+            ],
+            True,
+        ),
+    ]
+]
 
 cc_binary(
     name = "datarouter",
@@ -1023,12 +1040,12 @@ cc_library(
         ":udpoutput_mock",
         # buildifier on
         ":unixdomain_mock",
-        ":datarouter_feature_config",
         ":datarouter_feature_config_testing",
         ":datarouter_types",
         ":diagnostic_job_handler_mock",
         ":diagnostic_job_parser_mock",
         ":dlt_log_server_mock",
+        ":libdrconfighdrs",
         ":log_entry_deserialization",
         ":log_sender_mock",
         ":logparser_testing",

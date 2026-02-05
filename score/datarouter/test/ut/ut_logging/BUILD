@@ -153,7 +153,7 @@ cc_test(
     deps = [
         "//score/datarouter/src/file_transfer:file_transfer_handler_factory",
         "@googletest//:gtest_main",
-        "@score_logging//score/datarouter:datarouter_feature_config",
+        "@score_logging//score/datarouter:datarouter_feature_config_testing",
     ] + select({
         "//score/datarouter/build_configuration_flags:config_file_transfer": [
             "//score/datarouter/src/file_transfer/file_transfer_impl:file_transfer_stream_handler_factory",
@@ -257,7 +257,7 @@ cc_test(
     tags = ["unit"],
     deps = [
         "@googletest//:gtest_main",
-        "@score_logging//score/datarouter:datarouter_app",
+        "@score_logging//score/datarouter:datarouter_app_testing",
         "@score_logging//score/datarouter:log",
     ],
 )
