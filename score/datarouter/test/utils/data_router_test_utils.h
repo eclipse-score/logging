@@ -30,7 +30,7 @@ struct TestTypeInfo
         return type_params.size();
     }
 
-    void copy(const score::cpp::span<score::mw::log::detail::Byte> data) const
+    void Copy(const score::cpp::span<score::mw::log::detail::Byte> data) const
     {
         if (score::mw::log::detail::GetDataSizeAsLength(data) != type_params.size())
         {
@@ -46,10 +46,10 @@ struct TestTypeInfo
 template <typename Message>
 TestTypeInfo CreateTypeInfo()
 {
-    constexpr static std::size_t idsize = score::platform::dltid_t::size();
-    const std::string appPrefix(idsize * 3, char{0});
+    constexpr static std::size_t kIdsize = score::platform::dltid_t::size();
+    const std::string app_prefix(kIdsize * 3, char{0});
     TestTypeInfo type_info{};
-    type_info.type_params = appPrefix + ::score::common::visitor::logger_type_string<Message>();
+    type_info.type_params = app_prefix + ::score::common::visitor::logger_type_string<Message>();
     return type_info;
 }
 

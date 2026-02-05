@@ -65,7 +65,7 @@ TEST(LoggingErrorDomainTest, TestkNoChannelsFoundCode)
 
 enum ExtendLoggingErrorCode : std::underlying_type_t<LoggingErrorCode>
 {
-    EXTENDED_CODE
+    kExtendedCode
 };
 
 TEST(LoggingErrorDomainTest, TestUnknownCode)
@@ -77,7 +77,7 @@ TEST(LoggingErrorDomainTest, TestUnknownCode)
 
     std::string_view expected_result("Unknown generic error");
     LoggingErrorDomain obj;
-    LoggingErrorCode custom_logging_error_code = static_cast<LoggingErrorCode>(ExtendLoggingErrorCode::EXTENDED_CODE);
+    LoggingErrorCode custom_logging_error_code = static_cast<LoggingErrorCode>(ExtendLoggingErrorCode::kExtendedCode);
 
     EXPECT_EQ(obj.MessageFor(static_cast<score::result::ErrorCode>(custom_logging_error_code)), expected_result);
 }

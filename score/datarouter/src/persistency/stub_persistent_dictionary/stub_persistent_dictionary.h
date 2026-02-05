@@ -26,11 +26,11 @@ namespace datarouter
 class StubPersistentDictionary final : public IPersistentDictionary
 {
   public:
-    std::string getString(const std::string& key, const std::string& defaultValue) override;
-    bool getBool(const std::string& key, const bool defaultValue) override;
+    std::string GetString(const std::string& key, const std::string& default_value) override;
+    bool GetBool(const std::string& key, const bool default_value) override;
 
-    void setString(const std::string& key, const std::string& value) override;
-    void setBool(const std::string& key, const bool value) override;
+    void SetString(const std::string& key, const std::string& value) override;
+    void SetBool(const std::string& key, const bool value) override;
 };
 
 }  // namespace datarouter

@@ -50,12 +50,12 @@ std::string_view LoggingErrorDomain::MessageFor(const score::result::ErrorCode& 
 
 namespace
 {
-constexpr LoggingErrorDomain logging_error_domain;
+constexpr LoggingErrorDomain kLoggingErrorDomain;
 }
 
 score::result::Error MakeError(const LoggingErrorCode code, const std::string_view user_message) noexcept
 {
-    return {static_cast<score::result::ErrorCode>(code), logging_error_domain, user_message};
+    return {static_cast<score::result::ErrorCode>(code), kLoggingErrorDomain, user_message};
 }
 
 }  // namespace error

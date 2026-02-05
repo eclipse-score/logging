@@ -27,7 +27,7 @@ cc_library(
     deps = [
         ":file_transfer_stream_handler_stub",
         "//score/datarouter:logparser",
-        "//score/datarouter/file_transfer:file_transfer_handler_factory",
+        "//score/datarouter/src/file_transfer:file_transfer_handler_factory",
     ],
 )
 

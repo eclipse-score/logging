@@ -43,7 +43,7 @@ class MockDltOutput : public DltNonverboseHandler::IOutput
 {
   public:
     MOCK_METHOD(void,
-                sendNonVerbose,
+                SendNonVerbose,
                 (const score::mw::log::config::NvMsgDescriptor& desc, uint32_t tmsp, const void* data, size_t size),
                 (override));
     virtual ~MockDltOutput() = default;
@@ -52,66 +52,66 @@ class MockDltOutput : public DltNonverboseHandler::IOutput
 class DltNonverboseHandlerTest : public ::testing::Test
 {
   protected:
-    MockDltOutput mockOutput;
-    std::unique_ptr<DltNonverboseHandler> handler;
+    MockDltOutput mock_output_;
+    std::unique_ptr<DltNonverboseHandler> handler_;
     DltNonverboseHandlerTest() = default;
 
     void SetUp() override
     {
-        handler = std::make_unique<DltNonverboseHandler>(mockOutput);
+        handler_ = std::make_unique<DltNonverboseHandler>(mock_output_);
     }
 };
 
 TEST_F(DltNonverboseHandlerTest, HandleShouldCallSendNonVerbose)
 {
-    TypeInfo typeInfo;
-    typeInfo.typeName = "score::platform::datarouter::test::TestTraceableStruct";
+    TypeInfo type_info;
+    type_info.typeName = "score::platform::datarouter::test::TestTraceableStruct";
     timestamp_t timestamp = score::os::HighResolutionSteadyClock::now();
     const char* data = "TestData";
     bufsize_t size = 10;
 
     score::mw::log::config::NvMsgDescriptor descriptor;
-    typeInfo.nvMsgDesc = &descriptor;
+    type_info.nvMsgDesc = &descriptor;
 
-    handler->handle(typeInfo, timestamp, data, size);
+    handler_->handle(type_info, timestamp, data, size);
 }
 
 TEST(DltNonverboseHandler_T, HandleShouldNotCallSendNonVerboseWhenDescriptorIsNull)
 {
-    TypeInfo typeInfo;
-    typeInfo.typeName = "score::platform::datarouter::test::TestTraceableStruct";
-    typeInfo.nvMsgDesc = nullptr;
+    TypeInfo type_info;
+    type_info.typeName = "score::platform::datarouter::test::TestTraceableStruct";
+    type_info.nvMsgDesc = nullptr;
     timestamp_t timestamp = score::os::HighResolutionSteadyClock::now();
     const char data[] = "TestLogData";
     bufsize_t size = sizeof(data);
 
-    MockDltOutput mockOutput;
-    DltNonverboseHandler handler(mockOutput);
+    MockDltOutput mock_output;
+    DltNonverboseHandler handler(mock_output);
 
-    EXPECT_CALL(mockOutput, sendNonVerbose(_, _, _, _)).Times(0);
+    EXPECT_CALL(mock_output, SendNonVerbose(_, _, _, _)).Times(0);
 
-    handler.handle(typeInfo, timestamp, data, size);
+    handler.handle(type_info, timestamp, data, size);
 }
 
 TEST(DltNonverboseHandler_T, HandleCallSendNonVerboseWhenDltMsgDesc)
 {
-    MockDltOutput mockOutput;
+    MockDltOutput mock_output;
 
-    static const score::mw::log::config::NvMsgDescriptor descriptor{1234U,
-                                                                  score::mw::log::detail::LoggingIdentifier{"APP0"},
-                                                                  score::mw::log::detail::LoggingIdentifier{"CTX0"},
-                                                                  score::mw::log::LogLevel::kOff};
+    static const score::mw::log::config::NvMsgDescriptor kDescriptor{1234U,
+                                                                   score::mw::log::detail::LoggingIdentifier{"APP0"},
+                                                                   score::mw::log::detail::LoggingIdentifier{"CTX0"},
+                                                                   score::mw::log::LogLevel::kOff};
 
-    EXPECT_CALL(mockOutput, sendNonVerbose(_, _, _, _)).Times(1);
+    EXPECT_CALL(mock_output, SendNonVerbose(_, _, _, _)).Times(1);
 
-    DltNonverboseHandler handler(mockOutput);
+    DltNonverboseHandler handler(mock_output);
 
-    TypeInfo typeInfo;
-    typeInfo.typeName = "score::platform::datarouter::test::TestTraceableStruct";
-    typeInfo.nvMsgDesc = &descriptor;
+    TypeInfo type_info;
+    type_info.typeName = "score::platform::datarouter::test::TestTraceableStruct";
+    type_info.nvMsgDesc = &kDescriptor;
 
     timestamp_t timestamp = score::os::HighResolutionSteadyClock::now();
     const char data[] = "TestData";
     bufsize_t size = sizeof(data);
-    handler.handle(typeInfo, timestamp, data, size);
+    handler.handle(type_info, timestamp, data, size);
 }

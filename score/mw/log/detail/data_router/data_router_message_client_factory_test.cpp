@@ -15,8 +15,6 @@
 #include "score/os/mocklib/mock_pthread.h"
 #include "score/os/mocklib/unistdmock.h"
 #include "score/os/utils/mocklib/signalmock.h"
-#include "score/mw/com/message_passing/receiver_mock.h"
-#include "score/mw/com/message_passing/sender_mock.h"
 #include "score/mw/log/configuration/configuration.h"
 #include "score/mw/log/detail/data_router/data_router_message_client_factory_impl.h"
 #include "score/mw/log/detail/data_router/data_router_message_client_impl.h"

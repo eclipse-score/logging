@@ -2,7 +2,7 @@
 
 You sometimes want to get a log in the filesystem. No matter if qemu or normal, this should work. Though you can set it up at application level only, it can bring significant benefits for offline analysis.
 
-1. take a look at the following document regarding configuration of logging: [xyz doc](broken_link_g/xyz/documentation/blob/master/guidelines/logging/configuration.md)
+1. take a look at the following document regarding configuration of logging: [xpad doc](broken_link_g/xpad/documentation/blob/master/guidelines/logging/configuration.md)
 
 The following config will set App1 to write into /tmp/App1.dlt
 

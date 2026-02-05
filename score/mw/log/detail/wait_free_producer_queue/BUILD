@@ -98,10 +98,6 @@ cc_test(
     features = COMPILER_WARNING_FEATURES + [
         "aborts_upon_exception",
     ],
-    linkopts = select({
-        "@platforms//os:linux": ["-latomic"],  # needed for spp-host-clang
-        "//conditions:default": [],
-    }),
     tags = ["unit"],
     visibility = ["@score_baselibs//score/mw/log/detail:__pkg__"],
     deps = [

@@ -26,7 +26,7 @@ namespace daemon
 class ISessionHandle
 {
   public:
-    virtual void AcquireRequest() const = 0;
+    virtual bool AcquireRequest() const = 0;
     virtual ~ISessionHandle() = default;
 };
 

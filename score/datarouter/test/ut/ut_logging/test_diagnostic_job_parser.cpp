@@ -51,35 +51,35 @@ using namespace score::logging::dltserver;
 
 TEST_F(DiagnosticJobParserTest, ReadLogChannelNames_OK)
 {
-    auto correctHandler = std::make_unique<ReadLogChannelNamesHandler>();
+    auto correct_handler = std::make_unique<ReadLogChannelNamesHandler>();
     auto handler = uut.parse(std::string{char(config::READ_LOG_CHANNEL_NAMES)});
     EXPECT_NE(ConvertHandlerTypeTo<ReadLogChannelNamesHandler>(handler), nullptr);
 }
 
 TEST_F(DiagnosticJobParserTest, ResetToDefault_OK)
 {
-    auto correctHandler = std::make_unique<ResetToDefaultHandler>();
+    auto correct_handler = std::make_unique<ResetToDefaultHandler>();
     auto handler = uut.parse(std::string{char(config::RESET_TO_DEFAULT)});
     EXPECT_NE(ConvertHandlerTypeTo<ResetToDefaultHandler>(handler), nullptr);
 }
 
 TEST_F(DiagnosticJobParserTest, StoreDltConfig_OK)
 {
-    auto correctHandler = std::make_unique<StoreDltConfigHandler>();
+    auto correct_handler = std::make_unique<StoreDltConfigHandler>();
     auto handler = uut.parse(std::string{char(config::STORE_DLT_CONFIG)});
     EXPECT_NE(ConvertHandlerTypeTo<StoreDltConfigHandler>(handler), nullptr);
 }
 
 TEST_F(DiagnosticJobParserTest, SetTraceState_OK)
 {
-    auto correctHandler = std::make_unique<SetTraceStateHandler>();
+    auto correct_handler = std::make_unique<SetTraceStateHandler>();
     auto handler = uut.parse(std::string{char(config::SET_TRACE_STATE)});
     EXPECT_NE(ConvertHandlerTypeTo<SetTraceStateHandler>(handler), nullptr);
 }
 
 TEST_F(DiagnosticJobParserTest, SetDefaultTraceState_OK)
 {
-    auto correctHandler = std::make_unique<SetDefaultTraceStateHandler>();
+    auto correct_handler = std::make_unique<SetDefaultTraceStateHandler>();
     auto handler = uut.parse(std::string{char(config::SET_DEFAULT_TRACE_STATE)});
     EXPECT_NE(ConvertHandlerTypeTo<SetDefaultTraceStateHandler>(handler), nullptr);
 }
@@ -87,20 +87,20 @@ TEST_F(DiagnosticJobParserTest, SetDefaultTraceState_OK)
 TEST_F(DiagnosticJobParserTest, SetLogChannelThreshold_OK)
 {
     score::platform::dltid_t id("CORE");
-    auto correctHandler = std::make_unique<SetLogChannelThresholdHandler>(id, score::mw::log::LogLevel::kDebug);
+    auto correct_handler = std::make_unique<SetLogChannelThresholdHandler>(id, score::mw::log::LogLevel::kDebug);
     std::array<std::uint8_t, 7> command_buffer{config::SET_LOG_CHANNEL_THRESHOLD, 0x43, 0x4f, 0x52, 0x45, 5, 6};
     const std::string command{command_buffer.begin(), command_buffer.end()};
     auto handler = uut.parse(command);
-    auto* actual = ConvertHandlerTypeTo<SetLogChannelThresholdHandler>(handler);
+    const auto* actual = ConvertHandlerTypeTo<SetLogChannelThresholdHandler>(handler);
     EXPECT_NE(actual, nullptr);
-    EXPECT_EQ(*actual, *correctHandler);
+    EXPECT_EQ(*actual, *correct_handler);
 }
 
 TEST_F(DiagnosticJobParserTest, SetLogLevel_OK_UseDefault)
 {
     score::platform::dltid_t id_1("CORE");
     score::platform::dltid_t id_2("APP0");
-    auto correctHandler = std::make_unique<SetLogLevelHandler>(id_1, id_2, ThresholdCmd::UseDefault);
+    auto correct_handler = std::make_unique<SetLogLevelHandler>(id_1, id_2, ThresholdCmd::UseDefault);
     std::array<std::uint8_t, 10> command_buffer{config::SET_LOG_LEVEL,
                                                 0x43,
                                                 0x4f,
@@ -113,45 +113,45 @@ TEST_F(DiagnosticJobParserTest, SetLogLevel_OK_UseDefault)
                                                 static_cast<uint8_t>(ThresholdCmd::UseDefault)};
     const std::string command{command_buffer.begin(), command_buffer.end()};
     auto handler = uut.parse(command);
-    auto* actual = ConvertHandlerTypeTo<SetLogLevelHandler>(handler);
+    const auto* actual = ConvertHandlerTypeTo<SetLogLevelHandler>(handler);
     EXPECT_NE(actual, nullptr);
-    EXPECT_EQ(*actual, *correctHandler);
+    EXPECT_EQ(*actual, *correct_handler);
 }
 
 TEST_F(DiagnosticJobParserTest, SetLogLevel_OK_ExplicitLevel)
 {
     score::platform::dltid_t id_1("CORE");
     score::platform::dltid_t id_2("APP0");
-    auto correctHandler = std::make_unique<SetLogLevelHandler>(id_1, id_2, score::mw::log::LogLevel::kVerbose);
+    auto correct_handler = std::make_unique<SetLogLevelHandler>(id_1, id_2, score::mw::log::LogLevel::kVerbose);
     std::array<std::uint8_t, 10> command_buffer{
         config::SET_LOG_LEVEL, 0x43, 0x4f, 0x52, 0x45, 0x41, 0x50, 0x50, 0x30, 6};
     const std::string command{command_buffer.begin(), command_buffer.end()};
     auto handler = uut.parse(command);
-    auto* actual = ConvertHandlerTypeTo<SetLogLevelHandler>(handler);
+    const auto* actual = ConvertHandlerTypeTo<SetLogLevelHandler>(handler);
     EXPECT_NE(actual, nullptr);
-    EXPECT_EQ(*actual, *correctHandler);
+    EXPECT_EQ(*actual, *correct_handler);
 }
 
 TEST_F(DiagnosticJobParserTest, SetMessagingFilteringState_OK)
 {
-    auto correctHandler = std::make_unique<SetMessagingFilteringStateHandler>(true);
+    auto correct_handler = std::make_unique<SetMessagingFilteringStateHandler>(true);
     std::array<std::uint8_t, 2> command_buffer{config::SET_MESSAGING_FILTERING_STATE, 1};
     const std::string command{command_buffer.begin(), command_buffer.end()};
     auto handler = uut.parse(command);
-    auto* actual = ConvertHandlerTypeTo<SetMessagingFilteringStateHandler>(handler);
+    const auto* actual = ConvertHandlerTypeTo<SetMessagingFilteringStateHandler>(handler);
     EXPECT_NE(actual, nullptr);
-    EXPECT_EQ(*actual, *correctHandler);
+    EXPECT_EQ(*actual, *correct_handler);
 }
 
 TEST_F(DiagnosticJobParserTest, SetDefaultLogLevel_OK)
 {
-    auto correctHandler = std::make_unique<SetDefaultLogLevelHandler>(score::mw::log::LogLevel::kFatal);
+    auto correct_handler = std::make_unique<SetDefaultLogLevelHandler>(score::mw::log::LogLevel::kFatal);
     std::array<std::uint8_t, 2> command_buffer{config::SET_DEFAULT_LOG_LEVEL, 1};
     const std::string command{command_buffer.begin(), command_buffer.end()};
     auto handler = uut.parse(command);
-    auto* actual = ConvertHandlerTypeTo<SetDefaultLogLevelHandler>(handler);
+    const auto* actual = ConvertHandlerTypeTo<SetDefaultLogLevelHandler>(handler);
     EXPECT_NE(actual, nullptr);
-    EXPECT_EQ(*actual, *correctHandler);
+    EXPECT_EQ(*actual, *correct_handler);
 }
 
 TEST_F(DiagnosticJobParserTest, SetLogChannelAssignment_OK)
@@ -159,25 +159,25 @@ TEST_F(DiagnosticJobParserTest, SetLogChannelAssignment_OK)
     score::platform::dltid_t id_1("APP0");
     score::platform::dltid_t id_2("CTX0");
     score::platform::dltid_t id_3("CORE");
-    auto correctHandler = std::make_unique<SetLogChannelAssignmentHandler>(id_1, id_2, id_3, AssignmentAction::Add);
+    auto correct_handler = std::make_unique<SetLogChannelAssignmentHandler>(id_1, id_2, id_3, AssignmentAction::Add);
     std::array<std::uint8_t, 14> command_buffer{
         config::SET_LOG_CHANNEL_ASSIGNMENT, 0x41, 0x50, 0x50, 0x30, 0x43, 0x54, 0x58, 0x30, 0x43, 0x4f, 0x52, 0x45, 1};
     const std::string command{command_buffer.begin(), command_buffer.end()};
     auto handler = uut.parse(command);
-    auto* actual = ConvertHandlerTypeTo<SetLogChannelAssignmentHandler>(handler);
+    const auto* actual = ConvertHandlerTypeTo<SetLogChannelAssignmentHandler>(handler);
     EXPECT_NE(actual, nullptr);
-    EXPECT_EQ(*actual, *correctHandler);
+    EXPECT_EQ(*actual, *correct_handler);
 }
 
 TEST_F(DiagnosticJobParserTest, SetDltOutputEnable_OK)
 {
-    auto correctHandler = std::make_unique<SetDltOutputEnableHandler>(true);
+    auto correct_handler = std::make_unique<SetDltOutputEnableHandler>(true);
     std::array<std::uint8_t, 2> command_buffer{config::SET_DLT_OUTPUT_ENABLE, 1};
     const std::string command{command_buffer.begin(), command_buffer.end()};
     auto handler = uut.parse(command);
-    auto* actual = ConvertHandlerTypeTo<SetDltOutputEnableHandler>(handler);
+    const auto* actual = ConvertHandlerTypeTo<SetDltOutputEnableHandler>(handler);
     EXPECT_NE(actual, nullptr);
-    EXPECT_EQ(*actual, *correctHandler);
+    EXPECT_EQ(*actual, *correct_handler);
 }
 
 /*-----------------------------------------------------------------

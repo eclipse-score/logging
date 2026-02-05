@@ -70,7 +70,7 @@ class SharedMemoryReaderFixture : public ::testing::Test
 class TypeInfoTest
 {
   public:
-    void copy(const score::cpp::span<Byte> data) const
+    void Copy(const score::cpp::span<Byte> data) const
     {
         std::memcpy(data.data(), type.data(), type.size());
     }
@@ -480,7 +480,7 @@ TEST_F(SharedMemoryReaderFixture, CorruptedRegistrationHeaderSizeTooSmallShallIg
     class CorruptHeaderTypeInfoTest
     {
       public:
-        void copy(const score::cpp::span<Byte> data) const
+        void Copy(const score::cpp::span<Byte> data) const
         {
             std::memcpy(data.data(), type.data(), type.size());
             constexpr auto kHeaderSize = sizeof(BufferEntryHeader);

@@ -39,7 +39,7 @@ class StubFileTransferStreamHandler : public LogParser::TypeHandler
     class IOutput
     {
       public:
-        virtual void sendFTVerbose(score::cpp::span<const std::uint8_t> data,
+        virtual void SendFtVerbose(score::cpp::span<const std::uint8_t> data,
                                    mw::log::LogLevel loglevel,
                                    dltid_t appId,
                                    dltid_t ctxId,

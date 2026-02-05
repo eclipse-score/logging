@@ -36,25 +36,25 @@ TEST(ConfigSessionFactoryUT, CreateSessionsAndHandleCommands)
     EXPECT_CALL(outputs, bind(_, _, 3491U)).Times(1);
     EXPECT_CALL(outputs, destruct(_)).Times(1);
 
-    StaticConfig sConfig{};
-    PersistentConfig pConfig{};
-    StrictMock<MockFunction<PersistentConfig(void)>> readCallback;
-    StrictMock<MockFunction<void(const PersistentConfig&)>> writeCallback;
+    StaticConfig s_config{};
+    PersistentConfig p_config{};
+    StrictMock<MockFunction<PersistentConfig(void)>> read_callback;
+    StrictMock<MockFunction<void(const PersistentConfig&)>> write_callback;
 
-    DltLogServer server(sConfig, readCallback.AsStdFunction(), writeCallback.AsStdFunction(), true);
+    DltLogServer server(s_config, read_callback.AsStdFunction(), write_callback.AsStdFunction(), true);
 
-    score::platform::datarouter::DynamicConfigurationHandlerFactoryType dynFactory;
-    std::string respDyn;
-    auto dynSession = dynFactory.CreateConfigSession(
-        score::platform::datarouter::ConfigSessionHandleType{0, nullptr, std::reference_wrapper<std::string>{respDyn}},
+    score::platform::datarouter::DynamicConfigurationHandlerFactoryType dyn_factory;
+    std::string resp_dyn;
+    auto dyn_session = dyn_factory.CreateConfigSession(
+        score::platform::datarouter::ConfigSessionHandleType{0, nullptr, std::reference_wrapper<std::string>{resp_dyn}},
         server.make_config_command_handler());
-    ASSERT_NE(dynSession, nullptr);
-    std::array<std::uint8_t, 2> badEnableDyn{score::logging::dltserver::config::SET_DLT_OUTPUT_ENABLE, 2};
-    dynSession->on_command(std::string{badEnableDyn.begin(), badEnableDyn.end()});
-    if (!respDyn.empty())
+    ASSERT_NE(dyn_session, nullptr);
+    std::array<std::uint8_t, 2> bad_enable_dyn{score::logging::dltserver::config::SET_DLT_OUTPUT_ENABLE, 2};
+    dyn_session->on_command(std::string{bad_enable_dyn.begin(), bad_enable_dyn.end()});
+    if (!resp_dyn.empty())
     {
-        EXPECT_EQ(respDyn.size(), 1U);
-        EXPECT_EQ(respDyn[0], static_cast<char>(score::logging::dltserver::config::RET_ERROR));
+        EXPECT_EQ(resp_dyn.size(), 1U);
+        EXPECT_EQ(resp_dyn[0], static_cast<char>(score::logging::dltserver::config::RET_ERROR));
     }
 }
 

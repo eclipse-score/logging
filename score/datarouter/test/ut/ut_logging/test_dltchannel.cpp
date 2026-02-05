@@ -26,24 +26,24 @@ namespace test
 
 using namespace score::logging::dltserver;
 using namespace score::platform::internal;
-using LogEntry_t = ::score::mw::log::detail::log_entry_deserialization::LogEntryDeserializationReflection;
+using LogEntryT = ::score::mw::log::detail::log_entry_deserialization::LogEntryDeserializationReflection;
 
 struct Logger
 {
     std::string stream;
-    std::stringstream LogDebug()
+    std::stringstream LogDebug() const
     {
         return std::stringstream{stream};
     }
-    std::stringstream LogInfo()
+    std::stringstream LogInfo() const
     {
         return std::stringstream{stream};
     }
-    std::stringstream LogWarn()
+    std::stringstream LogWarn() const
     {
         return std::stringstream{stream};
     }
-    std::stringstream LogError()
+    std::stringstream LogError() const
     {
         return std::stringstream{stream};
     }
@@ -62,7 +62,7 @@ class DltChannelTest : public ::testing::Test
     static constexpr uint32_t kIpv4HeaderWithoutOptions = 20UL;
     static constexpr uint32_t kUdpHeader = 8UL;
     static constexpr uint32_t kMtu = 1500UL;
-    static constexpr uint32_t UDP_MAX_PAYLOAD = kMtu - (kIpv4HeaderWithoutOptions + kUdpHeader);
+    static constexpr uint32_t kUdpMaxPayload = kMtu - (kIpv4HeaderWithoutOptions + kUdpHeader);
 
   protected:
     // predefined verbose and non-verbose messages for tests
@@ -78,16 +78,16 @@ class DltChannelTest : public ::testing::Test
                                                           score::mw::log::detail::LoggingIdentifier{"CTX0"},
                                                           score::mw::log::LogLevel::kOff};
 
-    const LogEntry_t verbose_entry1_{score::mw::log::detail::LoggingIdentifier{"APP0"},
-                                     score::mw::log::detail::LoggingIdentifier{"CTX0"},
-                                     {score::cpp::span<const uint8_t>{msg1_}},
-                                     1,
-                                     score::mw::log::LogLevel::kOff};
-    const LogEntry_t verbose_entry2_{score::mw::log::detail::LoggingIdentifier{"APP1"},
-                                     score::mw::log::detail::LoggingIdentifier{"CTX0"},
-                                     {score::cpp::span<const uint8_t>{msg2_}},
-                                     1,
-                                     score::mw::log::LogLevel::kOff};
+    const LogEntryT verbose_entry1_{score::mw::log::detail::LoggingIdentifier{"APP0"},
+                                    score::mw::log::detail::LoggingIdentifier{"CTX0"},
+                                    {score::cpp::span<const uint8_t>{msg1_}},
+                                    1,
+                                    score::mw::log::LogLevel::kOff};
+    const LogEntryT verbose_entry2_{score::mw::log::detail::LoggingIdentifier{"APP1"},
+                                    score::mw::log::detail::LoggingIdentifier{"CTX0"},
+                                    {score::cpp::span<const uint8_t>{msg2_}},
+                                    1,
+                                    score::mw::log::LogLevel::kOff};
 };
 
 TEST_F(DltChannelTest, WhenCreatedDefault)
@@ -98,7 +98,7 @@ TEST_F(DltChannelTest, WhenCreatedDefault)
     EXPECT_CALL(outputs, bind(_, nullptr, 3491U)).Times(1);
     EXPECT_CALL(outputs, destruct(_)).Times(1);
 
-    DltLogChannel dltChannel(
+    DltLogChannel dlt_channel(
         dltid_t{"CHN0"}, score::mw::log::LogLevel::kOff, dltid_t{"ECU0"}, nullptr, 3491U, nullptr, 3490U, "");
 }
 
@@ -114,12 +114,12 @@ TEST_F(DltChannelTest, WhenSendingNonverboseTwice)
     EXPECT_CALL(outputs, destruct(_)).Times(1);
     EXPECT_CALL(outputs, send(_, A<score::cpp::span<mmsghdr>>())).WillOnce(DoAll(SaveArg<1>(&mmsg_span), Return(1)));
 
-    DltLogChannel dltChannel(
+    DltLogChannel dlt_channel(
         dltid_t{"CHN0"}, score::mw::log::LogLevel::kOff, dltid_t{"ECU0"}, nullptr, 3491U, nullptr, 3490U, "");
 
-    dltChannel.sendNonVerbose(nv_desc1_, 1U, msg1_.data(), msg1_.size());
-    dltChannel.sendNonVerbose(nv_desc2_, 2U, msg2_.data(), msg2_.size());
-    dltChannel.flush();
+    dlt_channel.sendNonVerbose(nv_desc1_, 1U, msg1_.data(), msg1_.size());
+    dlt_channel.sendNonVerbose(nv_desc2_, 2U, msg2_.data(), msg2_.size());
+    dlt_channel.flush();
 
     // check 2 non-verbose messages on UDP level (check by size)
     const auto sent_messages_count = 2;
@@ -128,7 +128,7 @@ TEST_F(DltChannelTest, WhenSendingNonverboseTwice)
               ((sizeof(DltNvHeaderWithMsgid) + 8) * sent_messages_count));
 
     Logger logger;
-    dltChannel.show_stats(logger);
+    dlt_channel.show_stats(logger);
 }
 
 TEST_F(DltChannelTest, WhenSendingVerboseTwice)
@@ -143,12 +143,12 @@ TEST_F(DltChannelTest, WhenSendingVerboseTwice)
     EXPECT_CALL(outputs, destruct(_)).Times(1);
     EXPECT_CALL(outputs, send(_, A<score::cpp::span<mmsghdr>>())).WillOnce(DoAll(SaveArg<1>(&mmsg_span), Return(1)));
 
-    DltLogChannel dltChannel(
+    DltLogChannel dlt_channel(
         dltid_t{"CHN0"}, score::mw::log::LogLevel::kOff, dltid_t{"ECU0"}, nullptr, 3491U, nullptr, 3490U, "");
 
-    dltChannel.sendVerbose(1U, verbose_entry1_);
-    dltChannel.sendVerbose(2U, verbose_entry2_);
-    dltChannel.flush();
+    dlt_channel.sendVerbose(1U, verbose_entry1_);
+    dlt_channel.sendVerbose(2U, verbose_entry2_);
+    dlt_channel.flush();
 
     // check 2 verbose messages on UDP level (check by size)
     const auto sent_messages_count = 2;
@@ -157,7 +157,7 @@ TEST_F(DltChannelTest, WhenSendingVerboseTwice)
               ((sizeof(DltVerboseHeader) + 8) * sent_messages_count));
 
     Logger logger;
-    dltChannel.show_stats(logger);
+    dlt_channel.show_stats(logger);
 }
 
 TEST_F(DltChannelTest, WhenSendingNvVNv)
@@ -183,16 +183,16 @@ TEST_F(DltChannelTest, WhenSendingNvVNv)
                         }),
                         Return(1)));
 
-    DltLogChannel dltChannel(
+    DltLogChannel dlt_channel(
         dltid_t{"CHN0"}, score::mw::log::LogLevel::kOff, dltid_t{"ECU0"}, nullptr, 3491U, nullptr, 3490U, "");
 
-    dltChannel.sendNonVerbose(nv_desc1_, 1U, msg1_.data(), msg1_.size());
-    dltChannel.sendVerbose(2U, verbose_entry1_);
-    dltChannel.sendNonVerbose(nv_desc2_, 3U, msg2_.data(), msg2_.size());
-    dltChannel.flush();
+    dlt_channel.sendNonVerbose(nv_desc1_, 1U, msg1_.data(), msg1_.size());
+    dlt_channel.sendVerbose(2U, verbose_entry1_);
+    dlt_channel.sendNonVerbose(nv_desc2_, 3U, msg2_.data(), msg2_.size());
+    dlt_channel.flush();
 
     Logger logger;
-    dltChannel.show_stats(logger);
+    dlt_channel.show_stats(logger);
 }
 
 TEST_F(DltChannelTest, TestSendUdpBufferingNonVerbose)
@@ -203,25 +203,25 @@ TEST_F(DltChannelTest, TestSendUdpBufferingNonVerbose)
     EXPECT_CALL(outputs, construct(_, nullptr, 3490U, Eq(std::string("")))).Times(1);
     EXPECT_CALL(outputs, bind(_, nullptr, 3491U)).Times(1);
 
-    DltLogChannel dltChannel(
+    DltLogChannel dlt_channel(
         dltid_t{"CHN0"}, score::mw::log::LogLevel::kOff, dltid_t{"ECU0"}, nullptr, 3491U, nullptr, 3490U, "");
 
     // all data should be buffered, without send to socket
     EXPECT_CALL(outputs, send(_, A<score::cpp::span<mmsghdr>>())).Times(0);
     // send a lot of data to fill DltLogChannel::prebuf_data_ to force using next buffer
-    const auto expected_prebuf_size = UDP_MAX_PAYLOAD;
+    const auto expected_prebuf_size = kUdpMaxPayload;
     const auto length_of_one_message = (sizeof(DltNvHeaderWithMsgid) + msg1_.size());
     const auto message_count_to_fill_prebuf = expected_prebuf_size / length_of_one_message;
     for (size_t i = 0; i < message_count_to_fill_prebuf; ++i)
     {
-        dltChannel.sendNonVerbose(nv_desc1_, static_cast<uint32_t>(i + 1), msg1_.data(), msg1_.size());
+        dlt_channel.sendNonVerbose(nv_desc1_, static_cast<uint32_t>(i + 1), msg1_.data(), msg1_.size());
     }
     Mock::VerifyAndClearExpectations(&outputs);
 
     // send another packet. it should be put to another buffer, because first buffer is already full
     // all data still should be buffered, no calls to socket
     EXPECT_CALL(outputs, send(_, A<score::cpp::span<mmsghdr>>())).Times(0);
-    dltChannel.sendNonVerbose(nv_desc2_, 1U, msg2_.data(), msg2_.size());
+    dlt_channel.sendNonVerbose(nv_desc2_, 1U, msg2_.data(), msg2_.size());
     Mock::VerifyAndClearExpectations(&outputs);
 
     // flush data and send it to socket
@@ -241,10 +241,10 @@ TEST_F(DltChannelTest, TestSendUdpBufferingNonVerbose)
                         }),
                         Return(1)));
 
-    dltChannel.flush();
+    dlt_channel.flush();
 
     Logger logger;
-    dltChannel.show_stats(logger);
+    dlt_channel.show_stats(logger);
 }
 
 TEST_F(DltChannelTest, TestSendUdpBufferingForVerbose)
@@ -255,27 +255,27 @@ TEST_F(DltChannelTest, TestSendUdpBufferingForVerbose)
     EXPECT_CALL(outputs, construct(_, nullptr, 3490U, Eq(std::string("")))).Times(1);
     EXPECT_CALL(outputs, bind(_, nullptr, 3491U)).Times(1);
 
-    DltLogChannel dltChannel(
+    DltLogChannel dlt_channel(
         dltid_t{"CHN0"}, score::mw::log::LogLevel::kOff, dltid_t{"ECU0"}, nullptr, 3491U, nullptr, 3490U, "");
 
     // Ensure data should be buffered without sending it
     EXPECT_CALL(outputs, send(_, A<score::cpp::span<mmsghdr>>())).Times(0);
 
     // Fill the prebuffer until it's full but still below UDP_MAX_PAYLOAD
-    const auto expected_prebuf_size = UDP_MAX_PAYLOAD;
+    const auto expected_prebuf_size = kUdpMaxPayload;
     const auto length_of_one_message = (sizeof(DltVerboseHeader) + msg1_.size());
     const auto message_count_to_fill_prebuf = expected_prebuf_size / length_of_one_message;
 
     for (size_t i = 0; i < message_count_to_fill_prebuf; ++i)
     {
-        dltChannel.sendVerbose(1U, verbose_entry1_);
+        dlt_channel.sendVerbose(1U, verbose_entry1_);
     }
 
     Mock::VerifyAndClearExpectations(&outputs);
 
     // Send another verbose message, which should be placed into a new buffer
     EXPECT_CALL(outputs, send(_, A<score::cpp::span<mmsghdr>>())).Times(0);
-    dltChannel.sendVerbose(2U, verbose_entry2_);
+    dlt_channel.sendVerbose(2U, verbose_entry2_);
     Mock::VerifyAndClearExpectations(&outputs);
 
     // Flush data and validate it is sent in two chunks (one full buffer + one extra)
@@ -295,10 +295,10 @@ TEST_F(DltChannelTest, TestSendUdpBufferingForVerbose)
                         }),
                         Return(1)));
 
-    dltChannel.flush();
+    dlt_channel.flush();
 
     Logger logger;
-    dltChannel.show_stats(logger);
+    dlt_channel.show_stats(logger);
 }
 
 TEST_F(DltChannelTest, WhenSendFailsWithOnlyVerboseMessages)
@@ -314,15 +314,15 @@ TEST_F(DltChannelTest, WhenSendFailsWithOnlyVerboseMessages)
     EXPECT_CALL(outputs, send(_, A<score::cpp::span<mmsghdr>>()))
         .WillOnce(Return(score::cpp::make_unexpected(score::os::Error::createFromErrno(EIO))));
 
-    DltLogChannel dltChannel(
+    DltLogChannel dlt_channel(
         dltid_t{"CHN0"}, score::mw::log::LogLevel::kOff, dltid_t{"ECU0"}, nullptr, 3491U, nullptr, 3490U, "");
 
-    dltChannel.sendVerbose(1U, verbose_entry1_);
-    dltChannel.sendVerbose(2U, verbose_entry2_);
+    dlt_channel.sendVerbose(1U, verbose_entry1_);
+    dlt_channel.sendVerbose(2U, verbose_entry2_);
 
-    dltChannel.flush();
+    dlt_channel.flush();
     Logger logger;
-    dltChannel.show_stats(logger);
+    dlt_channel.show_stats(logger);
 }
 
 TEST_F(DltChannelTest, WhenSendFailsWithOnlyNonVerboseMessages)
@@ -340,17 +340,17 @@ TEST_F(DltChannelTest, WhenSendFailsWithOnlyNonVerboseMessages)
     EXPECT_CALL(outputs, send(_, A<score::cpp::span<mmsghdr>>()))
         .WillOnce(Return(score::cpp::make_unexpected(score::os::Error::createFromErrno(EIO))));
 
-    DltLogChannel dltChannel(
+    DltLogChannel dlt_channel(
         dltid_t{"CHN0"}, score::mw::log::LogLevel::kOff, dltid_t{"ECU0"}, nullptr, 3491U, nullptr, 3490U, "");
 
     // Add only non-verbose messages
-    dltChannel.sendNonVerbose(nv_desc1_, 1U, msg1_.data(), msg1_.size());
-    dltChannel.sendNonVerbose(nv_desc2_, 2U, msg2_.data(), msg2_.size());
+    dlt_channel.sendNonVerbose(nv_desc1_, 1U, msg1_.data(), msg1_.size());
+    dlt_channel.sendNonVerbose(nv_desc2_, 2U, msg2_.data(), msg2_.size());
 
-    dltChannel.flush();
+    dlt_channel.flush();
 
     Logger logger;
-    dltChannel.show_stats(logger);
+    dlt_channel.show_stats(logger);
 }
 
 TEST_F(DltChannelTest, WhenSendingLargeMessage_GoesToElse)
@@ -365,18 +365,18 @@ TEST_F(DltChannelTest, WhenSendingLargeMessage_GoesToElse)
     EXPECT_CALL(outputs, send(_, A<const iovec*>(), A<size_t>()))
         .WillOnce(Return(score::cpp::make_unexpected(score::os::Error::createFromErrno(EACCES))));
 
-    DltLogChannel dltChannel(
+    DltLogChannel dlt_channel(
         dltid_t{"CHN0"}, score::mw::log::LogLevel::kOff, dltid_t{"ECU0"}, nullptr, 3491U, nullptr, 3490U, "");
 
     // Create a single large message bigger than UDP_MAX_PAYLOAD
-    std::vector<uint8_t> large_msg(UDP_MAX_PAYLOAD + 100, 0xAA);  // Large message (slightly bigger than the max)
+    std::vector<uint8_t> large_msg(kUdpMaxPayload + 100, 0xAA);  // Large message (slightly bigger than the max)
 
-    dltChannel.sendNonVerbose(nv_desc1_, 1U, large_msg.data(), large_msg.size());  // Send oversized message
+    dlt_channel.sendNonVerbose(nv_desc1_, 1U, large_msg.data(), large_msg.size());  // Send oversized message
 
-    dltChannel.flush();
+    dlt_channel.flush();
 
     Logger logger;
-    dltChannel.show_stats(logger);
+    dlt_channel.show_stats(logger);
 }
 
 TEST_F(DltChannelTest, WhenSendFailsWithLargeVerboseMessage)
@@ -393,22 +393,22 @@ TEST_F(DltChannelTest, WhenSendFailsWithLargeVerboseMessage)
     EXPECT_CALL(outputs, send(_, A<const iovec*>(), A<size_t>()))
         .WillOnce(Return(score::cpp::make_unexpected(score::os::Error::createFromErrno(EIO))));
 
-    DltLogChannel dltChannel(
+    DltLogChannel dlt_channel(
         dltid_t{"CHN0"}, score::mw::log::LogLevel::kOff, dltid_t{"ECU0"}, nullptr, 3491U, nullptr, 3490U, "");
 
     // Send a large verbose message to trigger the failure condition
-    std::vector<uint8_t> large_payload(UDP_MAX_PAYLOAD + 1, 0xAB);  // Large payload
-    LogEntry_t large_verbose_entry{score::mw::log::detail::LoggingIdentifier{"APP0"},
-                                   score::mw::log::detail::LoggingIdentifier{"CTX0"},
-                                   {score::cpp::span<const uint8_t>{large_payload}},
-                                   1,
-                                   score::mw::log::LogLevel::kOff};
+    std::vector<uint8_t> large_payload(kUdpMaxPayload + 1, 0xAB);  // Large payload
+    LogEntryT large_verbose_entry{score::mw::log::detail::LoggingIdentifier{"APP0"},
+                                  score::mw::log::detail::LoggingIdentifier{"CTX0"},
+                                  {score::cpp::span<const uint8_t>{large_payload}},
+                                  1,
+                                  score::mw::log::LogLevel::kOff};
 
-    dltChannel.sendVerbose(1U, large_verbose_entry);  // Should go to "sendmsg" instead of "sendmmsg"
-    dltChannel.flush();
+    dlt_channel.sendVerbose(1U, large_verbose_entry);  // Should go to "sendmsg" instead of "sendmmsg"
+    dlt_channel.flush();
 
     Logger logger;
-    dltChannel.show_stats(logger);
+    dlt_channel.show_stats(logger);
 }
 
 TEST_F(DltChannelTest, WhenSendingFTVerboseHitsSleepCondition)
@@ -420,8 +420,8 @@ TEST_F(DltChannelTest, WhenSendingFTVerboseHitsSleepCondition)
 
     score::cpp::span<const uint8_t> msg_data(msg1_.data(), msg1_.size());
     LogLevel log_level = LogLevel::kOff;  // Fixed namespace usage
-    dltid_t appId{"APP0"};
-    dltid_t ctxId{"CTX0"};
+    dltid_t app_id{"APP0"};
+    dltid_t ctx_id{"CTX0"};
     uint8_t nor = 1;
     uint32_t timestamp = 1;
 
@@ -431,16 +431,16 @@ TEST_F(DltChannelTest, WhenSendingFTVerboseHitsSleepCondition)
     EXPECT_CALL(outputs, send(_, A<const iovec*>(), A<size_t>()))
         .WillRepeatedly(Return(score::cpp::make_unexpected(score::os::Error::createFromErrno(EACCES))));
 
-    DltLogChannel dltChannel(dltid_t{"CHN0"}, log_level, dltid_t{"ECU0"}, nullptr, 3491U, nullptr, 3490U, "");
+    DltLogChannel dlt_channel(dltid_t{"CHN0"}, log_level, dltid_t{"ECU0"}, nullptr, 3491U, nullptr, 3490U, "");
 
     // Trigger iteration counter to reach kBurstFileTransferControlCount threshold
     constexpr auto kTestBurstFileTransferControlCount = 5UL;
     for (size_t i = 0; i < kTestBurstFileTransferControlCount; ++i)
     {
-        dltChannel.sendFTVerbose(msg_data, log_level, appId, ctxId, nor, timestamp);
+        dlt_channel.sendFTVerbose(msg_data, log_level, app_id, ctx_id, nor, timestamp);
     }
     Logger logger;
-    dltChannel.show_stats(logger);
+    dlt_channel.show_stats(logger);
 }
 
 TEST_F(DltChannelTest, WhenLogLevelExceedsThreshold_Verbose)
@@ -452,16 +452,16 @@ TEST_F(DltChannelTest, WhenLogLevelExceedsThreshold_Verbose)
     EXPECT_CALL(outputs, bind(_, nullptr, 3491U)).Times(1);
     EXPECT_CALL(outputs, destruct(_)).Times(1);
 
-    DltLogChannel dltChannel(
+    DltLogChannel dlt_channel(
         dltid_t{"CHN0"}, score::mw::log::LogLevel::kOff, dltid_t{"ECU0"}, nullptr, 3491U, nullptr, 3490U, "");
 
     // Set a high log level that should be ignored
-    LogEntry_t high_log_entry = verbose_entry1_;
+    LogEntryT high_log_entry = verbose_entry1_;
     high_log_entry.log_level = score::mw::log::LogLevel::kFatal;
 
     EXPECT_CALL(outputs, send(_, A<score::cpp::span<mmsghdr>>())).Times(0);
 
-    dltChannel.sendVerbose(1U, high_log_entry);
+    dlt_channel.sendVerbose(1U, high_log_entry);
 }
 
 TEST_F(DltChannelTest, WhenNonVerboseLogLevelExceedsThreshold)
@@ -473,14 +473,14 @@ TEST_F(DltChannelTest, WhenNonVerboseLogLevelExceedsThreshold)
     EXPECT_CALL(outputs, bind(_, nullptr, 3491U)).Times(1);
     EXPECT_CALL(outputs, destruct(_)).Times(1);
 
-    DltLogChannel dltChannel(
+    DltLogChannel dlt_channel(
         dltid_t{"CHN0"}, score::mw::log::LogLevel::kOff, dltid_t{"ECU0"}, nullptr, 3491U, nullptr, 3490U, "");
 
     auto high_log_desc = nv_desc1_;
     high_log_desc.SetLogLevel(score::mw::log::LogLevel::kFatal);
 
     EXPECT_CALL(outputs, send(_, A<score::cpp::span<mmsghdr>>())).Times(0);
-    dltChannel.sendNonVerbose(high_log_desc, 1U, msg1_.data(), msg1_.size());
+    dlt_channel.sendNonVerbose(high_log_desc, 1U, msg1_.data(), msg1_.size());
 }
 
 }  //  namespace test

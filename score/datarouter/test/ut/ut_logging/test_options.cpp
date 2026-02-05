@@ -32,8 +32,8 @@ TEST_F(OptionsTest, ParseNoArguments)
 {
     // Simulate: ./program
     int argc = 1;
-    char programName[] = "myProgram";
-    char* argv[] = {programName, nullptr};
+    char program_name[] = "myProgram";
+    char* argv[] = {program_name, nullptr};
 
     // parse returns true on success
     bool result = score::logging::options::Options::parse(argc, argv);
@@ -51,9 +51,9 @@ TEST_F(OptionsTest, ParseHelpShortOptionH)
 {
     // Simulate: ./program -h
     int argc = 2;
-    char programName[] = "myProgram";
-    char helpOption[] = "-h";
-    char* argv[] = {programName, helpOption, nullptr};
+    char program_name[] = "myProgram";
+    char help_option[] = "-h";
+    char* argv[] = {program_name, help_option, nullptr};
 
     // parse should return true
     bool result = score::logging::options::Options::parse(argc, argv);
@@ -71,9 +71,9 @@ TEST_F(OptionsTest, ParseVerboseShortOptionV)
 {
     // Simulate: ./program -v
     int argc = 2;
-    char programName[] = "myProgram";
-    char helpOption[] = "-v";
-    char* argv[] = {programName, helpOption, nullptr};
+    char program_name[] = "myProgram";
+    char help_option[] = "-v";
+    char* argv[] = {program_name, help_option, nullptr};
 
     // parse should return true
     bool result = score::logging::options::Options::parse(argc, argv);
@@ -89,9 +89,9 @@ TEST_F(OptionsTest, ParseVerboseLongOptionV)
     // Simulate: ./program --verbose
     // Because of struct long_options, that's equivalent to '-v'
     int argc = 2;
-    char programName[] = "myProgram";
-    char verboseOption[] = "--verbose";
-    char* argv[] = {programName, verboseOption, nullptr};
+    char program_name[] = "myProgram";
+    char verbose_option[] = "--verbose";
+    char* argv[] = {program_name, verbose_option, nullptr};
 
     bool result = score::logging::options::Options::parse(argc, argv);
     EXPECT_TRUE(result);
@@ -105,9 +105,9 @@ TEST_F(OptionsTest, ParseVerboseLongOptionHelp)
 {
     // Simulate: ./program --help
     int argc = 2;
-    char programName[] = "myProgram";
-    char verboseOption[] = "--help";
-    char* argv[] = {programName, verboseOption, nullptr};
+    char program_name[] = "myProgram";
+    char verbose_option[] = "--help";
+    char* argv[] = {program_name, verbose_option, nullptr};
 
     bool result = score::logging::options::Options::parse(argc, argv);
     EXPECT_TRUE(result);
@@ -120,9 +120,9 @@ TEST_F(OptionsTest, ParseVerboseLongOptionNoAdaptiveRuntime)
 {
     // Simulate: ./program --no_adaptive_runtime
     int argc = 2;
-    char programName[] = "myProgram";
-    char verboseOption[] = "--no_adaptive_runtime";
-    char* argv[] = {programName, verboseOption, nullptr};
+    char program_name[] = "myProgram";
+    char verbose_option[] = "--no_adaptive_runtime";
+    char* argv[] = {program_name, verbose_option, nullptr};
 
     bool result = score::logging::options::Options::parse(argc, argv);
     EXPECT_TRUE(result);
@@ -135,9 +135,9 @@ TEST_F(OptionsTest, ParseNoAdaptiveRuntimeShortOptionN)
 {
     // Simulate: ./program -n
     int argc = 2;
-    char programName[] = "myProgram";
-    char noAdaptiveOption[] = "-n";
-    char* argv[] = {programName, noAdaptiveOption, nullptr};
+    char program_name[] = "myProgram";
+    char no_adaptive_option[] = "-n";
+    char* argv[] = {program_name, no_adaptive_option, nullptr};
 
     bool result = score::logging::options::Options::parse(argc, argv);
     EXPECT_TRUE(result);
@@ -151,9 +151,9 @@ TEST_F(OptionsTest, ParseNoAdaptiveRuntimeShortOptionV)
 {
     // Simulate: ./program -V
     int argc = 2;
-    char programName[] = "myProgram";
-    char noAdaptiveOption[] = "-V";
-    char* argv[] = {programName, noAdaptiveOption, nullptr};
+    char program_name[] = "myProgram";
+    char no_adaptive_option[] = "-V";
+    char* argv[] = {program_name, no_adaptive_option, nullptr};
 
     bool result = score::logging::options::Options::parse(argc, argv);
     EXPECT_TRUE(result);
@@ -167,9 +167,9 @@ TEST_F(OptionsTest, ParseVersionLongOption)
     // Simulate: ./program --version
     // Because of struct long_options, that's equivalent to '-V'
     int argc = 2;
-    char programName[] = "myProgram";
-    char versionOption[] = "--version";
-    char* argv[] = {programName, versionOption, nullptr};
+    char program_name[] = "myProgram";
+    char version_option[] = "--version";
+    char* argv[] = {program_name, version_option, nullptr};
 
     bool result = score::logging::options::Options::parse(argc, argv);
     EXPECT_TRUE(result);
@@ -184,9 +184,9 @@ TEST_F(OptionsTest, ParseUnknownOptionSimiColon)
 {
     // Simulate: ./program --unknown
     int argc = 2;
-    char programName[] = "myProgram";
-    char unknownOption[] = ":";
-    char* argv[] = {programName, unknownOption, nullptr};
+    char program_name[] = "myProgram";
+    char unknown_option[] = ":";
+    char* argv[] = {program_name, unknown_option, nullptr};
 
     // parse should return false for unknown option
     bool result = score::logging::options::Options::parse(argc, argv);
@@ -202,9 +202,9 @@ TEST_F(OptionsTest, ParseUnknownOption)
 {
     // Simulate: ./program --unknown
     int argc = 2;
-    char programName[] = "myProgram";
-    char unknownOption[] = "--unknown";
-    char* argv[] = {programName, unknownOption, nullptr};
+    char program_name[] = "myProgram";
+    char unknown_option[] = "--unknown";
+    char* argv[] = {program_name, unknown_option, nullptr};
 
     // parse should return false for unknown option
     bool result = score::logging::options::Options::parse(argc, argv);
@@ -219,9 +219,9 @@ TEST_F(OptionsTest, ParseMissingArg)
     // We'll show a hypothetical:
 
     int argc = 2;
-    char programName[] = "myProgram";
-    char missingArgOption[] = "-d";
-    char* argv[] = {programName, missingArgOption, nullptr};
+    char program_name[] = "myProgram";
+    char missing_arg_option[] = "-d";
+    char* argv[] = {program_name, missing_arg_option, nullptr};
 
     bool result = score::logging::options::Options::parse(argc, argv);
 
@@ -232,9 +232,9 @@ TEST_F(OptionsTest, ParseUnknownOptionDoubleQuestionDashDash)
 {
     // Simulate: ./program ??--
     int argc = 2;
-    char programName[] = "myProgram";
-    char unknownOption[] = "--\?\?--";
-    char* argv[] = {programName, unknownOption, nullptr};
+    char program_name[] = "myProgram";
+    char unknown_option[] = "--\?\?--";
+    char* argv[] = {program_name, unknown_option, nullptr};
 
     // parse should return false for this unknown option
     bool result = score::logging::options::Options::parse(argc, argv);

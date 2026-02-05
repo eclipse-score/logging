@@ -20,21 +20,21 @@ namespace platform
 namespace datarouter
 {
 
-std::string StubPersistentDictionary::getString(const std::string& /*key*/, const std::string& defaultValue)
+std::string StubPersistentDictionary::GetString(const std::string& /*key*/, const std::string& default_value)
 {
-    return defaultValue;
+    return default_value;
 }
 
-bool StubPersistentDictionary::getBool(const std::string& /*key*/, const bool defaultValue)
+bool StubPersistentDictionary::GetBool(const std::string& /*key*/, const bool default_value)
 {
-    return defaultValue;
+    return default_value;
 }
 // LCOV_EXCL_START : will suppress this function since there nothing to assert through UT as its void empty function
-void StubPersistentDictionary::setString(const std::string& /*key*/, const std::string& /*value*/) {}
+void StubPersistentDictionary::SetString(const std::string& /*key*/, const std::string& /*value*/) {}
 // LCOV_EXCL_STOP
 
 // LCOV_EXCL_START : will suppress this function since there nothing to assert through UT as its void empty function
-void StubPersistentDictionary::setBool(const std::string& /*key*/, const bool /*value*/) {}
+void StubPersistentDictionary::SetBool(const std::string& /*key*/, const bool /*value*/) {}
 // LCOV_EXCL_STOP
 
 }  // namespace datarouter

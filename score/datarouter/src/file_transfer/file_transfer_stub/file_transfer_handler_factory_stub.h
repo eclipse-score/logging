@@ -15,8 +15,8 @@
 #define PAS_LOGGING_FILE_TRANSFER_HANDLER_FACTORY_STUB_H
 
 #include "logparser/logparser.h"
-#include "score/datarouter/file_transfer/file_transfer_handler_factory.hpp"
-#include "score/datarouter/file_transfer/file_transfer_stub/file_transfer_stream_handler_stub.h"
+#include "score/datarouter/src/file_transfer/file_transfer_handler_factory.hpp"
+#include "score/datarouter/src/file_transfer/file_transfer_stub/file_transfer_stream_handler_stub.h"
 
 #include <gmock/gmock.h>
 namespace score
@@ -34,7 +34,7 @@ class Output : public StubFileTransferStreamHandler::IOutput
   public:
     ~Output() = default;
     MOCK_METHOD(void,
-                sendFTVerbose,
+                SendFtVerbose,
                 (score::cpp::span<const std::uint8_t> data,
                  mw::log::LogLevel loglevel,
                  dltid_t appId,

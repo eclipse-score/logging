@@ -86,7 +86,7 @@ INSTANTIATE_TEST_SUITE_P(OversizedRequests,
 class TypeInfoTest
 {
   public:
-    void copy(const score::cpp::span<Byte> data) const
+    void Copy(const score::cpp::span<Byte> data) const
     {
         std::memcpy(data.data(), type.data(), type.size());
     }
@@ -102,7 +102,7 @@ class TypeInfoTest
 class TypeInfoTestOversized
 {
   public:
-    void copy(const score::cpp::span<Byte>) const {}
+    void Copy(const score::cpp::span<Byte>) const {}
     std::size_t size() const
     {
         constexpr std::size_t type_max = std::numeric_limits<score::mw::log::detail::TypeIdentifier>::max() + 1UL;

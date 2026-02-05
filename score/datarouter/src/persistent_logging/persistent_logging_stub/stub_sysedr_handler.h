@@ -11,12 +11,11 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-#ifndef SCORE_PAS_LOGGING_INCLUDE_SYSEDR_ISYSEDR_HANDLER_H
-#define SCORE_PAS_LOGGING_INCLUDE_SYSEDR_ISYSEDR_HANDLER_H
+#ifndef SCORE_PAS_LOGGING_SRC_PERSISTENT_LOGGING_PERSISTENT_LOGGING_STUB_STUB_SYSEDR_HANDLER_H
+#define SCORE_PAS_LOGGING_SRC_PERSISTENT_LOGGING_PERSISTENT_LOGGING_STUB_STUB_SYSEDR_HANDLER_H
 
-#include "logparser/logparser.h"
+#include "score/datarouter/src/persistent_logging/isysedr_handler.h"
 
-// LCOV_EXCL_START (nothing to test because this is just an interface definition)
 namespace score
 {
 namespace platform
@@ -24,27 +23,19 @@ namespace platform
 namespace internal
 {
 
-class ISysedrHandler : public LogParser::TypeHandler, public LogParser::AnyHandler
+class StubSysedrHandler final : public ISysedrHandler
 {
-  public:
-    ISysedrHandler() = default;
-    ~ISysedrHandler() = default;
 
-  protected:
+  private:
     // LogParser::TypeHandler
-    void handle(timestamp_t /* timestamp */, const char* /*data*/, bufsize_t /*size*/) override {};
+    void handle(timestamp_t /* timestamp */, const char* data, bufsize_t size) override;
 
     // LogParser::AnyHandler
-    void handle(const TypeInfo& /*typeInfo*/,
-                timestamp_t /*timestamp*/,
-                const char* /*data*/,
-                bufsize_t /*size*/) override {};
+    void handle(const TypeInfo& type_info, timestamp_t timestamp, const char* data, bufsize_t size) override;
 };
-
-// LCOV_EXCL_STOP
 
 }  // namespace internal
 }  // namespace platform
 }  // namespace score
 
-#endif  // SCORE_PAS_LOGGING_INCLUDE_SYSEDR_ISYSEDR_HANDLER_H
+#endif  // SCORE_PAS_LOGGING_SRC_PERSISTENT_LOGGING_PERSISTENT_LOGGING_STUB_STUB_SYSEDR_HANDLER_H

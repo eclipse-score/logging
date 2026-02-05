@@ -131,10 +131,6 @@ cc_test(
         "additional_warnings",
         "strict_warnings",
     ],
-    linkopts = select({
-        "@platforms//os:linux": ["-latomic"],  # needed for spp-host-clang
-        "//conditions:default": [],
-    }),
     tags = ["unit"],
     visibility = ["//score/mw/log/detail/data_router:__pkg__"],
     deps = [

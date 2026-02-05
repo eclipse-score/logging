@@ -98,11 +98,11 @@ TEST_F(UdpStreamOutputFixture, SetsockoptMethodShallNotReturnValueInCaseOfFailur
         .WillRepeatedly(Return(score::cpp::make_unexpected(score::os::Error::createFromErrno())));
 
     std::stringstream buffer;
-    std::streambuf* oldCerr = std::cerr.rdbuf(buffer.rdbuf());
+    std::streambuf* old_cerr = std::cerr.rdbuf(buffer.rdbuf());
     // And instantiating a UdpStreamOutput instance.
     stream_output_ = std::make_unique<UdpStreamOutput>(addr_, port_, multicast_interface_, std::move(sock_mock_));
 
-    std::cerr.rdbuf(oldCerr);
+    std::cerr.rdbuf(old_cerr);
     std::string output = buffer.str();
     EXPECT_THAT(output, ::testing::HasSubstr("ERROR: (UDP) socket cannot"));
 }

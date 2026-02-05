@@ -17,7 +17,7 @@
 #include "iostream"
 #include <fstream>
 
-const std::string FILE_NAME{"score/datarouter/test/ut/etc/dummy_file_transfer"};
+const std::string kFileName{"score/datarouter/test/ut/etc/dummy_file_transfer"};
 
 TEST(DltProtocolTest, PackageFileHeaderShallReturnsNulloptIftheBufferSizeIsSmallerThanTheDataSize)
 {
@@ -57,8 +57,8 @@ TEST(DltProtocolTest, PackageFileDataShallReturnsNulloptIftheBufferSizeIsSmaller
     const uint32_t serial_number{0U};
     const uint32_t pkg_number{1U};
 
-    FILE* file = fopen(FILE_NAME.c_str(), "rb");
-    ASSERT_TRUE(file != nullptr) << "The file used in the unit test is missed! The file: " << FILE_NAME;
+    FILE* file = fopen(kFileName.c_str(), "rb");
+    ASSERT_TRUE(file != nullptr) << "The file used in the unit test is missed! The file: " << kFileName;
 
     auto result = PackageFileData(data_span, file, serial_number, pkg_number);
     EXPECT_EQ(result, std::nullopt);
@@ -71,8 +71,8 @@ TEST(DltProtocolTest, PackageFileDataShallWriteDataCorrectlyWithCorrectData)
     const uint32_t serial_number{0U};
     const uint32_t pkg_number{1U};
 
-    FILE* file = fopen(FILE_NAME.c_str(), "rb");
-    ASSERT_TRUE(file != nullptr) << "The file used in the unit test is missed! The file: " << FILE_NAME;
+    FILE* file = fopen(kFileName.c_str(), "rb");
+    ASSERT_TRUE(file != nullptr) << "The file used in the unit test is missed! The file: " << kFileName;
 
     auto result = PackageFileData(data_span, file, serial_number, pkg_number);
     EXPECT_TRUE(result.has_value());
@@ -86,8 +86,8 @@ TEST(DltProtocolTest, DISABLED_PackageFileDataShallReturnsNulloptIfItWorkedOnAlr
     const uint32_t serial_number{0U};
     const uint32_t pkg_number{0};
 
-    FILE* file = fopen(FILE_NAME.c_str(), "rb");
-    ASSERT_TRUE(file != nullptr) << "The file used in the unit test is missed! The file: " << FILE_NAME;
+    FILE* file = fopen(kFileName.c_str(), "rb");
+    ASSERT_TRUE(file != nullptr) << "The file used in the unit test is missed! The file: " << kFileName;
     fclose(file);  // Close the file immediately.
 
     auto result = PackageFileData(data_span, file, serial_number, pkg_number);
@@ -123,7 +123,7 @@ TEST(DltProtocolTest, PackageFileErrorShallReturnFLER_FILE_NORIfTheFilePathIsExi
     // Any error code.
     const int16_t error_code{DLT_FILETRANSFER_ERROR_FILE_DATA};
     const uint32_t serial_number{0U};
-    const std::string file_name{FILE_NAME};
+    const std::string file_name{kFileName};
     const uint32_t file_size{0U};
     const std::string creation_date{"any date"};
     const uint32_t package_count{0U};
@@ -142,7 +142,7 @@ TEST(DltProtocolTest, PackageFileErrorShallReturnFLER_FILE_NORPlusOneIfTheFilePa
     // Any error code.
     const int16_t error_code{DLT_FILETRANSFER_ERROR_FILE_DATA};
     const uint32_t serial_number{0U};
-    const std::string file_name{FILE_NAME};
+    const std::string file_name{kFileName};
     const uint32_t file_size{0U};
     const std::string creation_date{"any date"};
     const uint32_t package_count{0U};
@@ -156,14 +156,14 @@ TEST(DltProtocolTest, PackageFileErrorShallReturnFLER_FILE_NORPlusOneIfTheFilePa
 
 TEST(DltProtocolTest, PackageFileErrorShallReturnFLER_NO_FILE_NORIfTheFilePathIsExist)
 {
-    auto temp_ = errno;
+    auto temp = errno;
     errno = ENOENT;
     std::array<char, BUFFER_SIZE> buffer{};
     auto data_span = score::cpp::span<char>{buffer.data(), buffer.size()};
     // Any error code.
     const int16_t error_code{DLT_FILETRANSFER_ERROR_FILE_DATA};
     const uint32_t serial_number{0U};
-    const std::string file_name{FILE_NAME};
+    const std::string file_name{kFileName};
     const uint32_t file_size{0U};
     const std::string creation_date{"any date"};
     const uint32_t package_count{0U};
@@ -172,7 +172,7 @@ TEST(DltProtocolTest, PackageFileErrorShallReturnFLER_NO_FILE_NORIfTheFilePathIs
     auto result = PackageFileError(
         data_span, error_code, serial_number, file_name, file_size, creation_date, package_count, error_message);
     // Index '1' to get the 'nor' from the tuple.
-    errno = temp_;
+    errno = temp;
     EXPECT_EQ(std::get<1>(result.value()), FLER_NO_FILE_NOR);
 }
 
