@@ -52,15 +52,8 @@ class Pthread;
 }  // namespace os
 }  // namespace score
 
-#ifdef __QNX__
-#include "score/message_passing/qnx_dispatch/qnx_dispatch_client_factory.h"
-#include "score/message_passing/qnx_dispatch/qnx_dispatch_engine.h"
-#include "score/message_passing/qnx_dispatch/qnx_dispatch_server_factory.h"
-#else
-#include "score/message_passing/unix_domain/unix_domain_client_factory.h"
-#include "score/message_passing/unix_domain/unix_domain_engine.h"
-#include "score/message_passing/unix_domain/unix_domain_server_factory.h"
-#endif
+#include "score/message_passing/client_factory.h"
+#include "score/message_passing/server_factory.h"
 
 namespace score
 {
@@ -69,13 +62,8 @@ namespace platform
 namespace datarouter
 {
 
-#ifdef __QNX__
-using ServerFactory = score::message_passing::QnxDispatchServerFactory;
-using ClientFactory = score::message_passing::QnxDispatchClientFactory;
-#else
-using ServerFactory = score::message_passing::UnixDomainServerFactory;
-using ClientFactory = score::message_passing::UnixDomainClientFactory;
-#endif
+using ServerFactory = score::message_passing::ServerFactory;
+using ClientFactory = score::message_passing::ClientFactory;
 
 class SocketServer
 {
