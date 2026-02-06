@@ -16,19 +16,10 @@
 
 #include "score/mw/log/detail/data_router/message_passing_factory.h"
 
-#include "score/message_passing/i_client_factory.h"
-#include "score/message_passing/i_server_factory.h"
-#include <optional>
+#include "score/message_passing/client_factory.h"
+#include "score/message_passing/server_factory.h"
 
-#ifdef __QNX__
-#include "score/message_passing/qnx_dispatch/qnx_dispatch_client_factory.h"
-#include "score/message_passing/qnx_dispatch/qnx_dispatch_engine.h"
-#include "score/message_passing/qnx_dispatch/qnx_dispatch_server_factory.h"
-#else
-#include "score/message_passing/unix_domain/unix_domain_client_factory.h"
-#include "score/message_passing/unix_domain/unix_domain_engine.h"
-#include "score/message_passing/unix_domain/unix_domain_server_factory.h"
-#endif
+#include <optional>
 
 namespace score
 {
@@ -39,26 +30,8 @@ namespace log
 namespace detail
 {
 
-/*
-       Deviation from Rule A16-0-1:
-       - Rule A16-0-1 (required, implementation, automated)
-       The pre-processor shall only be used for unconditional and conditional file
-       inclusion and include guards, and using the following directives: (1) #ifndef,
-       #ifdef, (3) #if, (4) #if defined, (5) #elif, (6) #else, (7) #define, (8) #endif, (9)
-       #include.
-       Justification:
-       - Feature Flag to enable/disable Logging Modes in Production SW.
-       */
-// coverity[autosar_cpp14_a16_0_1_violation] see above
-#ifdef __QNX__
-using ServerFactory = score::message_passing::QnxDispatchServerFactory;
-using ClientFactory = score::message_passing::QnxDispatchClientFactory;
-// coverity[autosar_cpp14_a16_0_1_violation] see above
-#else
-using ServerFactory = score::message_passing::UnixDomainServerFactory;
-using ClientFactory = score::message_passing::UnixDomainClientFactory;
-// coverity[autosar_cpp14_a16_0_1_violation] see above
-#endif
+using ServerFactory = score::message_passing::ServerFactory;
+using ClientFactory = score::message_passing::ClientFactory;
 
 class MessagePassingFactoryImpl : public MessagePassingFactory
 {
