@@ -103,11 +103,12 @@ SocketServer::PersistentStorageHandlers SocketServer::InitializePersistentStorag
 {
     PersistentStorageHandlers handlers;
 
-    handlers.load_dlt = [&persistent_dictionary]() {
-        return readDlt(*persistent_dictionary);
+    auto* pd_ptr = persistent_dictionary.get();
+    handlers.load_dlt = [pd_ptr]() {
+        return readDlt(*pd_ptr);
     };
-    handlers.store_dlt = [&persistent_dictionary](const score::logging::dltserver::PersistentConfig& config) {
-        writeDlt(config, *persistent_dictionary);
+    handlers.store_dlt = [pd_ptr](const score::logging::dltserver::PersistentConfig& config) {
+        writeDlt(config, *pd_ptr);
     };
     handlers.is_dlt_enabled = readDltEnabled(*persistent_dictionary);
 
