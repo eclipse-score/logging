@@ -131,9 +131,9 @@ SharedMemoryReader::SharedMemoryReader(const SharedData& shared_data,
                                        UnmapCallback unmap_callback) noexcept
     : shared_data_{shared_data},
       unmap_callback_{std::move(unmap_callback)},
-      linear_reader_{},
-      acquired_data_{},
-      number_of_acquired_bytes_{},
+      linear_reader_{std::nullopt},
+      acquired_data_{std::nullopt},
+      number_of_acquired_bytes_{0U},
       finished_reading_after_detach_{false},
       buffer_expected_to_read_next_{shared_data.control_block.switch_count_points_active_for_writing.load()},
       is_writer_detached_{false},
@@ -148,7 +148,7 @@ SharedMemoryReader::SharedMemoryReader(SharedMemoryReader&& other) noexcept
       acquired_data_{other.acquired_data_},
       number_of_acquired_bytes_{other.number_of_acquired_bytes_},
       finished_reading_after_detach_{other.finished_reading_after_detach_},
-      buffer_expected_to_read_next_(other.buffer_expected_to_read_next_),
+      buffer_expected_to_read_next_{other.buffer_expected_to_read_next_},
       is_writer_detached_{other.is_writer_detached_},
       alternating_read_only_reader_{std::move(other.alternating_read_only_reader_)}
 {
