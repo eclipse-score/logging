@@ -59,7 +59,16 @@ namespace platform
 namespace internal
 {
 
-LogParser::LogParser(const score::mw::log::INvConfig& nv_config) : nv_config_(nv_config) {}
+LogParser::LogParser(const score::mw::log::INvConfig& nv_config)
+    : ILogParser(),
+      filter_factory{},
+      handle_request_map{},
+      typename_to_index{},
+      index_parser_map{},
+      global_handlers{},
+      nv_config_(nv_config)
+{
+}
 
 void LogParser::IndexParser::add_handler(const LogParser::HandleRequestMap::value_type& request)
 {

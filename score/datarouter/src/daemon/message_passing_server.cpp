@@ -130,16 +130,18 @@ MessagePassingServer::MessagePassingServer(MessagePassingServer::SessionFactory 
         MessagePassingConfig::kMaxReplySize,
         MessagePassingConfig::kMaxNotifySize};
 
-    constexpr score::message_passing::IServerFactory::ServerConfig server_config{MessagePassingConfig::kMaxReceiverQueueSize,
-                                                                                MessagePassingConfig::kPreAllocConnections,
-                                                                                MessagePassingConfig::kMaxQueuedNotifies};
+    constexpr score::message_passing::IServerFactory::ServerConfig server_config{
+        MessagePassingConfig::kMaxReceiverQueueSize,
+        MessagePassingConfig::kPreAllocConnections,
+        MessagePassingConfig::kMaxQueuedNotifies};
     receiver_ = server_factory_->Create(service_protocol_config, server_config);
 
     auto connect_callback = [](score::message_passing::IServerConnection& connection) noexcept -> std::uintptr_t {
         const pid_t client_pid = connection.GetClientIdentity().pid;
         return static_cast<std::uintptr_t>(client_pid);
     };
-    auto disconnect_callback = [mutex_ptr = &mutex_, pid_session_map_ptr = &pid_session_map_](score::message_passing::IServerConnection& connection) noexcept {
+    auto disconnect_callback = [mutex_ptr = &mutex_, pid_session_map_ptr = &pid_session_map_](
+                                   score::message_passing::IServerConnection& connection) noexcept {
         std::unique_lock<std::mutex> lock(*mutex_ptr);
         const auto found = pid_session_map_ptr->find(connection.GetClientIdentity().pid);
         if (found != pid_session_map_ptr->end())
@@ -149,8 +151,9 @@ MessagePassingServer::MessagePassingServer(MessagePassingServer::SessionFactory 
             found->second.enqueue_for_delete_while_locked(true);
         }
     };
-    auto received_send_message_callback = [this_ptr = this](score::message_passing::IServerConnection& connection,
-                                                 const score::cpp::span<const std::uint8_t> message) noexcept -> score::cpp::blank {
+    auto received_send_message_callback = [this_ptr = this](
+                                              score::message_passing::IServerConnection& connection,
+                                              const score::cpp::span<const std::uint8_t> message) noexcept -> score::cpp::blank {
         const pid_t client_pid = connection.GetClientIdentity().pid;
         this_ptr->MessageCallback(message, client_pid);
         return {};
