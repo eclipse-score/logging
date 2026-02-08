@@ -124,35 +124,35 @@ MessagePassingServer::MessagePassingServer(MessagePassingServer::SessionFactory 
         std::cerr << "setname_np: " << ret_pthread.error() << std::endl;
     }
 
-    const score::message_passing::ServiceProtocolConfig service_protocol_config{
+    constexpr score::message_passing::ServiceProtocolConfig service_protocol_config{
         MessagePassingConfig::kDatarouterReceiverIdentifier,
         MessagePassingConfig::kMaxMessageSize,
         MessagePassingConfig::kMaxReplySize,
         MessagePassingConfig::kMaxNotifySize};
 
-    const score::message_passing::IServerFactory::ServerConfig server_config{MessagePassingConfig::kMaxReceiverQueueSize,
-                                                                           MessagePassingConfig::kPreAllocConnections,
-                                                                           MessagePassingConfig::kMaxQueuedNotifies};
+    constexpr score::message_passing::IServerFactory::ServerConfig server_config{MessagePassingConfig::kMaxReceiverQueueSize,
+                                                                                MessagePassingConfig::kPreAllocConnections,
+                                                                                MessagePassingConfig::kMaxQueuedNotifies};
     receiver_ = server_factory_->Create(service_protocol_config, server_config);
 
     auto connect_callback = [](score::message_passing::IServerConnection& connection) noexcept -> std::uintptr_t {
         const pid_t client_pid = connection.GetClientIdentity().pid;
         return static_cast<std::uintptr_t>(client_pid);
     };
-    auto disconnect_callback = [this](score::message_passing::IServerConnection& connection) noexcept {
-        std::unique_lock<std::mutex> lock(mutex_);
-        const auto found = pid_session_map_.find(connection.GetClientIdentity().pid);
-        if (found != pid_session_map_.end())
+    auto disconnect_callback = [mutex_ptr = &mutex_, pid_session_map_ptr = &pid_session_map_](score::message_passing::IServerConnection& connection) noexcept {
+        std::unique_lock<std::mutex> lock(*mutex_ptr);
+        const auto found = pid_session_map_ptr->find(connection.GetClientIdentity().pid);
+        if (found != pid_session_map_ptr->end())
         {
             SessionWrapper& wrapper = found->second;
             wrapper.to_force_finish_ = true;
             found->second.enqueue_for_delete_while_locked(true);
         }
     };
-    auto received_send_message_callback = [this](score::message_passing::IServerConnection& connection,
+    auto received_send_message_callback = [this_ptr = this](score::message_passing::IServerConnection& connection,
                                                  const score::cpp::span<const std::uint8_t> message) noexcept -> score::cpp::blank {
         const pid_t client_pid = connection.GetClientIdentity().pid;
-        this->MessageCallback(message, client_pid);
+        this_ptr->MessageCallback(message, client_pid);
         return {};
     };
     auto received_send_message_with_reply_callback =
@@ -540,7 +540,7 @@ bool MessagePassingServer::SessionHandle::AcquireRequest() const
     {
         return false;
     }
-    const std::array<std::uint8_t, 1> message{score::cpp::to_underlying(DatarouterMessageIdentifier::kAcquireRequest)};
+    constexpr std::array<std::uint8_t, 1> message{score::cpp::to_underlying(DatarouterMessageIdentifier::kAcquireRequest)};
     auto ret = sender_->Send(message);
     if (!ret)
     {
