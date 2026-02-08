@@ -284,7 +284,8 @@ void DataRouter::SourceSession::processAndRouteLogMessages(uint64_t& message_cou
                 }
                 else
                 {
-                    cmd->ticks_without_write++;
+                    auto& ticks = cmd->ticks_without_write;
+                    ++ticks;
                 }
             }
             else
@@ -547,7 +548,9 @@ bool DataRouter::SourceSession::request_acquire()
 
     if (acquire_result)
     {
-        ++(stats_data_.lock()->count_acquire_requests);
+        auto stats = stats_data_.lock();
+        auto& count_ref = stats->count_acquire_requests;
+        ++count_ref;
     }
 
     return acquire_result;
