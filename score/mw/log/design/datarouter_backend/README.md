@@ -201,7 +201,7 @@ readable without synchronization. Only after reading the remaining data from the
 ring buffer, should Datarouter unmap the shared memory page. Then the OS should
 free up the used resources.
 
-![SharedMemoryReader Class diagram](https://www.plantuml.com/plantuml/proxy?src=https://raw.githubusercontent.com/swh/ddad_score/mw/log/design/mw_log_shared_memory_reader.uxf?ref=a294e8aeb6453344591cfb1780d719f4a5ea1daa)
+![SharedMemoryReader Class diagram](https://www.plantuml.com/plantuml/proxy?src=https://raw.githubusercontent.com/swh/ddad_score/mw/log/design/mw_log_shared_memory_reader.puml)
 
 ## Limited impact of incoming messages in the logging client
 
@@ -308,4 +308,3 @@ Message ID: `kAcquireResponse`
 Message type: `MediumMessage`
 
 Payload: `struct ReadAcquireResult`
-

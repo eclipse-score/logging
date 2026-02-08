@@ -1,0 +1,249 @@
+@startuml configuration_static
+
+interface "bmw:mw::log::Recorder" as Recorder {
+}
+
+class "TextRecorder" as TextRecorder {
+}
+
+class "DataRouterRecorder" as DataRouterRecorder {
+  - configuration: score::mw::log::Configuration
+}
+
+class "FileRecorder" as FileRecorder {
+}
+
+class "Empty" as Empty {
+}
+
+class "CompositeRecorder" as CompositeRecorder {
+  - config_: score::mw::log::detail::Configuration
+}
+
+class "RecorderComposite" as RecorderComposite {
+  + RecorderComposite(recorders: vector<Recorder>)
+  __
+  - recorders_: vector<Recorder>
+}
+
+class "score::mw::log::Configuration" as Configuration {
+  - ecu_id_:  LoggingIdentifier
+  - app_id_:  LoggingIdentifier
+  - app_description_: std::string
+  - log_mode_: std::unordered_set<LogMode>
+  - log_file_path_: std::string
+  - default_log_level_: LogLevel
+  - default_console_log_level_: LogLevel
+  - context_log_level_: ContextLogLevelMap
+  - stack_buffer_size_: std::size_t
+  - ring_buffer_size_: std::size_t
+  - ring_buffer_overwrite_on_full_: bool
+  - number_of_slots_: std::size_t
+  - slot_size_bytes_: std::size_t
+  - data_router_uid_: std::size_t
+  - dynamic_datarouter_identifiers_: bool
+  __
+  + Configuration()
+  + GetEcuId(): std::string_view
+  + SetEcuId(const std::string_view): void
+  + GetAppId(): std::string_view
+  + SetAppId(const std::string_view): void
+  + GetAppDescription(): std::string_view
+  + SetAppDescription(const std::string_view): void
+  + GetLogMode(): const std::unordered_set<LogMode>&
+  + SetLogMode(const std::unordered_set<LogMode>&): void
+  + GetLogFilePath(): std::string_view
+  + SetLogFilePath(const std::string_view): void
+  + GetDefaultLogLevel(): LogLevel
+  + SetDefaultLogLevel(const LogLevel): void
+  + GetDefaultConsoleLogLevel(): LogLevel
+  + SetDefaultConsoleLogLevel(const LogLevel): void
+  + GetContextLogLevel(): ContextLogLevelMap&
+  + SetContextLogLevel(const ContextLogLevelMap&): void
+  + GetStackBufferSize(): std::size_t
+  + SetStackBufferSize(const std::size_t stack_buffer_size)
+  + GetRingBufferSize(): std::size_t
+  + SetRingBufferSize(const std::size_t ring_buffer_size): void
+  + GetRingBufferOverwriteOnFull(): bool
+  + SetRingBufferOverwriteOnFull(const bool): void
+  + GetNumberOfSlots(): std::size_t
+  + SetNumberOfSlots(const std::size_t number_of_slots): void
+  + GetSlotSizeInBytes(): std::size_t
+  + SetSlotSizeInBytes(const std::size_t slot_size_bytes): void
+  + SetDataRouterUid(const std::size_t uid): void
+  + GetDataRouterUid(): std::size_t
+  + GetDynamicDatarouterIdentifiers(): bool
+  + SetDynamicDatarouterIdentifiers(const bool enable_dynamic_identifier): void
+  + IsLogLevelEnabled(const LogLevel& log_level,\n                           const std::string_view context,\n                           const bool check_for_console = false): bool
+}
+
+class "TargetConfigReader" as TargetConfigReader {
+  - discoverer_: unique_ptr<IConfigurationFileDiscovery>
+  __
+  + TargetConfigReader(discoverer: IConfigurationFileDiscoverer)
+  + ReadConfig(): score::Result<Configuration>
+}
+
+interface "ITargetConfigReader" as ITargetConfigReader {
+  + {abstract} ReadConfig(): score::Result<Configuration>
+}
+
+class "TargetConfigReaderMock" as TargetConfigReaderMock {
+}
+
+class "RecorderFactory" as RecorderFactory {
+  - GetRemoteRecorder(const Configuration&):\n  std::unique_ptr<Recorder>
+  - GetFileRecorder(const Configuration& config\n  const std::unique_ptr<score::os::Fcntl>&):\n  std::unique_ptr<Recorder>
+  - GetConsoleRecorder(const Configuration&):\n  std::unique_ptr<Recorder>
+  __
+  + CreateFromConfiguration(): std::unique_ptr<Recorder>
+  + CreateFromConfiguration(\n  const std::unique_ptr<const ITargetConfigReader>):\n  std::unique_ptr<Recorder>
+  + CreateWithConsoleLoggingOnly(): std::unique_ptr<Recorder>
+  + CreateStub(): std::unique_ptr<Recorder>
+  + CreateRecorderFromLogMode(\n  const LogMode&,\n  const Configuration&,\n  const std::unique_ptr<score::os::Fcntl>)
+}
+
+interface "IRecorderFactory" as IRecorderFactory {
+  + CreateFromConfiguration: std::unique_ptr<Recorder>
+  + CreateWithConsoleLoggingOnly(): std::unique_ptr<Recorder>
+  + CreateStub(): std::unique_ptr<Recorder>
+}
+
+class "score::mw::log::detail::Runtime" as Runtime {
+}
+
+interface "IConfigurationFileDiscoverer" as IConfigurationFileDiscoverer {
+  + {abstract} FindConfigurationFiles(): vector<string>
+}
+
+class "ConfigurationFileDiscoverer" as ConfigurationFileDiscoverer {
+  - path_: std::unique_ptr<os::Path>
+  - stdlib_: std::unique_ptr<os::Stdlib>
+  - unistd_: std::unique_ptr<os::Unistd>
+  __
+  + ConfigurationFileDiscoverer(\n  std::unique_ptr<os::Path>&&,\n  std::unique_ptr<os::Stdlib>&&,\n  std::unique_ptr<os::Unistd>&&)
+  + FindConfigurationFiles(): std::vector<std::string>
+}
+
+class "ConfigurationFileDiscovererMock" as ConfigurationFileDiscovererMock {
+}
+
+class "LoggingIdentifier" as LoggingIdentifier {
+  + LoggingIdentifier(const std::string_view)
+  + GetStringView(): std::string_view
+  + friend operator==(const LoggingIdentifier&, const LoggingIdentifier&): bool
+  + friend operator!=(const LoggingIdentifier&, const LoggingIdentifier&): bool
+  + kMaxLength: std::size_t
+  + data_: std::array<std::string_view::value_type, kMaxLength>
+}
+
+package "score::json" {
+  class JsonUtils {
+    + FromFile(path): Result<score::json::Any>
+  }
+}
+
+package "score::os" {
+  class "utils/path" as Path {
+    + {static} get_exec_path(): Result<string>
+    + {static} get_parent_dir(): string
+  }
+
+  class "Unistd" as Unistd {
+    + access()
+  }
+
+  class "Stdlib" as Stdlib {
+    + getenv()
+  }
+}
+
+' Inheritance relationships
+Recorder <|-- DataRouterRecorder
+Recorder <|-- TextRecorder
+Recorder <|-- FileRecorder
+Recorder <|-- Empty
+Recorder <|-- CompositeRecorder
+Recorder <|.. RecorderComposite
+
+ITargetConfigReader <|.. TargetConfigReader
+ITargetConfigReader <|.. TargetConfigReaderMock
+
+IConfigurationFileDiscoverer <|-- ConfigurationFileDiscoverer
+IConfigurationFileDiscoverer <|-- ConfigurationFileDiscovererMock
+
+' Composition and aggregation relationships
+DataRouterRecorder *-- Configuration
+CompositeRecorder *-- Configuration
+RecorderComposite *-- DataRouterRecorder
+RecorderComposite *-- TextRecorder
+Configuration *-- LoggingIdentifier
+
+' Usage relationships
+RecorderFactory ..> RecorderComposite : creates
+RecorderFactory ..> TargetConfigReader : uses
+RecorderFactory ..> IRecorderFactory : uses
+Runtime ..> Recorder : owns instance of
+TargetConfigReader ..> Configuration : creates
+TargetConfigReader *-- IConfigurationFileDiscoverer
+TargetConfigReader ..> JsonUtils : uses
+ConfigurationFileDiscoverer ..> Path : uses
+ConfigurationFileDiscoverer ..> Unistd : uses
+ConfigurationFileDiscoverer ..> Stdlib : uses
+
+note right of RecorderComposite
+  Forwards the logs to all recorders in the list
+  passed in the constructor.
+end note
+
+note right of RecorderFactory
+  CreateForTarget(): Loads the configuration
+  and  instantiates the requested
+  recorder types.
+
+  CreateForUnitTests(): Prepares a recorder
+  that puts logs in standard output stream
+  for unit testing.
+
+  CreateStub(): Returns Empty recorder that
+  discards all the logs.
+end note
+
+note right of TargetConfigReader
+  Reads config from
+  /opt/<app>/etc/logging.json
+  and /ecu/logging.json and creates the
+  Configuration object.
+end note
+
+note bottom of TargetConfigReaderMock
+  Used for unit testing the RecorderFactory.
+end note
+
+note top of TargetConfigReader
+  Dependency injection for unit testing.
+end note
+
+note right of DataRouterRecorder
+  Configuration passed
+  the constructor by value.
+end note
+
+note right of ConfigurationFileDiscoverer
+  Finds the file paths to the global, environmental and
+  application configuration files and returns all that exists.
+
+  Global configuration:
+  1. /etc/ecu_logging_config.json if it exists.
+
+  Environmental configuration:
+  1. path under the MW_LOG_CONFIG_FILE environmental
+  variable if it defined
+
+  Application configuration:
+  1. <cwd>/etc/logging.json
+  2. <cwd>/logging.json
+  3. <binary path>/../etc/logging.json
+end note
+
+@enduml
