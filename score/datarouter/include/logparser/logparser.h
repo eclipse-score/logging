@@ -89,7 +89,7 @@ class LogParser : public ILogParser
       public:
         TypeInfo info_;
 
-        explicit IndexParser(TypeInfo info) : info_{info}, handlers_{} {}
+        explicit IndexParser(TypeInfo info) : info_{info}, handlers_() {}
 
         void add_handler(const HandleRequestMap::value_type& request);
         void remove_handler(const HandleRequestMap::value_type& request);
