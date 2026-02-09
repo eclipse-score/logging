@@ -179,7 +179,7 @@ void DatarouterMessageClientImpl::SetupReceiver() noexcept
     const score::message_passing::ServiceProtocolConfig service_protocol_config{
         msg_client_ids_.GetReceiverID(), MessagePassingConfig::kMaxMessageSize, 0U, 0U};
 
-    const score::message_passing::IServerFactory::ServerConfig server_config{
+    constexpr score::message_passing::IServerFactory::ServerConfig server_config{
         MessagePassingConfig::kMaxReceiverQueueSize, 0U, 0U};
     receiver_ = message_passing_factory_->CreateServer(service_protocol_config, server_config);
 }
