@@ -97,10 +97,10 @@ void DatarouterMessageClientImpl::ConnectToDatarouter() noexcept
     // Wait for the sender to be in Ready state before starting receiver
     {
         std::unique_lock<std::mutex> lock(sender_state_change_mutex_);
-        state_condition_.wait(lock, [this]() {
-            return (sender_state_.has_value() &&
-                    sender_state_.value() == score::message_passing::IClientConnection::State::kReady) ||
-                   stop_source_.stop_requested();
+        state_condition_.wait(lock, [&stop_source = stop_source_, &sender_state = sender_state_]() {
+            return (sender_state.has_value() &&
+                    sender_state.value() == score::message_passing::IClientConnection::State::kReady) ||
+                   stop_source.stop_requested();
         });
     }
 
@@ -191,18 +191,19 @@ bool DatarouterMessageClientImpl::StartReceiver()
     // Note that the receiver callback may only be called after the connect task finished.
     SCORE_LANGUAGE_FUTURECPP_PRECONDITION_PRD_MESSAGE(sender_ != nullptr, "The sender must be created before the receiver.");
 
-    auto connect_callback = [this](score::message_passing::IServerConnection& connection) noexcept -> std::uintptr_t {
-        const auto result = SignalHandling::PThreadBlockSigTerm(this->utils_.GetSignal());
+    auto* this_ptr = this;
+    auto connect_callback = [this_ptr](score::message_passing::IServerConnection& connection) noexcept -> std::uintptr_t {
+        const auto result = SignalHandling::PThreadBlockSigTerm(this_ptr->utils_.GetSignal());
         const pid_t client_pid = connection.GetClientIdentity().pid;
         return static_cast<std::uintptr_t>(client_pid);
     };
-    auto disconnect_callback = [this](score::message_passing::IServerConnection& /*connection*/) noexcept {
-        this->RequestInternalShutdown();
+    auto disconnect_callback = [this_ptr](score::message_passing::IServerConnection& /*connection*/) noexcept {
+        this_ptr->RequestInternalShutdown();
     };
-    auto received_send_message_callback = [this](
+    auto received_send_message_callback = [this_ptr](
                                               score::message_passing::IServerConnection& /*connection*/,
                                               const score::cpp::span<const std::uint8_t> /*message*/) noexcept -> score::cpp::blank {
-        this->OnAcquireRequest();
+        this_ptr->OnAcquireRequest();
         return {};
     };
     auto received_send_message_with_reply_callback =
