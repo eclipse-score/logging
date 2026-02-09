@@ -22,7 +22,8 @@ namespace log
 namespace detail
 {
 
-MessagePassingFactoryImpl::MessagePassingFactoryImpl() : server_factory_{}, client_factory_{server_factory_.GetEngine()}
+MessagePassingFactoryImpl::MessagePassingFactoryImpl()
+    : MessagePassingFactory(), server_factory_{}, client_factory_{server_factory_.GetEngine()}
 {
 }
 
