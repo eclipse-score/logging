@@ -283,6 +283,15 @@ void DatarouterMessageClientImpl::SendConnectMessage() noexcept
     SendMessage(message);
 }
 
+/*
+Deviation from Rule A15-5-3:
+- A function declared with the noexcept exception specification shall not throw exceptions.
+Justification:
+- Shutdown is noexcept because it is called from the destructor and must not throw.
+  All operations are either noexcept or guaranteed not to throw in practice. If an unexpected
+  exception occurs during shutdown, std::terminate is acceptable behavior for a destructor context.
+*/
+// coverity[autosar_cpp14_a15_5_3_violation]
 void DatarouterMessageClientImpl::Shutdown() noexcept
 {
     if (not first_message_received_.load())
