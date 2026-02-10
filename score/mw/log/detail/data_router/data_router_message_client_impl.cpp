@@ -305,7 +305,7 @@ void DatarouterMessageClientImpl::Shutdown() noexcept
     // Request the jthread to stop and wait for it to finish
     if (connect_thread_.joinable())
     {
-        connect_thread_.request_stop();
+        std::ignore = connect_thread_.request_stop();
         connect_thread_.join();
     }
 
