@@ -99,7 +99,7 @@ void DatarouterMessageClientImpl::ConnectToDatarouter() noexcept
         std::unique_lock<std::mutex> lock(sender_state_change_mutex_);
         state_condition_.wait(lock, [&stop_source = stop_source_, &sender_state = sender_state_]() {
             return (sender_state.has_value() &&
-                    sender_state.value() == score::message_passing::IClientConnection::State::kReady) ||
+                    (sender_state.value() == score::message_passing::IClientConnection::State::kReady)) ||
                    stop_source.stop_requested();
         });
     }
@@ -110,7 +110,7 @@ void DatarouterMessageClientImpl::ConnectToDatarouter() noexcept
         return;
     }
 
-    if (!sender_state_.has_value() || sender_state_.value() != score::message_passing::IClientConnection::State::kReady)
+    if (!sender_state_.has_value() || (sender_state_.value() != score::message_passing::IClientConnection::State::kReady))
     {
         RequestInternalShutdown();
         return;
