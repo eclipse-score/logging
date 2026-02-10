@@ -27,12 +27,17 @@ bazel_dep(name = "platforms", version = "1.0.0")
 
 # S-CORE process rules
 bazel_dep(name = "score_bazel_platforms", version = "0.0.4")
-bazel_dep(name = "score_docs_as_code", version = "2.2.0")
+bazel_dep(name = "score_docs_as_code", version = "3.0.0")
 bazel_dep(name = "score_tooling", version = "1.1.0")
 bazel_dep(name = "score_rust_policies", version = "0.0.3")
 
-bazel_dep(name = "score_process", version = "1.4.0", dev_dependency = True)
-bazel_dep(name = "score_platform", version = "0.5.1", dev_dependency = True)
+bazel_dep(name = "score_process", version = "1.4.3", dev_dependency = True)
+bazel_dep(name = "score_platform", version = "0.5.2", dev_dependency = True)  # This is main score repo
+git_override(
+    module_name = "score_platform",
+    commit = "7d252e75b733b09225f1a383bb00d5d7d79fa5ae",
+    remote = "https://github.com/eclipse-score/score.git",
+)
 
 # Toolchains and extensions
 bazel_dep(name = "score_bazel_cpp_toolchains", version = "0.2.2", dev_dependency = True)
@@ -103,10 +108,9 @@ git_override(
 bazel_dep(name = "score_baselibs", version = "0.2.0")
 git_override(
     module_name = "score_baselibs",
-    commit = "99d49637a2199f33a71edc479d39970e3bdcb271",
+    commit = "ffd1c812213c66a436ed982632f6942528b58be8",  # until release with docs 3.0.0
     remote = "https://github.com/eclipse-score/baselibs.git",
 )
 
 # Rust dependencies
-
-bazel_dep(name = "score_baselibs_rust", version = "0.0.5")
+bazel_dep(name = "score_baselibs_rust", version = "0.1.0")
