@@ -35,7 +35,7 @@ bazel_dep(name = "score_process", version = "1.4.0", dev_dependency = True)
 bazel_dep(name = "score_platform", version = "0.5.1", dev_dependency = True)
 
 # Toolchains and extensions
-bazel_dep(name = "score_bazel_cpp_toolchains", version = "0.2.0", dev_dependency = True)
+bazel_dep(name = "score_bazel_cpp_toolchains", version = "0.2.2", dev_dependency = True)
 bazel_dep(name = "score_toolchains_gcc", version = "0.5", dev_dependency = True)
 bazel_dep(name = "score_toolchains_qnx", version = "0.0.6", dev_dependency = True)
 bazel_dep(name = "score_toolchains_rust", version = "0.4.0", dev_dependency = True)
@@ -53,6 +53,7 @@ git_override(
 # Extensions
 
 gcc_cpp = use_extension("@score_bazel_cpp_toolchains//extensions:gcc.bzl", "gcc", dev_dependency = True)
+
 gcc_cpp.toolchain(
     name = "score_gcc_x86_64_toolchain",
     target_cpu = "x86_64",
@@ -61,6 +62,35 @@ gcc_cpp.toolchain(
     version = "12.2.0",
 )
 use_repo(gcc_cpp, "score_gcc_x86_64_toolchain")
+
+gcc_cpp.toolchain(
+    name = "score_gcc_arm64_toolchain",
+    target_cpu = "aarch64",
+    target_os = "linux",
+    version = "12.2.0",
+    use_default_package = True,
+)
+use_repo(gcc_cpp, "score_gcc_arm64_toolchain")
+
+gcc_cpp.toolchain(
+    name = "score_gcc_qnx_x86_64_toolchain",
+    target_cpu = "x86_64",
+    target_os = "qnx",
+    sdp_version = "8.0.0",
+    version = "12.2.0",
+    use_default_package = True,
+)
+use_repo(gcc_cpp, "score_gcc_qnx_x86_64_toolchain")
+
+gcc_cpp.toolchain(
+    name = "score_gcc_qnx_toolchain",
+    target_cpu = "aarch64",
+    target_os = "qnx",
+    sdp_version = "8.0.0",
+    version = "12.2.0",
+    use_default_package = True,
+)
+use_repo(gcc_cpp, "score_gcc_qnx_toolchain")
 
 gcc = use_extension("@score_toolchains_gcc//extentions:gcc.bzl", "gcc", dev_dependency = True)
 gcc.toolchain(

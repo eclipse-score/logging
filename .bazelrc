@@ -40,6 +40,20 @@ common:qnx --host_platform=@score_bazel_platforms//:x86_64-linux
 common:qnx --credential_helper=*.qnx.com=%workspace%/scripts/internal/qnx_creds.py
 common:qnx --sandbox_writable_path=/var/tmp
 
+build:x86_64-linux --platforms=@score_bazel_platforms//:x86_64-linux-gcc_12.2.0-posix
+build:x86_64-linux --extra_toolchains=@score_gcc_x86_64_toolchain//:x86_64-linux-gcc_12.2.0-posix
+build:x86_64-linux --extra_toolchains=@score_toolchains_rust//toolchains/x86_64-unknown-linux-gnu:toolchain_x86_64_linux
+
+build:aarch64-linux --platforms=@score_bazel_platforms//:aarch64-linux-gcc_12.2.0-posix
+build:aarch64-linux --extra_toolchains=@score_gcc_arm64_toolchain//:aarch64-linux-gcc_12.2.0-posix
+
+build:x86_64-qnx --platforms=@score_bazel_platforms//:x86_64-qnx8_0
+build:x86_64-qnx --extra_toolchains=@score_gcc_qnx_x86_64_toolchain//:x86_64-qnx-sdp_8.0.0-posix
+
+build:aarch64-qnx --platforms=@score_bazel_platforms//:arm64-qnx8_0
+build:aarch64-qnx --extra_toolchains=@score_gcc_qnx_toolchain//:aarch64-qnx-sdp_8.0.0-posix
+build:aarch64-qnx --extra_toolchains=@score_toolchains_rust//toolchains/aarch64-unknown-qnx8_0:toolchain_aarch64_qnx8_0
+
 build:build_qnx8 --platforms=@score_bazel_platforms//:arm64-qnx8_0
 build:build_qnx8 --extra_toolchains=@toolchains_qnx_qcc//:qcc_aarch64
 build:build_qnx8 --extra_toolchains=@toolchains_qnx_ifs//:ifs_aarch64
