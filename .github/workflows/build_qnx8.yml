@@ -11,38 +11,26 @@
 # SPDX-License-Identifier: Apache-2.0
 # *******************************************************************************
 
-name: QNX8 Build and Test
-
+name: QNX8 Build
 on:
   pull_request_target:
     types: [opened, reopened, synchronize]
-
+  merge_group:
+    types: [checks_requested]
 jobs:
-  qnx-build-x86_64:
+  qnx-build:
     uses: eclipse-score/cicd-workflows/.github/workflows/qnx-build.yml@main
     permissions:
       contents: read
       pull-requests: read
+    strategy:
+      matrix:
+        config: ['arm64-qnx', 'x86_64-qnx']
     with:
-      bazel-target: "//score/... //tests/..."
-      bazel-config: "x86_64-qnx"
-      credential-helper: "scripts/internal/qnx_creds.py"
-      environment-name: "workflow-approval"
-    secrets:
-      score-qnx-license: ${{ secrets.SCORE_QNX_LICENSE }}
-      score-qnx-user: ${{ secrets.SCORE_QNX_USER }}
-      score-qnx-password: ${{ secrets.SCORE_QNX_PASSWORD }}
-
-  qnx-build-arm64:
-    uses: eclipse-score/cicd-workflows/.github/workflows/qnx-build.yml@main
-    permissions:
-      contents: read
-      pull-requests: read
-    with:
-      bazel-target: "//score/... //tests/..."
-      bazel-config: "arm64-qnx"
-      credential-helper: "scripts/internal/qnx_creds.py"
-      environment-name: "workflow-approval"
+      bazel-target: '//score/... //tests/...'
+      bazel-config: ${{ matrix.config }}
+      credential-helper: 'scripts/internal/qnx_creds.py'
+      environment-name: 'workflow-approval'
     secrets:
       score-qnx-license: ${{ secrets.SCORE_QNX_LICENSE }}
       score-qnx-user: ${{ secrets.SCORE_QNX_USER }}
