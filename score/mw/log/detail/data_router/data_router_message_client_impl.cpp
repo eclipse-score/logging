@@ -272,7 +272,7 @@ void DatarouterMessageClientImpl::SendConnectMessage() noexcept
          (MessagePassingConfig::kRandomFilenameStartIndex + msg.GetRandomPart().size() + static_cast<std::size_t>(1))))
     {
         auto start_iter = writer_file_name_.begin();
-        std::advance(start_iter, static_cast<int>(MessagePassingConfig::kRandomFilenameStartIndex));
+        std::advance(start_iter, static_cast<std::ptrdiff_t>(MessagePassingConfig::kRandomFilenameStartIndex));
         auto random_part = msg.GetRandomPart();
         std::ignore = std::copy_n(start_iter, random_part.size(), random_part.begin());
         msg.SetRandomPart(random_part);
@@ -325,7 +325,7 @@ score::cpp::expected_blank<score::os::Error> DatarouterMessageClientImpl::Create
         MessagePassingConfig::kMaxMessageSize,
         MessagePassingConfig::kMaxReplySize,
         MessagePassingConfig::kMaxNotifySize};
-    const score::message_passing::IClientFactory::ClientConfig client_config{0, 10, false, true, false};
+    const score::message_passing::IClientFactory::ClientConfig client_config{0U, 10U, false, true, false};
     sender_ = message_passing_factory_->CreateClient(protocol_config, client_config);
 
     if (sender_ == nullptr)
