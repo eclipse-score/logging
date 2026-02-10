@@ -24,7 +24,7 @@ copyright_checker(
         ".github",
         "docs",
         "examples",
-        "score",
+        # "score", # Disabled until antonkri is back from vacations as we cannot get approval on some repo parts
         "tests",
         "//:.bazelrc",
         "//:BUILD",
