@@ -65,7 +65,7 @@ void SharedMemoryWriter::DetachWriter() noexcept
 
 void SharedMemoryWriter::IncrementTypeRegistrationFailures() noexcept
 {
-    shared_data_.number_of_drops_type_registration_failed.fetch_add(1U);
+    std::ignore = shared_data_.number_of_drops_type_registration_failed.fetch_add(1U);
 }
 
 SharedMemoryWriter::~SharedMemoryWriter() noexcept
