@@ -241,7 +241,7 @@ TEST_F(CompositeRecorderFixture, LogInvocationShallBeForwardedToAllAvailableReco
         EXPECT_CALL(*mock_recorder, LogUint64(recorder_slot, kBin64.value));
 
         EXPECT_CALL(*mock_recorder,
-                    Log_LogRawBuffer(recorder_slot, gLogRawBuffer.data(), static_cast<uint64_t>(gLogRawBuffer.size())));
+                    LogLogRawBuffer(recorder_slot, gLogRawBuffer.data(), static_cast<uint64_t>(gLogRawBuffer.size())));
         return mock_recorder;
     });
 
@@ -289,9 +289,9 @@ TEST_F(CompositeRecorderFixture, LogSlog2MessageAvailableRecorders)
         SlotHandle recorder_slot{static_cast<SlotIndex>(recorder)};
         EXPECT_CALL(
             *mock_recorder,
-            Log_LogSlog2Message(recorder_slot,
-                                static_cast<uint16_t>(gLogSlog2Message.GetCode()),
-                                LogStringEquals(static_cast<score::mw::log::LogString>(gLogSlog2Message.GetMessage()))))
+            LogLogSlog2Message(recorder_slot,
+                               static_cast<uint16_t>(gLogSlog2Message.GetCode()),
+                               LogStringEquals(static_cast<score::mw::log::LogString>(gLogSlog2Message.GetMessage()))))
             .Times(0);
         return mock_recorder;
     });
