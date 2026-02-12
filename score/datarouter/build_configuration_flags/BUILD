@@ -110,5 +110,6 @@ config_setting(
     flag_values = {":use_local_vlan": "True"},
     visibility = [
         "//score/datarouter/network:__pkg__",
+        # "@xyz//score/datarouter/network:__pkg__",
     ],
 )
