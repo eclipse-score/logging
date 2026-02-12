@@ -7,7 +7,7 @@
 # mw/log owners
 /score/mw/common_features.bzl @antonkri
 
-/score/mw/log @antonkri
+/score/mw/log @antonkri @4og
 
 # mw/log rust mw_logger owners (more specific rule overrides general rule above)
 /score/mw/log/rust @pawelrutkaq
