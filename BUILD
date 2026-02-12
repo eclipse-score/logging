@@ -32,6 +32,7 @@ copyright_checker(
         "//:project_config.bzl",
     ],
     config = "@score_tooling//cr_checker/resources:config",
+    exclusion = "//:.copyright_exclusions",
     template = "@score_tooling//cr_checker/resources:templates",
     visibility = ["//visibility:public"],
 )
