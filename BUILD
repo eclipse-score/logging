@@ -24,7 +24,7 @@ copyright_checker(
         ".github",
         "docs",
         "examples",
-        # "score", # Disabled until antonkri is back from vacations as we cannot get approval on some repo parts
+        "score",
         "tests",
         "//:.bazelrc",
         "//:BUILD",
@@ -32,6 +32,7 @@ copyright_checker(
         "//:project_config.bzl",
     ],
     config = "@score_tooling//cr_checker/resources:config",
+    exclusion = "//:.copyright_exclusions",
     template = "@score_tooling//cr_checker/resources:templates",
     visibility = ["//visibility:public"],
 )
