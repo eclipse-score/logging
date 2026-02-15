@@ -35,6 +35,7 @@
 #include <queue>
 #include <thread>
 #include <unordered_map>
+#include <unordered_set>
 
 namespace score
 {
@@ -203,6 +204,10 @@ class MessagePassingServer : public IMessagePassingServerSessionWrapper
     score::cpp::jthread worker_thread_;
     std::condition_variable worker_cond_;  // to wake up worker thread
     std::unordered_map<pid_t, SessionWrapper> pid_session_map_;
+    // Tracks client PIDs that disconnected before a session could be created/emplaced.
+    // This closes a race where OnConnectRequest creates a session outside mutex_ while
+    // disconnect_callback may already have run and the connection object may be gone.
+    std::unordered_set<pid_t> disconnected_pids_;
     std::queue<pid_t> work_queue_;
     std::atomic<bool> workers_exit_;
     std::condition_variable server_cond_;  // to wake up server thread

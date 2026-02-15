@@ -136,15 +136,22 @@ MessagePassingServer::MessagePassingServer(MessagePassingServer::SessionFactory 
         MessagePassingConfig::kMaxQueuedNotifies};
     receiver_ = server_factory_->Create(service_protocol_config, server_config);
 
-    auto connect_callback = [](score::message_passing::IServerConnection& connection) noexcept -> std::uintptr_t {
+    auto connect_callback = [this_ptr = this](score::message_passing::IServerConnection& connection) noexcept
+        -> std::uintptr_t {
         const pid_t client_pid = connection.GetClientIdentity().pid;
+        {
+            std::lock_guard<std::mutex> lock(this_ptr->mutex_);
+            this_ptr->disconnected_pids_.erase(client_pid);
+        }
         return static_cast<std::uintptr_t>(client_pid);
     };
-    auto disconnect_callback = [mutex_ptr = &mutex_, pid_session_map_ptr = &pid_session_map_](
-                                   score::message_passing::IServerConnection& connection) noexcept {
-        std::unique_lock<std::mutex> lock(*mutex_ptr);
-        const auto found = pid_session_map_ptr->find(connection.GetClientIdentity().pid);
-        if (found != pid_session_map_ptr->end())
+    auto disconnect_callback = [this_ptr = this](score::message_passing::IServerConnection& connection) noexcept {
+        const pid_t client_pid = connection.GetClientIdentity().pid;
+        std::unique_lock<std::mutex> lock(this_ptr->mutex_);
+        this_ptr->disconnected_pids_.insert(client_pid);
+
+        const auto found = this_ptr->pid_session_map_.find(client_pid);
+        if (found != this_ptr->pid_session_map_.end())
         {
             SessionWrapper& wrapper = found->second;
             wrapper.connection_ = nullptr;
@@ -468,7 +475,22 @@ void MessagePassingServer::OnConnectRequest(score::message_passing::IServerConne
     if (session)
     {
         std::unique_lock<std::mutex> lock(mutex_);
+        if (disconnected_pids_.find(pid) != disconnected_pids_.end())
+        {
+            // Client disconnected before we could create/emplace the session.
+            // Do not store &connection (may be already destroyed by the framework).
+            return;
+        }
+
         auto emplace_result = pid_session_map_.emplace(pid, SessionWrapper{this, pid, std::move(session)});
+        if (!emplace_result.second)
+        {
+            // Existing session for this PID is still present; do not overwrite it.
+            // The reconnect path is handled by disconnect_callback + worker-thread teardown.
+            return;
+        }
+
+        // connection_ points to framework-owned object. It is cleared in disconnect_callback.
         emplace_result.first->second.connection_ = &connection;
         // enqueue the tick to speed up processing connection
         emplace_result.first->second.enqueue_tick_while_locked();
