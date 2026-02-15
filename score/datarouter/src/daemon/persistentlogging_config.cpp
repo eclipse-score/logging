@@ -24,6 +24,7 @@
 #include <rapidjson/filereadstream.h>
 #include <rapidjson/stringbuffer.h>
 #include <algorithm>
+#include <cstdio>
 #include <iostream>
 #include <memory>
 
@@ -41,8 +42,18 @@ PersistentLoggingConfig ReadPersistentLoggingConfig(const std::string& file_path
     using ReadResult = PersistentLoggingConfig::ReadResult;
 
     PersistentLoggingConfig config;
-    using UniqueFileT = std::unique_ptr<std::FILE, decltype(&fclose)>;
-    UniqueFileT fp(std::fopen(file_path.c_str(), "r"), &fclose);
+    struct FileCloser
+    {
+        void operator()(std::FILE* file) const noexcept
+        {
+            if (file != nullptr)
+            {
+                std::fclose(file);
+            }
+        }
+    };
+    using UniqueFileT = std::unique_ptr<std::FILE, FileCloser>;
+    UniqueFileT fp(std::fopen(file_path.c_str(), "r"), FileCloser{});
     if (nullptr == fp)
     {
         config.read_result = ReadResult::kErrorOpen;

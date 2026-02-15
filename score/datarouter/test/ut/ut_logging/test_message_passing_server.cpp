@@ -292,13 +292,13 @@ class MessagePassingServerFixture : public ::testing::Test
     {
         auto connection = std::make_unique<StrictMock<::score::message_passing::ServerConnectionMock>>();
         auto* connection_ptr = connection.get();
-        auto emplace_result = connections_.emplace(pid, std::move(connection));
+        auto emplace_result = connections.emplace(pid, std::move(connection));
         EXPECT_TRUE(emplace_result.second);
 
-        connection_identities_.insert_or_assign(pid, score::message_passing::ClientIdentity{pid, 0, 0});
+        connection_identities.insert_or_assign(pid, score::message_passing::ClientIdentity{pid, 0, 0});
         EXPECT_CALL(*connection_ptr, GetClientIdentity())
             .Times(AnyNumber())
-            .WillRepeatedly(ReturnRef(connection_identities_.at(pid)));
+            .WillRepeatedly(ReturnRef(connection_identities.at(pid)));
 
         // Mirror production behavior: connect_callback runs before any messages.
         std::ignore = connect_callback(*connection_ptr);
@@ -351,8 +351,8 @@ class MessagePassingServerFixture : public ::testing::Test
     score::message_passing::MessageCallback sent_callback;
     score::message_passing::MessageCallback sent_with_reply_callback;
 
-    std::unordered_map<pid_t, std::unique_ptr<StrictMock<::score::message_passing::ServerConnectionMock>>> connections_;
-    std::map<pid_t, score::message_passing::ClientIdentity> connection_identities_;
+    std::unordered_map<pid_t, std::unique_ptr<StrictMock<::score::message_passing::ServerConnectionMock>>> connections;
+    std::map<pid_t, score::message_passing::ClientIdentity> connection_identities;
 
     std::mutex map_mutex;
     std::condition_variable map_cond;  // currently only used for destruction
@@ -463,6 +463,13 @@ TEST_F(MessagePassingServerFixture, TestOneConnectAcquireRelease)
 
     EXPECT_EQ(acquire_response_count, 1);
 
+    {
+        std::array<std::uint8_t, sizeof(score::mw::log::detail::ReadAcquireResult) + 2U> bad_message{};
+        bad_message[0] = score::cpp::to_underlying(DatarouterMessageIdentifier::kAcquireResponse);
+        sent_callback(*connection_ptr, bad_message);
+        EXPECT_EQ(acquire_response_count, 2);
+    }
+
     EXPECT_EQ(closed_by_peer_count, 0);
     EXPECT_FALSE(session_map.empty());
 
@@ -527,13 +534,13 @@ TEST_F(MessagePassingServerFixture, TestTripleConnectSamePid)
     this->disconnect_callback(connection);
     using namespace std::chrono_literals;
     std::this_thread::sleep_for(100ms);
-    connections_.erase(kClienT0Pid);
+    connections.erase(kClienT0Pid);
     auto* connection1 = ConnectClientAndSendConnectMessage(kClienT0Pid);
     EXPECT_CALL(connection, GetClientIdentity()).WillOnce(ReturnRef(client_identity));
     this->disconnect_callback(connection);
     std::this_thread::sleep_for(100ms);
 
-    connections_.erase(kClienT0Pid);
+    connections.erase(kClienT0Pid);
     auto* connection2 = ConnectClientAndSendConnectMessage(kClienT0Pid);
     EXPECT_EQ(construct_count, 3);
 
@@ -571,8 +578,8 @@ TEST_F(MessagePassingServerFixture, StaleConnectionAcquireResponseShouldBeIgnore
     }
 
     // Keep the old connection object alive, but free the PID slot for the new connection.
-    auto old_connection = std::move(connections_.at(kClienT0Pid));
-    connections_.erase(kClienT0Pid);
+    auto old_connection = std::move(connections.at(kClienT0Pid));
+    connections.erase(kClienT0Pid);
     auto* stale_connection_ptr = old_connection.get();
 
     // Reconnect client with the same PID (connection1) and create a new session.
@@ -627,7 +634,7 @@ TEST_F(MessagePassingServerFixture, TestSamePidWhileRunning)
         this->disconnect_callback(connection);
         std::this_thread::sleep_for(100ms);
 
-        connections_.erase(kClienT0Pid);
+        connections.erase(kClienT0Pid);
 
         auto* new_connection = ConnectClientAndSendConnectMessage(kClienT0Pid);
         std::ignore = new_connection;
@@ -683,7 +690,7 @@ TEST_F(MessagePassingServerFixture, TestSamePidWhileQueued)
         this->disconnect_callback(connection);
         std::this_thread::sleep_for(100ms);
 
-        connections_.erase(kClienT2Pid);
+        connections.erase(kClienT2Pid);
 
         auto* new_connection = ConnectClientAndSendConnectMessage(kClienT2Pid);
         std::ignore = new_connection;
@@ -724,9 +731,9 @@ TEST_F(MessagePassingServerFixture, WatchdogShouldTearDownUnresponsiveClient)
 
     {
         std::unique_lock<std::mutex> lock(map_mutex);
-        map_cond.wait(lock, [this]() {
+        ASSERT_TRUE(map_cond.wait_for(lock, std::chrono::seconds{3}, [this]() {
             return session_map.empty();
-        });
+        })) << "Timed out waiting for watchdog teardown";
     }
 
     ExpectServerDestruction();
@@ -752,7 +759,7 @@ TEST_F(MessagePassingServerFixture, WatchdogMissCountShouldResetOnValidResponse)
     // 1) First acquire request is missed by the client -> miss_count becomes 1.
     session_map.at(kClienT0Pid).handle->AcquireRequest();
     using namespace std::chrono_literals;
-    std::this_thread::sleep_for(150ms);
+    std::this_thread::sleep_for(1s);
 
     // 2) Late valid response arrives -> miss_count should reset to 0.
     score::mw::log::detail::ReadAcquireResult acquire_result{0U};
@@ -763,16 +770,16 @@ TEST_F(MessagePassingServerFixture, WatchdogMissCountShouldResetOnValidResponse)
 
     // 3) One more missed acquire should NOT tear down (max_misses = 2, miss_count should be 1).
     session_map.at(kClienT0Pid).handle->AcquireRequest();
-    std::this_thread::sleep_for(150ms);
+    std::this_thread::sleep_for(1s);
     EXPECT_FALSE(session_map.empty());
 
     // 4) Second miss after the reset should now tear down.
     session_map.at(kClienT0Pid).handle->AcquireRequest();
     {
         std::unique_lock<std::mutex> lock(map_mutex);
-        map_cond.wait(lock, [this]() {
+        ASSERT_TRUE(map_cond.wait_for(lock, std::chrono::seconds{3}, [this]() {
             return session_map.empty();
-        });
+        })) << "Timed out waiting for watchdog teardown after miss-count reset";
     }
 
     ExpectServerDestruction();
