@@ -163,10 +163,10 @@ class MessagePassingServerFixture : public ::testing::Test
             score::cpp::pmr::get_default_resource());
         server_mock = server_ptr.get();
 
-        EXPECT_CALL(
-            *server_factory_mock,
-            Create(CompareServiceProtocol(ServiceProtocolConfig{"/logging.datarouter_recv", kMaxSendBytes, 0U, kMaxNotifyBytes}),
-                   CompareServerConfig(server_config)))
+        EXPECT_CALL(*server_factory_mock,
+                    Create(CompareServiceProtocol(
+                               ServiceProtocolConfig{"/logging.datarouter_recv", kMaxSendBytes, 0U, kMaxNotifyBytes}),
+                           CompareServerConfig(server_config)))
             .WillOnce(Return(ByMove(std::move(server_ptr))));
     }
 
@@ -252,6 +252,28 @@ class MessagePassingServerFixture : public ::testing::Test
 
         // instantiate MessagePassingServer
         server.emplace(factory, server_factory_mock, client_factory_mock);
+    }
+
+    void InstantiateServerWithWatchdog(MessagePassingServer::SessionFactory factory,
+                                       MessagePassingServer::AcquireWatchdogConfig watchdog_config)
+    {
+        EXPECT_CALL(*server_mock,
+                    StartListening(Matcher<score::message_passing::ConnectCallback>(_),
+                                   Matcher<score::message_passing::DisconnectCallback>(_),
+                                   Matcher<score::message_passing::MessageCallback>(_),
+                                   Matcher<score::message_passing::MessageCallback>(_)))
+            .WillOnce([this](score::message_passing::ConnectCallback con_callback,
+                             score::message_passing::DisconnectCallback discon_callback,
+                             score::message_passing::MessageCallback sn_callback,
+                             score::message_passing::MessageCallback sn_rep_callback) {
+                this->connect_callback = std::move(con_callback);
+                this->disconnect_callback = std::move(discon_callback);
+                this->sent_callback = std::move(sn_callback);
+                this->sent_with_reply_callback = std::move(sn_rep_callback);
+                return score::cpp::expected_blank<score::os::Error>{};
+            });
+
+        server.emplace(factory, server_factory_mock, client_factory_mock, watchdog_config);
     }
 
     auto CreateConnectMessageSample(const pid_t)
@@ -642,6 +664,31 @@ TEST_F(MessagePassingServerFixture, TestSamePidWhileQueued)
 
     EXPECT_EQ(closed_by_peer_count, 1);
     EXPECT_EQ(destruct_count, 4);
+}
+
+TEST_F(MessagePassingServerFixture, WatchdogShouldTearDownUnresponsiveClient)
+{
+    ExpectOurPidIsQueried();
+
+    MessagePassingServer::AcquireWatchdogConfig watchdog_config;
+    watchdog_config.deadline = std::chrono::milliseconds{0};
+    watchdog_config.max_misses = 1U;
+    InstantiateServerWithWatchdog(GetCountingSessionFactory(), watchdog_config);
+
+    auto* connection_ptr = ConnectClientAndSendConnectMessage(kClienT0Pid);
+    ::testing::Sequence seq;
+    ExpectAcquireNotifyInSequence(DatarouterMessageIdentifier::kAcquireRequest, seq, connection_ptr);
+    session_map.at(kClienT0Pid).handle->AcquireRequest();
+
+    {
+        std::unique_lock<std::mutex> lock(map_mutex);
+        map_cond.wait(lock, [this]() {
+            return session_map.empty();
+        });
+    }
+
+    ExpectServerDestruction();
+    UninstantiateServer();
 }
 
 TEST(MessagePassingServerTests, sessionWrapperCreateTest)

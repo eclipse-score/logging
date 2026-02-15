@@ -28,6 +28,7 @@
 
 #include "score/concurrency/interruptible_wait.h"
 #include <score/stop_token.hpp>
+#include <chrono>
 #include <condition_variable>
 #include <functional>
 #include <mutex>
@@ -68,13 +69,21 @@ class IMessagePassingServerSessionWrapper
 class MessagePassingServer : public IMessagePassingServerSessionWrapper
 {
   public:
+    struct AcquireWatchdogConfig
+    {
+        AcquireWatchdogConfig(std::chrono::milliseconds deadline_in = std::chrono::milliseconds{1000},
+                              std::uint32_t max_misses_in = 3U)
+            : deadline(deadline_in), max_misses(max_misses_in)
+        {
+        }
+
+        std::chrono::milliseconds deadline;
+        std::uint32_t max_misses;
+    };
     class SessionHandle : public daemon::ISessionHandle
     {
       public:
-        SessionHandle(pid_t pid, MessagePassingServer* server)
-            : daemon::ISessionHandle(), pid_(pid), server_(server)
-        {
-        }
+        SessionHandle(pid_t pid, MessagePassingServer* server) : daemon::ISessionHandle(), pid_(pid), server_(server) {}
 
         bool AcquireRequest() const override;
 
@@ -100,7 +109,8 @@ class MessagePassingServer : public IMessagePassingServerSessionWrapper
 
     explicit MessagePassingServer(SessionFactory factory,
                                   std::shared_ptr<score::message_passing::IServerFactory> server_factory = nullptr,
-                                  std::shared_ptr<score::message_passing::IClientFactory> client_factory = nullptr);
+                                  std::shared_ptr<score::message_passing::IClientFactory> client_factory = nullptr,
+                                  AcquireWatchdogConfig watchdog_config = AcquireWatchdogConfig{});
     ~MessagePassingServer() noexcept;
 
     // for unit test only. to keep rest of functions in private
@@ -115,11 +125,11 @@ class MessagePassingServer : public IMessagePassingServerSessionWrapper
 
     void MessageCallback(score::message_passing::IServerConnection& connection, score::cpp::span<const std::uint8_t> message);
     void OnConnectRequest(score::message_passing::IServerConnection& connection,
-                const score::cpp::span<const std::uint8_t> message,
-                pid_t pid);
+                          const score::cpp::span<const std::uint8_t> message,
+                          pid_t pid);
     void OnAcquireResponse(score::message_passing::IServerConnection& connection,
-                 const score::cpp::span<const std::uint8_t> message,
-                 pid_t pid);
+                           const score::cpp::span<const std::uint8_t> message,
+                           pid_t pid);
 
     using timestamp_t = std::chrono::steady_clock::time_point;
 
@@ -130,7 +140,7 @@ class MessagePassingServer : public IMessagePassingServerSessionWrapper
               pid_(pid),
               session_(std::move(session)),
               connection_(nullptr),
-            acquire_in_flight_(false),
+              acquire_in_flight_(false),
               enqueued_(false),
               running_(false),
               to_delete_(false),
@@ -171,6 +181,8 @@ class MessagePassingServer : public IMessagePassingServerSessionWrapper
 
         score::message_passing::IServerConnection* connection_;
         bool acquire_in_flight_;
+        timestamp_t acquire_deadline_;
+        std::uint32_t acquire_miss_count_{0U};
 
         bool enqueued_;
         bool running_;
@@ -201,6 +213,8 @@ class MessagePassingServer : public IMessagePassingServerSessionWrapper
 
     std::shared_ptr<score::message_passing::IServerFactory> server_factory_;
     std::shared_ptr<score::message_passing::IClientFactory> client_factory_;
+
+    AcquireWatchdogConfig watchdog_config_;
 };
 
 }  // namespace internal

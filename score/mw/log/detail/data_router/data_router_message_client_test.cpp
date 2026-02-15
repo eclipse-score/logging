@@ -725,7 +725,9 @@ TEST_F(DatarouterMessageClientFixture, AcquireRequestShouldSendExpectedAcquireRe
 TEST_F(DatarouterMessageClientFixture, AcquireNotifyShouldSendExpectedAcquireResponse)
 {
     RecordProperty("ASIL", "B");
-    RecordProperty("Description", "Verifies that an acquire request delivered via NotifyCallback sends the expected acquire response.");
+    RecordProperty(
+        "Description",
+        "Verifies that an acquire request delivered via NotifyCallback sends the expected acquire response.");
     RecordProperty("TestType", "Interface test");
     RecordProperty("DerivationTechnique", "Generation and analysis of equivalence classes");
 
@@ -796,8 +798,8 @@ TEST_F(DatarouterMessageClientFixture, InvalidNotifyShouldNotSendAcquireResponse
     const score::cpp::span<const std::uint8_t> empty_message{};
     notify_callback(empty_message);
 
-    const std::array<std::uint8_t, 2U> oversized_message{score::cpp::to_underlying(DatarouterMessageIdentifier::kAcquireRequest),
-                                                         std::uint8_t{0U}};
+    const std::array<std::uint8_t, 2U> oversized_message{
+        score::cpp::to_underlying(DatarouterMessageIdentifier::kAcquireRequest), std::uint8_t{0U}};
     notify_callback(oversized_message);
 
     const std::array<std::uint8_t, 1U> wrong_id_message{score::cpp::to_underlying(DatarouterMessageIdentifier::kConnect)};

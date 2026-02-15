@@ -99,7 +99,8 @@ void MessagePassingServer::SessionWrapper::enqueue_tick_while_locked()
 // coverity[autosar_cpp14_a3_1_1_violation]
 MessagePassingServer::MessagePassingServer(MessagePassingServer::SessionFactory factory,
                                            std::shared_ptr<score::message_passing::IServerFactory> server_factory,
-                                           std::shared_ptr<score::message_passing::IClientFactory> client_factory)
+                                           std::shared_ptr<score::message_passing::IClientFactory> client_factory,
+                                           AcquireWatchdogConfig watchdog_config)
     : IMessagePassingServerSessionWrapper(),
       factory_{std::move(factory)},
       mutex_{},
@@ -112,7 +113,8 @@ MessagePassingServer::MessagePassingServer(MessagePassingServer::SessionFactory 
       server_cond_{},
       session_finishing_{false},
       server_factory_{server_factory},
-      client_factory_{client_factory}
+      client_factory_{client_factory},
+      watchdog_config_{watchdog_config}
 {
     worker_thread_ = score::cpp::jthread([this]() {
         RunWorkerThread();
@@ -246,6 +248,19 @@ void MessagePassingServer::RunWorkerThread()
                     }
                     else
                     {
+                        auto& wrapper = ps.second;
+                        if (wrapper.acquire_in_flight_ && (wrapper.acquire_deadline_ != timestamp_t{}) &&
+                            (now >= wrapper.acquire_deadline_))
+                        {
+                            wrapper.acquire_in_flight_ = false;
+                            ++wrapper.acquire_miss_count_;
+                            wrapper.acquire_deadline_ = timestamp_t{};
+                            if (wrapper.acquire_miss_count_ >= watchdog_config_.max_misses)
+                            {
+                                wrapper.enqueue_for_delete_while_locked(true);
+                                continue;
+                            }
+                        }
                         ps.second.enqueue_tick_while_locked();
                     }
                 }
@@ -490,6 +505,8 @@ void MessagePassingServer::OnAcquireResponse(score::message_passing::IServerConn
         std::ignore = std::copy(message.begin(), message.end(), acq_span.begin());
         session.session_->on_acquire_response(acq);
         session.acquire_in_flight_ = false;
+        session.acquire_deadline_ = timestamp_t{};
+        session.acquire_miss_count_ = 0U;
         // enqueue the tick to speed up processing acquire response
         session.enqueue_tick_while_locked();
     }
@@ -523,6 +540,7 @@ bool MessagePassingServer::NotifyAcquireRequestWhileLocked(const pid_t pid)
     else
     {
         wrapper.acquire_in_flight_ = true;
+        wrapper.acquire_deadline_ = timestamp_t::clock::now() + watchdog_config_.deadline;
     }
     return true;
 }
