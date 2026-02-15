@@ -14,7 +14,6 @@
 #include "score/datarouter/include/daemon/message_passing_server.h"
 
 #include "score/message_passing/mock/client_connection_mock.h"
-#include "score/message_passing/mock/client_factory_mock.h"
 #include "score/message_passing/mock/server_connection_mock.h"
 #include "score/message_passing/mock/server_factory_mock.h"
 #include "score/message_passing/mock/server_mock.h"
@@ -155,7 +154,6 @@ class MessagePassingServerFixture : public ::testing::Test
     void SetUp() override
     {
         server_factory_mock = std::make_shared<StrictMock<::score::message_passing::ServerFactoryMock>>();
-        client_factory_mock = std::make_shared<StrictMock<::score::message_passing::ClientFactoryMock>>();
 
         const score::message_passing::IServerFactory::ServerConfig server_config{gKReceiverQueueMaxSize, 0U, 1U};
 
@@ -251,7 +249,7 @@ class MessagePassingServerFixture : public ::testing::Test
             });
 
         // instantiate MessagePassingServer
-        server.emplace(factory, server_factory_mock, client_factory_mock);
+        server.emplace(factory, server_factory_mock);
     }
 
     void InstantiateServerWithWatchdog(MessagePassingServer::SessionFactory factory,
@@ -273,7 +271,7 @@ class MessagePassingServerFixture : public ::testing::Test
                 return score::cpp::expected_blank<score::os::Error>{};
             });
 
-        server.emplace(factory, server_factory_mock, client_factory_mock, watchdog_config);
+        server.emplace(factory, server_factory_mock, watchdog_config);
     }
 
     auto CreateConnectMessageSample(const pid_t)
@@ -341,7 +339,6 @@ class MessagePassingServerFixture : public ::testing::Test
     }
 
     StrictMock<::score::message_passing::ServerMock>* server_mock{};
-    std::shared_ptr<StrictMock<::score::message_passing::ClientFactoryMock>> client_factory_mock;
     std::shared_ptr<StrictMock<::score::message_passing::ServerFactoryMock>> server_factory_mock;
     ::score::os::MockGuard<score::os::UnistdMock> unistd_mock{};
 
@@ -412,7 +409,7 @@ TEST_F(MessagePassingServerFixture, TestFailedStartListening)
             return score::cpp::expected_blank<score::os::Error>{};
         });
     // instantiate MessagePassingServer
-    server.emplace(factory, server_factory_mock, client_factory_mock);
+    server.emplace(factory, server_factory_mock);
     ExpectServerDestruction();
 
     UninstantiateServer();

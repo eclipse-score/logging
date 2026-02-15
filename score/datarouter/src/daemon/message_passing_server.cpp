@@ -99,7 +99,6 @@ void MessagePassingServer::SessionWrapper::enqueue_tick_while_locked()
 // coverity[autosar_cpp14_a3_1_1_violation]
 MessagePassingServer::MessagePassingServer(MessagePassingServer::SessionFactory factory,
                                            std::shared_ptr<score::message_passing::IServerFactory> server_factory,
-                                           std::shared_ptr<score::message_passing::IClientFactory> client_factory,
                                            AcquireWatchdogConfig watchdog_config)
     : IMessagePassingServerSessionWrapper(),
       factory_{std::move(factory)},
@@ -113,7 +112,6 @@ MessagePassingServer::MessagePassingServer(MessagePassingServer::SessionFactory 
       server_cond_{},
       session_finishing_{false},
       server_factory_{server_factory},
-      client_factory_{client_factory},
       watchdog_config_{watchdog_config}
 {
     worker_thread_ = score::cpp::jthread([this]() {
@@ -549,23 +547,6 @@ bool MessagePassingServer::NotifyAcquireRequest(const pid_t pid)
 {
     std::lock_guard<std::mutex> lock(mutex_);
     return NotifyAcquireRequestWhileLocked(pid);
-}
-
-void MessagePassingServer::NotifyAcquireRequestFailed(std::int32_t pid)
-{
-    std::lock_guard<std::mutex> lock(mutex_);
-    const auto found = pid_session_map_.find(pid);
-    if (found == pid_session_map_.end())
-    {
-        /*
-         Code will be hit only in case of pid changed,
-         but since this is private functions so it cannot be test.
-        */
-        // LCOV_EXCL_START
-        return;
-        // LCOV_EXCL_STOP
-    }
-    found->second.enqueue_for_delete_while_locked(true);
 }
 
 bool MessagePassingServer::SessionHandle::AcquireRequest() const

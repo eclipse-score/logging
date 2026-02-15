@@ -18,7 +18,6 @@
 
 #include "score/mw/log/detail/data_router/shared_memory/common.h"
 
-#include "score/message_passing/i_client_factory.h"
 #include "score/message_passing/i_server_connection.h"
 #include "score/message_passing/i_server_factory.h"
 #include "score/mw/log/detail/logging_identifier.h"
@@ -107,10 +106,9 @@ class MessagePassingServer : public IMessagePassingServerSessionWrapper
                                                 const score::mw::log::detail::ConnectMessageFromClient&,
                                                 score::cpp::pmr::unique_ptr<daemon::ISessionHandle>)>;
 
-    explicit MessagePassingServer(SessionFactory factory,
-                                  std::shared_ptr<score::message_passing::IServerFactory> server_factory = nullptr,
-                                  std::shared_ptr<score::message_passing::IClientFactory> client_factory = nullptr,
-                                  AcquireWatchdogConfig watchdog_config = AcquireWatchdogConfig{});
+    MessagePassingServer(SessionFactory factory,
+                         std::shared_ptr<score::message_passing::IServerFactory> server_factory = nullptr,
+                         AcquireWatchdogConfig watchdog_config = AcquireWatchdogConfig{});
     ~MessagePassingServer() noexcept;
 
     // for unit test only. to keep rest of functions in private
@@ -121,7 +119,6 @@ class MessagePassingServer : public IMessagePassingServerSessionWrapper
 
     bool NotifyAcquireRequest(pid_t pid);
     bool NotifyAcquireRequestWhileLocked(pid_t pid);
-    void NotifyAcquireRequestFailed(std::int32_t pid);
 
     void MessageCallback(score::message_passing::IServerConnection& connection, score::cpp::span<const std::uint8_t> message);
     void OnConnectRequest(score::message_passing::IServerConnection& connection,
@@ -212,7 +209,6 @@ class MessagePassingServer : public IMessagePassingServerSessionWrapper
     bool session_finishing_;
 
     std::shared_ptr<score::message_passing::IServerFactory> server_factory_;
-    std::shared_ptr<score::message_passing::IClientFactory> client_factory_;
 
     AcquireWatchdogConfig watchdog_config_;
 };

@@ -385,8 +385,6 @@ void SocketServer::DoWork(const std::atomic_bool& exit_requested, const bool no_
     };
 
     std::shared_ptr<ServerFactory> server_factory = std::make_shared<ServerFactory>();
-    std::shared_ptr<ClientFactory> client_factory =
-        std::make_shared<ClientFactory>(/*server_factory_->GetEngine() Ticket-234313*/);
 
     /*
     Deviation from Rule A5-1-4:
@@ -395,7 +393,7 @@ void SocketServer::DoWork(const std::atomic_bool& exit_requested, const bool no_
     - mp_server does not exist inside any lambda.
     */
     // coverity[autosar_cpp14_a5_1_4_violation: FALSE]
-    MessagePassingServer mp_server(mp_factory, std::move(server_factory), std::move(client_factory));
+    MessagePassingServer mp_server(mp_factory, std::move(server_factory));
 
     // Run main event loop
     RunEventLoop(exit_requested, router, *dlt_server, stats_logger);
