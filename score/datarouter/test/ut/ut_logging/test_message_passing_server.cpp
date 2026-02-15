@@ -300,6 +300,9 @@ class MessagePassingServerFixture : public ::testing::Test
             .Times(AnyNumber())
             .WillRepeatedly(ReturnRef(connection_identities_.at(pid)));
 
+        // Mirror production behavior: connect_callback runs before any messages.
+        std::ignore = connect_callback(*connection_ptr);
+
         auto message = CreateConnectMessageSample(pid);
         sent_callback(*connection_ptr, message);
 
@@ -548,6 +551,48 @@ TEST_F(MessagePassingServerFixture, TestTripleConnectSamePid)
 
     EXPECT_EQ(closed_by_peer_count, 2);
     EXPECT_EQ(destruct_count, 3);
+}
+
+TEST_F(MessagePassingServerFixture, StaleConnectionAcquireResponseShouldBeIgnored)
+{
+    ExpectOurPidIsQueried();
+    InstantiateServer(GetCountingSessionFactory());
+
+    // Connect client (connection0) and create session.
+    auto* connection0_ptr = ConnectClientAndSendConnectMessage(kClienT0Pid);
+
+    // Disconnect the client and wait until its session is torn down.
+    this->disconnect_callback(*connection0_ptr);
+    {
+        std::unique_lock<std::mutex> lock(map_mutex);
+        map_cond.wait(lock, [this]() {
+            return session_map.empty();
+        });
+    }
+
+    // Keep the old connection object alive, but free the PID slot for the new connection.
+    auto old_connection = std::move(connections_.at(kClienT0Pid));
+    connections_.erase(kClienT0Pid);
+    auto* stale_connection_ptr = old_connection.get();
+
+    // Reconnect client with the same PID (connection1) and create a new session.
+    auto* connection1_ptr = ConnectClientAndSendConnectMessage(kClienT0Pid);
+
+    score::mw::log::detail::ReadAcquireResult acquire_result{0U};
+    std::array<std::uint8_t, sizeof(acquire_result) + 1> response{};
+    response[0] = score::cpp::to_underlying(DatarouterMessageIdentifier::kAcquireResponse);
+    std::memcpy(&response[1], &acquire_result, sizeof(acquire_result));
+
+    // Response on stale connection must be ignored.
+    sent_callback(*stale_connection_ptr, response);
+    EXPECT_EQ(acquire_response_count, 0);
+
+    // Response on the current connection must be accepted.
+    sent_callback(*connection1_ptr, response);
+    EXPECT_EQ(acquire_response_count, 1);
+
+    ExpectServerDestruction();
+    UninstantiateServer();
 }
 
 TEST_F(MessagePassingServerFixture, TestSamePidWhileRunning)
