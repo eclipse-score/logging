@@ -688,6 +688,52 @@ TEST_F(MessagePassingServerFixture, WatchdogShouldTearDownUnresponsiveClient)
     UninstantiateServer();
 }
 
+TEST_F(MessagePassingServerFixture, WatchdogMissCountShouldResetOnValidResponse)
+{
+    ExpectOurPidIsQueried();
+
+    MessagePassingServer::AcquireWatchdogConfig watchdog_config;
+    watchdog_config.deadline = std::chrono::milliseconds{0};
+    watchdog_config.max_misses = 2U;
+    InstantiateServerWithWatchdog(GetCountingSessionFactory(), watchdog_config);
+
+    auto* connection_ptr = ConnectClientAndSendConnectMessage(kClienT0Pid);
+
+    ::testing::Sequence seq;
+    ExpectAcquireNotifyInSequence(DatarouterMessageIdentifier::kAcquireRequest, seq, connection_ptr);
+    ExpectAcquireNotifyInSequence(DatarouterMessageIdentifier::kAcquireRequest, seq, connection_ptr);
+    ExpectAcquireNotifyInSequence(DatarouterMessageIdentifier::kAcquireRequest, seq, connection_ptr);
+
+    // 1) First acquire request is missed by the client -> miss_count becomes 1.
+    session_map.at(kClienT0Pid).handle->AcquireRequest();
+    using namespace std::chrono_literals;
+    std::this_thread::sleep_for(150ms);
+
+    // 2) Late valid response arrives -> miss_count should reset to 0.
+    score::mw::log::detail::ReadAcquireResult acquire_result{0U};
+    std::array<std::uint8_t, sizeof(acquire_result) + 1> response{};
+    response[0] = score::cpp::to_underlying(DatarouterMessageIdentifier::kAcquireResponse);
+    std::memcpy(&response[1], &acquire_result, sizeof(acquire_result));
+    sent_callback(*connection_ptr, response);
+
+    // 3) One more missed acquire should NOT tear down (max_misses = 2, miss_count should be 1).
+    session_map.at(kClienT0Pid).handle->AcquireRequest();
+    std::this_thread::sleep_for(150ms);
+    EXPECT_FALSE(session_map.empty());
+
+    // 4) Second miss after the reset should now tear down.
+    session_map.at(kClienT0Pid).handle->AcquireRequest();
+    {
+        std::unique_lock<std::mutex> lock(map_mutex);
+        map_cond.wait(lock, [this]() {
+            return session_map.empty();
+        });
+    }
+
+    ExpectServerDestruction();
+    UninstantiateServer();
+}
+
 TEST(MessagePassingServerTests, sessionWrapperCreateTest)
 {
     InSequence s;
