@@ -19,7 +19,6 @@
 #include "score/memory.hpp"
 #include <score/jthread.hpp>
 
-#include <array>
 #include <cstring>
 #include <iostream>
 #include <sstream>
@@ -36,58 +35,58 @@ namespace internal
 using score::mw::log::detail::DatarouterMessageIdentifier;
 using score::mw::log::detail::MessagePassingConfig;
 
-void MessagePassingServer::SessionWrapper::EnqueueForDeleteWhileLocked(bool by_peer)
+void MessagePassingServer::SessionWrapper::enqueue_for_delete_while_locked(bool by_peer)
 {
-    to_delete = true;
-    closed_by_peer = by_peer;
+    to_delete_ = true;
+    closed_by_peer_ = by_peer;
     // in order not to mess with the logic of the queue, we don't enqueue currently running tick. Instead, we mark it
     // to be deleted (or re-enqueued for post-mortem processing, if closed by peer) at the end of the tick processing
-    if (!running && !enqueued)
+    if (!running_ && !enqueued_)
     {
-        server->EnqueueTickWhileLocked(pid);
-        enqueued = true;
+        server_->EnqueueTickWhileLocked(pid_);
+        enqueued_ = true;
     }
 }
 
-bool MessagePassingServer::SessionWrapper::TickAtWorkerThread() const
+bool MessagePassingServer::SessionWrapper::tick_at_worker_thread()
 {
-    bool requeue = session->Tick();
+    bool requeue = session_->tick();
     return requeue;
 }
 
-void MessagePassingServer::SessionWrapper::NotifyClosedByPeer() const
+void MessagePassingServer::SessionWrapper::notify_closed_by_peer()
 {
-    session->OnClosedByPeer();
+    session_->on_closed_by_peer();
 }
 
-void MessagePassingServer::SessionWrapper::SetRunningWhileLocked()
+void MessagePassingServer::SessionWrapper::set_running_while_locked()
 {
-    enqueued = false;
-    running = true;
+    enqueued_ = false;
+    running_ = true;
 }
 
-bool MessagePassingServer::SessionWrapper::ResetRunningWhileLocked(bool requeue)
+bool MessagePassingServer::SessionWrapper::reset_running_while_locked(bool requeue)
 {
-    running = false;
+    running_ = false;
     // check if we need to re-enqueue the tick after running again. It may happen because:
     // 1. not all the work in tick was done (returned early to avoid congestion);
     // 2. the tick was marked for delete as "closed by peer" when running, but we don't expedite its finishing.
-    if (requeue || closed_by_peer)
+    if (requeue || closed_by_peer_)
     {
-        enqueued = true;
+        enqueued_ = true;
     }
-    return enqueued;
+    return enqueued_;
 }
 
-void MessagePassingServer::SessionWrapper::EnqueueTickWhileLocked()
+void MessagePassingServer::SessionWrapper::enqueue_tick_while_locked()
 {
-    if (!enqueued && !to_delete)
+    if (!enqueued_ && !to_delete_)
     {
-        if (!running)
+        if (!running_)
         {
-            server->EnqueueTickWhileLocked(pid);
+            server_->EnqueueTickWhileLocked(pid_);
         }
-        enqueued = true;
+        enqueued_ = true;
     }
 }
 /*
@@ -125,17 +124,17 @@ MessagePassingServer::MessagePassingServer(MessagePassingServer::SessionFactory 
         std::cerr << "setname_np: " << ret_pthread.error() << std::endl;
     }
 
-    constexpr score::message_passing::ServiceProtocolConfig kServiceProtocolConfig{
+    constexpr score::message_passing::ServiceProtocolConfig service_protocol_config{
         MessagePassingConfig::kDatarouterReceiverIdentifier,
         MessagePassingConfig::kMaxMessageSize,
         MessagePassingConfig::kMaxReplySize,
         MessagePassingConfig::kMaxNotifySize};
 
-    constexpr score::message_passing::IServerFactory::ServerConfig kServerConfig{
+    constexpr score::message_passing::IServerFactory::ServerConfig server_config{
         MessagePassingConfig::kMaxReceiverQueueSize,
         MessagePassingConfig::kPreAllocConnections,
         MessagePassingConfig::kMaxQueuedNotifies};
-    receiver_ = server_factory_->Create(kServiceProtocolConfig, kServerConfig);
+    receiver_ = server_factory_->Create(service_protocol_config, server_config);
 
     auto connect_callback = [](score::message_passing::IServerConnection& connection) noexcept -> std::uintptr_t {
         const pid_t client_pid = connection.GetClientIdentity().pid;
@@ -148,8 +147,9 @@ MessagePassingServer::MessagePassingServer(MessagePassingServer::SessionFactory 
         if (found != pid_session_map_ptr->end())
         {
             SessionWrapper& wrapper = found->second;
-            wrapper.to_force_finish = true;
-            found->second.EnqueueForDeleteWhileLocked(true);
+            wrapper.connection_ = nullptr;
+            wrapper.to_force_finish_ = true;
+            found->second.enqueue_for_delete_while_locked(true);
         }
     };
     auto received_send_message_callback = [this_ptr = this](
@@ -213,8 +213,8 @@ MessagePassingServer::~MessagePassingServer() noexcept
 
 void MessagePassingServer::RunWorkerThread()
 {
-    constexpr std::int32_t kTimeoutInMs = 100;
-    TimestampT t1 = TimestampT::clock::now() + std::chrono::milliseconds(kTimeoutInMs);
+    constexpr std::int32_t TIMEOUT_IN_MS = 100;
+    timestamp_t t1 = timestamp_t::clock::now() + std::chrono::milliseconds(TIMEOUT_IN_MS);
 
     std::unique_lock<std::mutex> lock(mutex_);
     while (!workers_exit_)
@@ -224,15 +224,15 @@ void MessagePassingServer::RunWorkerThread()
         });
         if (!workers_exit_)
         {
-            TimestampT now = TimestampT::clock::now();
-            if (connection_timeout_ != TimestampT{} && now >= connection_timeout_)
+            timestamp_t now = timestamp_t::clock::now();
+            if (connection_timeout_ != timestamp_t{} && now >= connection_timeout_)
             {
-                connection_timeout_ = TimestampT{};
+                connection_timeout_ = timestamp_t{};
                 stop_source_.request_stop();
             }
             if (now >= t1)
             {
-                t1 = now + std::chrono::milliseconds(kTimeoutInMs);
+                t1 = now + std::chrono::milliseconds(TIMEOUT_IN_MS);
                 for (auto& ps : pid_session_map_)
                 {
                     if (ps.second.GetIsSourceClosed())
@@ -241,12 +241,12 @@ void MessagePassingServer::RunWorkerThread()
                             this is private functions so it cannot be test.
                         */
                         // LCOV_EXCL_START
-                        ps.second.EnqueueForDeleteWhileLocked(true);
+                        ps.second.enqueue_for_delete_while_locked(true);
                         // LCOV_EXCL_STOP
                     }
                     else
                     {
-                        ps.second.EnqueueTickWhileLocked();
+                        ps.second.enqueue_tick_while_locked();
                     }
                 }
             }
@@ -257,16 +257,16 @@ void MessagePassingServer::RunWorkerThread()
             pid_t pid = work_queue_.front();
             work_queue_.pop();
             SessionWrapper& wrapper = pid_session_map_.at(pid);
-            wrapper.SetRunningWhileLocked();
-            bool closed_by_peer = wrapper.GetResetClosedByPeer();
+            wrapper.set_running_while_locked();
+            bool closed_by_peer = wrapper.get_reset_closed_by_peer();
             lock.unlock();
             if (closed_by_peer)
             {
-                wrapper.NotifyClosedByPeer();
+                wrapper.notify_closed_by_peer();
             }
-            bool requeue = wrapper.TickAtWorkerThread();
+            bool requeue = wrapper.tick_at_worker_thread();
             lock.lock();
-            if (wrapper.to_force_finish)
+            if (wrapper.to_force_finish_)
             {
                 if (!closed_by_peer)
                 {
@@ -276,7 +276,7 @@ void MessagePassingServer::RunWorkerThread()
                         this is private functions so it cannot be test.
                     */
                     // LCOV_EXCL_START
-                    wrapper.NotifyClosedByPeer();
+                    wrapper.notify_closed_by_peer();
                     requeue = true;
                     // LCOV_EXCL_STOP
                 }
@@ -288,7 +288,7 @@ void MessagePassingServer::RunWorkerThread()
                     lock.unlock();
                     do
                     {
-                        requeue = wrapper.TickAtWorkerThread();
+                        requeue = wrapper.tick_at_worker_thread();
                     } while (requeue);
                     lock.lock();
                     // LCOV_EXCL_STOP
@@ -303,13 +303,13 @@ void MessagePassingServer::RunWorkerThread()
                 node = {};
                 lock.lock();
             }
-            else if (wrapper.ResetRunningWhileLocked(requeue))
+            else if (wrapper.reset_running_while_locked(requeue))
             {
                 // LCOV_EXCL_START: see above
                 EnqueueTickWhileLocked(pid);
                 // LCOV_EXCL_STOP
             }
-            else if (wrapper.IsMarkedForDelete())
+            else if (wrapper.is_marked_for_delete())
             {
                 // Extract the session wrapper to destroy it outside the mutex lock
                 auto node = pid_session_map_.extract(pid);
@@ -338,10 +338,10 @@ void MessagePassingServer::FinishPreviousSessionWhileLocked(
 {
     const pid_t pid = it->first;
     SessionWrapper& wrapper = it->second;
-    wrapper.to_force_finish = true;
-    wrapper.EnqueueForDeleteWhileLocked(true);
+    wrapper.to_force_finish_ = true;
+    wrapper.enqueue_for_delete_while_locked(true);
     // if enqueued_ (i.e. not running) expedite the workload toward the front of the queue
-    if (wrapper.enqueued)
+    if (wrapper.enqueued_)
     {
         pid_t front_pid = work_queue_.front();
         while (front_pid != pid)
@@ -368,7 +368,7 @@ void MessagePassingServer::MessageCallback(score::message_passing::IServerConnec
                                            score::cpp::span<const std::uint8_t> message)
 {
     const pid_t pid = connection.GetClientIdentity().pid;
-    if (message.empty())
+    if (message.size() < 1)
     {
         std::cerr << "MessagePassingServer: Empty message received from " << pid;
         return;
@@ -419,6 +419,7 @@ void MessagePassingServer::OnConnectRequest(score::message_passing::IServerConne
 
     auto appid_sv = conn.GetAppId().GetStringView();
     std::string appid{appid_sv.data(), appid_sv.size()};
+
     // check for timeout or exit request
     if (stop_source_.stop_requested())
     {
@@ -455,9 +456,9 @@ void MessagePassingServer::OnConnectRequest(score::message_passing::IServerConne
     {
         std::unique_lock<std::mutex> lock(mutex_);
         auto emplace_result = pid_session_map_.emplace(pid, SessionWrapper{this, pid, std::move(session)});
-        emplace_result.first->second.connection = &connection;
+        emplace_result.first->second.connection_ = &connection;
         // enqueue the tick to speed up processing connection
-        emplace_result.first->second.EnqueueTickWhileLocked();
+        emplace_result.first->second.enqueue_tick_while_locked();
     }
 }
 
@@ -471,7 +472,7 @@ void MessagePassingServer::OnAcquireResponse(score::message_passing::IServerConn
     {
         auto& [key, session] = *found;
         std::ignore = key;
-        if (session.connection != &connection)
+        if (session.connection_ != &connection)
         {
             return;
         }
@@ -487,9 +488,10 @@ void MessagePassingServer::OnAcquireResponse(score::message_passing::IServerConn
         // coverity[autosar_cpp14_m5_2_8_violation]
         score::cpp::span<std::uint8_t> acq_span{static_cast<uint8_t*>(static_cast<void*>(&acq)), sizeof(acq)};
         std::ignore = std::copy(message.begin(), message.end(), acq_span.begin());
-        session.session->OnAcquireResponse(acq);
+        session.session_->on_acquire_response(acq);
+        session.acquire_in_flight_ = false;
         // enqueue the tick to speed up processing acquire response
-        session.EnqueueTickWhileLocked();
+        session.enqueue_tick_while_locked();
     }
 }
 
@@ -502,16 +504,25 @@ bool MessagePassingServer::NotifyAcquireRequestWhileLocked(const pid_t pid)
     }
 
     auto& wrapper = found->second;
-    if (wrapper.connection == nullptr)
+    if (wrapper.connection_ == nullptr)
     {
         return false;
     }
 
+    if (wrapper.acquire_in_flight_)
+    {
+        return true;
+    }
+
     constexpr std::array<std::uint8_t, 1> message{score::cpp::to_underlying(DatarouterMessageIdentifier::kAcquireRequest)};
-    auto ret = wrapper.connection->Notify(message);
+    auto ret = wrapper.connection_->Notify(message);
     if (!ret)
     {
-        wrapper.EnqueueForDeleteWhileLocked(true);
+        wrapper.enqueue_for_delete_while_locked(true);
+    }
+    else
+    {
+        wrapper.acquire_in_flight_ = true;
     }
     return true;
 }
@@ -536,7 +547,7 @@ void MessagePassingServer::NotifyAcquireRequestFailed(std::int32_t pid)
         return;
         // LCOV_EXCL_STOP
     }
-    found->second.EnqueueForDeleteWhileLocked(true);
+    found->second.enqueue_for_delete_while_locked(true);
 }
 
 bool MessagePassingServer::SessionHandle::AcquireRequest() const

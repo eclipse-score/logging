@@ -429,6 +429,7 @@ TEST_F(MessagePassingServerFixture, TestOneConnectAcquireRelease)
     ExpectAcquireNotifyInSequence(DatarouterMessageIdentifier::kAcquireRequest, seq, connection_ptr);
 
     session_map.at(kClienT0Pid).handle->AcquireRequest();
+    session_map.at(kClienT0Pid).handle->AcquireRequest();
     EXPECT_EQ(acquire_response_count, 0);
 
     score::mw::log::detail::ReadAcquireResult acquire_result{0U};

@@ -86,10 +86,10 @@ class MessagePassingServer : public IMessagePassingServerSessionWrapper
     class ISession
     {
       public:
-        virtual bool Tick() = 0;
-        virtual void OnAcquireResponse(const score::mw::log::detail::ReadAcquireResult&) = 0;
-        virtual void OnClosedByPeer() = 0;
-        virtual bool IsSourceClosed() = 0;
+        virtual bool tick() = 0;
+        virtual void on_acquire_response(const score::mw::log::detail::ReadAcquireResult&) = 0;
+        virtual void on_closed_by_peer() = 0;
+        virtual bool is_source_closed() = 0;
         virtual ~ISession() = default;
     };
 
@@ -121,62 +121,62 @@ class MessagePassingServer : public IMessagePassingServerSessionWrapper
                  const score::cpp::span<const std::uint8_t> message,
                  pid_t pid);
 
-    using TimestampT = std::chrono::steady_clock::time_point;
+    using timestamp_t = std::chrono::steady_clock::time_point;
 
     struct SessionWrapper
     {
-      SessionWrapper(IMessagePassingServerSessionWrapper* server_instance,
-               pid_t process_id,
-               std::unique_ptr<ISession> session_instance)
-          : server(server_instance),
-            pid(process_id),
-            session(std::move(session_instance)),
-            connection(nullptr),
-            enqueued(false),
-            running(false),
-            to_delete(false),
-            closed_by_peer(false),
-            to_force_finish(false)
+        SessionWrapper(IMessagePassingServerSessionWrapper* server, pid_t pid, std::unique_ptr<ISession> session)
+            : server_(server),
+              pid_(pid),
+              session_(std::move(session)),
+              connection_(nullptr),
+            acquire_in_flight_(false),
+              enqueued_(false),
+              running_(false),
+              to_delete_(false),
+              closed_by_peer_(false),
+              to_force_finish_(false)
         {
         }
 
-        void EnqueueForDeleteWhileLocked(bool by_peer = false);
-        bool IsMarkedForDelete() const
+        void enqueue_for_delete_while_locked(bool by_peer = false);
+        bool is_marked_for_delete()
         {
-            return to_delete;
+            return to_delete_;
         }
 
-        bool GetResetClosedByPeer()
+        bool get_reset_closed_by_peer()
         {
-            bool by_peer = closed_by_peer;
-            closed_by_peer = false;
+            bool by_peer = closed_by_peer_;
+            closed_by_peer_ = false;
             return by_peer;
         }
 
-        bool TickAtWorkerThread() const;
-        void NotifyClosedByPeer() const;
+        bool tick_at_worker_thread();
+        void notify_closed_by_peer();
 
-        void SetRunningWhileLocked();
-        bool ResetRunningWhileLocked(bool requeue);
+        void set_running_while_locked();
+        bool reset_running_while_locked(bool requeue);
 
-        void EnqueueTickWhileLocked();
+        void enqueue_tick_while_locked();
 
-        inline bool GetIsSourceClosed() const
+        inline bool GetIsSourceClosed()
         {
-            return session->IsSourceClosed();
+            return session_->is_source_closed();
         }
 
-        IMessagePassingServerSessionWrapper* server;
-        pid_t pid;
-        std::unique_ptr<ISession> session;
+        IMessagePassingServerSessionWrapper* server_;
+        pid_t pid_;
+        std::unique_ptr<ISession> session_;
 
-        score::message_passing::IServerConnection* connection;
+        score::message_passing::IServerConnection* connection_;
+        bool acquire_in_flight_;
 
-        bool enqueued;
-        bool running;
-        bool to_delete;
-        bool closed_by_peer;
-        bool to_force_finish;
+        bool enqueued_;
+        bool running_;
+        bool to_delete_;
+        bool closed_by_peer_;
+        bool to_force_finish_;
     };
 
     void FinishPreviousSessionWhileLocked(std::unordered_map<pid_t, MessagePassingServer::SessionWrapper>::iterator it,
@@ -190,7 +190,7 @@ class MessagePassingServer : public IMessagePassingServerSessionWrapper
 
     std::mutex mutex_;
     score::cpp::stop_source stop_source_;
-    TimestampT connection_timeout_;
+    timestamp_t connection_timeout_;
     score::cpp::jthread worker_thread_;
     std::condition_variable worker_cond_;  // to wake up worker thread
     std::unordered_map<pid_t, SessionWrapper> pid_session_map_;
