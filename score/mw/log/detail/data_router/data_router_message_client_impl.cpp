@@ -363,9 +363,27 @@ score::cpp::expected_blank<score::os::Error> DatarouterMessageClientImpl::Create
         state_condition_.notify_all();
     };
 
+    auto notify_callback = [this](score::cpp::span<const std::uint8_t> message) noexcept {
+        this->OnNotify(message);
+    };
     // coverity[autosar_cpp14_a5_1_4_violation]: See justification above
-    sender_->Start(state_callback, score::message_passing::IClientConnection::NotifyCallback{});
+    sender_->Start(state_callback, notify_callback);
     return {};
+}
+
+void DatarouterMessageClientImpl::OnNotify(const score::cpp::span<const std::uint8_t> message) noexcept
+{
+    if (message.size() != 1U)
+    {
+        return;
+    }
+
+    if (message.front() != score::cpp::to_underlying(DatarouterMessageIdentifier::kAcquireRequest))
+    {
+        return;
+    }
+
+    OnAcquireRequest();
 }
 
 void DatarouterMessageClientImpl::OnAcquireRequest() noexcept

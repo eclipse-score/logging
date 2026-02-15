@@ -99,6 +99,7 @@ class DatarouterMessageClientImpl : public DatarouterMessageClient
   private:
     void RunConnectTask();
     void OnAcquireRequest() noexcept;
+    void OnNotify(score::cpp::span<const std::uint8_t> message) noexcept;
     void UnlinkSharedMemoryFile() noexcept;
     void HandleFirstMessageReceived() noexcept;
     void RequestInternalShutdown() noexcept;
