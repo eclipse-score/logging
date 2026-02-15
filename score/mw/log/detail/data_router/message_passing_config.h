@@ -39,13 +39,13 @@ struct MessagePassingConfig
     static constexpr std::uint32_t kPreAllocConnections{0U};
 
     /// \brief Maximum number of queued notifications.
-    static constexpr std::uint32_t kMaxQueuedNotifies{0U};
+    static constexpr std::uint32_t kMaxQueuedNotifies{1U};
 
     /// \brief Maximum reply size in bytes.
     static constexpr std::uint32_t kMaxReplySize{0U};
 
     /// \brief Maximum notification size in bytes.
-    static constexpr std::uint32_t kMaxNotifySize{0U};
+    static constexpr std::uint32_t kMaxNotifySize{1U};
 
     /// \brief The DataRouter receiver endpoint identifier.
     static constexpr const char* kDatarouterReceiverIdentifier{"/logging.datarouter_recv"};

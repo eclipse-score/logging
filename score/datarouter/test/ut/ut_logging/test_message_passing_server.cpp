@@ -79,6 +79,7 @@ constexpr pid_t kClienT0Pid = 1000;
 constexpr pid_t kClienT1Pid = 1001;
 constexpr pid_t kClienT2Pid = 1002;
 constexpr std::uint32_t kMaxSendBytes{17U};
+constexpr std::uint32_t kMaxNotifyBytes{1U};
 
 std::uint32_t gKReceiverQueueMaxSize = 0;
 
@@ -155,7 +156,7 @@ class MessagePassingServerFixture : public ::testing::Test
         server_factory_mock = std::make_shared<StrictMock<::score::message_passing::ServerFactoryMock>>();
         client_factory_mock = std::make_shared<StrictMock<::score::message_passing::ClientFactoryMock>>();
 
-        const score::message_passing::IServerFactory::ServerConfig server_config{gKReceiverQueueMaxSize, 0U, 0U};
+        const score::message_passing::IServerFactory::ServerConfig server_config{gKReceiverQueueMaxSize, 0U, 1U};
 
         auto server_ptr = score::cpp::pmr::make_unique<testing::StrictMock<score::message_passing::ServerMock>>(
             score::cpp::pmr::get_default_resource());
@@ -163,7 +164,7 @@ class MessagePassingServerFixture : public ::testing::Test
 
         EXPECT_CALL(
             *server_factory_mock,
-            Create(CompareServiceProtocol(ServiceProtocolConfig{"/logging.datarouter_recv", kMaxSendBytes, 0U, 0U}),
+            Create(CompareServiceProtocol(ServiceProtocolConfig{"/logging.datarouter_recv", kMaxSendBytes, 0U, kMaxNotifyBytes}),
                    CompareServerConfig(server_config)))
             .WillOnce(Return(ByMove(std::move(server_ptr))));
     }
