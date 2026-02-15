@@ -28,6 +28,7 @@
 
 #include <atomic>
 #include <condition_variable>
+#include <map>
 #include <mutex>
 #include <thread>
 
@@ -213,11 +214,6 @@ class MessagePassingServerFixture : public ::testing::Test
             return session;
         };
     }
-    void ExpectClientDestruction(StrictMock<::score::message_passing::ClientConnectionMock>* client_mock)
-    {
-        EXPECT_CALL(*client_mock, Destruct()).Times(AnyNumber());
-    }
-
     void ExpectServerDestruction() const
     {
         EXPECT_CALL(*server_mock, Destruct()).Times(AnyNumber());
@@ -272,27 +268,22 @@ class MessagePassingServerFixture : public ::testing::Test
         return message;
     }
 
-    StrictMock<::score::message_passing::ClientConnectionMock>* ExpectConnectCallBackCalledAndClientCreated(
-        const pid_t pid)
+    StrictMock<::score::message_passing::ServerConnectionMock>* ConnectClientAndSendConnectMessage(const pid_t pid)
     {
-        auto client = score::cpp::pmr::make_unique<testing::StrictMock<score::message_passing::ClientConnectionMock>>(
-            score::cpp::pmr::get_default_resource());
+        auto connection = std::make_unique<StrictMock<::score::message_passing::ServerConnectionMock>>();
+        auto* connection_ptr = connection.get();
+        auto emplace_result = connections_.emplace(pid, std::move(connection));
+        EXPECT_TRUE(emplace_result.second);
 
-        auto* client_mock = client.get();
-
-        EXPECT_CALL(*client_factory_mock,
-                    Create(Matcher<const score::message_passing::ServiceProtocolConfig&>(_),
-                           Matcher<const score::message_passing::IClientFactory::ClientConfig&>(_)))
-            .WillOnce(Return(ByMove(std::move(client))));
-
-        StrictMock<::score::message_passing::ServerConnectionMock> connection;
-        score::message_passing::ClientIdentity client_identity{pid, 0, 0};
-        EXPECT_CALL(connection, GetClientIdentity()).Times(AnyNumber()).WillRepeatedly(ReturnRef(client_identity));
+        connection_identities_.insert_or_assign(pid, score::message_passing::ClientIdentity{pid, 0, 0});
+        EXPECT_CALL(*connection_ptr, GetClientIdentity())
+            .Times(AnyNumber())
+            .WillRepeatedly(ReturnRef(connection_identities_.at(pid)));
 
         auto message = CreateConnectMessageSample(pid);
-        sent_callback(connection, message);
+        sent_callback(*connection_ptr, message);
 
-        return client_mock;
+        return connection_ptr;
     }
 
     void UninstantiateServer()
@@ -305,11 +296,11 @@ class MessagePassingServerFixture : public ::testing::Test
         EXPECT_CALL(*unistd_mock, getpid()).WillRepeatedly(Return(kOurPid));
     }
 
-    void ExpectMessageSendInSequence(const DatarouterMessageIdentifier& id,
-                                     ::testing::Sequence& seq,
-                                     StrictMock<::score::message_passing::ClientConnectionMock>* client_mock)
+    void ExpectAcquireNotifyInSequence(const DatarouterMessageIdentifier& id,
+                                       ::testing::Sequence& seq,
+                                       StrictMock<::score::message_passing::ServerConnectionMock>* connection_mock)
     {
-        EXPECT_CALL(*client_mock, Send(An<score::cpp::span<const std::uint8_t>>()))
+        EXPECT_CALL(*connection_mock, Notify(An<score::cpp::span<const std::uint8_t>>()))
             .InSequence(seq)
             .WillOnce([id](const auto m) {
                 score::cpp::expected_blank<score::os::Error> ret{};
@@ -321,9 +312,9 @@ class MessagePassingServerFixture : public ::testing::Test
             });
     }
 
-    void ExpectAndFailShortMessageSend(StrictMock<::score::message_passing::ClientConnectionMock>* client_mock)
+    void ExpectAndFailAcquireNotify(StrictMock<::score::message_passing::ServerConnectionMock>* connection_mock)
     {
-        EXPECT_CALL(*client_mock, Send(Matcher<score::cpp::span<const std::uint8_t>>(_)))
+        EXPECT_CALL(*connection_mock, Notify(Matcher<score::cpp::span<const std::uint8_t>>(_)))
             .WillOnce(Return(score::cpp::make_unexpected(score::os::Error::createFromErrno(EINVAL))));
     }
 
@@ -337,6 +328,9 @@ class MessagePassingServerFixture : public ::testing::Test
     score::message_passing::DisconnectCallback disconnect_callback;
     score::message_passing::MessageCallback sent_callback;
     score::message_passing::MessageCallback sent_with_reply_callback;
+
+    std::unordered_map<pid_t, std::unique_ptr<StrictMock<::score::message_passing::ServerConnectionMock>>> connections_;
+    std::map<pid_t, score::message_passing::ClientIdentity> connection_identities_;
 
     std::mutex map_mutex;
     std::condition_variable map_cond;  // currently only used for destruction
@@ -428,40 +422,29 @@ TEST_F(MessagePassingServerFixture, TestOneConnectAcquireRelease)
     EXPECT_EQ(tick_count, 0);
     EXPECT_EQ(construct_count, 0);
 
-    auto* client = ExpectConnectCallBackCalledAndClientCreated(kClienT0Pid);
+    auto* connection_ptr = ConnectClientAndSendConnectMessage(kClienT0Pid);
 
     EXPECT_EQ(construct_count, 1);
-    EXPECT_CALL(*client,
-                Start(Matcher<score::message_passing::IClientConnection::StateCallback>(_),
-                      Matcher<score::message_passing::IClientConnection::NotifyCallback>(_)));
-
-    EXPECT_CALL(*client, GetState()).WillRepeatedly(Return(score::message_passing::IClientConnection::State::kReady));
-
     ::testing::Sequence seq;
-    ExpectMessageSendInSequence(DatarouterMessageIdentifier::kAcquireRequest, seq, client);
+    ExpectAcquireNotifyInSequence(DatarouterMessageIdentifier::kAcquireRequest, seq, connection_ptr);
 
     session_map.at(kClienT0Pid).handle->AcquireRequest();
     EXPECT_EQ(acquire_response_count, 0);
-
-    StrictMock<::score::message_passing::ServerConnectionMock> connection;
-    score::message_passing::ClientIdentity client_identity{kClienT0Pid, 0, 0};
-    EXPECT_CALL(connection, GetClientIdentity()).Times(AnyNumber()).WillRepeatedly(ReturnRef(client_identity));
 
     score::mw::log::detail::ReadAcquireResult acquire_result{0U};
     std::array<std::uint8_t, sizeof(acquire_result) + 1> message{};
     message[0] = score::cpp::to_underlying(DatarouterMessageIdentifier::kAcquireResponse);
     std::memcpy(&message[1], &acquire_result, sizeof(acquire_result));
 
-    sent_callback(connection, message);
+    sent_callback(*connection_ptr, message);
 
     EXPECT_EQ(acquire_response_count, 1);
 
     EXPECT_EQ(closed_by_peer_count, 0);
     EXPECT_FALSE(session_map.empty());
 
-    ExpectAndFailShortMessageSend(client);
+    ExpectAndFailAcquireNotify(connection_ptr);
     ExpectServerDestruction();
-    ExpectClientDestruction(client);
     session_map.at(kClienT0Pid).handle->AcquireRequest();
     {
         // let the worker thread process the fault; wait until it erases the client
@@ -485,15 +468,15 @@ TEST_F(MessagePassingServerFixture, TestTripleConnectDifferentPids)
 
     EXPECT_EQ(construct_count, 0);
 
-    auto* client0 = ExpectConnectCallBackCalledAndClientCreated(kClienT0Pid);
-    auto* client1 = ExpectConnectCallBackCalledAndClientCreated(kClienT1Pid);
-    auto* client2 = ExpectConnectCallBackCalledAndClientCreated(kClienT2Pid);
+    auto* connection0 = ConnectClientAndSendConnectMessage(kClienT0Pid);
+    auto* connection1 = ConnectClientAndSendConnectMessage(kClienT1Pid);
+    auto* connection2 = ConnectClientAndSendConnectMessage(kClienT2Pid);
     EXPECT_EQ(construct_count, 3);
 
     ExpectServerDestruction();
-    ExpectClientDestruction(client0);
-    ExpectClientDestruction(client1);
-    ExpectClientDestruction(client2);
+    std::ignore = connection0;
+    std::ignore = connection1;
+    std::ignore = connection2;
 
     EXPECT_EQ(closed_by_peer_count, 0);
     EXPECT_EQ(destruct_count, 0);
@@ -516,21 +499,24 @@ TEST_F(MessagePassingServerFixture, TestTripleConnectSamePid)
     EXPECT_EQ(construct_count, 0);
 
     // Recieving new connect with old pid means that old pid owner died and disconnect_callback was called.
-    auto* client0 = ExpectConnectCallBackCalledAndClientCreated(kClienT0Pid);
+    auto* connection0 = ConnectClientAndSendConnectMessage(kClienT0Pid);
     EXPECT_CALL(connection, GetClientIdentity()).WillOnce(ReturnRef(client_identity));
-    ExpectClientDestruction(client0);
     this->disconnect_callback(connection);
     using namespace std::chrono_literals;
     std::this_thread::sleep_for(100ms);
-    auto* client1 = ExpectConnectCallBackCalledAndClientCreated(kClienT0Pid);
+    connections_.erase(kClienT0Pid);
+    auto* connection1 = ConnectClientAndSendConnectMessage(kClienT0Pid);
     EXPECT_CALL(connection, GetClientIdentity()).WillOnce(ReturnRef(client_identity));
-    ExpectClientDestruction(client1);
     this->disconnect_callback(connection);
     std::this_thread::sleep_for(100ms);
 
-    auto* client2 = ExpectConnectCallBackCalledAndClientCreated(kClienT0Pid);
-    ExpectClientDestruction(client2);
+    connections_.erase(kClienT0Pid);
+    auto* connection2 = ConnectClientAndSendConnectMessage(kClienT0Pid);
     EXPECT_EQ(construct_count, 3);
+
+    std::ignore = connection0;
+    std::ignore = connection1;
+    std::ignore = connection2;
 
     ExpectServerDestruction();
 
@@ -554,14 +540,13 @@ TEST_F(MessagePassingServerFixture, TestSamePidWhileRunning)
     tick_blocker = true;
     EXPECT_EQ(tick_count, 0);
     EXPECT_EQ(construct_count, 0);
-    auto* client0 = ExpectConnectCallBackCalledAndClientCreated(kClienT0Pid);
-    auto* client1 = ExpectConnectCallBackCalledAndClientCreated(kClienT1Pid);
-    auto* client2 = ExpectConnectCallBackCalledAndClientCreated(kClienT2Pid);
+    auto* connection0 = ConnectClientAndSendConnectMessage(kClienT0Pid);
+    auto* connection1 = ConnectClientAndSendConnectMessage(kClienT1Pid);
+    auto* connection2 = ConnectClientAndSendConnectMessage(kClienT2Pid);
     EXPECT_EQ(construct_count, 3);
 
     ExpectServerDestruction();
 
-    // ExpectClientDestruction(client0);
     //  wait until CLIENT0 is blocked inside the first tick
     session_map.at(kClienT0Pid).WaitStartOfFirstTick();
 
@@ -574,12 +559,13 @@ TEST_F(MessagePassingServerFixture, TestSamePidWhileRunning)
         StrictMock<::score::message_passing::ServerConnectionMock> connection;
         score::message_passing::ClientIdentity client_identity{kClienT0Pid, 0, 0};
         EXPECT_CALL(connection, GetClientIdentity()).WillOnce(ReturnRef(client_identity));
-        ExpectClientDestruction(client0);
         this->disconnect_callback(connection);
         std::this_thread::sleep_for(100ms);
 
-        auto* new_client = ExpectConnectCallBackCalledAndClientCreated(kClienT0Pid);
-        ExpectClientDestruction(new_client);
+        connections_.erase(kClienT0Pid);
+
+        auto* new_connection = ConnectClientAndSendConnectMessage(kClienT0Pid);
+        std::ignore = new_connection;
     });
     EXPECT_EQ(destruct_count, 0);  // no destruction while we are still in the tick
 
@@ -592,8 +578,9 @@ TEST_F(MessagePassingServerFixture, TestSamePidWhileRunning)
     EXPECT_EQ(destruct_count, 1);
     EXPECT_GE(tick_count, 2);
 
-    ExpectClientDestruction(client1);
-    ExpectClientDestruction(client2);
+    std::ignore = connection0;
+    std::ignore = connection1;
+    std::ignore = connection2;
     UninstantiateServer();
 
     EXPECT_EQ(closed_by_peer_count, 1);
@@ -609,9 +596,9 @@ TEST_F(MessagePassingServerFixture, TestSamePidWhileQueued)
     tick_blocker = true;
     EXPECT_EQ(tick_count, 0);
     EXPECT_EQ(construct_count, 0);
-    auto* client0 = ExpectConnectCallBackCalledAndClientCreated(kClienT0Pid);
-    auto* client1 = ExpectConnectCallBackCalledAndClientCreated(kClienT1Pid);
-    auto* client2 = ExpectConnectCallBackCalledAndClientCreated(kClienT2Pid);
+    auto* connection0 = ConnectClientAndSendConnectMessage(kClienT0Pid);
+    auto* connection1 = ConnectClientAndSendConnectMessage(kClienT1Pid);
+    auto* connection2 = ConnectClientAndSendConnectMessage(kClienT2Pid);
     EXPECT_EQ(construct_count, 3);
 
     ExpectServerDestruction();
@@ -628,12 +615,13 @@ TEST_F(MessagePassingServerFixture, TestSamePidWhileQueued)
         StrictMock<::score::message_passing::ServerConnectionMock> connection;
         score::message_passing::ClientIdentity client_identity{kClienT2Pid, 0, 0};
         EXPECT_CALL(connection, GetClientIdentity()).WillOnce(ReturnRef(client_identity));
-        ExpectClientDestruction(client2);
         this->disconnect_callback(connection);
         std::this_thread::sleep_for(100ms);
 
-        auto* new_client = ExpectConnectCallBackCalledAndClientCreated(kClienT2Pid);
-        ExpectClientDestruction(new_client);
+        connections_.erase(kClienT2Pid);
+
+        auto* new_connection = ConnectClientAndSendConnectMessage(kClienT2Pid);
+        std::ignore = new_connection;
     });
     EXPECT_EQ(destruct_count, 0);  // no destruction while we are still in the tick
 
@@ -646,8 +634,9 @@ TEST_F(MessagePassingServerFixture, TestSamePidWhileQueued)
     EXPECT_EQ(destruct_count, 1);
     EXPECT_GE(tick_count, 2);
 
-    ExpectClientDestruction(client0);
-    ExpectClientDestruction(client1);
+    std::ignore = connection0;
+    std::ignore = connection1;
+    std::ignore = connection2;
     UninstantiateServer();
 
     EXPECT_EQ(closed_by_peer_count, 1);
@@ -681,25 +670,10 @@ TEST(MessagePassingServerTests, sessionWrapperCreateTest)
 TEST(MessagePassingServerTests, sessionHandleCreateTest)
 {
     const pid_t pid = 0;
-
-    auto client = score::cpp::pmr::make_unique<score::message_passing::ClientConnectionMock>(score::cpp::pmr::get_default_resource());
-
-    auto* client_raw_ptr = client.get();
     MessagePassingServer* msg_server = nullptr;
 
-    EXPECT_CALL(*client_raw_ptr,
-                Start(Matcher<score::message_passing::IClientConnection::StateCallback>(_),
-                      Matcher<score::message_passing::IClientConnection::NotifyCallback>(_)));
-
-    EXPECT_CALL(*client_raw_ptr, GetState())
-        .WillRepeatedly(Return(score::message_passing::IClientConnection::State::kReady));
-
-    EXPECT_CALL(*client_raw_ptr, Send(An<score::cpp::span<const std::uint8_t>>())).Times(1);
-
-    MessagePassingServer::SessionHandle session_handle(pid, msg_server, std::move(client));
-
-    EXPECT_NO_FATAL_FAILURE(session_handle.AcquireRequest());
-    EXPECT_CALL(*client_raw_ptr, Destruct()).Times(AnyNumber());
+    MessagePassingServer::SessionHandle session_handle(pid, msg_server);
+    EXPECT_FALSE(session_handle.AcquireRequest());
 }
 
 struct TestParams

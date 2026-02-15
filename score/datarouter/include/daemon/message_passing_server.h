@@ -71,20 +71,16 @@ class MessagePassingServer : public IMessagePassingServerSessionWrapper
     class SessionHandle : public daemon::ISessionHandle
     {
       public:
-        SessionHandle(pid_t pid,
-                      MessagePassingServer* server,
-                      score::cpp::pmr::unique_ptr<score::message_passing::IClientConnection> sender)
-            : daemon::ISessionHandle(), sender_(std::move(sender)), pid_(pid), server_(server), sender_state_{}
+        SessionHandle(pid_t pid, MessagePassingServer* server)
+            : daemon::ISessionHandle(), pid_(pid), server_(server)
         {
         }
 
         bool AcquireRequest() const override;
 
       private:
-        score::cpp::pmr::unique_ptr<score::message_passing::IClientConnection> sender_;
         pid_t pid_;
         MessagePassingServer* server_;
-        mutable std::optional<score::message_passing::IClientConnection::State> sender_state_;
     };
 
     class ISession
@@ -111,27 +107,36 @@ class MessagePassingServer : public IMessagePassingServerSessionWrapper
     class MessagePassingServerForTest;
 
   private:
+    friend class SessionHandle;
+
+    bool NotifyAcquireRequest(pid_t pid);
+    bool NotifyAcquireRequestWhileLocked(pid_t pid);
     void NotifyAcquireRequestFailed(std::int32_t pid);
 
-    void MessageCallback(const score::cpp::span<const std::uint8_t> message, const pid_t pid);
-    void OnConnectRequest(const score::cpp::span<const std::uint8_t> message, const pid_t pid);
-    void OnAcquireResponse(const score::cpp::span<const std::uint8_t> message, const pid_t pid);
+    void MessageCallback(score::message_passing::IServerConnection& connection, score::cpp::span<const std::uint8_t> message);
+    void OnConnectRequest(score::message_passing::IServerConnection& connection,
+                const score::cpp::span<const std::uint8_t> message,
+                pid_t pid);
+    void OnAcquireResponse(score::message_passing::IServerConnection& connection,
+                 const score::cpp::span<const std::uint8_t> message,
+                 pid_t pid);
 
     using TimestampT = std::chrono::steady_clock::time_point;
 
     struct SessionWrapper
     {
-        SessionWrapper(IMessagePassingServerSessionWrapper* server_instance,
-                       pid_t process_id,
-                       std::unique_ptr<ISession> session_instance)
-            : server(server_instance),
-              pid(process_id),
-              session(std::move(session_instance)),
-              enqueued(false),
-              running(false),
-              to_delete(false),
-              closed_by_peer(false),
-              to_force_finish(false)
+      SessionWrapper(IMessagePassingServerSessionWrapper* server_instance,
+               pid_t process_id,
+               std::unique_ptr<ISession> session_instance)
+          : server(server_instance),
+            pid(process_id),
+            session(std::move(session_instance)),
+            connection(nullptr),
+            enqueued(false),
+            running(false),
+            to_delete(false),
+            closed_by_peer(false),
+            to_force_finish(false)
         {
         }
 
@@ -164,6 +169,8 @@ class MessagePassingServer : public IMessagePassingServerSessionWrapper
         IMessagePassingServerSessionWrapper* server;
         pid_t pid;
         std::unique_ptr<ISession> session;
+
+        score::message_passing::IServerConnection* connection;
 
         bool enqueued;
         bool running;
