@@ -179,7 +179,7 @@ class MessagePassingServer : public IMessagePassingServerSessionWrapper
 
         score::message_passing::IServerConnection* connection_;
         bool acquire_in_flight_;
-        timestamp_t acquire_deadline_;
+        std::optional<timestamp_t> acquire_deadline_;
         std::uint32_t acquire_miss_count_{0U};
 
         bool enqueued_;
