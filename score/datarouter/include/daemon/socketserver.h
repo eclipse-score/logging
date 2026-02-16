@@ -72,7 +72,7 @@ class SocketServer
     {
         std::function<score::logging::dltserver::PersistentConfig()> load_dlt;
         std::function<void(const score::logging::dltserver::PersistentConfig&)> store_dlt;
-        bool is_dlt_enabled;
+        bool is_dlt_enabled{false};
     };
 
     static void Run(const std::atomic_bool& exit_requested, const bool no_adaptive_runtime)

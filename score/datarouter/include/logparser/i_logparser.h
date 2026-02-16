@@ -39,12 +39,12 @@ using TimestampT = score::os::HighResolutionSteadyClock::time_point;
 
 struct TypeInfo
 {
-    const score::mw::log::config::NvMsgDescriptor* nv_msg_desc;
-    BufsizeT id;
-    std::string params;
-    std::string type_name;
-    DltidT ecu_id;
-    DltidT app_id;
+    const score::mw::log::config::NvMsgDescriptor* nv_msg_desc{nullptr};
+    BufsizeT id{};
+    std::string params{};
+    std::string type_name{};
+    DltidT ecu_id{};
+    DltidT app_id{};
 };
 
 namespace internal
