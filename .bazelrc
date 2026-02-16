@@ -87,3 +87,6 @@ coverage --test_env=COVERAGE_GCOV_OPTIONS=-bcu
 coverage --test_env=LLVM_PROFILE_CONTINUOUS_MODE=1
 coverage --cxxopt -mllvm
 coverage --cxxopt -runtime-counter-relocation
+
+# Dynamic analysis (sanitizers) for Linux host builds/tests.
+try-import %workspace%/quality/sanitizer/sanitizer.bazelrc
