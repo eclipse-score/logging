@@ -82,3 +82,6 @@ coverage --combined_report=lcov
 coverage --test_env=COVERAGE_GCOV_OPTIONS=-bcu
 coverage --features=coverage
 coverage --cache_test_results=no
+
+# Dynamic analysis (sanitizers) for Linux host builds/tests.
+try-import %workspace%/quality/sanitizer/sanitizer.bazelrc
