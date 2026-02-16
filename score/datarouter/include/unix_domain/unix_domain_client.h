@@ -24,7 +24,8 @@
 #include <functional>
 #include <mutex>
 #include <queue>
-#include <thread>
+
+#include <score/jthread.hpp>
 
 #include <score/string_view.hpp>
 
@@ -92,7 +93,8 @@ class UnixDomainClient
     std::atomic<bool> exit_;
     std::mutex commands_mutex_;
     std::queue<std::string> commands_;
-    std::thread client_thread_;
+    score::cpp::jthread client_thread_;
+
     bool new_socket_retry_;
 
     // TODO: temporary workaround, remove
