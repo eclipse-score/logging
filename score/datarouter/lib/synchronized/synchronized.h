@@ -11,8 +11,8 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-#ifndef SCORE_PAS_LOGGING_LIB_SYNCHRONIZED_SYNCHRONIZED_H
-#define SCORE_PAS_LOGGING_LIB_SYNCHRONIZED_SYNCHRONIZED_H
+#ifndef SCORE_DATAROUTER_LIB_SYNCHRONIZED_SYNCHRONIZED_H
+#define SCORE_DATAROUTER_LIB_SYNCHRONIZED_SYNCHRONIZED_H
 
 #include <functional>
 #include <memory>
@@ -93,4 +93,4 @@ class Synchronized
 }  // namespace platform
 }  // namespace score
 
-#endif  // SCORE_PAS_LOGGING_LIB_SYNCHRONIZED_SYNCHRONIZED_H
+#endif  // SCORE_DATAROUTER_LIB_SYNCHRONIZED_SYNCHRONIZED_H

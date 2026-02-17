@@ -11,8 +11,8 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-#ifndef SCORE_PAS_LOGGING_INCLUDE_DAEMON_MESSAGE_PASSING_SERVER_H
-#define SCORE_PAS_LOGGING_INCLUDE_DAEMON_MESSAGE_PASSING_SERVER_H
+#ifndef SCORE_DATAROUTER_INCLUDE_DAEMON_MESSAGE_PASSING_SERVER_H
+#define SCORE_DATAROUTER_INCLUDE_DAEMON_MESSAGE_PASSING_SERVER_H
 
 #include "score/mw/log/detail/data_router/data_router_messages.h"
 
@@ -198,4 +198,4 @@ class MessagePassingServer : public IMessagePassingServerSessionWrapper
 }  // namespace platform
 }  // namespace score
 
-#endif  // SCORE_PAS_LOGGING_INCLUDE_DAEMON_MESSAGE_PASSING_SERVER_H
+#endif  // SCORE_DATAROUTER_INCLUDE_DAEMON_MESSAGE_PASSING_SERVER_H

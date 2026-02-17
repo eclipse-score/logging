@@ -337,7 +337,7 @@ filegroup(
     visibility = [
         "//platform/aas/tools/itf:__subpackages__",
         "//platform/aas/tools/sctf:__subpackages__",
-        "//pqr/abc/abc-lmn/config/iproject/corepas/datarouter:__pkg__",
+        "//pqr/abc/abc-lmn/config/project/cpu/pas/datarouter:__pkg__",
         "//score/datarouter/test:__subpackages__",
     ],
 )
@@ -591,6 +591,7 @@ cc_library(
         ":log_entry_deserialization",
         ":log_sender",
         ":logchannel_utility",
+        ":udp_stream_output",
         ":unixdomain_server",
         "//score/datarouter/network:vlan",
         "//score/datarouter/src/persistent_logging/persistent_logging_stub:sysedr_stub",
@@ -753,6 +754,7 @@ cc_library(
     hdrs = [
         "include/daemon/socketserver.h",
     ],
+    # Configuration block updated during migration
     features = COMPILER_WARNING_FEATURES,
     local_defines = select({
         "//score/datarouter/build_configuration_flags:config_persistent_logging": ["PERSISTENT_LOGGING"],
@@ -787,6 +789,7 @@ cc_library(
     hdrs = [
         "include/daemon/socketserver.h",
     ],
+    # Configuration block updated during migration
     features = COMPILER_WARNING_FEATURES,
     local_defines = select({
         "//score/datarouter/build_configuration_flags:config_persistent_logging": ["PERSISTENT_LOGGING"],
@@ -797,7 +800,7 @@ cc_library(
     deps = [
         ":datarouter_feature_config_testing",
         ":datarouter_lib",
-        ":dltserver_testing",
+        ":dltserver",
         ":persistentlogconfig",
         ":socketserver_config_lib_testing",
         "@score_baselibs//score/mw/log/configuration:nvconfigfactory",

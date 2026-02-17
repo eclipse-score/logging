@@ -11,8 +11,8 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-#ifndef SCORE_PAS_LOGGING_DLT_FILETRANSFER_TRIGGER_LIB_MOCK_FILETRANSFER_MOCK_H
-#define SCORE_PAS_LOGGING_DLT_FILETRANSFER_TRIGGER_LIB_MOCK_FILETRANSFER_MOCK_H
+#ifndef SCORE_DATAROUTER_DLT_FILETRANSFER_TRIGGER_LIB_MOCK_FILETRANSFER_MOCK_H
+#define SCORE_DATAROUTER_DLT_FILETRANSFER_TRIGGER_LIB_MOCK_FILETRANSFER_MOCK_H
 
 #include "score/datarouter/dlt_filetransfer_trigger_lib/include/ifile_transfer.h"
 
@@ -32,4 +32,4 @@ class MockFileTransfer : public IFileTransfer
 }  // namespace logging
 }  // namespace score
 
-#endif  // SCORE_PAS_LOGGING_DLT_FILETRANSFER_TRIGGER_LIB_MOCK_FILETRANSFER_MOCK_H
+#endif  // SCORE_DATAROUTER_DLT_FILETRANSFER_TRIGGER_LIB_MOCK_FILETRANSFER_MOCK_H

@@ -11,8 +11,8 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-#ifndef SCORE_PAS_LOGGING_INCLUDE_DAEMON_DIAGNOSTIC_JOB_PARSER_H
-#define SCORE_PAS_LOGGING_INCLUDE_DAEMON_DIAGNOSTIC_JOB_PARSER_H
+#ifndef SCORE_DATAROUTER_INCLUDE_DAEMON_DIAGNOSTIC_JOB_PARSER_H
+#define SCORE_DATAROUTER_INCLUDE_DAEMON_DIAGNOSTIC_JOB_PARSER_H
 
 #include <memory>
 #include <optional>
@@ -51,4 +51,4 @@ class DiagnosticJobParser : public IDiagnosticJobParser
 }  // namespace logging
 }  // namespace score
 
-#endif  // SCORE_PAS_LOGGING_INCLUDE_DAEMON_DIAGNOSTIC_JOB_PARSER_H
+#endif  // SCORE_DATAROUTER_INCLUDE_DAEMON_DIAGNOSTIC_JOB_PARSER_H

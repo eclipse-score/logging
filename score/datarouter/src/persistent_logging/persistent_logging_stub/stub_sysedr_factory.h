@@ -11,8 +11,8 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-#ifndef SCORE_PAS_LOGGING_SRC_PERSISTENT_LOGGING_PERSISTENT_LOGGING_STUB_STUB_SYSEDR_FACTORY_H
-#define SCORE_PAS_LOGGING_SRC_PERSISTENT_LOGGING_PERSISTENT_LOGGING_STUB_STUB_SYSEDR_FACTORY_H
+#ifndef SCORE_DATAROUTER_SRC_PERSISTENT_LOGGING_PERSISTENT_LOGGING_STUB_STUB_SYSEDR_FACTORY_H
+#define SCORE_DATAROUTER_SRC_PERSISTENT_LOGGING_PERSISTENT_LOGGING_STUB_STUB_SYSEDR_FACTORY_H
 
 #include "score/datarouter/src/persistent_logging/persistent_logging_stub/stub_sysedr_handler.h"
 #include "score/datarouter/src/persistent_logging/sysedr_factory.hpp"
@@ -34,4 +34,4 @@ class StubSysedrFactory : public SysedrFactory<StubSysedrFactory>
 }  // namespace platform
 }  // namespace score
 
-#endif  // SCORE_PAS_LOGGING_SRC_PERSISTENT_LOGGING_PERSISTENT_LOGGING_STUB_STUB_SYSEDR_FACTORY_H
+#endif  // SCORE_DATAROUTER_SRC_PERSISTENT_LOGGING_PERSISTENT_LOGGING_STUB_STUB_SYSEDR_FACTORY_H

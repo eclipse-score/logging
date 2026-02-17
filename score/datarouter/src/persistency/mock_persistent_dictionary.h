@@ -11,8 +11,8 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-#ifndef SCORE_PAS_LOGGING_SRC_PERSISTENCY_MOCK_PERSISTENT_DICTIONARY_H
-#define SCORE_PAS_LOGGING_SRC_PERSISTENCY_MOCK_PERSISTENT_DICTIONARY_H
+#ifndef SCORE_DATAROUTER_SRC_PERSISTENCY_MOCK_PERSISTENT_DICTIONARY_H
+#define SCORE_DATAROUTER_SRC_PERSISTENCY_MOCK_PERSISTENT_DICTIONARY_H
 
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
@@ -43,4 +43,4 @@ class MockPersistentDictionary : public ::score::platform::datarouter::IPersiste
 }  // namespace platform
 }  // namespace score
 
-#endif  // SCORE_PAS_LOGGING_SRC_PERSISTENCY_MOCK_PERSISTENT_DICTIONARY_H
+#endif  // SCORE_DATAROUTER_SRC_PERSISTENCY_MOCK_PERSISTENT_DICTIONARY_H

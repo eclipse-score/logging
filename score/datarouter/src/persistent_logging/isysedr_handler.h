@@ -11,8 +11,8 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-#ifndef SCORE_PAS_LOGGING_SRC_PERSISTENT_LOGGING_ISYSEDR_HANDLER_H
-#define SCORE_PAS_LOGGING_SRC_PERSISTENT_LOGGING_ISYSEDR_HANDLER_H
+#ifndef SCORE_DATAROUTER_SRC_PERSISTENT_LOGGING_ISYSEDR_HANDLER_H
+#define SCORE_DATAROUTER_SRC_PERSISTENT_LOGGING_ISYSEDR_HANDLER_H
 
 #include "logparser/logparser.h"
 
@@ -47,4 +47,4 @@ class ISysedrHandler : public LogParser::TypeHandler, public LogParser::AnyHandl
 }  // namespace platform
 }  // namespace score
 
-#endif  // SCORE_PAS_LOGGING_SRC_PERSISTENT_LOGGING_ISYSEDR_HANDLER_H
+#endif  // SCORE_DATAROUTER_SRC_PERSISTENT_LOGGING_ISYSEDR_HANDLER_H
