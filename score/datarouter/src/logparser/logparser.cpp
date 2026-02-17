@@ -102,7 +102,7 @@ void LogParser::add_incoming_type(const bufsize_t map_index, const std::string& 
     logger_unpack_string(params.substr(12U), typeName);
 
     typename_to_index.emplace(typeName, map_index);
-    IndexParser indexParser{TypeInfo{nv_config_.getDltMsgDesc(typeName), map_index, params, typeName, ecuId, appId}};
+    IndexParser indexParser{TypeInfo{nv_config_.GetDltMsgDesc(typeName), map_index, params, typeName, ecuId, appId}};
     const auto ith_range = handle_request_map.equal_range(typeName);
     for (auto ith = ith_range.first; ith != ith_range.second; ++ith)
     {
