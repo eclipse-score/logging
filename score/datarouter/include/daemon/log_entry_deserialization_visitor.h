@@ -11,8 +11,8 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-#ifndef SCORE_PAS_LOGGING_INCLUDE_DAEMON_LOG_ENTRY_DESERIALIZATION_VISITOR_H_
-#define SCORE_PAS_LOGGING_INCLUDE_DAEMON_LOG_ENTRY_DESERIALIZATION_VISITOR_H_
+#ifndef SCORE_DATAROUTER_INCLUDE_DAEMON_LOG_ENTRY_DESERIALIZATION_VISITOR_H_
+#define SCORE_DATAROUTER_INCLUDE_DAEMON_LOG_ENTRY_DESERIALIZATION_VISITOR_H_
 
 #include "score/mw/log/detail/common/log_entry_deserialize.h"
 #include "static_reflection_with_serialization/serialization/for_logging.h"
@@ -89,4 +89,4 @@ inline auto visit_as(serialized_visitor<A>& /*unused*/, const T& /*unused*/)
 }  //  namespace common
 }  //  namespace score
 
-#endif  //  SCORE_PAS_LOGGING_INCLUDE_DAEMON_LOG_ENTRY_DESERIALIZATION_VISITOR_H_
+#endif  //  SCORE_DATAROUTER_INCLUDE_DAEMON_LOG_ENTRY_DESERIALIZATION_VISITOR_H_

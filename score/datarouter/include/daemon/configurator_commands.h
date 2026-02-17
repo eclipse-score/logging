@@ -11,8 +11,8 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-#ifndef SCORE_PAS_LOGGING_INCLUDE_DAEMON_CONFIGURATOR_COMMANDS_H
-#define SCORE_PAS_LOGGING_INCLUDE_DAEMON_CONFIGURATOR_COMMANDS_H
+#ifndef SCORE_DATAROUTER_INCLUDE_DAEMON_CONFIGURATOR_COMMANDS_H
+#define SCORE_DATAROUTER_INCLUDE_DAEMON_CONFIGURATOR_COMMANDS_H
 
 #include <cstdint>
 
@@ -49,4 +49,4 @@ static constexpr std::uint8_t DISABLE = 0;
 }  // namespace logging
 }  // namespace score
 
-#endif  // SCORE_PAS_LOGGING_INCLUDE_DAEMON_CONFIGURATOR_COMMANDS_H
+#endif  // SCORE_DATAROUTER_INCLUDE_DAEMON_CONFIGURATOR_COMMANDS_H

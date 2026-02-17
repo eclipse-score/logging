@@ -11,8 +11,8 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-#ifndef SCORE_PAS_LOGGING_INCLUDE_DLT_DLTID_H
-#define SCORE_PAS_LOGGING_INCLUDE_DLT_DLTID_H
+#ifndef SCORE_DATAROUTER_INCLUDE_DLT_DLTID_H
+#define SCORE_DATAROUTER_INCLUDE_DLT_DLTID_H
 
 #include "score/mw/log/detail/logging_identifier.h"
 #include <cstring>
@@ -105,4 +105,4 @@ struct hash<score::platform::dltid_t>
 
 }  // namespace std
 
-#endif  // SCORE_PAS_LOGGING_INCLUDE_DLT_DLTID_H
+#endif  // SCORE_DATAROUTER_INCLUDE_DLT_DLTID_H

@@ -11,8 +11,8 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-#ifndef SCORE_PAS_LOGGING_NETWORK_VLAN_H
-#define SCORE_PAS_LOGGING_NETWORK_VLAN_H
+#ifndef SCORE_DATAROUTER_NETWORK_VLAN_H
+#define SCORE_DATAROUTER_NETWORK_VLAN_H
 
 #if defined(USE_LOCAL_VLAN)
 #include "score/datarouter/network/vlan_local.h"
@@ -20,4 +20,4 @@
 #include "score/network/vlan.h"
 #endif
 
-#endif  // SCORE_PAS_LOGGING_NETWORK_VLAN_H
+#endif  // SCORE_DATAROUTER_NETWORK_VLAN_H

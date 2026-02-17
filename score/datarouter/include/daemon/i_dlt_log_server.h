@@ -11,8 +11,8 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-#ifndef SCORE_PAS_LOGGING_INCLUDE_DAEMON_I_DLT_LOG_SERVER_H
-#define SCORE_PAS_LOGGING_INCLUDE_DAEMON_I_DLT_LOG_SERVER_H
+#ifndef SCORE_DATAROUTER_INCLUDE_DAEMON_I_DLT_LOG_SERVER_H
+#define SCORE_DATAROUTER_INCLUDE_DAEMON_I_DLT_LOG_SERVER_H
 
 #include "score/mw/log/log_level.h"
 #include "score/datarouter/include/daemon/configurator_commands.h"
@@ -67,4 +67,4 @@ class IDltLogServer
 }  // namespace logging
 }  // namespace score
 
-#endif  // SCORE_PAS_LOGGING_INCLUDE_DAEMON_I_DLT_LOG_SERVER_H
+#endif  // SCORE_DATAROUTER_INCLUDE_DAEMON_I_DLT_LOG_SERVER_H

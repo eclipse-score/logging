@@ -11,8 +11,8 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-#ifndef AAS_PAS_LOGGING_TRACING_TEST_H
-#define AAS_PAS_LOGGING_TRACING_TEST_H
+#ifndef AAS_DATAROUTER_TRACING_TEST_H
+#define AAS_DATAROUTER_TRACING_TEST_H
 
 #include "gtest/gtest.h"
 #include <Tracing>
@@ -43,4 +43,4 @@ TEST_F(TracingTest, TracingLifeCycleStart)
 }  // namespace logging
 }  // namespace score
 
-#endif  // AAS_PAS_LOGGING_TRACING_TEST_H
+#endif  // AAS_DATAROUTER_TRACING_TEST_H

@@ -11,8 +11,8 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-#ifndef SCORE_PAS_LOGGING_INCLUDE_DAEMON_I_UDP_SEND_H
-#define SCORE_PAS_LOGGING_INCLUDE_DAEMON_I_UDP_SEND_H
+#ifndef SCORE_DATAROUTER_INCLUDE_DAEMON_I_UDP_SEND_H
+#define SCORE_DATAROUTER_INCLUDE_DAEMON_I_UDP_SEND_H
 
 #include "score/os/errno.h"
 #include <score/utility.hpp>
@@ -35,4 +35,4 @@ class IUdpSend
 }  // namespace dltserver
 }  // namespace logging
 }  // namespace score
-#endif  // SCORE_PAS_LOGGING_INCLUDE_DAEMON_I_UDP_SEND_H
+#endif  // SCORE_DATAROUTER_INCLUDE_DAEMON_I_UDP_SEND_H

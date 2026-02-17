@@ -11,8 +11,8 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-#ifndef SCORE_PAS_LOGGING_TEST_UTILS_DATA_ROUTER_TEST_UTILS_H
-#define SCORE_PAS_LOGGING_TEST_UTILS_DATA_ROUTER_TEST_UTILS_H
+#ifndef SCORE_DATAROUTER_TEST_UTILS_DATA_ROUTER_TEST_UTILS_H
+#define SCORE_DATAROUTER_TEST_UTILS_DATA_ROUTER_TEST_UTILS_H
 
 #include "score/datarouter/datarouter/data_router.h"
 
@@ -56,4 +56,4 @@ TestTypeInfo CreateTypeInfo()
 }  // namespace
 }  // namespace test::utils
 
-#endif  // SCORE_PAS_LOGGING_TEST_UTILS_DATA_ROUTER_TEST_UTILS_H
+#endif  // SCORE_DATAROUTER_TEST_UTILS_DATA_ROUTER_TEST_UTILS_H

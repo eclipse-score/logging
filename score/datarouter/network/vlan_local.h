@@ -11,8 +11,8 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-#ifndef SCORE_PAS_LOGGING_NETWORK_VLAN_LOCAL_H
-#define SCORE_PAS_LOGGING_NETWORK_VLAN_LOCAL_H
+#ifndef SCORE_DATAROUTER_NETWORK_VLAN_LOCAL_H
+#define SCORE_DATAROUTER_NETWORK_VLAN_LOCAL_H
 
 #include "score/os/ObjectSeam.h"
 #include "score/os/errno.h"
@@ -47,4 +47,4 @@ class Vlan : public ObjectSeam<Vlan>
 }  // namespace os
 }  // namespace score
 
-#endif  // SCORE_PAS_LOGGING_NETWORK_VLAN_LOCAL_H
+#endif  // SCORE_DATAROUTER_NETWORK_VLAN_LOCAL_H

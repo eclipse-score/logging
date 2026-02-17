@@ -11,8 +11,8 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-#ifndef SCORE_PAS_LOGGING_DATAROUTER_FEATURE_CONFIG_H
-#define SCORE_PAS_LOGGING_DATAROUTER_FEATURE_CONFIG_H
+#ifndef SCORE_DATAROUTER_DATAROUTER_FEATURE_CONFIG_H
+#define SCORE_DATAROUTER_DATAROUTER_FEATURE_CONFIG_H
 
 // --- Conditional Compilation Feature Switch ---
 #if defined(PERSISTENT_CONFIG_FEATURE_ENABLED)
@@ -104,4 +104,4 @@ using FileTransferStreamHandlerType = score::logging::dltserver::StubFileTransfe
 }  // namespace platform
 }  // namespace score
 
-#endif  // SCORE_PAS_LOGGING_DATAROUTER_FEATURE_CONFIG_H
+#endif  // SCORE_DATAROUTER_DATAROUTER_FEATURE_CONFIG_H

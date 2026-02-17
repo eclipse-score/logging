@@ -11,8 +11,8 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-#ifndef SCORE_PAS_LOGGING_INCLUDE_DAEMON_I_DIAGNOSTIC_JOB_HANDLER_H
-#define SCORE_PAS_LOGGING_INCLUDE_DAEMON_I_DIAGNOSTIC_JOB_HANDLER_H
+#ifndef SCORE_DATAROUTER_INCLUDE_DAEMON_I_DIAGNOSTIC_JOB_HANDLER_H
+#define SCORE_DATAROUTER_INCLUDE_DAEMON_I_DIAGNOSTIC_JOB_HANDLER_H
 
 #include <cstdint>
 #include <string>
@@ -37,4 +37,4 @@ class IDiagnosticJobHandler
 }  // namespace logging
 }  // namespace score
 
-#endif  // SCORE_PAS_LOGGING_INCLUDE_DAEMON_I_DIAGNOSTIC_JOB_HANDLER_H
+#endif  // SCORE_DATAROUTER_INCLUDE_DAEMON_I_DIAGNOSTIC_JOB_HANDLER_H

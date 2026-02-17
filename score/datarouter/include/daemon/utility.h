@@ -11,8 +11,8 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-#ifndef SCORE_PAS_LOGGING_INCLUDE_DAEMON_UTILITY_H
-#define SCORE_PAS_LOGGING_INCLUDE_DAEMON_UTILITY_H
+#ifndef SCORE_DATAROUTER_INCLUDE_DAEMON_UTILITY_H
+#define SCORE_DATAROUTER_INCLUDE_DAEMON_UTILITY_H
 
 #include "score/mw/log/log_level.h"
 #include <string>
@@ -37,4 +37,4 @@ inline std::string GetStringFromLogLevel(score::mw::log::LogLevel level)
 
 namespace logchannel_operations = logging_daemon::logchannel_utility;
 
-#endif  // SCORE_PAS_LOGGING_INCLUDE_DAEMON_UTILITY_H
+#endif  // SCORE_DATAROUTER_INCLUDE_DAEMON_UTILITY_H

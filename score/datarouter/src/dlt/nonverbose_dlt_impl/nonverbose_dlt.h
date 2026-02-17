@@ -11,8 +11,8 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-#ifndef SCORE_PAS_LOGGING_NONVERBOSE_DLT_NONVERBOSE_DLT_H
-#define SCORE_PAS_LOGGING_NONVERBOSE_DLT_NONVERBOSE_DLT_H
+#ifndef SCORE_DATAROUTER_NONVERBOSE_DLT_NONVERBOSE_DLT_H
+#define SCORE_DATAROUTER_NONVERBOSE_DLT_NONVERBOSE_DLT_H
 
 #include "logparser/logparser.h"
 #include "score/mw/log/configuration/nvconfig.h"
@@ -56,4 +56,4 @@ class DltNonverboseHandler : public LogParser::AnyHandler
 }  // namespace logging
 }  // namespace score
 
-#endif  // SCORE_PAS_LOGGING_NONVERBOSE_DLT_NONVERBOSE_DLT_H
+#endif  // SCORE_DATAROUTER_NONVERBOSE_DLT_NONVERBOSE_DLT_H
