@@ -591,7 +591,6 @@ cc_library(
         ":log_entry_deserialization",
         ":log_sender",
         ":logchannel_utility",
-        ":udp_stream_output",
         ":unixdomain_server",
         "//score/datarouter/network:vlan",
         "//score/datarouter/src/persistent_logging/persistent_logging_stub:sysedr_stub",
@@ -798,7 +797,7 @@ cc_library(
     deps = [
         ":datarouter_feature_config_testing",
         ":datarouter_lib",
-        ":dltserver",
+        ":dltserver_testing",
         ":persistentlogconfig",
         ":socketserver_config_lib_testing",
         "@score_baselibs//score/mw/log/configuration:nvconfigfactory",
