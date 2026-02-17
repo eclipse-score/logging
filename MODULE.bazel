@@ -27,12 +27,12 @@ bazel_dep(name = "platforms", version = "1.0.0")
 
 # S-CORE process rules
 bazel_dep(name = "score_bazel_platforms", version = "0.0.4")
-bazel_dep(name = "score_docs_as_code", version = "2.2.0")
-bazel_dep(name = "score_tooling", version = "1.1.1")
+bazel_dep(name = "score_docs_as_code", version = "3.0.0")
+bazel_dep(name = "score_tooling", version = "1.1.0")
 bazel_dep(name = "score_rust_policies", version = "0.0.3")
 
-bazel_dep(name = "score_process", version = "1.4.0", dev_dependency = True)
-bazel_dep(name = "score_platform", version = "0.5.1", dev_dependency = True)
+bazel_dep(name = "score_process", version = "1.4.3", dev_dependency = True)
+bazel_dep(name = "score_platform", version = "0.5.3", dev_dependency = True)
 
 # Toolchains and extensions
 bazel_dep(name = "score_bazel_cpp_toolchains", version = "0.2.2", dev_dependency = True)
@@ -93,20 +93,14 @@ use_repo(python)
 
 bazel_dep(name = "googletest", version = "1.17.0.bcr.1")
 bazel_dep(name = "rapidjson", version = "1.1.0")
+bazel_dep(name = "score_baselibs", version = "0.2.4")
 bazel_dep(name = "score_communication", version = "0.1.2")
 git_override(
     module_name = "score_communication",
-    commit = "3203fd41ea3509defc498e846e1674085d8469aa",
+    commit = "56448a5589a5f7d3921b873e8127b824a8c1ca95",
     remote = "https://github.com/eclipse-score/communication.git",
-)
-
-bazel_dep(name = "score_baselibs", version = "0.2.0")
-git_override(
-    module_name = "score_baselibs",
-    commit = "99d49637a2199f33a71edc479d39970e3bdcb271",
-    remote = "https://github.com/eclipse-score/baselibs.git",
 )
 
 # Rust dependencies
 
-bazel_dep(name = "score_baselibs_rust", version = "0.0.5")
+bazel_dep(name = "score_baselibs_rust", version = "0.1.0")
