@@ -1,3 +1,5 @@
+load("@rules_cc//cc:defs.bzl", "cc_library")
+
 # *******************************************************************************
 # Copyright (c) 2025 Contributors to the Eclipse Foundation
 #
