@@ -2,10 +2,10 @@
 * @antonkri @pawelrutkaq @arsibo
 
 # datarouter owners
-/score/datarouter @antonkri
+/score/datarouter @antonkri @4og
 
 # mw/log owners
-/score/mw/common_features.bzl @antonkri
+/score/mw/common_features.bzl @antonkri @4og
 
 /score/mw/log @antonkri @4og
 
