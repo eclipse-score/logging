@@ -19,6 +19,8 @@
 #include "score/memory.hpp"
 #include <score/jthread.hpp>
 
+#include <algorithm>
+#include <array>
 #include <cstring>
 #include <iostream>
 #include <sstream>
@@ -136,8 +138,8 @@ MessagePassingServer::MessagePassingServer(MessagePassingServer::SessionFactory 
         MessagePassingConfig::kMaxQueuedNotifies};
     receiver_ = server_factory_->Create(service_protocol_config, server_config);
 
-    auto connect_callback = [this_ptr = this](score::message_passing::IServerConnection& connection) noexcept
-        -> std::uintptr_t {
+    auto connect_callback = [this_ptr =
+                                 this](score::message_passing::IServerConnection& connection) noexcept -> std::uintptr_t {
         const pid_t client_pid = connection.GetClientIdentity().pid;
         {
             std::lock_guard<std::mutex> lock(this_ptr->mutex_);

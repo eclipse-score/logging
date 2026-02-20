@@ -81,7 +81,7 @@ constexpr pid_t kClienT2Pid = 1002;
 constexpr std::uint32_t kMaxSendBytes{17U};
 constexpr std::uint32_t kMaxNotifyBytes{1U};
 
-std::uint32_t gKReceiverQueueMaxSize = 0;
+std::uint32_t gKReceiverQueueMaxSize = 1;
 
 class MockSession : public MessagePassingServer::ISession
 {

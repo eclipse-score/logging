@@ -361,6 +361,11 @@ score::cpp::expected_blank<score::os::Error> DatarouterMessageClientImpl::Create
             sender_state_ = new_state;
         }
         state_condition_.notify_all();
+
+        if (new_state == score::message_passing::IClientConnection::State::kStopped)
+        {
+            RequestInternalShutdown();
+        }
     };
 
     auto notify_callback = [this](score::cpp::span<const std::uint8_t> message) noexcept {

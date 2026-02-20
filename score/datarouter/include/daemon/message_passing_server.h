@@ -133,17 +133,19 @@ class MessagePassingServer : public IMessagePassingServerSessionWrapper
 
     struct SessionWrapper
     {
-        SessionWrapper(IMessagePassingServerSessionWrapper* server, pid_t pid, std::unique_ptr<ISession> session)
-            : server_(server),
-              pid_(pid),
-              session_(std::move(session)),
-              connection_(nullptr),
-              acquire_in_flight_(false),
-              enqueued_(false),
-              running_(false),
-              to_delete_(false),
-              closed_by_peer_(false),
-              to_force_finish_(false)
+        SessionWrapper(IMessagePassingServerSessionWrapper* message_passing_server,
+                       pid_t client_pid,
+                       std::unique_ptr<ISession> message_passing_session)
+            : server(message_passing_server),
+              pid(client_pid),
+              session(std::move(message_passing_session)),
+              connection(nullptr),
+              acquire_in_flight(false),
+              enqueued(false),
+              running(false),
+              to_delete(false),
+              closed_by_peer(false),
+              to_force_finish(false)
         {
         }
 

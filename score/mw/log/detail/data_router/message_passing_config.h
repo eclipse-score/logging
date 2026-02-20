@@ -32,8 +32,8 @@ struct MessagePassingConfig
     static constexpr std::uint32_t kMaxMessageSize{17U};
 
     /// \brief Maximum number of messages in receiver queue.
-    /// \note Value not used at the moment of integration with message passing library. May change in the future.
-    static constexpr std::uint32_t kMaxReceiverQueueSize{0U};
+    /// \note Value set based on the recommendation in message_passing/i_server_factory.h
+    static constexpr std::uint32_t kMaxReceiverQueueSize{1U};
 
     /// \brief Number of pre-allocated connections.
     static constexpr std::uint32_t kPreAllocConnections{0U};
