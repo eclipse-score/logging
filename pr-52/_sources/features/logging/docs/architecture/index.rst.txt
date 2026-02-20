@@ -95,6 +95,16 @@ Static Architecture
 
       {{ draw_feature(need(), needs) }}
 
+
+.. feat_arc_sta:: Logging Static View
+   :id: feat_arc_sta__logging__static_view
+   :security: YES
+   :safety: ASIL_B
+   :status: invalid
+   :fulfils: feat_req__logging__log_sinks_stdout
+   :includes: logic_arc_int__log_cpp__logging, logic_arc_int__log_rust__logging_rust
+   :belongs_to: feat__logging
+
 Dynamic Architecture
 --------------------
 

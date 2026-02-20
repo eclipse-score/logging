@@ -18,7 +18,4 @@ Logging
 .. toctree::
    :maxdepth: 1
 
-   ./mw-fr_logging.rst
-   ./docs/requirements/mw-fr_logging_req.rst
    ./docs/architecture/index.rst
-   ./docs/glossary.rst
