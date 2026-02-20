@@ -40,9 +40,10 @@ bazel_dep(name = "score_process", version = "1.4.0", dev_dependency = True)
 bazel_dep(name = "score_platform", version = "0.5.1", dev_dependency = True)
 git_override(
     module_name = "score_platform",
-    commit = "6829d691dfd4521ce376e22400bb104197967b7c",
+    commit = "00c1d25ed38616ca969f27ffe4feb9fc6fe53ee9",
     remote = "https://github.com/etas-contrib/score_score.git",
 )
+
 
 # Toolchains and extensions
 bazel_dep(name = "score_toolchains_gcc", version = "0.5", dev_dependency = True)
