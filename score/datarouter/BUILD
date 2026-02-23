@@ -57,6 +57,7 @@ cc_library(
         "//score/mw/log/detail/common:log_entry_deserialize",
         "@score_baselibs//score/language/futurecpp",
         "@score_baselibs//score/os/utils:path",
+        "@score_baselibs//score/quality/compiler_warnings",
     ],
 )
 
@@ -81,6 +82,7 @@ cc_library(
         "@score_baselibs//score/language/futurecpp",
         "@score_baselibs//score/os:socket",
         "@score_baselibs//score/os/utils:signal",
+        "@score_baselibs//score/quality/compiler_warnings",
     ],
 )
 

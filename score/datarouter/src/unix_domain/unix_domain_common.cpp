@@ -15,6 +15,7 @@
 #include "score/os/errno.h"
 #include "score/os/socket.h"
 #include "score/os/utils/signal.h"
+#include "score/quality/compiler_warnings/warnings.h"
 #include <unistd.h>
 #include <cstring>
 
@@ -53,21 +54,10 @@ static_assert(kSocketCmsgSpace == CMSG_SPACE(sizeof(int) * 1U), "Invalid constan
 void CmsgLenSuppressWarnings(struct cmsghdr* cmsg, size_t num_fds)
 {
 #ifdef __QNX__
-// NOLINTBEGIN(score-banned-preprocessor-directives) : required due to compiler warning for qnx
-/*
-Deviation from Rule A16-7-1:
-- The #pragma directive shall not be used
-Justification:
-- required due to compiler warning for qnx
-*/
-// coverity[autosar_cpp14_a16_7_1_violation] see above
-#pragma GCC diagnostic push
-// coverity[autosar_cpp14_a16_7_1_violation] see above
-#pragma GCC diagnostic ignored "-Wsign-conversion"
+    DISABLE_WARNING_PUSH
+    DISABLE_WARNING_SIGN_CONVERSION
     cmsg->cmsg_len = static_cast<socklen_t>(CMSG_LEN(sizeof(std::int32_t) * num_fds));
-// coverity[autosar_cpp14_a16_7_1_violation] see above
-#pragma GCC diagnostic pop
-// NOLINTEND(score-banned-preprocessor-directives)
+    DISABLE_WARNING_POP
 #else
     cmsg->cmsg_len = CMSG_LEN(sizeof(std::int32_t) * num_fds);
 #endif
@@ -77,11 +67,9 @@ int32_t* CmsgDataSuppressWarning(struct cmsghdr* cmsg)
 {
     int32_t* fdptr = nullptr;
 #ifdef __QNX__
-// NOLINTBEGIN(score-banned-preprocessor-directives) : required due to compiler warning for qnx
-// coverity[autosar_cpp14_a16_7_1_violation] see above
-#pragma GCC diagnostic push
-// coverity[autosar_cpp14_a16_7_1_violation] see above
-#pragma GCC diagnostic ignored "-Wsign-conversion"
+    DISABLE_WARNING_PUSH
+    DISABLE_WARNING_SIGN_CONVERSION
+
     /*
     Deviation from Rule M5-0-15:
     - Array indexing shall be the only form of pointer arithmetic
@@ -94,9 +82,7 @@ int32_t* CmsgDataSuppressWarning(struct cmsghdr* cmsg)
     // coverity[autosar_cpp14_m5_0_15_violation]
     // coverity[autosar_cpp14_m5_2_8_violation]
     fdptr = static_cast<std::int32_t*>(static_cast<void*>(CMSG_DATA(cmsg)));
-// coverity[autosar_cpp14_a16_7_1_violation] see above
-#pragma GCC diagnostic pop
-// NOLINTEND(score-banned-preprocessor-directives)
+    DISABLE_WARNING_POP
 #else
     // coverity[autosar_cpp14_m5_0_15_violation] see above
     // coverity[autosar_cpp14_m5_2_8_violation] see above

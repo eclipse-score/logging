@@ -61,6 +61,7 @@ cc_library(
         "@score_baselibs//score/mw/log/detail/text_recorder:file_output_backend",
         "@score_baselibs//score/mw/log/detail/text_recorder:message_builder_interface",
         "@score_baselibs//score/os/utils:high_resolution_steady_clock",
+        "@score_baselibs//score/quality/compiler_warnings",
         "@score_baselibs//score/static_reflection_with_serialization/serialization",
     ],
 )
