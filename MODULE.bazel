@@ -29,18 +29,18 @@ bazel_dep(name = "platforms", version = "1.0.0")
 bazel_dep(name = "score_bazel_platforms", version = "0.0.3")
 bazel_dep(name = "score_docs_as_code", version = "2.2.0")
 git_override(
-    module_name = "score_docs_as_code",
-    commit = "1e0c4f5a52fbb327ec2929da00d51b080fcf6f10",
-    remote = "https://github.com/etas-contrib/score_docs-as-code.git",
+     module_name = "score_docs_as_code",
+     commit = "8cd9b194921122e345b03aa78d7a421164abaa37",
+     remote = "https://github.com/etas-contrib/score_docs-as-code.git",
 )
 bazel_dep(name = "score_tooling", version = "1.0.4")
 bazel_dep(name = "score_rust_policies", version = "0.0.3")
 
-bazel_dep(name = "score_process", version = "1.4.0", dev_dependency = True)
+bazel_dep(name = "score_process", version = "1.4.3", dev_dependency = True)
 bazel_dep(name = "score_platform", version = "0.5.1", dev_dependency = True)
 git_override(
     module_name = "score_platform",
-    commit = "00c1d25ed38616ca969f27ffe4feb9fc6fe53ee9",
+    commit = "618e84e005aa83363ecba095d8370412bf45c739",
     remote = "https://github.com/etas-contrib/score_score.git",
 )
 
@@ -114,15 +114,17 @@ bazel_dep(name = "rapidjson", version = "1.1.0")
 bazel_dep(name = "score_baselibs", version = "0.2.0")
 git_override(
     module_name = "score_baselibs",
-    commit = "458dbd6ef269326405006222c68dc9146be119b6",
+    commit = "2fd2305c72e5fc6234d3e52dc99ae83916847075",
     remote = "https://github.com/etas-contrib/score_baselibs.git",
 )
+
 
 # Rust dependencies
 
 bazel_dep(name = "score_baselibs_rust", version = "0.0.3")
 git_override(
     module_name = "score_baselibs_rust",
-    commit = "70ff0888f8c5f5286c9134752f4dae9dc50b888c",
+    commit = "f4fe1d0336f2782787b324ec519ea82ce435c67a",
     remote = "https://github.com/etas-contrib/score_baselibs_rust.git",
 )
+

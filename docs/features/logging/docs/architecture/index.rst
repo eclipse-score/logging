@@ -80,20 +80,20 @@ Static Architecture
 
          {{ draw_feature(need(), needs) }}
 
+..
+   .. feat:: Logging
+      :id: feat__logging
+      :security: YES
+      :safety: ASIL_B
+      :status: valid
+      :includes: logic_arc_int__log_cpp__logging, logic_arc_int__log_rust__logging_rust
+      :consists_of: comp__log_rust, comp__log_cpp, comp__log_bridge, comp__datarouter, comp__recorders
+      
+      .. needarch::
+         :scale: 50
+         :align: center
 
-.. feat:: Logging
-   :id: feat__logging
-   :security: YES
-   :safety: ASIL_B
-   :status: valid
-   :includes: logic_arc_int__log_cpp__logging, logic_arc_int__log_rust__logging_rust
-   :consists_of: comp__log_rust, comp__log_cpp, comp__log_bridge, comp__datarouter, comp__recorders
-   
-   .. needarch::
-      :scale: 50
-      :align: center
-
-      {{ draw_feature(need(), needs) }}
+         {{ draw_feature(need(), needs) }}
 
 
 .. feat_arc_sta:: Logging Static View
@@ -102,8 +102,14 @@ Static Architecture
    :safety: ASIL_B
    :status: invalid
    :fulfils: feat_req__logging__log_sinks_stdout
-   :includes: logic_arc_int__log_cpp__logging, logic_arc_int__log_rust__logging_rust
+   :includes: logic_arc_int__log_cpp__logging, logic_arc_int__log_rust__logging_rust, logic_arc_int__log_rust__score_logger,logic_arc_int__log_cpp__recorder, logic_arc_int__logging__buffer,logic_arc_int__baselibs__json
    :belongs_to: feat__logging
+
+   .. needarch::
+      :scale: 50
+      :align: center
+
+      {{ draw_feature(need(), needs) }}
 
 Dynamic Architecture
 --------------------
@@ -133,12 +139,7 @@ Logical Interfaces
 
 
 
-.. logic_arc_int_op:: Log
-   :id: logic_arc_int_op__logging__log
-   :security: YES
-   :safety: ASIL_B
-   :status: valid
-   :included_by: logic_arc_int__log_cpp__logging
+
 
 
 Architecture draft from CFT discussion
