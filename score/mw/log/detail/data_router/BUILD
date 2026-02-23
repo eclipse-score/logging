@@ -119,6 +119,7 @@ cc_test(
         "data_router_backend_test.cpp",
         "data_router_message_client_factory_mock.h",
         "data_router_message_client_factory_test.cpp",
+        "data_router_message_client_identifiers_test.cpp",
         "data_router_message_client_mock.h",
         "data_router_message_client_test.cpp",
         "data_router_messages_test.cpp",

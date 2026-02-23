@@ -110,11 +110,18 @@ void DatarouterMessageClientImpl::ConnectToDatarouter() noexcept
         return;
     }
 
+    // LCOV_EXCL_START : Defensive check for a rare race between the condition_variable::wait
+    // above and the subsequent StartReceiver() call. The wait predicate only returns when
+    // sender_state_ == kReady or stop_source_.stop_requested() is true. After the wait
+    // returns and the mutex is released, the sender state could theoretically change again
+    // before we reach this point. This branch protects against that scenario but is not
+    // practically coverable in a deterministic unit test.
     if (!sender_state_.has_value() || (sender_state_.value() != score::message_passing::IClientConnection::State::kReady))
     {
         RequestInternalShutdown();
         return;
     }
+    // LCOV_EXCL_STOP
 
     if (StartReceiver() == false)
     {
