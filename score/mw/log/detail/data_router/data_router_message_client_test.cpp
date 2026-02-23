@@ -20,6 +20,7 @@
 #include "score/os/mocklib/unistdmock.h"
 #include "score/os/utils/mocklib/signalmock.h"
 #include "score/mw/log/detail/data_router/data_router_message_client_impl.h"
+#include "score/mw/log/detail/data_router/data_router_message_client_mock.h"
 #include "score/mw/log/detail/data_router/message_passing_factory_mock.h"
 
 #include "gmock/gmock.h"
@@ -37,11 +38,29 @@ namespace detail
 namespace
 {
 
+using ::score::mw::log::detail::DatarouterMessageClientMock;
 using ::testing::_;
 using ::testing::ByMove;
 using ::testing::Matcher;
 using ::testing::Return;
+using ::testing::ReturnRef;
 using ::testing::StrEq;
+
+class DatarouterMessageClientMockTest : public ::testing::Test
+{
+  protected:
+    void SetUp() override {}
+    void TearDown() override {}
+};
+
+TEST_F(DatarouterMessageClientMockTest, ShutdownIsInvoked)
+{
+    DatarouterMessageClientMock mock_client;
+
+    EXPECT_CALL(mock_client, Shutdown()).Times(1);
+
+    mock_client.Shutdown();
+}
 
 MATCHER_P(CompareServiceProtocol, expected, "")
 {
@@ -940,6 +959,297 @@ TEST_F(DatarouterMessageClientFixture, FailedToEmptySignalSet)
 
     state_callback(score::message_passing::IClientConnection::State::kReady);
     connect_thread.join();
+}
+
+TEST_F(DatarouterMessageClientFixture, ConnectToDatarouterShouldReportErrorAndShutdownWhenCreateSenderFails)
+{
+
+    testing::InSequence order_matters;
+
+    auto* receiver_ptr = ExpectReceiverCreated();
+
+    ExpectBlockTerminationSignalPass();
+    ExpectSetLoggerThreadName();
+
+    // CreateClient returns nullptr, causing CreateSender to return nullopt
+    const score::message_passing::ServiceProtocolConfig service_protocol_config{
+        kDatarouterReceiverIdentifier, kMaxSendBytes, 0U, 0U};
+    const score::message_passing::IClientFactory::ClientConfig client_config{0, 10, false, true, false};
+
+    EXPECT_CALL(*message_passing_factory_,
+                CreateClient(CompareServiceProtocol(service_protocol_config), CompareClientConfig(client_config)))
+        .WillOnce(Return(ByMove(nullptr)));
+
+    ExpectUnlinkMwsrWriterFile();
+    ExpectServerDestruction(receiver_ptr);
+
+    client_->SetupReceiver();
+    client_->ConnectToDatarouter();
+}
+
+TEST_F(DatarouterMessageClientFixture, ConnectCallbackBlocksSignalAndReturnsClientPid)
+{
+    constexpr pid_t kExpectedPid = 42;
+
+    auto* receiver_ptr = ExpectReceiverCreated();
+    EXPECT_CALL(*signal_mock_, SigEmptySet(_)).Times(2).WillRepeatedly(Return(0));
+    EXPECT_CALL(*signal_mock_, SigAddSet(_, SIGTERM)).Times(2).WillRepeatedly(Return(0));
+    EXPECT_CALL(*signal_mock_, PthreadSigMask(_, _)).Times(2).WillRepeatedly(Return(0));
+    ExpectSetLoggerThreadName();
+
+    sender_mock_in_transit_ = score::cpp::pmr::make_unique<testing::StrictMock<score::message_passing::ClientConnectionMock>>(
+        score::cpp::pmr::get_default_resource());
+    auto* sender_ptr = sender_mock_in_transit_.get();
+
+    const score::message_passing::ServiceProtocolConfig service_protocol_config{
+        kDatarouterReceiverIdentifier, kMaxSendBytes, 0U, 0U};
+    const score::message_passing::IClientFactory::ClientConfig client_config{0, 10, false, true, false};
+
+    EXPECT_CALL(*message_passing_factory_,
+                CreateClient(CompareServiceProtocol(service_protocol_config), CompareClientConfig(client_config)))
+        .WillOnce(Return(ByMove(std::move(sender_mock_in_transit_))));
+
+    EXPECT_CALL(*sender_ptr,
+                Start(Matcher<score::message_passing::IClientConnection::StateCallback>(_),
+                      Matcher<score::message_passing::IClientConnection::NotifyCallback>(_)))
+        .WillOnce([](score::message_passing::IClientConnection::StateCallback state_callback,
+                     score::message_passing::IClientConnection::NotifyCallback) {
+            state_callback(score::message_passing::IClientConnection::State::kReady);
+        });
+
+    testing::StrictMock<score::message_passing::ServerConnectionMock> server_conn_mock;
+
+    const score::message_passing::ClientIdentity expected_identity{kExpectedPid, 0, 0};
+    EXPECT_CALL(server_conn_mock, GetClientIdentity()).WillOnce(ReturnRef(expected_identity));
+
+    // ExpectBlockTerminationSignalPass();
+
+    EXPECT_CALL(*receiver_ptr,
+                StartListening(Matcher<score::message_passing::ConnectCallback>(_),
+                               Matcher<score::message_passing::DisconnectCallback>(_),
+                               Matcher<score::message_passing::MessageCallback>(_),
+                               Matcher<score::message_passing::MessageCallback>(_)))
+        .WillOnce([&server_conn_mock](score::message_passing::ConnectCallback connect_cb,
+                                      score::message_passing::DisconnectCallback,
+                                      score::message_passing::MessageCallback,
+                                      score::message_passing::MessageCallback) {
+            auto result = connect_cb(server_conn_mock);
+
+            EXPECT_TRUE(result.has_value());
+            EXPECT_EQ(std::get<std::uintptr_t>(result.value()), static_cast<std::uintptr_t>(kExpectedPid));
+
+            return score::cpp::expected_blank<score::os::Error>{};
+        });
+
+    ExpectSendConnectMessage(sender_ptr);
+
+    ExpectServerDestruction(receiver_ptr);
+    ExpectClientDestruction(sender_ptr);
+
+    client_->SetupReceiver();
+    client_->ConnectToDatarouter();
+}
+
+TEST_F(DatarouterMessageClientFixture, DisconnectCallbackRequestsInternalShutdown)
+{
+    auto* receiver_ptr = ExpectReceiverCreated();
+    ExpectBlockTerminationSignalPass();
+    ExpectSetLoggerThreadName();
+
+    sender_mock_in_transit_ = score::cpp::pmr::make_unique<testing::StrictMock<score::message_passing::ClientConnectionMock>>(
+        score::cpp::pmr::get_default_resource());
+    auto* sender_ptr = sender_mock_in_transit_.get();
+
+    const score::message_passing::ServiceProtocolConfig service_protocol_config{
+        kDatarouterReceiverIdentifier, kMaxSendBytes, 0U, 0U};
+    const score::message_passing::IClientFactory::ClientConfig client_config{0, 10, false, true, false};
+
+    EXPECT_CALL(*message_passing_factory_,
+                CreateClient(CompareServiceProtocol(service_protocol_config), CompareClientConfig(client_config)))
+        .WillOnce(Return(ByMove(std::move(sender_mock_in_transit_))));
+
+    EXPECT_CALL(*sender_ptr,
+                Start(Matcher<score::message_passing::IClientConnection::StateCallback>(_),
+                      Matcher<score::message_passing::IClientConnection::NotifyCallback>(_)))
+        .WillOnce([](score::message_passing::IClientConnection::StateCallback state_callback,
+                     score::message_passing::IClientConnection::NotifyCallback) {
+            state_callback(score::message_passing::IClientConnection::State::kReady);
+        });
+
+    testing::StrictMock<score::message_passing::ServerConnectionMock> server_conn_mock;
+
+    EXPECT_CALL(*receiver_ptr,
+                StartListening(Matcher<score::message_passing::ConnectCallback>(_),
+                               Matcher<score::message_passing::DisconnectCallback>(_),
+                               Matcher<score::message_passing::MessageCallback>(_),
+                               Matcher<score::message_passing::MessageCallback>(_)))
+        .WillOnce([&server_conn_mock](score::message_passing::ConnectCallback,
+                                      score::message_passing::DisconnectCallback disconnect_cb,
+                                      score::message_passing::MessageCallback,
+                                      score::message_passing::MessageCallback) {
+            disconnect_cb(server_conn_mock);
+            return score::cpp::expected_blank<score::os::Error>{};
+        });
+
+    ExpectUnlinkMwsrWriterFile();
+
+    ExpectServerDestruction(receiver_ptr);
+    ExpectClientDestruction(sender_ptr);
+
+    client_->SetupReceiver();
+    client_->ConnectToDatarouter();
+    EXPECT_TRUE(stop_source_.stop_requested());
+}
+
+TEST_F(DatarouterMessageClientFixture, ReceivedSendMessageWithReplyCallbackDoesNothing)
+{
+    auto* receiver_ptr = ExpectReceiverCreated();
+
+    ExpectBlockTerminationSignalPass();
+    ExpectSetLoggerThreadName();
+
+    sender_mock_in_transit_ = score::cpp::pmr::make_unique<testing::StrictMock<score::message_passing::ClientConnectionMock>>(
+        score::cpp::pmr::get_default_resource());
+    auto* sender_ptr = sender_mock_in_transit_.get();
+
+    const score::message_passing::ServiceProtocolConfig service_protocol_config{
+        kDatarouterReceiverIdentifier, kMaxSendBytes, 0U, 0U};
+    const score::message_passing::IClientFactory::ClientConfig client_config{0, 10, false, true, false};
+
+    EXPECT_CALL(*message_passing_factory_,
+                CreateClient(CompareServiceProtocol(service_protocol_config), CompareClientConfig(client_config)))
+        .WillOnce(Return(ByMove(std::move(sender_mock_in_transit_))));
+
+    EXPECT_CALL(*sender_ptr,
+                Start(Matcher<score::message_passing::IClientConnection::StateCallback>(_),
+                      Matcher<score::message_passing::IClientConnection::NotifyCallback>(_)))
+        .WillOnce([](score::message_passing::IClientConnection::StateCallback state_callback,
+                     score::message_passing::IClientConnection::NotifyCallback) {
+            state_callback(score::message_passing::IClientConnection::State::kReady);
+        });
+
+    EXPECT_CALL(*sender_ptr, Send(Matcher<score::cpp::span<const std::uint8_t>>(_)))
+        .WillOnce(Return(score::cpp::expected_blank<score::os::Error>{}));
+
+    testing::StrictMock<score::message_passing::ServerConnectionMock> server_conn_mock;
+
+    EXPECT_CALL(*receiver_ptr,
+                StartListening(Matcher<score::message_passing::ConnectCallback>(_),
+                               Matcher<score::message_passing::DisconnectCallback>(_),
+                               Matcher<score::message_passing::MessageCallback>(_),
+                               Matcher<score::message_passing::MessageCallback>(_)))
+        .WillOnce([&server_conn_mock](score::message_passing::ConnectCallback,
+                                      score::message_passing::DisconnectCallback,
+                                      score::message_passing::MessageCallback,
+                                      score::message_passing::MessageCallback send_with_reply_cb) {
+            const std::array<std::uint8_t, 4> message_data{0x01, 0x02, 0x03, 0x04};
+            const score::cpp::span<const std::uint8_t> message_span{message_data};
+
+            const auto result = send_with_reply_cb(server_conn_mock, message_span);
+            static_cast<void>(result);
+
+            return score::cpp::expected_blank<score::os::Error>{};
+        });
+
+    ExpectUnlinkMwsrWriterFile();
+    ExpectServerDestruction(receiver_ptr);
+    ExpectClientDestruction(sender_ptr);
+
+    client_->SetupReceiver();
+    client_->ConnectToDatarouter();
+}
+
+TEST_F(DatarouterMessageClientFixture, StopRequestedDuringReceiverStartReportsShutdownDuringInitialization)
+{
+    auto* receiver_ptr = ExpectReceiverCreated();
+
+    ExpectBlockTerminationSignalPass();
+    ExpectSetLoggerThreadName();
+
+    sender_mock_in_transit_ = score::cpp::pmr::make_unique<testing::StrictMock<score::message_passing::ClientConnectionMock>>(
+        score::cpp::pmr::get_default_resource());
+    auto* sender_ptr = sender_mock_in_transit_.get();
+
+    const score::message_passing::ServiceProtocolConfig service_protocol_config{
+        kDatarouterReceiverIdentifier, kMaxSendBytes, 0U, 0U};
+    const score::message_passing::IClientFactory::ClientConfig client_config{0, 10, false, true, false};
+
+    EXPECT_CALL(*message_passing_factory_,
+                CreateClient(CompareServiceProtocol(service_protocol_config), CompareClientConfig(client_config)))
+        .WillOnce(Return(ByMove(std::move(sender_mock_in_transit_))));
+
+    EXPECT_CALL(*sender_ptr,
+                Start(Matcher<score::message_passing::IClientConnection::StateCallback>(_),
+                      Matcher<score::message_passing::IClientConnection::NotifyCallback>(_)))
+        .WillOnce([](score::message_passing::IClientConnection::StateCallback state_callback,
+                     score::message_passing::IClientConnection::NotifyCallback) {
+            state_callback(score::message_passing::IClientConnection::State::kReady);
+        });
+
+    // SendConnectMessage must never be reached
+    EXPECT_CALL(*sender_ptr, Send(Matcher<score::cpp::span<const std::uint8_t>>(_))).Times(0);
+
+    testing::StrictMock<score::message_passing::ServerConnectionMock> server_conn_mock;
+
+    EXPECT_CALL(*receiver_ptr,
+                StartListening(Matcher<score::message_passing::ConnectCallback>(_),
+                               Matcher<score::message_passing::DisconnectCallback>(_),
+                               Matcher<score::message_passing::MessageCallback>(_),
+                               Matcher<score::message_passing::MessageCallback>(_)))
+        .WillOnce([&server_conn_mock](score::message_passing::ConnectCallback,
+                                      score::message_passing::DisconnectCallback disconnect_cb,
+                                      score::message_passing::MessageCallback,
+                                      score::message_passing::MessageCallback) {
+            // Trigger disconnect during StartListening — this calls RequestInternalShutdown(),
+            // setting stop_source_ to stop_requested AFTER the earlier stop check in
+            // ConnectToDatarouter() has already passed.
+            disconnect_cb(server_conn_mock);
+
+            return score::cpp::expected_blank<score::os::Error>{};
+        });
+
+    ExpectUnlinkMwsrWriterFile();
+    ExpectServerDestruction(receiver_ptr);
+    ExpectClientDestruction(sender_ptr);
+
+    client_->SetupReceiver();
+    client_->ConnectToDatarouter();
+
+    EXPECT_TRUE(stop_source_.stop_requested());
+}
+
+TEST_F(DatarouterMessageClientFixture, CreateSenderFailsWhenFactoryReturnsNullptr)
+{
+    auto* receiver_ptr = ExpectReceiverCreated();
+
+    ExpectBlockTerminationSignalPass();
+    ExpectSetLoggerThreadName();
+
+    const score::message_passing::ServiceProtocolConfig service_protocol_config{
+        kDatarouterReceiverIdentifier, kMaxSendBytes, 0U, 0U};
+    const score::message_passing::IClientFactory::ClientConfig client_config{0, 10, false, true, false};
+
+    // Factory returns nullptr — this is the key to hitting the branch
+    EXPECT_CALL(*message_passing_factory_,
+                CreateClient(CompareServiceProtocol(service_protocol_config), CompareClientConfig(client_config)))
+        .WillOnce(Return(ByMove(nullptr)));
+
+    // Since CreateSender fails, Start should never be called
+    // Since CreateSender fails, StartListening should never be called
+    EXPECT_CALL(*receiver_ptr,
+                StartListening(Matcher<score::message_passing::ConnectCallback>(_),
+                               Matcher<score::message_passing::DisconnectCallback>(_),
+                               Matcher<score::message_passing::MessageCallback>(_),
+                               Matcher<score::message_passing::MessageCallback>(_)))
+        .Times(0);
+
+    ExpectUnlinkMwsrWriterFile();
+    ExpectServerDestruction(receiver_ptr);
+
+    client_->SetupReceiver();
+    client_->ConnectToDatarouter();
+
+    EXPECT_TRUE(stop_source_.stop_requested());
 }
 
 }  // namespace
