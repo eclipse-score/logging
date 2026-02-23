@@ -13,6 +13,8 @@
 #ifndef SCORE_MW_LOG_DETAIL_FILE_RECORDER_DLT_MESSAGE_BUILDER_TYPES_H
 #define SCORE_MW_LOG_DETAIL_FILE_RECORDER_DLT_MESSAGE_BUILDER_TYPES_H
 
+#include "score/quality/compiler_warnings/warnings.h"
+
 #include <array>
 #include <cstdint>
 #include <limits>
@@ -75,26 +77,11 @@ constexpr std::size_t kDltStorageHeaderSize = 16UL;
 
 constexpr std::size_t kMaxDltHeaderSize = 512UL;
 
-// NOLINTBEGIN(score-banned-preprocessor-directives) needed to use PACKED attribute
 // needed to use PACKED attribute as GNU extension
-// coverity[autosar_cpp14_a16_0_1_violation]
-#if defined(__GNUC__)
-// needed to use PACKED attribute
-// coverity[autosar_cpp14_a16_7_1_violation]
-// coverity[autosar_cpp14_a16_0_1_violation]
-#pragma GCC diagnostic push
-// needed to use PACKED attribute
-// coverity[autosar_cpp14_a16_7_1_violation]
-// coverity[autosar_cpp14_a16_0_1_violation]
-#pragma GCC diagnostic ignored "-Wpacked"
-// needed to use PACKED attribute
-// coverity[autosar_cpp14_a16_7_1_violation]
-// coverity[autosar_cpp14_a16_0_1_violation]
-#pragma GCC diagnostic ignored "-Wattributes"
-// needed to use PACKED attribute as GNU extension
-// coverity[autosar_cpp14_a16_0_1_violation]
-#endif
-// NOLINTEND(score-banned-preprocessor-directives) needed to use PACKED attribute
+
+DISABLE_WARNING_PUSH
+DISABLE_WARNING_PACKED
+DISABLE_WARNING_ATTRIBUTES
 
 /**
  * The structure of the DLT standard header. This header is used in each DLT message.
@@ -148,17 +135,7 @@ struct DltVerboseHeader
 } PACKED;
 
 // needed to use PACKED attribute as GNU extension
-// coverity[autosar_cpp14_a16_0_1_violation]
-#if defined(__GNUC__)
-// NOLINTBEGIN(score-banned-preprocessor-directives) needed to use PACKED attribute
-// needed to use PACKED attribute
-// coverity[autosar_cpp14_a16_7_1_violation]
-// coverity[autosar_cpp14_a16_0_1_violation]
-#pragma GCC diagnostic pop
-// NOLINTEND(score-banned-preprocessor-directives) needed to use PACKED attribute
-// needed to use PACKED attribute as GNU extension
-// coverity[autosar_cpp14_a16_0_1_violation]
-#endif
+DISABLE_WARNING_POP
 
 }  // namespace detail
 }  // namespace log

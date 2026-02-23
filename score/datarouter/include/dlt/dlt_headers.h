@@ -28,27 +28,14 @@ namespace internal
 
 static constexpr uint32_t kDltMessageSize = 65536UL;
 
-// NOLINTBEGIN(score-banned-preprocessor-directives) see below
 /**
  * Suppress compiler warnings related to Wpacked and Wattributes
  * because some structures declared with PACKED attribute
  * if this attribute has no effect it causes warning
  */
-#if defined(__INTEL_COMPILER)  // ICC warnings not complete
-// required due to ICC warnings
-// coverity[autosar_cpp14_a16_7_1_violation]
-#pragma warning(push)
-#elif defined(__GNUC__)
-// required due to ICC warnings
-// coverity[autosar_cpp14_a16_7_1_violation]
-#pragma GCC diagnostic push
-// required due to ICC warnings
-// coverity[autosar_cpp14_a16_7_1_violation]
-#pragma GCC diagnostic ignored "-Wpacked"
-// required due to ICC warnings
-// coverity[autosar_cpp14_a16_7_1_violation]
-#pragma GCC diagnostic ignored "-Wattributes"
-#endif
+DISABLE_WARNING_PUSH
+DISABLE_WARNING_PACKED
+DISABLE_WARNING_ATTRIBUTES
 
 typedef struct
 {
@@ -64,16 +51,7 @@ typedef struct
     DltExtendedHeader ext;
 } PACKED DltVerboseHeader;
 
-#if defined(__INTEL_COMPILER)
-// required due to ICC warnings
-// coverity[autosar_cpp14_a16_7_1_violation]
-#pragma warning(pop)
-#elif defined(__GNUC__)
-// required due to ICC warnings
-// coverity[autosar_cpp14_a16_7_1_violation]
-#pragma GCC diagnostic pop
-#endif
-// NOLINTEND(score-banned-preprocessor-directives)
+DISABLE_WARNING_POP
 
 inline void ConstructDltStorageHeader(DltStorageHeader& storagehdr, uint32_t secs, int32_t microsecs)
 {
