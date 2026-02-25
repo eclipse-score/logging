@@ -86,7 +86,7 @@ TEST_F(StubConfigSessionUT, Tick_ReturnsTrue)
     score::logging::daemon::StubConfigSession session(std::move(handle), handler);
 
     // Act
-    bool result = session.tick();
+    bool result = session.Tick();
 
     // Assert
     EXPECT_TRUE(result);
@@ -103,9 +103,9 @@ TEST_F(StubConfigSessionUT, OnCommand_DoesNothing)
 
     // Act & Assert - Should not throw or crash
     EXPECT_NO_THROW({
-        session.on_command("test command");
-        session.on_command("");
-        session.on_command("another command");
+        session.OnCommand("test command");
+        session.OnCommand("");
+        session.OnCommand("another command");
     });
 }
 
@@ -120,8 +120,8 @@ TEST_F(StubConfigSessionUT, OnClosedByPeer_DoesNothing)
 
     // Act & Assert - Should not throw or crash
     EXPECT_NO_THROW({
-        session.on_closed_by_peer();
-        session.on_closed_by_peer();  // Can be called multiple times
+        session.OnClosedByPeer();
+        session.OnClosedByPeer();  // Can be called multiple times
     });
 }
 
@@ -139,9 +139,9 @@ TEST_F(StubConfigSessionUT, IsSessionInterface)
 
     // Assert - Should be able to call interface methods
     EXPECT_NO_THROW({
-        EXPECT_TRUE(session->tick());
-        session->on_command("test");
-        session->on_closed_by_peer();
+        EXPECT_TRUE(session->Tick());
+        session->OnCommand("test");
+        session->OnClosedByPeer();
     });
 }
 
@@ -177,7 +177,7 @@ TEST_F(StubConfigSessionFactoryUT, CreateConcreteSession_ReturnsValidSession)
 
     // Assert
     ASSERT_NE(session, nullptr);
-    EXPECT_TRUE(session->tick());
+    EXPECT_TRUE(session->Tick());
 }
 
 TEST_F(StubConfigSessionFactoryUT, CreateConfigSession_ReturnsValidSession)
@@ -194,7 +194,7 @@ TEST_F(StubConfigSessionFactoryUT, CreateConfigSession_ReturnsValidSession)
 
     // Assert
     ASSERT_NE(session, nullptr);
-    EXPECT_TRUE(session->tick());
+    EXPECT_TRUE(session->Tick());
 }
 
 TEST_F(StubConfigSessionFactoryUT, CreateConfigSession_WorksWithDifferentHandlerTypes)
@@ -243,10 +243,10 @@ TEST_F(StubConfigSessionFactoryUT, MultipleSessionCreation)
     for (const auto& session : sessions)
     {
         ASSERT_NE(session, nullptr);
-        EXPECT_TRUE(session->tick());
+        EXPECT_TRUE(session->Tick());
         EXPECT_NO_THROW({
-            session->on_command("test");
-            session->on_closed_by_peer();
+            session->OnCommand("test");
+            session->OnClosedByPeer();
         });
     }
 }

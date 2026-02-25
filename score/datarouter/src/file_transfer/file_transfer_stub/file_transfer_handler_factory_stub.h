@@ -52,7 +52,7 @@ class StubFileTransferHandlerFactory : public FileTransferHandlerFactory<StubFil
   public:
     explicit StubFileTransferHandlerFactory(Output& mock_output) : mock_output_(mock_output) {}
 
-    std::unique_ptr<LogParser::TypeHandler> createConcreteHandler()
+    std::unique_ptr<LogParser::TypeHandler> CreateConcreteHandler()
     {
         return std::make_unique<StubFileTransferStreamHandler>(mock_output_);
     }
