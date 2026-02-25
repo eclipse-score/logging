@@ -77,10 +77,6 @@ build:x86_64-linux --extra_toolchains=@score_toolchains_rust//toolchains/ferroce
 coverage --config=x86_64-linux
 coverage --instrumentation_filter="^//score/datarouter[/:],^//score/mw/log[/:],-//score/mw/.*/test[/:]"
 
-# coverage --experimental_generate_llvm_lcov
-# coverage --experimental_use_llvm_covmap
-# coverage --test_env=LLVM_PROFILE_CONTINUOUS_MODE=1
-
 # GCC-based coverage configuration
 coverage --combined_report=lcov
 coverage --test_env=COVERAGE_GCOV_OPTIONS=-bcu
