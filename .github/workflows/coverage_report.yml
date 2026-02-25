@@ -11,7 +11,7 @@
 # SPDX-License-Identifier: Apache-2.0
 # *******************************************************************************
 
-name: Code Coverage
+name: CPP/C++
 
 on:
   pull_request:
