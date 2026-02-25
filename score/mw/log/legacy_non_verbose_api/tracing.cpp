@@ -69,7 +69,7 @@ Logger::Logger(const score::cpp::optional<const score::mw::log::detail::Configur
     std::ignore = std::copy(config_.GetAppId().begin(), config_.GetAppId().end(), app_prefix_iter);
 }
 
-std::optional<LogLevel> Logger::GetLevelForContext(const std::string& name) const noexcept
+std::optional<LogLevel> Logger::GetLevelForContext(const std::string& name) const
 {
     const score::mw::log::config::NvMsgDescriptor* const msg_desc = nvconfig_.GetDltMsgDesc(name);
     if (msg_desc != nullptr)
