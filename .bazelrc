@@ -73,19 +73,16 @@ build:x86_64-linux --extra_toolchains=@score_toolchains_rust//toolchains/ferroce
 
 
 
-# With this instrumentation filter for our two main components, we ensure that `bazel coverage //...` is yielding the correct results
+# Coverage configuration for C++
 coverage --config=x86_64-linux
 coverage --instrumentation_filter="^//score/datarouter[/:],^//score/mw/log[/:],-//score/mw/.*/test[/:]"
-# Note: LLVM-specific flags - only use with LLVM/Clang toolchain
+
 # coverage --experimental_generate_llvm_lcov
 # coverage --experimental_use_llvm_covmap
 # coverage --test_env=LLVM_PROFILE_CONTINUOUS_MODE=1
-# coverage --cxxopt -mllvm
-# coverage --cxxopt -runtime-counter-relocation
 
 # GCC-based coverage configuration
 coverage --combined_report=lcov
-coverage --coverage_report_generator=@bazel_tools//tools/test/CoverageOutputGenerator/java/com/google/devtools/coverageoutputgenerator:Main
 coverage --test_env=COVERAGE_GCOV_OPTIONS=-bcu
 coverage --features=coverage
 coverage --cache_test_results=no
