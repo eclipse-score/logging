@@ -32,12 +32,12 @@ class StubConfigSession : public score::logging::ISession
     StubConfigSession(Handle&&, Handler&&)
     {
     }
-    bool tick() override
+    bool Tick() override
     {
         return true;
     }
-    void on_command(const std::string&) override {}
-    void on_closed_by_peer() override {}
+    void OnCommand(const std::string&) override {}
+    void OnClosedByPeer() override {}
 };
 
 }  // namespace daemon

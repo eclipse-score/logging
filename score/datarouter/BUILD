@@ -524,7 +524,7 @@ cc_library(
             "//conditions:default": ["//score/datarouter/src/persistency/stub_persistent_dictionary:stub_persistent_dictionary_factory"],
         }) + select({
             "//score/datarouter/build_configuration_flags:config_file_transfer": [
-                "//score/datarouter/src/file_transfer/file_transfer_impl:file_transfer_stream_handler",
+                ft_dep,
             ],
             "//conditions:default": [
                 "//score/datarouter/src/file_transfer/file_transfer_stub:file_transfer_stream_handler_stub",
@@ -552,7 +552,7 @@ cc_library(
             ],
         }),
     )
-    for name, ara_fact_dep, nv_dep, nv_stub_dep, dc_dep, dc_stub_dep, test_only in [
+    for name, ara_fact_dep, nv_dep, nv_stub_dep, dc_dep, dc_stub_dep, ft_dep, test_only in [
         (
             "",
             "//score/datarouter/src/persistency/ara_per_persistent_dictionary:ara_per_persistent_dictionary_factory",
@@ -560,6 +560,7 @@ cc_library(
             "//score/datarouter/src/dlt/nonverbose_dlt_stub:nonverbose_dlt_handler_stub",
             "//score/datarouter/src/configuration/dynamic_config/dynamic_config_impl:dynamic_config_session",
             "//score/datarouter/src/configuration/dynamic_config/dynamic_config_stub:config_session_stub",
+            "//score/datarouter/src/file_transfer/file_transfer_impl:file_transfer_stream_handler",
             False,
         ),
         (
@@ -569,6 +570,7 @@ cc_library(
             "//score/datarouter/src/dlt/nonverbose_dlt_stub:nonverbose_dlt_handler_stub_testing",
             "//score/datarouter/src/configuration/dynamic_config/dynamic_config_impl:dynamic_config_session_testing",
             "//score/datarouter/src/configuration/dynamic_config/dynamic_config_stub:config_session_stub_testing",
+            "//score/datarouter/src/file_transfer/file_transfer_impl:file_transfer_stream_handler_testing",
             True,
         ),
     ]
@@ -814,7 +816,7 @@ cc_library(
     deps = [
         ":datarouter_feature_config_testing",
         ":datarouter_lib",
-        ":dltserver",
+        ":dltserver_testing",
         ":persistentlogconfig",
         ":socketserver_config_lib_testing",
         "@score_baselibs//score/mw/log/configuration:nvconfigfactory",
@@ -939,10 +941,14 @@ cc_library(
     ],
     features = COMPILER_WARNING_FEATURES,
     strip_include_prefix = "mocks",
-    visibility = ["//score/datarouter/test:__subpackages__"],
+    visibility = [
+        "//score/datarouter/src/file_transfer:__subpackages__",
+        "//score/datarouter/test:__subpackages__",
+    ],
     deps = [
         ":dltserver_common",
         "@googletest//:gtest_main",
+        "@score_baselibs//score/os:socket",
     ],
 )
 
