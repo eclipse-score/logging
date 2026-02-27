@@ -1,0 +1,128 @@
+<diagram program="umletino" version="15.0.0"><zoom_level>10</zoom_level><help_text>Space for diagram notes</help_text><element><id>UMLGeneric</id><coordinates><x>80</x><y>0</y><w>130</w><h>40</h></coordinates><panel_attributes>_:LoggingClient_
+DataRouterRecorder
+
+bg=white</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>120</x><y>30</y><w>30</w><h>1100</h></coordinates><panel_attributes>lt=.
+layer=2</panel_attributes><additional_attributes>10;10;10;1080</additional_attributes></element><element><id>UMLGeneric</id><coordinates><x>2040</x><y>0</y><w>100</w><h>40</h></coordinates><panel_attributes>_:Datarouter_
+SourceSession
+
+bg=white</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>2080</x><y>30</y><w>30</w><h>1070</h></coordinates><panel_attributes>lt=.
+layer=2</panel_attributes><additional_attributes>10;10;10;1050</additional_attributes></element><element><id>UMLGeneric</id><coordinates><x>1320</x><y>0</y><w>260</w><h>40</h></coordinates><panel_attributes>score::mw::com::message_passing::
+Sender
+
+bg=white</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>1190</x><y>80</y><w>30</w><h>1050</h></coordinates><panel_attributes>lt=.
+layer=2</panel_attributes><additional_attributes>10;10;10;1030</additional_attributes></element><element><id>UMLFrame</id><coordinates><x>1100</x><y>50</y><w>190</w><h>1000</h></coordinates><panel_attributes>mw::com::message_passing
+Receiver Thread
+layer=1
+bg=white</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLFrame</id><coordinates><x>0</x><y>50</y><w>170</w><h>1090</h></coordinates><panel_attributes>User Thread
+bg=white
+layer=1</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>550</x><y>30</y><w>30</w><h>1100</h></coordinates><panel_attributes>lt=.</panel_attributes><additional_attributes>10;10;10;1080</additional_attributes></element><element><id>UMLGeneric</id><coordinates><x>1190</x><y>760</y><w>20</w><h>270</h></coordinates><panel_attributes>bg=white
+layer=2</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>1200</x><y>740</y><w>270</w><h>60</h></coordinates><panel_attributes>lt=&lt;-
+Send()
+message=
+[pid: &lt;pid&gt;, id: 0, payload: &lt;payload&gt; ]
+layer=2</panel_attributes><additional_attributes>10;20;250;20</additional_attributes></element><element><id>Relation</id><coordinates><x>320</x><y>740</y><w>890</w><h>40</h></coordinates><panel_attributes>lt=&lt;-
+OnMessageReceivedFromDatarouter(payload)
+layer=2</panel_attributes><additional_attributes>10;20;870;20</additional_attributes></element><element><id>UMLFrame</id><coordinates><x>1910</x><y>60</y><w>260</w><h>990</h></coordinates><panel_attributes>Datarouter
+Worker Thread
+bg=white
+layer=1</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>1440</x><y>30</y><w>30</w><h>1090</h></coordinates><panel_attributes>lt=.</panel_attributes><additional_attributes>10;10;10;1070</additional_attributes></element><element><id>UMLGeneric</id><coordinates><x>480</x><y>0</y><w>160</w><h>40</h></coordinates><panel_attributes>VerboseWriter
+
+bg=white</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>120</x><y>180</y><w>230</w><h>40</h></coordinates><panel_attributes>lt=&lt;-
+AcquireSlot()
+layer=2</panel_attributes><additional_attributes>210;20;10;20</additional_attributes></element><element><id>UMLGeneric</id><coordinates><x>270</x><y>0</y><w>130</w><h>40</h></coordinates><panel_attributes>_:LoggingClient_
+DataRouterBackend
+
+bg=white</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>320</x><y>30</y><w>30</w><h>1090</h></coordinates><panel_attributes>lt=.
+</panel_attributes><additional_attributes>10;10;10;1070</additional_attributes></element><element><id>Relation</id><coordinates><x>320</x><y>200</y><w>260</w><h>40</h></coordinates><panel_attributes>lt=&lt;-
+AcquireSlot()</panel_attributes><additional_attributes>240;20;10;20</additional_attributes></element><element><id>UMLGeneric</id><coordinates><x>680</x><y>0</y><w>160</w><h>40</h></coordinates><panel_attributes>VerboseMessageFifo
+
+bg=white</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>750</x><y>30</y><w>30</w><h>890</h></coordinates><panel_attributes>lt=.</panel_attributes><additional_attributes>10;10;10;870</additional_attributes></element><element><id>UMLGeneric</id><coordinates><x>870</x><y>0</y><w>160</w><h>40</h></coordinates><panel_attributes>CircularAllocator
+
+bg=white</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>550</x><y>240</y><w>420</w><h>40</h></coordinates><panel_attributes>lt=&lt;-
+AcquireSlot()</panel_attributes><additional_attributes>400;20;10;20</additional_attributes></element><element><id>Relation</id><coordinates><x>940</x><y>30</y><w>30</w><h>890</h></coordinates><panel_attributes>lt=.</panel_attributes><additional_attributes>10;10;10;870</additional_attributes></element><element><id>Relation</id><coordinates><x>550</x><y>290</y><w>420</w><h>40</h></coordinates><panel_attributes>lt=&lt;-
+Ok(slot_handle)</panel_attributes><additional_attributes>10;20;400;20</additional_attributes></element><element><id>UMLClass</id><coordinates><x>940</x><y>270</y><w>20</w><h>30</h></coordinates><panel_attributes>bg=white</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>120</x><y>300</y><w>460</w><h>40</h></coordinates><panel_attributes>lt=&lt;-
+Ok(slot_handle)
+layer=2</panel_attributes><additional_attributes>10;20;440;20</additional_attributes></element><element><id>UMLClass</id><coordinates><x>120</x><y>340</y><w>20</w><h>60</h></coordinates><panel_attributes>bg=white
+layer=2</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLNote</id><coordinates><x>20</x><y>340</y><w>90</w><h>60</h></coordinates><panel_attributes>User writes
+data into slot...
+
+bg=yellow
+layer=2</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>120</x><y>410</y><w>230</w><h>40</h></coordinates><panel_attributes>lt=&lt;-
+StopRecord(slot)
+layer=2</panel_attributes><additional_attributes>210;20;10;20</additional_attributes></element><element><id>Relation</id><coordinates><x>320</x><y>440</y><w>260</w><h>40</h></coordinates><panel_attributes>lt=&lt;-
+ReleaseSlotForWriting(slot)</panel_attributes><additional_attributes>240;20;10;20</additional_attributes></element><element><id>Relation</id><coordinates><x>550</x><y>460</y><w>230</w><h>40</h></coordinates><panel_attributes>lt=&lt;-
+TryPush(slot)</panel_attributes><additional_attributes>210;20;10;20</additional_attributes></element><element><id>UMLNote</id><coordinates><x>830</x><y>200</y><w>100</w><h>40</h></coordinates><panel_attributes>AcquireSlot is
+lock-free
+bg=yellow</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>550</x><y>480</y><w>230</w><h>40</h></coordinates><panel_attributes>lt=&lt;-
+Ok</panel_attributes><additional_attributes>10;20;210;20</additional_attributes></element><element><id>Relation</id><coordinates><x>320</x><y>480</y><w>260</w><h>40</h></coordinates><panel_attributes>lt=&lt;-
+</panel_attributes><additional_attributes>10;20;240;20</additional_attributes></element><element><id>Relation</id><coordinates><x>120</x><y>490</y><w>230</w><h>30</h></coordinates><panel_attributes>lt=&lt;-
+layer=2</panel_attributes><additional_attributes>10;10;210;10</additional_attributes></element><element><id>UMLNote</id><coordinates><x>770</x><y>340</y><w>150</w><h>140</h></coordinates><panel_attributes>TryPush shall be
+lock-free.
+By design, TryPush
+shall succeed as
+the fifo shall have
+capacity equal to
+the number of slots
+in the CircularAllocator.
+bg=yellow</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>320</x><y>780</y><w>260</w><h>40</h></coordinates><panel_attributes>lt=&lt;-
+Erase(num_messages)</panel_attributes><additional_attributes>240;20;10;20</additional_attributes></element><element><id>Relation</id><coordinates><x>550</x><y>820</y><w>230</w><h>40</h></coordinates><panel_attributes>lt=&lt;-
+Erase(num_messages)</panel_attributes><additional_attributes>210;20;10;20</additional_attributes></element><element><id>Relation</id><coordinates><x>750</x><y>850</y><w>220</w><h>40</h></coordinates><panel_attributes>lt=&lt;-
+ReleaseSlot(slot)</panel_attributes><additional_attributes>200;20;10;20</additional_attributes></element><element><id>Relation</id><coordinates><x>750</x><y>880</y><w>220</w><h>40</h></coordinates><panel_attributes>lt=&lt;-
+</panel_attributes><additional_attributes>10;20;200;20</additional_attributes></element><element><id>Relation</id><coordinates><x>550</x><y>880</y><w>230</w><h>40</h></coordinates><panel_attributes>lt=&lt;-
+</panel_attributes><additional_attributes>10;20;210;20</additional_attributes></element><element><id>Relation</id><coordinates><x>320</x><y>970</y><w>260</w><h>40</h></coordinates><panel_attributes>lt=&lt;-
+</panel_attributes><additional_attributes>10;20;240;20</additional_attributes></element><element><id>UMLClass</id><coordinates><x>550</x><y>910</y><w>20</w><h>60</h></coordinates><panel_attributes></panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLNote</id><coordinates><x>580</x><y>920</y><w>90</w><h>50</h></coordinates><panel_attributes>Handle
+non-verbose
+messages...
+bg=yellow</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>320</x><y>1020</y><w>890</w><h>30</h></coordinates><panel_attributes>lt=&lt;-
+layer=2</panel_attributes><additional_attributes>870;10;10;10</additional_attributes></element><element><id>UMLGeneric</id><coordinates><x>1640</x><y>0</y><w>160</w><h>40</h></coordinates><panel_attributes>VerboseReader
+
+bg=white</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>1710</x><y>30</y><w>30</w><h>1070</h></coordinates><panel_attributes>lt=.
+</panel_attributes><additional_attributes>10;10;10;1050</additional_attributes></element><element><id>UMLNote</id><coordinates><x>770</x><y>920</y><w>170</w><h>70</h></coordinates><panel_attributes>First remove element from
+Fifo, then relese the Slot
+from CircularAllocator.
+bg=yellow
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>1710</x><y>120</y><w>400</w><h>40</h></coordinates><panel_attributes>lt=&lt;-
+FetchNewMessages()
+layer=2</panel_attributes><additional_attributes>10;20;380;20</additional_attributes></element><element><id>Relation</id><coordinates><x>1710</x><y>180</y><w>400</w><h>40</h></coordinates><panel_attributes>lt=&lt;-
+GetNextMessage()
+layer=2</panel_attributes><additional_attributes>10;20;380;20</additional_attributes></element><element><id>Relation</id><coordinates><x>1710</x><y>210</y><w>400</w><h>40</h></coordinates><panel_attributes>lt=&lt;-
+empty
+layer=2</panel_attributes><additional_attributes>380;20;10;20</additional_attributes></element><element><id>UMLClass</id><coordinates><x>2080</x><y>240</y><w>20</w><h>70</h></coordinates><panel_attributes>bg=white
+layer=2</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>1710</x><y>530</y><w>400</w><h>40</h></coordinates><panel_attributes>lt=&lt;-
+GetNextMessage()
+layer=2</panel_attributes><additional_attributes>10;20;380;20</additional_attributes></element><element><id>Relation</id><coordinates><x>750</x><y>480</y><w>990</w><h>30</h></coordinates><panel_attributes>lt=&lt;..
+layer=2</panel_attributes><additional_attributes>970;10;10;10</additional_attributes></element><element><id>UMLNote</id><coordinates><x>1540</x><y>410</y><w>170</w><h>70</h></coordinates><panel_attributes>New message in VerboseMessageFifo
+become visible through atomic
+variable in shared memory.
+bg=yellow
+</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>1710</x><y>490</y><w>400</w><h>40</h></coordinates><panel_attributes>lt=&lt;-
+FetchNewMessages()
+layer=2</panel_attributes><additional_attributes>10;20;380;20</additional_attributes></element><element><id>Relation</id><coordinates><x>1710</x><y>580</y><w>400</w><h>40</h></coordinates><panel_attributes>lt=&lt;-
+LogEntry*
+layer=2</panel_attributes><additional_attributes>380;20;10;20</additional_attributes></element><element><id>UMLGeneric</id><coordinates><x>2260</x><y>0</y><w>160</w><h>40</h></coordinates><panel_attributes>LogParser
+
+bg=white</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>2330</x><y>30</y><w>30</w><h>1050</h></coordinates><panel_attributes>lt=.</panel_attributes><additional_attributes>10;10;10;1030</additional_attributes></element><element><id>Relation</id><coordinates><x>2080</x><y>610</y><w>280</w><h>40</h></coordinates><panel_attributes>lt=&lt;-
+Parse(LogEntry*)
+layer=2</panel_attributes><additional_attributes>260;20;10;20</additional_attributes></element><element><id>Relation</id><coordinates><x>1440</x><y>730</y><w>670</w><h>90</h></coordinates><panel_attributes>lt=&lt;-
+SendMessage
+MediumMessage = [
+num_verbose_messages_read,
+non_verbose_records_read
+]
+layer=2</panel_attributes><additional_attributes>10;20;650;20</additional_attributes></element><element><id>UMLClass</id><coordinates><x>2080</x><y>670</y><w>20</w><h>70</h></coordinates><panel_attributes>bg=white
+layer=2</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLNote</id><coordinates><x>1980</x><y>680</y><w>90</w><h>50</h></coordinates><panel_attributes>Handle
+non-verbose
+messages...
+bg=yellow
+layer=2</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLNote</id><coordinates><x>1460</x><y>680</y><w>160</w><h>50</h></coordinates><panel_attributes>Context switch:
+Datarouter worker thread
+is blocked on client.
+bg=yellow</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>1200</x><y>1010</y><w>910</w><h>40</h></coordinates><panel_attributes>lt=&lt;-
+Return
+layer=2</panel_attributes><additional_attributes>890;20;10;20</additional_attributes></element><element><id>UMLNote</id><coordinates><x>1460</x><y>970</y><w>160</w><h>50</h></coordinates><panel_attributes>Context switch:
+Datarouter worker thread
+is unblocked.
+bg=yellow</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>2080</x><y>630</y><w>280</w><h>30</h></coordinates><panel_attributes>lt=&lt;-
+layer=2</panel_attributes><additional_attributes>10;10;260;10</additional_attributes></element><element><id>UMLNote</id><coordinates><x>2360</x><y>600</y><w>160</w><h>50</h></coordinates><panel_attributes>Forward the log message
+to logging sinks.
+bg=yellow</panel_attributes><additional_attributes></additional_attributes></element></diagram>
