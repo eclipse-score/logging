@@ -76,7 +76,7 @@ cc_test(
         "//score/mw/log/test/console_logging_environment",
         "@googletest//:gtest_main",
         "@score_baselibs//score/language/futurecpp:futurecpp_test_support",
-        "@score_baselibs//score/mw/log:frontend",
+        "@score_baselibs//score/mw/log:console",
         "@score_baselibs//score/os/mocklib:pthread_mock",
         "@score_baselibs//score/os/mocklib:stat_mock",
         "@score_baselibs//score/os/mocklib:stdlib_mock",

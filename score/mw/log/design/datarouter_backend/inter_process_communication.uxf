@@ -1,0 +1,62 @@
+<diagram program="umletino" version="15.1"><zoom_level>13</zoom_level><help_text>Space for diagram notes</help_text><element><id>UMLGeneric</id><coordinates><x>52</x><y>78</y><w>312</w><h>455</h></coordinates><panel_attributes>&lt;&lt;Process&gt;&gt;
+Logging Client
+
+layer=1
+bg=white
+fontsize=14</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLGeneric</id><coordinates><x>1352</x><y>78</y><w>234</w><h>455</h></coordinates><panel_attributes>&lt;&lt;Process&gt;&gt;
+Datarouter
+layer=1
+
+bg=white
+fontsize=14</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLState</id><coordinates><x>780</x><y>182</y><w>195</w><h>52</h></coordinates><panel_attributes>Shared Memory
+fontsize=12
+bg=white
+fontsize=14</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>351</x><y>182</y><w>455</w><h>78</h></coordinates><panel_attributes>lt=&lt;&lt;&lt;&lt;&lt;-
+Creates and writes to
+/tmp/logging.&lt;appid&gt;.&lt;uid&gt;.shmem
+with permissions 0644
+fontsize=14</panel_attributes><additional_attributes>10;20;330;20</additional_attributes></element><element><id>Relation</id><coordinates><x>962</x><y>182</y><w>416</w><h>65</h></coordinates><panel_attributes>lt=&lt;-
+Read-only access
+
+fontsize=14</panel_attributes><additional_attributes>10;20;300;20</additional_attributes></element><element><id>Relation</id><coordinates><x>351</x><y>325</y><w>520</w><h>78</h></coordinates><panel_attributes>lt=-()
+Instantiates side channel to receive messages from
+/mw_com/message_passing/logging.&lt;app&gt;.&lt;uid&gt;
+
+bg=white
+fontsize=14</panel_attributes><additional_attributes>10;20;380;20</additional_attributes></element><element><id>Relation</id><coordinates><x>845</x><y>325</y><w>533</w><h>78</h></coordinates><panel_attributes>lt=)-
+Creates a Sender for each client
+to send requests to the client
+
+fontsize=14</panel_attributes><additional_attributes>20;20;390;20</additional_attributes></element><element><id>UMLGeneric</id><coordinates><x>130</x><y>156</y><w>234</w><h>351</h></coordinates><panel_attributes>symbol=component
+mw::log
+
+DatarouterBackend
+
+layer=2
+bg=white
+fontsize=14</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>156</x><y>338</y><w>208</w><h>39</h></coordinates><panel_attributes>/mw::com::Receiver/
+
+layer=3
+bg=white
+fontsize=14</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>1352</x><y>325</y><w>208</w><h>39</h></coordinates><panel_attributes>/mw::com::Sender/
+
+layer=2
+bg=white
+fontsize=14</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>156</x><y>429</y><w>208</w><h>39</h></coordinates><panel_attributes>/mw::com::Sender/
+
+layer=3
+bg=white
+fontsize=14</panel_attributes><additional_attributes></additional_attributes></element><element><id>UMLClass</id><coordinates><x>1352</x><y>416</y><w>208</w><h>39</h></coordinates><panel_attributes>/mw::com::Receiver/
+
+layer=2
+bg=white
+fontsize=14</panel_attributes><additional_attributes></additional_attributes></element><element><id>Relation</id><coordinates><x>351</x><y>416</y><w>520</w><h>78</h></coordinates><panel_attributes>lt=)-
+Creates a Sender
+to reply to requests from Datarouter
+
+fontsize=14</panel_attributes><additional_attributes>370;20;10;20</additional_attributes></element><element><id>Relation</id><coordinates><x>845</x><y>416</y><w>533</w><h>78</h></coordinates><panel_attributes>lt=-()
+One receiver for all clients
+/mw_com/message_passing/logging.datarouter_recv
+
+bg=white
+fontsize=14</panel_attributes><additional_attributes>390;20;10;20</additional_attributes></element></diagram>
