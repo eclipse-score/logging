@@ -26,4 +26,4 @@ jobs:
   coverage-report:
     uses: eclipse-score/cicd-workflows/.github/workflows/cpp-coverage.yml@main
     with:
-      bazel-target: "//..."
+      bazel-target: "--lockfile_mode=error //..."
