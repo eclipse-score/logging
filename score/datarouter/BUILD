@@ -402,10 +402,7 @@ cc_library(
         ":message_passing_server",
         ":unixdomain_server",
         "//score/mw/log/detail/data_router/shared_memory:reader",
-        "@score_baselibs//score/concurrency:locked_ptr",
         "@score_baselibs//score/concurrency:synchronized",
-        "@score_baselibs//score/concurrency:type_traits",
-        "@score_baselibs//score/concurrency:unlock_guard",
         "@score_baselibs//score/language/futurecpp",
     ],
 )
@@ -427,10 +424,7 @@ cc_library(
         ":logparser",
         ":message_passing_server",
         ":unixdomain_mock",
-        "@score_baselibs//score/concurrency:locked_ptr",
         "@score_baselibs//score/concurrency:synchronized",
-        "@score_baselibs//score/concurrency:type_traits",
-        "@score_baselibs//score/concurrency:unlock_guard",
     ],
 )
 
@@ -452,10 +446,7 @@ cc_library(
         ":logparser_testing",
         ":message_passing_server",
         ":unixdomain_mock",
-        "@score_baselibs//score/concurrency:locked_ptr",
         "@score_baselibs//score/concurrency:synchronized",
-        "@score_baselibs//score/concurrency:type_traits",
-        "@score_baselibs//score/concurrency:unlock_guard",
     ],
 )
 
