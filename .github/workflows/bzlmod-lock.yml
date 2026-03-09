@@ -1,5 +1,5 @@
 # *******************************************************************************
-# Copyright (c) 2026 Contributors to the Eclipse Foundation
+# Copyright (c) 2025 Contributors to the Eclipse Foundation
 #
 # See the NOTICE file(s) distributed with this work for additional
 # information regarding copyright ownership.
@@ -10,21 +10,19 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 # *******************************************************************************
-
-name: CPP/C++
-
+name: Bzlmod Lockfile Check
+permissions:
+  contents: read
 on:
   pull_request:
     types: [opened, reopened, synchronize]
+  merge_group:
+    types: [checks_requested]
   push:
     branches:
       - main
-  merge_group:
-    types: [checks_requested]
-
 jobs:
-  coverage-report:
-    uses: eclipse-score/cicd-workflows/.github/workflows/cpp-coverage.yml@main
+  bzlmod-lock:
+    uses: eclipse-score/cicd-workflows/.github/workflows/bzlmod-lock-check.yml@main
     with:
-      bazel-target: "//..."
-      extra-bazel-flags: "--lockfile_mode=error"
+      working-directory: .
