@@ -41,7 +41,6 @@ using ::testing::StrEq;
 const auto kMwsrFileName = "";
 constexpr pid_t kThisProcessPid = 1234;
 constexpr uid_t kUid = 1234;
-const std::string kClientReceiverIdentifier = "/" + std::string("");
 
 class DatarouterMessageClientFactoryFixture : public ::testing::Test
 {
@@ -111,8 +110,6 @@ TEST_F(DatarouterMessageClientFactoryFixture, CreateOnceShouldReturnClientWithEx
     auto* client_impl = dynamic_cast<DatarouterMessageClientImpl*>(client.get());
 
     // Using the getters check that the factory provided the expected values to the constructor.
-
-    EXPECT_EQ(client_impl->GetReceiverIdentifier(), kClientReceiverIdentifier);
     EXPECT_EQ(client_impl->GetAppid(), LoggingIdentifier{config_.GetAppId()});
     EXPECT_EQ(client_impl->GetThisProcessPid(), kThisProcessPid);
     EXPECT_EQ(client_impl->GetWriterFileName(), kMwsrFileName);

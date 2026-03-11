@@ -13,9 +13,6 @@
 
 #include "score/assert_support.hpp"
 #include "score/message_passing/mock/client_connection_mock.h"
-#include "score/message_passing/mock/server_connection_mock.h"
-#include "score/message_passing/mock/server_mock.h"
-#include "score/message_passing/server_types.h"
 #include "score/os/mocklib/mock_pthread.h"
 #include "score/os/mocklib/unistdmock.h"
 #include "score/os/utils/mocklib/signalmock.h"
@@ -43,7 +40,6 @@ using ::testing::_;
 using ::testing::ByMove;
 using ::testing::Matcher;
 using ::testing::Return;
-using ::testing::ReturnRef;
 using ::testing::StrEq;
 
 class DatarouterMessageClientMockTest : public ::testing::Test
@@ -73,17 +69,6 @@ MATCHER_P(CompareServiceProtocol, expected, "")
     return true;
 }
 
-MATCHER_P(CompareServerConfig, expected, "")
-{
-    if (arg.max_queued_sends != expected.max_queued_sends ||
-        arg.pre_alloc_connections != expected.pre_alloc_connections ||
-        arg.max_queued_notifies != expected.max_queued_notifies)
-    {
-        return false;
-    }
-    return true;
-}
-
 MATCHER_P(CompareClientConfig, expected, "")
 {
     if (arg.max_async_replies != expected.max_async_replies || arg.max_queued_sends != expected.max_queued_sends ||
@@ -106,7 +91,6 @@ constexpr auto kLoggerThreadName = "logger";
 constexpr uid_t kDatarouterDummyUid = 111;
 constexpr std::uint32_t kMaxSendBytes{17U};
 constexpr std::uint32_t kMaxNotifyBytes{1U};
-constexpr std::uint32_t kMaxNumberMessagesInReceiverQueue{1UL};
 
 class DatarouterMessageClientFixture : public ::testing::Test
 {
@@ -170,60 +154,6 @@ class DatarouterMessageClientFixture : public ::testing::Test
             .WillOnce(Return(score::cpp::make_unexpected(score::os::Error::createUnspecifiedError())));
     }
 
-    score::message_passing::ServerMock* ExpectReceiverCreated()
-    {
-        auto receiver = score::cpp::pmr::make_unique<testing::StrictMock<score::message_passing::ServerMock>>(
-            score::cpp::pmr::get_default_resource());
-        auto* receiver_ptr = receiver.get();
-        const score::message_passing::ServiceProtocolConfig service_protocol_config{
-            kClientReceiverIdentifier, kMaxSendBytes, 0U, 0U};
-
-        const score::message_passing::IServerFactory::ServerConfig server_config{
-            kMaxNumberMessagesInReceiverQueue, 0U, 0U};
-        EXPECT_CALL(*message_passing_factory_,
-                    CreateServer(CompareServiceProtocol(service_protocol_config), CompareServerConfig(server_config)))
-            .WillOnce(Return(ByMove(std::move(receiver))));
-        return receiver_ptr;
-    }
-
-    void ExpectReceiverStartListening(
-        score::message_passing::ServerMock* receiver_ptr,
-        score::message_passing::ConnectCallback* connect_callback = nullptr,
-        score::message_passing::DisconnectCallback* disconnect_callback = nullptr,
-        score::message_passing::MessageCallback* sent_callback = nullptr,
-        score::message_passing::MessageCallback* sent_with_reply_callback = nullptr,
-        score::cpp::expected_blank<score::os::Error> result = score::cpp::expected_blank<score::os::Error>{})
-    {
-        EXPECT_CALL(*receiver_ptr,
-                    StartListening(Matcher<score::message_passing::ConnectCallback>(_),
-                                   Matcher<score::message_passing::DisconnectCallback>(_),
-                                   Matcher<score::message_passing::MessageCallback>(_),
-                                   Matcher<score::message_passing::MessageCallback>(_)))
-            .WillOnce([connect_callback, disconnect_callback, sent_callback, sent_with_reply_callback, result](
-                          score::message_passing::ConnectCallback con_callback,
-                          score::message_passing::DisconnectCallback discon_callback,
-                          score::message_passing::MessageCallback sn_callback,
-                          score::message_passing::MessageCallback sn_rep_callback) {
-                if (connect_callback != nullptr)
-                {
-                    *connect_callback = std::move(con_callback);
-                }
-                if (disconnect_callback != nullptr)
-                {
-                    *disconnect_callback = std::move(discon_callback);
-                }
-                if (sent_callback != nullptr)
-                {
-                    *sent_callback = std::move(sn_callback);
-                }
-                if (sent_with_reply_callback != nullptr)
-                {
-                    *sent_with_reply_callback = std::move(sn_rep_callback);
-                }
-                return result;
-            });
-    }
-
     score::message_passing::ClientConnectionMock* ExpectSenderCreation(
         score::message_passing::IClientConnection::StateCallback* state_callback = nullptr,
         std::promise<void>* callback_registered = nullptr,
@@ -270,10 +200,6 @@ class DatarouterMessageClientFixture : public ::testing::Test
         EXPECT_CALL(*sender_mock, Destruct());
     }
 
-    void ExpectServerDestruction(score::message_passing::ServerMock* receiver_mock)
-    {
-        EXPECT_CALL(*receiver_mock, Destruct());
-    }
     void ExpectSendAcquireResponse(
         score::message_passing::ClientConnectionMock* sender_ptr,
         ReadAcquireResult expected_content,
@@ -325,27 +251,6 @@ class DatarouterMessageClientFixture : public ::testing::Test
             });
     }
 
-    void SendAcquireRequestAndExpectResponse(score::message_passing::MessageCallback& acquire_callback,
-                                             score::message_passing::ClientConnectionMock** sender_ptr,
-                                             bool first_message,
-                                             bool unlink_successful = true)
-    {
-        ReadAcquireResult acquired_data{};
-        acquired_data.acquired_buffer = shared_data_.control_block.switch_count_points_active_for_writing.load();
-
-        if (first_message)
-        {
-            // MwsrWriter file shall be unlinked on first acquire request.
-            ExpectUnlinkMwsrWriterFile(unlink_successful);
-        }
-
-        ExpectSendAcquireResponse(*sender_ptr, acquired_data);
-
-        score::message_passing::ServerConnectionMock connection;
-        const score::cpp::span<const std::uint8_t> message{};
-        acquire_callback(connection, message);
-    }
-
     void SendAcquireNotifyAndExpectResponse(score::message_passing::IClientConnection::NotifyCallback& notify_callback,
                                             score::message_passing::ClientConnectionMock** sender_ptr,
                                             bool first_message,
@@ -365,29 +270,13 @@ class DatarouterMessageClientFixture : public ::testing::Test
         notify_callback(message);
     }
 
-    void ExpectSenderAndReceiverCreation(
-        score::message_passing::ServerMock** receiver_ptr,
+    void ExpectSenderCreationSequence(
         score::message_passing::ClientConnectionMock** sender_ptr,
-
         score::message_passing::IClientConnection::StateCallback* state_callback = nullptr,
         std::promise<void>* callback_registered = nullptr,
-        score::cpp::expected_blank<score::os::Error> listen_result = score::cpp::expected_blank<score::os::Error>{},
-        score::message_passing::ConnectCallback* connect_callback = nullptr,
-        score::message_passing::DisconnectCallback* disconnect_callback = nullptr,
-        score::message_passing::MessageCallback* sent_callback = nullptr,
-        score::message_passing::MessageCallback* sent_with_reply_callback = nullptr,
         bool block_termination_signal_pass = true,
-        bool receiver_start_listening = true,
         score::message_passing::IClientConnection::NotifyCallback* notify_callback = nullptr)
-
     {
-        std::ignore = block_termination_signal_pass;  // TODO: remove this param
-        auto* receiver = ExpectReceiverCreated();
-        if (receiver_ptr != nullptr)
-        {
-            *receiver_ptr = receiver;
-        }
-
         if (block_termination_signal_pass)
         {
             ExpectBlockTerminationSignalPass();
@@ -403,15 +292,6 @@ class DatarouterMessageClientFixture : public ::testing::Test
         if (sender_ptr != nullptr)
         {
             *sender_ptr = sender;
-        }
-        if (receiver_start_listening)
-        {
-            ExpectReceiverStartListening(receiver,
-                                         connect_callback,
-                                         disconnect_callback,
-                                         sent_callback,
-                                         sent_with_reply_callback,
-                                         listen_result);
         }
     }
 
@@ -450,16 +330,12 @@ class DatarouterMessageClientFixture : public ::testing::Test
         EXPECT_CALL(*pthread_mock_, setname_np(kThreadId, StrEq(kLoggerThreadName))).WillOnce(Return(setname_result));
     }
 
-    void ExecuteCreateSenderAndReceiverSequence(
-        bool expect_receiver_success = true,
-        score::message_passing::IClientConnection::StateCallback* state_callback = nullptr)
+    void ExecuteCreateSenderSequence(score::message_passing::IClientConnection::StateCallback* state_callback = nullptr)
     {
-        client_->SetupReceiver();
         client_->BlockTermSignal();
         client_->SetThreadName();
         client_->CreateSender();
         (*state_callback)(score::message_passing::IClientConnection::State::kReady);
-        EXPECT_EQ(client_->StartReceiver(), expect_receiver_success);
     }
 
     bool unlink_done_{false};
@@ -508,58 +384,6 @@ TEST_F(DatarouterMessageClientFixture, CreateSenderShouldCreateSenderWithExpecte
     auto* sender = ExpectSenderCreation();
     ExpectClientDestruction(sender);
     client_->CreateSender();
-}
-
-TEST_F(DatarouterMessageClientFixture, StartReceiverShouldStartListenSuccessfully)
-{
-    RecordProperty("ASIL", "B");
-    RecordProperty("Description", "Verifies creating the receiver works properly.");
-    RecordProperty("TestType", "Interface test");
-    RecordProperty("DerivationTechnique", "Generation and analysis of equivalence classes");
-
-    testing::InSequence order_matters;
-
-    score::message_passing::ClientConnectionMock* sender_ptr{};
-    score::message_passing::ServerMock* receiver_ptr{};
-    score::message_passing::IClientConnection::StateCallback state_callback;
-
-    ExpectSenderAndReceiverCreation(&receiver_ptr, &sender_ptr, &state_callback);
-
-    ExpectServerDestruction(receiver_ptr);
-    ExpectClientDestruction(sender_ptr);
-    ExecuteCreateSenderAndReceiverSequence(true, &state_callback);
-}
-
-TEST_F(DatarouterMessageClientFixture, StartReceiverWithoutSenderAndReceiverShouldFail)
-{
-    RecordProperty("ASIL", "B");
-    RecordProperty("Description", "Verifies creating the receiver works properly.");
-    RecordProperty("TestType", "Interface test");
-    RecordProperty("DerivationTechnique", "Generation and analysis of equivalence classes");
-
-    testing::InSequence order_matters;
-
-    EXPECT_DEATH(client_->StartReceiver(), "");
-}
-TEST_F(DatarouterMessageClientFixture, ReceiverStartListeningFailsShouldBeHandledGracefully)
-{
-    RecordProperty("ASIL", "B");
-    RecordProperty("Description", "Verifies the ability of handling the receiver listen failure properly.");
-    RecordProperty("TestType", "Interface test");
-    RecordProperty("DerivationTechnique", "Generation and analysis of equivalence classes");
-
-    testing::InSequence order_matters;
-
-    score::message_passing::ClientConnectionMock* sender_ptr{};
-    score::message_passing::ServerMock* receiver_ptr{};
-    score::message_passing::IClientConnection::StateCallback state_callback;
-
-    auto start_listening_error = score::cpp::make_unexpected<score::os::Error>(score::os::Error::createFromErrno());
-    ExpectSenderAndReceiverCreation(&receiver_ptr, &sender_ptr, &state_callback, nullptr, start_listening_error);
-
-    ExpectServerDestruction(receiver_ptr);
-    ExpectClientDestruction(sender_ptr);
-    ExecuteCreateSenderAndReceiverSequence(false, &state_callback);
 }
 
 TEST_F(DatarouterMessageClientFixture, SendConnectMessageShouldSendExpectedPayload)
@@ -632,14 +456,11 @@ TEST_F(DatarouterMessageClientFixture, ConnectToDatarouterShouldSendConnectMessa
     testing::InSequence order_matters;
 
     score::message_passing::ClientConnectionMock* sender_ptr{};
-    score::message_passing::ServerMock* receiver_ptr{};
 
-    ExpectSenderAndReceiverCreation(&receiver_ptr, &sender_ptr, &state_callback, &callback_registered);
+    ExpectSenderCreationSequence(&sender_ptr, &state_callback, &callback_registered);
     ExpectSendConnectMessage(sender_ptr);
-    ExpectServerDestruction(receiver_ptr);
     ExpectClientDestruction(sender_ptr);
 
-    client_->SetupReceiver();
     // We need to unblock waiting for the connection so we change the state in a separate thread
     std::thread connect_thread([this]() noexcept {
         client_->ConnectToDatarouter();
@@ -649,77 +470,6 @@ TEST_F(DatarouterMessageClientFixture, ConnectToDatarouterShouldSendConnectMessa
     state_callback(score::message_passing::IClientConnection::State::kReady);
 
     connect_thread.join();
-}
-
-TEST_F(DatarouterMessageClientFixture, ConnectToDatarouterGivenThatReceiverFailedShouldNotSendConnectMessage)
-{
-    RecordProperty("ASIL", "B");
-    RecordProperty("Description", "Verifies the in-ability of sending connect message when receiver fails.");
-    RecordProperty("TestType", "Interface test");
-    RecordProperty("DerivationTechnique", "Generation and analysis of equivalence classes");
-
-    testing::InSequence order_matters;
-
-    score::message_passing::ClientConnectionMock* sender_ptr{};
-    score::message_passing::ServerMock* receiver_ptr{};
-    score::message_passing::IClientConnection::StateCallback state_callback;
-    std::promise<void> callback_registered;
-
-    ExpectSenderAndReceiverCreation(&receiver_ptr,
-                                    &sender_ptr,
-                                    &state_callback,
-                                    &callback_registered,
-                                    score::cpp::make_unexpected<score::os::Error>(score::os::Error::createFromErrno()));
-
-    ExpectUnlinkMwsrWriterFile();
-
-    ExpectServerDestruction(receiver_ptr);
-    ExpectClientDestruction(sender_ptr);
-    client_->SetupReceiver();
-    // We need to unblock waiting for the connection so we change the state in a separate thread
-    std::thread connect_thread([this]() noexcept {
-        client_->ConnectToDatarouter();
-    });
-
-    callback_registered.get_future().wait();
-    state_callback(score::message_passing::IClientConnection::State::kReady);
-
-    connect_thread.join();
-}
-
-TEST_F(DatarouterMessageClientFixture, AcquireRequestShouldSendExpectedAcquireResponse)
-{
-    RecordProperty("ASIL", "B");
-    RecordProperty("Description", "Verifies that acquired request shall send the expected acquired response.");
-    RecordProperty("TestType", "Interface test");
-    RecordProperty("DerivationTechnique", "Generation and analysis of equivalence classes");
-
-    testing::InSequence order_matters;
-
-    score::message_passing::ClientConnectionMock* sender_ptr{};
-    score::message_passing::ServerMock* receiver_ptr{};
-    score::message_passing::ConnectCallback connect_callback;
-    score::message_passing::DisconnectCallback disconnect_callback;
-    score::message_passing::MessageCallback sent_callback;
-    score::message_passing::MessageCallback sent_with_reply_callback;
-    score::message_passing::IClientConnection::StateCallback state_callback;
-
-    ExpectSenderAndReceiverCreation(&receiver_ptr,
-                                    &sender_ptr,
-                                    &state_callback,
-                                    nullptr,
-                                    {},
-                                    &connect_callback,
-                                    &disconnect_callback,
-                                    &sent_callback,
-                                    &sent_with_reply_callback);
-
-    ExecuteCreateSenderAndReceiverSequence(true, &state_callback);
-
-    bool first_message = true;
-    SendAcquireRequestAndExpectResponse(sent_callback, &sender_ptr, first_message, false);
-    ExpectServerDestruction(receiver_ptr);
-    ExpectClientDestruction(sender_ptr);
 }
 
 TEST_F(DatarouterMessageClientFixture, AcquireNotifyShouldSendExpectedAcquireResponse)
@@ -734,33 +484,16 @@ TEST_F(DatarouterMessageClientFixture, AcquireNotifyShouldSendExpectedAcquireRes
     testing::InSequence order_matters;
 
     score::message_passing::ClientConnectionMock* sender_ptr{};
-    score::message_passing::ServerMock* receiver_ptr{};
-    score::message_passing::ConnectCallback connect_callback;
-    score::message_passing::DisconnectCallback disconnect_callback;
-    score::message_passing::MessageCallback sent_callback;
-    score::message_passing::MessageCallback sent_with_reply_callback;
     score::message_passing::IClientConnection::StateCallback state_callback;
     score::message_passing::IClientConnection::NotifyCallback notify_callback;
 
-    ExpectSenderAndReceiverCreation(&receiver_ptr,
-                                    &sender_ptr,
-                                    &state_callback,
-                                    nullptr,
-                                    {},
-                                    &connect_callback,
-                                    &disconnect_callback,
-                                    &sent_callback,
-                                    &sent_with_reply_callback,
-                                    true,
-                                    true,
-                                    &notify_callback);
+    ExpectSenderCreationSequence(&sender_ptr, &state_callback, nullptr, true, &notify_callback);
 
-    ExecuteCreateSenderAndReceiverSequence(true, &state_callback);
+    ExecuteCreateSenderSequence(&state_callback);
 
     bool first_message = true;
     SendAcquireNotifyAndExpectResponse(notify_callback, &sender_ptr, first_message, false);
 
-    ExpectServerDestruction(receiver_ptr);
     ExpectClientDestruction(sender_ptr);
 }
 
@@ -774,24 +507,12 @@ TEST_F(DatarouterMessageClientFixture, InvalidNotifyShouldNotSendAcquireResponse
     testing::InSequence order_matters;
 
     score::message_passing::ClientConnectionMock* sender_ptr{};
-    score::message_passing::ServerMock* receiver_ptr{};
     score::message_passing::IClientConnection::StateCallback state_callback;
     score::message_passing::IClientConnection::NotifyCallback notify_callback;
 
-    ExpectSenderAndReceiverCreation(&receiver_ptr,
-                                    &sender_ptr,
-                                    &state_callback,
-                                    nullptr,
-                                    {},
-                                    nullptr,
-                                    nullptr,
-                                    nullptr,
-                                    nullptr,
-                                    true,
-                                    true,
-                                    &notify_callback);
+    ExpectSenderCreationSequence(&sender_ptr, &state_callback, nullptr, true, &notify_callback);
 
-    ExecuteCreateSenderAndReceiverSequence(true, &state_callback);
+    ExecuteCreateSenderSequence(&state_callback);
 
     EXPECT_CALL(*sender_ptr, Send(Matcher<score::cpp::span<const std::uint8_t>>(_))).Times(0);
 
@@ -805,49 +526,34 @@ TEST_F(DatarouterMessageClientFixture, InvalidNotifyShouldNotSendAcquireResponse
     const std::array<std::uint8_t, 1U> wrong_id_message{score::cpp::to_underlying(DatarouterMessageIdentifier::kConnect)};
     notify_callback(wrong_id_message);
 
-    ExpectServerDestruction(receiver_ptr);
     ExpectClientDestruction(sender_ptr);
 }
 
-TEST_F(DatarouterMessageClientFixture, SecondAcquireRequestShouldNotSetMwsrReader)
+TEST_F(DatarouterMessageClientFixture, SecondAcquireNotifyShouldNotUnlinkMwsrWriter)
 {
     RecordProperty("ASIL", "B");
-    RecordProperty("Description", "Verifies that the second acquire request should not set mwsr reader.");
+    RecordProperty("Description", "Verifies that the second acquire notify should not unlink the mwsr writer file.");
     RecordProperty("TestType", "Interface test");
     RecordProperty("DerivationTechnique", "Generation and analysis of equivalence classes");
 
     testing::InSequence order_matters;
 
     score::message_passing::ClientConnectionMock* sender_ptr{};
-    score::message_passing::ServerMock* receiver_ptr{};
-    score::message_passing::ConnectCallback connect_callback;
-    score::message_passing::DisconnectCallback disconnect_callback;
-    score::message_passing::MessageCallback sent_callback;
-    score::message_passing::MessageCallback sent_with_reply_callback;
     score::message_passing::IClientConnection::StateCallback state_callback;
+    score::message_passing::IClientConnection::NotifyCallback notify_callback;
 
-    ExpectSenderAndReceiverCreation(&receiver_ptr,
-                                    &sender_ptr,
-                                    &state_callback,
-                                    nullptr,
-                                    {},
-                                    &connect_callback,
-                                    &disconnect_callback,
-                                    &sent_callback,
-                                    &sent_with_reply_callback);
+    ExpectSenderCreationSequence(&sender_ptr, &state_callback, nullptr, true, &notify_callback);
 
-    ExecuteCreateSenderAndReceiverSequence(true, &state_callback);
+    ExecuteCreateSenderSequence(&state_callback);
 
     bool first_message = true;
-    SendAcquireRequestAndExpectResponse(sent_callback, &sender_ptr, first_message, false);
+    SendAcquireNotifyAndExpectResponse(notify_callback, &sender_ptr, first_message, false);
 
     first_message = false;
-    SendAcquireRequestAndExpectResponse(sent_callback, &sender_ptr, first_message);
-    ExpectServerDestruction(receiver_ptr);
+    SendAcquireNotifyAndExpectResponse(notify_callback, &sender_ptr, first_message);
     ExpectClientDestruction(sender_ptr);
 }
 
-// Refactor to acquire request
 TEST_F(DatarouterMessageClientFixture, ClientShouldShutdownAfterFailingToSendMessage)
 {
     RecordProperty("ASIL", "B");
@@ -858,23 +564,12 @@ TEST_F(DatarouterMessageClientFixture, ClientShouldShutdownAfterFailingToSendMes
     testing::InSequence order_matters;
 
     score::message_passing::ClientConnectionMock* sender_ptr{};
-    score::message_passing::ServerMock* receiver_ptr{};
-    score::message_passing::ConnectCallback connect_callback;
-    score::message_passing::DisconnectCallback disconnect_callback;
-    score::message_passing::MessageCallback sent_callback;
-    score::message_passing::MessageCallback sent_with_reply_callback;
     score::message_passing::IClientConnection::StateCallback state_callback;
-    ExpectSenderAndReceiverCreation(&receiver_ptr,
-                                    &sender_ptr,
-                                    &state_callback,
-                                    nullptr,
-                                    {},
-                                    &connect_callback,
-                                    &disconnect_callback,
-                                    &sent_callback,
-                                    &sent_with_reply_callback);
+    score::message_passing::IClientConnection::NotifyCallback notify_callback;
 
-    ExecuteCreateSenderAndReceiverSequence(true, &state_callback);
+    ExpectSenderCreationSequence(&sender_ptr, &state_callback, nullptr, true, &notify_callback);
+
+    ExecuteCreateSenderSequence(&state_callback);
 
     auto send_error = score::cpp::make_unexpected<score::os::Error>(score::os::Error::createFromErrno());
 
@@ -884,10 +579,8 @@ TEST_F(DatarouterMessageClientFixture, ClientShouldShutdownAfterFailingToSendMes
     ExpectUnlinkMwsrWriterFile();
     ExpectSendAcquireResponse(sender_ptr, result, send_error);
 
-    score::message_passing::ServerConnectionMock connection;
-    const score::cpp::span<const std::uint8_t> message{};
-    sent_callback(connection, message);
-    ExpectServerDestruction(receiver_ptr);
+    const std::array<std::uint8_t, 1U> message{score::cpp::to_underlying(DatarouterMessageIdentifier::kAcquireRequest)};
+    notify_callback(message);
     ExpectClientDestruction(sender_ptr);
 }
 
@@ -901,14 +594,12 @@ TEST_F(DatarouterMessageClientFixture, RunShouldSetupAndConnect)
     testing::InSequence order_matters;
 
     score::message_passing::ClientConnectionMock* sender_ptr{};
-    score::message_passing::ServerMock* receiver_ptr{};
     score::message_passing::IClientConnection::StateCallback state_callback;
     std::promise<void> callback_registered;
 
-    ExpectSenderAndReceiverCreation(&receiver_ptr, &sender_ptr, &state_callback, &callback_registered);
+    ExpectSenderCreationSequence(&sender_ptr, &state_callback, &callback_registered);
 
     ExpectSendConnectMessage(sender_ptr);
-    ExpectServerDestruction(receiver_ptr);
     ExpectClientDestruction(sender_ptr);
     ExpectUnlinkMwsrWriterFile();
     client_->Run();
@@ -930,14 +621,12 @@ TEST_F(DatarouterMessageClientFixture, RunShallNotBeCalledMoreThanOnce)
     testing::InSequence order_matters;
 
     score::message_passing::ClientConnectionMock* sender_ptr{};
-    score::message_passing::ServerMock* receiver_ptr{};
     score::message_passing::IClientConnection::StateCallback state_callback;
     std::promise<void> callback_registered;
 
-    ExpectSenderAndReceiverCreation(&receiver_ptr, &sender_ptr, &state_callback, &callback_registered);
+    ExpectSenderCreationSequence(&sender_ptr, &state_callback, &callback_registered);
     ExpectSendConnectMessage(sender_ptr);
 
-    ExpectServerDestruction(receiver_ptr);
     ExpectClientDestruction(sender_ptr);
     ExpectUnlinkMwsrWriterFile();
 
@@ -986,13 +675,11 @@ TEST_F(DatarouterMessageClientFixture, FailedToChownOwnMsrWriterFileForDataRoute
     testing::InSequence order_matters;
 
     score::message_passing::ClientConnectionMock* sender_ptr{};
-    score::message_passing::ServerMock* receiver_ptr{};
     score::message_passing::IClientConnection::StateCallback state_callback;
     std::promise<void> callback_registered;
 
-    ExpectSenderAndReceiverCreation(&receiver_ptr, &sender_ptr, &state_callback, &callback_registered);
+    ExpectSenderCreationSequence(&sender_ptr, &state_callback, &callback_registered);
     ExpectSendConnectMessage(sender_ptr);
-    ExpectServerDestruction(receiver_ptr);
     ExpectClientDestruction(sender_ptr);
     ExpectUnlinkMwsrWriterFile(false);
     client_->Run();
@@ -1013,24 +700,11 @@ TEST_F(DatarouterMessageClientFixture, GivenExitRequestDuringConnectionShouldNot
     testing::InSequence order_matters;
 
     score::message_passing::ClientConnectionMock* sender_ptr{};
-    score::message_passing::ServerMock* receiver_ptr{};
 
-    ExpectSenderAndReceiverCreation(&receiver_ptr,
-                                    &sender_ptr,
-                                    nullptr,
-                                    nullptr,
-                                    score::cpp::make_unexpected<score::os::Error>(score::os::Error::createFromErrno()),
-                                    nullptr,
-                                    nullptr,
-                                    nullptr,
-                                    nullptr,
-                                    true,
-                                    false);
+    ExpectSenderCreationSequence(&sender_ptr);
 
     ExpectUnlinkMwsrWriterFile();
-    ExpectServerDestruction(receiver_ptr);
     ExpectClientDestruction(sender_ptr);
-    client_->SetupReceiver();
     stop_source_.request_stop();
     client_->ConnectToDatarouter();
 }
@@ -1045,26 +719,13 @@ TEST_F(DatarouterMessageClientFixture, FailedToEmptySignalSet)
     testing::InSequence order_matters;
 
     score::message_passing::ClientConnectionMock* sender_ptr{};
-    score::message_passing::ServerMock* receiver_ptr{};
     score::message_passing::IClientConnection::StateCallback state_callback;
     std::promise<void> callback_registered;
 
-    ExpectSenderAndReceiverCreation(&receiver_ptr,
-                                    &sender_ptr,
-                                    &state_callback,
-                                    &callback_registered,
-                                    score::cpp::make_unexpected<score::os::Error>(score::os::Error::createFromErrno()),
-                                    nullptr,
-                                    nullptr,
-                                    nullptr,
-                                    nullptr,
-                                    false);
-    ExpectUnlinkMwsrWriterFile();
-
-    ExpectServerDestruction(receiver_ptr);
+    ExpectSenderCreationSequence(&sender_ptr, &state_callback, &callback_registered, false);
+    ExpectSendConnectMessage(sender_ptr);
     ExpectClientDestruction(sender_ptr);
 
-    client_->SetupReceiver();
     // We need to unblock waiting for the connection so we change the state in a separate thread
     std::thread connect_thread([this]() noexcept {
         client_->ConnectToDatarouter();
@@ -1081,55 +742,7 @@ TEST_F(DatarouterMessageClientFixture, ConnectToDatarouterShouldReportErrorAndSh
     RecordProperty("Description",
                    "Verifies ConnectToDatarouter reports an error and shuts down when CreateSender fails.");
     RecordProperty("TestType", "Interface test");
-    RecordProperty("DerivationTechnique", "Generation and analysis of equivalence classes");
-    testing::InSequence order_matters;
-
-
-    ExpectBlockTerminationSignalPass();
-    ExpectSetLoggerThreadName();
-
-   const score::message_passing::ServiceProtocolConfig service_protocol_config{
-        kDatarouterReceiverIdentifier, kMaxSendBytes, 0U, kMaxNotifyBytes};
-    const score::message_passing::IClientFactory::ClientConfig client_config{0, 10, false, true, false};
-
-    EXPECT_CALL(*message_passing_factory_,
-                CreateClient(CompareServiceProtocol(service_protocol_config), CompareClientConfig(client_config)))
-        .WillOnce(Return(ByMove(nullptr)));
-
-    ExpectUnlinkMwsrWriterFile();
-
-    client_->ConnectToDatarouter();
-
-    EXPECT_TRUE(stop_source_.stop_requested());
-}
-
-TEST_F(DatarouterMessageClientFixture, CreateSenderFailsWhenFactoryReturnsNullptr)
-{
-    RecordProperty("ASIL", "B");
-    RecordProperty("Description",
-                   "Verifies CreateSender reports an error and returns unexpected when the factory returns nullptr.");
-    RecordProperty("TestType", "Interface test");
-    RecordProperty("DerivationTechnique", "Generation and analysis of equivalence classes");
-
-    const score::message_passing::ServiceProtocolConfig service_protocol_config{
-        kDatarouterReceiverIdentifier, kMaxSendBytes, 0U, kMaxNotifyBytes};
-    const score::message_passing::IClientFactory::ClientConfig client_config{0, 10, false, true, false};
-
-    EXPECT_CALL(*message_passing_factory_,
-                CreateClient(CompareServiceProtocol(service_protocol_config), CompareClientConfig(client_config)))
-        .WillOnce(Return(ByMove(nullptr)));
-        const auto result = client_->CreateSender();
-            ASSERT_FALSE(result.has_value());
-
-}
-
-TEST_F(DatarouterMessageClientFixture, ConnectToDatarouterShouldReportErrorAndShutdownWhenCreateSenderFails)
-{
-    RecordProperty("ASIL", "B");
-    RecordProperty("Description",
-                   "Verifies ConnectToDatarouter reports an error and shuts down when CreateSender fails.");
-    RecordProperty("TestType", "Interface test");
-    RecordProperty("DerivationTechnique", "Generation and analysis of equivalence classes");
+    RecordProperty("DerivationTechnique", "Error guessing based on knowledge or experience");
 
     testing::InSequence order_matters;
 

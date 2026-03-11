@@ -19,8 +19,6 @@
 #include "score/mw/log/detail/error.h"
 #include "score/mw/log/detail/initialization_reporter.h"
 
-#include "score/os/utils/signal_impl.h"
-#include "score/mw/log/detail/utils/signal_handling/signal_handling.h"
 #include <array>
 #include <thread>
 #include <tuple>
@@ -53,7 +51,6 @@ DatarouterMessageClientImpl::DatarouterMessageClientImpl(const MsgClientIdentifi
       state_condition_{},
       sender_state_{},
       sender_{nullptr},
-      receiver_{nullptr},
       connect_thread_{}
 {
 }
@@ -69,7 +66,6 @@ void DatarouterMessageClientImpl::Run()
     // coverity[autosar_cpp14_a15_4_2_violation]
     SCORE_LANGUAGE_FUTURECPP_PRECONDITION_PRD_MESSAGE(run_started_ == false, "Run() must be called only once");
     run_started_ = true;
-    SetupReceiver();
     RunConnectTask();
 }
 
@@ -95,7 +91,7 @@ void DatarouterMessageClientImpl::ConnectToDatarouter() noexcept
         return;
     }
 
-    // Wait for the sender to be in Ready state before starting receiver
+    // Wait for the sender to be in Ready state before sending connect message
     {
         std::unique_lock<std::mutex> lock(sender_state_change_mutex_);
         state_condition_.wait(lock, [&stop_source = stop_source_, &sender_state = sender_state_]() {
@@ -123,12 +119,6 @@ void DatarouterMessageClientImpl::ConnectToDatarouter() noexcept
         return;
     }
     // LCOV_EXCL_STOP
-
-    if (StartReceiver() == false)
-    {
-        RequestInternalShutdown();
-        return;
-    }
 
     CheckExitRequestAndSendConnectMessage();
 }
@@ -180,72 +170,6 @@ void DatarouterMessageClientImpl::SetThreadName() noexcept
                                   std::string_view{error_details.data()},
                                   msg_client_ids_.GetAppID().GetStringView());
     }
-}
-
-void DatarouterMessageClientImpl::SetupReceiver() noexcept
-{
-    const score::message_passing::ServiceProtocolConfig service_protocol_config{
-        msg_client_ids_.GetReceiverID(), MessagePassingConfig::kMaxMessageSize, 0U, 0U};
-
-    constexpr score::message_passing::IServerFactory::ServerConfig kServerConfig{
-        MessagePassingConfig::kMaxReceiverQueueSize, 0U, 0U};
-    receiver_ = message_passing_factory_->CreateServer(service_protocol_config, kServerConfig);
-}
-
-bool DatarouterMessageClientImpl::StartReceiver()
-{
-    // When the receiver starts listening, receive callbacks may be called that use the sender to reply.
-    // Thus we must create the sender before starting to listen to messages.
-    // Note that the receiver callback may only be called after the connect task finished.
-    SCORE_LANGUAGE_FUTURECPP_PRECONDITION_PRD_MESSAGE(sender_ != nullptr, "The sender must be created before the receiver.");
-
-    auto* this_ptr = this;
-    auto connect_callback = [this_ptr](score::message_passing::IServerConnection& connection) noexcept -> std::uintptr_t {
-        std::ignore = SignalHandling::PThreadBlockSigTerm(this_ptr->utils_.GetSignal());
-        const pid_t client_pid = connection.GetClientIdentity().pid;
-        return static_cast<std::uintptr_t>(client_pid);
-    };
-    auto disconnect_callback = [this_ptr](score::message_passing::IServerConnection& /*connection*/) noexcept {
-        this_ptr->RequestInternalShutdown();
-    };
-    auto received_send_message_callback = [this_ptr](
-                                              score::message_passing::IServerConnection& /*connection*/,
-                                              const score::cpp::span<const std::uint8_t> /*message*/) noexcept -> score::cpp::blank {
-        this_ptr->OnAcquireRequest();
-        return {};
-    };
-    auto received_send_message_with_reply_callback =
-        [](score::message_passing::IServerConnection& /*connection*/,
-           score::cpp::span<const std::uint8_t> /*message*/) noexcept -> score::cpp::blank {
-        return {};
-    };
-
-    const auto result = receiver_->StartListening(connect_callback,
-                                                  disconnect_callback,
-                                                  received_send_message_callback,
-                                                  received_send_message_with_reply_callback);
-
-    if (result.has_value() == false)
-    {
-        const std::string underlying_error = result.error().ToString();
-        ReportInitializationError(mw::log::detail::Error::kReceiverInitializationError,
-                                  std::string_view{underlying_error},
-                                  msg_client_ids_.GetAppID().GetStringView());
-
-        std::array<std::string::value_type, 5> app_zero_terminated{};
-        std::ignore = std::copy_n(msg_client_ids_.GetAppID().GetStringView().begin(),
-                                  std::min(msg_client_ids_.GetAppID().GetStringView().size(),
-                                           app_zero_terminated.size() - static_cast<std::size_t>(1)),
-                                  app_zero_terminated.begin());
-        std::cerr
-            << "[[mw::log]] Application " << app_zero_terminated.data() << " (PID: " << msg_client_ids_.GetThisProcID()
-            << ") failed to start message passing receiver. Please add the 'PROCMGR_AID_PATHSPACE' ability to your"
-               "'app_config.json'."
-            << '\n';
-
-        return false;
-    }
-    return true;
 }
 
 void DatarouterMessageClientImpl::RequestInternalShutdown() noexcept
@@ -323,7 +247,6 @@ void DatarouterMessageClientImpl::Shutdown() noexcept
         connect_thread_.join();
     }
 
-    receiver_.reset();
     {
         std::unique_lock<std::mutex> lock(sender_mutex_);
         sender_.reset();
@@ -454,11 +377,6 @@ void DatarouterMessageClientImpl::UnlinkSharedMemoryFile() noexcept
         ReportInitializationError(
             Error::kUnlinkSharedMemoryError, underlying_error.data(), msg_client_ids_.GetAppID().GetStringView());
     }
-}
-
-const std::string& DatarouterMessageClientImpl::GetReceiverIdentifier() const noexcept
-{
-    return msg_client_ids_.GetReceiverID();
 }
 
 const pid_t& DatarouterMessageClientImpl::GetThisProcessPid() const noexcept

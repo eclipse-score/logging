@@ -18,7 +18,6 @@
 #include "score/jthread.hpp"
 #include "score/optional.hpp"
 #include "score/stop_token.hpp"
-#include "score/message_passing/i_server_connection.h"
 #include "score/os/errno.h"
 #include "score/mw/log/detail/data_router/data_router_message_client.h"
 #include "score/mw/log/detail/data_router/data_router_message_client_backend.h"
@@ -70,15 +69,9 @@ class DatarouterMessageClientImpl : public DatarouterMessageClient
     /// \pre Shall not be called concurrently to Run().
     void Shutdown() noexcept override;
 
-    void SetupReceiver() noexcept;
-
     /// \brief Creates the message passing client (sender) for communication with Datarouter.
     /// \returns An empty expected on success, or an error if the sender could not be created.
     score::cpp::expected_blank<score::os::Error> CreateSender() noexcept;
-
-    /// \pre SetupReceiver and CreateSender() called before.
-    /// \returns true if the receiver was started successfully.
-    bool StartReceiver();
 
     /// \pre CreateSender() called before.
     void SendConnectMessage() noexcept;
@@ -86,12 +79,11 @@ class DatarouterMessageClientImpl : public DatarouterMessageClient
     /// \brief Sets the thread name of the logger thread.
     void SetThreadName() noexcept;
 
-    /// \pre SetupReceiver() called before.
+    /// \brief Connects to the Datarouter by creating the sender and sending the connect message.
     void ConnectToDatarouter() noexcept;
 
     void BlockTermSignal() const noexcept;
 
-    const std::string& GetReceiverIdentifier() const noexcept;
     const pid_t& GetThisProcessPid() const noexcept;
     const std::string& GetWriterFileName() const noexcept;
     const LoggingIdentifier& GetAppid() const noexcept;
@@ -130,14 +122,12 @@ class DatarouterMessageClientImpl : public DatarouterMessageClient
     score::cpp::optional<score::message_passing::IClientConnection::State> sender_state_;
 
     // The construction/destruction order is critical here!
-    // Sender and receiver both may contain running tasks.
-    // Receiver tasks (callbacks) may use the sender.
-    // Thus the receiver needs to destruct first, and then the sender.
-    // Finally it is safe to join the connect thread.
+    // The sender may contain running tasks.
+    // The connect thread may use the sender.
+    // Thus the sender needs to destruct before joining the connect thread.
     // Only then we can ensure that there are no concurrent tasks
     // accessing private data from another thread.
     score::cpp::pmr::unique_ptr<score::message_passing::IClientConnection> sender_;
-    score::cpp::pmr::unique_ptr<score::message_passing::IServer> receiver_;
     score::cpp::jthread connect_thread_;
 };
 
