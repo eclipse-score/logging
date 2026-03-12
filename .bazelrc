@@ -82,3 +82,42 @@ coverage --combined_report=lcov
 coverage --test_env=COVERAGE_GCOV_OPTIONS=-bcu
 coverage --features=coverage
 coverage --cache_test_results=no
+
+# ==============================================================================
+# Dynamic analysis (sanitizers) for Linux host builds/tests
+# ==============================================================================
+
+# Debug symbols for sanitizer stack traces  
+test:with_debug_symbols --cxxopt=-g1
+test:with_debug_symbols --strip=never
+
+# AddressSanitizer + UndefinedBehaviorSanitizer + LeakSanitizer (Combined)
+build:asan_ubsan_lsan --config=x86_64-linux
+build:asan_ubsan_lsan --features=asan
+build:asan_ubsan_lsan --features=ubsan
+build:asan_ubsan_lsan --features=lsan
+build:asan_ubsan_lsan --platform_suffix=asan_ubsan_lsan
+test:asan_ubsan_lsan --config=with_debug_symbols
+test:asan_ubsan_lsan --test_tag_filters=-no-asan,-no-lsan,-no-ubsan
+test:asan_ubsan_lsan --@score_cpp_policies//sanitizers/flags:sanitizer=asan_ubsan_lsan
+test:asan_ubsan_lsan --run_under=@score_cpp_policies//sanitizers:wrapper
+
+# Shortcuts for individual sanitizers
+build:asan  --config=asan_ubsan_lsan
+test:asan   --test_tag_filters=-no-asan
+build:ubsan --config=asan_ubsan_lsan
+test:ubsan  --test_tag_filters=-no-ubsan
+build:lsan  --config=asan_ubsan_lsan
+test:lsan   --test_tag_filters=-no-lsan
+
+# ThreadSanitizer (cannot be combined with ASan/LSan)
+build:tsan --config=x86_64-linux
+build:tsan --features=tsan
+build:tsan --platform_suffix=tsan
+# GCC 12 promotes TSan limitation on atomic_thread_fence to -Werror=tsan.
+# Downgrade to warning so external deps (score_baselibs) compile; TSan still runs.
+build:tsan --cxxopt=-Wno-error=tsan
+test:tsan --config=with_debug_symbols
+test:tsan --test_tag_filters=-no-tsan
+test:tsan --@score_cpp_policies//sanitizers/flags:sanitizer=tsan
+test:tsan --run_under=@score_cpp_policies//sanitizers:wrapper

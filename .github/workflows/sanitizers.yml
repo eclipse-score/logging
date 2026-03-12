@@ -1,0 +1,69 @@
+# *******************************************************************************
+# Copyright (c) 2026 Contributors to the Eclipse Foundation
+#
+# See the NOTICE file(s) distributed with this work for additional
+# information regarding copyright ownership.
+#
+# This program and the accompanying materials are made available under the
+# terms of the Apache License Version 2.0 which is available at
+# https://www.apache.org/licenses/LICENSE-2.0
+#
+# SPDX-License-Identifier: Apache-2.0
+# *******************************************************************************
+
+name: Sanitizers
+
+on:
+  pull_request:
+    types: [opened, reopened, synchronize]
+  merge_group:
+    types: [checks_requested]
+
+permissions:
+  contents: read
+
+jobs:
+  sanitizer-tests:
+    name: Bazel Tests (${{ matrix.sanitizer_config }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        sanitizer_config: [asan_ubsan_lsan]
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4.2.2
+        with:
+          ref: ${{ github.head_ref || github.event.pull_request.head.ref || github.ref }}
+          repository: ${{ github.event.pull_request.head.repo.full_name || github.repository }}
+
+      - name: Setup Bazel with shared caching
+        uses: bazel-contrib/setup-bazel@0.18.0
+        with:
+          bazelisk-version: 1.26.0
+          disk-cache: true
+          repository-cache: true
+          bazelisk-cache: true
+          cache-save: ${{ github.event_name == 'push' }}
+
+      - name: Run sanitizer tests via Bazel
+        run: |
+          set -euo pipefail
+          echo "Running: bazel test --config=${{ matrix.sanitizer_config }} //score/..."
+          # Note: Scoped to C/C++ targets only. Rust targets require Rust-specific
+          # sanitizer handling and are excluded via tag filters.
+          bazel test \
+            --config=${{ matrix.sanitizer_config }} \
+            //score/... \
+            --build_tag_filters=-rust \
+            --test_tag_filters=-rust \
+            --verbose_failures
+
+      - name: Upload Bazel test logs (always)
+        if: always()
+        uses: actions/upload-artifact@v6
+        with:
+          name: bazel-testlogs-${{ matrix.sanitizer_config }}
+          path: bazel-testlogs/**/test.log
+          if-no-files-found: warn
