@@ -1,0 +1,70 @@
+@startuml client_disconnect_sequence_diagram
+
+participant ":LoggingClient" as Client
+participant "main()" as Main
+participant "mw::log::\nRuntime" as Runtime
+participant "mw::log::\nSafeDatarouterBackend" as Backend
+participant "mw::com::message_passing::\nReceiver" as Receiver
+
+Client -> Main : (start)
+activate Main
+
+Main -> Runtime : GetRecorder()\nGetInstance()
+note right of Runtime
+  Creation of the Runtime
+  Singleton that owns
+  the Recorder.
+end note
+
+Runtime -> Backend : constructs
+Backend -> Receiver : constructs
+Receiver -> Receiver : launches\nReceiver thread
+
+Main -> Runtime : Shutdown()
+note right of Runtime
+  Runtime::Shutdown() must be called
+  before the return of main().
+  After that no more calls to logging
+  are allowed.
+end note
+
+Runtime -> Backend : deconstructs\n~Runtime()
+
+Backend -> Receiver : Trigger stop source
+Backend -> Receiver : join()
+
+participant "mw::log::\nSharedLoggingData" as SLD
+
+Backend -> SLD : Set Detached State
+note right of SLD
+  The detached state shall allow
+  Datarouter to continue consuming
+  all the messages remaining
+  in shared memory without the need
+  of synchronization with the client.
+end note
+
+Backend -> SLD : If Datarouter has discovered the file:\nunlink shared memory file
+note right of SLD
+  After Datarouter and the client have
+  closed the file, the memory will be freed.
+  The client only unlinks on shutdown if
+  Datarouter has already discovered the
+  file, i.e. Datarouter has sent at least one
+  message to the client.
+end note
+
+Main --> Client : return
+deactivate Main
+
+note over Client, Main
+  C++ static deinitialization
+  phase begins after the
+  return of main().
+  At this point accessing
+  any static state is unsafe.
+  Thus the user must call
+  Shutdown() before.
+end note
+
+@enduml

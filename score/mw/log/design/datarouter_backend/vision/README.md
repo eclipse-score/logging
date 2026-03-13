@@ -77,7 +77,7 @@ only supports unidirectional message transport. Hence, the design allows to
 achieve the logging requirements without the need for a back-channel. On the
 highest level of abstraction we see the ASIL-B qualified client process on the
 one side and the datarouter process on the other ![Component
-view](https://www.plantuml.com/plantuml/proxy?src=https://raw.githubusercontent.com/swh/ddad_score/mw/log/design/datarouter_backend/vision/overview.uxf?ref=859c929f4d8643f3ec14142d8f7e10488c3c80e2).
+view](./score/mw/log/design/datarouter_backend/vision/overview.puml).
 The logs are written by the client into shared memory and read-out by
 datarouter. Freedom of interference is ensured since the datarouter process has
 read-only access to the shared-memory. In order to reuse the logging buffers in
@@ -113,7 +113,7 @@ Naturally, the communication to `datarouter` is encapsulated within the
 `mw::log` package of the logging client. This minimizes coupling with the
 frontend. Similarly, the backend is uncoupled on datarouter side as illustrated
 in the component view ![Component
-view](https://www.plantuml.com/plantuml/proxy?src=https://raw.githubusercontent.com/swh/ddad_score/mw/log/design/datarouter_backend/vision/component_diagram.uxf?ref=859c929f4d8643f3ec14142d8f7e10488c3c80e2).
+view](./score/mw/log/design/datarouter_backend/vision/component_diagram.puml).
 The `DatarouterBackend` and `Datarouter` are the linking points of this design
 into the [the larger logging package](../README.md). Note, possibly small
 (internal) API changes must be introduce to obtain a seamless link. The
@@ -156,7 +156,7 @@ the message of how much data is has been read and may be freed via a
 `score::mw::com::message_passing::ISender` instance, respectively. Details on the
 communication are given in the [next section](#data-flow). Datarouter contains
 one `LogClientReader` for each connected client. ![High Level
-design](https://www.plantuml.com/plantuml/proxy?src=https://raw.githubusercontent.com/swh/ddad_score/mw/log/design/datarouter_backend/vision/high_level_design.uxf?ref=859c929f4d8643f3ec14142d8f7e10488c3c80e2).
+design](./score/mw/log/design/datarouter_backend/vision/high_level_design.puml).
 
 ## Data flow
 
@@ -189,7 +189,7 @@ for the message passing channel are initialized. If any of these operations fail
 they can be retried or aborted. In the latter case the logging client should
 shutdown or restart altogether.
 
-![Initialization sequence diagram](https://www.plantuml.com/plantuml/proxy?src=https://raw.githubusercontent.com/swh/ddad_score/mw/log/design/datarouter_backend/vision/initialization_sequence_diagram.uxf?ref=859c929f4d8643f3ec14142d8f7e10488c3c80e2)
+![Initialization sequence diagram](./score/mw/log/design/datarouter_backend/vision/initialization_sequence_diagram.puml)
 
 ### Log message processing
 
@@ -238,7 +238,7 @@ handles unplausible inputs gracefully. I.e. in the worst-case it may interpret a
 faulty input such that it erases all elements. Hence, the damage is restricted
 to these incorrectly deleted logs.
 
-![Verbose message sequence diagram](https://www.plantuml.com/plantuml/proxy?src=https://raw.githubusercontent.com/swh/ddad_score/mw/log/design/datarouter_backend/vision/verbose_sequence_diagram.uxf?ref=859c929f4d8643f3ec14142d8f7e10488c3c80e2)
+![Verbose message sequence diagram](./score/mw/log/design/datarouter_backend/vision/verbose_sequence_diagram.puml)
 
 #### Non-Verbose log messages
 
@@ -279,7 +279,7 @@ passing library. This back-communication is equivalent (potentially even
 combined into one message) to the verbose case. The `Erase` method in the client
 again handles unplausible inputs gracefully; risking at worst a loss of logs.
 
-![Non-Verbose message sequence diagram](https://www.plantuml.com/plantuml/proxy?src=https://raw.githubusercontent.com/swh/ddad_score/mw/log/design/datarouter_backend/vision/non_verbose_sequence_diagram.uxf?ref=859c929f4d8643f3ec14142d8f7e10488c3c80e2)
+![Non-Verbose message sequence diagram](./score/mw/log/design/datarouter_backend/vision/non_verbose_sequence_diagram.puml)
 
 ### Disconnect of the Logging client
 
@@ -320,7 +320,7 @@ resource (after tracing the old one to completion). After this switch the
 resources will be freed by the operating system, as it is not linked to by any
 process.
 
-![Client disconnect sequence diagram](https://www.plantuml.com/plantuml/proxy?src=https://raw.githubusercontent.com/swh/ddad_score/mw/log/design/datarouter_backend/vision/client_disconnect_sequence_diagram.uxf?ref=859c929f4d8643f3ec14142d8f7e10488c3c80e2)
+![Client disconnect sequence diagram](./score/mw/log/design/datarouter_backend/vision/client_disconnect_sequence_diagram.puml)
 
 ## Handling of non-verbose record identifiers
 

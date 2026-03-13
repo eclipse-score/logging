@@ -1,0 +1,41 @@
+@startuml overview
+
+left to right direction
+skinparam linetype ortho
+
+rectangle "<<Process>>\nLogging Client" as LoggingClient {
+  component "mw::log\n\nDatarouterBackend" as Backend {
+    component "mw::com::Receiver" as Receiver
+  }
+}
+
+rectangle "<<Process>>\nDatarouter" as Datarouter {
+  component "mw::com::Sender" as Sender
+}
+
+rectangle "Shared Memory" as SharedMemory
+
+LoggingClient *-down- SharedMemory
+Datarouter -down-> SharedMemory
+
+note top of Receiver
+  Instantiates side channel to receive messages from:
+  /logging.<app>.<pid>.<timestamp>
+end note
+
+note right of Sender
+  Creates a Sender
+  Sends messages to the client via side channel
+end note
+
+Receiver -0)- Sender
+
+note bottom of SharedMemory
+  LoggingClient creates and writes to:
+  /tmp/<app>.<pid>.<timestamp>.shmem
+  permissions: rw-r--r--
+
+  Datarouter discovers and opens read-only
+end note
+
+@enduml

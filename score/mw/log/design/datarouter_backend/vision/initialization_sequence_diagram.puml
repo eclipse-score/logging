@@ -1,0 +1,124 @@
+@startuml initialization_sequence_diagram
+
+participant ":LoggingClient\n<App-Id>" as Client
+participant ":SafeDataRouterRecorder" as Recorder
+participant ":score::json" as Json
+participant ":SafeDataRouterBackend" as Backend
+participant "score::memory::\nSharedMemoryFactory" as ShmFactory
+participant ":SharedLoggingData" as SLD #red
+participant ":VerboseMessageWriter" as VWriter
+participant ":NonVerboseMessageWriter" as NVWriter
+participant ":CircularAllocator" as Alloc
+participant ":Fifo" as Fifo
+participant ":SynchronizedNonVerbose\nRecordContainer" as SyncNV
+
+box "Logger Thread"
+  participant ":score::mw::com::message_passing::\nReceiverFactory" as ReceiverFactory
+  participant ":score::mw::com::message_passing::\nReceiver" as Receiver
+end box
+
+== LoggingClient Initialization ==
+
+activate Client
+Client -> Recorder : construct
+
+activate Recorder
+Recorder -> Json : Read:\n/opt/datarouter/etc/common-class-ids.json\n/opt/datarouter/etc/class-ids-<app-id>.json
+Json --> Recorder
+
+Recorder -> Recorder : initialize: type_enabled_map_
+
+Recorder -> Json : Read: Buffer sizes\nfrom logging.json
+Json --> Recorder
+
+Recorder -> Backend : construct(buffer_sizes)
+
+activate Backend
+Backend -> ShmFactory : create(path =\n"/tmp/logging/pid_<appname>_<timestamp>")
+activate ShmFactory
+ShmFactory --> Backend : std::shared_ptr<ManagedMemoryResource>
+deactivate ShmFactory
+
+Backend -> ShmFactory : data_ = managed_memory_resource.allocate(...)
+ShmFactory -> SLD : allocates
+activate SLD
+
+Backend -> VWriter : construct(data_.verbose_messages_container)
+activate VWriter
+VWriter -> Alloc : constructs
+activate Alloc
+VWriter -> Fifo : constructs
+activate Fifo
+
+Backend -> NVWriter : construct(data_.non_verbose_records_container)
+activate NVWriter
+NVWriter -> SyncNV : constructs
+activate SyncNV
+
+note over ReceiverFactory
+  Since score::mw::com::message_passing is potentially
+  blocking on the receiver side, this is done in the
+  dedicated logger thread.
+
+  Note: it might be possible and desired to also do
+  (parts of) the other initializations inside the
+  logger thread.
+end note
+
+Backend -> ReceiverFactory : receiver_ = Create(\n  identifier = "<app_id>_log_side_channel")
+activate ReceiverFactory
+ReceiverFactory --> Backend
+deactivate ReceiverFactory
+ReceiverFactory -> Receiver : (creates)
+activate Receiver
+Receiver -> SLD : connect
+
+deactivate Backend
+deactivate Recorder
+
+== Datarouter Initialization ==
+
+participant ":Datarouter" as Datarouter
+participant ":score::json" as DrJson
+participant ":LogClientReader" as LCReader
+participant "score::memory::\nSharedMemoryFactory " as DrShmFactory
+participant ":VerboseMessageReader" as VMReader
+participant ":NonVerboseRecordReader" as NVMReader
+participant ":score::mw::com::message_passing::\nSenderFactory" as SenderFactory
+participant ":score::mw::com::message_passing::\nSender" as Sender
+
+activate Datarouter
+Datarouter -> DrJson : read: /opt/datarouter/etc/common-class-ids.json
+DrJson --> Datarouter
+Datarouter -> DrJson : read: /opt/datarouter/etc/class-ids-*.json
+DrJson --> Datarouter
+Datarouter -> DrJson : read: /opt/datarouter/etc/class-ids.json
+DrJson --> Datarouter
+
+loop Monitor "/tmp/logging/" for new files
+  Datarouter -> DrShmFactory : open(path =\n"/tmp/logging/pid_<appname>_<timestamp>",\nisReadWrite = false)
+  activate DrShmFactory
+  DrShmFactory --> Datarouter : std::shared_ptr<ManagedMemoryResource>
+  deactivate DrShmFactory
+
+  Datarouter -> DrShmFactory : data_ = managed_memory_resource.open(...)
+  DrShmFactory -> SLD : opens
+
+  Datarouter -> LCReader : constructs
+  activate LCReader
+  LCReader -> VMReader : constructs
+  activate VMReader
+  LCReader -> NVMReader : constructs
+  activate NVMReader
+
+  LCReader -> SenderFactory : sender_ = Create(\n  identifier = "<app_id>_log_side_channel")
+  activate SenderFactory
+  SenderFactory --> LCReader
+  deactivate SenderFactory
+  SenderFactory -> Sender : (creates)
+  activate Sender
+
+  Datarouter -> Datarouter : sources_.emplace(...)
+end
+
+@enduml

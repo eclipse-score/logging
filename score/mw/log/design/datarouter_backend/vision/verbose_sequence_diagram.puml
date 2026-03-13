@@ -1,0 +1,119 @@
+@startuml verbose_sequence_diagram
+
+box "User Thread"
+  participant ":LoggingClient\nDataRouterRecorder" as Recorder
+  participant ":LoggingClient\nDataRouterBackend" as Backend
+end box
+
+participant "VerboseWriter" as VWriter
+participant "VerboseMessageFifo" as Fifo
+participant "CircularAllocator" as Alloc
+
+box "mw::com::message_passing\nReceiver Thread"
+  participant "score::mw::com::message_passing::\nSender" as Sender
+end box
+
+participant "VerboseReader" as VReader
+
+box "Datarouter Worker Thread"
+  participant ":Datarouter\nSourceSession" as Datarouter
+  participant "LogParser" as Parser
+end box
+
+== Acquire Slot ==
+
+Recorder -> Backend : AcquireSlot()
+Backend -> VWriter : AcquireSlot()
+VWriter -> Alloc : AcquireSlot()
+note right of Alloc : AcquireSlot is lock-free
+Alloc --> VWriter : Ok(slot_handle)
+VWriter --> Backend : Ok(slot_handle)
+Backend --> Recorder : Ok(slot_handle)
+
+note over Recorder
+  User writes
+  data into slot...
+end note
+
+== Release Slot ==
+
+Recorder -> Backend : StopRecord(slot)
+Backend -> VWriter : ReleaseSlotForWriting(slot)
+VWriter -> Fifo : TryPush(slot)
+note right of Fifo
+  TryPush shall be lock-free.
+  By design, TryPush shall succeed
+  as the fifo shall have capacity
+  equal to the number of slots
+  in the CircularAllocator.
+end note
+Fifo --> VWriter : Ok
+VWriter --> Backend : (return)
+Backend --> Recorder : (return)
+
+== Datarouter Reads Messages ==
+
+Datarouter -> VReader : FetchNewMessages()
+Datarouter -> VReader : GetNextMessage()
+VReader --> Datarouter : empty
+
+note over Fifo, VReader
+  New message in VerboseMessageFifo
+  becomes visible through atomic
+  variable in shared memory.
+end note
+
+Datarouter -> VReader : FetchNewMessages()
+Datarouter -> VReader : GetNextMessage()
+VReader --> Datarouter : LogEntry*
+
+Datarouter -> Parser : Parse(LogEntry*)
+Parser --> Datarouter : (return)
+
+note over VWriter, Fifo
+  Handle non-verbose messages...
+end note
+
+== Send Acknowledgement ==
+
+Datarouter -> Sender : SendMessage\nMediumMessage = [\n  num_verbose_messages_read,\n  non_verbose_records_read\n]
+note over Sender, Datarouter
+  Context switch:
+  Datarouter worker thread
+  is blocked on client.
+end note
+
+Sender -> Backend : OnMessageReceivedFromDatarouter(payload)
+
+Backend -> VWriter : Erase(num_messages)
+VWriter -> Fifo : Erase(num_messages)
+Fifo -> Alloc : ReleaseSlot(slot)
+Alloc --> Fifo : (return)
+Fifo --> VWriter : (return)
+
+note right of Fifo
+  First remove element from Fifo,
+  then release the Slot from
+  CircularAllocator.
+end note
+
+note over VWriter, Alloc
+  Handle non-verbose messages...
+end note
+
+VWriter --> Backend : (return)
+
+Sender --> Datarouter : Return
+
+note over Sender, Datarouter
+  Context switch:
+  Datarouter worker thread
+  is unblocked.
+end note
+
+note right of Parser
+  Forward the log message
+  to logging sinks.
+end note
+
+@enduml

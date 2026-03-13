@@ -1,0 +1,51 @@
+@startuml component_diagram
+
+skinparam linetype ortho
+
+package "mw::log" {
+  [Frontend]
+
+  package "DatarouterBackend" as DatarouterBackend {
+    [VerboseMessageWriter]
+    [NonVerboseMessageWriter]
+
+    package "Common" {
+      [SharedLoggingData]
+    }
+
+    Common -[hidden]down- NonVerboseMessageWriter
+    NonVerboseMessageWriter -[hidden]down- VerboseMessageWriter
+  }
+
+  [Frontend] -right-> DatarouterBackend
+}
+
+package "Datarouter" as Datarouter {
+  package "mw::log Adapter" as LogAdapter {
+    [VerboseMessageReader]
+    [NonVerboseMessageReader]
+
+    VerboseMessageReader -[hidden]down- NonVerboseMessageReader
+  }
+}
+
+together {
+  [mw::com::MessagePassing] as MessagePassing
+  [score::memory::shared] as SharedMemory
+  [score::json] as Json
+
+  MessagePassing -[hidden]down- SharedMemory
+  SharedMemory -[hidden]down- Json
+}
+
+DatarouterBackend -right-> MessagePassing
+DatarouterBackend -right-> SharedMemory
+DatarouterBackend -right-> Json
+
+LogAdapter  -right-> MessagePassing
+LogAdapter  -right-> SharedMemory
+LogAdapter  -right-> Json
+
+LogAdapter -right-> [Common]
+
+@enduml

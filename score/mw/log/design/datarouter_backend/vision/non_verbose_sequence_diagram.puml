@@ -1,0 +1,168 @@
+@startuml non_verbose_sequence_diagram
+
+box "User Thread"
+  participant ":LoggingClient\nDataRouterRecorder" as Recorder
+end box
+
+participant ":LoggingClient\nSafeDataRouterBackend" as Backend
+participant "NonVerboseWriter" as NVWriter
+participant "SynchronizedNonVerboseRecordReader" as SyncReader
+participant "NonVerboseRecordContainer" as NVContainer
+
+box "mw::com::message_passing\nReceiver Thread"
+  participant ":score::mw::com::\nmessage_passing::Receiver" as ReceiverThread
+end box
+
+participant "score::mw::com::\nmessage_passing::Sender" as Sender
+participant "NonVerboseReader" as NVReader
+
+box "Datarouter Worker Thread"
+  participant ":Datarouter\nSourceSession" as Datarouter
+end box
+
+participant "LogParser" as Parser
+
+== Initial State: Datarouter Polls for New Messages ==
+
+activate Datarouter
+Datarouter -> NVReader : FetchNewMessages()
+activate NVReader
+Datarouter -> NVReader : GetNextMessage()
+NVReader --> Datarouter : empty
+deactivate NVReader
+
+== User Thread: Write Non-Verbose Record ==
+
+activate Recorder
+Recorder -> Backend : TRACE MACRO ->\nTrace(callback)
+activate Backend
+Backend -> NVWriter
+activate NVWriter
+NVWriter -> SyncReader : lock(mutex)
+activate SyncReader
+SyncReader -> NVContainer
+activate NVContainer
+
+note over NVWriter, NVContainer #yellow
+  Skip over space for Valid-Enum in first
+  position; Write temporary Header
+end note
+
+NVContainer --> SyncReader : b = buffer_.at(write_index)
+deactivate NVContainer
+SyncReader --> NVWriter
+deactivate SyncReader
+
+NVWriter -> Backend : callback(b)
+activate Backend
+Backend -> Recorder : callback(b)
+activate Recorder
+
+note left of Recorder #yellow
+  Serializer writes
+  into buffer
+end note
+
+note over NVWriter, NVContainer #yellow
+  Adjust Temporary header
+  adjust write_index
+end note
+
+Recorder --> Backend : serializer callback terminates
+deactivate Recorder
+Backend --> NVWriter
+deactivate Backend
+
+NVWriter -> SyncReader : release lock
+activate SyncReader
+SyncReader --> NVWriter
+deactivate SyncReader
+
+NVWriter --> Backend
+deactivate NVWriter
+Backend --> Recorder
+deactivate Backend
+deactivate Recorder
+
+== Data Becomes Visible in Shared Memory ==
+
+note over NVContainer, NVReader #yellow
+  New message in NonVerboseRecordContainer
+  become visible through atomic variable
+  in shared memory.
+end note
+
+== Datarouter Worker Thread: Read Non-Verbose Record ==
+
+Datarouter -> NVReader : FetchNewMessages()
+activate NVReader
+Datarouter -> NVReader : GetNextMessage()
+NVReader --> Datarouter : NonVerboseRecord
+deactivate NVReader
+
+Datarouter -> Parser : Parse(NonVerboseRecord)
+activate Parser
+
+note over Parser #yellow
+  Handle non-verbose
+  messages...
+end note
+
+Parser --> Datarouter
+deactivate Parser
+
+note right of Parser #yellow
+  Forward the log message
+  to logging sinks.
+end note
+
+== Datarouter Notifies Logger: Erase Consumed Records ==
+
+Datarouter -> Sender : SendMessage\nMediumMessage = [\n  num_verbose_messages_read,\n  num_verbose_records_read\n]
+activate Sender
+
+note over Sender, Datarouter #yellow
+  Context switch:\nDatarouter worker thread\nis blocked on client.
+end note
+
+Sender -> ReceiverThread : Send()\nmessage = [\n  pid: pid,\n  id: 0,\n  payload: payload\n]
+activate ReceiverThread
+
+ReceiverThread -> Backend : OnMessageReceivedFromDatarouter(payload)
+activate Backend
+Backend -> NVWriter : Erase(num_records)
+activate NVWriter
+NVWriter -> SyncReader : lock(mutex)
+activate SyncReader
+SyncReader -> NVContainer : read_index +=\nGetByteSizeOfReadMessages(num_records)
+activate NVContainer
+
+note over NVWriter, NVContainer #yellow
+  Adjust at buffer wrap-around
+end note
+
+NVContainer --> SyncReader
+deactivate NVContainer
+
+note over NVWriter, NVContainer #yellow
+  Handle verbose messages...
+end note
+
+SyncReader --> NVWriter
+deactivate SyncReader
+NVWriter --> Backend
+deactivate NVWriter
+Backend --> ReceiverThread
+deactivate Backend
+
+ReceiverThread --> Datarouter : Return
+deactivate ReceiverThread
+deactivate Sender
+
+note over Sender, Datarouter #yellow
+  Context switch:\nDatarouter worker thread\nis unblocked.
+end note
+
+deactivate Datarouter
+
+@enduml

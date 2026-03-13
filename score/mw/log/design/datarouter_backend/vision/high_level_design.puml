@@ -1,0 +1,231 @@
+@startuml high_level_design
+
+top to bottom direction
+skinparam linetype ortho
+
+skinparam class {
+  BackgroundColor<<Shared Memory>> #FF8080
+}
+
+note "Legend:\nred background = data structure lives in shared memory" as Legend
+note "Unit tests on target shall check:\n- atomic<size_t>::is_lock_free()\n- atomic_flag::is_lock_free()" as AtomicNote
+
+package "LoggingProcess: ASIL-B" {
+
+  class "<<Singleton>>\nmw::log::Runtime" as Runtime
+
+  class SafeDataRouterRecorder {
+    + IsTypeEnabled(pretty_name: const string&): bool
+    + Trace(serialize: SerializeCallback): bool
+    + StartRecord()
+    + StopRecord()
+    + Log()
+    - type_enabled_map_: std::unordered_map<std::string, bool>
+  }
+
+  class SafeDataRouterBackend {
+    + SetDetached()
+    + AcquireSlot()
+    + ReleaseSlotForWriting(number_of_slots)
+    + GetUnderlyingSlot(SlotHandle)
+    + Trace(serialize: SerializeCallback)
+    - data_: SharedLoggingData
+    - verbose_message_writer_: VerboseMessageWriter
+    - non_verbose_writer_: NonVerboseRecordWriter
+    - receiver_: std::unique_ptr<score::mw::com::IReceiver>
+  }
+
+  class VerboseMessageWriter {
+    + AcquireSlot()
+    + ReleaseSlotForWriting(number_of_slots)
+    + GetUnderlyingSlot(SlotHandle)
+    + Erase(num_elements: size_t): void
+    - TryWriteIntoSlot(message): score::cpp::optional<size_t>
+    - TryPushFifo()
+    - slots_: CircularAllocator
+    - data_: VerboseMessageContainer&
+  }
+
+  class NonVerboseRecordWriter {
+    + Erase(num_elements: size_t): void
+    + TryPush(callback: score::cpp::function<size_t, (uint8*, size_t)>): PushResult
+    - data_: SynchronizedNonVerboseRecordContainer&
+  }
+
+  note bottom of NonVerboseRecordWriter : Honor alignment of NonVerboseRecordHeader.\nErase: Shall handle wrong inputs gracefully.
+
+  class Fifo {
+    + TryPush(index: size_t): PushResult
+    + Erase(number_of_elements)
+    - fifo_read_index_: atomic<size_t>&
+    - fifo_write_index_: atomic<size_t>&
+    - fifo_buffer_: score::memory::shared::Vector<size_t>&
+    - fifo_valid_: score::memory::shared::Vector<atomic_flag>&
+  }
+
+  note right of Fifo : Legacy template T\nfixed to T = LogEntry
+
+  class CircularAllocator {
+    + AcquireSlot(): optional<SlotHandle>
+    + ReleaseSlotForWriting(SlotHandle)
+    + ReleaseSlotForReading(SlotHandle)
+    + GetUnderlyingSlot(): Slot
+    - data_: score::memory::shared::Vector<LogEntry>&
+    - in_use_: score::memory::shared::Vector<std::atomic_flag>&
+  }
+
+  class SynchronizedNonVerboseRecordContainer {
+    + mutex: std::mutex
+    + container: NonVerboseRecordContainer&
+  }
+
+  class "score::memory::SharedMemoryFactory" as SharedMemoryFactory
+  class "score::mw::com::message_passing::ReceiverFactory" as ReceiverFactory
+  class "score::mw::com::message_passing::IReceiver" as IReceiver
+  class Serializer
+
+  Runtime --> SafeDataRouterRecorder : is owned by
+  SafeDataRouterRecorder *-- SafeDataRouterBackend
+  SafeDataRouterBackend *-- VerboseMessageWriter
+  SafeDataRouterBackend *-- NonVerboseRecordWriter
+  SafeDataRouterBackend *-- IReceiver
+  SafeDataRouterBackend ..> ReceiverFactory : uses to initialize receiver_
+  SafeDataRouterBackend ..> Serializer : callback
+
+  VerboseMessageWriter *-- CircularAllocator
+  VerboseMessageWriter *-- Fifo
+
+  NonVerboseRecordWriter *-- SynchronizedNonVerboseRecordContainer
+
+  SafeDataRouterBackend --> SharedMemoryFactory : uses
+  ReceiverFactory ..> IReceiver : initializes
+}
+
+' Shared memory data structures — live between both process domains
+class SharedLoggingData <<Shared Memory>> {
+  + verbose_messages_container: VerboseMessageContainer
+  + non_verbose_records_container: NonVerboseRecordContainerData
+  + writer_detached: std::atomic_flag
+}
+
+class VerboseMessageContainer <<Shared Memory>> {
+  + fifo_read_index: atomic<size_t>
+  + fifo_write_index: atomic<size_t>
+  + fifo_buffer: score::memory::shared::Vector<size_t>
+  + fifo_valid: score::memory::shared::Vector<atomic_flag>
+  + used_slots: score::memory::shared::Vector<std::atomic_flag>
+  + slots: score::memory::shared::Vector<LogEntry>
+}
+
+class LogEntry <<Shared Memory>> {
+  + ctx_id: LoggingIdentifier
+  + payload_: score::memory::shared::Vector<uint8>
+  + timestamp_steady_nsec: std::uint64
+  + num_of_args: std::uint8
+  + log_level: std::uint8
+  + sequence_number: std::uint16
+}
+
+class NonVerboseRecordContainer <<Shared Memory>> {
+  + read_index: atomic<size_t>
+  + write_index: atomic<size_t>
+  + buffer: score::memory::shared::Vector<uint8_t>
+}
+
+class SideChannelMessage {
+  + verbose_number_of_messages
+  + non_verbose_number_of_bytes
+}
+
+note "Non-verbose messages as bytestream:\nNonVerboseRecordHeader + Payload\n+ NonVerboseRecordHeader + Payload + ..." as NVNote
+
+' Relationships involving shared memory structures
+SafeDataRouterBackend *-- SharedLoggingData
+SharedMemoryFactory ..> SharedLoggingData : allocates
+VerboseMessageWriter --> VerboseMessageContainer : uses (modifying)
+SynchronizedNonVerboseRecordContainer --> NonVerboseRecordContainer : uses (modifying)
+CircularAllocator --> VerboseMessageContainer : uses (modifying)
+SharedLoggingData *-- VerboseMessageContainer
+SharedLoggingData *-- NonVerboseRecordContainer
+VerboseMessageContainer *-- LogEntry
+SideChannelMessage --> SafeDataRouterBackend : receives
+
+package "Datarouter: QM" {
+
+  class Datarouter {
+    - sources_: std::vector<LogClientReader>
+    - CallbackFunctions
+  }
+
+  class LogClientReader {
+    + CheckForNewMessagesAndActUpon(verbose_message_callback, non_verbose_message)
+    - OpenSharedLoggingData()
+    - ReadDetached()
+    - data_: SharedLoggingData const&
+    - sender_: std::unique_ptr<score::mw::com::ISender>
+    - verbose_reader_: VerboseMessageReader
+    - non_verbose_reader_: NonVerboseRecordReader
+  }
+
+  class VerboseMessageReader {
+    + GetNextMessage(): score::cpp::optional<LogEntry*>
+    - FetchNewMessages(): void
+    - data_: VerboseMessageContainer const&
+    - local_write_index_: std::size_t
+    - local_read_index_: std::size_t
+  }
+
+  class NonVerboseRecordReader {
+    + GetNextMessage(): score::cpp::optional<NonVerboseRecord>
+    - FetchNewMessages(): void
+    - data_: NonVerboseRecordContainer const&
+    - local_write_index_: std::size_t
+    - local_read_index_: std::size_t
+  }
+
+  class NonVerboseRecord {
+    + GetPayload(): span<char>
+    + GetHeader(): NonVerboseRecordHeader
+    - header: NonVerboseRecordHeader*
+    - payload: uint8_t*
+  }
+
+  class NonVerboseRecordHeader {
+    + payload_length: uint8_t
+    + sequence_number: uint16_t
+    + type_info: uint32_t
+    + log_level: LogLevel
+    + timestamp_ns: uint64_t
+    + status: std::atomic<NonVerboseRecordStatus>
+  }
+
+  enum NonVerboseRecordStatus {
+    kInvalid
+    kValid
+    kValidLast
+  }
+
+  class LogParser
+  class "score::mw::com::message_passing::SenderFactory" as SenderFactory
+  class "score::mw::com::message_passing::ISender" as ISender
+
+  Datarouter *-- "0..n" LogClientReader
+  Datarouter *-- "1..1" LogParser
+
+  LogClientReader *-- VerboseMessageReader
+  LogClientReader *-- NonVerboseRecordReader
+  LogClientReader ..> SenderFactory : uses
+  SenderFactory ..> ISender : initializes
+  LogClientReader *-- ISender
+
+  NonVerboseRecordReader ..> NonVerboseRecord : ConvertsByteStreamTo
+  NonVerboseRecord o-- NonVerboseRecordHeader
+  NonVerboseRecordHeader *-- NonVerboseRecordStatus
+}
+
+' Cross-domain reads and sends via shared memory
+VerboseMessageReader --> VerboseMessageContainer : reads
+NonVerboseRecordReader --> NonVerboseRecordContainer : reads
+LogClientReader --> SideChannelMessage : sends
+
+@enduml
