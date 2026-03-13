@@ -532,13 +532,22 @@ TEST_F(MessagePassingServerFixture, TestTripleConnectSamePid)
     auto* connection0 = ConnectClientAndSendConnectMessage(kClienT0Pid);
     EXPECT_CALL(connection, GetClientIdentity()).WillOnce(ReturnRef(client_identity));
     this->disconnect_callback(connection);
-    using namespace std::chrono_literals;
-    std::this_thread::sleep_for(100ms);
+    {
+        std::unique_lock<std::mutex> lock(map_mutex);
+        ASSERT_TRUE(map_cond.wait_for(lock, std::chrono::seconds{1}, [this]() {
+            return session_map.find(kClienT0Pid) == session_map.end();
+        })) << "Timed out waiting for session cleanup after first disconnect";
+    }
     connections.erase(kClienT0Pid);
     auto* connection1 = ConnectClientAndSendConnectMessage(kClienT0Pid);
     EXPECT_CALL(connection, GetClientIdentity()).WillOnce(ReturnRef(client_identity));
     this->disconnect_callback(connection);
-    std::this_thread::sleep_for(100ms);
+    {
+        std::unique_lock<std::mutex> lock(map_mutex);
+        ASSERT_TRUE(map_cond.wait_for(lock, std::chrono::seconds{1}, [this]() {
+            return session_map.find(kClienT0Pid) == session_map.end();
+        })) << "Timed out waiting for session cleanup after second disconnect";
+    }
 
     connections.erase(kClienT0Pid);
     auto* connection2 = ConnectClientAndSendConnectMessage(kClienT0Pid);
@@ -622,17 +631,20 @@ TEST_F(MessagePassingServerFixture, TestSamePidWhileRunning)
     //  wait until CLIENT0 is blocked inside the first tick
     session_map.at(kClienT0Pid).WaitStartOfFirstTick();
 
-    // accumulate other ticks in the queue
-    using namespace std::chrono_literals;
-    std::this_thread::sleep_for(100ms);
-
     // we will need to unblock the tick before the callback returns, so start it on a separate thread
     std::thread connect_thread([&]() {
         StrictMock<::score::message_passing::ServerConnectionMock> connection;
         score::message_passing::ClientIdentity client_identity{kClienT0Pid, 0, 0};
         EXPECT_CALL(connection, GetClientIdentity()).WillOnce(ReturnRef(client_identity));
         this->disconnect_callback(connection);
-        std::this_thread::sleep_for(100ms);
+
+        // Wait for the old session to be fully destroyed before reconnecting
+        {
+            std::unique_lock<std::mutex> lock(map_mutex);
+            ASSERT_TRUE(map_cond.wait_for(lock, std::chrono::seconds{1}, [this]() {
+                return session_map.find(kClienT0Pid) == session_map.end();
+            })) << "Timed out waiting for old CLIENT0 session destruction";
+        }
 
         connections.erase(kClienT0Pid);
 
@@ -678,17 +690,20 @@ TEST_F(MessagePassingServerFixture, TestSamePidWhileQueued)
     // wait until CLIENT0 is blocked inside the first tick
     session_map.at(kClienT0Pid).WaitStartOfFirstTick();
 
-    // accumulate other ticks (CLIENT2 in particular) in the queue
-    using namespace std::chrono_literals;
-    std::this_thread::sleep_for(250ms);
-
     // we will need to unblock the tick before the callback returns, so start it on a separate thread
     std::thread connect_thread([&]() {
         StrictMock<::score::message_passing::ServerConnectionMock> connection;
         score::message_passing::ClientIdentity client_identity{kClienT2Pid, 0, 0};
         EXPECT_CALL(connection, GetClientIdentity()).WillOnce(ReturnRef(client_identity));
         this->disconnect_callback(connection);
-        std::this_thread::sleep_for(100ms);
+
+        // Wait for the old session to be fully destroyed before reconnecting
+        {
+            std::unique_lock<std::mutex> lock(map_mutex);
+            ASSERT_TRUE(map_cond.wait_for(lock, std::chrono::seconds{1}, [this]() {
+                return session_map.find(kClienT2Pid) == session_map.end();
+            })) << "Timed out waiting for old CLIENT2 session destruction";
+        }
 
         connections.erase(kClienT2Pid);
 
@@ -731,7 +746,7 @@ TEST_F(MessagePassingServerFixture, WatchdogShouldTearDownUnresponsiveClient)
 
     {
         std::unique_lock<std::mutex> lock(map_mutex);
-        ASSERT_TRUE(map_cond.wait_for(lock, std::chrono::seconds{3}, [this]() {
+        ASSERT_TRUE(map_cond.wait_for(lock, std::chrono::seconds{1}, [this]() {
             return session_map.empty();
         })) << "Timed out waiting for watchdog teardown";
     }
@@ -759,7 +774,7 @@ TEST_F(MessagePassingServerFixture, WatchdogMissCountShouldResetOnValidResponse)
     // 1) First acquire request is missed by the client -> miss_count becomes 1.
     session_map.at(kClienT0Pid).handle->AcquireRequest();
     using namespace std::chrono_literals;
-    std::this_thread::sleep_for(1s);
+    std::this_thread::sleep_for(100ms);
 
     // 2) Late valid response arrives -> miss_count should reset to 0.
     score::mw::log::detail::ReadAcquireResult acquire_result{0U};
@@ -770,14 +785,14 @@ TEST_F(MessagePassingServerFixture, WatchdogMissCountShouldResetOnValidResponse)
 
     // 3) One more missed acquire should NOT tear down (max_misses = 2, miss_count should be 1).
     session_map.at(kClienT0Pid).handle->AcquireRequest();
-    std::this_thread::sleep_for(1s);
+    std::this_thread::sleep_for(100ms);
     EXPECT_FALSE(session_map.empty());
 
     // 4) Second miss after the reset should now tear down.
     session_map.at(kClienT0Pid).handle->AcquireRequest();
     {
         std::unique_lock<std::mutex> lock(map_mutex);
-        ASSERT_TRUE(map_cond.wait_for(lock, std::chrono::seconds{3}, [this]() {
+        ASSERT_TRUE(map_cond.wait_for(lock, std::chrono::seconds{1}, [this]() {
             return session_map.empty();
         })) << "Timed out waiting for watchdog teardown after miss-count reset";
     }
@@ -802,7 +817,7 @@ TEST_F(MessagePassingServerFixture, EnobufsFromNotifyShouldNotKillSession)
 
     // Session should still be alive — ENOBUFS is treated as a transient error.
     using namespace std::chrono_literals;
-    std::this_thread::sleep_for(200ms);
+    std::this_thread::sleep_for(50ms);
     EXPECT_FALSE(session_map.empty());
 
     // A subsequent successful Notify() should work normally.
@@ -811,7 +826,7 @@ TEST_F(MessagePassingServerFixture, EnobufsFromNotifyShouldNotKillSession)
     session_map.at(kClienT0Pid).handle->AcquireRequest();
 
     // Verify session is still alive after successful notify.
-    std::this_thread::sleep_for(200ms);
+    std::this_thread::sleep_for(50ms);
     EXPECT_FALSE(session_map.empty());
 
     ExpectServerDestruction();
@@ -832,9 +847,46 @@ TEST_F(MessagePassingServerFixture, NonEnobufsNotifyFailureShouldStillKillSessio
 
     {
         std::unique_lock<std::mutex> lock(map_mutex);
-        ASSERT_TRUE(map_cond.wait_for(lock, std::chrono::seconds{3}, [this]() {
+        ASSERT_TRUE(map_cond.wait_for(lock, std::chrono::seconds{1}, [this]() {
             return session_map.empty();
         })) << "Timed out waiting for session teardown after non-ENOBUFS failure";
+    }
+
+    ExpectServerDestruction();
+    UninstantiateServer();
+}
+
+TEST_F(MessagePassingServerFixture, DisconnectDuringNotifyShouldNotCrash)
+{
+    ExpectOurPidIsQueried();
+
+    InstantiateServer(GetCountingSessionFactory());
+
+    auto* connection_ptr = ConnectClientAndSendConnectMessage(kClienT0Pid);
+
+    // Simulate a disconnect arriving right after the Notify() kernel call.
+    // In production the disconnect callback fires on the dispatch thread and can
+    // race with NotifyAcquireRequest.  NotifyAcquireRequest holds the server mutex
+    // for the duration of Notify(), so we spawn the disconnect thread inside the
+    // mock (it blocks on the mutex) and join it after AcquireRequest returns.
+    std::thread disconnect_thread;
+    EXPECT_CALL(*connection_ptr, Notify(Matcher<score::cpp::span<const std::uint8_t>>(_)))
+        .WillOnce([this, connection_ptr, &disconnect_thread](const auto /*m*/) {
+            disconnect_thread = std::thread([this, connection_ptr]() {
+                this->disconnect_callback(*connection_ptr);
+            });
+            return score::cpp::expected_blank<score::os::Error>{};
+        });
+
+    session_map.at(kClienT0Pid).handle->AcquireRequest();
+    disconnect_thread.join();
+
+    // Wait for teardown to complete.
+    {
+        std::unique_lock<std::mutex> lock(map_mutex);
+        ASSERT_TRUE(map_cond.wait_for(lock, std::chrono::seconds{1}, [this]() {
+            return session_map.empty();
+        })) << "Timed out waiting for session teardown after disconnect-during-notify";
     }
 
     ExpectServerDestruction();

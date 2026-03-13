@@ -92,6 +92,14 @@ class MessagePassingServer : public IMessagePassingServerSessionWrapper
         MessagePassingServer* server_;
     };
 
+    /// Thread-safety contract:
+    /// - Tick() is called from the worker thread without the server mutex held.
+    /// - OnAcquireResponse() is called from the dispatch thread with the server mutex held.
+    /// - OnClosedByPeer() is called from the worker thread without the server mutex held.
+    /// - IsSourceClosed() is called from the worker thread with the server mutex held.
+    /// Implementations must ensure that shared state accessed by Tick() and by any method
+    /// called under the mutex (OnAcquireResponse, IsSourceClosed) is properly synchronized
+    /// (e.g., via atomics or an internal lock).
     class ISession
     {
       public:
@@ -119,7 +127,6 @@ class MessagePassingServer : public IMessagePassingServerSessionWrapper
     friend class SessionHandle;
 
     bool NotifyAcquireRequest(pid_t pid);
-    bool NotifyAcquireRequestWhileLocked(pid_t pid);
 
     void MessageCallback(score::message_passing::IServerConnection& connection, score::cpp::span<const std::uint8_t> message);
     void OnConnectRequest(score::message_passing::IServerConnection& connection,

@@ -490,6 +490,8 @@ void MessagePassingServer::OnConnectRequest(score::message_passing::IServerConne
         {
             // Existing session for this PID is still present; do not overwrite it.
             // The reconnect path is handled by disconnect_callback + worker-thread teardown.
+            std::cerr << "MessagePassingServer: Session for pid " << pid << " already exists, dropping new session"
+                      << std::endl;
             return;
         }
 
@@ -536,8 +538,16 @@ void MessagePassingServer::OnAcquireResponse(score::message_passing::IServerConn
     }
 }
 
-bool MessagePassingServer::NotifyAcquireRequestWhileLocked(const pid_t pid)
+bool MessagePassingServer::NotifyAcquireRequest(const pid_t pid)
 {
+    // Guard against calls during server destruction (e.g., from session destructors
+    // during pid_session_map_.clear()). workers_exit_ is set before the map is cleared.
+    if (workers_exit_.load())
+    {
+        return false;
+    }
+
+    std::lock_guard<std::mutex> lock(mutex_);
     const auto found = pid_session_map_.find(pid);
     if (found == pid_session_map_.end())
     {
@@ -555,12 +565,16 @@ bool MessagePassingServer::NotifyAcquireRequestWhileLocked(const pid_t pid)
         return true;
     }
 
+    // Notify() is non-blocking (QNX pulse), so holding the mutex is safe and avoids
+    // a use-after-free race where disconnect_callback could destroy the connection
+    // object between releasing the lock and calling Notify().
     constexpr std::array<std::uint8_t, 1> kMessage{score::cpp::to_underlying(DatarouterMessageIdentifier::kAcquireRequest)};
     auto ret = wrapper.connection->Notify(kMessage);
+
     if (!ret)
     {
-        // ENOBUFS indicates the notify pool is temporarily exhausted (a previous notification could still be in
-        // flight). This is a transient condition - Let the watchdog will handle it if the client never responds.
+        // ENOBUFS indicates the notify pool is temporarily exhausted (a previous notification is still in flight).
+        // This is a transient condition — the watchdog will handle it if the client never responds.
         if (ret.error().GetOsDependentErrorCode() == ENOBUFS)
         {
             std::cerr << "MessagePassingServer: Notify pool exhausted for pid " << pid << ", skipping acquire request"
@@ -576,12 +590,6 @@ bool MessagePassingServer::NotifyAcquireRequestWhileLocked(const pid_t pid)
         wrapper.acquire_deadline = TimestampT::clock::now() + watchdog_config_.deadline;
     }
     return true;
-}
-
-bool MessagePassingServer::NotifyAcquireRequest(const pid_t pid)
-{
-    std::lock_guard<std::mutex> lock(mutex_);
-    return NotifyAcquireRequestWhileLocked(pid);
 }
 
 bool MessagePassingServer::SessionHandle::AcquireRequest() const
