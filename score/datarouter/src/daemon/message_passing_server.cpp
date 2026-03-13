@@ -559,6 +559,15 @@ bool MessagePassingServer::NotifyAcquireRequestWhileLocked(const pid_t pid)
     auto ret = wrapper.connection->Notify(kMessage);
     if (!ret)
     {
+        // ENOBUFS indicates the notify pool is temporarily exhausted (a previous notification could still be in
+        // flight). This is a transient condition - Let the watchdog will handle it if the client never responds.
+        if (ret.error().GetOsDependentErrorCode() == ENOBUFS)
+        {
+            std::cerr << "MessagePassingServer: Notify pool exhausted for pid " << pid << ", skipping acquire request"
+                      << std::endl;
+            return true;
+        }
+        std::cerr << "MessagePassingServer: Notify failed for pid " << pid << ": " << ret.error() << std::endl;
         wrapper.EnqueueForDeleteWhileLocked(true);
     }
     else

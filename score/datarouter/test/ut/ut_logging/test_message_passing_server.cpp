@@ -786,6 +786,61 @@ TEST_F(MessagePassingServerFixture, WatchdogMissCountShouldResetOnValidResponse)
     UninstantiateServer();
 }
 
+TEST_F(MessagePassingServerFixture, EnobufsFromNotifyShouldNotKillSession)
+{
+    ExpectOurPidIsQueried();
+
+    InstantiateServer(GetCountingSessionFactory());
+
+    auto* connection_ptr = ConnectClientAndSendConnectMessage(kClienT0Pid);
+
+    // First Notify() fails with ENOBUFS (notify pool exhausted — transient).
+    EXPECT_CALL(*connection_ptr, Notify(Matcher<score::cpp::span<const std::uint8_t>>(_)))
+        .WillOnce(Return(score::cpp::make_unexpected(score::os::Error::createFromErrno(ENOBUFS))));
+
+    session_map.at(kClienT0Pid).handle->AcquireRequest();
+
+    // Session should still be alive — ENOBUFS is treated as a transient error.
+    using namespace std::chrono_literals;
+    std::this_thread::sleep_for(200ms);
+    EXPECT_FALSE(session_map.empty());
+
+    // A subsequent successful Notify() should work normally.
+    ::testing::Sequence seq;
+    ExpectAcquireNotifyInSequence(DatarouterMessageIdentifier::kAcquireRequest, seq, connection_ptr);
+    session_map.at(kClienT0Pid).handle->AcquireRequest();
+
+    // Verify session is still alive after successful notify.
+    std::this_thread::sleep_for(200ms);
+    EXPECT_FALSE(session_map.empty());
+
+    ExpectServerDestruction();
+    UninstantiateServer();
+}
+
+TEST_F(MessagePassingServerFixture, NonEnobufsNotifyFailureShouldStillKillSession)
+{
+    ExpectOurPidIsQueried();
+
+    InstantiateServer(GetCountingSessionFactory());
+
+    auto* connection_ptr = ConnectClientAndSendConnectMessage(kClienT0Pid);
+
+    // Notify() fails with EINVAL (not ENOBUFS) — should still tear down the session.
+    ExpectAndFailAcquireNotify(connection_ptr);
+    session_map.at(kClienT0Pid).handle->AcquireRequest();
+
+    {
+        std::unique_lock<std::mutex> lock(map_mutex);
+        ASSERT_TRUE(map_cond.wait_for(lock, std::chrono::seconds{3}, [this]() {
+            return session_map.empty();
+        })) << "Timed out waiting for session teardown after non-ENOBUFS failure";
+    }
+
+    ExpectServerDestruction();
+    UninstantiateServer();
+}
+
 TEST(MessagePassingServerTests, sessionWrapperCreateTest)
 {
     InSequence s;
