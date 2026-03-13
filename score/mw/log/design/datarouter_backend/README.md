@@ -50,7 +50,7 @@ communication over the side channel, we establish two independent unidirectional
 channels. On the highest level of abstraction we see the ASIL-B qualified client
 process on the one side and the datarouter process on the other
 
-![Inter-process communication](https://www.plantuml.com/plantuml/proxy?src=https://raw.githubusercontent.com/swh/ddad_score/mw/log/design/datarouter_backend/inter_process_communication.uxf?ref=1f63d6572c73339987778857d3e2f35b831d877b).
+![Inter-process communication](./score/mw/log/design/datarouter_backend/inter_process_communication.puml).
 
 The logs are written by the client into shared memory and read-out by
 datarouter. Freedom of interference is ensured since the datarouter process has
@@ -61,7 +61,7 @@ safety-qualified message passing library.
 
 ## Class diagram
 
-![Class diagram](https://www.plantuml.com/plantuml/proxy?src=https://raw.githubusercontent.com/swh/ddad_score/mw/log/design/datarouter_backend/class_diagram.uxf?ref=a294e8aeb6453344591cfb1780d719f4a5ea1daa)
+![Class diagram](./score/mw/log/design/datarouter_backend/datarouter_class_diagram.puml)
 
 The class diagram above shows the relevant classes client-side and in
 Datarouter. Client-side the `DatarouterBackend` contains a circular allocator
@@ -82,7 +82,7 @@ access to the ring buffer between Datarouter and the client.
 
 ## Activity diagrams
 
-![DataRouterBackend::DataRouterBackend Activity diagram](https://www.plantuml.com/plantuml/proxy?src=https://raw.githubusercontent.com/swh/ddad_score/mw/log/design/datarouter_backend_datarouterbackend.uxf?ref=5e05cd648f508d14acff7fc405f7cba93c4c5dff)
+![DataRouterBackend::DataRouterBackend Activity diagram](./score/mw/log/design/datarouter_backend/datarouter_backend_datarouterbackend.puml)
 
 ## Lock-free Shared Memory Design
 
