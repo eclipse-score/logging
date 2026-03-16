@@ -118,6 +118,7 @@ build:tsan --platform_suffix=tsan
 # Downgrade to warning so external deps (score_baselibs) compile; TSan still runs.
 build:tsan --cxxopt=-Wno-error=tsan
 test:tsan --config=with_debug_symbols
+test:tsan --cxxopt=-O1
 test:tsan --test_tag_filters=-no-tsan
 test:tsan --@score_cpp_policies//sanitizers/flags:sanitizer=tsan
 test:tsan --run_under=@score_cpp_policies//sanitizers:wrapper
