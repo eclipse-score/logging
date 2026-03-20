@@ -275,19 +275,18 @@ cc_library(
     ],
 )
 
+# FIXME: Ticket-252685
 alias(
     name = "libtracing",
     actual = ":log",
     visibility = ["//visibility:public"],
 )
 
+# FIXME: Ticket-252685
 cc_library(
     name = "log",
     visibility = ["//visibility:public"],
-    deps = [
-        "//score/mw/log/detail/common:recorder_factory",
-        "@score_baselibs//score/mw/log:frontend",
-    ],
+    deps = ["@score_baselibs//score/mw/log:console"],
 )
 
 ## ===========================================================================

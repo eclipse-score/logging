@@ -13,8 +13,14 @@
 #include "score/mw/log/detail/backend_table.h"
 #include "score/mw/log/recorder_config.h"
 
-#include "score/mw/log/detail/data_router/remote_dlt_recorder_factory.h"
 #include "score/mw/log/detail/empty_recorder.h"
+
+// When KCUSTOM_LOGGING is defined, this header is provided by the
+// custom_recorder_impl label_flag target.
+// coverity[autosar_cpp14_a16_0_1_violation]
+#if defined(KCUSTOM_LOGGING)
+#include "custom_recorder.h"
+#endif
 
 namespace score
 {
@@ -27,19 +33,18 @@ namespace detail
 namespace
 {
 
-std::unique_ptr<Recorder> CreateRemoteRecorder(const Configuration& config, score::cpp::pmr::memory_resource* memory_resource)
+std::unique_ptr<Recorder> CreateCustomRecorder(const Configuration& config, score::cpp::pmr::memory_resource* memory_resource)
 {
-    if constexpr (kRemoteLoggingEnabled)
-    {
-        RemoteDltRecorderFactory factory;
-        return factory.CreateLogRecorder(config, memory_resource);
-    }
-    else
-    {
-        static_cast<void>(config);
-        static_cast<void>(memory_resource);
-        return std::make_unique<EmptyRecorder>();
-    }
+    // coverity[autosar_cpp14_a16_0_1_violation]
+#if defined(KCUSTOM_LOGGING)
+    CustomRecorderFactory factory;
+    return factory.CreateLogRecorder(config, memory_resource);
+#else
+    static_cast<void>(config);
+    static_cast<void>(memory_resource);
+    return std::make_unique<EmptyRecorder>();
+    // coverity[autosar_cpp14_a16_0_1_violation]
+#endif
 }
 
 /*
@@ -52,7 +57,7 @@ Justification:
   is trivially destructible. This follows the established pattern used by Runtime::Instance().
 */
 // coverity[autosar_cpp14_a3_3_2_violation]
-const BackendRegistrant kRemoteRegistrant{LogMode::kRemote, &CreateRemoteRecorder};
+const BackendRegistrant kCustomRegistrant{LogMode::kCustom, &CreateCustomRecorder};
 
 }  // namespace
 }  // namespace detail

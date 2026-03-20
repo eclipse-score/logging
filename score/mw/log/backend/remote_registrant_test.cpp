@@ -10,7 +10,7 @@
  *
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
-#include "score/mw/log/backend_table.h"
+#include "score/mw/log/detail/backend_table.h"
 
 #include "gtest/gtest.h"
 

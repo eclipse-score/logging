@@ -10,7 +10,10 @@
  *
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
-#include "score/mw/log/backend_table.h"
+#include "score/mw/log/detail/backend_table.h"
+#include "score/mw/log/recorder_config.h"
+
+#include "score/mw/log/detail/empty_recorder.h"
 #include "score/mw/log/detail/file_recorder/file_recorder_factory.h"
 
 namespace score
@@ -26,8 +29,17 @@ namespace
 
 std::unique_ptr<Recorder> CreateFileRecorder(const Configuration& config, score::cpp::pmr::memory_resource* memory_resource)
 {
-    FileRecorderFactory factory{score::os::Fcntl::Default(memory_resource)};
-    return factory.CreateLogRecorder(config, memory_resource);
+    if constexpr (kFileLoggingEnabled)
+    {
+        FileRecorderFactory factory{score::os::Fcntl::Default(memory_resource)};
+        return factory.CreateLogRecorder(config, memory_resource);
+    }
+    else
+    {
+        static_cast<void>(config);
+        static_cast<void>(memory_resource);
+        return std::make_unique<EmptyRecorder>();
+    }
 }
 
 /*

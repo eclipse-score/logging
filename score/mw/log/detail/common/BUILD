@@ -33,30 +33,6 @@ COMPILER_WARNING_FEATURES = [
 ]
 
 cc_library(
-    name = "recorder_factory",
-    srcs = [
-        "recorder_factory.cpp",
-    ],
-    hdrs = [
-        "recorder_factory.h",
-    ],
-    features = COMPILER_WARNING_FEATURES,
-    tags = ["FFI"],
-    visibility = [
-        "//visibility:public",
-    ],
-    deps = [
-        ":composite_recorder",
-        ":recorder_config",
-        "@score_baselibs//score/mw/log:recorder_interface",
-        "@score_baselibs//score/mw/log/configuration:configuration_parser",
-        "@score_baselibs//score/mw/log/detail:empty_recorder",
-        "@score_baselibs//score/mw/log/detail:initialization_reporter",
-    ],
-    alwayslink = True,
-)
-
-cc_library(
     name = "recorder_config",
     hdrs = [
         "recorder_config.h",
@@ -188,8 +164,10 @@ cc_library(
     features = COMPILER_WARNING_FEATURES,
     tags = ["FFI"],
     visibility = [
+        "//platform/aas/tools/sctf/mw_log_helper:__pkg__",
         "//score/mw/log/detail/data_router:__pkg__",
         "@score_baselibs//score/mw/log:__pkg__",
+        "@score_baselibs//score/mw/log/detail:__pkg__",
     ],
     deps = [
         "@score_baselibs//score/mw/log:recorder",
@@ -251,25 +229,6 @@ cc_test(
 )
 
 cc_test(
-    name = "recorder_factory_test",
-    srcs = [
-        "recorder_factory_test.cpp",
-    ],
-    data = [
-    ],
-    features = COMPILER_WARNING_FEATURES + [
-        "aborts_upon_exception",
-    ],
-    tags = ["unit"],
-    deps = [
-        ":recorder_factory",
-        "@googletest//:gtest_main",
-        "@score_baselibs//score/mw/log/configuration:target_config_reader_mock",
-        "@score_baselibs//score/os/mocklib:fcntl_mock",
-    ],
-)
-
-cc_test(
     name = "statistics_reporter_test",
     srcs = [
         "statistics_reporter_test.cpp",
@@ -312,12 +271,17 @@ cc_test(
     features = COMPILER_WARNING_FEATURES + [
         "aborts_upon_exception",
     ],
+    local_defines = select({
+        "//score/mw/log/detail/flags:config_KConsole_Logging": ["KCONSOLE_LOGGING"],
+        "//conditions:default": [],
+    }),
     tags = ["unit"],
     deps = [
-        "//score/mw/log/detail/common:recorder_factory",
         "@googletest//:gtest_main",
-        "@score_baselibs//score/mw/log:frontend",
+        "@score_baselibs//score/mw/log:console",
+        "@score_baselibs//score/mw/log:recorder_config",
         "@score_baselibs//score/mw/log:recorder_mock",
+        "@score_baselibs//score/mw/log/detail/text_recorder",
     ],
 )
 
@@ -331,9 +295,8 @@ cc_test(
     ],
     tags = ["unit"],
     deps = [
-        "//score/mw/log/detail/common:recorder_factory",
         "@googletest//:gtest_main",
-        "@score_baselibs//score/mw/log:frontend",
+        "@score_baselibs//score/mw/log:console",
         "@score_baselibs//score/mw/log:recorder_mock",
         "@score_baselibs//score/mw/log/test/my_custom_lib:my_custom_type_mw_log",
     ],
@@ -349,9 +312,8 @@ cc_test(
     ],
     tags = ["unit"],
     deps = [
-        "//score/mw/log/detail/common:recorder_factory",
         "@googletest//:gtest_main",
-        "@score_baselibs//score/mw/log:frontend",
+        "@score_baselibs//score/mw/log:console",
         "@score_baselibs//score/mw/log:recorder_mock",
         "@score_baselibs//score/mw/log/detail:thread_local_guard",
     ],
@@ -363,7 +325,6 @@ cc_unit_test_suites_for_host_and_qnx(
         ":composite_recorder_test",
         ":dlt_format_test",
         ":log_entry_deserialize_test",
-        ":recorder_factory_test",
         ":statistics_reporter_test",
         ":helper_functions_test",
         ":runtime_test",

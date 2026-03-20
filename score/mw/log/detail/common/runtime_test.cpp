@@ -12,11 +12,14 @@
  ********************************************************************************/
 #include "score/mw/log/runtime.h"
 
-#include "score/mw/log/detail/common/recorder_config.h"
 #include "score/mw/log/detail/empty_recorder.h"
+#include "score/mw/log/detail/text_recorder/text_recorder.h"
+#include "score/mw/log/recorder_config.h"
 #include "score/mw/log/recorder_mock.h"
 
 #include "gtest/gtest.h"
+
+#include <type_traits>
 
 namespace score
 {
@@ -28,6 +31,8 @@ namespace detail
 {
 namespace
 {
+
+using ConsoleRecorderType = std::conditional_t<kConsoleLoggingEnabled, TextRecorder, EmptyRecorder>;
 
 template <typename ConcreteRecorder>
 bool IsRecorderOfType(const Recorder& recorder) noexcept
