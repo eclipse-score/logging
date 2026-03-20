@@ -12,3 +12,117 @@
 # *******************************************************************************
 
 # Backend plugin registrants for non-default log backends (file, remote, slog).
+# Each registrant is an additive Bazel dep that registers its creator function
+# into the global backend table during static initialization.
+
+load("@rules_cc//cc:defs.bzl", "cc_library", "cc_test")
+load("@score_baselibs//:bazel/unit_tests.bzl", "cc_unit_test_suites_for_host_and_qnx")
+
+COMPILER_WARNING_FEATURES = [
+    "treat_warnings_as_errors",
+    "additional_warnings",
+    "strict_warnings",
+]
+
+# --- Plugin: DLT File Logging ---
+# Add this dep to your binary to enable file-based DLT logging.
+cc_library(
+    name = "file",
+    srcs = ["file_registrant.cpp"],
+    features = COMPILER_WARNING_FEATURES,
+    tags = ["FFI"],
+    visibility = ["//visibility:public"],
+    deps = [
+        "//score/mw/log/detail/file_recorder:file_recorder_factory",
+        "@score_baselibs//score/mw/log:backend_table",
+    ],
+    alwayslink = True,
+)
+
+# --- Plugin: Remote DLT via DataRouter ---
+# Add this dep to your binary to enable remote DLT logging.
+cc_library(
+    name = "remote",
+    srcs = ["remote_registrant.cpp"],
+    features = COMPILER_WARNING_FEATURES,
+    tags = ["FFI"],
+    visibility = ["//visibility:public"],
+    deps = [
+        "//score/mw/log/detail/data_router:remote_dlt_recorder_factory",
+        "@score_baselibs//score/mw/log:backend_table",
+    ],
+    alwayslink = True,
+)
+
+# --- Plugin: QNX slog2 System Logging ---
+# Automatically included on QNX builds.
+cc_library(
+    name = "slog",
+    srcs = ["slog_registrant.cpp"],
+    features = COMPILER_WARNING_FEATURES,
+    tags = ["FFI"],
+    target_compatible_with = ["@platforms//os:qnx"],
+    visibility = ["//visibility:public"],
+    deps = [
+        "//score/mw/log/detail/slog:slog_recorder_factory",
+        "@score_baselibs//score/mw/log:backend_table",
+    ],
+    alwayslink = True,
+)
+
+# --- Tests ---
+
+cc_test(
+    name = "file_registrant_test",
+    srcs = ["file_registrant_test.cpp"],
+    features = COMPILER_WARNING_FEATURES + [
+        "aborts_upon_exception",
+    ],
+    tags = ["unit"],
+    deps = [
+        ":file",
+        "@googletest//:gtest_main",
+        "@score_baselibs//score/mw/log:backend_table",
+    ],
+)
+
+cc_test(
+    name = "remote_registrant_test",
+    srcs = ["remote_registrant_test.cpp"],
+    features = COMPILER_WARNING_FEATURES + [
+        "aborts_upon_exception",
+    ],
+    tags = ["unit"],
+    deps = [
+        ":remote",
+        "@googletest//:gtest_main",
+        "@score_baselibs//score/mw/log:backend_stub_testutil",
+        "@score_baselibs//score/mw/log:backend_table",
+    ],
+)
+
+cc_test(
+    name = "slog_registrant_test",
+    srcs = ["slog_registrant_test.cpp"],
+    features = COMPILER_WARNING_FEATURES + [
+        "aborts_upon_exception",
+    ],
+    tags = ["unit"],
+    target_compatible_with = ["@platforms//os:qnx"],
+    deps = [
+        ":slog",
+        "@googletest//:gtest_main",
+        "@score_baselibs//score/mw/log:backend_table",
+    ],
+)
+
+cc_unit_test_suites_for_host_and_qnx(
+    name = "unit_tests",
+    cc_unit_tests = [
+        ":file_registrant_test",
+        ":remote_registrant_test",
+    ],
+    visibility = [
+        "@score_baselibs//score/mw/log:__pkg__",
+    ],
+)
