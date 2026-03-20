@@ -101,6 +101,7 @@ cc_library(
     features = COMPILER_WARNING_FEATURES,
     tags = ["FFI"],
     visibility = [
+        "//score/mw/log/backend:__pkg__",
         "//score/mw/log/detail/common:__pkg__",
         "@score_baselibs//score/mw/log/detail:__pkg__",
     ],
