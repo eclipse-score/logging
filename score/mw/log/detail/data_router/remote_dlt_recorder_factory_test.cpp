@@ -14,7 +14,7 @@
 #include "score/mw/log/detail/data_router/data_router_recorder.h"
 
 #include "score/mw/log/detail/common/composite_recorder.h"
-#include "score/mw/log/detail/common/recorder_factory.h"
+#include "score/mw/log/detail/registry_aware_recorder_factory.h"
 
 #include "score/mw/log/configuration/target_config_reader_mock.h"
 
@@ -69,30 +69,7 @@ class RecorderFactoryConfigFixture : public ::testing::Test
     }
     void TearDown() override {}
 
-    std::unique_ptr<Recorder> CreateFromConfiguration() noexcept
-    {
-        auto config_reader_mock = std::make_unique<TargetConfigReaderMock>();
-        ON_CALL(*config_reader_mock, ReadConfig).WillByDefault(testing::Invoke([&]() {
-            return config_result_;
-        }));
-        return RecorderFactory{}.CreateFromConfiguration(std::move(config_reader_mock),
-                                                         score::cpp::pmr::get_default_resource());
-    }
-
-    void SetTargetConfigReaderResult(score::Result<Configuration> result) noexcept
-    {
-        config_result_ = result;
-    }
-
-    void SetConfigurationWithLogMode(const std::unordered_set<LogMode>& log_modes,
-                                     Configuration config = Configuration{}) noexcept
-    {
-        config.SetLogMode(log_modes);
-        SetTargetConfigReaderResult(config);
-    }
-
   protected:
-    score::Result<Configuration> config_result_;
     score::cpp::pmr::memory_resource* memory_resource_ = nullptr;
 };
 
@@ -104,8 +81,9 @@ TEST_F(RecorderFactoryConfigFixture, RemoteConfiguredShallReturnDataRouterRecord
     RecordProperty("TestingTechnique", "Requirements-based test");
     RecordProperty("DerivationTechnique", "Analysis of requirements");
 
-    SetConfigurationWithLogMode({LogMode::kRemote});
-    auto recorder = CreateFromConfiguration();
+    const Configuration config{};
+    auto recorder =
+        RegistryAwareRecorderFactory{}.CreateRecorderFromLogMode(LogMode::kRemote, config, memory_resource_);
     EXPECT_TRUE(IsRecorderOfType<DataRouterRecorder>(recorder));
 }
 
@@ -118,13 +96,22 @@ TEST_F(RecorderFactoryConfigFixture, MultipleLogModesShallReturnCompositeRecorde
     RecordProperty("TestingTechnique", "Requirements-based test");
     RecordProperty("DerivationTechnique", "Analysis of requirements");
 
-    SetConfigurationWithLogMode({LogMode::kFile, LogMode::kConsole, LogMode::kRemote});
-    auto recorder = CreateFromConfiguration();
-    ASSERT_TRUE(IsRecorderOfType<CompositeRecorder>(recorder));
-    const auto& composite_recorder = *dynamic_cast<CompositeRecorder*>(recorder.get());
+    const Configuration config{};
+    const std::unordered_set<LogMode> modes{LogMode::kFile, LogMode::kConsole, LogMode::kRemote};
 
-    EXPECT_EQ(composite_recorder.GetRecorders().size(), config_result_->GetLogMode().size());
-    EXPECT_TRUE(ContainsRecorderOfType<DataRouterRecorder>(composite_recorder));
+    std::vector<std::unique_ptr<Recorder>> recorders;
+    for (const auto& mode : modes)
+    {
+        auto recorder = RegistryAwareRecorderFactory{}.CreateRecorderFromLogMode(mode, config, memory_resource_);
+        if (recorder != nullptr)
+        {
+            std::ignore = recorders.emplace_back(std::move(recorder));
+        }
+    }
+
+    ASSERT_EQ(recorders.size(), modes.size());
+    auto composite = std::make_unique<CompositeRecorder>(std::move(recorders));
+    EXPECT_TRUE(ContainsRecorderOfType<DataRouterRecorder>(*composite));
 }
 
 }  // namespace

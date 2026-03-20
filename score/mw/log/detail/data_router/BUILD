@@ -136,7 +136,7 @@ cc_test(
     deps = [
         ":data_router_backend",
         ":message_passing_interface",
-        "//score/mw/log/detail/common:recorder_factory",
+        "//score/mw/log/backend:remote",
         "//score/mw/log/detail/data_router/shared_memory:reader",
         "//score/mw/log/test/console_logging_environment",
         "@googletest//:gtest_main",

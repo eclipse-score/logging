@@ -24,37 +24,49 @@ COMPILER_WARNING_FEATURES = [
     "strict_warnings",
 ]
 
-# --- Plugin: DLT File Logging ---
+# Plugin: DLT File Logging
 # Add this dep to your binary to enable file-based DLT logging.
 cc_library(
     name = "file",
     srcs = ["file_registrant.cpp"],
     features = COMPILER_WARNING_FEATURES,
+    local_defines = select({
+        "//score/mw/log/detail/flags:config_KFile_Logging": ["KFILE_LOGGING"],
+        "//conditions:default": [],
+    }),
     tags = ["FFI"],
-    visibility = ["//visibility:public"],
+    visibility = ["//visibility:public"],  # platform_only
     deps = [
         "//score/mw/log/detail/file_recorder:file_recorder_factory",
         "@score_baselibs//score/mw/log:backend_table",
+        "@score_baselibs//score/mw/log:empty_recorder",
+        "@score_baselibs//score/mw/log:recorder_config",
     ],
     alwayslink = True,
 )
 
-# --- Plugin: Remote DLT via DataRouter ---
+# Plugin: Remote DLT via DataRouter
 # Add this dep to your binary to enable remote DLT logging.
 cc_library(
     name = "remote",
     srcs = ["remote_registrant.cpp"],
     features = COMPILER_WARNING_FEATURES,
+    local_defines = select({
+        "//score/mw/log/flags:Remote_Logging": ["KREMOTE_LOGGING"],
+        "//conditions:default": [],
+    }),
     tags = ["FFI"],
-    visibility = ["//visibility:public"],
+    visibility = ["//visibility:public"],  # platform_only
     deps = [
         "//score/mw/log/detail/data_router:remote_dlt_recorder_factory",
         "@score_baselibs//score/mw/log:backend_table",
+        "@score_baselibs//score/mw/log:empty_recorder",
+        "@score_baselibs//score/mw/log:recorder_config",
     ],
     alwayslink = True,
 )
 
-# --- Plugin: QNX slog2 System Logging ---
+# Plugin: QNX slog2 System Logging
 # Automatically included on QNX builds.
 cc_library(
     name = "slog",
@@ -62,7 +74,7 @@ cc_library(
     features = COMPILER_WARNING_FEATURES,
     tags = ["FFI"],
     target_compatible_with = ["@platforms//os:qnx"],
-    visibility = ["//visibility:public"],
+    visibility = ["//visibility:public"],  # platform_only
     deps = [
         "//score/mw/log/detail/slog:slog_recorder_factory",
         "@score_baselibs//score/mw/log:backend_table",
@@ -70,7 +82,31 @@ cc_library(
     alwayslink = True,
 )
 
-# --- Tests ---
+# Plugin: Custom user-provided Logging backend
+# Opt-in. Build with --@score_logging//score/mw/log/flags:KCustom_Logging=True
+# and --@score_logging//score/mw/log/flags:custom_recorder_impl=//your:target.
+cc_library(
+    name = "custom",
+    srcs = ["custom_registrant.cpp"],
+    features = COMPILER_WARNING_FEATURES,
+    local_defines = select({
+        "//score/mw/log/flags:Custom_Logging": ["KCUSTOM_LOGGING"],
+        "//conditions:default": [],
+    }),
+    tags = ["FFI"],
+    visibility = ["//visibility:public"],
+    deps = [
+        "@score_baselibs//score/mw/log:backend_table",
+        "@score_baselibs//score/mw/log:empty_recorder",
+        "@score_baselibs//score/mw/log:recorder_config",
+    ] + select({
+        "//score/mw/log/flags:Custom_Logging": [
+            "//score/mw/log/flags:custom_recorder_impl",
+        ],
+        "//conditions:default": [],
+    }),
+    alwayslink = True,
+)
 
 cc_test(
     name = "file_registrant_test",
@@ -96,7 +132,7 @@ cc_test(
     deps = [
         ":remote",
         "@googletest//:gtest_main",
-        "@score_baselibs//score/mw/log:backend_stub_testutil",
+        "@score_baselibs//score/mw/log:backend_console",
         "@score_baselibs//score/mw/log:backend_table",
     ],
 )
