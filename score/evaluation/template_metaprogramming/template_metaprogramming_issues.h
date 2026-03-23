@@ -1,30 +1,4 @@
-// *******************************************************************************
-// Copyright (c) 2025 Contributors to the Eclipse Foundation
-//
-// See the NOTICE file(s) distributed with this work for additional
-// information regarding copyright ownership.
-//
-// This program and the accompanying materials are made available under the
-// terms of the Apache License Version 2.0 which is available at
-// https://www.apache.org/licenses/LICENSE-2.0
-//
-// SPDX-License-Identifier: Apache-2.0
-// *******************************************************************************
 
-/// @file template_metaprogramming_issues.h
-/// @brief Intentional template-metaprogramming issues for review-tool evaluation.
-///
-/// Issues planted:
-///   [TM-01] Reinvented type trait (`IsSameCustom`) instead of `std::is_same_v`.
-///   [TM-02] Recursive template factorial where `constexpr` function is simpler.
-///   [TM-03] SFINAE return-type `enable_if` causes poor diagnostics/readability.
-///   [TM-04] Unconstrained template accepts unsupported types.
-///   [TM-05] Partial specialization changes semantic contract unexpectedly.
-///   [TM-06] Recursive variadic template sum instead of C++17 fold expression.
-///   [TM-07] Hand-rolled typelist length recursion instead of tuple/pack facilities.
-///   [TM-08] Pointer specialization ignores cv/ref categories.
-///   [TM-09] Template bool parameter over-configures behavior (boolean trap at type level).
-///   [TM-10] Missing `static_assert` for template preconditions.
 
 #ifndef SCORE_EVALUATION_TEMPLATE_METAPROGRAMMING_ISSUES_H
 #define SCORE_EVALUATION_TEMPLATE_METAPROGRAMMING_ISSUES_H
@@ -39,9 +13,6 @@ namespace score
 namespace evaluation
 {
 
-// ---------------------------------------------------------------------------
-// [TM-01] Reinvented trait (unnecessary custom implementation)
-// ---------------------------------------------------------------------------
 template <typename A, typename B>
 struct IsSameCustom
 {
@@ -54,9 +25,6 @@ struct IsSameCustom<A, A>
     static constexpr bool value = true;
 };
 
-// ---------------------------------------------------------------------------
-// [TM-02] Recursive factorial TMP for simple numeric constant
-// ---------------------------------------------------------------------------
 template <int N>
 struct Factorial
 {
@@ -69,9 +37,6 @@ struct Factorial<0>
     static constexpr int value = 1;
 };
 
-// ---------------------------------------------------------------------------
-// [TM-03] SFINAE in return type (hard-to-read diagnostics)
-// ---------------------------------------------------------------------------
 template <typename T>
 auto ToStringSfinae(const T& v) -> typename std::enable_if<std::is_integral<T>::value, std::string>::type
 {
@@ -84,19 +49,12 @@ auto ToStringSfinae(const T& v) -> typename std::enable_if<std::is_floating_poin
     return std::to_string(v);
 }
 
-// ---------------------------------------------------------------------------
-// [TM-04] Unconstrained template (accepts too many types)
-// ---------------------------------------------------------------------------
 template <typename T>
 T AddOneGeneric(T value)
 {
-    // Accepts any T with operator+, but intended only for arithmetic.
     return value + static_cast<T>(1);
 }
 
-// ---------------------------------------------------------------------------
-// [TM-05] Specialization changes semantics unexpectedly
-// ---------------------------------------------------------------------------
 template <typename T>
 struct ValuePolicy
 {
@@ -106,12 +64,9 @@ struct ValuePolicy
 template <>
 struct ValuePolicy<bool>
 {
-    static bool Default() { return true; }  // semantic surprise vs generic zero-init behavior
+    static bool Default() { return true; }
 };
 
-// ---------------------------------------------------------------------------
-// [TM-06] Recursive variadic template sum (pre-C++17 style)
-// ---------------------------------------------------------------------------
 template <typename T>
 constexpr T SumRecursive(T value)
 {
@@ -124,9 +79,6 @@ constexpr T SumRecursive(T first, Rest... rest)
     return first + SumRecursive<T>(static_cast<T>(rest)...);
 }
 
-// ---------------------------------------------------------------------------
-// [TM-07] Hand-rolled typelist length recursion
-// ---------------------------------------------------------------------------
 template <typename... Ts>
 struct TypeListLength;
 
@@ -142,9 +94,6 @@ struct TypeListLength<T, Ts...>
     static constexpr std::size_t value = 1U + TypeListLength<Ts...>::value;
 };
 
-// ---------------------------------------------------------------------------
-// [TM-08] Pointer-only specialization ignores cv/ref qualifiers of pointee
-// ---------------------------------------------------------------------------
 template <typename T>
 struct IsPointerLike
 {
@@ -157,9 +106,6 @@ struct IsPointerLike<T*>
     static constexpr bool value = true;
 };
 
-// ---------------------------------------------------------------------------
-// [TM-09] Boolean template parameter controls semantics (type-level bool trap)
-// ---------------------------------------------------------------------------
 template <typename T, bool ClampNegative>
 struct Normalizer
 {
@@ -173,17 +119,12 @@ struct Normalizer
     }
 };
 
-// ---------------------------------------------------------------------------
-// [TM-10] Missing static_assert preconditions in template API
-// ---------------------------------------------------------------------------
 template <typename T>
 struct FixedBlock
 {
-    // Intended for POD-like types only, but no static_assert enforces this.
     T data[4];
 };
 
-// Utility calls to ensure templates are instantiated in translation units.
 inline void EvaluateTemplateMetaprogrammingSamples()
 {
     constexpr bool same = IsSameCustom<int, int>::value;
@@ -219,7 +160,7 @@ inline void EvaluateTemplateMetaprogrammingSamples()
     (void)block;
 }
 
-}  // namespace evaluation
-}  // namespace score
+}
+}
 
 #endif  // SCORE_EVALUATION_TEMPLATE_METAPROGRAMMING_ISSUES_H

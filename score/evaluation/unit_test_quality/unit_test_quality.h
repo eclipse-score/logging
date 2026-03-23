@@ -1,22 +1,4 @@
-// *******************************************************************************
-// Copyright (c) 2025 Contributors to the Eclipse Foundation
-//
-// See the NOTICE file(s) distributed with this work for additional
-// information regarding copyright ownership.
-//
-// This program and the accompanying materials are made available under the
-// terms of the Apache License Version 2.0 which is available at
-// https://www.apache.org/licenses/LICENSE-2.0
-//
-// SPDX-License-Identifier: Apache-2.0
-// *******************************************************************************
 
-/// @file unit_test_quality.h
-/// @brief Production source code used as the subject under test for §11.
-///
-/// The class designs here are intentionally crafted to expose missing or
-/// weak test coverage that a code-review tool should flag in the
-/// accompanying test file (unit_test_quality_test.cpp).
 
 #ifndef SCORE_EVALUATION_UNIT_TEST_QUALITY_H
 #define SCORE_EVALUATION_UNIT_TEST_QUALITY_H
@@ -31,14 +13,9 @@ namespace score
 namespace evaluation
 {
 
-// ---------------------------------------------------------------------------
-// TokenBucket – simple rate limiter used by [UT-01..UT-04].
-// ---------------------------------------------------------------------------
 class TokenBucket
 {
 public:
-    /// @param capacity   Maximum number of tokens the bucket can hold.
-    /// @param refill_rate Tokens added per Refill() call (must be > 0).
     explicit TokenBucket(int capacity, int refill_rate)
         : capacity_(capacity), tokens_(capacity), refill_rate_(refill_rate)
     {
@@ -48,7 +25,6 @@ public:
         }
     }
 
-    /// Try to consume @p n tokens. Returns true on success, false if not enough tokens.
     bool TryConsume(int n)
     {
         if (n <= 0) return true;
@@ -60,7 +36,6 @@ public:
         return false;
     }
 
-    /// Refill the bucket; tokens are capped at capacity.
     void Refill()
     {
         tokens_ = std::min(tokens_ + refill_rate_, capacity_);
@@ -75,19 +50,13 @@ private:
     int refill_rate_;
 };
 
-// ---------------------------------------------------------------------------
-// StringProcessor – used by [UT-05..UT-07].
-// ---------------------------------------------------------------------------
 class StringProcessor
 {
 public:
-    /// Trims leading and trailing ASCII whitespace.
     static std::string Trim(const std::string& s);
 
-    /// Splits @p s on the single-character @p delimiter.
     static std::vector<std::string> Split(const std::string& s, char delimiter);
 
-    /// Returns @p s with every ASCII letter converted to upper-case.
     static std::string ToUpperCase(const std::string& s);
 };
 
@@ -116,7 +85,7 @@ inline std::vector<std::string> StringProcessor::Split(const std::string& s, cha
             token += c;
         }
     }
-    result.push_back(token);  // last token (may be empty)
+    result.push_back(token);
     return result;
 }
 
@@ -130,9 +99,6 @@ inline std::string StringProcessor::ToUpperCase(const std::string& s)
     return out;
 }
 
-// ---------------------------------------------------------------------------
-// CircularBuffer<T> – fixed-size FIFO used by [UT-08..UT-10].
-// ---------------------------------------------------------------------------
 template<typename T>
 class CircularBuffer
 {
@@ -143,7 +109,6 @@ public:
         if (capacity == 0) throw std::invalid_argument("capacity must be > 0");
     }
 
-    /// Push an element; overwrites oldest element when full.
     void Push(const T& value)
     {
         buf_[tail_] = value;
@@ -154,11 +119,10 @@ public:
         }
         else
         {
-            head_ = (head_ + 1) % capacity_;  // overwrite: advance head
+            head_ = (head_ + 1) % capacity_;
         }
     }
 
-    /// Pop the oldest element; throws std::underflow_error when empty.
     T Pop()
     {
         if (size_ == 0) throw std::underflow_error("CircularBuffer is empty");
@@ -181,9 +145,6 @@ private:
     std::size_t     capacity_;
 };
 
-// ---------------------------------------------------------------------------
-// PaymentProcessor – used by [UT-11..UT-13] (dependency injection / mocking).
-// ---------------------------------------------------------------------------
 class IPaymentGateway
 {
 public:
@@ -197,7 +158,6 @@ class PaymentProcessor
 public:
     explicit PaymentProcessor(IPaymentGateway& gateway) : gateway_(gateway) {}
 
-    /// Returns true and records the transaction if the charge succeeds.
     bool ProcessPayment(const std::string& account, double amount)
     {
         if (account.empty() || amount <= 0.0) return false;
@@ -209,11 +169,10 @@ public:
         return false;
     }
 
-    /// Refunds the last successful charge; no-op if log is empty.
     bool RefundLast(const std::string& account)
     {
         if (transaction_log_.empty()) return false;
-        const double refund_amount = 1.0;  // simplified: always refunds 1.0
+        const double refund_amount = 1.0;
         return gateway_.Refund(account, refund_amount);
     }
 
@@ -227,7 +186,7 @@ private:
     std::vector<std::string> transaction_log_;
 };
 
-}  // namespace evaluation
-}  // namespace score
+}
+}
 
 #endif  // SCORE_EVALUATION_UNIT_TEST_QUALITY_H
