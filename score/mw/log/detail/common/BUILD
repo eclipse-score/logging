@@ -326,10 +326,14 @@ cc_test(
     srcs = [
         "@score_baselibs//score/mw/log:log_stream_test.cpp",
     ],
+    copts = ["-Wno-deprecated-declarations"],  # src from @score_baselibs uses deprecated APIs
     features = COMPILER_WARNING_FEATURES + [
         "aborts_upon_exception",
     ],
-    tags = ["unit"],
+    tags = [
+        "no-clang-tidy",  # src from @score_baselibs, cannot suppress deprecations in source
+        "unit",
+    ],
     deps = [
         "//score/mw/log/detail/common:recorder_factory",
         "@googletest//:gtest_main",
