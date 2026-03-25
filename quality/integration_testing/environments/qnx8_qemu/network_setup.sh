@@ -30,3 +30,6 @@ ifconfig vtnet0 169.254.158.190 netmask 255.255.0.0
 
 sysctl -w net.inet.icmp.bmcastecho=1 > /dev/null
 sysctl -w qnx.sec.droproot=33:33 > /dev/null
+
+echo "---> Adding multicast route for DLT UDP"
+route add -net 224.0.0.0 -netmask 240.0.0.0 -interface vtnet0
