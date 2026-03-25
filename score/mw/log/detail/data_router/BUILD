@@ -107,7 +107,6 @@ cc_library(
     ],
     deps = [
         ":data_router_backend",
-        "@score_baselibs//score/mw/log:recorder_interface",
         "@score_baselibs//score/mw/log/configuration",
         "@score_baselibs//score/mw/log/detail:log_recorder_factory",
         "@score_baselibs//score/os/utils:signal",
@@ -143,6 +142,7 @@ cc_test(
         "@score_baselibs//score/language/futurecpp:futurecpp_test_support",
         "@score_baselibs//score/mw/log/configuration:target_config_reader_mock",
         "@score_baselibs//score/mw/log/detail:backend_mock",
+        "@score_baselibs//score/mw/log/detail/text_recorder",
         "@score_baselibs//score/os/mocklib:fcntl_mock",
         "@score_baselibs//score/os/mocklib:mman_mock",
         "@score_baselibs//score/os/mocklib:pthread_mock",

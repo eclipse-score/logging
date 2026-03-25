@@ -13,7 +13,9 @@
 #include "score/mw/log/runtime.h"
 
 #include "score/mw/log/detail/empty_recorder.h"
+#ifdef KCONSOLE_LOGGING
 #include "score/mw/log/detail/text_recorder/text_recorder.h"
+#endif
 #include "score/mw/log/recorder_config.h"
 #include "score/mw/log/recorder_mock.h"
 
@@ -32,7 +34,11 @@ namespace detail
 namespace
 {
 
-using ConsoleRecorderType = std::conditional_t<kConsoleLoggingEnabled, TextRecorder, EmptyRecorder>;
+#ifdef KCONSOLE_LOGGING
+using ConsoleRecorderType = TextRecorder;
+#else
+using ConsoleRecorderType = EmptyRecorder;
+#endif
 
 template <typename ConcreteRecorder>
 bool IsRecorderOfType(const Recorder& recorder) noexcept

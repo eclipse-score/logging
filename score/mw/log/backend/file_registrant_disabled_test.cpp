@@ -10,7 +10,7 @@
  *
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
-#include "score/mw/log/detail/backend_table.h"
+#include "score/mw/log/backend_table.h"
 
 #include "gtest/gtest.h"
 
@@ -25,31 +25,26 @@ namespace detail
 namespace
 {
 
-TEST(FileRegistrantTest, FileBackendIsRegisteredAfterStaticInitialization)
+TEST(FileRegistrantTest, FileBackendIsNotRegisteredWhenDisabled)
 {
-    RecordProperty("Description",
-                   "The file backend registrant shall register a creator for LogMode::kFile during static init.");
-    RecordProperty("TestingTechnique", "Requirements-based test");
+    RecordProperty("Description", "When file logging is disabled, no creator shall be registered for LogMode::kFile.");
+    RecordProperty("TestType", "Verification of the control flow and data flow");
+    RecordProperty("DerivationTechnique", "Generation and analysis of equivalence classes");
 
-    EXPECT_TRUE(IsBackendAvailable(LogMode::kFile));
+    EXPECT_FALSE(IsBackendAvailable(LogMode::kFile));
 }
 
-TEST(FileRegistrantTest, FileBackendCreatorReturnsNonNullRecorder)
+TEST(FileRegistrantTest, CreateRecorderForModeReturnsNullptrWhenFileLoggingDisabled)
 {
     RecordProperty("Description",
-                   "The registered file backend creator shall return a non-null Recorder given valid configuration.");
-    RecordProperty("TestingTechnique", "Requirements-based test");
+                   "CreateRecorderForMode shall return nullptr for LogMode::kFile when file logging is disabled.");
+    RecordProperty("TestType", "Interface test");
+    RecordProperty("DerivationTechnique", "Generation and analysis of equivalence classes");
 
-    ASSERT_TRUE(IsBackendAvailable(LogMode::kFile));
-
-    Configuration config;
-    config.SetLogFilePath("/tmp");
-    config.SetAppId("TEST");
-    config.SetEcuId("ECU1");
-
+    const Configuration config;
     auto recorder = CreateRecorderForMode(LogMode::kFile, config, score::cpp::pmr::get_default_resource());
 
-    EXPECT_NE(recorder, nullptr);
+    EXPECT_EQ(recorder, nullptr);
 }
 
 }  // namespace

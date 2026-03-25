@@ -13,8 +13,10 @@
 
 #include "score/mw/log/detail/data_router/data_router_recorder.h"
 
-#include "score/mw/log/detail/common/composite_recorder.h"
+#include "score/mw/log/backend_table.h"
+#include "score/mw/log/detail/composite_recorder.h"
 #include "score/mw/log/detail/registry_aware_recorder_factory.h"
+#include "score/mw/log/detail/text_recorder/text_recorder.h"
 
 #include "score/mw/log/configuration/target_config_reader_mock.h"
 
@@ -84,7 +86,14 @@ TEST_F(RecorderFactoryConfigFixture, RemoteConfiguredShallReturnDataRouterRecord
     const Configuration config{};
     auto recorder =
         RegistryAwareRecorderFactory{}.CreateRecorderFromLogMode(LogMode::kRemote, config, memory_resource_);
-    EXPECT_TRUE(IsRecorderOfType<DataRouterRecorder>(recorder));
+    if (IsBackendAvailable(LogMode::kRemote))
+    {
+        EXPECT_TRUE(IsRecorderOfType<DataRouterRecorder>(recorder));
+    }
+    else
+    {
+        EXPECT_TRUE(IsRecorderOfType<EmptyRecorder>(recorder));
+    }
 }
 
 TEST_F(RecorderFactoryConfigFixture, MultipleLogModesShallReturnCompositeRecorder)
@@ -111,7 +120,18 @@ TEST_F(RecorderFactoryConfigFixture, MultipleLogModesShallReturnCompositeRecorde
 
     ASSERT_EQ(recorders.size(), modes.size());
     auto composite = std::make_unique<CompositeRecorder>(std::move(recorders));
-    EXPECT_TRUE(ContainsRecorderOfType<DataRouterRecorder>(*composite));
+    if (IsBackendAvailable(LogMode::kRemote))
+    {
+        EXPECT_TRUE(ContainsRecorderOfType<DataRouterRecorder>(*composite));
+    }
+    else if (IsBackendAvailable(LogMode::kConsole) || IsBackendAvailable(LogMode::kFile))
+    {
+        EXPECT_TRUE(ContainsRecorderOfType<TextRecorder>(*composite));
+    }
+    else
+    {
+        EXPECT_TRUE(ContainsRecorderOfType<EmptyRecorder>(*composite));
+    }
 }
 
 }  // namespace

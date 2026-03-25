@@ -83,8 +83,8 @@ cc_library(
     ],
     deps = [
         ":file_recorder",
-        "@score_baselibs//score/mw/log:empty_recorder",
         "@score_baselibs//score/mw/log/configuration",
+        "@score_baselibs//score/mw/log/detail:empty_recorder",
         "@score_baselibs//score/mw/log/detail:initialization_reporter",
         "@score_baselibs//score/mw/log/detail:log_recorder_factory",
     ],
