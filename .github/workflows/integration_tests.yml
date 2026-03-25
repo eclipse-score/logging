@@ -87,6 +87,12 @@ jobs:
           sudo udevadm control --reload-rules
           sudo udevadm trigger --name-match=kvm
 
+      - name: Setup tap0 network interface for QEMU
+        run: |
+          sudo ip tuntap add dev tap0 mode tap user runner
+          sudo ip link set dev tap0 up
+          sudo ip addr add 169.254.21.88/16 dev tap0
+
       - name: Allow unprivileged user namespaces
         run: |
           sudo sysctl kernel.apparmor_restrict_unprivileged_userns=0
