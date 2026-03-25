@@ -20,7 +20,7 @@ namespace helper
 using testing::Types;
 TEST(SumTest, SumNoOverflow)
 {
-    std::numeric_limits<std::size_t>::max();
+    std::ignore = std::numeric_limits<std::size_t>::max();
     const std::size_t expected_value = 6U;
     std::size_t result = Sum<uint8_t>(1U, 2U, 3U);
     EXPECT_EQ(result, expected_value);
