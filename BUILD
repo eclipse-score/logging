@@ -42,6 +42,7 @@ use_format_targets()
 
 exports_files([
     "MODULE.bazel",
+    ".clang-tidy",
 ])
 
 # Creates all documentation targets:
