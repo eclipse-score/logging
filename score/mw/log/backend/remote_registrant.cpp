@@ -10,11 +10,8 @@
  *
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
-#include "score/mw/log/detail/backend_table.h"
-#include "score/mw/log/recorder_config.h"
-
+#include "score/mw/log/backend_table.h"
 #include "score/mw/log/detail/data_router/remote_dlt_recorder_factory.h"
-#include "score/mw/log/detail/empty_recorder.h"
 
 namespace score
 {
@@ -29,17 +26,8 @@ namespace
 
 std::unique_ptr<Recorder> CreateRemoteRecorder(const Configuration& config, score::cpp::pmr::memory_resource* memory_resource)
 {
-    if constexpr (kRemoteLoggingEnabled)
-    {
-        RemoteDltRecorderFactory factory;
-        return factory.CreateLogRecorder(config, memory_resource);
-    }
-    else
-    {
-        static_cast<void>(config);
-        static_cast<void>(memory_resource);
-        return std::make_unique<EmptyRecorder>();
-    }
+    RemoteDltRecorderFactory factory;
+    return factory.CreateLogRecorder(config, memory_resource);
 }
 
 /*

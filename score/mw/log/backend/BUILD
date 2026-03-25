@@ -28,20 +28,21 @@ COMPILER_WARNING_FEATURES = [
 # Add this dep to your binary to enable file-based DLT logging.
 cc_library(
     name = "file",
-    srcs = ["file_registrant.cpp"],
-    features = COMPILER_WARNING_FEATURES,
-    local_defines = select({
-        "//score/mw/log/detail/flags:config_KFile_Logging": ["KFILE_LOGGING"],
+    srcs = select({
+        "//score/mw/log/detail/flags:config_KFile_Logging": ["file_registrant.cpp"],
         "//conditions:default": [],
     }),
+    features = COMPILER_WARNING_FEATURES,
     tags = ["FFI"],
     visibility = ["//visibility:public"],  # platform_only
     deps = [
-        "//score/mw/log/detail/file_recorder:file_recorder_factory",
-        "@score_baselibs//score/mw/log:backend_table",
-        "@score_baselibs//score/mw/log:empty_recorder",
-        "@score_baselibs//score/mw/log:recorder_config",
-    ],
+        "@score_baselibs//score/mw/log:minimal",
+    ] + select({
+        "//score/mw/log/detail/flags:config_KFile_Logging": [
+            "//score/mw/log/detail/file_recorder:file_recorder_factory",
+        ],
+        "//conditions:default": [],
+    }),
     alwayslink = True,
 )
 
@@ -49,20 +50,21 @@ cc_library(
 # Add this dep to your binary to enable remote DLT logging.
 cc_library(
     name = "remote",
-    srcs = ["remote_registrant.cpp"],
-    features = COMPILER_WARNING_FEATURES,
-    local_defines = select({
-        "//score/mw/log/flags:Remote_Logging": ["KREMOTE_LOGGING"],
+    srcs = select({
+        "//score/mw/log/flags:Remote_Logging": ["remote_registrant.cpp"],
         "//conditions:default": [],
     }),
+    features = COMPILER_WARNING_FEATURES,
     tags = ["FFI"],
     visibility = ["//visibility:public"],  # platform_only
     deps = [
-        "//score/mw/log/detail/data_router:remote_dlt_recorder_factory",
-        "@score_baselibs//score/mw/log:backend_table",
-        "@score_baselibs//score/mw/log:empty_recorder",
-        "@score_baselibs//score/mw/log:recorder_config",
-    ],
+        "@score_baselibs//score/mw/log:minimal",
+    ] + select({
+        "//score/mw/log/flags:Remote_Logging": [
+            "//score/mw/log/detail/data_router:remote_dlt_recorder_factory",
+        ],
+        "//conditions:default": [],
+    }),
     alwayslink = True,
 )
 
@@ -77,7 +79,7 @@ cc_library(
     visibility = ["//visibility:public"],  # platform_only
     deps = [
         "//score/mw/log/detail/slog:slog_recorder_factory",
-        "@score_baselibs//score/mw/log:backend_table",
+        "@score_baselibs//score/mw/log:minimal",
     ],
     alwayslink = True,
 )
@@ -87,18 +89,15 @@ cc_library(
 # and --@score_logging//score/mw/log/flags:custom_recorder_impl=//your:target.
 cc_library(
     name = "custom",
-    srcs = ["custom_registrant.cpp"],
-    features = COMPILER_WARNING_FEATURES,
-    local_defines = select({
-        "//score/mw/log/flags:Custom_Logging": ["KCUSTOM_LOGGING"],
+    srcs = select({
+        "//score/mw/log/flags:Custom_Logging": ["custom_registrant.cpp"],
         "//conditions:default": [],
     }),
+    features = COMPILER_WARNING_FEATURES,
     tags = ["FFI"],
     visibility = ["//visibility:public"],
     deps = [
-        "@score_baselibs//score/mw/log:backend_table",
-        "@score_baselibs//score/mw/log:empty_recorder",
-        "@score_baselibs//score/mw/log:recorder_config",
+        "@score_baselibs//score/mw/log:minimal",
     ] + select({
         "//score/mw/log/flags:Custom_Logging": [
             "//score/mw/log/flags:custom_recorder_impl",
@@ -110,7 +109,10 @@ cc_library(
 
 cc_test(
     name = "file_registrant_test",
-    srcs = ["file_registrant_test.cpp"],
+    srcs = select({
+        "//score/mw/log/detail/flags:config_KFile_Logging": ["file_registrant_enabled_test.cpp"],
+        "//conditions:default": ["file_registrant_disabled_test.cpp"],
+    }),
     features = COMPILER_WARNING_FEATURES + [
         "aborts_upon_exception",
     ],
@@ -124,7 +126,10 @@ cc_test(
 
 cc_test(
     name = "remote_registrant_test",
-    srcs = ["remote_registrant_test.cpp"],
+    srcs = select({
+        "//score/mw/log/flags:Remote_Logging": ["remote_registrant_enabled_test.cpp"],
+        "//conditions:default": ["remote_registrant_disabled_test.cpp"],
+    }),
     features = COMPILER_WARNING_FEATURES + [
         "aborts_upon_exception",
     ],
@@ -132,8 +137,8 @@ cc_test(
     deps = [
         ":remote",
         "@googletest//:gtest_main",
-        "@score_baselibs//score/mw/log:backend_console",
         "@score_baselibs//score/mw/log:backend_table",
+        "@score_baselibs//score/mw/log:console",
     ],
 )
 

@@ -153,47 +153,6 @@ cc_library(
     ],
 )
 
-cc_library(
-    name = "composite_recorder",
-    srcs = [
-        "composite_recorder.cpp",
-    ],
-    hdrs = [
-        "composite_recorder.h",
-    ],
-    features = COMPILER_WARNING_FEATURES,
-    tags = ["FFI"],
-    visibility = [
-        "//platform/aas/tools/sctf/mw_log_helper:__pkg__",
-        "//score/mw/log/detail/data_router:__pkg__",
-        "@score_baselibs//score/mw/log:__pkg__",
-        "@score_baselibs//score/mw/log/detail:__pkg__",
-    ],
-    deps = [
-        "@score_baselibs//score/mw/log:recorder",
-        "@score_baselibs//score/mw/log/detail:initialization_reporter",
-        "@score_baselibs//score/mw/log/detail:types_and_errors",
-    ],
-)
-
-cc_test(
-    name = "composite_recorder_test",
-    srcs = [
-        "composite_recorder_test.cpp",
-    ],
-    data = [
-    ],
-    features = COMPILER_WARNING_FEATURES + [
-        "aborts_upon_exception",
-    ],
-    tags = ["unit"],
-    deps = [
-        ":composite_recorder",
-        "@googletest//:gtest_main",
-        "@score_baselibs//score/mw/log:recorder_mock",
-    ],
-)
-
 cc_test(
     name = "dlt_format_test",
     srcs = [
@@ -281,8 +240,12 @@ cc_test(
         "@score_baselibs//score/mw/log:console",
         "@score_baselibs//score/mw/log:recorder_config",
         "@score_baselibs//score/mw/log:recorder_mock",
-        "@score_baselibs//score/mw/log/detail/text_recorder",
-    ],
+    ] + select({
+        "//score/mw/log/detail/flags:config_KConsole_Logging": [
+            "@score_baselibs//score/mw/log/detail/text_recorder",
+        ],
+        "//conditions:default": [],
+    }),
 )
 
 cc_test(
@@ -322,7 +285,6 @@ cc_test(
 cc_unit_test_suites_for_host_and_qnx(
     name = "unit_tests",
     cc_unit_tests = [
-        ":composite_recorder_test",
         ":dlt_format_test",
         ":log_entry_deserialize_test",
         ":statistics_reporter_test",

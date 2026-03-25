@@ -10,17 +10,8 @@
  *
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
-#include "score/mw/log/detail/backend_table.h"
-#include "score/mw/log/recorder_config.h"
-
-#include "score/mw/log/detail/empty_recorder.h"
-
-// When KCUSTOM_LOGGING is defined, this header is provided by the
-// custom_recorder_impl label_flag target.
-// coverity[autosar_cpp14_a16_0_1_violation]
-#if defined(KCUSTOM_LOGGING)
 #include "custom_recorder.h"
-#endif
+#include "score/mw/log/backend_table.h"
 
 namespace score
 {
@@ -35,16 +26,8 @@ namespace
 
 std::unique_ptr<Recorder> CreateCustomRecorder(const Configuration& config, score::cpp::pmr::memory_resource* memory_resource)
 {
-    // coverity[autosar_cpp14_a16_0_1_violation]
-#if defined(KCUSTOM_LOGGING)
     CustomRecorderFactory factory;
     return factory.CreateLogRecorder(config, memory_resource);
-#else
-    static_cast<void>(config);
-    static_cast<void>(memory_resource);
-    return std::make_unique<EmptyRecorder>();
-    // coverity[autosar_cpp14_a16_0_1_violation]
-#endif
 }
 
 /*

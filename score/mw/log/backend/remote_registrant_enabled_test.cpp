@@ -10,7 +10,7 @@
  *
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
-#include "score/mw/log/detail/backend_table.h"
+#include "score/mw/log/backend_table.h"
 
 #include "gtest/gtest.h"
 
@@ -29,7 +29,8 @@ TEST(RemoteRegistrantTest, RemoteBackendIsRegisteredAfterStaticInitialization)
 {
     RecordProperty("Description",
                    "The remote backend registrant shall register a creator for LogMode::kRemote during static init.");
-    RecordProperty("TestingTechnique", "Requirements-based test");
+    RecordProperty("TestType", "Verification of the control flow and data flow");
+    RecordProperty("DerivationTechnique", "Analysis of functional dependencies");
 
     EXPECT_TRUE(IsBackendAvailable(LogMode::kRemote));
 }
