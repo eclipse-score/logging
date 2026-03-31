@@ -33,56 +33,6 @@ COMPILER_WARNING_FEATURES = [
 ]
 
 cc_library(
-    name = "recorder_config",
-    hdrs = [
-        "recorder_config.h",
-    ],
-    defines = select({
-        "//score/mw/log/detail/flags:config_KConsole_Logging": ["KCONSOLE_LOGGING"],
-        "//conditions:default": [],
-    }) + select({
-        "//score/mw/log/detail/flags:config_KFile_Logging": ["KFILE_LOGGING"],
-        "//conditions:default": [],
-    }) + select({
-        "//score/mw/log/flags:Remote_Logging": ["KREMOTE_LOGGING"],
-        "//conditions:default": [],
-    }) + select({
-        "//score/mw/log/flags:Custom_Logging": ["KCUSTOM_LOGGING"],
-        "//conditions:default": [],
-    }),
-    features = COMPILER_WARNING_FEATURES,
-    tags = ["FFI"],
-    deps = [
-        "@score_baselibs//score/mw/log/detail:empty_recorder_factory",
-    ] + select({
-        "@platforms//os:linux": [],
-        "@platforms//os:qnx": [
-            "//score/mw/log/detail/slog",
-        ],
-    }) + select({
-        "//score/mw/log/detail/flags:config_KConsole_Logging": [
-            "@score_baselibs//score/mw/log/detail/text_recorder:console_recorder_factory",
-        ],
-        "//conditions:default": [],
-    }) + select({
-        "//score/mw/log/detail/flags:config_KFile_Logging": [
-            "//score/mw/log/detail/file_recorder:file_recorder_factory",
-        ],
-        "//conditions:default": [],
-    }) + select({
-        "//score/mw/log/flags:Remote_Logging": [
-            "//score/mw/log/detail/data_router:remote_dlt_recorder_factory",
-        ],
-        "//conditions:default": [],
-    }) + select({
-        "//score/mw/log/flags:Custom_Logging": [
-            "//score/mw/log/flags:custom_recorder_impl",
-        ],
-        "//conditions:default": [],
-    }),
-)
-
-cc_library(
     name = "log_entry_deserialize",
     srcs = ["log_entry_deserialize.h"],
     features = COMPILER_WARNING_FEATURES,
@@ -238,7 +188,6 @@ cc_test(
     deps = [
         "@googletest//:gtest_main",
         "@score_baselibs//score/mw/log:console",
-        "@score_baselibs//score/mw/log:recorder_config",
         "@score_baselibs//score/mw/log:recorder_mock",
     ] + select({
         "//score/mw/log/detail/flags:config_KConsole_Logging": [

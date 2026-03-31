@@ -162,6 +162,7 @@ cc_unit_test_suites_for_host_and_qnx(
     cc_unit_tests = [
         ":file_registrant_test",
         ":remote_registrant_test",
+        ":slog_registrant_test",
     ],
     visibility = [
         "@score_baselibs//score/mw/log:__pkg__",

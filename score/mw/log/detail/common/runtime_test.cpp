@@ -16,7 +16,6 @@
 #ifdef KCONSOLE_LOGGING
 #include "score/mw/log/detail/text_recorder/text_recorder.h"
 #endif
-#include "score/mw/log/recorder_config.h"
 #include "score/mw/log/recorder_mock.h"
 
 #include "gtest/gtest.h"
