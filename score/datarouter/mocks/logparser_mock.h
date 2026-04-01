@@ -34,8 +34,6 @@ class LogParserMock : public ILogParser
   public:
     ~LogParserMock() = default;
 
-    MOCK_METHOD(void, SetFilterFactory, (FilterFunctionFactory factory), (override));
-
     MOCK_METHOD(void, AddIncomingType, (const BufsizeT map_index, const std::string& params), (override));
     MOCK_METHOD(void, AddIncomingType, (const score::mw::log::detail::TypeRegistration&), (override));
 
@@ -45,10 +43,6 @@ class LogParserMock : public ILogParser
     MOCK_METHOD(void, RemoveTypeHandler, (const std::string& type_name, TypeHandler& handler), (override));
     MOCK_METHOD(void, RemoveGlobalHandler, (AnyHandler & handler), (override));
 
-    MOCK_METHOD(bool, IsTypeHndlRegistered, (const std::string& type_name, const TypeHandler& handler), (override));
-    MOCK_METHOD(bool, IsGlbHndlRegistered, (const AnyHandler& handler), (override));
-
-    MOCK_METHOD(void, ResetInternalMapping, (), (override));
     MOCK_METHOD(void, Parse, (TimestampT timestamp, const char* data, BufsizeT size), (override));
     MOCK_METHOD(void, Parse, (const score::mw::log::detail::SharedMemoryRecord& record), (override));
 };

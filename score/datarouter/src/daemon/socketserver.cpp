@@ -16,7 +16,7 @@
 #include "daemon/dlt_log_server.h"
 #include "daemon/message_passing_server.h"
 #include "daemon/socketserver_config.h"
-#include "daemon/socketserver_filter_factory.h"
+
 #include "score/datarouter/daemon_communication/session_handle_interface.h"
 #include "score/datarouter/datarouter/data_router.h"
 #include "score/datarouter/include/applications/datarouter_feature_config.h"
@@ -167,7 +167,6 @@ DataRouter::SourceSetupCallback SocketServer::CreateSourceSetupHandler(
     */
     // coverity[autosar_cpp14_a5_1_4_violation]
     return [&dlt_server](score::platform::internal::ILogParser&& parser) {
-        parser.SetFilterFactory(GetFilterFactory());
         dlt_server.AddHandlers(parser);
     };
 }
