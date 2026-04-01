@@ -39,6 +39,19 @@ namespace platform
 namespace internal
 {
 
+/// LogParser is NOT thread-safe.
+///
+/// Handler maps (handle_request_map_, global_handlers_) are populated once at
+/// construction via constructor injection and never mutated afterward (Ticket-254408).
+/// However, AddIncomingType() mutates index_parser_map_ and Parse*()/
+/// ParseSharedMemoryRecord() reads it — both without synchronization.
+///
+/// This is currently safe because a single SourceSession owns each LogParser
+/// instance, and AddIncomingType() / Parse*() are only called from the
+/// SourceSession::Tick() path, which is single-threaded per session.
+///
+/// If the design ever evolves to allow concurrent access (e.g. parallel readers),
+/// index_parser_map_ would need protection (e.g. std::shared_mutex).
 class LogParser : public ILogParser
 {
   public:
@@ -75,7 +88,6 @@ class LogParser : public ILogParser
 
     HandleRequestMap handle_request_map_;
 
-    std::unordered_multimap<std::string, const BufsizeT> typename_to_index_;
     std::unordered_map<BufsizeT, IndexParser> index_parser_map_;
 
     std::vector<AnyHandler*> global_handlers_;
