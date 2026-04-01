@@ -102,10 +102,9 @@ TEST(LogParserTest, SingleMessageHandler)
     const std::string type_params = MakeTypeParams<TestMessage>(DltidT{"ECU0"}, DltidT{"APP0"});
     constexpr BufsizeT kTestMessageIndex = 1234;
     const std::string message = MakeMessage(kTestMessageIndex, TestMessage{2345});
-    LogParser parser(CreateTestNvConfig());
-    parser.AddGlobalHandler(any_handler);
-    parser.AddTypeHandler("test::TestMessage", type_handler_yes);
-    parser.AddTypeHandler("test::notTestMessage", type_handler_no);
+    LogParser parser(CreateTestNvConfig(),
+                     {&any_handler},
+                     {{"test::TestMessage", &type_handler_yes}, {"test::notTestMessage", &type_handler_no}});
 
     parser.AddIncomingType(kTestMessageIndex, type_params);
 
@@ -142,46 +141,34 @@ TEST(LogParserTest, TestWrongTypeParameter)
     parser.AddIncomingType(kTestMessageIndex, type_params);
 }
 
-// The purpose of the test is to cover the else case for the below condition for 'add_global_handler' method.
-// The condition is:
-// if (is_glb_hndl_registered(handler) == false)
+// Test that global handlers passed to constructor are registered.
 TEST(LogParserTest, TestRegisterGlobalHandler)
 {
-    LogParser parser(CreateTestNvConfig());
     testing::StrictMock<AnyHandlerMock> any_handler;
-    // Register the same global handler twice.
-    EXPECT_FALSE(parser.IsGlbHndlRegistered(any_handler));
-    parser.AddGlobalHandler(any_handler);
+    LogParser parser(CreateTestNvConfig(), {&any_handler});
     EXPECT_TRUE(parser.IsGlbHndlRegistered(any_handler));
-    // To reach the else case in the condition there.
-    parser.AddGlobalHandler(any_handler);
 }
 
-// Test the if condition in the 'add_type_handler' method.
-// The condition is:
-// if (is_type_hndl_registered(typeName, handler))
+// Test that type handlers passed to constructor are registered.
 TEST(LogParserTest, TestAlreadyRegisteredTypeHandler)
 {
     testing::StrictMock<TypeHandlerMock> type_handler_yes;
 
-    LogParser parser(CreateTestNvConfig());
-    parser.AddTypeHandler("test::TestMessage", type_handler_yes);
-    parser.AddTypeHandler("test::TestMessage", type_handler_yes);
+    LogParser parser(CreateTestNvConfig(), {}, {{"test::TestMessage", &type_handler_yes}});
 
     EXPECT_TRUE(parser.IsTypeHndlRegistered("test::TestMessage", type_handler_yes));
 }
 
 TEST(LogParserTest, TestRegisteringNewTypeHandler)
 {
-    LogParser parser(CreateTestNvConfig());
     testing::StrictMock<TypeHandlerMock> type_handler_yes;
+    LogParser parser(CreateTestNvConfig(), {}, {{"test::TestMessage", &type_handler_yes}});
 
-    EXPECT_FALSE(parser.IsTypeHndlRegistered("test::TestMessage", type_handler_yes));
+    EXPECT_TRUE(parser.IsTypeHndlRegistered("test::TestMessage", type_handler_yes));
 
     const std::string type_params = MakeTypeParams<TestMessage>(DltidT{"ECU0"}, DltidT{"APP0"});
     constexpr BufsizeT kTestMessageIndex = 1234;
     parser.AddIncomingType(kTestMessageIndex, type_params);
-    parser.AddTypeHandler("test::TestMessage", type_handler_yes);
 
     EXPECT_TRUE(parser.IsTypeHndlRegistered("test::TestMessage", type_handler_yes));
 }
@@ -228,7 +215,7 @@ TEST(LogParserTest, WeCanNotParseASharedMemoryRecordIfTheTypeIdentifierIsNotWith
     // Unfortunately, there other way to set expectation for calling this method.
     // And there is no other methods are using it internally.
     score::mw::log::detail::SharedMemoryRecord record;
-    EXPECT_NO_FATAL_FAILURE(parser.Parse(record));
+    EXPECT_NO_FATAL_FAILURE(parser.ParseSharedMemoryRecord(record));
     // Since we didn't fill any values to 'index_parser_map' map, it will be empty which leads to immediate returning.
 }
 

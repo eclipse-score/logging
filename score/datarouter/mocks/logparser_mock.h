@@ -37,11 +37,8 @@ class LogParserMock : public ILogParser
     MOCK_METHOD(void, AddIncomingType, (const BufsizeT map_index, const std::string& params), (override));
     MOCK_METHOD(void, AddIncomingType, (const score::mw::log::detail::TypeRegistration&), (override));
 
-    MOCK_METHOD(void, AddTypeHandler, (const std::string& type_name, TypeHandler& handler), (override));
-    MOCK_METHOD(void, AddGlobalHandler, (AnyHandler & handler), (override));
-
     MOCK_METHOD(void, Parse, (TimestampT timestamp, const char* data, BufsizeT size), (override));
-    MOCK_METHOD(void, Parse, (const score::mw::log::detail::SharedMemoryRecord& record), (override));
+    MOCK_METHOD(void, ParseSharedMemoryRecord, (const score::mw::log::detail::SharedMemoryRecord& record), (override));
 };
 
 }  // namespace internal

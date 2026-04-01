@@ -42,20 +42,19 @@ namespace internal
 class LogParser : public ILogParser
 {
   public:
-    explicit LogParser(const score::mw::log::INvConfig& nv_config);
+    explicit LogParser(const score::mw::log::INvConfig& nv_config,
+                       std::vector<AnyHandler*> global_handlers = {},
+                       std::vector<TypeHandlerBinding> type_handlers = {});
     ~LogParser() = default;
 
     void AddIncomingType(const BufsizeT map_index, const std::string& params) override;
     void AddIncomingType(const score::mw::log::detail::TypeRegistration&) override;
 
-    void AddTypeHandler(const std::string& type_name, TypeHandler& handler) override;
-    void AddGlobalHandler(AnyHandler& handler) override;
-
     bool IsTypeHndlRegistered(const std::string& type_name, const TypeHandler& handler);
     bool IsGlbHndlRegistered(const AnyHandler& handler);
 
     void Parse(TimestampT timestamp, const char* data, BufsizeT size) override;
-    void Parse(const score::mw::log::detail::SharedMemoryRecord& record) override;
+    void ParseSharedMemoryRecord(const score::mw::log::detail::SharedMemoryRecord& record) override;
 
   private:
     struct HandleRequest

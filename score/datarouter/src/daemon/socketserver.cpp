@@ -156,8 +156,7 @@ std::unique_ptr<score::logging::dltserver::DltLogServer> SocketServer::CreateDlt
         static_config.value(), storage_handlers.load_dlt, storage_handlers.store_dlt, storage_handlers.is_dlt_enabled);
 }
 
-DataRouter::SourceSetupCallback SocketServer::CreateSourceSetupHandler(
-    score::logging::dltserver::DltLogServer& dlt_server)
+DataRouter::HandlerProvider SocketServer::CreateSourceSetupHandler(score::logging::dltserver::DltLogServer& dlt_server)
 {
     /*
         Deviation from Rule A5-1-4:
@@ -166,8 +165,10 @@ DataRouter::SourceSetupCallback SocketServer::CreateSourceSetupHandler(
         - dltServer and lambda are in the same scope.
     */
     // coverity[autosar_cpp14_a5_1_4_violation]
-    return [&dlt_server](score::platform::internal::ILogParser&& parser) {
-        dlt_server.AddHandlers(parser);
+    return [&dlt_server](std::vector<score::platform::internal::ILogParser::AnyHandler*>& global_handlers,
+                         std::vector<score::platform::internal::ILogParser::TypeHandlerBinding>& type_handlers) {
+        global_handlers = dlt_server.GetGlobalHandlers();
+        type_handlers = dlt_server.GetTypeHandlerBindings();
     };
 }
 

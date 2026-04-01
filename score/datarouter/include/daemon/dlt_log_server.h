@@ -100,22 +100,21 @@ class DltLogServer : score::platform::datarouter::DltNonverboseHandlerType::IOut
     virtual ~DltLogServer() = default;
     // Not possible to mock LogParser currently.
     // LCOV_EXCL_START
-    void AddHandlers(ILogParser& parser)
+    std::vector<ILogParser::AnyHandler*> GetGlobalHandlers()
     {
-        parser.AddGlobalHandler(*sysedr_handler_);
-        parser.AddTypeHandler(kPersistentRequestTypeName, *sysedr_handler_);
+        return {sysedr_handler_.get(), &nvhandler_};
+    }
 
-        // Always register DLT handlers unconditionally; they check
-        // IsOutputEnabled() at dispatch time. This eliminates the cross-thread
-        // mutation of parser handler lists that caused SIGABRT (Ticket-254408).
-        parser.AddGlobalHandler(nvhandler_);
-        parser.AddTypeHandler(kLogEntryTypeName, vhandler_);
-        parser.AddTypeHandler(kFileTransferTypeName, fthandler_);
+    std::vector<ILogParser::TypeHandlerBinding> GetTypeHandlerBindings()
+    {
+        return {{kPersistentRequestTypeName, sysedr_handler_.get()},
+                {kLogEntryTypeName, &vhandler_},
+                {kFileTransferTypeName, &fthandler_}};
     }
 
     void UpdateHandlers(ILogParser& /* parser */, bool /* enabled */)
     {
-        // No-op: handlers are registered unconditionally in AddHandlers() and check
+        // No-op: handlers are registered unconditionally at LogParser construction and check
         // IsOutputEnabled() at dispatch time. This eliminates the cross-thread
         // mutation of parser handler lists that caused SIGABRT (Ticket-254408).
     }
