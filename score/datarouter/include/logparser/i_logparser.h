@@ -85,9 +85,6 @@ class ILogParser
     virtual void AddTypeHandler(const std::string& type_name, TypeHandler& handler) = 0;
     virtual void AddGlobalHandler(AnyHandler& handler) = 0;
 
-    virtual void RemoveTypeHandler(const std::string& type_name, TypeHandler& handler) = 0;
-    virtual void RemoveGlobalHandler(AnyHandler& handler) = 0;
-
     virtual void Parse(TimestampT timestamp, const char* data, BufsizeT size) = 0;
     virtual void Parse(const score::mw::log::detail::SharedMemoryRecord& record) = 0;
 };

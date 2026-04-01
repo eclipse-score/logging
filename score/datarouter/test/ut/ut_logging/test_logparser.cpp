@@ -130,33 +130,6 @@ TEST(LogParserTest, FilterForwarderWithSingleForwarder)
     parser.Parse(TimestampT{3s}, message3.data(), static_cast<BufsizeT>(message3.size()));
 }
 
-// Test the else case in the below condition in 'remove_type_handler' and 'remove_handler' methods.
-// The conditions are:
-// if (ith != ith_range.second)
-// if (it != handlers_.end())
-TEST(LogParserTest, TestRemoveTypeHandler)
-{
-    LogParser parser(CreateTestNvConfig());
-    testing::StrictMock<TypeHandlerMock> type_handler_yes;
-    parser.AddTypeHandler("test::TestMessage", type_handler_yes);
-    parser.AddTypeHandler("test::TestMessage", type_handler_yes);
-
-    testing::StrictMock<TypeHandlerMock> type_handler_no;
-    EXPECT_CALL(type_handler_no, Handle(_, _, _)).Times(0);
-
-    parser.AddTypeHandler("test::notTestMessage", type_handler_no);
-
-    const std::string type_params = MakeTypeParams<TestMessage>(DltidT{"ECU0"}, DltidT{"APP0"});
-    constexpr BufsizeT kTestMessageIndex = 1234;
-
-    // Add the type twice.
-    parser.AddIncomingType(kTestMessageIndex, type_params);
-    parser.AddIncomingType(kTestMessageIndex, type_params);
-    parser.RemoveTypeHandler("test::TestMessage", type_handler_yes);
-    // Remove non existent type handler.
-    parser.RemoveTypeHandler("test::TestMessage", type_handler_yes);
-}
-
 // Test the True case for the below condition for 'add_incoming_type' method.
 // The condition is:
 // if (params.size() <= 12 + sizeof(uint32_t) || params[0] != 0 || params[1] != 0 || params[2] != 0 || params[3] != 0)
@@ -182,27 +155,6 @@ TEST(LogParserTest, TestRegisterGlobalHandler)
     EXPECT_TRUE(parser.IsGlbHndlRegistered(any_handler));
     // To reach the else case in the condition there.
     parser.AddGlobalHandler(any_handler);
-}
-
-// The purpose of the test is to cover the else case for the below condition for 'remove_global_handler' method.
-// The condition is:
-// if (it != global_handlers.end())
-TEST(LogParserTest, TestRemovingGlobalHandler)
-{
-    LogParser parser(CreateTestNvConfig());
-    testing::StrictMock<AnyHandlerMock> any_handler;
-    // Check non-registered handler.
-    EXPECT_FALSE(parser.IsGlbHndlRegistered(any_handler));
-    // Register new handler.
-    parser.AddGlobalHandler(any_handler);
-    // Check registered handler.
-    EXPECT_TRUE(parser.IsGlbHndlRegistered(any_handler));
-    // Remove the handler.
-    parser.RemoveGlobalHandler(any_handler);
-    // Handler no more exist.
-    EXPECT_FALSE(parser.IsGlbHndlRegistered(any_handler));
-    // Try remove non registered handler (To reach the else case in the condition there).
-    parser.RemoveGlobalHandler(any_handler);
 }
 
 // Test the if condition in the 'add_type_handler' method.
