@@ -64,27 +64,26 @@ LogParser::LogParser(const score::mw::log::INvConfig& nv_config,
                      std::vector<TypeHandlerBinding> type_handlers)
     : ILogParser(),
       handle_request_map_{},
-      typename_to_index_{},
       index_parser_map_{},
       global_handlers_{std::move(global_handlers)},
       nv_config_(nv_config)
 {
     for (auto& binding : type_handlers)
     {
-        handle_request_map_.emplace(std::move(binding.type_name), HandleRequest{binding.handler});
+        handle_request_map_.emplace(std::move(binding.type_name), binding.handler);
     }
 }
 
-void LogParser::IndexParser::AddHandler(const LogParser::HandleRequestMap::value_type& request)
+void LogParser::IndexParser::AddHandler(TypeHandler* handler)
 {
-    handlers_.push_back(Handler{&request, request.second.handler});
+    handlers_.push_back(handler);
 }
 
 void LogParser::IndexParser::Parse(const TimestampT timestamp, const char* const data, const BufsizeT size)
 {
     for (const auto& handler : handlers_)
     {
-        handler.handler->Handle(timestamp, data, size);
+        handler->Handle(timestamp, data, size);
     }
 }
 
@@ -108,12 +107,9 @@ void LogParser::AddIncomingType(const BufsizeT map_index, const std::string& par
     const auto ith_range = handle_request_map_.equal_range(type_name);
     for (auto ith = ith_range.first; ith != ith_range.second; ++ith)
     {
-        index_parser.AddHandler(*ith);
+        index_parser.AddHandler(ith->second);
     }
-    // Insert into index_parser_map_ before typename_to_index_ to maintain the invariant:
-    // every index visible in typename_to_index_ must have a corresponding entry in index_parser_map_.
     index_parser_map_.emplace(map_index, std::move(index_parser));
-    typename_to_index_.emplace(type_name, map_index);
 }
 
 void LogParser::AddIncomingType(const score::mw::log::detail::TypeRegistration& type_registration)
@@ -121,32 +117,6 @@ void LogParser::AddIncomingType(const score::mw::log::detail::TypeRegistration& 
     std::string params{type_registration.registration_data.data(),
                        score::mw::log::detail::GetDataSizeAsLength(type_registration.registration_data)};
     this->AddIncomingType(type_registration.type_id, params);
-}
-
-bool LogParser::IsTypeHndlRegistered(const std::string& type_name, const TypeHandler& handler)
-{
-    bool retval = false;
-    const auto ith_range = handle_request_map_.equal_range(type_name);
-    const auto finder = [&handler](const auto& v) {
-        return v.second.handler == &handler;
-    };
-    const auto ith = std::find_if(ith_range.first, ith_range.second, finder);
-    if (ith != ith_range.second)
-    {
-        retval = true;
-    }
-    return retval;
-}
-
-bool LogParser::IsGlbHndlRegistered(const AnyHandler& handler)
-{
-    const auto it = std::find(global_handlers_.begin(), global_handlers_.end(), &handler);
-    bool retval = false;
-    if (it != global_handlers_.end())
-    {
-        retval = true;
-    }
-    return retval;
 }
 
 void LogParser::Parse(TimestampT timestamp, const char* data, BufsizeT size)
