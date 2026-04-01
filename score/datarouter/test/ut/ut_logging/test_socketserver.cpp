@@ -223,17 +223,17 @@ TEST_F(SocketServerCreateDltServerTest, CreateDltServerExecutesSuccessfully)
     auto source_setup_handler = SocketServer::CreateSourceSetupHandler(*dlt_server);
 
     // Verify correct return type
-    EXPECT_TRUE((std::is_same<decltype(source_setup_handler), DataRouter::SourceSetupCallback>::value));
+    EXPECT_TRUE((std::is_same<decltype(source_setup_handler), DataRouter::HandlerProvider>::value));
 
     // Verify the lambda was created (not null)
     EXPECT_TRUE(static_cast<bool>(source_setup_handler));
 
-    // Execute the lambda to cover lines 152-153
-    score::mw::log::INvConfigMock nvconfig_mock;
-    score::platform::internal::LogParser parser(nvconfig_mock);
-
-    // Call the lambda
-    source_setup_handler(std::move(parser));
+    // Execute the lambda to cover the handler provider
+    std::vector<score::platform::internal::ILogParser::AnyHandler*> global_handlers;
+    std::vector<score::platform::internal::ILogParser::TypeHandlerBinding> type_handlers;
+    source_setup_handler(global_handlers, type_handlers);
+    EXPECT_FALSE(global_handlers.empty());
+    EXPECT_FALSE(type_handlers.empty());
 }
 
 TEST_F(SocketServerCreateDltServerTest, CreateDltServerReturnsNullOnConfigError)

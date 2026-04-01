@@ -59,14 +59,20 @@ namespace platform
 namespace internal
 {
 
-LogParser::LogParser(const score::mw::log::INvConfig& nv_config)
+LogParser::LogParser(const score::mw::log::INvConfig& nv_config,
+                     std::vector<AnyHandler*> global_handlers,
+                     std::vector<TypeHandlerBinding> type_handlers)
     : ILogParser(),
       handle_request_map_{},
       typename_to_index_{},
       index_parser_map_{},
-      global_handlers_{},
+      global_handlers_{std::move(global_handlers)},
       nv_config_(nv_config)
 {
+    for (auto& binding : type_handlers)
+    {
+        handle_request_map_.emplace(std::move(binding.type_name), HandleRequest{binding.handler});
+    }
 }
 
 void LogParser::IndexParser::AddHandler(const LogParser::HandleRequestMap::value_type& request)
@@ -115,32 +121,6 @@ void LogParser::AddIncomingType(const score::mw::log::detail::TypeRegistration& 
     std::string params{type_registration.registration_data.data(),
                        score::mw::log::detail::GetDataSizeAsLength(type_registration.registration_data)};
     this->AddIncomingType(type_registration.type_id, params);
-}
-
-void LogParser::AddGlobalHandler(AnyHandler& handler)
-{
-    if (IsGlbHndlRegistered(handler) == false)
-    {
-        global_handlers_.push_back(&handler);
-    }
-}
-
-void LogParser::AddTypeHandler(const std::string& type_name, TypeHandler& handler)
-{
-    if (IsTypeHndlRegistered(type_name, handler))
-    {
-        return;
-    }
-    const auto ith = handle_request_map_.emplace(type_name, HandleRequest{&handler});
-    const auto iti_range = typename_to_index_.equal_range(type_name);
-    for (auto iti = iti_range.first; iti != iti_range.second; ++iti)
-    {
-        const auto it = index_parser_map_.find(iti->second);
-        if (it != index_parser_map_.end())
-        {
-            it->second.AddHandler(*ith);
-        }
-    }
 }
 
 bool LogParser::IsTypeHndlRegistered(const std::string& type_name, const TypeHandler& handler)
@@ -207,7 +187,7 @@ void LogParser::Parse(TimestampT timestamp, const char* data, BufsizeT size)
     }
 }
 
-void LogParser::Parse(const score::mw::log::detail::SharedMemoryRecord& record)
+void LogParser::ParseSharedMemoryRecord(const score::mw::log::detail::SharedMemoryRecord& record)
 {
     const auto index_parser_entry = index_parser_map_.find(record.header.type_identifier);
     if (index_parser_entry == index_parser_map_.end())

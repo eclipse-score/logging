@@ -87,14 +87,15 @@ struct StatsData
 class DataRouter
 {
   public:
-    using SourceSetupCallback = std::function<void(ILogParser&&)>;
+    using HandlerProvider =
+        std::function<void(std::vector<ILogParser::AnyHandler*>&, std::vector<ILogParser::TypeHandlerBinding>&)>;
     using SessionPtr = std::unique_ptr<UnixDomainServer::ISession>;
     using MessagingSessionPtr = std::unique_ptr<MessagePassingServer::ISession>;
 
     using SessionHandleVariant = score::cpp::variant<UnixDomainServer::SessionHandle,
                                               score::cpp::pmr::unique_ptr<score::platform::internal::daemon::ISessionHandle>>;
 
-    explicit DataRouter(score::mw::log::Logger& logger, SourceSetupCallback source_callback = SourceSetupCallback());
+    explicit DataRouter(score::mw::log::Logger& logger, HandlerProvider handler_provider = HandlerProvider());
 
     MessagingSessionPtr NewSourceSession(
         int fd,
@@ -217,7 +218,7 @@ class DataRouter
     score::mw::log::Logger& stats_logger_;
 
     std::unordered_set<SourceSession*> sources_;
-    SourceSetupCallback source_callback_;
+    HandlerProvider handler_provider_;
 
     std::mutex subscriber_mutex_;
 };

@@ -68,6 +68,12 @@ class ILogParser
         virtual ~AnyHandler() = default;
     };
 
+    struct TypeHandlerBinding
+    {
+        std::string type_name;
+        TypeHandler* handler;
+    };
+
     virtual ~ILogParser() = default;
 
     // a function object to return whether the message parameter passes some encapsulted filter
@@ -82,11 +88,8 @@ class ILogParser
     virtual void AddIncomingType(const BufsizeT map_index, const std::string& params) = 0;
     virtual void AddIncomingType(const score::mw::log::detail::TypeRegistration&) = 0;
 
-    virtual void AddTypeHandler(const std::string& type_name, TypeHandler& handler) = 0;
-    virtual void AddGlobalHandler(AnyHandler& handler) = 0;
-
     virtual void Parse(TimestampT timestamp, const char* data, BufsizeT size) = 0;
-    virtual void Parse(const score::mw::log::detail::SharedMemoryRecord& record) = 0;
+    virtual void ParseSharedMemoryRecord(const score::mw::log::detail::SharedMemoryRecord& record) = 0;
 };
 
 }  // namespace internal

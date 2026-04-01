@@ -90,7 +90,7 @@ class SocketServer
     static std::unique_ptr<score::logging::dltserver::DltLogServer> CreateDltServer(
         const PersistentStorageHandlers& storage_handlers);
 
-    static DataRouter::SourceSetupCallback CreateSourceSetupHandler(score::logging::dltserver::DltLogServer& dlt_server);
+    static DataRouter::HandlerProvider CreateSourceSetupHandler(score::logging::dltserver::DltLogServer& dlt_server);
 
     // Static helper functions for testing lambda bodies
     static void UpdateParserHandlers(score::logging::dltserver::DltLogServer& dlt_server,
