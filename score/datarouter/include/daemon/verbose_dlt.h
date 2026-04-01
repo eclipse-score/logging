@@ -38,6 +38,7 @@ class DltVerboseHandler : public LogParser::TypeHandler
         virtual void SendVerbose(
             uint32_t tmsp,
             const score::mw::log::detail::log_entry_deserialization::LogEntryDeserializationReflection& entry) = 0;
+        virtual bool IsOutputEnabled() const noexcept = 0;
 
       protected:
         ~IOutput() = default;

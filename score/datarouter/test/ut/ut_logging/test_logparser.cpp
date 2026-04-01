@@ -118,29 +118,6 @@ TEST(LogParserTest, FilterForwarderWithSingleForwarder)
     const std::string type_params = MakeTypeParams<TestMessage>(DltidT{"ECU4"}, DltidT{"APP0"});
 
     LogParser parser(CreateTestNvConfig());
-    const auto factory = [](const std::string& type_name, const DataFilter& filter) -> LogParser::FilterFunction {
-        if (type_name == "test::TestMessage" && filter.filter_type == "test::TestFilter")
-        {
-            TestFilter test_filter;
-            using S = ::score::common::visitor::logging_serializer;
-            if (S::deserialize(filter.filter_data.data(), filter.filter_data.size(), test_filter))
-            {
-                return [test_filter](const char* const data, const BufsizeT size) {
-                    TestMessage message;
-                    if (S::deserialize(data, size, message))
-                    {
-                        return test_filter.test_field == message.test_field;
-                    }
-                    else
-                    {
-                        return false;
-                    }
-                };
-            }
-        }
-        return {};
-    };
-    parser.SetFilterFactory(factory);
 
     constexpr BufsizeT kTestMessageIndex = 1234;
     parser.AddIncomingType(kTestMessageIndex, type_params);
@@ -257,15 +234,6 @@ TEST(LogParserTest, TestRegisteringNewTypeHandler)
     EXPECT_TRUE(parser.IsTypeHndlRegistered("test::TestMessage", type_handler_yes));
 }
 
-// The purpose of this test is to enhance the line coverage for 'reset_internal_mapping' method.
-TEST(LogParserTest, TestResetInternalMapping)
-{
-    LogParser parser(CreateTestNvConfig());
-    // Unfortunately, there other way to set expectation for calling this method.
-    // And there is no other methods are using it internally.
-    EXPECT_NO_FATAL_FAILURE(parser.ResetInternalMapping());
-}
-
 struct SmallTestMessage
 {
     uint8_t test_field;
@@ -283,8 +251,6 @@ TEST(LogParserTest, WeCanNotParseIfTheSizeOfTheSerializedMessageSmallerThanTheEx
     LogParser parser(CreateTestNvConfig());
     // Unfortunately, there other way to set expectation for calling this method.
     // And there is no other methods are using it internally.
-    EXPECT_NO_FATAL_FAILURE(parser.Parse(time_now, message.data(), static_cast<std::uint16_t>(message.size())));
-    EXPECT_NO_FATAL_FAILURE(parser.ResetInternalMapping());
     EXPECT_NO_FATAL_FAILURE(parser.Parse(time_now, message.data(), static_cast<std::uint16_t>(message.size())));
 }
 

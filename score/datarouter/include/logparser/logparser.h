@@ -45,11 +45,6 @@ class LogParser : public ILogParser
     explicit LogParser(const score::mw::log::INvConfig& nv_config);
     ~LogParser() = default;
 
-    void SetFilterFactory(FilterFunctionFactory factory) override
-    {
-        filter_factory_ = factory;
-    }
-
     void AddIncomingType(const BufsizeT map_index, const std::string& params) override;
     void AddIncomingType(const score::mw::log::detail::TypeRegistration&) override;
 
@@ -59,10 +54,8 @@ class LogParser : public ILogParser
     void RemoveTypeHandler(const std::string& type_name, TypeHandler& handler) override;
     void RemoveGlobalHandler(AnyHandler& handler) override;
 
-    bool IsTypeHndlRegistered(const std::string& type_name, const TypeHandler& handler) override;
-    bool IsGlbHndlRegistered(const AnyHandler& handler) override;
-
-    void ResetInternalMapping() override;
+    bool IsTypeHndlRegistered(const std::string& type_name, const TypeHandler& handler);
+    bool IsGlbHndlRegistered(const AnyHandler& handler);
 
     void Parse(TimestampT timestamp, const char* data, BufsizeT size) override;
     void Parse(const score::mw::log::detail::SharedMemoryRecord& record) override;
@@ -114,8 +107,6 @@ class LogParser : public ILogParser
 
         std::vector<Handler> handlers_;
     };
-
-    FilterFunctionFactory filter_factory_;
 
     HandleRequestMap handle_request_map_;
 

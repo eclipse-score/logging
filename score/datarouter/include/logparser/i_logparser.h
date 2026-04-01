@@ -79,8 +79,6 @@ class ILogParser
     // (called on the request data provided by add_data_forwarder())
     using FilterFunctionFactory = std::function<FilterFunction(const std::string&, const DataFilter&)>;
 
-    virtual void SetFilterFactory(FilterFunctionFactory factory) = 0;
-
     virtual void AddIncomingType(const BufsizeT map_index, const std::string& params) = 0;
     virtual void AddIncomingType(const score::mw::log::detail::TypeRegistration&) = 0;
 
@@ -90,10 +88,6 @@ class ILogParser
     virtual void RemoveTypeHandler(const std::string& type_name, TypeHandler& handler) = 0;
     virtual void RemoveGlobalHandler(AnyHandler& handler) = 0;
 
-    virtual bool IsTypeHndlRegistered(const std::string& type_name, const TypeHandler& handler) = 0;
-    virtual bool IsGlbHndlRegistered(const AnyHandler& handler) = 0;
-
-    virtual void ResetInternalMapping() = 0;
     virtual void Parse(TimestampT timestamp, const char* data, BufsizeT size) = 0;
     virtual void Parse(const score::mw::log::detail::SharedMemoryRecord& record) = 0;
 };

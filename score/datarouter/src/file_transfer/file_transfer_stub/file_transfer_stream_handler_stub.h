@@ -45,6 +45,7 @@ class StubFileTransferStreamHandler : public LogParser::TypeHandler
                                    DltidT ctxId,
                                    uint8_t nor,
                                    uint32_t time_tmsp) = 0;
+        virtual bool IsOutputEnabled() const noexcept = 0;
 
       protected:
         virtual ~IOutput() = default;

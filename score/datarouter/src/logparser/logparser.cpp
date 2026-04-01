@@ -61,7 +61,6 @@ namespace internal
 
 LogParser::LogParser(const score::mw::log::INvConfig& nv_config)
     : ILogParser(),
-      filter_factory_{},
       handle_request_map_{},
       typename_to_index_{},
       index_parser_map_{},
@@ -110,7 +109,6 @@ void LogParser::AddIncomingType(const BufsizeT map_index, const std::string& par
     std::string type_name;
     LoggerUnpackString(params.substr(12U), type_name);
 
-    typename_to_index_.emplace(type_name, map_index);
     IndexParser index_parser{
         TypeInfo{nv_config_.GetDltMsgDesc(type_name), map_index, params, type_name, ecu_id, app_id}};
     const auto ith_range = handle_request_map_.equal_range(type_name);
@@ -118,7 +116,10 @@ void LogParser::AddIncomingType(const BufsizeT map_index, const std::string& par
     {
         index_parser.AddHandler(*ith);
     }
+    // Insert into index_parser_map_ before typename_to_index_ to maintain the invariant:
+    // every index visible in typename_to_index_ must have a corresponding entry in index_parser_map_.
     index_parser_map_.emplace(map_index, std::move(index_parser));
+    typename_to_index_.emplace(type_name, map_index);
 }
 
 void LogParser::AddIncomingType(const score::mw::log::detail::TypeRegistration& type_registration)
@@ -155,7 +156,11 @@ void LogParser::AddTypeHandler(const std::string& type_name, TypeHandler& handle
     const auto iti_range = typename_to_index_.equal_range(type_name);
     for (auto iti = iti_range.first; iti != iti_range.second; ++iti)
     {
-        index_parser_map_.at(iti->second).AddHandler(*ith);
+        const auto it = index_parser_map_.find(iti->second);
+        if (it != index_parser_map_.end())
+        {
+            it->second.AddHandler(*ith);
+        }
     }
 }
 
@@ -171,7 +176,11 @@ void LogParser::RemoveTypeHandler(const std::string& type_name, TypeHandler& han
         const auto iti_range = typename_to_index_.equal_range(type_name);
         for (auto iti = iti_range.first; iti != iti_range.second; ++iti)
         {
-            index_parser_map_.at(iti->second).RemoveHandler(*ith);
+            const auto it = index_parser_map_.find(iti->second);
+            if (it != index_parser_map_.end())
+            {
+                it->second.RemoveHandler(*ith);
+            }
         }
         handle_request_map_.erase(ith);
     }
@@ -201,12 +210,6 @@ bool LogParser::IsGlbHndlRegistered(const AnyHandler& handler)
         retval = true;
     }
     return retval;
-}
-
-void LogParser::ResetInternalMapping()
-{
-    typename_to_index_.clear();
-    index_parser_map_.clear();
 }
 
 void LogParser::Parse(TimestampT timestamp, const char* data, BufsizeT size)

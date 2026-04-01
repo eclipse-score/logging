@@ -105,30 +105,19 @@ class DltLogServer : score::platform::datarouter::DltNonverboseHandlerType::IOut
         parser.AddGlobalHandler(*sysedr_handler_);
         parser.AddTypeHandler(kPersistentRequestTypeName, *sysedr_handler_);
 
-        if (dlt_output_enabled_)
-        {
-            // XXX only add handler for those which are accepted
-            parser.AddGlobalHandler(nvhandler_);
-            parser.AddTypeHandler(kLogEntryTypeName, vhandler_);
-            parser.AddTypeHandler(kFileTransferTypeName, fthandler_);
-        }
+        // Always register DLT handlers unconditionally; they check
+        // IsOutputEnabled() at dispatch time. This eliminates the cross-thread
+        // mutation of parser handler lists that caused SIGABRT (Ticket-254408).
+        parser.AddGlobalHandler(nvhandler_);
+        parser.AddTypeHandler(kLogEntryTypeName, vhandler_);
+        parser.AddTypeHandler(kFileTransferTypeName, fthandler_);
     }
 
-    void UpdateHandlers(ILogParser& parser, bool enabled)
+    void UpdateHandlers(ILogParser& /* parser */, bool /* enabled */)
     {
-        // protected by external mutex
-        if (enabled)
-        {
-            parser.AddGlobalHandler(nvhandler_);
-            parser.AddTypeHandler(kLogEntryTypeName, vhandler_);
-            parser.AddTypeHandler(kFileTransferTypeName, fthandler_);
-        }
-        else
-        {
-            parser.RemoveGlobalHandler(nvhandler_);
-            parser.RemoveTypeHandler(kLogEntryTypeName, vhandler_);
-            parser.RemoveTypeHandler(kFileTransferTypeName, fthandler_);
-        }
+        // No-op: handlers are registered unconditionally in AddHandlers() and check
+        // IsOutputEnabled() at dispatch time. This eliminates the cross-thread
+        // mutation of parser handler lists that caused SIGABRT (Ticket-254408).
     }
     // LCOV_EXCL_STOP
 
@@ -139,8 +128,7 @@ class DltLogServer : score::platform::datarouter::DltNonverboseHandlerType::IOut
 
     void UpdateHandlersFinal(bool enabled)
     {
-        // protected by external mutex
-        dlt_output_enabled_ = enabled;
+        dlt_output_enabled_.store(enabled, std::memory_order_release);
     }
 
     void Flush()
@@ -295,7 +283,7 @@ class DltLogServer : score::platform::datarouter::DltNonverboseHandlerType::IOut
     std::mutex config_mutex_;
 
     bool filtering_enabled_;
-    bool dlt_output_enabled_;
+    std::atomic<bool> dlt_output_enabled_;
 
     LoglevelT default_threshold_;
     std::unordered_map<KeyT, LoglevelT, KeyHash> message_thresholds_;
@@ -321,6 +309,8 @@ class DltLogServer : score::platform::datarouter::DltNonverboseHandlerType::IOut
     std::unique_ptr<IDiagnosticJobParser> parser_;
 
     std::unique_ptr<ISysedrHandler> sysedr_handler_;
+
+    bool IsOutputEnabled() const noexcept override final;
 
     void SendNonVerbose(const score::mw::log::config::NvMsgDescriptor& desc,
                         uint32_t tmsp,
