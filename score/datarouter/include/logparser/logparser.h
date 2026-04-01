@@ -51,9 +51,6 @@ class LogParser : public ILogParser
     void AddTypeHandler(const std::string& type_name, TypeHandler& handler) override;
     void AddGlobalHandler(AnyHandler& handler) override;
 
-    void RemoveTypeHandler(const std::string& type_name, TypeHandler& handler) override;
-    void RemoveGlobalHandler(AnyHandler& handler) override;
-
     bool IsTypeHndlRegistered(const std::string& type_name, const TypeHandler& handler);
     bool IsGlbHndlRegistered(const AnyHandler& handler);
 
@@ -85,7 +82,6 @@ class LogParser : public ILogParser
         explicit IndexParser(TypeInfo type_info) : info{type_info}, handlers_{} {}
 
         void AddHandler(const HandleRequestMap::value_type& request);
-        void RemoveHandler(const HandleRequestMap::value_type& request);
 
         void Parse(const TimestampT timestamp, const char* const data, const BufsizeT size);
 

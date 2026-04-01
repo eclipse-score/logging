@@ -74,18 +74,6 @@ void LogParser::IndexParser::AddHandler(const LogParser::HandleRequestMap::value
     handlers_.push_back(Handler{&request, request.second.handler});
 }
 
-void LogParser::IndexParser::RemoveHandler(const LogParser::HandleRequestMap::value_type& request)
-{
-    const auto finder = [&request](const auto& v) {
-        return v.request == &request;
-    };
-    const auto it = std::find_if(handlers_.begin(), handlers_.end(), finder);
-    if (it != handlers_.end())
-    {
-        handlers_.erase(it);
-    }
-}
-
 void LogParser::IndexParser::Parse(const TimestampT timestamp, const char* const data, const BufsizeT size)
 {
     for (const auto& handler : handlers_)
@@ -137,15 +125,6 @@ void LogParser::AddGlobalHandler(AnyHandler& handler)
     }
 }
 
-void LogParser::RemoveGlobalHandler(AnyHandler& handler)
-{
-    const auto it = std::find(global_handlers_.begin(), global_handlers_.end(), &handler);
-    if (it != global_handlers_.end())
-    {
-        global_handlers_.erase(it);
-    }
-}
-
 void LogParser::AddTypeHandler(const std::string& type_name, TypeHandler& handler)
 {
     if (IsTypeHndlRegistered(type_name, handler))
@@ -161,28 +140,6 @@ void LogParser::AddTypeHandler(const std::string& type_name, TypeHandler& handle
         {
             it->second.AddHandler(*ith);
         }
-    }
-}
-
-void LogParser::RemoveTypeHandler(const std::string& type_name, TypeHandler& handler)
-{
-    const auto ith_range = handle_request_map_.equal_range(type_name);
-    const auto finder = [&handler](const auto& v) {
-        return v.second.handler == &handler;
-    };
-    const auto ith = std::find_if(ith_range.first, ith_range.second, finder);
-    if (ith != ith_range.second)
-    {
-        const auto iti_range = typename_to_index_.equal_range(type_name);
-        for (auto iti = iti_range.first; iti != iti_range.second; ++iti)
-        {
-            const auto it = index_parser_map_.find(iti->second);
-            if (it != index_parser_map_.end())
-            {
-                it->second.RemoveHandler(*ith);
-            }
-        }
-        handle_request_map_.erase(ith);
     }
 }
 

@@ -40,9 +40,6 @@ class LogParserMock : public ILogParser
     MOCK_METHOD(void, AddTypeHandler, (const std::string& type_name, TypeHandler& handler), (override));
     MOCK_METHOD(void, AddGlobalHandler, (AnyHandler & handler), (override));
 
-    MOCK_METHOD(void, RemoveTypeHandler, (const std::string& type_name, TypeHandler& handler), (override));
-    MOCK_METHOD(void, RemoveGlobalHandler, (AnyHandler & handler), (override));
-
     MOCK_METHOD(void, Parse, (TimestampT timestamp, const char* data, BufsizeT size), (override));
     MOCK_METHOD(void, Parse, (const score::mw::log::detail::SharedMemoryRecord& record), (override));
 };
