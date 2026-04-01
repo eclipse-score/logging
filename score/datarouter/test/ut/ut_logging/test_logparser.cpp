@@ -141,38 +141,6 @@ TEST(LogParserTest, TestWrongTypeParameter)
     parser.AddIncomingType(kTestMessageIndex, type_params);
 }
 
-// Test that global handlers passed to constructor are registered.
-TEST(LogParserTest, TestRegisterGlobalHandler)
-{
-    testing::StrictMock<AnyHandlerMock> any_handler;
-    LogParser parser(CreateTestNvConfig(), {&any_handler});
-    EXPECT_TRUE(parser.IsGlbHndlRegistered(any_handler));
-}
-
-// Test that type handlers passed to constructor are registered.
-TEST(LogParserTest, TestAlreadyRegisteredTypeHandler)
-{
-    testing::StrictMock<TypeHandlerMock> type_handler_yes;
-
-    LogParser parser(CreateTestNvConfig(), {}, {{"test::TestMessage", &type_handler_yes}});
-
-    EXPECT_TRUE(parser.IsTypeHndlRegistered("test::TestMessage", type_handler_yes));
-}
-
-TEST(LogParserTest, TestRegisteringNewTypeHandler)
-{
-    testing::StrictMock<TypeHandlerMock> type_handler_yes;
-    LogParser parser(CreateTestNvConfig(), {}, {{"test::TestMessage", &type_handler_yes}});
-
-    EXPECT_TRUE(parser.IsTypeHndlRegistered("test::TestMessage", type_handler_yes));
-
-    const std::string type_params = MakeTypeParams<TestMessage>(DltidT{"ECU0"}, DltidT{"APP0"});
-    constexpr BufsizeT kTestMessageIndex = 1234;
-    parser.AddIncomingType(kTestMessageIndex, type_params);
-
-    EXPECT_TRUE(parser.IsTypeHndlRegistered("test::TestMessage", type_handler_yes));
-}
-
 struct SmallTestMessage
 {
     uint8_t test_field;

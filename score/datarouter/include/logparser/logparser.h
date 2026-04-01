@@ -50,28 +50,13 @@ class LogParser : public ILogParser
     void AddIncomingType(const BufsizeT map_index, const std::string& params) override;
     void AddIncomingType(const score::mw::log::detail::TypeRegistration&) override;
 
-    bool IsTypeHndlRegistered(const std::string& type_name, const TypeHandler& handler);
-    bool IsGlbHndlRegistered(const AnyHandler& handler);
-
     void Parse(TimestampT timestamp, const char* data, BufsizeT size) override;
     void ParseSharedMemoryRecord(const score::mw::log::detail::SharedMemoryRecord& record) override;
 
   private:
-    struct HandleRequest
-    {
-        /*
-        Deviation from Rule A9-6-1:
-        - Data types used for interfacing with hardware or conforming to communication protocols shall be trivial,
-        standard-layout and only contain members of types with defined sizes.
-        Justification:
-        - It's false positive, this class is not used to interface with hardware.
-        */
-        // coverity[autosar_cpp14_a9_6_1_violation : FALSE]
-        TypeHandler* handler;
-    };
     // typeName-keyed
     // HandleRequestMap::value_type* is not changed by unrelated insert/erase
-    using HandleRequestMap = std::unordered_multimap<std::string, const HandleRequest>;
+    using HandleRequestMap = std::unordered_multimap<std::string, TypeHandler*>;
 
     class IndexParser
     {
@@ -80,27 +65,12 @@ class LogParser : public ILogParser
 
         explicit IndexParser(TypeInfo type_info) : info{type_info}, handlers_{} {}
 
-        void AddHandler(const HandleRequestMap::value_type& request);
+        void AddHandler(TypeHandler* handler);
 
         void Parse(const TimestampT timestamp, const char* const data, const BufsizeT size);
 
       private:
-        struct Handler
-        {
-            /*
-            Deviation from Rule A9-6-1:
-            - Data types used for interfacing with hardware or conforming to communication protocols shall be trivial,
-            standard-layout and only contain members of types with defined sizes.
-            Justification:
-            - It's false positive, this class is not used to interface with hardware.
-            */
-            // coverity[autosar_cpp14_a9_6_1_violation : FALSE]
-            const HandleRequestMap::value_type* request;
-            // coverity[autosar_cpp14_a9_6_1_violation : FALSE]
-            TypeHandler* handler;
-        };
-
-        std::vector<Handler> handlers_;
+        std::vector<TypeHandler*> handlers_;
     };
 
     HandleRequestMap handle_request_map_;
