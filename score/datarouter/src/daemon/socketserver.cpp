@@ -168,9 +168,13 @@ std::unique_ptr<score::platform::internal::ILogParserFactory> SocketServer::Crea
         std::unique_ptr<score::platform::internal::ILogParser> Create(const score::mw::log::NvConfig& nv_config) override
         {
             auto global_handlers = dlt_server_.GetGlobalHandlers();
-            auto type_handlers = dlt_server_.GetTypeHandlerBindings();
+            score::platform::internal::LogParser::HandleRequestMap handle_request_map;
+            for (auto& binding : dlt_server_.GetTypeHandlerBindings())
+            {
+                handle_request_map.emplace(std::move(binding.type_name), binding.handler);
+            }
             return std::make_unique<score::platform::internal::LogParser>(
-                nv_config, std::move(global_handlers), std::move(type_handlers));
+                nv_config, std::move(global_handlers), std::move(handle_request_map));
         }
 
       private:

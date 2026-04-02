@@ -42,7 +42,8 @@ namespace internal
 /// LogParser is NOT thread-safe.
 ///
 /// Handler maps (handle_request_map_, global_handlers_) are populated once at
-/// construction via constructor injection and never mutated afterward (Ticket-254408).
+/// construction via constructor injection and declared const to enforce that
+/// invariant (Ticket-254408).
 /// However, AddIncomingType() mutates index_parser_map_ and Parse*()/
 /// ParseSharedMemoryRecord() reads it — both without synchronization.
 ///
@@ -55,9 +56,11 @@ namespace internal
 class LogParser : public ILogParser
 {
   public:
+    using HandleRequestMap = std::unordered_multimap<std::string, TypeHandler*>;
+
     explicit LogParser(const score::mw::log::INvConfig& nv_config,
                        std::vector<AnyHandler*> global_handlers = {},
-                       std::vector<TypeHandlerBinding> type_handlers = {});
+                       HandleRequestMap handle_request_map = {});
     ~LogParser() = default;
 
     void AddIncomingType(const BufsizeT map_index, const std::string& params) override;
@@ -67,10 +70,6 @@ class LogParser : public ILogParser
     void ParseSharedMemoryRecord(const score::mw::log::detail::SharedMemoryRecord& record) override;
 
   private:
-    // typeName-keyed
-    // HandleRequestMap::value_type* is not changed by unrelated insert/erase
-    using HandleRequestMap = std::unordered_multimap<std::string, TypeHandler*>;
-
     class IndexParser
     {
       public:
@@ -86,11 +85,11 @@ class LogParser : public ILogParser
         std::vector<TypeHandler*> handlers_;
     };
 
-    HandleRequestMap handle_request_map_;
+    const HandleRequestMap handle_request_map_;
 
     std::unordered_map<BufsizeT, IndexParser> index_parser_map_;
 
-    std::vector<AnyHandler*> global_handlers_;
+    const std::vector<AnyHandler*> global_handlers_;
     const score::mw::log::INvConfig& nv_config_;
 };
 
