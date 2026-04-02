@@ -16,6 +16,7 @@
 #include "daemon/dlt_log_server.h"
 #include "daemon/message_passing_server.h"
 #include "daemon/socketserver_config.h"
+#include "logparser/logparser.h"
 
 #include "score/datarouter/daemon_communication/session_handle_interface.h"
 #include "score/datarouter/datarouter/data_router.h"
@@ -156,20 +157,27 @@ std::unique_ptr<score::logging::dltserver::DltLogServer> SocketServer::CreateDlt
         static_config.value(), storage_handlers.load_dlt, storage_handlers.store_dlt, storage_handlers.is_dlt_enabled);
 }
 
-DataRouter::HandlerProvider SocketServer::CreateSourceSetupHandler(score::logging::dltserver::DltLogServer& dlt_server)
+std::unique_ptr<score::platform::internal::ILogParserFactory> SocketServer::CreateLogParserFactory(
+    score::logging::dltserver::DltLogServer& dlt_server)
 {
-    /*
-        Deviation from Rule A5-1-4:
-        - A lambda expression object shall not outlive any of its reference captured objects.
-        Justification:
-        - dltServer and lambda are in the same scope.
-    */
-    // coverity[autosar_cpp14_a5_1_4_violation]
-    return [&dlt_server](std::vector<score::platform::internal::ILogParser::AnyHandler*>& global_handlers,
-                         std::vector<score::platform::internal::ILogParser::TypeHandlerBinding>& type_handlers) {
-        global_handlers = dlt_server.GetGlobalHandlers();
-        type_handlers = dlt_server.GetTypeHandlerBindings();
+    class DltLogParserFactory : public score::platform::internal::ILogParserFactory
+    {
+      public:
+        explicit DltLogParserFactory(score::logging::dltserver::DltLogServer& dlt_server) : dlt_server_(dlt_server) {}
+
+        std::unique_ptr<score::platform::internal::ILogParser> Create(const score::mw::log::NvConfig& nv_config) override
+        {
+            auto global_handlers = dlt_server_.GetGlobalHandlers();
+            auto type_handlers = dlt_server_.GetTypeHandlerBindings();
+            return std::make_unique<score::platform::internal::LogParser>(
+                nv_config, std::move(global_handlers), std::move(type_handlers));
+        }
+
+      private:
+        score::logging::dltserver::DltLogServer& dlt_server_;
     };
+
+    return std::make_unique<DltLogParserFactory>(dlt_server);
 }
 
 // Static helper: Update handlers for each parser
@@ -360,16 +368,9 @@ void SocketServer::DoWork(const std::atomic_bool& exit_requested, const bool no_
         return;
     }
 
-    // Create data router with source setup handler
-    const auto source_setup = CreateSourceSetupHandler(*dlt_server);
-    /*
-        Deviation from Rule A5-1-4:
-        - A lambda expression object shall not outlive any of its reference captured objects.
-        Justification:
-        - router and lambda are in the same scope.
-    */
-    // coverity[autosar_cpp14_a5_1_4_violation]
-    DataRouter router(stats_logger, source_setup);
+    // Create data router with log parser factory
+    auto log_parser_factory = CreateLogParserFactory(*dlt_server);
+    DataRouter router(stats_logger, std::move(log_parser_factory));
 
     // Create and set enable handler
     const auto enable_handler = CreateEnableHandler(router, *pd, *dlt_server);

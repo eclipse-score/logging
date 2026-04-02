@@ -15,7 +15,7 @@
 #define SCORE_DATAROUTER_DATAROUTER_DATA_ROUTER_H
 
 #include "daemon/message_passing_server.h"
-#include "logparser/logparser.h"
+#include "logparser/i_log_parser_factory.h"
 #include "score/mw/log/configuration/nvconfig.h"
 #include "score/mw/log/detail/data_router/shared_memory/reader_factory.h"
 #include "score/mw/log/detail/data_router/shared_memory/shared_memory_reader.h"
@@ -40,6 +40,7 @@ namespace datarouter
 {
 
 using internal::ILogParser;
+using internal::ILogParserFactory;
 using internal::MessagePassingServer;
 using internal::UnixDomainServer;
 
@@ -87,15 +88,13 @@ struct StatsData
 class DataRouter
 {
   public:
-    using HandlerProvider =
-        std::function<void(std::vector<ILogParser::AnyHandler*>&, std::vector<ILogParser::TypeHandlerBinding>&)>;
     using SessionPtr = std::unique_ptr<UnixDomainServer::ISession>;
     using MessagingSessionPtr = std::unique_ptr<MessagePassingServer::ISession>;
 
     using SessionHandleVariant = score::cpp::variant<UnixDomainServer::SessionHandle,
                                               score::cpp::pmr::unique_ptr<score::platform::internal::daemon::ISessionHandle>>;
 
-    explicit DataRouter(score::mw::log::Logger& logger, HandlerProvider handler_provider = HandlerProvider());
+    explicit DataRouter(score::mw::log::Logger& logger, std::unique_ptr<ILogParserFactory> log_parser_factory = nullptr);
 
     MessagingSessionPtr NewSourceSession(
         int fd,
@@ -218,7 +217,7 @@ class DataRouter
     score::mw::log::Logger& stats_logger_;
 
     std::unordered_set<SourceSession*> sources_;
-    HandlerProvider handler_provider_;
+    std::unique_ptr<ILogParserFactory> log_parser_factory_;
 
     std::mutex subscriber_mutex_;
 };

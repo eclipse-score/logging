@@ -13,6 +13,8 @@
 
 #include "score/datarouter/datarouter/data_router.h"
 
+#include "logparser/logparser.h"
+
 #include "score/mw/log/logging.h"
 
 #include "score/os/unistd.h"
@@ -74,8 +76,8 @@ std::string QuotaValueAsString(double quota) noexcept
     return ss.str();
 }
 
-DataRouter::DataRouter(score::mw::log::Logger& logger, HandlerProvider handler_provider)
-    : stats_logger_(logger), handler_provider_(std::move(handler_provider))
+DataRouter::DataRouter(score::mw::log::Logger& logger, std::unique_ptr<ILogParserFactory> log_parser_factory)
+    : stats_logger_(logger), log_parser_factory_(std::move(log_parser_factory))
 {
 }
 
@@ -122,27 +124,18 @@ std::unique_ptr<DataRouter::SourceSession> DataRouter::NewSourceSessionImpl(
     std::unique_ptr<score::mw::log::detail::ISharedMemoryReader> reader,
     const score::mw::log::NvConfig& nv_config)
 {
-    // Obtain handler lists from the provider before constructing the parser.
-    // This ensures all handlers are injected at construction time, making LogParser
-    // intrinsically thread-safe (no post-construction mutation of handler maps).
-    std::vector<score::platform::internal::ILogParser::AnyHandler*> global_handlers;
-    std::vector<score::platform::internal::ILogParser::TypeHandlerBinding> type_handlers;
-    if (handler_provider_)
-    {
-        handler_provider_(global_handlers, type_handlers);
-    }
+    auto parser = log_parser_factory_ ? log_parser_factory_->Create(nv_config)
+                                      : std::make_unique<score::platform::internal::LogParser>(nv_config);
 
-    auto source_session = std::make_unique<DataRouter::SourceSession>(
-        *this,
-        std::move(reader),
-        name,
-        is_dlt_enabled,
-        std::move(handle),
-        quota,
-        quota_enforcement_enabled,
-        stats_logger_,
-        std::make_unique<score::platform::internal::LogParser>(
-            nv_config, std::move(global_handlers), std::move(type_handlers)));
+    auto source_session = std::make_unique<DataRouter::SourceSession>(*this,
+                                                                      std::move(reader),
+                                                                      name,
+                                                                      is_dlt_enabled,
+                                                                      std::move(handle),
+                                                                      quota,
+                                                                      quota_enforcement_enabled,
+                                                                      stats_logger_,
+                                                                      std::move(parser));
 
     if (!source_session)
     {

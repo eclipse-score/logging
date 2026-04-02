@@ -246,6 +246,38 @@ cc_library(
     ],
 )
 
+cc_library(
+    name = "logparser_factory_interface",
+    hdrs = [
+        "include/logparser/i_log_parser_factory.h",
+    ],
+    features = COMPILER_WARNING_FEATURES,
+    strip_include_prefix = "include",
+    visibility = [
+        "//score/datarouter/src/dlt/nonverbose_dlt_impl:__pkg__",
+        "//score/datarouter/src/dlt/nonverbose_dlt_stub:__pkg__",
+        "//score/datarouter/test:__subpackages__",
+        "@score_logging//score/datarouter:__subpackages__",
+    ],
+    deps = [
+        ":logparser_interface",
+    ],
+)
+
+cc_library(
+    name = "logparser_factory_mock",
+    hdrs = [
+        "mocks/log_parser_factory_mock.h",
+    ],
+    features = COMPILER_WARNING_FEATURES,
+    strip_include_prefix = "mocks",
+    visibility = ["//score/datarouter/test:__subpackages__"],
+    deps = [
+        ":logparser_factory_interface",
+        "@googletest//:gtest_main",
+    ],
+)
+
 ## ===========================================================================
 ## libtracing
 ## ---------------------------------------------------------------------------
@@ -398,6 +430,7 @@ cc_library(
         ":datarouter_types",
         ":log",
         ":logparser",
+        ":logparser_factory_interface",
         ":message_passing_server",
         ":unixdomain_server",
         "//score/mw/log/detail/data_router/shared_memory:reader",
@@ -421,6 +454,7 @@ cc_library(
     deps = [
         ":log",
         ":logparser",
+        ":logparser_factory_interface",
         ":message_passing_server",
         ":unixdomain_mock",
         "@score_baselibs//score/concurrency:synchronized",
@@ -442,6 +476,7 @@ cc_library(
     deps = [
         ":datarouter_types",
         ":log",
+        ":logparser_factory_interface",
         ":logparser_testing",
         ":message_passing_server",
         ":unixdomain_mock",

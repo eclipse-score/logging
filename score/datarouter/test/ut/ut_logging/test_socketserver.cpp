@@ -203,7 +203,7 @@ TEST_F(SocketServerCreateDltServerTest, CreateDltServerExecutesSuccessfully)
 {
     RecordProperty(
         "Description",
-        "Verify CreateDltServer returns correct type and CreateSourceSetupHandler works when DltServer exists");
+        "Verify CreateDltServer returns correct type and CreateLogParserFactory works when DltServer exists");
     RecordProperty("TestType", "Interface test");
     RecordProperty("Verifies", "::score::platform::datarouter::SocketServer::CreateDltServer()");
     RecordProperty("DerivationTechnique", "Analysis of boundary values");
@@ -216,24 +216,19 @@ TEST_F(SocketServerCreateDltServerTest, CreateDltServerExecutesSuccessfully)
     // Verify correct return type: std::unique_ptr<score::logging::dltserver::DltLogServer>
     EXPECT_TRUE((std::is_same<decltype(dlt_server), std::unique_ptr<score::logging::dltserver::DltLogServer>>::value));
 
-    // If DltServer was created successfully, test CreateSourceSetupHandler
+    // If DltServer was created successfully, test CreateLogParserFactory
     ASSERT_TRUE(dlt_server != nullptr);
 
-    // Call CreateSourceSetupHandler with the created DltServer (lines 144-154)
-    auto source_setup_handler = SocketServer::CreateSourceSetupHandler(*dlt_server);
+    // Call CreateLogParserFactory with the created DltServer
+    auto log_parser_factory = SocketServer::CreateLogParserFactory(*dlt_server);
 
-    // Verify correct return type
-    EXPECT_TRUE((std::is_same<decltype(source_setup_handler), DataRouter::HandlerProvider>::value));
+    // Verify the factory was created (not null)
+    EXPECT_NE(log_parser_factory, nullptr);
 
-    // Verify the lambda was created (not null)
-    EXPECT_TRUE(static_cast<bool>(source_setup_handler));
-
-    // Execute the lambda to cover the handler provider
-    std::vector<score::platform::internal::ILogParser::AnyHandler*> global_handlers;
-    std::vector<score::platform::internal::ILogParser::TypeHandlerBinding> type_handlers;
-    source_setup_handler(global_handlers, type_handlers);
-    EXPECT_FALSE(global_handlers.empty());
-    EXPECT_FALSE(type_handlers.empty());
+    // Execute the factory to cover the log parser creation
+    score::mw::log::NvConfig nv_config({});
+    auto parser = log_parser_factory->Create(nv_config);
+    EXPECT_NE(parser, nullptr);
 }
 
 TEST_F(SocketServerCreateDltServerTest, CreateDltServerReturnsNullOnConfigError)
@@ -372,8 +367,8 @@ TEST_F(SocketServerRemainingFunctionsTest, CreateEnableHandlerCreatesCallbackSuc
 
     // Create a minimal DataRouter
     score::mw::log::Logger& logger = score::mw::log::CreateLogger("TEST", "test");
-    const auto source_setup = SocketServer::CreateSourceSetupHandler(*dlt_server);
-    DataRouter router(logger, source_setup);
+    auto log_parser_factory = SocketServer::CreateLogParserFactory(*dlt_server);
+    DataRouter router(logger, std::move(log_parser_factory));
 
     // Expect writeDltEnabled to be called when the handler lambda executes
     EXPECT_CALL(*dynamic_cast<MockPersistentDictionary*>(mock_pd_.get()), SetBool(kConfigOutputEnabledKey, _)).Times(1);
@@ -474,8 +469,8 @@ TEST_F(SocketServerRemainingFunctionsTest, CreateMessagePassingSessionErrorPath)
 
     // Create DataRouter
     score::mw::log::Logger& logger = score::mw::log::CreateLogger("TEST", "test");
-    const auto source_setup = SocketServer::CreateSourceSetupHandler(*dlt_server);
-    DataRouter router(logger, source_setup);
+    auto log_parser_factory = SocketServer::CreateLogParserFactory(*dlt_server);
+    DataRouter router(logger, std::move(log_parser_factory));
 
     // Load NvConfig
     const auto nv_config = SocketServer::LoadNvConfig(logger, test_config_path_);
@@ -505,8 +500,8 @@ TEST_F(SocketServerRemainingFunctionsTest, CreateMessagePassingSessionSuccessPat
 
     // Create DataRouter
     score::mw::log::Logger& logger = score::mw::log::CreateLogger("TEST", "test");
-    const auto source_setup = SocketServer::CreateSourceSetupHandler(*dlt_server);
-    DataRouter router(logger, source_setup);
+    auto log_parser_factory = SocketServer::CreateLogParserFactory(*dlt_server);
+    DataRouter router(logger, std::move(log_parser_factory));
 
     // Load NvConfig
     const auto nv_config = SocketServer::LoadNvConfig(logger, test_config_path_);
@@ -551,8 +546,8 @@ TEST_F(SocketServerRemainingFunctionsTest, CreateMessagePassingSessionCloseFailu
 
     // Create DataRouter
     score::mw::log::Logger& logger = score::mw::log::CreateLogger("TEST", "test");
-    const auto source_setup = SocketServer::CreateSourceSetupHandler(*dlt_server);
-    DataRouter router(logger, source_setup);
+    auto log_parser_factory = SocketServer::CreateLogParserFactory(*dlt_server);
+    DataRouter router(logger, std::move(log_parser_factory));
 
     // Load NvConfig
     const auto nv_config = SocketServer::LoadNvConfig(logger, test_config_path_);
