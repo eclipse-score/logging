@@ -61,17 +61,13 @@ namespace internal
 
 LogParser::LogParser(const score::mw::log::INvConfig& nv_config,
                      std::vector<AnyHandler*> global_handlers,
-                     std::vector<TypeHandlerBinding> type_handlers)
+                     HandleRequestMap handle_request_map)
     : ILogParser(),
-      handle_request_map_{},
+      handle_request_map_{std::move(handle_request_map)},
       index_parser_map_{},
       global_handlers_{std::move(global_handlers)},
       nv_config_(nv_config)
 {
-    for (auto& binding : type_handlers)
-    {
-        handle_request_map_.emplace(std::move(binding.type_name), binding.handler);
-    }
 }
 
 void LogParser::IndexParser::AddHandler(TypeHandler* handler)
