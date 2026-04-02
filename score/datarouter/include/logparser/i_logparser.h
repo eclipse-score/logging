@@ -76,15 +76,6 @@ class ILogParser
 
     virtual ~ILogParser() = default;
 
-    // a function object to return whether the message parameter passes some encapsulted filter
-    // (in order to support content-based forwarding)
-    using FilterFunction = std::function<bool(const char*, BufsizeT)>;
-
-    // a function to create such function objects based on the type of the message,
-    // the type of the filter object, and the serialized payload of the filter object
-    // (called on the request data provided by add_data_forwarder())
-    using FilterFunctionFactory = std::function<FilterFunction(const std::string&, const DataFilter&)>;
-
     virtual void AddIncomingType(const BufsizeT map_index, const std::string& params) = 0;
     virtual void AddIncomingType(const score::mw::log::detail::TypeRegistration&) = 0;
 

@@ -738,11 +738,9 @@ cc_library(
     name = "socketserver_config_lib",
     srcs = [
         "src/daemon/socketserver_config.cpp",
-        "src/daemon/socketserver_filter_factory.cpp",
     ],
     hdrs = [
         "include/daemon/socketserver_config.h",
-        "include/daemon/socketserver_filter_factory.h",
     ],
     features = COMPILER_WARNING_FEATURES,
     strip_include_prefix = "include",
@@ -768,11 +766,9 @@ cc_library(
     testonly = True,
     srcs = [
         "src/daemon/socketserver_config.cpp",
-        "src/daemon/socketserver_filter_factory.cpp",
     ],
     hdrs = [
         "include/daemon/socketserver_config.h",
-        "include/daemon/socketserver_filter_factory.h",
     ],
     features = COMPILER_WARNING_FEATURES,
     strip_include_prefix = "include",
