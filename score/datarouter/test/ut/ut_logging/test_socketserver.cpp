@@ -384,48 +384,6 @@ TEST_F(SocketServerRemainingFunctionsTest, CreateEnableHandlerCreatesCallbackSuc
     enable_handler(true);
 }
 
-TEST_F(SocketServerRemainingFunctionsTest, UpdateParserHandlersExecutesSuccessfully)
-{
-    RecordProperty("Description", "Verify UpdateParserHandlers static function works correctly");
-    RecordProperty("TestType", "Interface test");
-    RecordProperty("Verifies", "::score::platform::datarouter::SocketServer::UpdateParserHandlers()");
-    RecordProperty("DerivationTechnique", "Error guessing based on knowledge or experience");
-
-    // Create DltLogServer
-    auto dlt_server = SocketServer::CreateDltServer(storage_handlers_);
-    ASSERT_NE(nullptr, dlt_server);
-
-    // Create a LogParser
-    score::mw::log::INvConfigMock nvconfig_mock;
-    score::platform::internal::LogParser parser(nvconfig_mock);
-
-    // Call the static helper function - this covers the parser callback lambda body (lines 192-194)
-    SocketServer::UpdateParserHandlers(*dlt_server, parser, true);
-    SocketServer::UpdateParserHandlers(*dlt_server, parser, false);
-
-    // If we reach here without crashing, the function executed successfully
-    SUCCEED();
-}
-
-TEST_F(SocketServerRemainingFunctionsTest, UpdateHandlersFinalExecutesSuccessfully)
-{
-    RecordProperty("Description", "Verify UpdateHandlersFinal static function works correctly");
-    RecordProperty("TestType", "Interface test");
-    RecordProperty("Verifies", "::score::platform::datarouter::SocketServer::UpdateHandlersFinal()");
-    RecordProperty("DerivationTechnique", "Error guessing based on knowledge or experience");
-
-    // Create DltLogServer
-    auto dlt_server = SocketServer::CreateDltServer(storage_handlers_);
-    ASSERT_NE(nullptr, dlt_server);
-
-    // Call the static helper function - this covers the final callback lambda body (lines 195-197)
-    SocketServer::UpdateHandlersFinal(*dlt_server, true);
-    SocketServer::UpdateHandlersFinal(*dlt_server, false);
-
-    // If we reach here without crashing, the function executed successfully
-    SUCCEED();
-}
-
 TEST_F(SocketServerRemainingFunctionsTest, CreateConfigSessionExecutesSuccessfully)
 {
     RecordProperty("Description", "Verify CreateConfigSession static function works correctly");

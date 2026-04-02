@@ -999,7 +999,7 @@ TEST_F(DltServerCreatedWithoutConfigFixture, SendFTVerboseAppIdNoCoreChannelExpe
     dlt_server.SendFtVerbose({}, score::mw::log::LogLevel::kVerbose, app_id, ctx_id, 0U, 100U);
 }
 
-TEST_F(DltServerCreatedWithoutConfigFixture, UpdateHandlersFinalToTrueExpectDltOutputEnabledFlagTrue)
+TEST_F(DltServerCreatedWithoutConfigFixture, SetDltOutputEnabledToTrueExpectDltOutputEnabledFlagTrue)
 {
     EXPECT_CALL(read_callback, Call()).Times(0);
     EXPECT_CALL(write_callback, Call(_)).Times(0);
@@ -1007,7 +1007,7 @@ TEST_F(DltServerCreatedWithoutConfigFixture, UpdateHandlersFinalToTrueExpectDltO
     score::logging::dltserver::DltLogServer::DltLogServerTest dlt_server(
         s_config, read_callback.AsStdFunction(), write_callback.AsStdFunction(), true);
 
-    dlt_server.UpdateHandlersFinal(true);
+    dlt_server.SetDltOutputEnabled(true);
     EXPECT_TRUE(dlt_server.GetDltEnabled());
 }
 

@@ -93,13 +93,6 @@ class SocketServer
     static std::unique_ptr<score::platform::internal::ILogParserFactory> CreateLogParserFactory(
         score::logging::dltserver::DltLogServer& dlt_server);
 
-    // Static helper functions for testing lambda bodies
-    static void UpdateParserHandlers(score::logging::dltserver::DltLogServer& dlt_server,
-                                     score::platform::internal::ILogParser& parser,
-                                     bool enable);
-
-    static void UpdateHandlersFinal(score::logging::dltserver::DltLogServer& dlt_server, bool enable);
-
     static std::unique_ptr<score::platform::internal::UnixDomainServer::ISession> CreateConfigSession(
         score::logging::dltserver::DltLogServer& dlt_server,
         score::platform::internal::UnixDomainServer::SessionHandle handle);

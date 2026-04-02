@@ -108,17 +108,14 @@ class DataRouter
         score::mw::log::detail::ReaderFactoryPtr reader_factory =
             score::mw::log::detail::ReaderFactory::Default(score::cpp::pmr::get_default_resource()));
 
-    template <typename E, typename F>
-    void ForEachSourceParser(E e, F f, bool enable_logging_client)
+    void ForEachSource(bool enable_logging_client)
     {
         std::lock_guard<std::mutex> lock(subscriber_mutex_);
         for (const auto& source_session : sources_)
         {
             // No need for the extra lock - synchronization is handled by the Synchronized<T> wrapper
             source_session->SetLoggingClientEnabled(enable_logging_client);
-            e(source_session->GetParser());
         }
-        f();
     }
 
     void ShowSourceStatistics(uint16_t series_num);
