@@ -16,7 +16,7 @@
 
 #include "daemon/dlt_log_server.h"
 #include "daemon/message_passing_server.h"
-#include "logparser/logparser.h"
+#include "logparser/i_log_parser_factory.h"
 #include "score/mw/log/configuration/nvconfig.h"
 #include "score/mw/log/logging.h"
 #include "score/datarouter/datarouter/data_router.h"
@@ -90,7 +90,8 @@ class SocketServer
     static std::unique_ptr<score::logging::dltserver::DltLogServer> CreateDltServer(
         const PersistentStorageHandlers& storage_handlers);
 
-    static DataRouter::HandlerProvider CreateSourceSetupHandler(score::logging::dltserver::DltLogServer& dlt_server);
+    static std::unique_ptr<score::platform::internal::ILogParserFactory> CreateLogParserFactory(
+        score::logging::dltserver::DltLogServer& dlt_server);
 
     // Static helper functions for testing lambda bodies
     static void UpdateParserHandlers(score::logging::dltserver::DltLogServer& dlt_server,
