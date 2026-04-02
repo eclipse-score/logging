@@ -112,12 +112,6 @@ class DltLogServer : score::platform::datarouter::DltNonverboseHandlerType::IOut
                 {kFileTransferTypeName, &fthandler_}};
     }
 
-    void UpdateHandlers(ILogParser& /* parser */, bool /* enabled */)
-    {
-        // No-op: handlers are registered unconditionally at LogParser construction and check
-        // IsOutputEnabled() at dispatch time. This eliminates the cross-thread
-        // mutation of parser handler lists that caused SIGABRT (Ticket-254408).
-    }
     // LCOV_EXCL_STOP
 
     void SetEnabledCallback(EnabledCallback enabled_callback = EnabledCallback())
@@ -125,7 +119,7 @@ class DltLogServer : score::platform::datarouter::DltNonverboseHandlerType::IOut
         enabled_callback_ = enabled_callback;
     }
 
-    void UpdateHandlersFinal(bool enabled)
+    void SetDltOutputEnabled(bool enabled)
     {
         dlt_output_enabled_.store(enabled, std::memory_order_release);
     }
