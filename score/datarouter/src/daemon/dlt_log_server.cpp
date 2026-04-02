@@ -231,7 +231,7 @@ bool DltLogServer::GetDltEnabled() const noexcept
 
 bool DltLogServer::IsOutputEnabled() const noexcept
 {
-    return dlt_output_enabled_.load(std::memory_order_acquire);
+    return GetDltEnabled();
 }
 
 void DltLogServer::SaveDatabase()
