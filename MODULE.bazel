@@ -22,6 +22,16 @@ bazel_dep(name = "bazel_skylib", version = "1.7.1")
 bazel_dep(name = "rules_rust", version = "0.61.0")
 bazel_dep(name = "rules_cc", version = "0.1.1")
 bazel_dep(name = "aspect_rules_lint", version = "1.0.3")
+
+bazel_dep(name = "score_cpp_policies", version = "0.0.0", dev_dependency = True)
+git_override(
+    module_name = "score_cpp_policies",
+    commit = "87b5b33dea15ff2e2dde1b0aae9cb982f49bc277",
+    remote = "https://github.com/RSingh1511/score_cpp_policies.git",
+)
+
+bazel_dep(name = "toolchains_llvm", version = "1.5.0", dev_dependency = True)
+
 bazel_dep(name = "buildifier_prebuilt", version = "7.3.1")
 bazel_dep(name = "platforms", version = "1.0.0")
 
@@ -79,6 +89,16 @@ use_repo(
     "score_qcc_aarch64_toolchain",
     "score_qcc_x86_64_toolchain",
 )
+
+llvm = use_extension(
+    "@toolchains_llvm//toolchain/extensions:llvm.bzl",
+    "llvm",
+    dev_dependency = True,
+)
+llvm.toolchain(
+    llvm_version = "19.1.7",
+)
+use_repo(llvm, "llvm_toolchain")
 
 PYTHON_VERSION = "3.12"
 
