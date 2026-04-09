@@ -50,6 +50,9 @@ struct SocketMessangerHeader  //  __attribute__((packed))  //  TODO: deal with p
 class UnixDomainSockAddr
 {
   public:
+    static constexpr std::size_t kMaxPathLength = sizeof(sockaddr_un::sun_path) - 1U;
+    static constexpr std::size_t kMaxAbstractPathLength = sizeof(sockaddr_un::sun_path) - 2U;
+
     UnixDomainSockAddr(const std::string& path, bool is_abstract);
     const char* GetAddressString()
     {
