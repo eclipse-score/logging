@@ -38,6 +38,7 @@ test_suite(
         ":logparserUT",
         ":messagePassingServerUT",
         ":persistentLogConfigUT",
+        ":socket_config_test",
         ":socketserverConfigUT",
         ":socketserverUT",
         ":udp_stream_output_test",
@@ -295,6 +296,19 @@ cc_test(
         "@googletest//:gtest_main",
         "@score_logging//score/datarouter:log",
         "@score_logging//score/datarouter:socketserver_config_lib_testing",
+    ],
+)
+
+cc_test(
+    name = "socket_config_test",
+    srcs = [
+        "socket_config_test.cpp",
+    ],
+    features = FEAT_COMPILER_WARNINGS_AS_ERRORS,
+    tags = ["unit"],
+    deps = [
+        "@googletest//:gtest_main",
+        "@score_logging//score/datarouter:socket_config",
     ],
 )
 

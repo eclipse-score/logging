@@ -15,6 +15,7 @@
 
 #include "daemon/dlt_log_server.h"
 #include "daemon/message_passing_server.h"
+#include "daemon/socket_config.h"
 #include "daemon/socketserver_config.h"
 #include "daemon/socketserver_filter_factory.h"
 #include "score/datarouter/daemon_communication/session_handle_interface.h"
@@ -237,7 +238,7 @@ std::unique_ptr<score::platform::internal::UnixDomainServer> SocketServer::Creat
 {
     const auto factory = std::bind(&SocketServer::CreateConfigSession, std::ref(dlt_server), std::placeholders::_2);
 
-    const UnixDomainSockAddr addr(score::logging::config::kSocketAddress, true);
+    const UnixDomainSockAddr addr = score::logging::config::CreateSocketAddress();
     /*
     Deviation from Rule A5-1-4:
     - A lambda expression object shall not outlive any of its reference captured objects.
