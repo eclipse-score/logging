@@ -15,6 +15,7 @@
 
 #include "daemon/dlt_log_server.h"
 #include "daemon/message_passing_server.h"
+#include "daemon/socket_config.h"
 #include "daemon/socketserver_config.h"
 #include "logparser/logparser.h"
 
@@ -30,9 +31,6 @@
 #include "score/mw/log/configuration/nvconfig.h"
 #include "score/mw/log/configuration/nvconfigfactory.h"
 #include "score/concurrency/thread_pool.h"
-
-// Constants
-#include "data_router_cfg.h"
 
 #include <score/math.hpp>
 #include <functional>
@@ -243,7 +241,7 @@ std::unique_ptr<score::platform::internal::UnixDomainServer> SocketServer::Creat
         return SocketServer::CreateConfigSession(dlt_server, std::move(handle));
     };
 
-    const UnixDomainSockAddr addr(score::logging::config::kSocketAddress, true);
+    const UnixDomainSockAddr addr = score::logging::config::CreateSocketAddress(score::os::Stdlib::instance());
     /*
     Deviation from Rule A5-1-4:
     - A lambda expression object shall not outlive any of its reference captured objects.
