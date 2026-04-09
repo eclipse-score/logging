@@ -669,6 +669,22 @@ cc_library(
 ]
 
 cc_library(
+    name = "socket_config",
+    srcs = ["src/daemon/socket_config.cpp"],
+    hdrs = ["include/daemon/socket_config.h"],
+    features = COMPILER_WARNING_FEATURES,
+    strip_include_prefix = "include",
+    visibility = [
+        "//score/datarouter:__subpackages__",
+        "//score/mw/log/detail/data_router:__subpackages__",
+    ],
+    deps = [
+        ":unixdomain_common",
+        "@score_baselibs//score/language/futurecpp",
+    ],
+)
+
+cc_library(
     name = "socketserver_config_helpers",
     hdrs = [
         "include/daemon/socketserver_json_helpers.h",
@@ -786,6 +802,7 @@ cc_library(
         ":datarouter_lib",
         ":dltserver",
         ":persistentlogconfig",
+        ":socket_config",
         ":socketserver_config_lib",
         "@score_baselibs//score/mw/log/configuration:nvconfigfactory",
     ] + select({
@@ -818,6 +835,7 @@ cc_library(
         ":datarouter_lib",
         ":dltserver_testing",
         ":persistentlogconfig",
+        ":socket_config",
         ":socketserver_config_lib_testing",
         "@score_baselibs//score/mw/log/configuration:nvconfigfactory",
     ] + select({
