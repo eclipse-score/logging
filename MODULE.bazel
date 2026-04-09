@@ -33,13 +33,13 @@ git_override(
     commit = "21640ab325b3aae147ba4e3e8b5e7ab89fc2e8f5",
     remote = "https://github.com/eclipse-score/docs-as-code.git",
 )
+
 bazel_dep(name = "score_tooling", version = "1.2.0")
 git_override(
     module_name = "score_tooling",
     commit = "f1380eb29ee7d7648f47135b9033919910405fe3",
     remote = "https://github.com/eclipse-score/tooling.git",
 )
-
 
 bazel_dep(name = "score_rust_policies", version = "0.0.3")
 
@@ -49,6 +49,7 @@ git_override(
     commit = "5205f7bf4a8919a2280989ef5d12e826065e55cd",
     remote = "https://github.com/eclipse-score/process_description.git",
 )
+
 bazel_dep(name = "score_platform", dev_dependency = True)
 git_override(
     module_name = "score_platform",
