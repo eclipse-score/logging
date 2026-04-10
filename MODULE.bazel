@@ -92,17 +92,17 @@ python.toolchain(
 
 bazel_dep(name = "googletest", version = "1.17.0.bcr.1")
 bazel_dep(name = "rapidjson", version = "1.1.0")
-bazel_dep(name = "score_baselibs", version = "0.2.4")
+bazel_dep(name = "score_baselibs", version = "0.2.5")
 git_override(
     module_name = "score_baselibs",
-    commit = "4b67ce1929575801405c77f7e3c79ab36156a976",
+    commit = "ef2a4fd5cbb3fcc29e65fb70718c91e1fccade8c",
     remote = "https://github.com/eclipse-score/baselibs.git",
 )
 
-bazel_dep(name = "score_communication", version = "0.1.2")
+bazel_dep(name = "score_communication", version = "0.1.4")
 git_override(
     module_name = "score_communication",
-    commit = "56448a5589a5f7d3921b873e8127b824a8c1ca95",
+    commit = "032dad193a18684e77ec1908ae784318f63a6f05",
     remote = "https://github.com/eclipse-score/communication.git",
 )
 
