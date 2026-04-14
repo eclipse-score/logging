@@ -27,11 +27,10 @@ bazel_dep(name = "platforms", version = "1.0.0")
 
 # S-CORE process rules
 bazel_dep(name = "score_bazel_platforms", version = "0.0.4")
-bazel_dep(name = "score_docs_as_code")
-git_override(
+bazel_dep(name = "score_docs_as_code", version = "4.0.0")
+single_version_override(
     module_name = "score_docs_as_code",
-    commit = "21640ab325b3aae147ba4e3e8b5e7ab89fc2e8f5",
-    remote = "https://github.com/eclipse-score/docs-as-code.git",
+    version = "4.0.0",
 )
 
 bazel_dep(name = "score_tooling", version = "1.2.0")
