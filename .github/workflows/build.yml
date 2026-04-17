@@ -64,8 +64,4 @@ jobs:
         run: |
           bazel build --lockfile_mode=error --config x86_64-linux -- \
             //... \
-            -//:docs \
-            -//:docs_check \
-            -//:docs_link_check \
-            -//:docs_combo \
-            -//:live_preview
+            -//:*
