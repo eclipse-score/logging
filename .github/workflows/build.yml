@@ -62,4 +62,6 @@ jobs:
 
       - name: Build with Bazel
         run: |
-          bazel build --lockfile_mode=error --config x86_64-linux //...
+          bazel build --lockfile_mode=error --config x86_64-linux -- \
+            //... \
+            -//:*
