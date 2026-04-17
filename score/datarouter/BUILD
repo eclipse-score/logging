@@ -209,6 +209,7 @@ cc_library(
         ":log",
         ":logparser_interface",
         "//score/mw/log/detail/data_router/shared_memory:reader",
+        "@score_baselibs//score/mw/log/configuration:nvconfig",
         "@score_baselibs//score/static_reflection_with_serialization/serialization",
     ],
 )
@@ -901,6 +902,7 @@ cc_binary(
     ],
     deps = [
         ":datarouter_app",
+        "@score_baselibs//score/os:errno_logging",
         "@score_baselibs//score/os:pthread",
         "@score_baselibs//score/os/utils:path",
         # "//third_party/jemalloc", # Ticket-231781
