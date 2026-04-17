@@ -172,7 +172,7 @@ class DltLogServer : score::platform::datarouter::DltNonverboseHandlerType::IOut
 
     bool GetDltEnabled() const noexcept;
 
-    std::string ReadLogChannelNames() override;
+    std::string ReadLogChannelNames() const override;
     std::string ResetToDefault() override;
     std::string StoreDltConfig() override;
     std::string SetTraceState() override;
@@ -190,6 +190,12 @@ class DltLogServer : score::platform::datarouter::DltNonverboseHandlerType::IOut
     // This is used for test purpose only in google tests, to have an access to the private members.
     // Do not use this calls in implementation except unit tests.
     class DltLogServerTest;
+    inline std::optional<uint8_t> GetCoredumpChannel() const
+    {
+        // Read coredump_channel_ under config_mutex_ to avoid data race with InitLogChannels
+        std::lock_guard<std::mutex> lock(config_mutex_);
+        return coredump_channel_;
+    }
 
   private:
     using KeyT = std::pair<DltidT, DltidT>;
@@ -274,7 +280,7 @@ class DltLogServer : score::platform::datarouter::DltNonverboseHandlerType::IOut
         return FindInKeyMap(channel_assignments_, app_id, ctx_id).value_or(ChannelmaskT{});
     }
 
-    std::mutex config_mutex_;
+    mutable std::mutex config_mutex_;
 
     bool filtering_enabled_;
     std::atomic<bool> dlt_output_enabled_;
