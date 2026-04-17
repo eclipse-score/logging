@@ -37,7 +37,7 @@ cc_library(
         "//platform/aas/ara/log:__subpackages__",
         "//score/mw/log:__subpackages__",
         "@score_baselibs//score/mw/log:__subpackages__",
-        "@score_logging//score/datarouter:__pkg__",
+        "@score_logging//score/datarouter:__subpackages__",
     ],
     deps = [
         "//score/mw/log/detail/data_router/shared_memory:writer",

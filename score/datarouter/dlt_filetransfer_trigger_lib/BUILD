@@ -47,6 +47,7 @@ cc_library(
     ],
     deps = [
         "filetransfer_message_types",
+        "//score/mw/log/legacy_non_verbose_api",
         "@score_logging//score/datarouter:log",
     ],
 )
