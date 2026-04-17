@@ -65,14 +65,10 @@ void DltLogServer::SendFtVerbose(score::cpp::span<const std::uint8_t> data,
     const auto sender = [&data, &loglevel, &app_id, &ctx_id, &nor, &tmsp, this](DltLogChannel& c) {
         log_sender_->SendFTVerbose(data, loglevel, app_id, ctx_id, nor, tmsp, c);
     };
-    // Read coredump_channel_ under config_mutex_ to avoid data race with InitLogChannels
-    std::optional<uint8_t> coredump_ch;
-    {
-        std::lock_guard<std::mutex> lock(config_mutex_);
-        coredump_ch = coredump_channel_;
-    }
+    const auto coredump_ch = GetCoredumpChannel();
     if (coredump_ch.has_value())
     {
+        //  channels_ shall be immutable after construction
         sender(channels_[coredump_ch.value()]);
     }
     else
@@ -282,7 +278,7 @@ void DltLogServer::ClearDatabase()
     writer_callback_(PersistentConfig{});
 }
 
-std::string DltLogServer::ReadLogChannelNames()
+std::string DltLogServer::ReadLogChannelNames() const
 {
     std::string response(1, config::kRetError);
 

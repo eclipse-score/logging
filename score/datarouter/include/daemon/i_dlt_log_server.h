@@ -43,7 +43,7 @@ enum class AssignmentAction : std::uint8_t
 class IDltLogServer
 {
   public:
-    virtual std::string ReadLogChannelNames() = 0;
+    virtual std::string ReadLogChannelNames() const = 0;
     virtual std::string ResetToDefault() = 0;
     virtual std::string StoreDltConfig() = 0;
     virtual std::string SetTraceState() = 0;
