@@ -65,11 +65,15 @@ void DltLogServer::SendFtVerbose(score::cpp::span<const std::uint8_t> data,
     const auto sender = [&data, &loglevel, &app_id, &ctx_id, &nor, &tmsp, this](DltLogChannel& c) {
         log_sender_->SendFTVerbose(data, loglevel, app_id, ctx_id, nor, tmsp, c);
     };
-    // Coredump channel SIZE_MAX value means that there the configuration settings
-    // don't explicitly specify the coredump channel
-    if (coredump_channel_.has_value())
+    // Read coredump_channel_ under config_mutex_ to avoid data race with InitLogChannels
+    std::optional<uint8_t> coredump_ch;
     {
-        sender(channels_[coredump_channel_.value()]);
+        std::lock_guard<std::mutex> lock(config_mutex_);
+        coredump_ch = coredump_channel_;
+    }
+    if (coredump_ch.has_value())
+    {
+        sender(channels_[coredump_ch.value()]);
     }
     else
     {

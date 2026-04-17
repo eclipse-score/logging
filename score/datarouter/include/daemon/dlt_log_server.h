@@ -134,6 +134,7 @@ class DltLogServer : score::platform::datarouter::DltNonverboseHandlerType::IOut
 
     double GetQuota(std::string name)
     {
+        std::lock_guard<std::mutex> lock(config_mutex_);
         auto quota = throughput_apps_.find(DltidT(name));
         return quota == throughput_apps_.end() ? 1.0 : quota->second;
     }
