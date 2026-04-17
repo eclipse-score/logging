@@ -283,7 +283,7 @@ std::string DltLogServer::ReadLogChannelNames() const
     std::string response(1, config::kRetError);
 
     std::lock_guard<std::mutex> lock(config_mutex_);
-    for (auto& channel : channels_)
+    for (const auto& channel : channels_)
     {
         AppendId(channel.channel_name, response);
     }

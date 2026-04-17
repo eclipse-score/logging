@@ -190,12 +190,6 @@ class DltLogServer : score::platform::datarouter::DltNonverboseHandlerType::IOut
     // This is used for test purpose only in google tests, to have an access to the private members.
     // Do not use this calls in implementation except unit tests.
     class DltLogServerTest;
-    inline std::optional<uint8_t> GetCoredumpChannel() const
-    {
-        // Read coredump_channel_ under config_mutex_ to avoid data race with InitLogChannels
-        std::lock_guard<std::mutex> lock(config_mutex_);
-        return coredump_channel_;
-    }
 
   private:
     using KeyT = std::pair<DltidT, DltidT>;
@@ -239,6 +233,13 @@ class DltLogServer : score::platform::datarouter::DltNonverboseHandlerType::IOut
                 }
             }
         }
+    }
+
+    inline std::optional<uint8_t> GetCoredumpChannel() const
+    {
+        // Read coredump_channel_ under config_mutex_ to avoid data race with InitLogChannels
+        std::lock_guard<std::mutex> lock(config_mutex_);
+        return coredump_channel_;
     }
 
     template <typename KeyMap>
