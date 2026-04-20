@@ -24,7 +24,7 @@ config_setting(
         ":persistent_logging": "True",
     },
     visibility = [
-        "//platform/aas/test/pas/datarouterconf:__subpackages__",
+        "//platform/aas/pas/datarouterconf:__subpackages__",
         "@score_logging//score/datarouter:__subpackages__",
     ],
 )
