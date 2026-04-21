@@ -50,7 +50,7 @@ communication over the side channel, we establish two independent unidirectional
 channels. On the highest level of abstraction we see the ASIL-B qualified client
 process on the one side and the datarouter process on the other
 
-![Inter-process communication](./score/mw/log/design/datarouter_backend/inter_process_communication.puml).
+![Inter-process communication](./score/mw/log/design/backend/datarouter_backend/inter_process_communication.puml).
 
 The logs are written by the client into shared memory and read-out by
 datarouter. Freedom of interference is ensured since the datarouter process has
@@ -61,7 +61,7 @@ safety-qualified message passing library.
 
 ## Class diagram
 
-![Class diagram](./score/mw/log/design/datarouter_backend/datarouter_class_diagram.puml)
+![Class diagram](./score/mw/log/design/backend/datarouter_backend/datarouter_class_diagram.puml)
 
 The class diagram above shows the relevant classes client-side and in
 Datarouter. Client-side the `DatarouterBackend` contains a circular allocator
@@ -82,7 +82,7 @@ access to the ring buffer between Datarouter and the client.
 
 ## Activity diagrams
 
-![DataRouterBackend::DataRouterBackend Activity diagram](./score/mw/log/design/datarouter_backend/datarouter_backend_datarouterbackend.puml)
+![DataRouterBackend::DataRouterBackend Activity diagram](./score/mw/log/design/backend/datarouter_backend/datarouter_backend_datarouterbackend.puml)
 
 ## Lock-free Shared Memory Design
 
@@ -201,7 +201,7 @@ readable without synchronization. Only after reading the remaining data from the
 ring buffer, should Datarouter unmap the shared memory page. Then the OS should
 free up the used resources.
 
-![SharedMemoryReader Class diagram](./score/mw/log/design/mw_log_shared_memory_reader.puml)
+![SharedMemoryReader Class diagram](./score/mw/log/design/backend/datarouter_backend/mw_log_shared_memory_reader.puml)
 
 ## Limited impact of incoming messages in the logging client
 
