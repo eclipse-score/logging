@@ -7,13 +7,13 @@ Logging Module View
    :status: valid
    :safety: ASIL_B
    :security: YES
-   :includes: comp__data_router, comp__middleware
+   :includes: comp__data_router, comp__mw_logging
 
    The logging module provides a standardized logging framework for C++ and Rust projects using Bazel. It includes components for log routing and middleware processing, allowing for flexible log management and integration with various logging backends. The module is designed to be extensible and configurable to meet the needs of different applications and environments.
 
 .. mod_view_sta:: Logging module view
    :id: mod_view_sta__logging__logging_view
-   :includes: comp__data_router, comp__middleware
+   :includes: comp__data_router, comp__mw_logging
    :belongs_to: mod__logging
 
    .. needarch::
