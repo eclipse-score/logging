@@ -65,3 +65,5 @@ jobs:
           bazel build --lockfile_mode=error --config x86_64-linux -- \
             //... \
             -//:*
+            # Exclude targets that are not expected to build the source code, e.g. documentation, format check, live preview, product integration tests.
+            # Please execute "bazel query 'kind(rule, //:*)'" to find the list of all excluded targets by this option.
