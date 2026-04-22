@@ -33,7 +33,6 @@ single_version_override(
     version = "4.0.1",
 )
 
-
 bazel_dep(name = "score_tooling", version = "1.2.0")
 git_override(
     module_name = "score_tooling",
