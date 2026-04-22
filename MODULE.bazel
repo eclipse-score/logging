@@ -29,9 +29,10 @@ bazel_dep(name = "platforms", version = "1.0.0")
 bazel_dep(name = "score_bazel_platforms", version = "0.0.4")
 bazel_dep(name = "score_docs_as_code", version = "4.0.1")
 single_version_override(
-    module_name="score_docs_as_code",
-    version = "4.0.1"
+    module_name = "score_docs_as_code",
+    version = "4.0.1",
 )
+
 bazel_dep(name = "score_tooling", version = "1.1.2")
 bazel_dep(name = "score_rust_policies", version = "0.0.3")
 
