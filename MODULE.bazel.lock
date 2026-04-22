@@ -900,11 +900,6 @@
     "https://raw.githubusercontent.com/eclipse-score/bazel_registry/main/modules/score_rust_policies/0.0.5/source.json": "22c8bf0a5cbf7c7b06f774f3f66498e0bc14346a8b2208f7427a8fbb78a42547",
     "https://raw.githubusercontent.com/eclipse-score/bazel_registry/main/modules/score_toolchains_rust/0.4.0/MODULE.bazel": "e48f2aca62f92a44a939e1347715e7d767b647fc9f8e664e598c56d1d057ad49",
     "https://raw.githubusercontent.com/eclipse-score/bazel_registry/main/modules/score_toolchains_rust/0.4.0/source.json": "dcaa0e66166906ed54dc4feb28d02dda54be87b7c4018415d0d7b7190f56f5bb",
-    "https://raw.githubusercontent.com/eclipse-score/bazel_registry/main/modules/score_tooling/1.0.4/MODULE.bazel": "89da6c5a0a5fab61ff842648bc9d7d26e4a389ba33b459a9f5449257ddd04c5a",
-    "https://raw.githubusercontent.com/eclipse-score/bazel_registry/main/modules/score_tooling/1.1.0/MODULE.bazel": "5a04a5ce3512eb742a036600fba58b465f427e2e193db8e88857132e4a4eb513",
-    "https://raw.githubusercontent.com/eclipse-score/bazel_registry/main/modules/score_tooling/1.1.2/MODULE.bazel": "56d08309931cfad67c2b6691207bb5f761a3946830d620c630d2436630e6b499",
-    "https://raw.githubusercontent.com/eclipse-score/bazel_registry/main/modules/score_tooling/1.2.0/MODULE.bazel": "982db97a4f8440356ea935f103204f644fb2b84d8188df63533c7312c82afc37",
-    "https://raw.githubusercontent.com/eclipse-score/bazel_registry/main/modules/score_tooling/1.2.0/source.json": "c742d8932e4e6b667f3c81f40127768a8541f01ca7b1e6751773926231cbd852",
     "https://raw.githubusercontent.com/eclipse-score/bazel_registry/main/modules/stardoc/0.5.0/MODULE.bazel": "not found",
     "https://raw.githubusercontent.com/eclipse-score/bazel_registry/main/modules/stardoc/0.5.1/MODULE.bazel": "not found",
     "https://raw.githubusercontent.com/eclipse-score/bazel_registry/main/modules/stardoc/0.5.3/MODULE.bazel": "not found",
@@ -3121,7 +3116,7 @@
     "@@rules_rust+//crate_universe:extensions.bzl%crate": {
       "general": {
         "bzlTransitiveDigest": "Rml6707AhV+z3lNpJ9yLLXxXu5TkDJksZWL4U22ljg4=",
-        "usagesDigest": "Sdbg6tnnXyRANKIE7Bi/SYzIcKY0cjgLVpG1GnYlBrc=",
+        "usagesDigest": "AqtGzXuUAG8qDzk+kXiJLndmiSns4spy6uMAWYc0gHE=",
         "recordedFileInputs": {},
         "recordedDirentsInputs": {},
         "envVariables": {
