@@ -33,12 +33,7 @@ single_version_override(
     version = "4.0.1",
 )
 
-bazel_dep(name = "score_tooling", version = "1.2.0")
-git_override(
-    module_name = "score_tooling",
-    commit = "f1380eb29ee7d7648f47135b9033919910405fe3",
-    remote = "https://github.com/eclipse-score/tooling.git",
-)
+bazel_dep(name = "score_tooling", version = "1.1.2")
 
 bazel_dep(name = "score_rust_policies", version = "0.0.3")
 
