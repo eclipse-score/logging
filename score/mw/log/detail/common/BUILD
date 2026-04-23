@@ -89,6 +89,7 @@ cc_library(
     tags = ["FFI"],
     visibility = [
         "//score/mw/log/detail/data_router:__pkg__",
+        "//score/mw/log/detail/dlt_trace:__pkg__",
         "//score/mw/log/detail/file_recorder:__pkg__",
     ],
     deps = [
