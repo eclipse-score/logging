@@ -46,6 +46,22 @@ config_setting(
     ],
 )
 
+bool_flag(
+    name = "KDltTrace_Logging",
+    build_setting_default = False,
+)
+
+config_setting(
+    name = "DltTrace_Logging",
+    flag_values = {
+        ":KDltTrace_Logging": "True",
+    },
+    visibility = [
+        "//score/mw/log:__subpackages__",
+        "@score_baselibs//score/mw/log:__subpackages__",
+    ],
+)
+
 cc_library(
     name = "unfilled",
 )
