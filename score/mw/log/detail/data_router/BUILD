@@ -106,9 +106,9 @@ cc_library(
     ],
     deps = [
         ":data_router_backend",
-        "@score_baselibs//score/mw/log:recorder_interface",
         "@score_baselibs//score/mw/log/configuration",
         "@score_baselibs//score/mw/log/detail:log_recorder_factory",
+        "@score_baselibs//score/mw/log/detail:recorder_interface",
         "@score_baselibs//score/os/utils:signal",
     ],
 )
