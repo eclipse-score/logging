@@ -663,6 +663,9 @@
     "https://raw.githubusercontent.com/eclipse-score/bazel_registry/main/modules/rules_shell/0.4.1/MODULE.bazel": "not found",
     "https://raw.githubusercontent.com/eclipse-score/bazel_registry/main/modules/rules_shell/0.5.0/MODULE.bazel": "not found",
     "https://raw.githubusercontent.com/eclipse-score/bazel_registry/main/modules/rules_shell/0.6.1/MODULE.bazel": "not found",
+    "https://raw.githubusercontent.com/eclipse-score/bazel_registry/main/modules/score_baselibs/0.2.5/MODULE.bazel": "85bbf4a8b925dded67fc1e56090c8fdc949424ddb87bcddef116135372e3d4ca",
+    "https://raw.githubusercontent.com/eclipse-score/bazel_registry/main/modules/score_baselibs/0.2.6/MODULE.bazel": "36db2ffb07d1b4cc91f44ffbdb17cab834baef0fb3173c5e9b6885868fdc420c",
+    "https://raw.githubusercontent.com/eclipse-score/bazel_registry/main/modules/score_baselibs/0.2.6/source.json": "a8bb7e82abe9d4de6301e4a28252e51323d4a758fe0b8e74ac9fd8c3ea625c3f",
     "https://raw.githubusercontent.com/eclipse-score/bazel_registry/main/modules/score_baselibs_rust/0.1.0/MODULE.bazel": "e9f8781fa23b58a7c4815d662d82a9a472d8dddc306f08cba3853928f3b760fe",
     "https://raw.githubusercontent.com/eclipse-score/bazel_registry/main/modules/score_baselibs_rust/0.1.0/source.json": "f569a33fda1de61ccb962e19b72af745d93ba3f543c98b6ee72f81c9b890185f",
     "https://raw.githubusercontent.com/eclipse-score/bazel_registry/main/modules/score_bazel_cpp_toolchains/0.2.2/MODULE.bazel": "343a1892b1d5c616e0b4cbecfb5e548fa69328d22bb4fd5862bdd3cfa902142b",
@@ -672,6 +675,8 @@
     "https://raw.githubusercontent.com/eclipse-score/bazel_registry/main/modules/score_bazel_platforms/0.0.4/MODULE.bazel": "57dce05e4eb4ac25250d67e47caef99f4cbaedf38083de26aa53979ee6a3ae4b",
     "https://raw.githubusercontent.com/eclipse-score/bazel_registry/main/modules/score_bazel_platforms/0.1.2/MODULE.bazel": "d1889bf36241521c5d5c401aaf1e98242a60f9cab9d223f8190e5d7087956e83",
     "https://raw.githubusercontent.com/eclipse-score/bazel_registry/main/modules/score_bazel_platforms/0.1.2/source.json": "549c18a968c1ab76135ad38fd15981fcc04d377a62f20e2e5e0b5faa9de2b01d",
+    "https://raw.githubusercontent.com/eclipse-score/bazel_registry/main/modules/score_communication/0.2.0/MODULE.bazel": "f7146a2757dac70923db06d4882982968621dc055b5a396a09166aef06f97f04",
+    "https://raw.githubusercontent.com/eclipse-score/bazel_registry/main/modules/score_communication/0.2.0/source.json": "7cec6300c90155d039d86615777d6245f672607cf679b3925403ef17a47d09ac",
     "https://raw.githubusercontent.com/eclipse-score/bazel_registry/main/modules/score_crates/0.0.6/MODULE.bazel": "da72d24b2afb4456377f7ee13d0d95fb6bfc70dbfb949c7b8676618e661edf61",
     "https://raw.githubusercontent.com/eclipse-score/bazel_registry/main/modules/score_crates/0.0.9/MODULE.bazel": "8f581e0a658a6dab149f381d783443cb00b559f4e9623956f8ff3de06108c550",
     "https://raw.githubusercontent.com/eclipse-score/bazel_registry/main/modules/score_crates/0.0.9/source.json": "58f24336e5e21d53551c0f0d304b0efa318eca031d296f33b998996c73573ce3",
@@ -8013,34 +8018,6 @@
             "score_bazel_cpp_toolchains+",
             "score_bazel_cpp_toolchains",
             "score_bazel_cpp_toolchains+"
-          ]
-        ]
-      }
-    },
-    "@@score_communication+//third_party/lobster:lobster.bzl%lobster_ext": {
-      "general": {
-        "bzlTransitiveDigest": "WeAcRBt9zulTOUuuXh8PyiJnDi1xjnx86d11aKeGO6Q=",
-        "usagesDigest": "9AP7r9HXfgbxP88+CFwQ5sNC7RRph62hAmCXzR7c+HY=",
-        "recordedFileInputs": {},
-        "recordedDirentsInputs": {},
-        "envVariables": {},
-        "generatedRepoSpecs": {
-          "lobster": {
-            "repoRuleId": "@@bazel_tools//tools/build_defs/repo:http.bzl%http_archive",
-            "attributes": {
-              "sha256": "5a0b86c62cadc872dcb1b79485ba72953400bcdc42f97c5b5aefe210e92ce6ff",
-              "strip_prefix": "lobster-lobster-0.14.1",
-              "urls": [
-                "https://github.com/bmw-software-engineering/lobster/archive/refs/tags/lobster-0.14.1.tar.gz"
-              ]
-            }
-          }
-        },
-        "recordedRepoMappingEntries": [
-          [
-            "score_communication+",
-            "bazel_tools",
-            "bazel_tools"
           ]
         ]
       }
