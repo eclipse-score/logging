@@ -99,8 +99,19 @@ python.toolchain(
 
 bazel_dep(name = "googletest", version = "1.17.0.bcr.1")
 bazel_dep(name = "rapidjson", version = "1.1.0")
-bazel_dep(name = "score_baselibs", version = "0.2.6")
-bazel_dep(name = "score_communication", version = "0.2.0")
+bazel_dep(name = "score_baselibs", version = "0.2.5")
+bazel_dep(name = "score_communication", version = "0.1.4")
+
+# TODO: Remove once score_communication fixes the visibility issue in a new release.
+# score_communication v0.2.0 (latest registry release) exposes internal targets
+# (e.g. @score_logging) via visibility labels that are not resolvable from this
+# repo, causing "no such target" errors at analysis time. This override pins to
+# commit 406aaef (post-0.1.4), which does not have the broken visibility labels.
+git_override(
+    module_name = "score_communication",
+    commit = "406aaef064f6baf8a6a09bfb3523e75bdaced916",
+    remote = "https://github.com/eclipse-score/communication.git",
+)
 
 # Rust dependencies
 

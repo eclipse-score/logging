@@ -48,10 +48,10 @@ cc_library(
     deps = [
         ":composite_recorder",
         ":recorder_config",
+        "@score_baselibs//score/mw/log:recorder_interface",
         "@score_baselibs//score/mw/log/configuration:configuration_parser",
         "@score_baselibs//score/mw/log/detail:empty_recorder",
         "@score_baselibs//score/mw/log/detail:initialization_reporter",
-        "@score_baselibs//score/mw/log/detail:recorder_interface",
     ],
     alwayslink = True,
 )
