@@ -34,6 +34,13 @@ bazel_dep(name = "score_rust_policies", version = "0.0.3")
 bazel_dep(name = "score_process", version = "1.4.3", dev_dependency = True)
 bazel_dep(name = "score_platform", version = "0.5.3", dev_dependency = True)
 
+# Pin score_process to 1.4.3 — v1.4.4 added folder_templates with doc__ IDs
+# that collide with score_platform's own IDs (upstream bug in process_description).
+single_version_override(
+    module_name = "score_process",
+    version = "1.4.3",
+)
+
 # Toolchains and extensions
 bazel_dep(name = "score_bazel_cpp_toolchains", version = "0.2.2", dev_dependency = True)
 bazel_dep(name = "score_toolchains_rust", version = "0.4.0", dev_dependency = True)
@@ -92,17 +99,17 @@ python.toolchain(
 
 bazel_dep(name = "googletest", version = "1.17.0.bcr.1")
 bazel_dep(name = "rapidjson", version = "1.1.0")
-bazel_dep(name = "score_baselibs", version = "0.2.4")
-git_override(
-    module_name = "score_baselibs",
-    commit = "4b67ce1929575801405c77f7e3c79ab36156a976",
-    remote = "https://github.com/eclipse-score/baselibs.git",
-)
+bazel_dep(name = "score_baselibs", version = "0.2.5")
+bazel_dep(name = "score_communication", version = "0.1.4")
 
-bazel_dep(name = "score_communication", version = "0.1.2")
+# TODO: Remove once score_communication fixes the visibility issue in a new release.
+# score_communication v0.2.0 (latest registry release) exposes internal targets
+# (e.g. @score_logging) via visibility labels that are not resolvable from this
+# repo, causing "no such target" errors at analysis time. This override pins to
+# commit 406aaef (post-0.1.4), which does not have the broken visibility labels.
 git_override(
     module_name = "score_communication",
-    commit = "56448a5589a5f7d3921b873e8127b824a8c1ca95",
+    commit = "406aaef064f6baf8a6a09bfb3523e75bdaced916",
     remote = "https://github.com/eclipse-score/communication.git",
 )
 
