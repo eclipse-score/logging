@@ -50,8 +50,7 @@ cc_library(
     }),
     visibility = ["//visibility:private"],
     deps = [
-        "//score/mw/log/detail/common:recorder_factory",
-        "@score_baselibs//score/mw/log:frontend",
+        "@score_baselibs//score/mw/log:console",
     ],
 )
 
