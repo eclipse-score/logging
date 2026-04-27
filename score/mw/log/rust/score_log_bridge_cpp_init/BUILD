@@ -33,7 +33,7 @@ cc_library(
     deps = [
         ":ffi",
         # Link dependency required by `:ffi`.
-        "//score/mw/log/detail/common:recorder_factory",
+        "@score_baselibs//score/mw/log",
     ],
 )
 
