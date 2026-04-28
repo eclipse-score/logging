@@ -90,6 +90,7 @@ rust_test(
     crate_features = select({
         ":x86_64-linux": ["x86_64_linux"],
         ":arm64-qnx": ["arm64_qnx"],
+        ":x86_64-qnx": ["x86_64_qnx"],
         "//conditions:default": [],
     }),
     edition = "2021",
