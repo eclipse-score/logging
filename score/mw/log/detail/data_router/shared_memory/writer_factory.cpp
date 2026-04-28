@@ -13,9 +13,11 @@
 
 #include "score/mw/log/detail/data_router/shared_memory/writer_factory.h"
 
+#include "score/mw/log/detail/data_router/shared_memory/path_utils.h"
 #include <iostream>
 #include <memory>
 #include <sstream>
+#include <vector>
 
 namespace score
 {
@@ -30,16 +32,27 @@ namespace
 {
 constexpr auto kSeperator = ".";
 // NOLINTNEXTLINE(modernize-avoid-c-arrays) size available in compile time and bounds are checked
-constexpr char kFileNameTemplate[] = "/tmp/logging-XXXXXX.shmem";
-// NOLINTNEXTLINE(modernize-avoid-c-arrays) size available in compile time and bounds are checked
-constexpr char kFileNameDirectoryTemplate[] = "/tmp/";
-// NOLINTNEXTLINE(modernize-avoid-c-arrays) size available in compile time and bounds are checked
 constexpr char kFileNameBaseTemplate[] = "logging-XXXXXX";
 // NOLINTNEXTLINE(modernize-avoid-c-arrays) size available in compile time and bounds are checked
 constexpr char kSuffixName[] = ".shmem";
 static_assert(sizeof(kSuffixName) <= static_cast<std::size_t>(std::numeric_limits<int32_t>::max() - 1),
               "size of kSuffixName is too big");
 constexpr int32_t kSizeOfTemplateSuffix{static_cast<int32_t>(sizeof(kSuffixName)) - 1};
+
+// Lazy-initialized shared memory directory (memoized to avoid repeated getenv calls)
+std::string GetSharedMemoryDir()
+{
+    static const std::string dir = []() {
+        auto result = GetAndEnsureSharedMemoryDirectory();
+        if (!result.has_value())
+        {
+            std::cerr << "Warning: Failed to setup shared memory directory, using /tmp/\n";
+            return std::string("/tmp/");
+        }
+        return result.value();
+    }();
+    return dir;
+}
 
 }  // namespace
 
@@ -49,9 +62,8 @@ LoggingClientFileNameResult WriterFactory::GetStaticLoggingClientFilename(const 
     std::stringstream logging_id;
     logging_id << "logging" << kSeperator << std::string{app_id.data(), app_id.size()} << kSeperator << uid;
     std::stringstream file_name;
-    constexpr auto kFileNameDirectoryTemplateSize = sizeof(kFileNameDirectoryTemplate) - 1UL;
-    file_name << std::string{std::begin(kFileNameDirectoryTemplate), kFileNameDirectoryTemplateSize} << logging_id.str()
-              << std::begin(kSuffixName);
+    const std::string shm_dir = GetSharedMemoryDir();
+    file_name << shm_dir << logging_id.str() << std::begin(kSuffixName);
     LoggingClientFileNameResult result{};
     result.file_name = file_name.str();
     result.identifier = logging_id.str();
@@ -229,9 +241,14 @@ LoggingClientFileNameResult WriterFactory::PrepareFileNameAndUpdateOpenFlags(
 
     if (true == dynamic_mode)  //  Create dynamic identifier file
     {
-        constexpr auto kFileNameTemplateSize = sizeof(kFileNameTemplate);
-        std::array<char, kFileNameTemplateSize> name_buffer{};
-        std::ignore = std::copy_n(std::begin(kFileNameTemplate), kFileNameTemplateSize, name_buffer.begin());
+        const std::string shm_dir = GetSharedMemoryDir();
+        const std::string file_template = shm_dir + std::string(kFileNameBaseTemplate) + std::string(kSuffixName);
+
+        const auto template_size = file_template.size() + 1;  // +1 for null terminator
+        std::vector<char> name_buffer(template_size);
+        std::copy(file_template.begin(), file_template.end(), name_buffer.begin());
+        name_buffer[file_template.size()] = '\0';
+
         const auto mkstemp_result = osal_.stdlib->mkstemps(name_buffer.data(), kSizeOfTemplateSuffix);
         if (!mkstemp_result.has_value())
         {
@@ -245,15 +262,16 @@ LoggingClientFileNameResult WriterFactory::PrepareFileNameAndUpdateOpenFlags(
         {
             std::cerr << "Unable to apply permissions to: " << name_buffer.data() << '\n';
         }
-        result_file_name.file_name = std::string{name_buffer.data(), name_buffer.size() - 1UL};
+        result_file_name.file_name = std::string{name_buffer.data()};
 
-        auto* find_beginning_logging_identifier = std::begin(name_buffer);
-        static_assert(
-            sizeof(kFileNameDirectoryTemplate) <= static_cast<std::size_t>(std::numeric_limits<int32_t>::max() - 1),
-            "size of kFileNameDirectoryTemplate is greater than size of int");
-        std::advance(find_beginning_logging_identifier, static_cast<int32_t>(sizeof(kFileNameDirectoryTemplate)) - 1);
-        result_file_name.identifier =
-            std::string{find_beginning_logging_identifier, sizeof(kFileNameBaseTemplate) - 1UL};
+        // Extract identifier (everything after directory path)
+        const std::size_t dir_len = shm_dir.size();
+        if (result_file_name.file_name.size() > dir_len)
+        {
+            const std::size_t base_start = dir_len;
+            const std::size_t base_len = sizeof(kFileNameBaseTemplate) - 1;
+            result_file_name.identifier = result_file_name.file_name.substr(base_start, base_len);
+        }
     }
     else
     {
