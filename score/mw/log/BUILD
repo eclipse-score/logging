@@ -21,6 +21,7 @@ COMPILER_WARNING_FEATURES = [
 
 cc_library(
     name = "log",
+    deprecation = "Usage of target '@score_logging//score/mw/log' is deprecated and will be removed in the v0.8 release. Please use '@score_baselibs//score/mw/log' instead.",
     features = COMPILER_WARNING_FEATURES,
     tags = ["FFI"],
     visibility = ["//visibility:public"],
