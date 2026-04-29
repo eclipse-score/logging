@@ -34,6 +34,7 @@
 
 # Bazel
 bazel-*
+examples/bazel-*
 user.bazelrc
 
 # Compilation databases for code completion in IDEs

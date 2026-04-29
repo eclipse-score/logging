@@ -63,3 +63,8 @@ jobs:
       - name: Build with Bazel
         run: |
           bazel build --lockfile_mode=error --config x86_64-linux //...
+
+      - name: Bazel test integration as module
+        run: |
+          # for the beginning, we do this only with the default configuration
+          cd examples && bazel build //... && bazel mod deps --lockfile_mode=update
