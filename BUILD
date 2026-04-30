@@ -51,5 +51,5 @@ docs(
         "@score_platform//:needs_json",
         "@score_process//:needs_json",
     ],
-    source_dir = "docs",
+    source_dir = ".",
 )
