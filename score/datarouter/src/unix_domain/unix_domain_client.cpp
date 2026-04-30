@@ -13,6 +13,8 @@
 
 #include "unix_domain/unix_domain_client.h"
 #include "score/os/pthread.h"
+#include "score/os/socket.h"
+#include "score/os/unistd.h"
 #include "score/os/utils/signal_impl.h"
 
 #include <fcntl.h>
@@ -79,12 +81,10 @@ void UnixDomainClient::ClientRoutine()
     while (false == exit_.load())
     {
         new_socket_retry_ = false;
-        // Suppressed here as it is safely used, and it is among safety headers.
-        // NOLINTNEXTLINE(score-banned-function) see comment above
-        std::int32_t fd = socket(AF_UNIX, SOCK_STREAM, 0);
+        const auto socket_result = score::os::Socket::instance().socket(score::os::Socket::Domain::kUnix, SOCK_STREAM, 0);
 
         using namespace std::chrono_literals;
-        if (fd == -1)
+        if (!socket_result.has_value())
         {
             std::this_thread::sleep_for(100ms);
             /*
@@ -97,23 +97,17 @@ void UnixDomainClient::ClientRoutine()
             continue;
         }
 
+        std::int32_t fd = socket_result.value();
+
         while (false == exit_.load())
         {
             auto connect_retry_delay = 100ms;
-            std::int32_t ret =
-                connect(fd, static_cast<const sockaddr*>(static_cast<const void*>(&addr_)), sizeof(sockaddr_un));
-            if (ret == -1)
+            const auto connect_result = score::os::Socket::instance().connect(
+                fd, static_cast<const sockaddr*>(static_cast<const void*>(&addr_)), sizeof(sockaddr_un));
+            if (!connect_result.has_value())
             {
-                // TODO: ENOENT was added to allow applications to run during QNX transition
-                // see: TicketOld-68843
-                /*
-                Deviation from Rule M19-3-1:
-                - The error indicator errno shall not be used.
-                Justification:
-                - required for error handling
-                */
-                // coverity[autosar_cpp14_m19_3_1_violation]
-                if (errno == ECONNREFUSED || errno == EAGAIN || errno == ENOENT)
+                const auto os_error = connect_result.error().GetOsDependentErrorCode();
+                if (os_error == ECONNREFUSED || os_error == EAGAIN || os_error == ENOENT)
                 {
                     std::this_thread::sleep_for(connect_retry_delay);
                     connect_retry_delay *= 2;
@@ -137,9 +131,7 @@ void UnixDomainClient::ClientRoutine()
         }
         if (true == exit_.load() || new_socket_retry_)
         {
-            // Suppressed here as it is safely used, and it is among safety headers.
-            // NOLINTNEXTLINE(score-banned-function) see comment above
-            close(fd);
+            score::os::Unistd::instance().close(fd);
             fd = -1;
             break;
         }
@@ -206,9 +198,7 @@ void UnixDomainClient::ClientRoutine()
                 }
                 else
                 {
-                    // Suppressed here as it is safely used, and it is among safety headers.
-                    // NOLINTNEXTLINE(score-banned-function) see comment above
-                    close(result_fd.value());
+                    score::os::Unistd::instance().close(result_fd.value());
                 }
             }
 
@@ -239,9 +229,7 @@ void UnixDomainClient::ClientRoutine()
         }
         fd_.store(-1);
         on_disconnect_();
-        // Suppressed here as it is safely used, and it is among safety headers.
-        // NOLINTNEXTLINE(score-banned-function) see comment above
-        close(fd);
+        score::os::Unistd::instance().close(fd);
     }
 }
 

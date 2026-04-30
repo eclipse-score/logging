@@ -24,7 +24,7 @@ config_setting(
         ":persistent_logging": "True",
     },
     visibility = [
-        "//platform/aas/test/pas/datarouterconf:__subpackages__",
+        "//platform/aas/pas/datarouterconf:__subpackages__",
         "@score_logging//score/datarouter:__subpackages__",
     ],
 )
@@ -108,4 +108,8 @@ bool_flag(
 config_setting(
     name = "enable_local_vlan",
     flag_values = {":use_local_vlan": "True"},
+    visibility = [
+        "//score/datarouter/network:__pkg__",
+        # "@xyz//score/datarouter/network:__pkg__",
+    ],
 )

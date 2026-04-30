@@ -1,0 +1,330 @@
+@startuml data_router_class_diagram
+
+skinparam classAttributeIconSize 0
+skinparam linetype ortho
+hide empty members
+
+title data_router class diagram
+
+package "datarouter_backend" {
+  class DataRouterBackend {
+    - buffer_: CircularAllocator<LogRecord>
+    - message_client_: std::unique_ptr<DatarouterMessageClient>
+    + DataRouterBackend(number_of_slots: std::size_t, initial_slot_value: LogRecord&, message_client_factory: DatarouterMessageClientFactory&, config: Configuration&, writer_factory: WriterFactory)
+    + ReserveSlot(): score::cpp::optional<SlotHandle>
+    + FlushSlot(slot: SlotHandle&): void
+    + GetLogRecord(slot: SlotHandle&): LogRecord&
+  }
+
+  interface DatarouterMessageClient {
+    + Run(): void
+    + Shutdown(): void
+  }
+
+  class DatarouterMessageClientImpl {
+    - run_started_: bool
+    - msg_client_ids_: MsgClientIdentifiers
+    - use_dynamic_datarouter_ids_: bool
+    - first_message_received_: std::atomic_bool
+    - utils_: MsgClientUtils
+    - unlinked_shared_memory_file_: bool
+    - shared_memory_writer_: SharedMemoryWriter&
+    - writer_file_name_: std::string
+    - message_passing_factory_: std::unique_ptr<MessagePassingFactory>
+    - stop_source_: score::cpp::stop_source
+    - sender_state_: score::cpp::optional<IClientConnection::State>
+    - sender_: score::cpp::pmr::unique_ptr<IClientConnection>
+    - receiver_: score::cpp::pmr::unique_ptr<IServer>
+    - connect_thread_: score::cpp::jthread
+    + DatarouterMessageClientImpl(ids: MsgClientIdentifiers&, backend: MsgClientBackend, utils: MsgClientUtils, stop_source: score::cpp::stop_source)
+    + Run(): void
+    + Shutdown(): void
+    + SetupReceiver(): void
+    + CreateSender(): score::cpp::expected_blank<score::os::Error>
+    + StartReceiver(): bool
+    + SendConnectMessage(): void
+    + SetThreadName(): void
+    + ConnectToDatarouter(): void
+    + BlockTermSignal(): void
+    + GetReceiverIdentifier(): const std::string&
+    + GetThisProcessPid(): const pid_t&
+    + GetWriterFileName(): const std::string&
+    + GetAppid(): const LoggingIdentifier&
+  }
+
+  class MsgClientBackend {
+    - shared_memory_writer_: SharedMemoryWriter&
+    - writer_file_name_: std::string
+    - message_passing_factory_: std::unique_ptr<MessagePassingFactory>
+    - use_dynamic_datarouter_ids_: bool
+    + GetShMemWriter(): SharedMemoryWriter&
+    + GetWriterFilename(): std::string const&
+    + GetMsgPassingFactory(): std::unique_ptr<MessagePassingFactory>&
+    + IsUsingDynamicDatarouterIDs(): bool
+  }
+
+  class MsgClientIdentifiers {
+    - receiver_id_: std::string
+    - this_process_id_: pid_t
+    - app_id_: LoggingIdentifier
+    - datarouter_uid_: uid_t
+    - uid_: uid_t
+  }
+
+  class MsgClientUtils {
+    - unistd_: score::cpp::pmr::unique_ptr<score::os::Unistd>
+    - pthread_: score::cpp::pmr::unique_ptr<score::os::Pthread>
+    - signal_: score::cpp::pmr::unique_ptr<score::os::Signal>
+    + GetUnistd(): score::os::Unistd&
+    + GetPthread(): score::os::Pthread&
+    + GetSignal(): score::os::Signal&
+  }
+
+  interface DatarouterMessageClientFactory {
+    + CreateOnce(identifier: std::string&, mwsr_file_name: std::string&): std::unique_ptr<DatarouterMessageClient>
+  }
+
+  class DatarouterMessageClientFactoryImpl {
+    - created_once_: bool
+    - config_: Configuration const&
+    - message_passing_factory_: std::unique_ptr<MessagePassingFactory>
+    - msg_client_utils_: MsgClientUtils
+    + CreateOnce(identifier: std::string&, mwsr_file_name: std::string&): std::unique_ptr<DatarouterMessageClient>
+  }
+
+  interface MessagePassingFactory {
+    + CreateServer(protocol_config: ServiceProtocolConfig&, server_config: IServerFactory::ServerConfig&): std::unique_ptr<IServer>
+    + CreateClient(protocol_config: ServiceProtocolConfig&, client_config: IClientFactory::ClientConfig&): std::unique_ptr<IClientConnection>
+  }
+
+  class MessagePassingFactoryImpl {
+    - server_factory_: ServerFactory
+    - client_factory_: ClientFactory
+    + CreateServer(protocol_config: ServiceProtocolConfig&, server_config: IServerFactory::ServerConfig&): std::unique_ptr<IServer>
+    + CreateClient(protocol_config: ServiceProtocolConfig&, client_config: IClientFactory::ClientConfig&): std::unique_ptr<IClientConnection>
+  }
+
+  class DataRouterRecorder {
+    - backend_: std::unique_ptr<Backend>
+    - config_: Configuration
+    - statistics_reporter_: StatisticsReporter
+    + StartRecord(context_id: std::string_view, log_level: LogLevel): score::cpp::optional<SlotHandle>
+    + StopRecord(slot: SlotHandle&): void
+    + IsLogEnabled(log_level: LogLevel&, context: std::string_view): bool
+  }
+
+  class RemoteDltRecorderFactory {
+    + CreateConcreteLogRecorder(config: Configuration&, memory_resource: score::cpp::pmr::memory_resource*): std::unique_ptr<Recorder>
+  }
+
+  enum DatarouterMessageIdentifier {
+    kConnect
+    kAcquireRequest
+    kAcquireResponse
+  }
+
+  class ConnectMessageFromClient {
+    - appid_: LoggingIdentifier
+    - uid_: uid_t
+    - use_dynamic_identifier_: bool
+    - random_part_: std::array<char, 6>
+    + SetAppId(appid: LoggingIdentifier&): void
+    + SetUid(uid: uid_t): void
+    + SetUseDynamicIdentifier(use_dynamic_identifier: bool): void
+    + SetRandomPart(random_part: std::array<char, 6>&): void
+    + GetAppId(): LoggingIdentifier
+    + GetUid(): uid_t
+    + GetUseDynamicIdentifier(): bool
+    + GetRandomPart(): std::array<char, 6>
+  }
+}
+
+package "shared_memory" {
+  class SharedData <<struct>> {
+    + control_block: AlternatingControlBlock
+    + linear_buffer_1_offset: Length
+    + linear_buffer_2_offset: Length
+    + number_of_drops_buffer_full: std::atomic<Length>
+    + size_of_drops_buffer_full: std::atomic<Length>
+    + number_of_drops_invalid_size: std::atomic<Length>
+    + number_of_drops_type_registration_failed: std::atomic<Length>
+    + writer_detached: std::atomic<bool>
+    + producer_pid: pid_t
+  }
+
+  class BufferEntryHeader <<struct>> {
+    + time_stamp: TimePoint
+    + type_identifier: TypeIdentifier
+  }
+
+  class ReadAcquireResult <<struct>> {
+    + acquired_buffer: std::uint32_t
+  }
+
+  interface ISharedMemoryReader {
+    + Read(type_registration_callback: TypeRegistrationCallback&, new_message_callback: NewRecordCallback&): std::optional<Length>
+    + PeekNumberOfBytesAcquiredInBuffer(acquired_buffer_count_id: std::uint32_t): std::optional<Length>
+    + ReadDetached(type_registration_callback: TypeRegistrationCallback&, new_message_callback: NewRecordCallback&): std::optional<Length>
+    + NotifyAcquisitionSetReader(acquire_result: ReadAcquireResult&): std::optional<Length>
+    + GetNumberOfDropsWithBufferFull(): Length
+    + GetNumberOfDropsWithInvalidSize(): Length
+    + GetNumberOfDropsWithTypeRegistrationFailed(): Length
+    + GetSizeOfDropsWithBufferFull(): Length
+    + GetRingBufferSizeBytes(): Length
+    + IsBlockReleasedByWriters(block_count: std::uint32_t): bool
+  }
+
+  class SharedMemoryReader {
+    - shared_data_: SharedData const&
+    - unmap_callback_: UnmapCallback
+    - linear_reader_: std::optional<LinearReader>
+    - acquired_data_: std::optional<ReadAcquireResult>
+    - alternating_read_only_reader_: AlternatingReadOnlyReader
+    + SharedMemoryReader(shared_data: SharedData&, alternating_read_only_reader: AlternatingReadOnlyReader, unmap_callback: UnmapCallback)
+    + Read(type_registration_callback, new_message_callback): std::optional<Length>
+    + PeekNumberOfBytesAcquiredInBuffer(acquired_buffer_count_id): std::optional<Length>
+    + ReadDetached(type_registration_callback, new_message_callback): std::optional<Length>
+    + NotifyAcquisitionSetReader(acquire_result): std::optional<Length>
+    + GetNumberOfDropsWithBufferFull(): Length
+    + GetNumberOfDropsWithInvalidSize(): Length
+    + GetNumberOfDropsWithTypeRegistrationFailed(): Length
+    + GetSizeOfDropsWithBufferFull(): Length
+    + GetRingBufferSizeBytes(): Length
+    + IsBlockReleasedByWriters(block_count: std::uint32_t): bool
+  }
+
+  class SharedMemoryWriter {
+    - shared_data_: SharedData&
+    - alternating_writer_: WaitFreeAlternatingWriter
+    - alternating_reader_: AlternatingReaderProxy
+    - unmap_callback_: UnmapCallback
+    - type_identifier_: std::atomic<TypeIdentifier>
+    + AllocAndWrite(...): void
+    + TryRegisterType(info: Typeinfo&): score::cpp::optional<TypeIdentifier>
+    + ReadAcquire(): ReadAcquireResult
+    + DetachWriter(): void
+    + IncrementTypeRegistrationFailures(): void
+  }
+
+  interface ReaderFactory {
+    + Create(file_descriptor: std::int32_t, expected_pid: pid_t): std::unique_ptr<ISharedMemoryReader>
+    + Default(memory_resource: score::cpp::pmr::memory_resource*): ReaderFactoryPtr
+  }
+
+  class ReaderFactoryImpl {
+    - mman_: score::os::Mman
+    - stat_: score::os::Stat
+    + Create(file_descriptor: std::int32_t, expected_pid: pid_t): std::unique_ptr<ISharedMemoryReader>
+  }
+
+  class WriterFactory {
+    - osal_: OsalInstances
+    - mmap_result_: score::cpp::expected<void*, score::os::Error>
+    - unmap_callback_: UnmapCallback
+    - file_attributes_: LoggingClientFileNameResult
+    + Create(ring_buffer_size: std::size_t, dynamic_mode: bool, app_id: std::string_view): score::cpp::optional<SharedMemoryWriter>
+    + GetIdentifier(): std::string
+    + GetFileName(): std::string
+  }
+
+  class LoggingClientFileNameResult <<struct>> {
+    + file_name: std::string
+    + identifier: std::string
+  }
+
+  class "WriterFactory::OsalInstances" as OsalInstances <<struct>> {
+    + fcntl_osal: score::os::Fcntl
+    + unistd: score::os::Unistd
+    + mman: score::os::Mman
+    + stat_osal: score::os::Stat
+    + stdlib: score::os::Stdlib
+  }
+}
+
+abstract class Backend
+abstract class Recorder
+abstract class "LogRecorderFactory<RemoteDltRecorderFactory>" as LogRecorderFactoryT
+interface IClientConnection
+interface IServer
+
+Backend <|-- DataRouterBackend
+Recorder <|-- DataRouterRecorder
+LogRecorderFactoryT <|-- RemoteDltRecorderFactory
+
+DatarouterMessageClient <|-- DatarouterMessageClientImpl
+DatarouterMessageClientFactory <|-- DatarouterMessageClientFactoryImpl
+MessagePassingFactory <|-- MessagePassingFactoryImpl
+ISharedMemoryReader <|-- SharedMemoryReader
+ReaderFactory <|-- ReaderFactoryImpl
+
+DataRouterBackend *-- DatarouterMessageClient : owns
+DataRouterBackend ..> DatarouterMessageClientFactory : creates client via
+DataRouterBackend ..> WriterFactory : creates shared memory writer via
+DataRouterBackend ..> Configuration : reads ring buffer config
+DataRouterBackend ..> LogRecord : initializes slots
+
+DataRouterRecorder *-- Backend : owns
+DataRouterRecorder *-- StatisticsReporter
+DataRouterRecorder *-- Configuration
+
+RemoteDltRecorderFactory ..> DataRouterRecorder : creates
+RemoteDltRecorderFactory ..> DataRouterBackend : creates
+RemoteDltRecorderFactory ..> DatarouterMessageClientFactoryImpl : creates
+RemoteDltRecorderFactory ..> MessagePassingFactoryImpl : creates
+RemoteDltRecorderFactory ..> MsgClientUtils : creates
+RemoteDltRecorderFactory ..> WriterFactory : configures
+
+DatarouterMessageClientFactoryImpl *-- MessagePassingFactory
+DatarouterMessageClientFactoryImpl *-- MsgClientUtils
+DatarouterMessageClientFactoryImpl ..> DatarouterMessageClientImpl : creates
+DatarouterMessageClientFactoryImpl ..> Configuration : reads app and uid settings
+
+DatarouterMessageClientImpl *-- MsgClientIdentifiers
+DatarouterMessageClientImpl *-- MsgClientUtils
+DatarouterMessageClientImpl *-- MessagePassingFactory
+DatarouterMessageClientImpl --> SharedMemoryWriter : writes acquire/connect state
+DatarouterMessageClientImpl --> IClientConnection : sender
+DatarouterMessageClientImpl --> IServer : receiver
+DatarouterMessageClientImpl ..> MsgClientBackend : constructed from
+DatarouterMessageClientImpl ..> ConnectMessageFromClient : serializes
+DatarouterMessageClientImpl ..> DatarouterMessageIdentifier
+
+MsgClientBackend --> SharedMemoryWriter
+MsgClientBackend *-- MessagePassingFactory
+MsgClientIdentifiers --> LoggingIdentifier
+ConnectMessageFromClient --> LoggingIdentifier
+
+MessagePassingFactoryImpl *-- ServerFactory
+MessagePassingFactoryImpl *-- ClientFactory
+MessagePassingFactoryImpl ..> IServer
+MessagePassingFactoryImpl ..> IClientConnection
+
+WriterFactory *-- OsalInstances
+WriterFactory *-- LoggingClientFileNameResult
+WriterFactory ..> SharedMemoryWriter : creates
+
+ReaderFactory ..> ISharedMemoryReader : creates
+ReaderFactoryImpl ..> SharedMemoryReader : creates
+
+SharedMemoryReader *-- SharedData : views
+SharedMemoryWriter *-- SharedData : manages
+
+note right of DataRouterRecorder
+  Multiple Log(...) overloads are omitted
+  to keep the diagram focused on structure.
+end note
+
+note bottom of DatarouterMessageClientImpl
+  The implementation owns sender/receiver lifecycle
+  and runs a background connect thread.
+end note
+
+note bottom of WriterFactory
+  Creates and maps the shared memory file,
+  then returns a SharedMemoryWriter.
+end note
+
+note "Focused on production classes in data_router and shared_memory.\nTests, mocks, free functions, and minor POD helper structs are intentionally omitted." as N1
+N1 .. DataRouterBackend
+
+@enduml

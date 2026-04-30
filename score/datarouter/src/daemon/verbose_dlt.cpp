@@ -25,6 +25,10 @@ namespace dltserver
 
 void DltVerboseHandler::Handle(TimestampT timestamp, const char* data, BufsizeT size)
 {
+    if (!output_.IsOutputEnabled())
+    {
+        return;
+    }
     namespace dlt_server_logging = ::score::mw::log::detail::log_entry_deserialization;
     using DltDurationT = std::chrono::duration<uint32_t, std::ratio<1, 10000>>;
     uint32_t duration = std::chrono::duration_cast<DltDurationT>(timestamp.time_since_epoch()).count();

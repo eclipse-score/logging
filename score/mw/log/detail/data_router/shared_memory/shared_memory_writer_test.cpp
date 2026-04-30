@@ -158,10 +158,10 @@ TEST_F(SharedMemoryWriterFixture, ShallHandleOverflowAndNotFail)
     RecordProperty("TestingTechnique", "Requirements-based test");
     RecordProperty("DerivationTechnique", "Analysis of requirements");
 
-    const auto first = shared_memory_writer.TryRegisterType(TypeInfoTest{});
+    score::cpp::ignore = shared_memory_writer.TryRegisterType(TypeInfoTest{});
     for (auto i = 0UL; i < kRingSize; i++)  //  much more then it is possible
     {
-        const auto result = shared_memory_writer.TryRegisterType(TypeInfoTest{});
+        score::cpp::ignore = shared_memory_writer.TryRegisterType(TypeInfoTest{});
     }
     const auto result = shared_memory_writer.TryRegisterType(TypeInfoTest{});
     EXPECT_FALSE(result.has_value());
@@ -255,7 +255,7 @@ TEST_F(SharedMemoryWriterFixture, MultipleConcurentRegistrationShallBeValidInCou
         threads.at(counter) = std::thread([this]() noexcept {
             for (auto number = 0UL; number < kNumberOfActions; number++)
             {
-                const auto type_id = shared_memory_writer.TryRegisterType(TypeInfoTest{});
+                score::cpp::ignore = shared_memory_writer.TryRegisterType(TypeInfoTest{});
             }
         });
     }

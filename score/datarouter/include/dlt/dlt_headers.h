@@ -17,7 +17,6 @@
 #include "dlt/dlt_common.h"
 #include "score/mw/log/detail/common/log_entry_deserialize.h"
 #include "score/mw/log/detail/log_entry.h"
-#include "score/datarouter/include/dlt/dltid_converter.h"
 
 namespace score
 {
@@ -79,7 +78,9 @@ inline void ConstructDltStandardHeader(DltStandardHeader& std, size_t msg_size, 
 }
 inline void ConstructDltStandardHeaderExtra(DltStandardHeaderExtra& stde, DltidT ecu, uint32_t tmsp)
 {
-    std::copy_n(ecu.Data(), std::min(ecu.size(), sizeof(stde.ecu)), static_cast<char*>(stde.ecu));
+    std::fill(std::begin(stde.ecu), std::end(stde.ecu), '\0');
+    const auto ecu_data = ecu.Data();
+    std::copy_n(ecu_data.begin(), ecu_data.size(), static_cast<char*>(stde.ecu));
     stde.tmsp = DLT_HTOBE_32(tmsp);
 }
 
@@ -92,8 +93,12 @@ inline void ConstructDltExtendedHeader(DltExtendedHeader& ext,
     ext.msin = static_cast<uint8_t>((DLT_TYPE_LOG << DLT_MSIN_MSTP_SHIFT) |
                                     (static_cast<std::uint8_t>(loglevel) << DLT_MSIN_MTIN_SHIFT) | (DLT_MSIN_VERB));
     ext.noar = nor;
-    std::copy_n(app_id.Data(), sizeof(ext.apid), static_cast<char*>(ext.apid));
-    std::copy_n(ctx_id.Data(), sizeof(ext.ctid), static_cast<char*>(ext.ctid));
+    std::fill(std::begin(ext.apid), std::end(ext.apid), '\0');
+    const auto app_id_data = app_id.Data();
+    std::copy_n(app_id_data.begin(), app_id_data.size(), static_cast<char*>(ext.apid));
+    std::fill(std::begin(ext.ctid), std::end(ext.ctid), '\0');
+    const auto ctx_id_data = ctx_id.Data();
+    std::copy_n(ctx_id_data.begin(), ctx_id_data.size(), static_cast<char*>(ext.ctid));
 }
 
 inline void ConstructStorageVerbosePacket(uint8_t* dlt_message,
@@ -117,8 +122,8 @@ inline void ConstructStorageVerbosePacket(uint8_t* dlt_message,
     ConstructDltExtendedHeader(hdr.ext,
                                entry.log_level,
                                static_cast<uint8_t>(entry.num_of_args),
-                               platform::ConvertToDltId(entry.app_id),
-                               platform::ConvertToDltId(entry.ctx_id));
+                               platform::DltidT{entry.app_id},
+                               platform::DltidT{entry.ctx_id});
     // avoid signed/unsigned comparison warning in std::next
     const auto offset = static_cast<typename std::iterator_traits<decltype(dlt_message)>::difference_type>(
         sizeof(DltStorageHeader) + sizeof(DltVerboseHeader));
@@ -139,8 +144,8 @@ inline uint32_t ConstructVerboseHeader(
     ConstructDltExtendedHeader(header.ext,
                                entry.log_level,
                                static_cast<uint8_t>(entry.num_of_args),
-                               platform::ConvertToDltId(entry.app_id),
-                               platform::ConvertToDltId(entry.ctx_id));
+                               platform::DltidT{entry.app_id},
+                               platform::DltidT{entry.ctx_id});
     return sizeof(DltVerboseHeader);
 }
 

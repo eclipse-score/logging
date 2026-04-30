@@ -1,0 +1,64 @@
+@startuml class_diagram
+
+struct AcquiredData <<POD>> {
+  + data: score::cpp::span<Byte>
+}
+
+struct AlternatingAcquiredData <<POD>> {
+  + data: score::cpp::span<Byte>
+  + control_block_id: AlternatingControlBlockSelectId
+}
+
+class LinearControlBlock <<POD>> {
+  + data: score::cpp::span<Byte>
+  + acquired_index: std::atomic<Length>
+  + written_index: std::atomic<Length>
+  + number_of_writers: std::atomic<Length>
+}
+
+class WaitFreeLinearWriter {
+  + WaitFreeLinearWriter(control_block: LinearControlBlock&, pre_acquire_hook: PreAcquireHook)
+  + Acquire(length: Length): score::cpp::optional<AcquiredData>
+  + Release(acquired_data: const AcquiredData&): void
+}
+
+class LinearReader {
+  + LinearReader(data: const score::cpp::span<Byte>&)
+  + Read(): std::optional<score::cpp::span<Byte>>
+  + GetSizeOfWholeDataBuffer(): Length
+}
+
+class AlternatingControlBlock <<POD>> {
+  + control_block_even: LinearControlBlock
+  + control_block_odd: LinearControlBlock
+  + switch_count_points_active_for_writing: std::atomic<uint32_t>
+}
+
+class WaitFreeAlternatingWriter {
+  + WaitFreeAlternatingWriter(control_block: AlternatingControlBlock&)
+  + Acquire(length: Length): std::optional<AlternatingAcquiredData>
+  + Release(acquired_data: const AlternatingAcquiredData&): void
+}
+
+class AlternatingReaderProxy {
+  + AlternatingReaderProxy(dcb: AlternatingControlBlock&)
+  + Switch(): uint32_t
+}
+
+class AlternatingReadOnlyReader {
+  + AlternatingReadOnlyReader(dcb: const AlternatingControlBlock&, buffer_even: score::cpp::span<Byte>, buffer_odd: score::cpp::span<Byte>)
+  + IsBlockReleasedByWriters(block_id_count: uint32_t): bool
+  + CreateLinearReader(block_id_count: uint32_t): LinearReader
+}
+
+WaitFreeLinearWriter ..> LinearControlBlock : uses
+WaitFreeLinearWriter ..> AcquiredData : uses
+AlternatingControlBlock *-- "2" LinearControlBlock
+WaitFreeAlternatingWriter *-- "2" WaitFreeLinearWriter
+WaitFreeAlternatingWriter ..> AlternatingControlBlock : uses
+WaitFreeAlternatingWriter ..> AlternatingAcquiredData : uses
+AlternatingReaderProxy ..> AlternatingControlBlock : uses
+AlternatingReadOnlyReader ..> AlternatingControlBlock : uses
+AlternatingReadOnlyReader *-- LinearReader
+
+@enduml

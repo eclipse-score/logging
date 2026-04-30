@@ -10,9 +10,9 @@ interface "mw::log::Recorder" as Recorder {
 
 ' Interface
 interface "mw::log::detail::Backend" as Backend {
-  +ReserveSlot() : score::cpp::optional<SlotHandle>
-  +FlushSlot(slot : const SlotHandle&)
-  +GetLogRecord(slot : const SlotHandle&): LogRecord&
+  + ReserveSlot() : score::cpp::optional<SlotHandle>
+  + FlushSlot(slot : const SlotHandle&)
+  + GetLogRecord(slot : const SlotHandle&): LogRecord&
 }
 
 ' Recorder implementations

@@ -11,17 +11,37 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-#include "score/datarouter/include/dlt/dltid_converter.h"
+#ifndef SCORE_DATAROUTER_INCLUDE_LOGPARSER_I_LOG_PARSER_FACTORY_H
+#define SCORE_DATAROUTER_INCLUDE_LOGPARSER_I_LOG_PARSER_FACTORY_H
+
+#include "logparser/i_logparser.h"
+
+#include <memory>
 
 namespace score
 {
+namespace mw
+{
+namespace log
+{
+class NvConfig;
+}  // namespace log
+}  // namespace mw
 namespace platform
 {
-
-DltidT ConvertToDltId(const score::mw::log::detail::LoggingIdentifier& logging_identifier)
+namespace internal
 {
-    return DltidT{logging_identifier.GetStringView()};
-}
 
+class ILogParserFactory
+{
+  public:
+    virtual ~ILogParserFactory() = default;
+
+    virtual std::unique_ptr<ILogParser> Create(const score::mw::log::NvConfig& nv_config) = 0;
+};
+
+}  // namespace internal
 }  // namespace platform
 }  // namespace score
+
+#endif  // SCORE_DATAROUTER_INCLUDE_LOGPARSER_I_LOG_PARSER_FACTORY_H

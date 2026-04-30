@@ -26,6 +26,10 @@ class MockDltVerboseHandlerOutput : public DltVerboseHandler::IOutput
                 SendVerbose,
                 (uint32_t, const score::mw::log::detail::log_entry_deserialization::LogEntryDeserializationReflection&),
                 (override));
+    bool IsOutputEnabled() const noexcept override
+    {
+        return true;
+    }
     virtual ~MockDltVerboseHandlerOutput() = default;
 };
 

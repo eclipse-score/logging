@@ -77,13 +77,14 @@ cc_library(
     features = COMPILER_WARNING_FEATURES,
     tags = ["FFI"],
     visibility = [
+        "//score/mw/log/backend:__pkg__",
         "//score/mw/log/detail/common:__pkg__",
         "@score_baselibs//score/mw/log/detail:__pkg__",
     ],
     deps = [
         ":file_recorder",
+        "@score_baselibs//score/mw/log:minimal",
         "@score_baselibs//score/mw/log/configuration",
-        "@score_baselibs//score/mw/log/detail:empty_recorder",
         "@score_baselibs//score/mw/log/detail:initialization_reporter",
         "@score_baselibs//score/mw/log/detail:log_recorder_factory",
     ],

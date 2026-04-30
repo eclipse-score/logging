@@ -33,80 +33,6 @@ COMPILER_WARNING_FEATURES = [
 ]
 
 cc_library(
-    name = "recorder_factory",
-    srcs = [
-        "recorder_factory.cpp",
-    ],
-    hdrs = [
-        "recorder_factory.h",
-    ],
-    features = COMPILER_WARNING_FEATURES,
-    tags = ["FFI"],
-    visibility = [
-        "//visibility:public",
-    ],
-    deps = [
-        ":composite_recorder",
-        ":recorder_config",
-        "@score_baselibs//score/mw/log:recorder_interface",
-        "@score_baselibs//score/mw/log/configuration:configuration_parser",
-        "@score_baselibs//score/mw/log/detail:empty_recorder",
-        "@score_baselibs//score/mw/log/detail:initialization_reporter",
-    ],
-    alwayslink = True,
-)
-
-cc_library(
-    name = "recorder_config",
-    hdrs = [
-        "recorder_config.h",
-    ],
-    defines = select({
-        "//score/mw/log/detail/flags:config_KConsole_Logging": ["KCONSOLE_LOGGING"],
-        "//conditions:default": [],
-    }) + select({
-        "//score/mw/log/detail/flags:config_KFile_Logging": ["KFILE_LOGGING"],
-        "//conditions:default": [],
-    }) + select({
-        "//score/mw/log/flags:Remote_Logging": ["KREMOTE_LOGGING"],
-        "//conditions:default": [],
-    }) + select({
-        "//score/mw/log/flags:Custom_Logging": ["KCUSTOM_LOGGING"],
-        "//conditions:default": [],
-    }),
-    features = COMPILER_WARNING_FEATURES,
-    tags = ["FFI"],
-    deps = [
-        "@score_baselibs//score/mw/log/detail:empty_recorder_factory",
-    ] + select({
-        "@platforms//os:linux": [],
-        "@platforms//os:qnx": [
-            "//score/mw/log/detail/slog",
-        ],
-    }) + select({
-        "//score/mw/log/detail/flags:config_KConsole_Logging": [
-            "@score_baselibs//score/mw/log/detail/text_recorder:console_recorder_factory",
-        ],
-        "//conditions:default": [],
-    }) + select({
-        "//score/mw/log/detail/flags:config_KFile_Logging": [
-            "//score/mw/log/detail/file_recorder:file_recorder_factory",
-        ],
-        "//conditions:default": [],
-    }) + select({
-        "//score/mw/log/flags:Remote_Logging": [
-            "//score/mw/log/detail/data_router:remote_dlt_recorder_factory",
-        ],
-        "//conditions:default": [],
-    }) + select({
-        "//score/mw/log/flags:Custom_Logging": [
-            "//score/mw/log/flags:custom_recorder_impl",
-        ],
-        "//conditions:default": [],
-    }),
-)
-
-cc_library(
     name = "log_entry_deserialize",
     srcs = ["log_entry_deserialize.h"],
     features = COMPILER_WARNING_FEATURES,
@@ -177,45 +103,6 @@ cc_library(
     ],
 )
 
-cc_library(
-    name = "composite_recorder",
-    srcs = [
-        "composite_recorder.cpp",
-    ],
-    hdrs = [
-        "composite_recorder.h",
-    ],
-    features = COMPILER_WARNING_FEATURES,
-    tags = ["FFI"],
-    visibility = [
-        "//score/mw/log/detail/data_router:__pkg__",
-        "@score_baselibs//score/mw/log:__pkg__",
-    ],
-    deps = [
-        "@score_baselibs//score/mw/log:recorder",
-        "@score_baselibs//score/mw/log/detail:initialization_reporter",
-        "@score_baselibs//score/mw/log/detail:types_and_errors",
-    ],
-)
-
-cc_test(
-    name = "composite_recorder_test",
-    srcs = [
-        "composite_recorder_test.cpp",
-    ],
-    data = [
-    ],
-    features = COMPILER_WARNING_FEATURES + [
-        "aborts_upon_exception",
-    ],
-    tags = ["unit"],
-    deps = [
-        ":composite_recorder",
-        "@googletest//:gtest_main",
-        "@score_baselibs//score/mw/log:recorder_mock",
-    ],
-)
-
 cc_test(
     name = "dlt_format_test",
     srcs = [
@@ -247,25 +134,6 @@ cc_test(
     deps = [
         ":log_entry_deserialize",
         "@googletest//:gtest_main",
-    ],
-)
-
-cc_test(
-    name = "recorder_factory_test",
-    srcs = [
-        "recorder_factory_test.cpp",
-    ],
-    data = [
-    ],
-    features = COMPILER_WARNING_FEATURES + [
-        "aborts_upon_exception",
-    ],
-    tags = ["unit"],
-    deps = [
-        ":recorder_factory",
-        "@googletest//:gtest_main",
-        "@score_baselibs//score/mw/log/configuration:target_config_reader_mock",
-        "@score_baselibs//score/os/mocklib:fcntl_mock",
     ],
 )
 
@@ -312,13 +180,21 @@ cc_test(
     features = COMPILER_WARNING_FEATURES + [
         "aborts_upon_exception",
     ],
+    local_defines = select({
+        "//score/mw/log/detail/flags:config_KConsole_Logging": ["KCONSOLE_LOGGING"],
+        "//conditions:default": [],
+    }),
     tags = ["unit"],
     deps = [
-        "//score/mw/log/detail/common:recorder_factory",
         "@googletest//:gtest_main",
-        "@score_baselibs//score/mw/log:frontend",
+        "@score_baselibs//score/mw/log:console",
         "@score_baselibs//score/mw/log:recorder_mock",
-    ],
+    ] + select({
+        "//score/mw/log/detail/flags:config_KConsole_Logging": [
+            "@score_baselibs//score/mw/log/detail/text_recorder",
+        ],
+        "//conditions:default": [],
+    }),
 )
 
 cc_test(
@@ -331,9 +207,8 @@ cc_test(
     ],
     tags = ["unit"],
     deps = [
-        "//score/mw/log/detail/common:recorder_factory",
         "@googletest//:gtest_main",
-        "@score_baselibs//score/mw/log:frontend",
+        "@score_baselibs//score/mw/log:console",
         "@score_baselibs//score/mw/log:recorder_mock",
         "@score_baselibs//score/mw/log/test/my_custom_lib:my_custom_type_mw_log",
     ],
@@ -349,9 +224,8 @@ cc_test(
     ],
     tags = ["unit"],
     deps = [
-        "//score/mw/log/detail/common:recorder_factory",
         "@googletest//:gtest_main",
-        "@score_baselibs//score/mw/log:frontend",
+        "@score_baselibs//score/mw/log:console",
         "@score_baselibs//score/mw/log:recorder_mock",
         "@score_baselibs//score/mw/log/detail:thread_local_guard",
     ],
@@ -360,10 +234,8 @@ cc_test(
 cc_unit_test_suites_for_host_and_qnx(
     name = "unit_tests",
     cc_unit_tests = [
-        ":composite_recorder_test",
         ":dlt_format_test",
         ":log_entry_deserialize_test",
-        ":recorder_factory_test",
         ":statistics_reporter_test",
         ":helper_functions_test",
         ":runtime_test",

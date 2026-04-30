@@ -32,16 +32,12 @@ clang_tidy_extra_checks(
 
 cc_library(
     name = "dltprotocol",
-    srcs = [
-        "src/dlt/dltid_converter.cpp",
-    ],
     hdrs = [
         "include/dlt/dlt_common.h",
         "include/dlt/dlt_headers.h",
         "include/dlt/dlt_protocol.h",
         "include/dlt/dlt_types.h",
         "include/dlt/dltid.h",
-        "include/dlt/dltid_converter.h",
         "include/dlt/logentry_trace.h",
         "include/dlt/plogfilterdesc.h",
     ],
@@ -213,6 +209,7 @@ cc_library(
         ":log",
         ":logparser_interface",
         "//score/mw/log/detail/data_router/shared_memory:reader",
+        "@score_baselibs//score/mw/log/configuration:nvconfig",
         "@score_baselibs//score/static_reflection_with_serialization/serialization",
     ],
 )
@@ -250,6 +247,38 @@ cc_library(
     ],
 )
 
+cc_library(
+    name = "logparser_factory_interface",
+    hdrs = [
+        "include/logparser/i_log_parser_factory.h",
+    ],
+    features = COMPILER_WARNING_FEATURES,
+    strip_include_prefix = "include",
+    visibility = [
+        "//score/datarouter/src/dlt/nonverbose_dlt_impl:__pkg__",
+        "//score/datarouter/src/dlt/nonverbose_dlt_stub:__pkg__",
+        "//score/datarouter/test:__subpackages__",
+        "@score_logging//score/datarouter:__subpackages__",
+    ],
+    deps = [
+        ":logparser_interface",
+    ],
+)
+
+cc_library(
+    name = "logparser_factory_mock",
+    hdrs = [
+        "mocks/log_parser_factory_mock.h",
+    ],
+    features = COMPILER_WARNING_FEATURES,
+    strip_include_prefix = "mocks",
+    visibility = ["//score/datarouter/test:__subpackages__"],
+    deps = [
+        ":logparser_factory_interface",
+        "@googletest//:gtest_main",
+    ],
+)
+
 ## ===========================================================================
 ## libtracing
 ## ---------------------------------------------------------------------------
@@ -279,19 +308,18 @@ cc_library(
     ],
 )
 
+# FIXME: Ticket-252685
 alias(
     name = "libtracing",
     actual = ":log",
     visibility = ["//visibility:public"],
 )
 
+# FIXME: Ticket-252685
 cc_library(
     name = "log",
     visibility = ["//visibility:public"],
-    deps = [
-        "//score/mw/log/detail/common:recorder_factory",
-        "@score_baselibs//score/mw/log:frontend",
-    ],
+    deps = ["@score_baselibs//score/mw/log:console"],
 )
 
 ## ===========================================================================
@@ -403,10 +431,11 @@ cc_library(
         ":datarouter_types",
         ":log",
         ":logparser",
+        ":logparser_factory_interface",
         ":message_passing_server",
         ":unixdomain_server",
-        "//score/datarouter/lib/synchronized:synchronized_utility",
         "//score/mw/log/detail/data_router/shared_memory:reader",
+        "@score_baselibs//score/concurrency:synchronized",
         "@score_baselibs//score/language/futurecpp",
     ],
 )
@@ -426,9 +455,10 @@ cc_library(
     deps = [
         ":log",
         ":logparser",
+        ":logparser_factory_interface",
         ":message_passing_server",
         ":unixdomain_mock",
-        "//score/datarouter/lib/synchronized:synchronized_utility",
+        "@score_baselibs//score/concurrency:synchronized",
     ],
 )
 
@@ -447,10 +477,11 @@ cc_library(
     deps = [
         ":datarouter_types",
         ":log",
+        ":logparser_factory_interface",
         ":logparser_testing",
         ":message_passing_server",
         ":unixdomain_mock",
-        "//score/datarouter/lib/synchronized:synchronized_utility",
+        "@score_baselibs//score/concurrency:synchronized",
     ],
 )
 
@@ -708,11 +739,9 @@ cc_library(
     name = "socketserver_config_lib",
     srcs = [
         "src/daemon/socketserver_config.cpp",
-        "src/daemon/socketserver_filter_factory.cpp",
     ],
     hdrs = [
         "include/daemon/socketserver_config.h",
-        "include/daemon/socketserver_filter_factory.h",
     ],
     features = COMPILER_WARNING_FEATURES,
     strip_include_prefix = "include",
@@ -738,11 +767,9 @@ cc_library(
     testonly = True,
     srcs = [
         "src/daemon/socketserver_config.cpp",
-        "src/daemon/socketserver_filter_factory.cpp",
     ],
     hdrs = [
         "include/daemon/socketserver_config.h",
-        "include/daemon/socketserver_filter_factory.h",
     ],
     features = COMPILER_WARNING_FEATURES,
     strip_include_prefix = "include",
@@ -875,6 +902,7 @@ cc_binary(
     ],
     deps = [
         ":datarouter_app",
+        "@score_baselibs//score/os:errno_logging",
         "@score_baselibs//score/os:pthread",
         "@score_baselibs//score/os/utils:path",
         # "//third_party/jemalloc", # Ticket-231781
@@ -1091,7 +1119,6 @@ cc_library(
 test_suite(
     name = "unit_tests",
     tests = [
-        "//score/datarouter/lib/synchronized:synchronized_test",
         #"//score/datarouter/persistent_log_request:unit_tests",
         #"//score/datarouter/test:unit_tests",
         #"//score/datarouter/tools/generator:unit_tests",

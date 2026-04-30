@@ -100,36 +100,18 @@ class DltLogServer : score::platform::datarouter::DltNonverboseHandlerType::IOut
     virtual ~DltLogServer() = default;
     // Not possible to mock LogParser currently.
     // LCOV_EXCL_START
-    void AddHandlers(ILogParser& parser)
+    std::vector<ILogParser::AnyHandler*> GetGlobalHandlers()
     {
-        parser.AddGlobalHandler(*sysedr_handler_);
-        parser.AddTypeHandler(kPersistentRequestTypeName, *sysedr_handler_);
-
-        if (dlt_output_enabled_)
-        {
-            // XXX only add handler for those which are accepted
-            parser.AddGlobalHandler(nvhandler_);
-            parser.AddTypeHandler(kLogEntryTypeName, vhandler_);
-            parser.AddTypeHandler(kFileTransferTypeName, fthandler_);
-        }
+        return {sysedr_handler_.get(), &nvhandler_};
     }
 
-    void UpdateHandlers(ILogParser& parser, bool enabled)
+    std::vector<ILogParser::TypeHandlerBinding> GetTypeHandlerBindings()
     {
-        // protected by external mutex
-        if (enabled)
-        {
-            parser.AddGlobalHandler(nvhandler_);
-            parser.AddTypeHandler(kLogEntryTypeName, vhandler_);
-            parser.AddTypeHandler(kFileTransferTypeName, fthandler_);
-        }
-        else
-        {
-            parser.RemoveGlobalHandler(nvhandler_);
-            parser.RemoveTypeHandler(kLogEntryTypeName, vhandler_);
-            parser.RemoveTypeHandler(kFileTransferTypeName, fthandler_);
-        }
+        return {{kPersistentRequestTypeName, sysedr_handler_.get()},
+                {kLogEntryTypeName, &vhandler_},
+                {kFileTransferTypeName, &fthandler_}};
     }
+
     // LCOV_EXCL_STOP
 
     void SetEnabledCallback(EnabledCallback enabled_callback = EnabledCallback())
@@ -137,10 +119,9 @@ class DltLogServer : score::platform::datarouter::DltNonverboseHandlerType::IOut
         enabled_callback_ = enabled_callback;
     }
 
-    void UpdateHandlersFinal(bool enabled)
+    void SetDltOutputEnabled(bool enabled)
     {
-        // protected by external mutex
-        dlt_output_enabled_ = enabled;
+        dlt_output_enabled_.store(enabled, std::memory_order_release);
     }
 
     void Flush()
@@ -153,6 +134,7 @@ class DltLogServer : score::platform::datarouter::DltNonverboseHandlerType::IOut
 
     double GetQuota(std::string name)
     {
+        std::lock_guard<std::mutex> lock(config_mutex_);
         auto quota = throughput_apps_.find(DltidT(name));
         return quota == throughput_apps_.end() ? 1.0 : quota->second;
     }
@@ -190,7 +172,7 @@ class DltLogServer : score::platform::datarouter::DltNonverboseHandlerType::IOut
 
     bool GetDltEnabled() const noexcept;
 
-    std::string ReadLogChannelNames() override;
+    std::string ReadLogChannelNames() const override;
     std::string ResetToDefault() override;
     std::string StoreDltConfig() override;
     std::string SetTraceState() override;
@@ -217,8 +199,8 @@ class DltLogServer : score::platform::datarouter::DltNonverboseHandlerType::IOut
       public:
         std::size_t operator()(const KeyT& k) const
         {
-            auto low = static_cast<uint64_t>(k.first.value);
-            auto high = static_cast<uint64_t>(k.second.value) << 32;
+            auto low = static_cast<uint64_t>(k.first.GetHash());
+            auto high = static_cast<uint64_t>(k.second.GetHash()) << 32;
             return std::hash<uint64_t>{}(high | low);
         }
     };
@@ -251,6 +233,13 @@ class DltLogServer : score::platform::datarouter::DltNonverboseHandlerType::IOut
                 }
             }
         }
+    }
+
+    inline std::optional<uint8_t> GetCoredumpChannel() const
+    {
+        // Read coredump_channel_ under config_mutex_ to avoid data race with InitLogChannels
+        std::lock_guard<std::mutex> lock(config_mutex_);
+        return coredump_channel_;
     }
 
     template <typename KeyMap>
@@ -292,10 +281,10 @@ class DltLogServer : score::platform::datarouter::DltNonverboseHandlerType::IOut
         return FindInKeyMap(channel_assignments_, app_id, ctx_id).value_or(ChannelmaskT{});
     }
 
-    std::mutex config_mutex_;
+    mutable std::mutex config_mutex_;
 
     bool filtering_enabled_;
-    bool dlt_output_enabled_;
+    std::atomic<bool> dlt_output_enabled_;
 
     LoglevelT default_threshold_;
     std::unordered_map<KeyT, LoglevelT, KeyHash> message_thresholds_;
@@ -321,6 +310,8 @@ class DltLogServer : score::platform::datarouter::DltNonverboseHandlerType::IOut
     std::unique_ptr<IDiagnosticJobParser> parser_;
 
     std::unique_ptr<ISysedrHandler> sysedr_handler_;
+
+    bool IsOutputEnabled() const noexcept override final;
 
     void SendNonVerbose(const score::mw::log::config::NvMsgDescriptor& desc,
                         uint32_t tmsp,

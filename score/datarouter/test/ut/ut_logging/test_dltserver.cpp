@@ -836,11 +836,10 @@ TEST(DltServerTest, ExtractIdValidInputDataExpectValidResult)
     const std::string input_message{"asdAPP012345678zxccvb86545"};
     const size_t offset{3};
     const auto ret_value = ExtractId(input_message, offset);
-    const std::string ret_val_string(ret_value.Data(), ret_value.size());
     constexpr std::string_view kExpectedString{"APP0"};
 
-    EXPECT_EQ(ret_val_string, kExpectedString);
-    EXPECT_NE(ret_value.value, 0);
+    EXPECT_EQ(ret_value.Data(), kExpectedString);
+    EXPECT_NE(ret_value.GetHash(), 0);
 }
 
 TEST(DltServerTest, ExtractIdNonValidInputDataExpectNonValidResult)
@@ -848,11 +847,10 @@ TEST(DltServerTest, ExtractIdNonValidInputDataExpectNonValidResult)
     const std::string input_message;
     const size_t offset{static_cast<unsigned long>(std::numeric_limits<std::string::difference_type>::max() + 1UL)};
     const auto ret_value = ExtractId(input_message, offset);
-    const std::string ret_val_string(ret_value.Data(), ret_value.size());
-    const std::string expected_string{0x00, 0x00, 0x00, 0x00};
+    const std::string expected_string{};
 
-    EXPECT_EQ(ret_val_string, expected_string);
-    EXPECT_EQ(ret_value.value, 0);
+    EXPECT_EQ(std::string(ret_value), expected_string);
+    EXPECT_EQ(ret_value.GetHash(), 0);
 }
 
 TEST(DltServerTest, AppendIdValidInputDataExpectValidResult)
@@ -1001,7 +999,7 @@ TEST_F(DltServerCreatedWithoutConfigFixture, SendFTVerboseAppIdNoCoreChannelExpe
     dlt_server.SendFtVerbose({}, score::mw::log::LogLevel::kVerbose, app_id, ctx_id, 0U, 100U);
 }
 
-TEST_F(DltServerCreatedWithoutConfigFixture, UpdateHandlersFinalToTrueExpectDltOutputEnabledFlagTrue)
+TEST_F(DltServerCreatedWithoutConfigFixture, SetDltOutputEnabledToTrueExpectDltOutputEnabledFlagTrue)
 {
     EXPECT_CALL(read_callback, Call()).Times(0);
     EXPECT_CALL(write_callback, Call(_)).Times(0);
@@ -1009,7 +1007,7 @@ TEST_F(DltServerCreatedWithoutConfigFixture, UpdateHandlersFinalToTrueExpectDltO
     score::logging::dltserver::DltLogServer::DltLogServerTest dlt_server(
         s_config, read_callback.AsStdFunction(), write_callback.AsStdFunction(), true);
 
-    dlt_server.UpdateHandlersFinal(true);
+    dlt_server.SetDltOutputEnabled(true);
     EXPECT_TRUE(dlt_server.GetDltEnabled());
 }
 

@@ -13,6 +13,8 @@
 
 #include "score/datarouter/datarouter/data_router.h"
 
+#include "logparser/logparser.h"
+
 #include "score/mw/log/logging.h"
 
 #include "score/os/unistd.h"
@@ -74,8 +76,8 @@ std::string QuotaValueAsString(double quota) noexcept
     return ss.str();
 }
 
-DataRouter::DataRouter(score::mw::log::Logger& logger, SourceSetupCallback source_callback)
-    : stats_logger_(logger), source_callback_(source_callback)
+DataRouter::DataRouter(score::mw::log::Logger& logger, std::unique_ptr<ILogParserFactory> log_parser_factory)
+    : stats_logger_(logger), log_parser_factory_(std::move(log_parser_factory))
 {
 }
 
@@ -122,16 +124,18 @@ std::unique_ptr<DataRouter::SourceSession> DataRouter::NewSourceSessionImpl(
     std::unique_ptr<score::mw::log::detail::ISharedMemoryReader> reader,
     const score::mw::log::NvConfig& nv_config)
 {
-    auto source_session =
-        std::make_unique<DataRouter::SourceSession>(*this,
-                                                    std::move(reader),
-                                                    name,
-                                                    is_dlt_enabled,
-                                                    std::move(handle),
-                                                    quota,
-                                                    quota_enforcement_enabled,
-                                                    stats_logger_,
-                                                    std::make_unique<score::platform::internal::LogParser>(nv_config));
+    auto parser = log_parser_factory_ ? log_parser_factory_->Create(nv_config)
+                                      : std::make_unique<score::platform::internal::LogParser>(nv_config);
+
+    auto source_session = std::make_unique<DataRouter::SourceSession>(*this,
+                                                                      std::move(reader),
+                                                                      name,
+                                                                      is_dlt_enabled,
+                                                                      std::move(handle),
+                                                                      quota,
+                                                                      quota_enforcement_enabled,
+                                                                      stats_logger_,
+                                                                      std::move(parser));
 
     if (!source_session)
     {
@@ -145,10 +149,6 @@ std::unique_ptr<DataRouter::SourceSession> DataRouter::NewSourceSessionImpl(
     // from new_source_session_impl() which acquires the lock before construction.
     std::ignore = sources_.insert(source_session.get());
 
-    if (source_callback_)
-    {
-        source_callback_(std::move(source_session->GetParser()));
-    }
     // persistent subscribers
     return source_session;
 }
@@ -237,7 +237,7 @@ void DataRouter::SourceSession::ProcessAndRouteLogMessages(uint64_t& message_cou
             }
 
             auto record_received_timestamp = score::mw::log::detail::TimePoint::clock::now();
-            parser_->Parse(record);
+            parser_->ParseSharedMemoryRecord(record);
             ++message_count_local;
 
             transport_delay_local = std::max(transport_delay_local,
@@ -307,7 +307,7 @@ void DataRouter::SourceSession::ProcessDetachedLogs(uint64_t& number_of_bytes_in
             parser_->AddIncomingType(registration);
         },
         [this](const auto& record) noexcept {
-            parser_->Parse(record);
+            parser_->ParseSharedMemoryRecord(record);
         });
 
     if (number_of_bytes_in_buffer_result_detached.has_value())

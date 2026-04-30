@@ -11,22 +11,30 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-#ifndef SCORE_DATAROUTER_INCLUDE_DAEMON_SOCKETSERVER_FILTER_FACTORY_H
-#define SCORE_DATAROUTER_INCLUDE_DAEMON_SOCKETSERVER_FILTER_FACTORY_H
+#ifndef SCORE_DATAROUTER_MOCKS_LOG_PARSER_FACTORY_MOCK_H
+#define SCORE_DATAROUTER_MOCKS_LOG_PARSER_FACTORY_MOCK_H
 
-#include "logparser/logparser.h"
+#include "logparser/i_log_parser_factory.h"
+
+#include <gmock/gmock.h>
 
 namespace score
 {
 namespace platform
 {
-namespace datarouter
+namespace internal
 {
 
-internal::LogParser::FilterFunctionFactory GetFilterFactory();
+class ILogParserFactoryMock : public ILogParserFactory
+{
+  public:
+    ~ILogParserFactoryMock() override = default;
 
-}  // namespace datarouter
+    MOCK_METHOD(std::unique_ptr<ILogParser>, Create, (const score::mw::log::NvConfig& nv_config), (override));
+};
+
+}  // namespace internal
 }  // namespace platform
 }  // namespace score
 
-#endif  // SCORE_DATAROUTER_INCLUDE_DAEMON_SOCKETSERVER_FILTER_FACTORY_H
+#endif  // SCORE_DATAROUTER_MOCKS_LOG_PARSER_FACTORY_MOCK_H

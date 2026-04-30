@@ -21,11 +21,17 @@ COMPILER_WARNING_FEATURES = [
 
 cc_library(
     name = "log",
+    deprecation = "Usage of target '@score_logging//score/mw/log' is deprecated and will be removed in the v0.8 release. Please use '@score_baselibs//score/mw/log' instead.",
     features = COMPILER_WARNING_FEATURES,
     tags = ["FFI"],
     visibility = ["//visibility:public"],
     deps = [
-        "//score/mw/log/detail/common:recorder_factory",
+        "//score/mw/log/backend:file",
+        "//score/mw/log/backend:remote",
+        "@score_baselibs//score/mw/log:console",
         "@score_baselibs//score/mw/log:frontend",
-    ],
+    ] + select({
+        "@platforms//os:qnx": ["//score/mw/log/backend:slog"],
+        "//conditions:default": [],
+    }),
 )

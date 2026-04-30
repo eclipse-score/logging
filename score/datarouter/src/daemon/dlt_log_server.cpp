@@ -16,7 +16,6 @@
 #include "score/datarouter/include/daemon/configurator_commands.h"
 #include "score/datarouter/include/daemon/diagnostic_job_parser.h"
 #include "score/datarouter/include/daemon/i_diagnostic_job_handler.h"
-#include "score/datarouter/include/dlt/dltid_converter.h"
 
 #include <algorithm>
 #include <sstream>
@@ -53,8 +52,7 @@ void DltLogServer::SendVerbose(
     const auto sender = [&tmsp, &entry, this](DltLogChannel& c) {
         log_sender_->SendVerbose(tmsp, entry, c);
     };
-    FilterAndCall(
-        platform::ConvertToDltId(entry.app_id), platform::ConvertToDltId(entry.ctx_id), entry.log_level, sender);
+    FilterAndCall(platform::DltidT{entry.app_id}, platform::DltidT{entry.ctx_id}, entry.log_level, sender);
 }
 
 void DltLogServer::SendFtVerbose(score::cpp::span<const std::uint8_t> data,
@@ -67,11 +65,11 @@ void DltLogServer::SendFtVerbose(score::cpp::span<const std::uint8_t> data,
     const auto sender = [&data, &loglevel, &app_id, &ctx_id, &nor, &tmsp, this](DltLogChannel& c) {
         log_sender_->SendFTVerbose(data, loglevel, app_id, ctx_id, nor, tmsp, c);
     };
-    // Coredump channel SIZE_MAX value means that there the configuration settings
-    // don't explicitly specify the coredump channel
-    if (coredump_channel_.has_value())
+    const auto coredump_ch = GetCoredumpChannel();
+    if (coredump_ch.has_value())
     {
-        sender(channels_[coredump_channel_.value()]);
+        //  channels_ shall be immutable after construction
+        sender(channels_[coredump_ch.value()]);
     }
     else
     {
@@ -215,11 +213,11 @@ void DltLogServer::InitLogChannelsDefault(const bool reloading)
 
 void DltLogServer::SetOutputEnabled(const bool enabled)
 {
-    const bool update = (dlt_output_enabled_ != enabled);
+    const bool update = (dlt_output_enabled_.load(std::memory_order_acquire) != enabled);
 
     if (update)
     {
-        dlt_output_enabled_ = enabled;
+        dlt_output_enabled_.store(enabled, std::memory_order_release);
         if (enabled_callback_)
         {
             enabled_callback_(enabled);
@@ -228,7 +226,12 @@ void DltLogServer::SetOutputEnabled(const bool enabled)
 }
 bool DltLogServer::GetDltEnabled() const noexcept
 {
-    return dlt_output_enabled_;
+    return dlt_output_enabled_.load(std::memory_order_acquire);
+}
+
+bool DltLogServer::IsOutputEnabled() const noexcept
+{
+    return GetDltEnabled();
 }
 
 void DltLogServer::SaveDatabase()
@@ -275,12 +278,12 @@ void DltLogServer::ClearDatabase()
     writer_callback_(PersistentConfig{});
 }
 
-std::string DltLogServer::ReadLogChannelNames()
+std::string DltLogServer::ReadLogChannelNames() const
 {
     std::string response(1, config::kRetError);
 
     std::lock_guard<std::mutex> lock(config_mutex_);
-    for (auto& channel : channels_)
+    for (const auto& channel : channels_)
     {
         AppendId(channel.channel_name, response);
     }
