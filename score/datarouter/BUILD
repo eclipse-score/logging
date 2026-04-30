@@ -319,7 +319,7 @@ alias(
 cc_library(
     name = "log",
     visibility = ["//visibility:public"],
-    deps = ["@score_baselibs//score/mw/log:console"],
+    deps = ["//score/mw/log"],
 )
 
 ## ===========================================================================
