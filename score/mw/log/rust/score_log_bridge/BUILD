@@ -50,8 +50,13 @@ cc_library(
     }),
     visibility = ["//visibility:private"],
     deps = [
+        "//score/mw/log/backend:file",  # TODO: Remove after score/issues/2848 is resolved
+        "//score/mw/log/backend:remote",  # TODO: Remove after score/issues/2848 is resolved
         "@score_baselibs//score/mw/log",
-    ],
+    ] + select({
+        "@platforms//os:qnx": ["//score/mw/log/backend:slog"],  # TODO: Remove after score/issues/2848 is resolved
+        "//conditions:default": [],
+    }),
 )
 
 rust_library(

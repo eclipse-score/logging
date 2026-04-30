@@ -34,7 +34,12 @@ cc_library(
         ":ffi",
         # Link dependency required by `:ffi`.
         "@score_baselibs//score/mw/log",
-    ],
+        "//score/mw/log/backend:file",  # TODO: Remove after score/issues/2848 is resolved
+        "//score/mw/log/backend:remote",  # TODO: Remove after score/issues/2848 is resolved
+    ] + select({
+        "@platforms//os:qnx": ["//score/mw/log/backend:slog"],  # TODO: Remove after score/issues/2848 is resolved
+        "//conditions:default": [],
+    }),
 )
 
 # Example consists of Rust library, C++ library, C++ application.
