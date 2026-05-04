@@ -915,6 +915,7 @@ cc_library(
         "//score/mw/log/detail/data_router/shared_memory:reader",
         "@score_baselibs//score/concurrency",
         "@score_baselibs//score/os:pthread",
+        "@score_baselibs//score/os:unistd",
         "@score_communication//score/message_passing",
     ],
 )
