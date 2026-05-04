@@ -27,6 +27,6 @@ cc_library(
     deps = [
         "//score/datarouter/src/persistent_logging:sysedr_factory",
         "//score/datarouter/src/persistent_logging:sysedr_handler_interface",
-        "@score_logging//score/datarouter:log",
+        "@score_baselibs//score/mw/log",
     ],
 )
