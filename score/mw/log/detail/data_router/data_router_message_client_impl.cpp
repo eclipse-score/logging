@@ -327,13 +327,13 @@ void DatarouterMessageClientImpl::Shutdown() noexcept
 
 score::cpp::expected_blank<score::os::Error> DatarouterMessageClientImpl::CreateSender() noexcept
 {
-    const score::message_passing::ServiceProtocolConfig protocol_config{
+    constexpr score::message_passing::ServiceProtocolConfig kProtocolConfig{
         MessagePassingConfig::kDatarouterReceiverIdentifier,
         MessagePassingConfig::kMaxMessageSize,
         MessagePassingConfig::kMaxReplySize,
         MessagePassingConfig::kMaxNotifySize};
-    const score::message_passing::IClientFactory::ClientConfig client_config{0U, 10U, false, true, false};
-    sender_ = message_passing_factory_->CreateClient(protocol_config, client_config);
+    constexpr score::message_passing::IClientFactory::ClientConfig kClientConfig{0U, 10U, false, true, false};
+    sender_ = message_passing_factory_->CreateClient(kProtocolConfig, kClientConfig);
 
     if (sender_ == nullptr)
     {
@@ -342,16 +342,21 @@ score::cpp::expected_blank<score::os::Error> DatarouterMessageClientImpl::Create
         return score::cpp::make_unexpected(score::os::Error::createFromErrno(ENOMEM));
     }
 
-    auto state_callback =
-        [&state_mutex = sender_state_change_mutex_, &state = sender_state_, &condition = state_condition_](
-            score::message_passing::IClientConnection::State new_state) noexcept {
-            {
-                std::lock_guard<std::mutex> callback_lock(state_mutex);
-                state = new_state;
-            }
-            condition.notify_all();
-        };
+    // Suppress "AUTOSAR C++14 A5-1-4" rule finding: "A lambda expression object shall not outlive any of its
+    // reference-captured objects.".
+    // The lambda is stored in sender_ and its lifetime is bounded by sender_'s lifetime. The Shutdown() method
+    // calls sender_.reset() which invokes the ClientConnection destructor. That destructor calls Stop() and
+    // waits for state_ == kStopped before returning, guaranteeing all callbacks complete before sender_ is destroyed.
+    // Therefore, the lambda cannot outlive the captured 'this' pointer.
+    auto state_callback = [this](score::message_passing::IClientConnection::State new_state) noexcept {
+        {
+            std::lock_guard<std::mutex> callback_lock(sender_state_change_mutex_);
+            sender_state_ = new_state;
+        }
+        state_condition_.notify_all();
+    };
 
+    // coverity[autosar_cpp14_a5_1_4_violation]: See justification above
     sender_->Start(state_callback, score::message_passing::IClientConnection::NotifyCallback{});
     return {};
 }
