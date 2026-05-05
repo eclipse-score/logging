@@ -799,6 +799,7 @@ cc_library(
         ":dltserver",
         ":persistentlogconfig",
         ":socketserver_config_lib",
+        "//score/mw/log/detail/data_router/shared_memory:path_utils",
         "@score_baselibs//score/mw/log/configuration:nvconfigfactory",
     ] + select({
         "//score/datarouter/build_configuration_flags:config_persistent_logging": [
@@ -831,6 +832,7 @@ cc_library(
         ":dltserver_testing",
         ":persistentlogconfig",
         ":socketserver_config_lib_testing",
+        "//score/mw/log/detail/data_router/shared_memory:path_utils",
         "@score_baselibs//score/mw/log/configuration:nvconfigfactory",
     ] + select({
         "//score/datarouter/build_configuration_flags:config_persistent_logging": [
