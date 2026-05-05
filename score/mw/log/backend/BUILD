@@ -46,12 +46,13 @@ cc_library(
     alwayslink = True,
 )
 
-# Plugin: Remote DLT via DataRouter
-# Add this dep to your binary to enable remote DLT logging.
+# Plugin: Remote DLT logging.
+# By default uses DataRouter. With --@score_logging//score/mw/log/flags:use_dlt_trace=True,
+# the remote backend uses the DLT Trace (Generic Trace Library) implementation instead.
 cc_library(
     name = "remote",
     srcs = select({
-        "//score/mw/log/flags:Remote_Logging": ["remote_registrant.cpp"],
+        "//score/mw/log/flags:datarouter_enabled": ["remote_registrant.cpp"],
         "//conditions:default": [],
     }),
     features = COMPILER_WARNING_FEATURES,
@@ -60,8 +61,11 @@ cc_library(
     deps = [
         "@score_baselibs//score/mw/log:minimal",
     ] + select({
-        "//score/mw/log/flags:Remote_Logging": [
+        "//score/mw/log/flags:datarouter_enabled": [
             "//score/mw/log/detail/data_router:remote_dlt_recorder_factory",
+        ],
+        "//score/mw/log/flags:dlt_trace_enabled": [
+            "//score/mw/log/detail/dlt_trace:dlt_trace_registrant",
         ],
         "//conditions:default": [],
     }),
