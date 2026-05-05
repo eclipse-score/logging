@@ -268,9 +268,10 @@ class DatarouterMessageClientFixture : public ::testing::Test
     {
         EXPECT_CALL(*receiver_mock, Destruct());
     }
-    void ExpectSendAcquireResponse(score::message_passing::ClientConnectionMock* sender_ptr,
-                                   ReadAcquireResult expected_content,
-                                   score::cpp::expected_blank<score::os::Error> result = score::cpp::expected_blank<score::os::Error>{})
+    void ExpectSendAcquireResponse(
+        score::message_passing::ClientConnectionMock* sender_ptr,
+        ReadAcquireResult expected_content,
+        score::cpp::expected_blank<score::os::Error> result = score::cpp::expected_blank<score::os::Error>{})
     {
         EXPECT_CALL(*sender_ptr, Send(Matcher<score::cpp::span<const std::uint8_t>>(_)))
             .WillOnce(
