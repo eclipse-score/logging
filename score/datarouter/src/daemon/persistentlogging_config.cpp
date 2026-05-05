@@ -41,8 +41,9 @@ PersistentLoggingConfig ReadPersistentLoggingConfig(const std::string& file_path
     using ReadResult = PersistentLoggingConfig::ReadResult;
 
     PersistentLoggingConfig config;
-    using UniqueFileT = std::unique_ptr<std::FILE, decltype(&fclose)>;
-    UniqueFileT fp(std::fopen(file_path.c_str(), "r"), &fclose);
+    auto file_deleter = [](std::FILE* f) { if (f) fclose(f); };
+    using UniqueFileT = std::unique_ptr<std::FILE, decltype(file_deleter)>;
+    UniqueFileT fp(std::fopen(file_path.c_str(), "r"), file_deleter);
     if (nullptr == fp)
     {
         config.read_result = ReadResult::kErrorOpen;
