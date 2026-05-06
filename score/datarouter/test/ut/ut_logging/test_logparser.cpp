@@ -114,6 +114,12 @@ TEST(LogParserTest, SingleMessageHandler)
 
 TEST(LogParserTest, FilterForwarderWithSingleForwarder)
 {
+    RecordProperty("PartiallyVerifies", "comp_req__logging__something");
+    RecordProperty("ASIL", "B");
+    RecordProperty("Description", "hello");
+    RecordProperty("TestType", "requirements-based");
+    RecordProperty("DerivationTechnique", "requirements-analysis");
+
     using namespace std::chrono_literals;
     const std::string type_params = MakeTypeParams<TestMessage>(DltidT{"ECU4"}, DltidT{"APP0"});
 
@@ -136,6 +142,11 @@ TEST(LogParserTest, FilterForwarderWithSingleForwarder)
 // There is no expectation or assertion we can set to check this condition.
 TEST(LogParserTest, TestWrongTypeParameter)
 {
+    RecordProperty("PartiallyVerifies", "feat_req__logging__timestamping_original");
+    RecordProperty("ASIL", "B");
+    RecordProperty("Description", "hello");
+    RecordProperty("TestType", "requirements-based");
+    RecordProperty("DerivationTechnique", "requirements-analysis");
     LogParser parser(CreateTestNvConfig());
     const std::string type_params = MakeWrongTypeParams<TestMessage>(DltidT{"ECU0"}, DltidT{"APP0"});
     constexpr BufsizeT kTestMessageIndex = 1234;
