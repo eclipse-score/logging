@@ -32,4 +32,4 @@ Please use the [Stakeholder and Tool Requirements Template](https://eclipse-scor
 #### Additional Information
 Please note, that all Git commit messages must adhere the rules described in the [Eclipse Foundation Project Handbook](https://www.eclipse.org/projects/handbook/#resources-commit).
 
-Please find process descriptions here: [process description](https://eclipse-score.github.io/score/process_description/).
+Please find process descriptions here: [process description](https://eclipse-score.github.io/score/process_description/)
