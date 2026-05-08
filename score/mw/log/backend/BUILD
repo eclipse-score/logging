@@ -47,8 +47,8 @@ cc_library(
 )
 
 # Plugin: Remote DLT logging.
-# By default uses DataRouter. With --@score_logging//score/mw/log/flags:experimental_dltv2_backend=True,
-# the remote backend uses the DLT Trace (Generic Trace Library) implementation instead.
+# By default the DLTv1 support is used. With --@score_logging//score/mw/log/flags:experimental_dltv2_backend=True,
+# the remote backend uses the DLTv2 backend that uses the Generic Trace Library (GTL) implementation.
 cc_library(
     name = "remote",
     srcs = select({
