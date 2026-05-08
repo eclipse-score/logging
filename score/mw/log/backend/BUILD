@@ -47,13 +47,13 @@ cc_library(
 )
 
 # Plugin: Remote DLT logging.
-# By default the DLTv1 support is used. With --@score_logging//score/mw/log/flags:experimental_dltv2_backend=True,
+# By default the DLTv1 support is used. With --@score_logging//score/mw/log/flags:shm_dma_enabled=True,
 # the remote backend uses the DLTv2 backend that uses the Generic Trace Library (GTL) implementation.
 cc_library(
     name = "remote",
     srcs = select({
         "//score/mw/log/flags:Remote_Logging": ["remote_registrant.cpp"],
-        "//score/mw/log/flags:config_use_dltv2_trace": [],
+        "//score/mw/log/flags:config_use_shm_dma_enabled": [],
         "//conditions:default": [],
     }),
     features = COMPILER_WARNING_FEATURES,
@@ -65,7 +65,7 @@ cc_library(
         "//score/mw/log/flags:Remote_Logging": [
             "//score/mw/log/detail/data_router:remote_dlt_recorder_factory",
         ],
-        "//score/mw/log/flags:config_use_dltv2_trace": [
+        "//score/mw/log/flags:config_use_shm_dma_enabled": [
             "//score/mw/log/detail/dlt_trace:dlt_trace_registrant",
         ],
         "//conditions:default": [],
