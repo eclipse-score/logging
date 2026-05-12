@@ -14,6 +14,8 @@
 name: Run Tests
 
 on:
+  # Reusable workflow only — triggered by "Test and Build Docs" (docs.yml) on PRs.
+  # Keeping tests here avoids duplication: docs.yml gates the docs build on tests passing.
   workflow_call: {}
 
 jobs:
