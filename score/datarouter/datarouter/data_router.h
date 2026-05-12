@@ -15,15 +15,15 @@
 #define SCORE_DATAROUTER_DATAROUTER_DATA_ROUTER_H
 
 #include "daemon/message_passing_server.h"
-#include "logparser/logparser.h"
+#include "logparser/i_log_parser_factory.h"
 #include "score/mw/log/configuration/nvconfig.h"
 #include "score/mw/log/detail/data_router/shared_memory/reader_factory.h"
 #include "score/mw/log/detail/data_router/shared_memory/shared_memory_reader.h"
 #include "score/datarouter/daemon_communication/session_handle_interface.h"
 #include "unix_domain/unix_domain_server.h"
 
+#include "score/concurrency/synchronized.h"
 #include "score/mw/log/logger.h"
-#include "score/datarouter/lib/synchronized/synchronized.h"
 
 #include "score/variant.hpp"
 
@@ -40,8 +40,12 @@ namespace datarouter
 {
 
 using internal::ILogParser;
+using internal::ILogParserFactory;
 using internal::MessagePassingServer;
 using internal::UnixDomainServer;
+
+template <typename T, typename Mutex = std::mutex>
+using Synchronized = score::concurrency::Synchronized<T, Mutex>;
 
 std::string QuotaValueAsString(double quota) noexcept;
 
@@ -84,14 +88,13 @@ struct StatsData
 class DataRouter
 {
   public:
-    using SourceSetupCallback = std::function<void(ILogParser&&)>;
     using SessionPtr = std::unique_ptr<UnixDomainServer::ISession>;
     using MessagingSessionPtr = std::unique_ptr<MessagePassingServer::ISession>;
 
     using SessionHandleVariant = score::cpp::variant<UnixDomainServer::SessionHandle,
                                               score::cpp::pmr::unique_ptr<score::platform::internal::daemon::ISessionHandle>>;
 
-    explicit DataRouter(score::mw::log::Logger& logger, SourceSetupCallback source_callback = SourceSetupCallback());
+    explicit DataRouter(score::mw::log::Logger& logger, std::unique_ptr<ILogParserFactory> log_parser_factory = nullptr);
 
     MessagingSessionPtr NewSourceSession(
         int fd,
@@ -105,17 +108,14 @@ class DataRouter
         score::mw::log::detail::ReaderFactoryPtr reader_factory =
             score::mw::log::detail::ReaderFactory::Default(score::cpp::pmr::get_default_resource()));
 
-    template <typename E, typename F>
-    void ForEachSourceParser(E e, F f, bool enable_logging_client)
+    void ForEachSource(bool enable_logging_client)
     {
         std::lock_guard<std::mutex> lock(subscriber_mutex_);
         for (const auto& source_session : sources_)
         {
             // No need for the extra lock - synchronization is handled by the Synchronized<T> wrapper
             source_session->SetLoggingClientEnabled(enable_logging_client);
-            e(source_session->GetParser());
         }
-        f();
     }
 
     void ShowSourceStatistics(uint16_t series_num);
@@ -214,7 +214,7 @@ class DataRouter
     score::mw::log::Logger& stats_logger_;
 
     std::unordered_set<SourceSession*> sources_;
-    SourceSetupCallback source_callback_;
+    std::unique_ptr<ILogParserFactory> log_parser_factory_;
 
     std::mutex subscriber_mutex_;
 };

@@ -1,0 +1,45 @@
+@startuml inter_process_communication
+
+left to right direction
+skinparam linetype ortho
+
+rectangle "<<Process>>\nLogging Client" as LoggingClient {
+  component "mw::log\n\nDatarouterBackend" as Backend {
+    component "mw::com::Receiver" as ClientReceiver
+    component "mw::com::Sender" as ClientSender
+  }
+}
+
+rectangle "<<Process>>\nDatarouter" as Datarouter {
+  component "mw::com::Sender" as DrSender
+  component "mw::com::Receiver" as DrReceiver
+}
+
+rectangle "Shared Memory" as SharedMemory
+
+LoggingClient *-down- SharedMemory : Creates and writes to\n/tmp/logging.<appid>.<uid>.shmem\nwith permissions 0644
+Datarouter -down-> SharedMemory : Read-only access
+
+ClientReceiver -0)- DrSender
+ClientSender -(0- DrReceiver
+
+note top of ClientReceiver
+  Instantiates side channel to receive messages from
+  /mw_com/message_passing/logging.<app>.<uid>
+end note
+
+note top of DrSender
+  Creates a Sender for each client
+  to send requests to the client
+end note
+
+note bottom of ClientSender
+  Creates a Sender to reply to requests from Datarouter
+end note
+
+note bottom of DrReceiver
+  One receiver for all clients
+  /mw_com/message_passing/logging.datarouter_recv
+end note
+
+@enduml

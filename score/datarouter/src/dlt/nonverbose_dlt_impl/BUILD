@@ -11,6 +11,7 @@
 # SPDX-License-Identifier: Apache-2.0
 # *******************************************************************************
 
+load("@rules_cc//cc:defs.bzl", "cc_library")
 load("@score_baselibs//score/language/safecpp:toolchain_features.bzl", "COMPILER_WARNING_FEATURES")
 load("@score_baselibs//score/quality/clang_tidy:extra_checks.bzl", "clang_tidy_extra_checks")
 
@@ -41,8 +42,8 @@ clang_tidy_extra_checks(
             "@score_logging//score/datarouter:__subpackages__",
         ],
         deps = [
+            "@score_baselibs//score/mw/log",
             "@score_baselibs//score/mw/log/configuration:nvconfig",
-            "@score_logging//score/datarouter:log",
             "@score_logging//score/datarouter:logparser",
         ] + dep,
     )

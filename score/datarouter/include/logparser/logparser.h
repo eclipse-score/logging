@@ -39,51 +39,37 @@ namespace platform
 namespace internal
 {
 
+/// LogParser is NOT thread-safe.
+///
+/// Handler maps (handle_request_map_, global_handlers_) are populated once at
+/// construction via constructor injection and declared const to enforce that
+/// invariant (Ticket-254408).
+/// However, AddIncomingType() mutates index_parser_map_ and Parse*()/
+/// ParseSharedMemoryRecord() reads it — both without synchronization.
+///
+/// This is currently safe because a single SourceSession owns each LogParser
+/// instance, and AddIncomingType() / Parse*() are only called from the
+/// SourceSession::Tick() path, which is single-threaded per session.
+///
+/// If the design ever evolves to allow concurrent access (e.g. parallel readers),
+/// index_parser_map_ would need protection (e.g. std::shared_mutex).
 class LogParser : public ILogParser
 {
   public:
-    explicit LogParser(const score::mw::log::INvConfig& nv_config);
-    ~LogParser() = default;
+    using HandleRequestMap = std::unordered_multimap<std::string, TypeHandler*>;
 
-    void SetFilterFactory(FilterFunctionFactory factory) override
-    {
-        filter_factory_ = factory;
-    }
+    explicit LogParser(const score::mw::log::INvConfig& nv_config,
+                       std::vector<AnyHandler*> global_handlers = {},
+                       HandleRequestMap handle_request_map = {});
+    ~LogParser() = default;
 
     void AddIncomingType(const BufsizeT map_index, const std::string& params) override;
     void AddIncomingType(const score::mw::log::detail::TypeRegistration&) override;
 
-    void AddTypeHandler(const std::string& type_name, TypeHandler& handler) override;
-    void AddGlobalHandler(AnyHandler& handler) override;
-
-    void RemoveTypeHandler(const std::string& type_name, TypeHandler& handler) override;
-    void RemoveGlobalHandler(AnyHandler& handler) override;
-
-    bool IsTypeHndlRegistered(const std::string& type_name, const TypeHandler& handler) override;
-    bool IsGlbHndlRegistered(const AnyHandler& handler) override;
-
-    void ResetInternalMapping() override;
-
     void Parse(TimestampT timestamp, const char* data, BufsizeT size) override;
-    void Parse(const score::mw::log::detail::SharedMemoryRecord& record) override;
+    void ParseSharedMemoryRecord(const score::mw::log::detail::SharedMemoryRecord& record) override;
 
   private:
-    struct HandleRequest
-    {
-        /*
-        Deviation from Rule A9-6-1:
-        - Data types used for interfacing with hardware or conforming to communication protocols shall be trivial,
-        standard-layout and only contain members of types with defined sizes.
-        Justification:
-        - It's false positive, this class is not used to interface with hardware.
-        */
-        // coverity[autosar_cpp14_a9_6_1_violation : FALSE]
-        TypeHandler* handler;
-    };
-    // typeName-keyed
-    // HandleRequestMap::value_type* is not changed by unrelated insert/erase
-    using HandleRequestMap = std::unordered_multimap<std::string, const HandleRequest>;
-
     class IndexParser
     {
       public:
@@ -91,38 +77,19 @@ class LogParser : public ILogParser
 
         explicit IndexParser(TypeInfo type_info) : info{type_info}, handlers_{} {}
 
-        void AddHandler(const HandleRequestMap::value_type& request);
-        void RemoveHandler(const HandleRequestMap::value_type& request);
+        void AddHandler(TypeHandler* handler);
 
         void Parse(const TimestampT timestamp, const char* const data, const BufsizeT size);
 
       private:
-        struct Handler
-        {
-            /*
-            Deviation from Rule A9-6-1:
-            - Data types used for interfacing with hardware or conforming to communication protocols shall be trivial,
-            standard-layout and only contain members of types with defined sizes.
-            Justification:
-            - It's false positive, this class is not used to interface with hardware.
-            */
-            // coverity[autosar_cpp14_a9_6_1_violation : FALSE]
-            const HandleRequestMap::value_type* request;
-            // coverity[autosar_cpp14_a9_6_1_violation : FALSE]
-            TypeHandler* handler;
-        };
-
-        std::vector<Handler> handlers_;
+        std::vector<TypeHandler*> handlers_;
     };
 
-    FilterFunctionFactory filter_factory_;
+    const HandleRequestMap handle_request_map_;
 
-    HandleRequestMap handle_request_map_;
-
-    std::unordered_multimap<std::string, const BufsizeT> typename_to_index_;
     std::unordered_map<BufsizeT, IndexParser> index_parser_map_;
 
-    std::vector<AnyHandler*> global_handlers_;
+    const std::vector<AnyHandler*> global_handlers_;
     const score::mw::log::INvConfig& nv_config_;
 };
 

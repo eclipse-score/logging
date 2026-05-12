@@ -102,9 +102,9 @@ class MessagePassingServer : public IMessagePassingServerSessionWrapper
                                                 const score::mw::log::detail::ConnectMessageFromClient&,
                                                 score::cpp::pmr::unique_ptr<daemon::ISessionHandle>)>;
 
-    MessagePassingServer(SessionFactory factory,
-                         std::shared_ptr<score::message_passing::IServerFactory> server_factory = nullptr,
-                         std::shared_ptr<score::message_passing::IClientFactory> client_factory = nullptr);
+    explicit MessagePassingServer(SessionFactory factory,
+                                  std::shared_ptr<score::message_passing::IServerFactory> server_factory = nullptr,
+                                  std::shared_ptr<score::message_passing::IClientFactory> client_factory = nullptr);
     ~MessagePassingServer() noexcept;
 
     // for unit test only. to keep rest of functions in private

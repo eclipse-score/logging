@@ -12,7 +12,7 @@
  ********************************************************************************/
 #include "score/mw/log/test/console_logging_environment/console_logging_environment.h"
 
-#include "score/mw/log/detail/common/recorder_factory.h"
+#include "score/mw/log/detail/registry_aware_recorder_factory.h"
 
 #include "score/mw/log/runtime.h"
 
@@ -28,7 +28,8 @@ void ConsoleLoggingEnvironment::SetUp()
     score::mw::log::detail::Configuration config{};
     config.SetLogMode({score::mw::LogMode::kConsole});
     config.SetDefaultConsoleLogLevel(score::mw::log::LogLevel::kVerbose);
-    recorder_ = score::mw::log::detail::RecorderFactory().CreateRecorderFromLogMode(score::mw::LogMode::kConsole, config);
+    recorder_ = score::mw::log::detail::RegistryAwareRecorderFactory().CreateRecorderFromLogMode(
+        score::mw::LogMode::kConsole, config);
 
     score::mw::log::detail::Runtime::SetRecorder(recorder_.get());
 }

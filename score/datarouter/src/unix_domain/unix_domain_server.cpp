@@ -230,11 +230,16 @@ void UnixDomainServer::ProcessServerIteration(ConnectionState& state,
     //  NOLINTBEGIN(score-banned-function) see comment above
     score::cpp::expected<std::int32_t, score::os::Error> poll_ret;
 #ifdef __QNX__
+    // NOLINTBEGIN(score-banned-preprocessor-directives) see below
+    // disable "useless cast" warning for the following line, as poll expects nfds_t type for the second argument,
+    // which may have different size in different QNX versions, and the cast ensures the correct type is used
+    // without causing compiler warnings on any version.
     DISABLE_WARNING_PUSH
     DISABLE_WARNING_USELESS_CAST
     poll_ret =
         score::os::SysPoll::instance().poll(state.connection_pollfd_list.data(), static_cast<nfds_t>(size), timeout);
     DISABLE_WARNING_POP
+    // NOLINTEND(score-banned-preprocessor-directives)
 #else
     poll_ret = score::os::SysPoll::instance().poll(state.connection_pollfd_list.data(), size, timeout);
 #endif

@@ -54,7 +54,7 @@ STRUCT_VISITABLE(TestFilter, test_field)
 template <typename T>
 std::string MakeTypeParams(DltidT ecu_id, DltidT app_id)
 {
-    return std::string(4, char(0)) + std::string(ecu_id.Data(), 4) + std::string(app_id.Data(), 4) +
+    return std::string(4, char(0)) + std::string(ecu_id) + std::string(app_id) +
            ::score::common::visitor::logger_type_string<T>();
 }
 
@@ -62,8 +62,7 @@ template <typename T>
 std::string MakeWrongTypeParams(DltidT ecu_id, DltidT app_id)
 {
     // Without the first four zeros.
-    return std::string(ecu_id.Data(), 4) + std::string(app_id.Data(), 4) +
-           ::score::common::visitor::logger_type_string<T>();
+    return std::string(ecu_id) + std::string(app_id) + ::score::common::visitor::logger_type_string<T>();
 }
 
 template <typename S, typename T>
@@ -103,10 +102,10 @@ TEST(LogParserTest, SingleMessageHandler)
     const std::string type_params = MakeTypeParams<TestMessage>(DltidT{"ECU0"}, DltidT{"APP0"});
     constexpr BufsizeT kTestMessageIndex = 1234;
     const std::string message = MakeMessage(kTestMessageIndex, TestMessage{2345});
-    LogParser parser(CreateTestNvConfig());
-    parser.AddGlobalHandler(any_handler);
-    parser.AddTypeHandler("test::TestMessage", type_handler_yes);
-    parser.AddTypeHandler("test::notTestMessage", type_handler_no);
+    LogParser parser(CreateTestNvConfig(),
+                     {&any_handler},
+                     LogParser::HandleRequestMap{{"test::TestMessage", &type_handler_yes},
+                                                 {"test::notTestMessage", &type_handler_no}});
 
     parser.AddIncomingType(kTestMessageIndex, type_params);
 
@@ -119,29 +118,6 @@ TEST(LogParserTest, FilterForwarderWithSingleForwarder)
     const std::string type_params = MakeTypeParams<TestMessage>(DltidT{"ECU4"}, DltidT{"APP0"});
 
     LogParser parser(CreateTestNvConfig());
-    const auto factory = [](const std::string& type_name, const DataFilter& filter) -> LogParser::FilterFunction {
-        if (type_name == "test::TestMessage" && filter.filter_type == "test::TestFilter")
-        {
-            TestFilter test_filter;
-            using S = ::score::common::visitor::logging_serializer;
-            if (S::deserialize(filter.filter_data.data(), filter.filter_data.size(), test_filter))
-            {
-                return [test_filter](const char* const data, const BufsizeT size) {
-                    TestMessage message;
-                    if (S::deserialize(data, size, message))
-                    {
-                        return test_filter.test_field == message.test_field;
-                    }
-                    else
-                    {
-                        return false;
-                    }
-                };
-            }
-        }
-        return {};
-    };
-    parser.SetFilterFactory(factory);
 
     constexpr BufsizeT kTestMessageIndex = 1234;
     parser.AddIncomingType(kTestMessageIndex, type_params);
@@ -154,33 +130,6 @@ TEST(LogParserTest, FilterForwarderWithSingleForwarder)
     parser.Parse(TimestampT{3s}, message3.data(), static_cast<BufsizeT>(message3.size()));
 }
 
-// Test the else case in the below condition in 'remove_type_handler' and 'remove_handler' methods.
-// The conditions are:
-// if (ith != ith_range.second)
-// if (it != handlers_.end())
-TEST(LogParserTest, TestRemoveTypeHandler)
-{
-    LogParser parser(CreateTestNvConfig());
-    testing::StrictMock<TypeHandlerMock> type_handler_yes;
-    parser.AddTypeHandler("test::TestMessage", type_handler_yes);
-    parser.AddTypeHandler("test::TestMessage", type_handler_yes);
-
-    testing::StrictMock<TypeHandlerMock> type_handler_no;
-    EXPECT_CALL(type_handler_no, Handle(_, _, _)).Times(0);
-
-    parser.AddTypeHandler("test::notTestMessage", type_handler_no);
-
-    const std::string type_params = MakeTypeParams<TestMessage>(DltidT{"ECU0"}, DltidT{"APP0"});
-    constexpr BufsizeT kTestMessageIndex = 1234;
-
-    // Add the type twice.
-    parser.AddIncomingType(kTestMessageIndex, type_params);
-    parser.AddIncomingType(kTestMessageIndex, type_params);
-    parser.RemoveTypeHandler("test::TestMessage", type_handler_yes);
-    // Remove non existent type handler.
-    parser.RemoveTypeHandler("test::TestMessage", type_handler_yes);
-}
-
 // Test the True case for the below condition for 'add_incoming_type' method.
 // The condition is:
 // if (params.size() <= 12 + sizeof(uint32_t) || params[0] != 0 || params[1] != 0 || params[2] != 0 || params[3] != 0)
@@ -191,80 +140,6 @@ TEST(LogParserTest, TestWrongTypeParameter)
     const std::string type_params = MakeWrongTypeParams<TestMessage>(DltidT{"ECU0"}, DltidT{"APP0"});
     constexpr BufsizeT kTestMessageIndex = 1234;
     parser.AddIncomingType(kTestMessageIndex, type_params);
-}
-
-// The purpose of the test is to cover the else case for the below condition for 'add_global_handler' method.
-// The condition is:
-// if (is_glb_hndl_registered(handler) == false)
-TEST(LogParserTest, TestRegisterGlobalHandler)
-{
-    LogParser parser(CreateTestNvConfig());
-    testing::StrictMock<AnyHandlerMock> any_handler;
-    // Register the same global handler twice.
-    EXPECT_FALSE(parser.IsGlbHndlRegistered(any_handler));
-    parser.AddGlobalHandler(any_handler);
-    EXPECT_TRUE(parser.IsGlbHndlRegistered(any_handler));
-    // To reach the else case in the condition there.
-    parser.AddGlobalHandler(any_handler);
-}
-
-// The purpose of the test is to cover the else case for the below condition for 'remove_global_handler' method.
-// The condition is:
-// if (it != global_handlers.end())
-TEST(LogParserTest, TestRemovingGlobalHandler)
-{
-    LogParser parser(CreateTestNvConfig());
-    testing::StrictMock<AnyHandlerMock> any_handler;
-    // Check non-registered handler.
-    EXPECT_FALSE(parser.IsGlbHndlRegistered(any_handler));
-    // Register new handler.
-    parser.AddGlobalHandler(any_handler);
-    // Check registered handler.
-    EXPECT_TRUE(parser.IsGlbHndlRegistered(any_handler));
-    // Remove the handler.
-    parser.RemoveGlobalHandler(any_handler);
-    // Handler no more exist.
-    EXPECT_FALSE(parser.IsGlbHndlRegistered(any_handler));
-    // Try remove non registered handler (To reach the else case in the condition there).
-    parser.RemoveGlobalHandler(any_handler);
-}
-
-// Test the if condition in the 'add_type_handler' method.
-// The condition is:
-// if (is_type_hndl_registered(typeName, handler))
-TEST(LogParserTest, TestAlreadyRegisteredTypeHandler)
-{
-    testing::StrictMock<TypeHandlerMock> type_handler_yes;
-
-    LogParser parser(CreateTestNvConfig());
-    parser.AddTypeHandler("test::TestMessage", type_handler_yes);
-    parser.AddTypeHandler("test::TestMessage", type_handler_yes);
-
-    EXPECT_TRUE(parser.IsTypeHndlRegistered("test::TestMessage", type_handler_yes));
-}
-
-TEST(LogParserTest, TestRegisteringNewTypeHandler)
-{
-    LogParser parser(CreateTestNvConfig());
-    testing::StrictMock<TypeHandlerMock> type_handler_yes;
-
-    EXPECT_FALSE(parser.IsTypeHndlRegistered("test::TestMessage", type_handler_yes));
-
-    const std::string type_params = MakeTypeParams<TestMessage>(DltidT{"ECU0"}, DltidT{"APP0"});
-    constexpr BufsizeT kTestMessageIndex = 1234;
-    parser.AddIncomingType(kTestMessageIndex, type_params);
-    parser.AddTypeHandler("test::TestMessage", type_handler_yes);
-
-    EXPECT_TRUE(parser.IsTypeHndlRegistered("test::TestMessage", type_handler_yes));
-}
-
-// The purpose of this test is to enhance the line coverage for 'reset_internal_mapping' method.
-TEST(LogParserTest, TestResetInternalMapping)
-{
-    LogParser parser(CreateTestNvConfig());
-    // Unfortunately, there other way to set expectation for calling this method.
-    // And there is no other methods are using it internally.
-    EXPECT_NO_FATAL_FAILURE(parser.ResetInternalMapping());
 }
 
 struct SmallTestMessage
@@ -284,8 +159,6 @@ TEST(LogParserTest, WeCanNotParseIfTheSizeOfTheSerializedMessageSmallerThanTheEx
     LogParser parser(CreateTestNvConfig());
     // Unfortunately, there other way to set expectation for calling this method.
     // And there is no other methods are using it internally.
-    EXPECT_NO_FATAL_FAILURE(parser.Parse(time_now, message.data(), static_cast<std::uint16_t>(message.size())));
-    EXPECT_NO_FATAL_FAILURE(parser.ResetInternalMapping());
     EXPECT_NO_FATAL_FAILURE(parser.Parse(time_now, message.data(), static_cast<std::uint16_t>(message.size())));
 }
 
@@ -311,7 +184,7 @@ TEST(LogParserTest, WeCanNotParseASharedMemoryRecordIfTheTypeIdentifierIsNotWith
     // Unfortunately, there other way to set expectation for calling this method.
     // And there is no other methods are using it internally.
     score::mw::log::detail::SharedMemoryRecord record;
-    EXPECT_NO_FATAL_FAILURE(parser.Parse(record));
+    EXPECT_NO_FATAL_FAILURE(parser.ParseSharedMemoryRecord(record));
     // Since we didn't fill any values to 'index_parser_map' map, it will be empty which leads to immediate returning.
 }
 

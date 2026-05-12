@@ -14,8 +14,6 @@
 #include "score/mw/log/detail/log_entry.h"
 #include "score/mw/log/log_common.h"
 
-#include "daemon/socketserver_filter_factory.h"
-
 #include "score/mw/log/log_level.h"
 
 #include "score/datarouter/include/daemon/socketserver_config.h"
@@ -40,73 +38,6 @@ namespace
 
 const std::string kConfigDatabaseKey = "dltConfig";
 const std::string kConfigOutputEnabledKey = "dltOutputEnabled";
-
-template <typename T>
-std::string TypeName()
-{
-    return ::score::common::visitor::struct_visitable<T>::name();
-}
-
-TEST(SocketserverConfigTest, FilterFactoryDefault)
-{
-    const auto factory = ::score::platform::datarouter::GetFilterFactory();
-    EXPECT_TRUE(factory);
-    EXPECT_FALSE(factory("", ::score::platform::DataFilter{}));
-}
-
-TEST(SocketserverConfigTest, FilterFactoryLogEntry)
-{
-    const auto factory = ::score::platform::datarouter::GetFilterFactory();
-
-    using ::score::mw::log::detail::LogEntry;
-    using ::score::platform::DltidT;
-    using ::score::platform::internal::LogEntryFilter;
-    using S = ::score::common::visitor::logging_serializer;
-
-    constexpr std::size_t kSerializationBufferSize = 128;
-    std::array<char, kSerializationBufferSize> buffer;
-
-    const LogEntryFilter filter{
-        score::mw::log::detail::LoggingIdentifier{"APP0"}, score::mw::log::detail::LoggingIdentifier{""}, 1U};
-    const auto f_size = S::serialize(filter, buffer.data(), buffer.size());
-    ::score::platform::DataFilter data_filter{TypeName<LogEntryFilter>(), std::string(buffer.data(), f_size)};
-
-    const auto matcher = factory(TypeName<LogEntry>(), data_filter);
-    EXPECT_TRUE(matcher);
-
-    const LogEntry entry1{score::mw::log::detail::LoggingIdentifier{"APP0"},
-                          score::mw::log::detail::LoggingIdentifier{"CTX0"},
-                          {'1'},
-                          {},
-                          {},
-                          1,
-                          {},
-                          mw::log::LogLevel::kOff};
-    const LogEntry entry2{score::mw::log::detail::LoggingIdentifier{"APP0"},
-                          score::mw::log::detail::LoggingIdentifier{"CTX0"},
-                          {'2'},
-                          {},
-                          {},
-                          1,
-                          {},
-                          mw::log::LogLevel::kError};
-    const LogEntry entry3{score::mw::log::detail::LoggingIdentifier{"APP1"},
-                          score::mw::log::detail::LoggingIdentifier{"CTX0"},
-                          {'3'},
-                          {},
-                          {},
-                          1,
-                          {},
-                          mw::log::LogLevel::kOff};
-    const auto t_size1 = S::serialize(entry1, buffer.data(), buffer.size());
-    EXPECT_TRUE(matcher(buffer.data(), t_size1));
-    const auto t_size2 = S::serialize(entry2, buffer.data(), buffer.size());
-    EXPECT_FALSE(matcher(buffer.data(), t_size2));
-    const auto t_size3 = S::serialize(entry3, buffer.data(), buffer.size());
-    EXPECT_FALSE(matcher(buffer.data(), t_size3));
-    // Test deserialization for failing and return false.
-    EXPECT_FALSE(matcher(buffer.data(), 0));
-}
 
 std::string PrepareLogChannelsPath(const std::string& file_name)
 {

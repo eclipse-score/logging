@@ -154,7 +154,7 @@ class Logger
 
   private:
     static Logger** GetInjectedTestInstance();
-    std::optional<LogLevel> GetLevelForContext(const std::string& name) const noexcept;
+    std::optional<LogLevel> GetLevelForContext(const std::string& name) const;
 
     score::mw::log::detail::Configuration config_;
     const score::mw::log::NvConfig nvconfig_;

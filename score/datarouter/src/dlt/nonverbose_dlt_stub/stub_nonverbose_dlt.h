@@ -37,6 +37,7 @@ class StubDltNonverboseHandler : public LogParser::AnyHandler
                                     uint32_t tmsp,
                                     const void* data,
                                     size_t size) = 0;
+        virtual bool IsOutputEnabled() const noexcept = 0;
 
       protected:
         ~IOutput() = default;

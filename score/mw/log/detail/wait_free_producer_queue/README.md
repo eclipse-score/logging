@@ -123,7 +123,7 @@ other buffer.
 The design is divided into data structures for linear and alternating mode.
 The alternating mode is composed by reusing the linear entities:
 
-![Class diagram](https://www.plantuml.com/plantuml/proxy?src=https://raw.githubusercontent.com/swh/ddad_score/mw/log/detail/wait_free_producer_queue/design/class_diagram.uxf?ref=e42bb784c8567256b2c8837cd7a771e6193fc9cb)
+![Class diagram](./score/mw/log/detail/wait_free_producer_queue/design/class_diagram.puml)
 
 For each mode, we extract the data members into POD structs that could be
 allocated on shared memory. The data structs should not be accessed directly but
@@ -153,7 +153,7 @@ to finish the data for reading. This operation atomically adds the number of
 written bytes to the `written_index`. Thus as soon as all pending writers are
 finished we arrive at the equality of `written_index` and `acquire_index`.
 
-![Linear writer sequence](https://www.plantuml.com/plantuml/proxy?src=https://raw.githubusercontent.com/swh/ddad_score/mw/log/detail/wait_free_producer_queue/design/wait_free_linear_buffer.uxf?ref=109d7fea89c8f7f627b62f9e78299f067241a6ec)
+![Linear writer sequence](./score/mw/log/detail/wait_free_producer_queue/design/wait_free_linear_buffer.puml)
 
 The implementation shall prevent the overflow of the running indices. This
 achieved by limiting the maximum allowed number of concurrent writers to some
@@ -187,7 +187,7 @@ one is for writing.
 
 The figure below shows the concurrent operation of a producer and consumer thread:
 
-![Alternating writer sequence](https://www.plantuml.com/plantuml/proxy?src=https://raw.githubusercontent.com/swh/ddad_score/mw/log/detail/wait_free_producer_queue/design/wait_free_alternating_buffers.uxf?ref=109d7fea89c8f7f627b62f9e78299f067241a6ec)
+![Alternating writer sequence](./score/mw/log/detail/wait_free_producer_queue/design/wait_free_alternating_buffers.puml)
 
 In the sequence diagram, the producer thread starts to acquire data on the
 linear buffer 1. After that the consumer threads calls `Switch()` to toggle the
