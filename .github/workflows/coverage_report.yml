@@ -14,18 +14,12 @@
 name: CPP coverage
 
 on:
-  pull_request:
-    types: [opened, reopened, synchronize]
-  merge_group:
-    types: [checks_requested]
-  push:
-    branches:
-      - main
+  workflow_call:
 
 jobs:
   approval:
     name: coverage approval gate
-    if: github.event_name == 'pull_request'
+    if: github.event_name == 'pull_request_target' || github.event_name == 'pull_request'
     environment: workflow-approval
     runs-on: ubuntu-latest
     permissions:
