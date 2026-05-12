@@ -41,6 +41,7 @@ test_suite(
         ":socketserverConfigUT",
         ":socketserverUT",
         ":udp_stream_output_test",
+        ":unix_domain_common_test",
         ":unix_domain_server_test",
         ":utility_test",
     ],
@@ -307,10 +308,7 @@ cc_test(
         "//score/datarouter/test/ut/etc:fg_socket_server_log_channels_test_json",
     ],
     features = FEAT_COMPILER_WARNINGS_AS_ERRORS,
-    tags = [
-        "no_ci",
-        "unit",
-    ],
+    tags = ["unit"],
     deps = [
         "//score/datarouter/src/persistency:mock",
         "@googletest//:gtest_main",
@@ -413,6 +411,20 @@ cc_test(
     ],
 )
 
+cc_test(
+    name = "unix_domain_common_test",
+    srcs = [
+        "test_unix_domain_common.cpp",
+    ],
+    features = FEAT_COMPILER_WARNINGS_AS_ERRORS,
+    tags = ["unit"],
+    deps = [
+        "@googletest//:gtest_main",
+        "@score_baselibs//score/os/mocklib:socket_mock",
+        "@score_logging//score/datarouter:unixdomain_common",
+    ],
+)
+
 py_unittest_qnx_test(
     name = "unit_tests_qnx",
     data_files = [
@@ -431,6 +443,7 @@ py_unittest_qnx_test(
         ":persistentLogConfigUT",
         ":dlt_verbose_handler_test",
         ":udp_stream_output_test",
+        ":unix_domain_common_test",
         ":unix_domain_server_test",
         ":messagePassingServerUT",
         ":socketserverConfigUT",

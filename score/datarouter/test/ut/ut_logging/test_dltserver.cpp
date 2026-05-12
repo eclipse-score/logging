@@ -107,6 +107,7 @@ class DltLogServer::DltLogServerTest : public DltLogServer
     virtual ~DltLogServerTest() {};
 
   public:
+    using DltLogServer::IsOutputEnabled;
     using DltLogServer::SendFtVerbose;
     using DltLogServer::SendNonVerbose;
     using DltLogServer::SendVerbose;
@@ -154,6 +155,12 @@ TEST_F(DltServerCreatedWithoutConfigFixture, WhenCreatedDefaultDltEnabledTrue)
     EXPECT_TRUE(dlt_enabled);
 }
 
+TEST_F(DltServerCreatedWithoutConfigFixture, IsOutputEnabledReflectsDltEnabled)
+{
+    DltLogServer::DltLogServerTest dlt_server_enabled(
+        s_config, read_callback.AsStdFunction(), write_callback.AsStdFunction(), true);
+    EXPECT_TRUE(dlt_server_enabled.IsOutputEnabled());
+}
 TEST_F(DltServerCreatedWithoutConfigFixture, QuotaEnforcementEnabledExpectFalse)
 {
     DltLogServer dlt_server(s_config, read_callback.AsStdFunction(), write_callback.AsStdFunction(), true);

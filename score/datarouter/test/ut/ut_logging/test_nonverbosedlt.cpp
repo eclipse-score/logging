@@ -46,10 +46,7 @@ class MockDltOutput : public DltNonverboseHandler::IOutput
                 SendNonVerbose,
                 (const score::mw::log::config::NvMsgDescriptor& desc, uint32_t tmsp, const void* data, size_t size),
                 (override));
-    bool IsOutputEnabled() const noexcept override
-    {
-        return true;
-    }
+    MOCK_METHOD(bool, IsOutputEnabled, (), (const, noexcept, override));
     virtual ~MockDltOutput() = default;
 };
 
@@ -62,6 +59,7 @@ class DltNonverboseHandlerTest : public ::testing::Test
 
     void SetUp() override
     {
+        ON_CALL(mock_output_, IsOutputEnabled()).WillByDefault(Return(true));
         handler_ = std::make_unique<DltNonverboseHandler>(mock_output_);
     }
 };
@@ -90,6 +88,7 @@ TEST(DltNonverboseHandler_T, HandleShouldNotCallSendNonVerboseWhenDescriptorIsNu
     BufsizeT size = sizeof(data);
 
     MockDltOutput mock_output;
+    ON_CALL(mock_output, IsOutputEnabled()).WillByDefault(Return(true));
     DltNonverboseHandler handler(mock_output);
 
     EXPECT_CALL(mock_output, SendNonVerbose(_, _, _, _)).Times(0);
@@ -100,6 +99,7 @@ TEST(DltNonverboseHandler_T, HandleShouldNotCallSendNonVerboseWhenDescriptorIsNu
 TEST(DltNonverboseHandler_T, HandleCallSendNonVerboseWhenDltMsgDesc)
 {
     MockDltOutput mock_output;
+    ON_CALL(mock_output, IsOutputEnabled()).WillByDefault(Return(true));
 
     static const score::mw::log::config::NvMsgDescriptor kDescriptor{1234U,
                                                                    score::mw::log::detail::LoggingIdentifier{"APP0"},
@@ -112,6 +112,27 @@ TEST(DltNonverboseHandler_T, HandleCallSendNonVerboseWhenDltMsgDesc)
 
     TypeInfo type_info;
     type_info.type_name = "score::platform::datarouter::test::TestTraceableStruct";
+    type_info.nv_msg_desc = &kDescriptor;
+
+    TimestampT timestamp = score::os::HighResolutionSteadyClock::now();
+    const char data[] = "TestData";
+    BufsizeT size = sizeof(data);
+    handler.Handle(type_info, timestamp, data, size);
+}
+
+// Covers the !IsOutputEnabled() early-return branch.
+TEST(DltNonverboseHandler_T, HandleDoesNothingWhenOutputDisabled)
+{
+    MockDltOutput mock_output;
+    ON_CALL(mock_output, IsOutputEnabled()).WillByDefault(Return(false));
+    EXPECT_CALL(mock_output, SendNonVerbose(_, _, _, _)).Times(0);
+    DltNonverboseHandler handler(mock_output);
+
+    static const score::mw::log::config::NvMsgDescriptor kDescriptor{1234U,
+                                                                   score::mw::log::detail::LoggingIdentifier{"APP0"},
+                                                                   score::mw::log::detail::LoggingIdentifier{"CTX0"},
+                                                                   score::mw::log::LogLevel::kOff};
+    TypeInfo type_info;
     type_info.nv_msg_desc = &kDescriptor;
 
     TimestampT timestamp = score::os::HighResolutionSteadyClock::now();

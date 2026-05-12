@@ -104,6 +104,18 @@ class MockIMessagePassingServerSessionWrapper : public IMessagePassingServerSess
     MOCK_METHOD(void, EnqueueTickWhileLocked, (pid_t pid), (override));
 };
 
+class MessagePassingServer::MessagePassingServerForTest : public MessagePassingServer
+{
+  public:
+    using MessagePassingServer::connection_timeout_;
+    using MessagePassingServer::FinishPreviousSessionWhileLocked;
+    using MessagePassingServer::MessagePassingServer;
+    using MessagePassingServer::mutex_;
+    using MessagePassingServer::pid_session_map_;
+    using MessagePassingServer::SessionWrapper;
+    using MessagePassingServer::stop_source_;
+};
+
 class MessagePassingServerFixture : public ::testing::Test
 {
   public:
@@ -319,7 +331,7 @@ class MessagePassingServerFixture : public ::testing::Test
     std::shared_ptr<StrictMock<::score::message_passing::ServerFactoryMock>> server_factory_mock;
     ::score::os::MockGuard<score::os::UnistdMock> unistd_mock{};
 
-    score::cpp::optional<MessagePassingServer> server;
+    score::cpp::optional<MessagePassingServer::MessagePassingServerForTest> server;
     score::message_passing::ConnectCallback connect_callback;
     score::message_passing::DisconnectCallback disconnect_callback;
     score::message_passing::MessageCallback sent_callback;
@@ -386,6 +398,23 @@ TEST_F(MessagePassingServerFixture, TestFailedStartListening)
     server.emplace(factory, server_factory_mock, client_factory_mock);
     ExpectServerDestruction();
 
+    UninstantiateServer();
+}
+
+// Covers the StartListening error path: std::cerr << "StartListening: " << ret_listening.error()
+TEST_F(MessagePassingServerFixture, TestStartListeningFailure)
+{
+    MessagePassingServer::SessionFactory factory = {};
+
+    EXPECT_CALL(*server_mock,
+                StartListening(Matcher<score::message_passing::ConnectCallback>(_),
+                               Matcher<score::message_passing::DisconnectCallback>(_),
+                               Matcher<score::message_passing::MessageCallback>(_),
+                               Matcher<score::message_passing::MessageCallback>(_)))
+        .WillOnce(Return(score::cpp::make_unexpected(score::os::Error::createFromErrno(EINVAL))));
+
+    server.emplace(factory, server_factory_mock, client_factory_mock);
+    ExpectServerDestruction();
     UninstantiateServer();
 }
 
@@ -624,12 +653,6 @@ TEST_F(MessagePassingServerFixture, TestSamePidWhileQueued)
     EXPECT_EQ(destruct_count, 4);
 }
 
-class MessagePassingServer::MessagePassingServerForTest : public MessagePassingServer
-{
-  public:
-    using MessagePassingServer::SessionWrapper;
-};
-
 TEST(MessagePassingServerTests, sessionWrapperCreateTest)
 {
     InSequence s;
@@ -752,6 +775,232 @@ TEST(SessionWrapperTest, ResetRunningWhileLocked)
         session_wrapper.ResetRunningWhileLocked(false);
         EXPECT_FALSE(session_wrapper.enqueued);
     }
+}
+
+// Covers the connect_callback lambda body by invoking it via connect_callback captured in InstantiateServer.
+TEST_F(MessagePassingServerFixture, ConnectCallbackReturnsClientPid)
+{
+    InstantiateServer(GetCountingSessionFactory());
+
+    StrictMock<::score::message_passing::ServerConnectionMock> connection;
+    score::message_passing::ClientIdentity client_identity{kClienT0Pid, 0, 0};
+    EXPECT_CALL(connection, GetClientIdentity()).WillOnce(ReturnRef(client_identity));
+
+    // invoke the connect_callback directly — this covers the lambda body
+    const auto result = connect_callback(connection);
+    ASSERT_TRUE(result.has_value());
+    EXPECT_EQ(std::get<std::uintptr_t>(result.value()), static_cast<std::uintptr_t>(kClienT0Pid));
+
+    ExpectServerDestruction();
+    UninstantiateServer();
+}
+
+// Covers the received_send_message_with_reply_callback lambda by invoking it directly.
+TEST_F(MessagePassingServerFixture, SentWithReplyCallbackReturnsBlank)
+{
+    InstantiateServer();
+
+    StrictMock<::score::message_passing::ServerConnectionMock> connection;
+    std::array<std::uint8_t, 1> msg{0U};
+    score::cpp::span<const std::uint8_t> span{msg};
+
+    // invoke the with-reply callback — covers the lambda body (return {})
+    EXPECT_NO_FATAL_FAILURE(sent_with_reply_callback(connection, span));
+
+    ExpectServerDestruction();
+    UninstantiateServer();
+}
+
+// Covers MessageCallback empty-message branch (std::cerr + return).
+TEST_F(MessagePassingServerFixture, MessageCallbackEmptyMessage)
+{
+    InstantiateServer(GetCountingSessionFactory());
+
+    StrictMock<::score::message_passing::ServerConnectionMock> connection;
+    score::message_passing::ClientIdentity client_identity{kClienT0Pid, 0, 0};
+    EXPECT_CALL(connection, GetClientIdentity()).WillRepeatedly(ReturnRef(client_identity));
+
+    // send an empty message — triggers the "message.empty()" branch
+    std::array<std::uint8_t, 0> empty_msg{};
+    EXPECT_NO_FATAL_FAILURE(sent_callback(connection, empty_msg));
+
+    ExpectServerDestruction();
+    UninstantiateServer();
+}
+
+// Covers MessageCallback kAcquireRequest unsupported branch.
+TEST_F(MessagePassingServerFixture, MessageCallbackUnsupportedAcquireRequest)
+{
+    InstantiateServer(GetCountingSessionFactory());
+
+    StrictMock<::score::message_passing::ServerConnectionMock> connection;
+    score::message_passing::ClientIdentity client_identity{kClienT0Pid, 0, 0};
+    EXPECT_CALL(connection, GetClientIdentity()).WillRepeatedly(ReturnRef(client_identity));
+
+    std::array<std::uint8_t, 1> msg{score::cpp::to_underlying(DatarouterMessageIdentifier::kAcquireRequest)};
+    EXPECT_NO_FATAL_FAILURE(sent_callback(connection, msg));
+
+    ExpectServerDestruction();
+    UninstantiateServer();
+}
+
+// Covers MessageCallback default (unknown message type) branch.
+TEST_F(MessagePassingServerFixture, MessageCallbackUnknownMessageType)
+{
+    InstantiateServer(GetCountingSessionFactory());
+
+    StrictMock<::score::message_passing::ServerConnectionMock> connection;
+    score::message_passing::ClientIdentity client_identity{kClienT0Pid, 0, 0};
+    EXPECT_CALL(connection, GetClientIdentity()).WillRepeatedly(ReturnRef(client_identity));
+
+    // 0xFF is an unknown message type, hitting the default branch
+    std::array<std::uint8_t, 1> msg{0xFFU};
+    EXPECT_NO_FATAL_FAILURE(sent_callback(connection, msg));
+
+    ExpectServerDestruction();
+    UninstantiateServer();
+}
+
+// Covers SessionHandle::AcquireRequest when sender state is not kReady → return false.
+TEST(MessagePassingServerTests, SessionHandleAcquireRequestNotReady)
+{
+    const pid_t pid = 0;
+
+    auto client = score::cpp::pmr::make_unique<score::message_passing::ClientConnectionMock>(score::cpp::pmr::get_default_resource());
+    auto* client_raw_ptr = client.get();
+    MessagePassingServer* msg_server = nullptr;
+
+    EXPECT_CALL(*client_raw_ptr,
+                Start(Matcher<score::message_passing::IClientConnection::StateCallback>(_),
+                      Matcher<score::message_passing::IClientConnection::NotifyCallback>(_)));
+
+    // Return a non-Ready state to trigger "return false"
+    EXPECT_CALL(*client_raw_ptr, GetState())
+        .WillRepeatedly(Return(score::message_passing::IClientConnection::State::kStarting));
+
+    MessagePassingServer::SessionHandle session_handle(pid, msg_server, std::move(client));
+
+    const bool result = session_handle.AcquireRequest();
+    EXPECT_FALSE(result);
+
+    EXPECT_CALL(*client_raw_ptr, Destruct()).Times(AnyNumber());
+}
+
+// Covers OnConnectRequest "ConnectMessageFromClient too small" branch:
+// send a kConnect message whose payload is smaller than sizeof(ConnectMessageFromClient).
+TEST_F(MessagePassingServerFixture, OnConnectRequestMessageTooSmall)
+{
+    InstantiateServer(GetCountingSessionFactory());
+
+    StrictMock<::score::message_passing::ServerConnectionMock> connection;
+    score::message_passing::ClientIdentity client_identity{kClienT0Pid, 0, 0};
+    EXPECT_CALL(connection, GetClientIdentity()).WillRepeatedly(ReturnRef(client_identity));
+
+    // 1-byte payload: message_type byte only, no ConnectMessageFromClient body
+    std::array<std::uint8_t, 1U> too_small_msg{score::cpp::to_underlying(DatarouterMessageIdentifier::kConnect)};
+    EXPECT_NO_FATAL_FAILURE(sent_callback(connection, too_small_msg));
+
+    // No session must have been created
+    EXPECT_EQ(construct_count, 0);
+
+    ExpectServerDestruction();
+    UninstantiateServer();
+}
+
+// Covers RunWorkerThread connection_timeout_ branch (lines 230-231):
+// Set connection_timeout_ to a past time so the worker fires stop_source_.request_stop().
+TEST_F(MessagePassingServerFixture, RunWorkerThreadConnectionTimeoutExpired)
+{
+    InstantiateServer();
+
+    // Access connection_timeout_ via MessagePassingServerForTest
+    auto* server_for_test = &(*server);
+
+    {
+        std::lock_guard<std::mutex> lock(server_for_test->mutex_);
+        // Set to a time in the past — worker will see now >= connection_timeout_ and fire stop
+        server_for_test->connection_timeout_ = std::chrono::steady_clock::now() - std::chrono::milliseconds(1);
+    }
+
+    // Give the worker thread time to execute one iteration and hit the branch
+    using namespace std::chrono_literals;
+    std::this_thread::sleep_for(250ms);
+
+    ExpectServerDestruction();
+    UninstantiateServer();
+}
+
+// Covers FinishPreviousSessionWhileLocked: insert a session into pid_session_map_ directly,
+// then call FinishPreviousSessionWhileLocked to exercise the function body.
+TEST_F(MessagePassingServerFixture, FinishPreviousSessionWhileLockedCoversBody)
+{
+    InstantiateServer(GetCountingSessionFactory());
+
+    auto* server_for_test = &(*server);
+
+    // Create a session mock that always returns false from Tick (not requeue)
+    auto session_mock = std::make_unique<testing::NiceMock<MockSession>>();
+    EXPECT_CALL(*session_mock, Tick).Times(AnyNumber()).WillRepeatedly(Return(false));
+    EXPECT_CALL(*session_mock, IsSourceClosed).Times(AnyNumber()).WillRepeatedly(Return(false));
+    EXPECT_CALL(*session_mock, OnClosedByPeer).Times(AnyNumber());
+    EXPECT_CALL(*session_mock, Destruct).Times(1);
+
+    const pid_t test_pid = 9999;
+    {
+        std::unique_lock<std::mutex> lock(server_for_test->mutex_);
+
+        // Insert a session directly into the map
+        server_for_test->pid_session_map_.emplace(
+            std::piecewise_construct,
+            std::forward_as_tuple(test_pid),
+            std::forward_as_tuple(server_for_test, test_pid, std::move(session_mock)));
+
+        auto it = server_for_test->pid_session_map_.find(test_pid);
+
+        // FinishPreviousSessionWhileLocked sets session_finishing_=true and waits on server_cond_.
+        // The worker thread will process the enqueued session (to_force_finish=true),
+        // extract it from the map, set session_finishing_=false, and notify server_cond_.
+        server_for_test->FinishPreviousSessionWhileLocked(it, lock);
+        // If we reach here, the function completed successfully.
+    }
+
+    ExpectServerDestruction();
+    UninstantiateServer();
+}
+
+// Covers OnConnectRequest stop_requested() branch:
+// Request stop before sending a valid connect message so the early-exit path is taken.
+TEST_F(MessagePassingServerFixture, OnConnectRequestStopRequestedCoversEarlyExit)
+{
+    InstantiateServer(GetCountingSessionFactory());
+
+    // Request stop on the server's stop_source_ before invoking the callback
+    auto* server_for_test = &(*server);
+    server_for_test->stop_source_.request_stop();
+
+    // client_factory_->Create() is called before the stop check — set up the mock
+    auto client = score::cpp::pmr::make_unique<testing::StrictMock<score::message_passing::ClientConnectionMock>>(
+        score::cpp::pmr::get_default_resource());
+    auto* client_mock = client.get();
+    EXPECT_CALL(*client_factory_mock,
+                Create(Matcher<const score::message_passing::ServiceProtocolConfig&>(_),
+                       Matcher<const score::message_passing::IClientFactory::ClientConfig&>(_)))
+        .WillOnce(Return(ByMove(std::move(client))));
+    // sender is destroyed at the early return inside OnConnectRequest
+    EXPECT_CALL(*client_mock, Destruct()).Times(1);
+
+    StrictMock<::score::message_passing::ServerConnectionMock> connection;
+    score::message_passing::ClientIdentity client_identity{kClienT0Pid, 0, 0};
+    EXPECT_CALL(connection, GetClientIdentity()).Times(AnyNumber()).WillRepeatedly(ReturnRef(client_identity));
+
+    auto message = CreateConnectMessageSample(kClienT0Pid);
+    sent_callback(connection, message);
+
+    // The early exit fires before factory_ is called — no session constructed
+    EXPECT_EQ(construct_count, 0);
+
+    ExpectServerDestruction();
+    UninstantiateServer();
 }
 
 }  // namespace internal

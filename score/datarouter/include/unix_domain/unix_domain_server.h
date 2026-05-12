@@ -164,6 +164,9 @@ class UnixDomainServer
     {
         std::unordered_map<int, SessionWrapper> connection_fd_map;
         std::vector<pollfd> connection_pollfd_list;
+        // added default constructor to Fix coverage tool issue as mentioned in
+        // broken_link_j/Ticket-261895?focusedId=25555111&page=com.atlassian.jira.plugin.system.issuetabpanels:comment-tabpanel#comment-25555111
+        ConnectionState() : connection_fd_map{}, connection_pollfd_list{} {};
     };
 
     static void PassMessage(std::int32_t fd, const std::string& message);

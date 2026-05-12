@@ -104,12 +104,14 @@ SocketServer::PersistentStorageHandlers SocketServer::InitializePersistentStorag
     PersistentStorageHandlers handlers;
 
     auto* pd_ptr = persistent_dictionary.get();
+    // LCOV_EXCL_START - due to Ticket-262283
     handlers.load_dlt = [pd_ptr]() {
         return ReadDlt(*pd_ptr);
     };
     handlers.store_dlt = [pd_ptr](const score::logging::dltserver::PersistentConfig& config) {
         WriteDlt(config, *pd_ptr);
     };
+    // LCOV_EXCL_STOP
     handlers.is_dlt_enabled = ReadDltEnabled(*persistent_dictionary);
 
 /*

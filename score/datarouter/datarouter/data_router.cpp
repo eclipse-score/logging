@@ -137,10 +137,13 @@ std::unique_ptr<DataRouter::SourceSession> DataRouter::NewSourceSessionImpl(
                                                                       stats_logger_,
                                                                       std::move(parser));
 
+    // This is a safety check for the unique_ptr creation, which is can't be forced to fail in a test environment.
+    // LCOV_EXCL_START : see above.
     if (!source_session)
     {
         return nullptr;
     }
+    // LCOV_EXCL_STOP
 
     std::lock_guard<std::mutex> lock(subscriber_mutex_);
 

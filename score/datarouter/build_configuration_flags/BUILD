@@ -101,6 +101,22 @@ config_setting(
 )
 
 bool_flag(
+    name = "dlt_output_enable",
+    build_setting_default = False,
+)
+
+config_setting(
+    name = "dlt_output_enabled",
+    flag_values = {
+        ":dlt_output_enable": "True",
+    },
+    visibility = [
+        # Visibility scope updated during migration
+        "@score_logging//score/datarouter:__subpackages__",
+    ],
+)
+
+bool_flag(
     name = "use_local_vlan",
     build_setting_default = False,
 )

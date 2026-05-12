@@ -246,8 +246,8 @@ class DltLogChannel
                               const score::cpp::string_view statistics_type = "verbose")
     {
         auto log_stream{stat_logger.LogInfo()};
-        log_stream << std::string(statistics_type.data(), statistics_type.size())
-                   << " messages in the channel:" << channel_id.Data() << ": count " << statistics.stats_msgcnt
+        log_stream << std::string(statistics_type.data(), statistics_type.size());
+        log_stream << " messages in the channel:" << channel_id.Data() << ": count " << statistics.stats_msgcnt
                    << ", size " << statistics.stats_totalsize << " bytes ("
                    << statistics.stats_totalsize / kBandwidthDenominator << " kiB/s)"
                    << "failed to send: total count " << statistics.send_failures_count;
