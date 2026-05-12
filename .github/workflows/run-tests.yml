@@ -1,0 +1,29 @@
+# *******************************************************************************
+# Copyright (c) 2025 Contributors to the Eclipse Foundation
+#
+# See the NOTICE file(s) distributed with this work for additional
+# information regarding copyright ownership.
+#
+# This program and the accompanying materials are made available under the
+# terms of the Apache License Version 2.0 which is available at
+# https://www.apache.org/licenses/LICENSE-2.0
+#
+# SPDX-License-Identifier: Apache-2.0
+# *******************************************************************************
+
+name: Run Tests
+
+on:
+  # Reusable workflow only — triggered by "Test and Build Docs" (docs.yml) on PRs.
+  # Keeping tests here avoids duplication: docs.yml gates the docs build on tests passing.
+  workflow_call: {}
+
+jobs:
+  run-tests:
+    uses: eclipse-score/cicd-workflows/.github/workflows/tests.yml@c1c90b1a82a1fab0fc202979dde6686b2162d5a8 # v0.0.0
+    permissions:
+      contents: read
+      pull-requests: read
+    with:
+      bazel-target: 'test --lockfile_mode=error //... --config x86_64-linux'
+      upload-name: 'bazel-testlogs'
