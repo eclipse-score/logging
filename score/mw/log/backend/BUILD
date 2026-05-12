@@ -125,7 +125,7 @@ cc_test(
     deps = [
         ":file",
         "@googletest//:gtest_main",
-        "@score_baselibs//score/mw/log",
+        "@score_baselibs//score/mw/log:backend_table",
     ],
 )
 
@@ -142,7 +142,8 @@ cc_test(
     deps = [
         ":remote",
         "@googletest//:gtest_main",
-        "@score_baselibs//score/mw/log",
+        "@score_baselibs//score/mw/log:backend_table",
+        "@score_baselibs//score/mw/log:console",
     ],
 )
 
@@ -157,7 +158,7 @@ cc_test(
     deps = [
         ":slog",
         "@googletest//:gtest_main",
-        "@score_baselibs//score/mw/log",
+        "@score_baselibs//score/mw/log:backend_table",
     ],
 )
 

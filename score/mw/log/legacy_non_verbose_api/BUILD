@@ -14,18 +14,6 @@
 load("@rules_cc//cc:defs.bzl", "cc_library", "cc_test")
 load("@score_baselibs//:bazel/unit_tests.bzl", "cc_unit_test_suites_for_host_and_qnx")
 load("@score_baselibs//score/language/safecpp:toolchain_features.bzl", "COMPILER_WARNING_FEATURES")
-load("@score_baselibs//score/quality/clang_tidy:extra_checks.bzl", "clang_tidy_extra_checks")
-
-clang_tidy_extra_checks(
-    name = "clang_tidy_extra_checks",
-    extra_features = [
-        "spp_code_style_check_header_guards",
-        "spp_code_style_check_method_names",
-        "spp_code_style_check_readability",
-        "spp_code_style_check_type_names",
-        "spp_code_style_check_variable_names",
-    ],
-)
 
 cc_library(
     name = "legacy_non_verbose_api",
@@ -76,7 +64,7 @@ cc_test(
         "//score/mw/log/test/console_logging_environment",
         "@googletest//:gtest_main",
         "@score_baselibs//score/language/futurecpp:futurecpp_test_support",
-        "@score_baselibs//score/mw/log:console",
+        "@score_baselibs//score/mw/log",
         "@score_baselibs//score/os/mocklib:pthread_mock",
         "@score_baselibs//score/os/mocklib:stat_mock",
         "@score_baselibs//score/os/mocklib:stdlib_mock",

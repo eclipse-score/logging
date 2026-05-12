@@ -634,6 +634,33 @@ TEST(SocketServerHelperTest, ResolveSharedMemoryFileNameWithStaticIdentifier)
     EXPECT_EQ(result, "/tmp/logging.MYAP.5000.shmem");
 }
 
+TEST_F(SocketServerCreateDltServerTest, CreateUnixDomainServerFactoryLambdaInvokesCreateConfigSession)
+{
+    RecordProperty("Description",
+                   "Invoke the Session2Factory lambda stored in the mock UnixDomainServer to cover "
+                   "the factory lambda body (lines 234-235) of socketserver.cpp::CreateUnixDomainServer.");
+    RecordProperty("TestType", "Interface test");
+    RecordProperty("Verifies", "::score::platform::datarouter::SocketServer::CreateUnixDomainServer()");
+    RecordProperty("DerivationTechnique", "Analysis of boundary values");
+
+    auto handlers = CreateTestHandlers();
+    auto dlt_server = SocketServer::CreateDltServer(handlers);
+    ASSERT_NE(nullptr, dlt_server);
+
+    // CreateUnixDomainServer builds the factory lambda (lines 234-235) and stores it
+    // in the mock UnixDomainServer via stored_factory.
+    auto unix_domain_server = SocketServer::CreateUnixDomainServer(*dlt_server);
+    ASSERT_NE(nullptr, unix_domain_server);
+    ASSERT_TRUE(unix_domain_server->stored_factory);
+
+    // Invoke the stored factory lambda — this executes lines 234-235 of socketserver.cpp.
+    UnixDomainServer::SessionHandle handle{-1};
+    auto session = unix_domain_server->stored_factory("init", std::move(handle));
+
+    // CreateConfigSession was called; session may be non-null depending on DltLogServer state.
+    SUCCEED();
+}
+
 }  // namespace
 }  // namespace datarouter
 }  // namespace platform

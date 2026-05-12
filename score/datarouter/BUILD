@@ -73,6 +73,7 @@ cc_library(
     strip_include_prefix = "include",
     visibility = [
         "//platform/aas/pas/datarouterconf:__subpackages__",
+        "@score_logging//score/datarouter:__subpackages__",
     ],
     deps = [
         "@score_baselibs//score/language/futurecpp",
@@ -782,7 +783,12 @@ cc_library(
     hdrs = [
         "include/daemon/socketserver.h",
     ],
-    # Configuration block updated during migration
+    defines = select({
+        "//score/datarouter/build_configuration_flags:dlt_output_enabled": [
+            "DLT_OUTPUT_ENABLED",
+        ],
+        "//conditions:default": [],
+    }),
     features = COMPILER_WARNING_FEATURES,
     local_defines = select({
         "//score/datarouter/build_configuration_flags:config_persistent_logging": ["PERSISTENT_LOGGING"],
@@ -817,7 +823,12 @@ cc_library(
     hdrs = [
         "include/daemon/socketserver.h",
     ],
-    # Configuration block updated during migration
+    defines = select({
+        "//score/datarouter/build_configuration_flags:dlt_output_enabled": [
+            "DLT_OUTPUT_ENABLED",
+        ],
+        "//conditions:default": [],
+    }),
     features = COMPILER_WARNING_FEATURES,
     local_defines = select({
         "//score/datarouter/build_configuration_flags:config_persistent_logging": ["PERSISTENT_LOGGING"],
@@ -890,12 +901,9 @@ cc_binary(
         "@score_baselibs//score/os:errno_logging",
         "@score_baselibs//score/os:pthread",
         "@score_baselibs//score/os/utils:path",
-        "@score_logging//score/mw/log/backend:file",
-        "@score_logging//score/mw/log/backend:remote",
-    ] + select({
-        "@platforms//os:qnx": ["//score/mw/log/backend:slog"],
-        "//conditions:default": [],
-    }),
+        "@score_baselibs//score/mw/log",
+        # "//third_party/jemalloc", # Ticket-231781
+    ],
 )
 
 cc_library(

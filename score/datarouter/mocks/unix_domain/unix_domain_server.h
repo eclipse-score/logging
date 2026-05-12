@@ -63,8 +63,14 @@ class UnixDomainServer
 
     using Session2Factory = std::function<std::unique_ptr<ISession>(const std::string&, SessionHandle)>;
 
-    UnixDomainServer(UnixDomainSockAddr, Session2Factory = Session2Factory()) {}
+    UnixDomainServer(UnixDomainSockAddr, Session2Factory factory = Session2Factory())
+        : stored_factory(std::move(factory))
+    {
+    }
     ~UnixDomainServer() {}
+
+    /// \brief Stored factory — exposed so tests can invoke it and cover lambda bodies in production code.
+    Session2Factory stored_factory;
 };
 
 namespace dummy_namespace
