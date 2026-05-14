@@ -12,10 +12,10 @@
    # SPDX-License-Identifier: Apache-2.0
    # *******************************************************************************
 
-Module Template Documentation
-=============================
+Logging Documentation
+=====================
 
-This documentation describes the structure, usage and configuration of the Bazel-based C++/Rust module template.
+This documentation describes the structure, usage and configuration of the Bazel-based C++/Rust logging module.
 
 .. contents:: Table of Contents
    :depth: 2
@@ -42,13 +42,13 @@ Requirements
 Project Layout
 --------------
 
-The module template includes the following top-level structure:
+The logging module includes the following top-level structure:
 
-- `score/`: Main C++/Rust sources
-- `tests/`: Unit and integration tests
-- `examples/`: Usage examples
-- `docs/`: Documentation using `docs-as-code`
-- `.github/workflows/`: CI/CD pipelines
+- ``score/``: Main C++/Rust sources
+- ``tests/``: Unit and integration tests
+- ``examples/``: Usage examples
+- ``docs/``: Documentation using ``docs-as-code``
+- ``.github/workflows/``: CI/CD pipelines
 
 Quick Start
 -----------
@@ -68,7 +68,7 @@ To run tests:
 Configuration
 -------------
 
-The `project_config.bzl` file defines metadata used by Bazel macros.
+The ``project_config.bzl`` file defines metadata used by Bazel macros.
 
 Example:
 
@@ -79,7 +79,7 @@ Example:
        "source_code": ["cpp", "rust"]
    }
 
-This enables conditional behavior (e.g., choosing `clang-tidy` for C++ or `clippy` for Rust).
+This enables conditional behavior (e.g., choosing ``clang-tidy`` for C++ or ``clippy`` for Rust).
 
 Decision records
 ----------------
