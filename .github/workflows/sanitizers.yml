@@ -29,7 +29,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        sanitizer_config: [asan_ubsan_lsan]
+        sanitizer_config: [asan_ubsan_lsan, tsan]
 
     steps:
       - name: Checkout repository
