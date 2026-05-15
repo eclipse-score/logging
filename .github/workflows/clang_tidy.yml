@@ -1,0 +1,44 @@
+# *******************************************************************************
+# Copyright (c) 2025 Contributors to the Eclipse Foundation
+#
+# See the NOTICE file(s) distributed with this work for additional
+# information regarding copyright ownership.
+#
+# This program and the accompanying materials are made available under the
+# terms of the Apache License Version 2.0 which is available at
+# https://www.apache.org/licenses/LICENSE-2.0
+#
+# SPDX-License-Identifier: Apache-2.0
+# *******************************************************************************
+
+name: Clang-Tidy
+
+on:
+  pull_request:
+    types: [opened, reopened, synchronize]
+  merge_group:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: clang-tidy-${{ github.workflow }}-${{ github.head_ref || github.run_id }}
+  cancel-in-progress: true
+
+jobs:
+  clang-tidy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Bazel
+        uses: bazel-contrib/setup-bazel@0.15.0
+        with:
+          bazelisk-version: 1.26.0
+          disk-cache: clang-tidy
+          repository-cache: true
+          external-cache: true
+      - name: Run clang-tidy
+        # Scope limited to //score/mw/... because Rust/QNX targets are not yet
+        # validated against this configuration. Expand once they pass.
+        run: bazel test --config=clang-tidy --lockfile_mode=error //score/mw/...
