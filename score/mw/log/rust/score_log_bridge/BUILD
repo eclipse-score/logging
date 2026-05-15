@@ -101,6 +101,11 @@ rust_test(
     edition = "2021",
     rustc_flags = RUSTC_FLAGS,
     tags = [
+        "no-asan",  # Rust tests with C++ FFI require sanitizer-instrumented stdlib
+        "no-lsan",
+        "no-tsan",
+        "no-ubsan",
+        "rust",
         "unit_tests",
         "ut",
     ],
@@ -118,6 +123,7 @@ rust_binary(
     ],
     edition = "2021",
     rustc_flags = RUSTC_FLAGS,
+    tags = ["rust"],
     visibility = ["//visibility:public"],
     deps = [
         ":score_log_bridge",
