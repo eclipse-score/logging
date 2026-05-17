@@ -313,6 +313,12 @@ void DatarouterMessageClientImpl::Shutdown() noexcept
     if (connect_thread_.joinable())
     {
         std::ignore = connect_thread_.request_stop();
+        // Suppress "AUTOSAR C++14 A15-4-2" rule findings. This rule states:
+        // "If a function is declared to be noexcept, noexcept(true) or noexcept(&lt;true condition&gt;),
+        // then it shall not exit with an exception."
+        // Justification: if an unexpected exception occurs during shutdown, std::terminate is acceptable behavior for a
+        // destructor context.
+        // coverity[autosar_cpp14_a15_4_2_violation]
         connect_thread_.join();
     }
 
