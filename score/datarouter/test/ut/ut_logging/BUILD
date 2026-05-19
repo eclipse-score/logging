@@ -198,8 +198,8 @@ cc_test(
     tags = ["unit"],
     deps = [
         "@googletest//:gtest_main",
+        "@score_baselibs//score/mw/log",
         "@score_logging//score/datarouter:dltserver_testing",
-        "@score_logging//score/datarouter:log",
     ],
 )
 
@@ -227,7 +227,7 @@ cc_test(
         # buildifier off
         "@score_logging//score/datarouter:dltserver_testing",
         # buildifier on
-        "@score_logging//score/datarouter:log",
+        "@score_baselibs//score/mw/log",
         "@score_logging//score/datarouter:datarouter_feature_config_testing",
         "//score/datarouter/dlt_filetransfer_trigger_lib",
         "@googletest//:gtest_main",
@@ -243,8 +243,8 @@ cc_test(
     tags = ["unit"],
     deps = [
         "@googletest//:gtest_main",
+        "@score_baselibs//score/mw/log",
         "@score_logging//score/datarouter:datarouter_options",
-        "@score_logging//score/datarouter:log",
     ],
 )
 
@@ -257,8 +257,8 @@ cc_test(
     tags = ["unit"],
     deps = [
         "@googletest//:gtest_main",
+        "@score_baselibs//score/mw/log",
         "@score_logging//score/datarouter:datarouter_app_testing",
-        "@score_logging//score/datarouter:log",
     ],
 )
 
@@ -274,7 +274,7 @@ cc_test(
     tags = ["unit"],
     deps = [
         "@googletest//:gtest_main",
-        "@score_logging//score/datarouter:log",
+        "@score_baselibs//score/mw/log",
         "@score_logging//score/datarouter:persistentlogconfig",
     ],
 )
@@ -293,7 +293,7 @@ cc_test(
     deps = [
         "//score/datarouter/src/persistency/stub_persistent_dictionary:stub",
         "@googletest//:gtest_main",
-        "@score_logging//score/datarouter:log",
+        "@score_baselibs//score/mw/log",
         "@score_logging//score/datarouter:socketserver_config_lib_testing",
     ],
 )

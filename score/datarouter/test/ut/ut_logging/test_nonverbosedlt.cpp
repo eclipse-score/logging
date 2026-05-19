@@ -46,6 +46,10 @@ class MockDltOutput : public DltNonverboseHandler::IOutput
                 SendNonVerbose,
                 (const score::mw::log::config::NvMsgDescriptor& desc, uint32_t tmsp, const void* data, size_t size),
                 (override));
+    bool IsOutputEnabled() const noexcept override
+    {
+        return true;
+    }
     virtual ~MockDltOutput() = default;
 };
 

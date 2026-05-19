@@ -136,6 +136,15 @@ TEST_F(SharedMemoryReaderFixture, RingBufferSizeShallReturnValueBasedOnControlBl
     EXPECT_EQ(kRingSize, shared_memory_reader.GetRingBufferSizeBytes());
 }
 
+TEST_F(SharedMemoryReaderFixture, GetterShallReadSharedDataNumberOfDropsWithTypeRegistrationFailed)
+{
+
+    static constexpr Length kNumberOfDropsTypeRegistrationFailed{17UL};
+    shared_data.number_of_drops_type_registration_failed.store(kNumberOfDropsTypeRegistrationFailed);
+
+    EXPECT_EQ(kNumberOfDropsTypeRegistrationFailed, shared_memory_reader.GetNumberOfDropsWithTypeRegistrationFailed());
+}
+
 TEST_F(SharedMemoryReaderFixture, UnmapCallbackShallBeCalledWhenDestructing)
 {
     RecordProperty("ParentRequirement", "SCR-861827, SCR-12206795");

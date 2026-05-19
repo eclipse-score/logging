@@ -69,7 +69,15 @@ Logger::Logger(const score::cpp::optional<const score::mw::log::detail::Configur
     std::ignore = std::copy(config_.GetAppId().begin(), config_.GetAppId().end(), app_prefix_iter);
 }
 
-std::optional<LogLevel> Logger::GetLevelForContext(const std::string& name) const noexcept
+/*
+Deviation from Rule A0-1-3:
+- Every function defined in an anonymous namespace, or static function with internal linkage,
+    or private member function shall be used.
+Justification:
+- The function is already used in GetTypeThreshold method.
+*/
+// coverity[autosar_cpp14_a0_1_3_violation : FALSE] see above
+std::optional<LogLevel> Logger::GetLevelForContext(const std::string& name) const
 {
     const score::mw::log::config::NvMsgDescriptor* const msg_desc = nvconfig_.GetDltMsgDesc(name);
     if (msg_desc != nullptr)

@@ -16,7 +16,8 @@
 #include "daemon/dlt_log_server.h"
 #include "daemon/message_passing_server.h"
 #include "daemon/socketserver_config.h"
-#include "daemon/socketserver_filter_factory.h"
+#include "logparser/logparser.h"
+
 #include "score/datarouter/daemon_communication/session_handle_interface.h"
 #include "score/datarouter/datarouter/data_router.h"
 #include "score/datarouter/include/applications/datarouter_feature_config.h"
@@ -156,34 +157,31 @@ std::unique_ptr<score::logging::dltserver::DltLogServer> SocketServer::CreateDlt
         static_config.value(), storage_handlers.load_dlt, storage_handlers.store_dlt, storage_handlers.is_dlt_enabled);
 }
 
-DataRouter::SourceSetupCallback SocketServer::CreateSourceSetupHandler(
+std::unique_ptr<score::platform::internal::ILogParserFactory> SocketServer::CreateLogParserFactory(
     score::logging::dltserver::DltLogServer& dlt_server)
 {
-    /*
-        Deviation from Rule A5-1-4:
-        - A lambda expression object shall not outlive any of its reference captured objects.
-        Justification:
-        - dltServer and lambda are in the same scope.
-    */
-    // coverity[autosar_cpp14_a5_1_4_violation]
-    return [&dlt_server](score::platform::internal::ILogParser&& parser) {
-        parser.SetFilterFactory(GetFilterFactory());
-        dlt_server.AddHandlers(parser);
+    class DltLogParserFactory : public score::platform::internal::ILogParserFactory
+    {
+      public:
+        explicit DltLogParserFactory(score::logging::dltserver::DltLogServer& dlt_server) : dlt_server_(dlt_server) {}
+
+        std::unique_ptr<score::platform::internal::ILogParser> Create(const score::mw::log::NvConfig& nv_config) override
+        {
+            auto global_handlers = dlt_server_.GetGlobalHandlers();
+            score::platform::internal::LogParser::HandleRequestMap handle_request_map;
+            for (auto& binding : dlt_server_.GetTypeHandlerBindings())
+            {
+                handle_request_map.emplace(std::move(binding.type_name), binding.handler);
+            }
+            return std::make_unique<score::platform::internal::LogParser>(
+                nv_config, std::move(global_handlers), std::move(handle_request_map));
+        }
+
+      private:
+        score::logging::dltserver::DltLogServer& dlt_server_;
     };
-}
 
-// Static helper: Update handlers for each parser
-void SocketServer::UpdateParserHandlers(score::logging::dltserver::DltLogServer& dlt_server,
-                                        score::platform::internal::ILogParser& parser,
-                                        bool enable)
-{
-    dlt_server.UpdateHandlers(parser, enable);
-}
-
-// Static helper: Final update after all parsers processed
-void SocketServer::UpdateHandlersFinal(score::logging::dltserver::DltLogServer& dlt_server, bool enable)
-{
-    dlt_server.UpdateHandlersFinal(enable);
+    return std::make_unique<DltLogParserFactory>(dlt_server);
 }
 
 // Static helper: Create a new config session from Unix domain handle
@@ -225,17 +223,17 @@ std::function<void(bool)> SocketServer::CreateEnableHandler(DataRouter& router,
         std::cerr << "DRCMD enable callback called with " << enable << std::endl;
         score::mw::log::LogWarn() << "Changing output enable to " << enable;
         WriteDltEnabled(enable, persistent_dictionary);
-        router.ForEachSourceParser(
-            std::bind(&SocketServer::UpdateParserHandlers, std::ref(dlt_server), std::placeholders::_1, enable),
-            std::bind(&SocketServer::UpdateHandlersFinal, std::ref(dlt_server), enable),
-            enable);
+        router.ForEachSource(enable);
+        dlt_server.SetDltOutputEnabled(enable);
     };
 }
 
 std::unique_ptr<score::platform::internal::UnixDomainServer> SocketServer::CreateUnixDomainServer(
     score::logging::dltserver::DltLogServer& dlt_server)
 {
-    const auto factory = std::bind(&SocketServer::CreateConfigSession, std::ref(dlt_server), std::placeholders::_2);
+    const auto factory = [&dlt_server](const std::string& /*name*/, UnixDomainServer::SessionHandle handle) {
+        return SocketServer::CreateConfigSession(dlt_server, std::move(handle));
+    };
 
     const UnixDomainSockAddr addr(score::logging::config::kSocketAddress, true);
     /*
@@ -360,16 +358,9 @@ void SocketServer::DoWork(const std::atomic_bool& exit_requested, const bool no_
         return;
     }
 
-    // Create data router with source setup handler
-    const auto source_setup = CreateSourceSetupHandler(*dlt_server);
-    /*
-        Deviation from Rule A5-1-4:
-        - A lambda expression object shall not outlive any of its reference captured objects.
-        Justification:
-        - router and lambda are in the same scope.
-    */
-    // coverity[autosar_cpp14_a5_1_4_violation]
-    DataRouter router(stats_logger, source_setup);
+    // Create data router with log parser factory
+    auto log_parser_factory = CreateLogParserFactory(*dlt_server);
+    DataRouter router(stats_logger, std::move(log_parser_factory));
 
     // Create and set enable handler
     const auto enable_handler = CreateEnableHandler(router, *pd, *dlt_server);
@@ -381,14 +372,14 @@ void SocketServer::DoWork(const std::atomic_bool& exit_requested, const bool no_
     // Load NvConfig
     const score::mw::log::NvConfig nv_config = LoadNvConfig(stats_logger);
 
-    // Create message passing factory using std::bind directly
-    const auto mp_factory = std::bind(&SocketServer::CreateMessagePassingSession,
-                                      std::ref(router),
-                                      std::ref(*dlt_server),
-                                      std::ref(nv_config),
-                                      std::placeholders::_1,   // client_pid
-                                      std::placeholders::_2,   // conn
-                                      std::placeholders::_3);  // handle
+    // Create message passing factory
+    const auto mp_factory = [&router, &dlt_server, &nv_config](
+                                const pid_t client_pid,
+                                const score::mw::log::detail::ConnectMessageFromClient& conn,
+                                score::cpp::pmr::unique_ptr<score::platform::internal::daemon::ISessionHandle> handle) {
+        return SocketServer::CreateMessagePassingSession(
+            router, *dlt_server, nv_config, client_pid, conn, std::move(handle));
+    };
 
     std::shared_ptr<ServerFactory> server_factory = std::make_shared<ServerFactory>();
     std::shared_ptr<ClientFactory> client_factory =

@@ -219,13 +219,14 @@ TEST(DltIdTest, TestTheSingleargumentCharPointerConstructionAndGetTheData)
     const char* char_pointer_str{FOUR_CHAR_STRING};
     score::platform::DltidT dlt_id{char_pointer_str};
 
-    const char* get_data = dlt_id.Data();
+    const auto data = dlt_id.Data();
 
     // The size of dlt id is four.
-    EXPECT_EQ(get_data[0], char_pointer_str[0]);
-    EXPECT_EQ(get_data[1], char_pointer_str[1]);
-    EXPECT_EQ(get_data[2], char_pointer_str[2]);
-    EXPECT_EQ(get_data[3], char_pointer_str[3]);
+    ASSERT_EQ(data.size(), 4U);
+    EXPECT_EQ(data[0], char_pointer_str[0]);
+    EXPECT_EQ(data[1], char_pointer_str[1]);
+    EXPECT_EQ(data[2], char_pointer_str[2]);
+    EXPECT_EQ(data[3], char_pointer_str[3]);
 }
 
 TEST(DltIdTest, TestDltIdEqualityOperator)
@@ -256,7 +257,7 @@ TEST(DltIdTest, DltIdSizeShouldBeEqualToFour)
     const std::string str{FOUR_CHAR_STRING};
     score::platform::DltidT dlt_id{str};
 
-    EXPECT_EQ(dlt_id.size(), score::platform::DltidT::kSize);
+    EXPECT_EQ(dlt_id.size(), 4U);
 }
 
 TEST(DltIdTest, TestDltIdAssignOperator)
@@ -300,5 +301,5 @@ TEST(DltIdTest, TestHashStruct)
     std::hash<score::platform::DltidT> hash_instance;
     std::size_t dlt_id_value = hash_instance(dlt_id);  // operator()
 
-    EXPECT_EQ(dlt_id_value, dlt_id.value);
+    EXPECT_EQ(dlt_id_value, dlt_id.GetHash());
 }

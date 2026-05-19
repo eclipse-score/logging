@@ -39,6 +39,10 @@ class MockFTOutput : public FileTransferStreamHandler::IOutput
                  uint8_t nor,
                  uint32_t time_tmsp),
                 (override));
+    bool IsOutputEnabled() const noexcept override
+    {
+        return true;
+    }
 
     virtual ~MockFTOutput() = default;
 };

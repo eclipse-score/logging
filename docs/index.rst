@@ -81,13 +81,11 @@ Example:
 
 This enables conditional behavior (e.g., choosing ``clang-tidy`` for C++ or ``clippy`` for Rust).
 
-Decision records
-----------------
-
-.. TODO: move decision records to proper location once docs are made.
+Additional documentation
+------------------------
 
 .. toctree::
    :maxdepth: 1
-   :glob:
 
-   design_decisions/explicit_init.rst
+   /docs/features/logging/architecture/index
+   /docs/design_decisions/explicit_init

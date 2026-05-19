@@ -29,6 +29,10 @@ DltNonverboseHandler::DltNonverboseHandler(IOutput& output)
 
 void DltNonverboseHandler::Handle(const TypeInfo& type_info, TimestampT timestamp, const char* data, BufsizeT size)
 {
+    if (!output_.IsOutputEnabled())
+    {
+        return;
+    }
     if (type_info.nv_msg_desc != nullptr)
     {
         using DltDurationT = std::chrono::duration<uint32_t, std::ratio<1, 10000>>;

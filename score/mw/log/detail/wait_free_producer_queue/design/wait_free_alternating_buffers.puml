@@ -1,0 +1,94 @@
+@startuml wait_free_alternating_buffers
+
+participant "Producer Thread\n(WaitFreeAlternatingWriter)" as P
+participant "AlternatingControlBlock" as ACB
+participant "Consumer Thread\n(AlternatingReaderProxy /\nAlternatingReadOnlyReader)" as C
+
+note over ACB
+  control_block_odd.acquired_index == 0, written_index == 0, number_of_writers == 0
+  control_block_even.acquired_index == 0, written_index == 0, number_of_writers == 0
+  switch_count == 1  (odd → control_block_odd active for writing)
+end note
+
+P -> ACB : Acquire(64 bytes)
+note right of P
+  number_of_writers_odd.fetch_add(1)
+  acquired_index_odd.fetch_add(8 + 64)
+  acquired_index_odd == 72, number_of_writers_odd == 1
+  AlternatingAcquiredData.data == Buffer_odd [8:72)
+end note
+
+note over P, C: Acquire happens before Switch
+
+C -> ACB : Switch()
+note right of C
+  1. switch_count == 1 (odd) → control_block_odd active for writing
+  2. Reset opposite buffer (control_block_even) for future writing:
+     control_block_even.acquired_index.exchange(0)
+     control_block_even.written_index.exchange(0)
+  3. Toggle future writers to control_block_even:
+     switch_count.fetch_add(1) → switch_count == 2
+  4. Returns old switch_count == 1 (identifies control_block_odd for reading)
+end note
+
+P -> ACB : WriteData(acquired_data)
+note left of P: Writing on control_block_odd, range [8:72)
+
+P -> ACB : Release(64 bytes)
+note left of P
+  written_index_odd.fetch_add(8 + 64)
+  written_index_odd == 72, number_of_writers_odd == 0
+end note
+
+note over P, C: Release happens before IsBlockReleasedByWriters returns true
+
+C -> ACB : IsBlockReleasedByWriters(switch_count=1)
+note right of C
+  Polls until: number_of_writers_odd == 0
+           AND written_index_odd == acquired_index_odd
+end note
+
+par Concurrent writing and reading
+  C -> C : CreateLinearReader(switch_count=1)
+  note right of C
+    Reads control_block_odd (Buffer_odd)
+    read_range == [0:72)
+  end note
+  C -> C : Process Packet 1
+  note right of C: Processing Buffer_odd, payload range [8:72)
+else
+  P -> ACB : Acquire(16 bytes)
+  note left of P
+    number_of_writers_even.fetch_add(1)
+    acquired_index_even.fetch_add(8 + 16)
+    acquired_index_even == 24, number_of_writers_even == 1
+    AlternatingAcquiredData.data == Buffer_even [8:24)
+  end note
+  P -> ACB : WriteData(acquired_data)
+  note left of P: Writing on control_block_even, range [8:24)
+  P -> ACB : Release(16 bytes)
+  note left of P
+    written_index_even.fetch_add(8 + 16)
+    written_index_even == 24, number_of_writers_even == 0
+  end note
+end
+
+note over ACB
+  control_block_odd.acquired_index == 72, written_index == 72, number_of_writers == 0
+  control_block_even.acquired_index == 24, written_index == 24, number_of_writers == 0
+  switch_count == 2  (even → control_block_even active for writing)
+end note
+
+legend bottom
+  **control_block_odd (Buffer_odd) Content — Packet 1:**
+  | **Index Range** | **0..8**     | **8..72**                        |
+  | Data            | 64           | WriteData()                      |
+  | Description     | Length of P1 | Payload of Producer 1 (Packet 1) |
+
+  **control_block_even (Buffer_even) Content — Packet 2:**
+  | **Index Range** | **0..8**     | **8..24**                        |
+  | Data            | 16           | WriteData()                      |
+  | Description     | Length of P2 | Payload of Producer 1 (Packet 2) |
+endlegend
+
+@enduml
