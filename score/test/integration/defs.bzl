@@ -40,8 +40,8 @@ def py_logging_itf_test(name, srcs, filesystem, **kwargs):
         name = image_name,
         base = "@ubuntu_24_04",
         tars = [
-            "//score/test/itf:dlt_pkg",
-            "//score/test/itf:datarouter_pkg",
+            "//score/test/integration:dlt_pkg",
+            "//score/test/integration:datarouter_pkg",
             filesystem,
         ],
     )
@@ -75,7 +75,7 @@ def py_logging_itf_test(name, srcs, filesystem, **kwargs):
         plugins = [
             "@score_itf//score/itf/plugins:docker_plugin",
             "@score_itf//score/itf/plugins:dlt_plugin",
-            "//score/test/itf:logging_plugin",
+            "//score/test/integration:logging_plugin",
         ],
         env = {"DOCKER_HOST": ""},
         **kwargs

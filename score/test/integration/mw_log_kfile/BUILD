@@ -12,7 +12,7 @@
 # *******************************************************************************
 
 load("@rules_pkg//pkg:tar.bzl", "pkg_tar")
-load("//score/test/itf:defs.bzl", "py_logging_itf_test")
+load("//score/test/integration:defs.bzl", "py_logging_itf_test")
 
 cc_binary(
     name = "dlt_generator",
@@ -45,7 +45,7 @@ py_logging_itf_test(
     srcs = ["test_mw_log_kfile.py"],
     filesystem = ":dlt_generator_filesystem",
     deps = [
-        "//score/test/itf:dlt_parser",
+        "//score/test/integration:dlt_parser",
         "@score_itf//third_party/python_dlt",
     ],
 )
