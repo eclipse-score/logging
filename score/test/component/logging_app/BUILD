@@ -23,28 +23,32 @@
 # SPDX-License-Identifier: Apache-2.0
 # ********************************************************************************
 
-load("//score/test/component:defs.bzl", "py_logging_itf_test")
+load("@rules_cc//cc:cc_binary.bzl", "cc_binary")
+load("@rules_pkg//pkg:tar.bzl", "pkg_tar")
 
-py_logging_itf_test(
-    name = "test_mw_log",
-    srcs = ["test_mw_log.py"],
-    filesystem = "//score/test/component/logging_app:logging_app_filesystem",
-    deps = [
-        "@score_itf//third_party/python_dlt",
-    ],
+cc_binary(
+    name = "logging_app",
+    srcs = ["logging_app.cpp"],
+    deps = ["//score/mw/log"],
 )
 
-py_logging_itf_test(
-    name = "test_mw_log_kFile",
-    srcs = ["test_mw_log_kFile.py"],
-    filesystem = "//score/test/component/dlt_generator_app:dlt_generator_filesystem",
-    deps = [
-        "@score_itf//third_party/python_dlt",
-    ],
+pkg_tar(
+    name = "logging_app_bin_pkg",
+    srcs = [":logging_app"],
+    package_dir = "opt/test_apps/logging_app/bin",
 )
 
-py_logging_itf_test(
-    name = "test_mw_log_filters",
-    srcs = ["test_mw_log_filters.py"],
-    filesystem = "//score/test/component/filters_app:mwfiltertest_filesystem",
+pkg_tar(
+    name = "logging_app_config_pkg",
+    srcs = ["etc/logging.json"],
+    package_dir = "opt/test_apps/logging_app/etc",
+)
+
+pkg_tar(
+    name = "logging_app_filesystem",
+    visibility = ["//score/test/component:__subpackages__"],
+    deps = [
+        ":logging_app_bin_pkg",
+        ":logging_app_config_pkg",
+    ],
 )
