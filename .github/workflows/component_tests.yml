@@ -26,6 +26,8 @@
 name: Component Tests
 
 on:
+  pull_request:
+    types: [opened, reopened, synchronize]
   schedule:
     # Run nightly at 02:00 UTC
     - cron: "0 2 * * *"

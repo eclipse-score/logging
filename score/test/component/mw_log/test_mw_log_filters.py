@@ -60,7 +60,7 @@ def test_mw_verbose_filters(target, datarouter_on_target, dlt_capture):
     assert count("DBG") == 5, f"DBG: expected 5, got {count('DBG')}"
     assert count("VBS") == 6, f"VBS: expected 6, got {count('VBS')}"
 
-    total = sum(count(ctx) for ctx in CONTEXT_IDS)
+    total = sum(count(ctx) for ctx in CONTEXT_IDS) + count("DFLT")
     assert total == TOTAL_VERBOSE_MESSAGES, (
         f"Total: expected {TOTAL_VERBOSE_MESSAGES}, got {total}"
     )
