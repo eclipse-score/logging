@@ -35,8 +35,8 @@ py_logging_itf_test(
 )
 
 py_logging_itf_test(
-    name = "test_mw_log_kFile",
-    srcs = ["test_mw_log_kFile.py"],
+    name = "test_mw_log_kfile",
+    srcs = ["test_mw_log_kfile.py"],
     filesystem = "//score/test/component/dlt_generator_app:dlt_generator_filesystem",
     deps = [
         "@score_itf//third_party/python_dlt",
