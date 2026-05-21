@@ -42,6 +42,8 @@ common --//score/datarouter/build_configuration_flags:use_local_vlan=True
 # ignored-attributes warnings (string_comparison_adaptor.h, text_format.h, etc.)
 build --copt=-Wno-deprecated-declarations
 build --copt=-Wno-ignored-attributes
+# TODO: Remove once score_itf fixes strict-warning incompatibilities in dlt_daemon C code
+build --per_file_copt=external.*score_itf.*dlt_daemon/.*@-Wno-missing-prototypes,-Wno-address,-Wno-stringop-truncation,-Wno-format,-Wno-format-nonliteral
 
 # Base QNX config (shared flags)
 common:qnx --credential_helper=*.qnx.com=%workspace%/scripts/internal/qnx_creds.py
