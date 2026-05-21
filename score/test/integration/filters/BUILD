@@ -13,21 +13,13 @@
 
 load("@rules_cc//cc:defs.bzl", "cc_binary")
 load("@rules_pkg//pkg:tar.bzl", "pkg_tar")
-load("//score/test/itf:defs.bzl", "py_logging_itf_test")
+load("//score/test/integration:defs.bzl", "py_logging_itf_test")
 
 cc_binary(
     name = "mwfiltertest",
     srcs = ["mwfiltertest.cpp"],
     deps = ["//score/mw/log"],
 )
-
-cc_binary(
-    name = "arafiltertest",
-    srcs = ["arafiltertest.cpp"],
-    deps = ["//score/mw/log"],
-)
-
-# --- Per-test filesystems ---
 
 pkg_tar(
     name = "mwfiltertest_pkg",
@@ -49,45 +41,14 @@ pkg_tar(
     ],
 )
 
-pkg_tar(
-    name = "arafiltertest_pkg",
-    srcs = [":arafiltertest"],
-    package_dir = "opt/test_apps/arafiltertest/bin",
-)
-
-pkg_tar(
-    name = "arafiltertest_config_pkg",
-    srcs = ["etc/logging.json"],
-    package_dir = "opt/test_apps/arafiltertest/etc",
-)
-
-pkg_tar(
-    name = "arafiltertest_filesystem",
-    deps = [
-        ":arafiltertest_config_pkg",
-        ":arafiltertest_pkg",
-    ],
-)
-
-# --- Test targets ---
-
 py_logging_itf_test(
     name = "test_mw_verbose_filters",
     srcs = ["test_mw_verbose_filters.py"],
     filesystem = ":mwfiltertest_filesystem",
-    deps = ["//score/test/itf:dlt_parser"],
+    deps = ["//score/test/integration:dlt_parser"],
 )
 
-py_logging_itf_test(
-    name = "test_ara_verbose_filters",
-    srcs = ["test_ara_verbose_filters.py"],
-    filesystem = ":arafiltertest_filesystem",
-    deps = ["//score/test/itf:dlt_parser"],
-)
-
-# --- Non-verbose (TRACE) filter test ---
 # NOTE: Requires --//score/datarouter/build_configuration_flags:enable_nonverbose_dlt=True
-
 cc_binary(
     name = "filtertest",
     srcs = [

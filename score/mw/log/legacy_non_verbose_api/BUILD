@@ -24,7 +24,7 @@ cc_library(
     visibility = [
         "//platform/aas/ara/log:__subpackages__",
         "//score/mw/log:__subpackages__",
-        "//score/test/itf:__subpackages__",
+        "//score/test/integration:__subpackages__",
         "@score_baselibs//score/mw/log:__subpackages__",
         "@score_logging//score/datarouter:__subpackages__",
     ],

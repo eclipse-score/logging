@@ -18,36 +18,14 @@ load("@score_itf//bazel:py_itf_plugin.bzl", "py_itf_plugin")
 # =============================================================================
 # Shared base layers (included in every test image by the macro)
 # =============================================================================
-
-# --- DLT daemon binaries (from @score_itf) ---
-pkg_tar(
-    name = "dlt_bins_pkg",
-    srcs = [
-        "@score_itf//third_party/dlt:dlt-adaptor-stdin",
-        "@score_itf//third_party/dlt:dlt-daemon",
-        "@score_itf//third_party/dlt:dlt-receive",
-    ],
-    package_dir = "usr/bin",
-)
-
-pkg_tar(
-    name = "dlt_conf_pkg",
-    srcs = [
-        "@score_itf//third_party/dlt:dlt-daemon-conf",
-    ],
-    package_dir = "etc",
-)
-
 pkg_tar(
     name = "dlt_pkg",
-    visibility = ["//score/test/itf:__subpackages__"],
-    deps = [
-        ":dlt_bins_pkg",
-        ":dlt_conf_pkg",
+    visibility = ["//score/test/integration:__subpackages__"],
+    srcs = [
+        "@score_itf//third_party/dlt:dlt-receive",
     ],
 )
 
-# --- Datarouter binary + config ---
 pkg_tar(
     name = "datarouter_bin_pkg",
     srcs = ["//score/datarouter"],
@@ -56,14 +34,14 @@ pkg_tar(
 
 pkg_tar(
     name = "datarouter_conf_pkg",
-    srcs = ["//score/datarouter:all_config_files"],
+    srcs = ["//score/datarouter:integration_config_files"],
     package_dir = "opt/datarouter",
     strip_prefix = "/score/datarouter",
 )
 
 pkg_tar(
     name = "datarouter_pkg",
-    visibility = ["//score/test/itf:__subpackages__"],
+    visibility = ["//score/test/integration:__subpackages__"],
     deps = [
         ":datarouter_bin_pkg",
         ":datarouter_conf_pkg",
@@ -78,7 +56,7 @@ py_library(
     name = "dlt_parser",
     srcs = ["dlt_parser.py"],
     imports = ["."],
-    visibility = ["//score/test/itf:__subpackages__"],
+    visibility = ["//score/test/integration:__subpackages__"],
 )
 
 py_library(
@@ -94,5 +72,5 @@ py_itf_plugin(
         "logging_plugin",
     ],
     py_library = ":logging_plugin_lib",
-    visibility = ["//score/test/itf:__subpackages__"],
+    visibility = ["//score/test/integration:__subpackages__"],
 )
