@@ -38,6 +38,11 @@ common --//score/datarouter/build_configuration_flags:enable_dynamic_configurati
 common --//score/datarouter/build_configuration_flags:file_transfer=False
 common --//score/datarouter/build_configuration_flags:use_local_vlan=True
 
+# TODO: Remove once score_baselibs fixes deprecated StringLiteral and
+# ignored-attributes warnings (string_comparison_adaptor.h, text_format.h, etc.)
+build --copt=-Wno-deprecated-declarations
+build --copt=-Wno-ignored-attributes
+
 # Base QNX config (shared flags)
 common:qnx --credential_helper=*.qnx.com=%workspace%/scripts/internal/qnx_creds.py
 common:qnx --credential_helper_timeout="60s"
