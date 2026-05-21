@@ -13,7 +13,7 @@
 
 load("@rules_cc//cc:defs.bzl", "cc_binary")
 load("@rules_pkg//pkg:tar.bzl", "pkg_tar")
-load("//score/test/integration:defs.bzl", "py_logging_itf_test")
+load("//score/test/component:defs.bzl", "py_logging_itf_test")
 
 cc_binary(
     name = "mwfiltertest",
@@ -45,7 +45,6 @@ py_logging_itf_test(
     name = "test_mw_verbose_filters",
     srcs = ["test_mw_verbose_filters.py"],
     filesystem = ":mwfiltertest_filesystem",
-    deps = ["//score/test/integration:dlt_parser"],
 )
 
 # NOTE: Requires --//score/datarouter/build_configuration_flags:enable_nonverbose_dlt=True

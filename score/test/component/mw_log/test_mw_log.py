@@ -24,58 +24,13 @@ import os
 import tempfile
 
 import dlt.dlt as python_dlt
-from dlt_parser import parse_messages
+from logging_plugin import download_dlt
 
 
 LOGGER = logging.getLogger(__name__)
 
 LOGGING_APP_ID = "EXA"
 LOGGING_APP_CMD = "cd /opt/test_apps/logging_app && ./bin/logging_app"
-
-# Expected substrings that must appear in the DLT output from our app.
-# These match the structured content of each message emitted by logging_app.cpp
-# as formatted by dlt-receive -a text output.
-# NOTE: dlt-receive -a renders bool as 1/0 (not True/False),
-#       UINT64_MAX as -1 (signed), and raw buffers as hex bytes.
-VALUES_TO_CHECK_REMOTE = [
-    "Logging Application DoLogging",
-    "val_bool 1",
-    "val_uint8t 123 val_uint16t 1234 val_uint32t 12345 val_uint64t 123456",
-    "val_uint8tmax 255 val_uint16tmax 65535 val_uint32tmax 4294967295 val_uint64tmax -1",
-    "val_int8t -34 val_int16t -14576 val_int32t -2147483640 val_int64t -9223372036854775700",
-    "val_int8tmax 127 val_int16tmax 32767 val_int32tmax 2147483647 val_int64tmax 9223372036854775807",
-    "val_int8tmin -128 val_int16tmin -32768 val_int32tmin -2147483648 val_int64tmin -9223372036854775808",
-    "val_int8tminplusint8t -94 val_int16tminplusint16t -18192 val_int32tminplusint32t -8 val_int64tminplusint64t -108",
-    "val_string Logging",
-    "val_double 93454.6",
-    "log_hex_8 10 log_hex_16 9876 log_hex_32 543210987 log_hex_64 654321098765432109",
-    "log_bin_8 8 log_bin_16 9012 log_bin_32 3456789012 log_bin_64 3456789012345678901",
-    "log_raw_buffer",
-    "log_slog2_message slog2_message",
-]
-
-# Expected substrings for console output (captured from the app's stdout).
-# Console output differs from dlt-receive -a in several ways:
-#   - val_bool renders as True (not 1)
-#   - UINT64_MAX renders as 18446744073709551615 (unsigned) not -1
-#   - val_double has more decimal places (93454.600000)
-#   - log_raw_buffer renders as contiguous hex string (726177)
-VALUES_TO_CHECK_CONSOLE = [
-    "Logging Application DoLogging",
-    "val_bool True",
-    "val_uint8t 123 val_uint16t 1234 val_uint32t 12345 val_uint64t 123456",
-    "val_uint8tmax 255 val_uint16tmax 65535 val_uint32tmax 4294967295 val_uint64tmax 18446744073709551615",
-    "val_int8t -34 val_int16t -14576 val_int32t -2147483640 val_int64t -9223372036854775700",
-    "val_int8tmax 127 val_int16tmax 32767 val_int32tmax 2147483647 val_int64tmax 9223372036854775807",
-    "val_int8tmin -128 val_int16tmin -32768 val_int32tmin -2147483648 val_int64tmin -9223372036854775808",
-    "val_int8tminplusint8t -94 val_int16tminplusint16t -18192 val_int32tminplusint32t -8 val_int64tminplusint64t -108",
-    "val_string Logging",
-    "val_double 93454.600000",
-    "log_hex_8 10 log_hex_16 9876 log_hex_32 543210987 log_hex_64 654321098765432109",
-    "log_bin_8 8 log_bin_16 9012 log_bin_32 3456789012 log_bin_64 3456789012345678901",
-    "log_raw_buffer 726177",
-    "log_slog2_message slog2_message",
-]
 
 # Expected substrings for DLT binary file output parsed by python-dlt.
 # Differs from dlt-receive -a (remote) in:
@@ -98,35 +53,45 @@ VALUES_TO_CHECK_FILE = [
     "log_slog2_message slog2_message",
 ]
 
+# Expected substrings for console output (captured from the app's stdout).
+VALUES_TO_CHECK_CONSOLE = [
+    "Logging Application DoLogging",
+    "val_bool True",
+    "val_uint8t 123 val_uint16t 1234 val_uint32t 12345 val_uint64t 123456",
+    "val_uint8tmax 255 val_uint16tmax 65535 val_uint32tmax 4294967295 val_uint64tmax 18446744073709551615",
+    "val_int8t -34 val_int16t -14576 val_int32t -2147483640 val_int64t -9223372036854775700",
+    "val_int8tmax 127 val_int16tmax 32767 val_int32tmax 2147483647 val_int64tmax 9223372036854775807",
+    "val_int8tmin -128 val_int16tmin -32768 val_int32tmin -2147483648 val_int64tmin -9223372036854775808",
+    "val_int8tminplusint8t -94 val_int16tminplusint16t -18192 val_int32tminplusint32t -8 val_int64tminplusint64t -108",
+    "val_string Logging",
+    "val_double 93454.600000",
+    "log_hex_8 10 log_hex_16 9876 log_hex_32 543210987 log_hex_64 654321098765432109",
+    "log_bin_8 8 log_bin_16 9012 log_bin_32 3456789012 log_bin_64 3456789012345678901",
+    "log_raw_buffer 726177",
+    "log_slog2_message slog2_message",
+]
+
 
 def test_mw_log_remote_logging(target, datarouter_on_target, dlt_capture):
     """Verify all data types are correctly logged and received via DLT."""
     with dlt_capture() as receiver:
         target.execute(LOGGING_APP_CMD)
 
-    output = receiver.get_output()
-    LOGGER.info(f"DLT output length: {len(output)} chars")
-
-    messages = parse_messages(output, LOGGING_APP_ID)
+    record = download_dlt(target, receiver.dlt_file)
+    messages = record.find(query=dict(apid=LOGGING_APP_ID))
     LOGGER.info(f"Received {len(messages)} messages from {LOGGING_APP_ID}")
     for msg in messages:
         LOGGER.info(f"  [{msg.ctid}] {msg.payload}")
 
     assert len(messages) > 0, "No DLT messages received from logging_app"
 
-    app_output = "\n".join(msg.payload for msg in messages)
-    missing = [v for v in VALUES_TO_CHECK_REMOTE if v not in app_output]
+    app_output = "\n".join(str(msg.payload) for msg in messages)
+    missing = [v for v in VALUES_TO_CHECK_FILE if v not in app_output]
     assert not missing, f"Missing expected values in DLT output: {missing}"
 
 
 def test_mw_log_console_logging(target, datarouter_on_target):
-    """Verify all data types are correctly logged to console (stdout).
-
-    The app writes DLT-formatted log lines to stdout when logMode includes
-    kConsole. Console rendering differs from dlt-receive -a in how certain
-    types are formatted (unsigned vs signed integers, binary representations,
-    raw buffer hex encoding, double precision).
-    """
+    """Verify all data types are correctly logged to console (stdout)."""
     proc = target.execute_async(
         "/opt/test_apps/logging_app/bin/logging_app",
         cwd="/opt/test_apps/logging_app",
@@ -143,12 +108,7 @@ def test_mw_log_console_logging(target, datarouter_on_target):
 
 
 def test_mw_log_file_logging(target, datarouter_on_target):
-    """Verify all data types are correctly logged to a .dlt file on disk.
-
-    The app writes DLT binary messages to /tmp/EXA.dlt when logMode includes
-    kFile. The test downloads the file and parses it with python-dlt to verify
-    that all expected values are present in the message payloads.
-    """
+    """Verify all data types are correctly logged to a .dlt file on disk."""
     target.execute(LOGGING_APP_CMD)
 
     with tempfile.TemporaryDirectory() as tmpdir:

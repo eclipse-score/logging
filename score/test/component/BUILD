@@ -20,10 +20,10 @@ load("@score_itf//bazel:py_itf_plugin.bzl", "py_itf_plugin")
 # =============================================================================
 pkg_tar(
     name = "dlt_pkg",
-    visibility = ["//score/test/integration:__subpackages__"],
     srcs = [
         "@score_itf//third_party/dlt:dlt-receive",
     ],
+    visibility = ["//score/test/component:__subpackages__"],
 )
 
 pkg_tar(
@@ -34,14 +34,14 @@ pkg_tar(
 
 pkg_tar(
     name = "datarouter_conf_pkg",
-    srcs = ["//score/datarouter:integration_config_files"],
+    srcs = ["//score/datarouter:integration_test_config_files"],
     package_dir = "opt/datarouter",
     strip_prefix = "/score/datarouter",
 )
 
 pkg_tar(
     name = "datarouter_pkg",
-    visibility = ["//score/test/integration:__subpackages__"],
+    visibility = ["//score/test/component:__subpackages__"],
     deps = [
         ":datarouter_bin_pkg",
         ":datarouter_conf_pkg",
@@ -51,13 +51,6 @@ pkg_tar(
 # =============================================================================
 # Shared Python libraries and plugin
 # =============================================================================
-
-py_library(
-    name = "dlt_parser",
-    srcs = ["dlt_parser.py"],
-    imports = ["."],
-    visibility = ["//score/test/integration:__subpackages__"],
-)
 
 py_library(
     name = "logging_plugin_lib",
@@ -72,5 +65,5 @@ py_itf_plugin(
         "logging_plugin",
     ],
     py_library = ":logging_plugin_lib",
-    visibility = ["//score/test/integration:__subpackages__"],
+    visibility = ["//score/test/component:__subpackages__"],
 )

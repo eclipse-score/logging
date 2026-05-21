@@ -24,14 +24,13 @@ exactly 22 messages should be visible.
 
 import logging
 
-from dlt_parser import count_messages_by_context
-
+from logging_plugin import download_dlt
 
 LOGGER = logging.getLogger(__name__)
 
 TOTAL_VERBOSE_MESSAGES = 22
 TEST_APP_ID = "TAP"
-CONTEXT_IDS = {"FAT", "ERR", "WRN", "INF", "DBG", "VBS"}
+CONTEXT_IDS = ["FAT", "ERR", "WRN", "INF", "DBG", "VBS"]
 
 
 def test_mw_verbose_filters(target, datarouter_on_target, dlt_capture):
@@ -49,17 +48,19 @@ def test_mw_verbose_filters(target, datarouter_on_target, dlt_capture):
     with dlt_capture() as receiver:
         target.execute("cd /opt/test_apps/mwfiltertest && ./bin/mwfiltertest")
 
-    output = receiver.get_output()
-    LOGGER.info(f"DLT output length: {len(output)} chars")
+    record = download_dlt(target, receiver.dlt_file)
 
-    counts, total = count_messages_by_context(output, TEST_APP_ID, CONTEXT_IDS)
+    def count(ctx):
+        return len(record.find(query=dict(apid=TEST_APP_ID, ctid=ctx)))
 
-    assert counts.get("FAT", 0) == 1, f"FAT: expected 1, got {counts.get('FAT', 0)}"
-    assert counts.get("ERR", 0) == 2, f"ERR: expected 2, got {counts.get('ERR', 0)}"
-    assert counts.get("WRN", 0) == 3, f"WRN: expected 3, got {counts.get('WRN', 0)}"
-    assert counts.get("INF", 0) == 4, f"INF: expected 4, got {counts.get('INF', 0)}"
-    assert counts.get("DBG", 0) == 5, f"DBG: expected 5, got {counts.get('DBG', 0)}"
-    assert counts.get("VBS", 0) == 6, f"VBS: expected 6, got {counts.get('VBS', 0)}"
+    assert count("FAT") == 1, f"FAT: expected 1, got {count('FAT')}"
+    assert count("ERR") == 2, f"ERR: expected 2, got {count('ERR')}"
+    assert count("WRN") == 3, f"WRN: expected 3, got {count('WRN')}"
+    assert count("INF") == 4, f"INF: expected 4, got {count('INF')}"
+    assert count("DBG") == 5, f"DBG: expected 5, got {count('DBG')}"
+    assert count("VBS") == 6, f"VBS: expected 6, got {count('VBS')}"
+
+    total = sum(count(ctx) for ctx in CONTEXT_IDS)
     assert total == TOTAL_VERBOSE_MESSAGES, (
         f"Total: expected {TOTAL_VERBOSE_MESSAGES}, got {total}"
     )

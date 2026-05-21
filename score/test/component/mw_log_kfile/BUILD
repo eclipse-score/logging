@@ -11,8 +11,9 @@
 # SPDX-License-Identifier: Apache-2.0
 # *******************************************************************************
 
+load("@rules_cc//cc:cc_binary.bzl", "cc_binary")
 load("@rules_pkg//pkg:tar.bzl", "pkg_tar")
-load("//score/test/integration:defs.bzl", "py_logging_itf_test")
+load("//score/test/component:defs.bzl", "py_logging_itf_test")
 
 cc_binary(
     name = "dlt_generator",
@@ -45,7 +46,6 @@ py_logging_itf_test(
     srcs = ["test_mw_log_kfile.py"],
     filesystem = ":dlt_generator_filesystem",
     deps = [
-        "//score/test/integration:dlt_parser",
         "@score_itf//third_party/python_dlt",
     ],
 )
