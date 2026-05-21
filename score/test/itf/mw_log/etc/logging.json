@@ -1,0 +1,7 @@
+{
+  "appId": "EXA",
+  "appDesc": "Example App",
+  "logMode": "kConsole|kRemote|kFile",
+  "logLevel": "kVerbose",
+  "logLevelThresholdConsole": "kVerbose"
+}
