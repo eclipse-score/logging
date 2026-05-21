@@ -1,0 +1,18 @@
+{
+    "appId": "FTST",
+    "appDesc": "Filter Test Application",
+    "contextConfigs": [
+      {
+        "name": "AAAA",
+        "logLevel": "kVerbose"
+      },
+      {
+        "name": "BBBB",
+        "logLevel": "kInfo"
+      },
+      {
+        "name": "CCCC",
+        "logLevel": "kFatal"
+      }
+    ]
+  }

@@ -89,3 +89,60 @@ py_logging_itf_test(
 # NOTE: Requires --//score/datarouter/build_configuration_flags:enable_nonverbose_dlt=True
 
 cc_binary(
+    name = "filtertest",
+    srcs = [
+        "filtertest.cpp",
+        "filtertest.h",
+    ],
+    deps = [
+        "//score/mw/log",
+        "//score/mw/log/legacy_non_verbose_api",
+        "@score_baselibs//score/static_reflection_with_serialization/visitor",
+    ],
+)
+
+pkg_tar(
+    name = "filtertest_bin_pkg",
+    srcs = [":filtertest"],
+    package_dir = "opt/test_apps/filtertest/bin",
+)
+
+genrule(
+    name = "filtertest_logging_json",
+    srcs = ["etc/filtertest_logging.json"],
+    outs = ["filtertest_etc/logging.json"],
+    cmd = "cp $< $@",
+)
+
+pkg_tar(
+    name = "filtertest_config_pkg",
+    srcs = [":filtertest_logging_json"],
+    package_dir = "opt/test_apps/filtertest/etc",
+    strip_prefix = "filtertest_etc",
+)
+
+pkg_tar(
+    name = "filtertest_classid_pkg",
+    srcs = ["etc/class-id.json"],
+    package_dir = "bmw/platform/opt/datarouter/etc",
+)
+
+pkg_tar(
+    name = "filtertest_filesystem",
+    deps = [
+        ":filtertest_bin_pkg",
+        ":filtertest_classid_pkg",
+        ":filtertest_config_pkg",
+    ],
+)
+
+py_logging_itf_test(
+    name = "test_datarouter_filters",
+    srcs = ["test_datarouter_filters.py"],
+    filesystem = ":filtertest_filesystem",
+    target_compatible_with = select({
+        "//score/datarouter/build_configuration_flags:config_datarouter_nonverbose_dlt": [],
+        "//conditions:default": ["@platforms//:incompatible"],
+    }),
+    deps = ["@score_itf//score/itf/plugins/dlt"],
+)
