@@ -1,5 +1,5 @@
 # *******************************************************************************
-# Copyright (c) 2025 Contributors to the Eclipse Foundation
+# Copyright (c) 2026 Contributors to the Eclipse Foundation
 #
 # See the NOTICE file(s) distributed with this work for additional
 # information regarding copyright ownership.
@@ -10,11 +10,25 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 # *******************************************************************************
+# ********************************************************************************
+# Copyright (c) 2025 Contributors to the Eclipse Foundation
+#
+# See the NOTICE file(s) distributed with this work for additional
+# information regarding copyright ownership.
+#
+# This program and the accompanying materials are made available under the
+# terms of the Apache License Version 2.0 which is available at
+# https://www.apache.org/licenses/LICENSE-2.0
+#
+# SPDX-License-Identifier: Apache-2.0
+# ********************************************************************************
 
 load("@rules_cc//cc:defs.bzl", "cc_binary")
 load("@rules_pkg//pkg:tar.bzl", "pkg_tar")
-load("//score/test/component:defs.bzl", "py_logging_itf_test")
 
+# ---------------------------------------------------------------------------
+# mwfiltertest — used by mw_log verbose filter tests
+# ---------------------------------------------------------------------------
 cc_binary(
     name = "mwfiltertest",
     srcs = ["mwfiltertest.cpp"],
@@ -22,7 +36,7 @@ cc_binary(
 )
 
 pkg_tar(
-    name = "mwfiltertest_pkg",
+    name = "mwfiltertest_bin_pkg",
     srcs = [":mwfiltertest"],
     package_dir = "opt/test_apps/mwfiltertest/bin",
 )
@@ -35,19 +49,16 @@ pkg_tar(
 
 pkg_tar(
     name = "mwfiltertest_filesystem",
+    visibility = ["//score/test/component:__subpackages__"],
     deps = [
+        ":mwfiltertest_bin_pkg",
         ":mwfiltertest_config_pkg",
-        ":mwfiltertest_pkg",
     ],
 )
 
-py_logging_itf_test(
-    name = "test_mw_verbose_filters",
-    srcs = ["test_mw_verbose_filters.py"],
-    filesystem = ":mwfiltertest_filesystem",
-)
-
-# NOTE: Requires --//score/datarouter/build_configuration_flags:enable_nonverbose_dlt=True
+# ---------------------------------------------------------------------------
+# filtertest — used by datarouter non-verbose filter tests
+# ---------------------------------------------------------------------------
 cc_binary(
     name = "filtertest",
     srcs = [
@@ -89,20 +100,10 @@ pkg_tar(
 
 pkg_tar(
     name = "filtertest_filesystem",
+    visibility = ["//score/test/component:__subpackages__"],
     deps = [
         ":filtertest_bin_pkg",
         ":filtertest_classid_pkg",
         ":filtertest_config_pkg",
     ],
-)
-
-py_logging_itf_test(
-    name = "test_datarouter_filters",
-    srcs = ["test_datarouter_filters.py"],
-    filesystem = ":filtertest_filesystem",
-    target_compatible_with = select({
-        "//score/datarouter/build_configuration_flags:config_datarouter_nonverbose_dlt": [],
-        "//conditions:default": ["@platforms//:incompatible"],
-    }),
-    deps = ["@score_itf//score/itf/plugins/dlt"],
 )

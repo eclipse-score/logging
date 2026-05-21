@@ -26,25 +26,12 @@
 load("//score/test/component:defs.bzl", "py_logging_itf_test")
 
 py_logging_itf_test(
-    name = "test_mw_log",
-    srcs = ["test_mw_log.py"],
-    filesystem = "//score/test/component/logging_app:logging_app_filesystem",
-    deps = [
-        "@score_itf//third_party/python_dlt",
-    ],
-)
-
-py_logging_itf_test(
-    name = "test_mw_log_kFile",
-    srcs = ["test_mw_log_kFile.py"],
-    filesystem = "//score/test/component/dlt_generator_app:dlt_generator_filesystem",
-    deps = [
-        "@score_itf//third_party/python_dlt",
-    ],
-)
-
-py_logging_itf_test(
-    name = "test_mw_log_filters",
-    srcs = ["test_mw_log_filters.py"],
-    filesystem = "//score/test/component/filters_app:mwfiltertest_filesystem",
+    name = "test_datarouter_filters",
+    srcs = ["test_datarouter_filters.py"],
+    filesystem = "//score/test/component/filters_app:filtertest_filesystem",
+    target_compatible_with = select({
+        "//score/datarouter/build_configuration_flags:config_datarouter_nonverbose_dlt": [],
+        "//conditions:default": ["@platforms//:incompatible"],
+    }),
+    deps = ["@score_itf//score/itf/plugins/dlt"],
 )
