@@ -1,0 +1,91 @@
+# *******************************************************************************
+# Copyright (c) 2025 Contributors to the Eclipse Foundation
+#
+# See the NOTICE file(s) distributed with this work for additional
+# information regarding copyright ownership.
+#
+# This program and the accompanying materials are made available under the
+# terms of the Apache License Version 2.0 which is available at
+# https://www.apache.org/licenses/LICENSE-2.0
+#
+# SPDX-License-Identifier: Apache-2.0
+# *******************************************************************************
+
+load("@rules_cc//cc:defs.bzl", "cc_binary")
+load("@rules_pkg//pkg:tar.bzl", "pkg_tar")
+load("//score/test/itf:defs.bzl", "py_logging_itf_test")
+
+cc_binary(
+    name = "mwfiltertest",
+    srcs = ["mwfiltertest.cpp"],
+    deps = ["//score/mw/log"],
+)
+
+cc_binary(
+    name = "arafiltertest",
+    srcs = ["arafiltertest.cpp"],
+    deps = ["//score/mw/log"],
+)
+
+# --- Per-test filesystems ---
+
+pkg_tar(
+    name = "mwfiltertest_pkg",
+    srcs = [":mwfiltertest"],
+    package_dir = "opt/test_apps/mwfiltertest/bin",
+)
+
+pkg_tar(
+    name = "mwfiltertest_config_pkg",
+    srcs = ["etc/logging.json"],
+    package_dir = "opt/test_apps/mwfiltertest/etc",
+)
+
+pkg_tar(
+    name = "mwfiltertest_filesystem",
+    deps = [
+        ":mwfiltertest_config_pkg",
+        ":mwfiltertest_pkg",
+    ],
+)
+
+pkg_tar(
+    name = "arafiltertest_pkg",
+    srcs = [":arafiltertest"],
+    package_dir = "opt/test_apps/arafiltertest/bin",
+)
+
+pkg_tar(
+    name = "arafiltertest_config_pkg",
+    srcs = ["etc/logging.json"],
+    package_dir = "opt/test_apps/arafiltertest/etc",
+)
+
+pkg_tar(
+    name = "arafiltertest_filesystem",
+    deps = [
+        ":arafiltertest_config_pkg",
+        ":arafiltertest_pkg",
+    ],
+)
+
+# --- Test targets ---
+
+py_logging_itf_test(
+    name = "test_mw_verbose_filters",
+    srcs = ["test_mw_verbose_filters.py"],
+    filesystem = ":mwfiltertest_filesystem",
+    deps = ["//score/test/itf:dlt_parser"],
+)
+
+py_logging_itf_test(
+    name = "test_ara_verbose_filters",
+    srcs = ["test_ara_verbose_filters.py"],
+    filesystem = ":arafiltertest_filesystem",
+    deps = ["//score/test/itf:dlt_parser"],
+)
+
+# --- Non-verbose (TRACE) filter test ---
+# NOTE: Requires --//score/datarouter/build_configuration_flags:enable_nonverbose_dlt=True
+
+cc_binary(
