@@ -11,19 +11,33 @@
 # SPDX-License-Identifier: Apache-2.0
 # *******************************************************************************
 
-name: CPP/C++
+name: CPP coverage
 
 on:
   pull_request:
     types: [opened, reopened, synchronize]
+  merge_group:
+    types: [checks_requested]
   push:
     branches:
       - main
-  merge_group:
-    types: [checks_requested]
 
 jobs:
+  approval:
+    name: coverage approval gate
+    if: github.event_name == 'pull_request'
+    environment: workflow-approval
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: read
+    steps:
+      - name: Blocking on approval
+        run: 'true'
+
   coverage-report:
+    if: ${{ !cancelled() }}
+    needs: approval
     uses: eclipse-score/cicd-workflows/.github/workflows/cpp-coverage.yml@main
     with:
       bazel-target: "//..."

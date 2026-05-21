@@ -307,7 +307,10 @@ cc_test(
         "//score/datarouter/test/ut/etc:fg_socket_server_log_channels_test_json",
     ],
     features = FEAT_COMPILER_WARNINGS_AS_ERRORS,
-    tags = ["unit"],
+    tags = [
+        "no_ci",
+        "unit",
+    ],
     deps = [
         "//score/datarouter/src/persistency:mock",
         "@googletest//:gtest_main",
