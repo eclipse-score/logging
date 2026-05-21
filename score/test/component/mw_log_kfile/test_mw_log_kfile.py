@@ -25,8 +25,7 @@ import os
 import tempfile
 
 import dlt.dlt as python_dlt
-
-from dlt_parser import parse_messages
+from logging_plugin import download_dlt
 
 
 LOGGER = logging.getLogger(__name__)
@@ -63,13 +62,7 @@ def _verify_kfile_messages(target, expected):
 
 
 def test_mw_log_kfile(target, datarouter_on_target, dlt_capture):
-    """Verify kFile logging produces the expected number of messages.
-
-    Runs dlt_generator with 100 iterations, each producing 6 log messages
-    (Fatal, Error, Warn, Info, Verbose, Debug). Verifies the exact count
-    from the on-disk .dlt file. Remote DLT output via UDP is logged for
-    diagnostics but not asserted exactly.
-    """
+    """Verify kFile logging produces the expected number of messages."""
     expected = ITERATIONS * MESSAGES_PER_ITERATION
 
     with dlt_capture() as receiver:
@@ -79,25 +72,16 @@ def test_mw_log_kfile(target, datarouter_on_target, dlt_capture):
         )
 
     # Log remote DLT count for diagnostics (UDP is inherently lossy)
-    output = receiver.get_output()
-    messages = parse_messages(output, APP_ID)
-    remote_count = sum(1 for m in messages if DEFAULT_MESSAGE in m.payload)
+    record = download_dlt(target, receiver.dlt_file)
+    messages = record.find(query=dict(apid=APP_ID))
+    remote_count = sum(1 for m in messages if DEFAULT_MESSAGE in str(m.payload))
     LOGGER.info(f"Remote DLT message count: {remote_count} / {expected} expected")
 
     _verify_kfile_messages(target, expected)
 
 
 def test_mw_log_kfile_multiple_threads(target, datarouter_on_target, dlt_capture):
-    """Verify kFile logging with multiple threads.
-
-    Runs dlt_generator with 4 threads and 100 iterations each, producing
-    4 * 6 * 100 = 2400 messages total. Verifies the exact count from the
-    on-disk .dlt file (written directly by the datarouter from shared memory).
-
-    Remote DLT output via UDP is logged for diagnostics but not asserted
-    exactly, because UDP multicast can truncate or drop messages under
-    concurrent load — this is inherent to the protocol, not a bug.
-    """
+    """Verify kFile logging with multiple threads."""
     threads = 4
     expected = threads * ITERATIONS * MESSAGES_PER_ITERATION
 
@@ -108,9 +92,9 @@ def test_mw_log_kfile_multiple_threads(target, datarouter_on_target, dlt_capture
         )
 
     # Log remote DLT count for diagnostics (UDP is inherently lossy)
-    output = receiver.get_output()
-    messages = parse_messages(output, APP_ID)
-    remote_count = sum(1 for m in messages if DEFAULT_MESSAGE in m.payload)
+    record = download_dlt(target, receiver.dlt_file)
+    messages = record.find(query=dict(apid=APP_ID))
+    remote_count = sum(1 for m in messages if DEFAULT_MESSAGE in str(m.payload))
     LOGGER.info(f"Remote DLT message count: {remote_count} / {expected} expected")
 
     _verify_kfile_messages(target, expected)

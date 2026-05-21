@@ -26,7 +26,7 @@ that the test files are created on the target filesystem.
 import logging
 
 import pytest
-from dlt_parser import parse_messages
+from logging_plugin import download_dlt
 
 
 LOGGER = logging.getLogger(__name__)
@@ -36,26 +36,17 @@ NUM_TRANSFERS = 50
 
 
 def test_filetransfer(target, datarouter_on_target, dlt_capture):
-    """Verify that file transfer DLT messages are sent and received.
-
-    The filetransfer_app creates test files and sends them via the
-    FileTransfer API.  We verify:
-    1. The app's lifecycle log messages are received via UDP
-    2. All NUM_TRANSFERS transfers are confirmed by app-level log messages
-    3. The test files exist on the target filesystem
-    """
+    """Verify that file transfer DLT messages are sent and received."""
     with dlt_capture() as receiver:
         target.execute("cd /opt/test_apps/filetransfer && ./bin/filetransfer_app")
 
-    output = receiver.get_output()
-    LOGGER.info(f"DLT output length: {len(output)} chars")
-
-    messages = parse_messages(output, APP_ID)
+    record = download_dlt(target, receiver.dlt_file)
+    messages = record.find(query=dict(apid=APP_ID))
     LOGGER.info(f"App message count: {len(messages)}")
 
     assert len(messages) > 0, "No DLT messages received from filetransfer_app"
 
-    app_payloads = "\n".join(m.payload for m in messages)
+    app_payloads = "\n".join(str(m.payload) for m in messages)
 
     # Verify lifecycle messages
     assert "initialize" in app_payloads, "Missing 'initialize' message"
@@ -63,7 +54,7 @@ def test_filetransfer(target, datarouter_on_target, dlt_capture):
     assert "done" in app_payloads, "Missing 'done' message"
 
     # Verify transfer confirmations from the app
-    transfer_msgs = [m for m in messages if "Transferred file" in m.payload]
+    transfer_msgs = [m for m in messages if "Transferred file" in str(m.payload)]
     assert len(transfer_msgs) == NUM_TRANSFERS, (
         f"Expected {NUM_TRANSFERS} transfer confirmations, got {len(transfer_msgs)}"
     )
@@ -82,13 +73,4 @@ def test_filetransfer(target, datarouter_on_target, dlt_capture):
     reason="file_transfer_impl not available in this repo — FLST/FLDA/FLFI protocol messages are not emitted"
 )
 def test_filetransfer_protocol_verification(target, datarouter_on_target, dlt_capture):
-    """Verify DLT file transfer protocol messages (FLST/FLDA/FLFI) and hash integrity.
-
-    This test verifies the low-level DLT file transfer protocol, including:
-    - FLST (file transfer start) messages with correct file metadata
-    - FLDA (file transfer data) messages containing file content
-    - FLFI (file transfer finish) messages with MD5 hash verification
-
-    Requires file_transfer_impl/ to be present and file_transfer=True in .bazelrc.
-    Currently blocked because file_transfer_impl/ does not exist in this repo.
-    """
+    """Verify DLT file transfer protocol messages (FLST/FLDA/FLFI) and hash integrity."""

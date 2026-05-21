@@ -11,41 +11,41 @@
 # SPDX-License-Identifier: Apache-2.0
 # *******************************************************************************
 
+load("@rules_cc//cc:cc_binary.bzl", "cc_binary")
 load("@rules_pkg//pkg:tar.bzl", "pkg_tar")
-load("//score/test/integration:defs.bzl", "py_logging_itf_test")
+load("//score/test/component:defs.bzl", "py_logging_itf_test")
 
 cc_binary(
-    name = "logging_app",
-    srcs = ["logging_app.cpp"],
-    deps = ["//score/mw/log"],
-)
-
-pkg_tar(
-    name = "logging_app_bin_pkg",
-    srcs = [":logging_app"],
-    package_dir = "opt/test_apps/logging_app/bin",
-)
-
-pkg_tar(
-    name = "logging_app_config_pkg",
-    srcs = ["etc/logging.json"],
-    package_dir = "opt/test_apps/logging_app/etc",
-)
-
-pkg_tar(
-    name = "logging_app_filesystem",
+    name = "filetransfer_app",
+    srcs = ["filetransfer_app.cpp"],
     deps = [
-        ":logging_app_bin_pkg",
-        ":logging_app_config_pkg",
+        "//score/datarouter/dlt_filetransfer_trigger_lib",
+        "//score/mw/log",
+    ],
+)
+
+pkg_tar(
+    name = "filetransfer_bin_pkg",
+    srcs = [":filetransfer_app"],
+    package_dir = "opt/test_apps/filetransfer/bin",
+)
+
+pkg_tar(
+    name = "filetransfer_config_pkg",
+    srcs = ["etc/logging.json"],
+    package_dir = "opt/test_apps/filetransfer/etc",
+)
+
+pkg_tar(
+    name = "filetransfer_filesystem",
+    deps = [
+        ":filetransfer_bin_pkg",
+        ":filetransfer_config_pkg",
     ],
 )
 
 py_logging_itf_test(
-    name = "test_mw_log",
-    srcs = ["test_mw_log.py"],
-    filesystem = ":logging_app_filesystem",
-    deps = [
-        "//score/test/integration:dlt_parser",
-        "@score_itf//third_party/python_dlt",
-    ],
+    name = "test_filetransfer",
+    srcs = ["test_filetransfer.py"],
+    filesystem = ":filetransfer_filesystem",
 )
