@@ -1,0 +1,6 @@
+{
+  "appId": "FTEA",
+  "appDesc": "File Transfer Example App",
+  "logMode": "kRemote",
+  "logLevel": "kVerbose"
+}
