@@ -368,6 +368,22 @@ filegroup(
         "//platform/aas/tools/sctf:__subpackages__",
         "//pqr/abc/abc-lmn/config/project/cpu/pas/datarouter:__pkg__",
         "//score/datarouter/test:__subpackages__",
+        "//score/test/itf:__subpackages__",
+    ],
+)
+
+filegroup(
+    name = "all_config_files",
+    srcs = [
+        "etc/key_value_storage_list.json",
+        "etc/log-channels.json",
+        "etc/logging.json",
+        "etc/persistent-database-override.json",
+        "etc/persistent-logging.json",
+        "etc/raw-channels.json",
+    ],
+    visibility = [
+        "//score/test/itf:__subpackages__",
     ],
 )
 
