@@ -87,5 +87,15 @@ Additional documentation
 .. toctree::
    :maxdepth: 1
 
-   /docs/features/logging/architecture/index
-   /docs/design_decisions/explicit_init
+   features/logging/architecture/index
+   design_decisions/explicit_init
+
+Components
+==========
+
+.. toctree::
+   :titlesonly:
+   :maxdepth: 1
+   :glob:
+
+   components/**/index
