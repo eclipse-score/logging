@@ -91,3 +91,13 @@ Decision records
    :glob:
 
    design_decisions/explicit_init.rst
+
+Requirements
+------------
+
+.. toctree::
+   :maxdepth: 1
+   :glob:
+
+   logging/requirements/index.rst
+   logging/stats.rst
