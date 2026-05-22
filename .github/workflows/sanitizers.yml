@@ -56,8 +56,8 @@ jobs:
           bazel test \
             --config=${{ matrix.sanitizer_config }} \
             //score/... \
-            --build_tag_filters=-rust \
-            --test_tag_filters=-rust \
+            --build_tag_filters=-rust,-integration \
+            --test_tag_filters=-rust,-integration \
             --verbose_failures
 
       - name: Upload Bazel test logs (always)

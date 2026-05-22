@@ -51,7 +51,7 @@ config_setting(
         ":enable_nonverbose_dlt": "True",
     },
     visibility = [
-        "//visibility:public",
+        "@score_logging//score/datarouter:__subpackages__",
     ],
 )
 

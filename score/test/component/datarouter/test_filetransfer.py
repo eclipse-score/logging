@@ -25,7 +25,6 @@ that the test files are created on the target filesystem.
 
 import logging
 
-import pytest
 from logging_plugin import download_dlt
 
 
@@ -67,10 +66,3 @@ def test_filetransfer(target, datarouter_on_target, dlt_capture):
     assert file_count == NUM_TRANSFERS, (
         f"Expected {NUM_TRANSFERS} test files on target, found {file_count}"
     )
-
-
-@pytest.mark.skip(
-    reason="file_transfer_impl not available in this repo — FLST/FLDA/FLFI protocol messages are not emitted"
-)
-def test_filetransfer_protocol_verification(target, datarouter_on_target, dlt_capture):
-    """Verify DLT file transfer protocol messages (FLST/FLDA/FLFI) and hash integrity."""
