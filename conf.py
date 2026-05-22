@@ -53,6 +53,7 @@ exclude_patterns = [
     # entries are required to prevent the build from failing.
     "bazel-*",
     ".venv_docs",
+    "score/**/docs/**",
 ]
 
 templates_path = ["templates"]

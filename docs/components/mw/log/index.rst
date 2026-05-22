@@ -12,8 +12,9 @@
    # SPDX-License-Identifier: Apache-2.0
    # *******************************************************************************
 
+
 Logging Documentation
-========================
+=====================
 
 This section is reserved for middleware-specific documentation.
 
