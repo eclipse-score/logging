@@ -67,3 +67,7 @@ jobs:
           bazel build --lockfile_mode=error --config x86_64-linux -- \
             //... \
             -//:*
+
+      - name: Test with Bazel
+        run: |
+          bazel test --lockfile_mode=error --config x86_64-linux //score/... --test_tag_filters=-no_ci
