@@ -32,4 +32,4 @@ Components
    :maxdepth: 1
    :glob:
 
-   ./score/**/docs/index
+   ./docs/components/**/index
