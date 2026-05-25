@@ -169,14 +169,23 @@ std::unique_ptr<score::platform::internal::ILogParserFactory> SocketServer::Crea
 
         std::unique_ptr<score::platform::internal::ILogParser> Create(const score::mw::log::NvConfig& nv_config) override
         {
-            auto global_handlers = dlt_server_.GetGlobalHandlers();
-            score::platform::internal::LogParser::HandleRequestMap handle_request_map;
+            using LogParser = score::platform::internal::LogParser;
+
+            const auto handler_vec = dlt_server_.GetGlobalHandlers();
+            std::array<ILogParser::AnyHandler*, LogParser::kMaxGlobalHandlers> global_handlers{};
+            const std::size_t handler_count = std::min(handler_vec.size(), LogParser::kMaxGlobalHandlers);
+            for (std::size_t i = 0U; i < handler_count; ++i)
+            {
+                global_handlers[i] = handler_vec[i];
+            }
+
+            LogParser::HandleRequestMap handle_request_map;
             for (auto& binding : dlt_server_.GetTypeHandlerBindings())
             {
                 handle_request_map.emplace(std::move(binding.type_name), binding.handler);
             }
-            return std::make_unique<score::platform::internal::LogParser>(
-                nv_config, std::move(global_handlers), std::move(handle_request_map));
+            return std::make_unique<LogParser>(
+                nv_config, global_handlers, handler_count, std::move(handle_request_map));
         }
 
       private:
@@ -226,7 +235,7 @@ std::function<void(bool)> SocketServer::CreateEnableHandler(DataRouter& router,
         score::mw::log::LogWarn() << "Changing output enable to " << enable;
         WriteDltEnabled(enable, persistent_dictionary);
         router.ForEachSource(enable);
-        dlt_server.SetDltOutputEnabled(enable);
+        dlt_server.SetDltOutputEnable(enable);
     };
 }
 
@@ -294,7 +303,7 @@ std::unique_ptr<MessagePassingServer::ISession> SocketServer::CreateMessagePassi
     const auto fd = maybe_fd.value();
     const auto quota = dlt_server.GetQuota(appid);
     const auto quota_enforcement_enabled = dlt_server.GetQuotaEnforcementEnabled();
-    const bool is_dlt_enabled = dlt_server.GetDltEnabled();
+    const bool is_dlt_enabled = dlt_server.IsOutputEnabled();
     auto source_session = router.NewSourceSession(
         fd, appid, is_dlt_enabled, std::move(handle), quota, quota_enforcement_enabled, client_pid, nv_config);
     // The reason for banning is, because it's error-prone to use. One should use abstractions e.g. provided by

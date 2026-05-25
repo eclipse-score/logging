@@ -16,6 +16,7 @@
 
 #include "logparser/i_logparser.h"
 
+#include <array>
 #include <unordered_map>
 #include <unordered_set>
 #include <vector>
@@ -58,8 +59,19 @@ class LogParser : public ILogParser
   public:
     using HandleRequestMap = std::unordered_multimap<std::string, TypeHandler*>;
 
+    /// Maximum number of TypeHandlers that can be bound to a single type name.
+    /// DltLogServer registers exactly 1 handler per type (vhandler_, fthandler_,
+    /// sysedr_handler_). Increase this constant if a second handler per type is added.
+    static constexpr std::size_t kMaxHandlersPerType{1U};
+
+    /// Maximum number of global (AnyHandler) handlers.
+    /// DltLogServer registers exactly 2: sysedr_handler_ + nvhandler_.
+    /// Increase this constant if a new global handler is added.
+    static constexpr std::size_t kMaxGlobalHandlers{2U};
+
     explicit LogParser(const score::mw::log::INvConfig& nv_config,
-                       std::vector<AnyHandler*> global_handlers = {},
+                       std::array<AnyHandler*, kMaxGlobalHandlers> global_handlers = {},
+                       std::size_t global_handler_count = 0U,
                        HandleRequestMap handle_request_map = {});
     ~LogParser() = default;
 
@@ -75,21 +87,23 @@ class LogParser : public ILogParser
       public:
         TypeInfo info;
 
-        explicit IndexParser(TypeInfo type_info) : info{type_info}, handlers_{} {}
+        explicit IndexParser(TypeInfo type_info) : info{type_info}, handlers_{}, handler_count_{0U} {}
 
         void AddHandler(TypeHandler* handler);
 
         void Parse(const TimestampT timestamp, const char* const data, const BufsizeT size);
 
       private:
-        std::vector<TypeHandler*> handlers_;
+        std::array<TypeHandler*, kMaxHandlersPerType> handlers_;
+        std::size_t handler_count_;
     };
 
     const HandleRequestMap handle_request_map_;
 
     std::unordered_map<BufsizeT, IndexParser> index_parser_map_;
 
-    const std::vector<AnyHandler*> global_handlers_;
+    const std::array<AnyHandler*, kMaxGlobalHandlers> global_handlers_;
+    const std::size_t global_handler_count_;
     const score::mw::log::INvConfig& nv_config_;
 };
 

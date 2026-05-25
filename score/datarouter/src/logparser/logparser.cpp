@@ -60,26 +60,31 @@ namespace internal
 {
 
 LogParser::LogParser(const score::mw::log::INvConfig& nv_config,
-                     std::vector<AnyHandler*> global_handlers,
+                     std::array<AnyHandler*, kMaxGlobalHandlers> global_handlers,
+                     std::size_t global_handler_count,
                      HandleRequestMap handle_request_map)
     : ILogParser(),
       handle_request_map_{std::move(handle_request_map)},
       index_parser_map_{},
-      global_handlers_{std::move(global_handlers)},
+      global_handlers_{global_handlers},
+      global_handler_count_{global_handler_count},
       nv_config_(nv_config)
 {
 }
 
 void LogParser::IndexParser::AddHandler(TypeHandler* handler)
 {
-    handlers_.push_back(handler);
+    if (handler_count_ < handlers_.size())
+    {
+        handlers_[handler_count_++] = handler;
+    }
 }
 
 void LogParser::IndexParser::Parse(const TimestampT timestamp, const char* const data, const BufsizeT size)
 {
-    for (const auto& handler : handlers_)
+    for (std::size_t i = 0U; i < handler_count_; ++i)
     {
-        handler->Handle(timestamp, data, size);
+        handlers_[i]->Handle(timestamp, data, size);
     }
 }
 
@@ -147,9 +152,9 @@ void LogParser::Parse(TimestampT timestamp, const char* data, BufsizeT size)
     index_parser.Parse(timestamp, data, size);
 
     const auto& type_info = index_parser.info;
-    for (auto* const handler : global_handlers_)
+    for (std::size_t i = 0U; i < global_handler_count_; ++i)
     {
-        handler->Handle(type_info, timestamp, data, size);
+        global_handlers_[i]->Handle(type_info, timestamp, data, size);
     }
 }
 
@@ -181,10 +186,10 @@ void LogParser::ParseSharedMemoryRecord(const score::mw::log::detail::SharedMemo
 
     index_parser.Parse(record.header.time_stamp, payload_ptr, payload_length_buf_size);
 
-    const auto& type_info = index_parser.info;
-    for (auto* const handler : global_handlers_)
+    const auto& type_info = index_parser_entry->second.info;
+    for (std::size_t i = 0U; i < global_handler_count_; ++i)
     {
-        handler->Handle(type_info, record.header.time_stamp, payload_ptr, payload_length_buf_size);
+        global_handlers_[i]->Handle(type_info, record.header.time_stamp, payload_ptr, payload_length_buf_size);
     }
 }
 

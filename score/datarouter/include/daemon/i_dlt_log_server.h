@@ -60,6 +60,10 @@ class IDltLogServer
                                                 AssignmentAction assignment_flag) = 0;
     virtual std::string SetDltOutputEnable(bool enable) = 0;
 
+    /// Returns the current output-enable state.
+    /// Thread-safe: backed by std::atomic<bool> in the concrete implementation.
+    virtual bool IsOutputEnabled() const noexcept = 0;
+
     virtual ~IDltLogServer() = default;
 };
 

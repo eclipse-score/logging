@@ -44,6 +44,7 @@ class DltLogServerMock : public IDltLogServer
                 (score::platform::DltidT, score::platform::DltidT, score::platform::DltidT, AssignmentAction),
                 (override));
     MOCK_METHOD(std::string, SetDltOutputEnable, (bool), (override));
+    MOCK_METHOD(bool, IsOutputEnabled, (), (const, noexcept, override));
 };
 
 }  // namespace mock

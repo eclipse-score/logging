@@ -151,7 +151,7 @@ TEST_F(DltServerCreatedWithoutConfigFixture, WhenCreatedDefault)
 TEST_F(DltServerCreatedWithoutConfigFixture, WhenCreatedDefaultDltEnabledTrue)
 {
     DltLogServer dlt_server(s_config, read_callback.AsStdFunction(), write_callback.AsStdFunction(), true);
-    const auto dlt_enabled = dlt_server.GetDltEnabled();
+    const auto dlt_enabled = dlt_server.IsOutputEnabled();
     EXPECT_TRUE(dlt_enabled);
 }
 
@@ -1006,7 +1006,7 @@ TEST_F(DltServerCreatedWithoutConfigFixture, SendFTVerboseAppIdNoCoreChannelExpe
     dlt_server.SendFtVerbose({}, score::mw::log::LogLevel::kVerbose, app_id, ctx_id, 0U, 100U);
 }
 
-TEST_F(DltServerCreatedWithoutConfigFixture, SetDltOutputEnabledToTrueExpectDltOutputEnabledFlagTrue)
+TEST_F(DltServerCreatedWithoutConfigFixture, SetDltOutputEnableToTrueExpectIsOutputEnabledTrue)
 {
     EXPECT_CALL(read_callback, Call()).Times(0);
     EXPECT_CALL(write_callback, Call(_)).Times(0);
@@ -1014,8 +1014,8 @@ TEST_F(DltServerCreatedWithoutConfigFixture, SetDltOutputEnabledToTrueExpectDltO
     score::logging::dltserver::DltLogServer::DltLogServerTest dlt_server(
         s_config, read_callback.AsStdFunction(), write_callback.AsStdFunction(), true);
 
-    dlt_server.SetDltOutputEnabled(true);
-    EXPECT_TRUE(dlt_server.GetDltEnabled());
+    dlt_server.SetDltOutputEnable(true);
+    EXPECT_TRUE(dlt_server.IsOutputEnabled());
 }
 
 TEST_F(DltServerCreatedWithConfigFixture, SetLogChannelThresholdChannelMissingDirectCallReturnsError)
@@ -1150,20 +1150,20 @@ TEST_F(DltServerCreatedWithConfigFixture, SetDltOutputEnableDirectCall)
     auto response = dlt_server.SetDltOutputEnable(true);
     EXPECT_EQ(response.size(), kCommandResponseSize);
     EXPECT_EQ(response[0], static_cast<char>(config::kRetOk));
-    EXPECT_TRUE(dlt_server.GetDltEnabled());
+    EXPECT_TRUE(dlt_server.IsOutputEnabled());
 
     // Test disabling output through public method
     response = dlt_server.SetDltOutputEnable(false);
     EXPECT_EQ(response.size(), kCommandResponseSize);
     EXPECT_EQ(response[0], static_cast<char>(config::kRetOk));
-    EXPECT_FALSE(dlt_server.GetDltEnabled());
+    EXPECT_FALSE(dlt_server.IsOutputEnabled());
 }
 
 TEST_F(DltServerCreatedWithConfigFixture, SetDltOutputEnableBehaviorBlocksAllSends)
 {
     // Prove that enabling/disabling output affects the observable server state.
     // Note: sendVerbose()/sendNonVerbose() are not gated by this flag in the current implementation;
-    // the flag controls the DLT output enable state exposed via GetDltEnabled().
+    // the flag controls the DLT output enable state exposed via IsOutputEnabled().
     EXPECT_CALL(read_callback, Call()).Times(1).WillOnce(Return(p_config));
     EXPECT_CALL(write_callback, Call(_)).Times(0);
 
@@ -1179,13 +1179,13 @@ TEST_F(DltServerCreatedWithConfigFixture, SetDltOutputEnableBehaviorBlocksAllSen
     const auto disable_resp = dlt_server.SetDltOutputEnable(false);
     EXPECT_EQ(disable_resp.size(), kCommandResponseSize);
     EXPECT_EQ(disable_resp[0], static_cast<char>(config::kRetOk));
-    EXPECT_FALSE(dlt_server.GetDltEnabled());
+    EXPECT_FALSE(dlt_server.IsOutputEnabled());
 
     // Re-enable output: sending should resume.
     const auto enable_resp = dlt_server.SetDltOutputEnable(true);
     EXPECT_EQ(enable_resp.size(), kCommandResponseSize);
     EXPECT_EQ(enable_resp[0], static_cast<char>(config::kRetOk));
-    EXPECT_TRUE(dlt_server.GetDltEnabled());
+    EXPECT_TRUE(dlt_server.IsOutputEnabled());
 
     // Basic sanity: calling sendVerbose still forwards to the log sender (2 channels).
     EXPECT_CALL(*log_sender_mock_raw_ptr, SendVerbose(_, _, _)).Times(2);

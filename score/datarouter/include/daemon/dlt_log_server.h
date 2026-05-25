@@ -119,11 +119,6 @@ class DltLogServer : score::platform::datarouter::DltNonverboseHandlerType::IOut
         enabled_callback_ = enabled_callback;
     }
 
-    void SetDltOutputEnabled(bool enabled)
-    {
-        dlt_output_enabled_.store(enabled, std::memory_order_release);
-    }
-
     void Flush()
     {
         for (auto& channel : channels_)
@@ -170,8 +165,6 @@ class DltLogServer : score::platform::datarouter::DltNonverboseHandlerType::IOut
     }
     // LCOV_EXCL_STOP
 
-    bool GetDltEnabled() const noexcept;
-
     std::string ReadLogChannelNames() const override;
     std::string ResetToDefault() override;
     std::string StoreDltConfig() override;
@@ -186,6 +179,10 @@ class DltLogServer : score::platform::datarouter::DltNonverboseHandlerType::IOut
                                         DltidT channel,
                                         AssignmentAction assignment_flag) override;
     std::string SetDltOutputEnable(bool enable) override;
+
+    /// Returns the current output-enable state.
+    /// Thread-safe: reads std::atomic<bool> with acquire ordering.
+    bool IsOutputEnabled() const noexcept override final;
 
     // This is used for test purpose only in google tests, to have an access to the private members.
     // Do not use this calls in implementation except unit tests.
@@ -310,8 +307,6 @@ class DltLogServer : score::platform::datarouter::DltNonverboseHandlerType::IOut
     std::unique_ptr<IDiagnosticJobParser> parser_;
 
     std::unique_ptr<ISysedrHandler> sysedr_handler_;
-
-    bool IsOutputEnabled() const noexcept override final;
 
     void SendNonVerbose(const score::mw::log::config::NvMsgDescriptor& desc,
                         uint32_t tmsp,
