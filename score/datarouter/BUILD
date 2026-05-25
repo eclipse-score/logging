@@ -838,7 +838,7 @@ cc_library(
     visibility = ["//score/datarouter/test:__subpackages__"],
     deps = [
         ":datarouter_feature_config_testing",
-        ":datarouter_lib",
+        ":datarouter_testing",
         ":dltserver_testing",
         ":persistentlogconfig",
         ":socketserver_config_lib_testing",
