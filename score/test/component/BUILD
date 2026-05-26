@@ -34,9 +34,9 @@ pkg_tar(
 
 pkg_tar(
     name = "datarouter_conf_pkg",
-    srcs = ["//score/datarouter:integration_test_config_files"],
+    srcs = ["//score/test/component/datarouter:datarouter_test_config_files"],
     package_dir = "opt/datarouter",
-    strip_prefix = "/score/datarouter",
+    strip_prefix = "/score/test/component/datarouter",
 )
 
 pkg_tar(

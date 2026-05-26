@@ -368,19 +368,6 @@ filegroup(
         "//platform/aas/tools/sctf:__subpackages__",
         "//pqr/abc/abc-lmn/config/project/cpu/pas/datarouter:__pkg__",
         "//score/datarouter/test:__subpackages__",
-        "//score/test/component:__subpackages__",
-    ],
-)
-
-filegroup(
-    name = "integration_test_config_files",
-    srcs = [
-        "etc/log-channels.json",
-        "etc/logging.json",
-        "etc/raw-channels.json",
-    ],
-    visibility = [
-        "//score/test/component:__subpackages__",
     ],
 )
 
