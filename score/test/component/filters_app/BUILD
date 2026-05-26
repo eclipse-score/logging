@@ -67,7 +67,7 @@ cc_binary(
     ],
     deps = [
         "//score/mw/log",
-        "//score/mw/log/legacy_non_verbose_api",
+        "@score_baselibs//score/mw/log",
         "@score_baselibs//score/static_reflection_with_serialization/visitor",
     ],
 )

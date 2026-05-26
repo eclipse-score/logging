@@ -58,6 +58,16 @@ py_logging_itf_test(
 # datarouter filters test
 # =============================================================================
 
+filegroup(
+    name = "datarouter_test_config_files",
+    srcs = [
+        "etc/log-channels.json",
+        "etc/logging.json",
+        "etc/raw-channels.json",
+    ],
+    visibility = ["//score/test/component:__pkg__"],
+)
+
 py_logging_itf_test(
     name = "test_datarouter_filters",
     srcs = ["test_datarouter_filters.py"],
