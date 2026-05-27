@@ -56,6 +56,7 @@ py_library(
     name = "logging_plugin_lib",
     srcs = ["logging_plugin.py"],
     imports = ["."],
+    target_compatible_with = ["@platforms//os:linux"],
     deps = ["@score_itf//score/itf/plugins:docker"],
 )
 
@@ -65,5 +66,6 @@ py_itf_plugin(
         "logging_plugin",
     ],
     py_library = ":logging_plugin_lib",
+    target_compatible_with = ["@platforms//os:linux"],
     visibility = ["//score/test/component:__subpackages__"],
 )

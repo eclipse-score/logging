@@ -76,6 +76,10 @@ build:x86_64-linux --config=_common
 build:x86_64-linux --platforms=@score_bazel_platforms//:x86_64-linux-gcc_12.2.0-posix
 build:x86_64-linux --extra_toolchains=@score_gcc_x86_64_toolchain//:x86_64-linux-gcc_12.2.0
 build:x86_64-linux --extra_toolchains=@score_toolchains_rust//toolchains/ferrocene:ferrocene_x86_64_unknown_linux_gnu
+# rules_python 1.8.5 enables precompile by default. The custom GCC toolchain has no
+# Python runtime, causing analysis to crash. "force_disabled" (not "disabled") is needed
+# because pip packages set precompile=enabled at target level, which "disabled" won't override.
+build:x86_64-linux --@rules_python//python/config_settings:precompile=force_disabled
 
 
 

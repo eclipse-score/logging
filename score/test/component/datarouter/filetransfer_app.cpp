@@ -20,7 +20,7 @@
 #include <sstream>
 #include <string>
 
-namespace log = score::mw::log;
+namespace mw_log = score::mw::log;
 
 namespace {
 
@@ -37,7 +37,7 @@ void CreateTestFile(const std::string& path) {
 }  // namespace
 
 int main() {
-    log::Logger& logger = log::CreateLogger("FTEA", "File Transfer Example App");
+    mw_log::Logger& logger = mw_log::CreateLogger("FTEA", "File Transfer Example App");
 
     logger.LogInfo() << "File Transfer Example Application" << "initialize";
 
