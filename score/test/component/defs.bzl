@@ -44,12 +44,14 @@ def py_logging_itf_test(name, srcs, filesystem, **kwargs):
             "//score/test/component:datarouter_pkg",
             filesystem,
         ],
+        target_compatible_with = ["@platforms//os:linux"],
     )
 
     oci_load(
         name = image_loader,
         image = image_name,
         repo_tags = [repo_tag],
+        target_compatible_with = ["@platforms//os:linux"],
     )
 
     _extend_list_in_kwargs(kwargs, "data", [image_loader])

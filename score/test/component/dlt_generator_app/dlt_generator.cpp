@@ -24,13 +24,13 @@
 #include <thread>
 #include <vector>
 
-namespace log = score::mw::log;
+namespace mw_log = score::mw::log;
 
 namespace {
 
 const std::string kDefaultMessage = "default message text for example log generating application";
 
-void DltLogJob(log::Logger& logger,
+void DltLogJob(mw_log::Logger& logger,
                uint32_t iterations,
                uint32_t sleep_ms,
                bool counter,
@@ -100,7 +100,7 @@ int main(int argc, char* argv[]) {
         }
     }
 
-    log::Logger& logger = log::CreateLogger("LOGG", "dlt generator context");
+    mw_log::Logger& logger = mw_log::CreateLogger("LOGG", "dlt generator context");
     logger.LogInfo() << "Welcome warm-up message to initialize logging context.";
 
     std::vector<std::thread> threads;
