@@ -1,0 +1,35 @@
+# *******************************************************************************
+# Copyright (c) 2026 Contributors to the Eclipse Foundation
+#
+# See the NOTICE file(s) distributed with this work for additional
+# information regarding copyright ownership.
+#
+# This program and the accompanying materials are made available under the
+# terms of the Apache License Version 2.0 which is available at
+# https://www.apache.org/licenses/LICENSE-2.0
+#
+# SPDX-License-Identifier: Apache-2.0
+# *******************************************************************************
+
+bazel_dep(name = "score_logging", version = "0.0.0")
+local_path_override(
+    module_name = "score_logging",
+    path = "../..",
+)
+
+# Direct dep required so that @score_baselibs//... flag targets are visible from the root module.
+bazel_dep(name = "score_baselibs", version = "0.2.4")
+git_override(
+    module_name = "score_baselibs",
+    commit = "4b67ce1929575801405c77f7e3c79ab36156a976",
+    remote = "https://github.com/eclipse-score/baselibs.git",
+)
+
+bazel_dep(name = "rules_cc", version = "0.1.1")
+
+# Required to resolve a boost version conflict between score_baselibs and score_communication.
+git_override(
+    module_name = "score_communication",
+    commit = "56448a5589a5f7d3921b873e8127b824a8c1ca95",
+    remote = "https://github.com/eclipse-score/communication.git",
+)
