@@ -109,3 +109,19 @@ bazel_dep(name = "score_communication", version = "0.2.1")
 # Rust dependencies
 
 bazel_dep(name = "score_baselibs_rust", version = "0.1.0")
+
+bazel_dep(name = "score_itf", version = "0.4.0", dev_dependency = True)
+
+# OCI / Docker image rules for integration tests
+bazel_dep(name = "rules_oci", version = "2.2.7", dev_dependency = True)
+bazel_dep(name = "rules_pkg", version = "1.2.0", dev_dependency = True)
+
+oci = use_extension("@rules_oci//oci:extensions.bzl", "oci", dev_dependency = True)
+oci.pull(
+    name = "ubuntu_24_04",
+    digest = "sha256:2e863c44b718727c860746568e1d54afd13b2fa71b160f5cd9058fc436217b30",
+    image = "ubuntu",
+    platforms = ["linux/amd64"],
+    tag = "24.04",
+)
+use_repo(oci, "ubuntu_24_04", "ubuntu_24_04_linux_amd64")

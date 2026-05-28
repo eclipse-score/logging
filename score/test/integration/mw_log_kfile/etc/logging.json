@@ -1,0 +1,7 @@
+{
+  "appId": "LGGG",
+  "appDesc": "DLT Generator App",
+  "logMode": "kFile|kRemote",
+  "logLevel": "kVerbose",
+  "logLevelThresholdConsole": "kDebug"
+}

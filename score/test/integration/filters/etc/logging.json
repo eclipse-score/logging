@@ -1,0 +1,32 @@
+{
+  "appId": "TAP",
+  "appDesc": "Test Application",
+  "logLevel": "kFatal",
+  "logMode": "kRemote",
+  "contextConfigs": [
+    {
+      "name": "FAT",
+      "logLevel": "kFatal"
+    },
+    {
+      "name": "ERR",
+      "logLevel": "kError"
+    },
+    {
+      "name": "WRN",
+      "logLevel": "kWarn"
+    },
+    {
+      "name": "INF",
+      "logLevel": "kInfo"
+    },
+    {
+      "name": "DBG",
+      "logLevel": "kDebug"
+    },
+    {
+      "name": "VBS",
+      "logLevel": "kVerbose"
+    }
+  ]
+}
