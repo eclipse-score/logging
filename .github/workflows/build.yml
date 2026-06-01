@@ -71,4 +71,7 @@ jobs:
 
       - name: Test with Bazel
         run: |
-          bazel test --lockfile_mode=error --config x86_64-linux //score/... --test_tag_filters=-no_ci
+          # Component tests run in component_tests.yml; exclude here to avoid pulling in QNX deps.
+          bazel test --lockfile_mode=error --config x86_64-linux \
+            --test_tag_filters=-no_ci \
+            -- //score/... -//score/test/component/...
