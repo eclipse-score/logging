@@ -18,6 +18,11 @@ build --tool_java_runtime_version=remotejdk_17
 common --registry=https://raw.githubusercontent.com/eclipse-score/bazel_registry/main/
 common --registry=https://bcr.bazel.build
 
+# Retry HTTP downloads to handle transient failures (e.g. QNX toolchain)
+common --http_connector_attempts=10
+common --http_connector_retry_max_timeout=1s
+common --http_timeout_scaling=2.0
+
 test --test_tag_filters=-manual
 test --test_output=errors
 build --incompatible_strict_action_env
