@@ -119,6 +119,11 @@ class DltLogServer : score::platform::datarouter::DltNonverboseHandlerType::IOut
         enabled_callback_ = enabled_callback;
     }
 
+    void SetDltOutputEnabled(bool enabled)
+    {
+        dlt_output_enabled_.store(enabled, std::memory_order_release);
+    }
+
     void Flush()
     {
         for (auto& channel : channels_)
@@ -164,6 +169,8 @@ class DltLogServer : score::platform::datarouter::DltNonverboseHandlerType::IOut
         }
     }
     // LCOV_EXCL_STOP
+
+    bool GetDltEnabled() const noexcept;
 
     std::string ReadLogChannelNames() const override;
     std::string ResetToDefault() override;

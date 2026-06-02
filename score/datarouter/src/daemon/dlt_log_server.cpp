@@ -213,13 +213,11 @@ void DltLogServer::InitLogChannelsDefault(const bool reloading)
 
 void DltLogServer::SetOutputEnabled(const bool enabled)
 {
-    // compare_exchange_strong makes the load+conditional-store a single atomic
-    // operation, preventing the check-then-act race where two concurrent callers
-    // could both observe the old value and both fire enabled_callback_.
-    bool expected = !enabled;
-    if (dlt_output_enabled_.compare_exchange_strong(
-            expected, enabled, std::memory_order_acq_rel, std::memory_order_acquire))
+    const bool update = (dlt_output_enabled_.load(std::memory_order_acquire) != enabled);
+
+    if (update)
     {
+        dlt_output_enabled_.store(enabled, std::memory_order_release);
         if (enabled_callback_)
         {
             enabled_callback_(enabled);
@@ -227,9 +225,14 @@ void DltLogServer::SetOutputEnabled(const bool enabled)
     }
 }
 
-bool DltLogServer::IsOutputEnabled() const noexcept
+bool DltLogServer::GetDltEnabled() const noexcept
 {
     return dlt_output_enabled_.load(std::memory_order_acquire);
+}
+
+bool DltLogServer::IsOutputEnabled() const noexcept
+{
+    return GetDltEnabled();
 }
 
 void DltLogServer::SaveDatabase()
