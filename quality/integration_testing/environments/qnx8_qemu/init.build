@@ -1,0 +1,59 @@
+# *******************************************************************************
+# Copyright (c) 2025 Contributors to the Eclipse Foundation
+#
+# See the NOTICE file(s) distributed with this work for additional
+# information regarding copyright ownership.
+#
+# This program and the accompanying materials are made available under the
+# terms of the Apache License Version 2.0 which is available at
+# https://www.apache.org/licenses/LICENSE-2.0
+#
+# SPDX-License-Identifier: Apache-2.0
+# *******************************************************************************
+
+[image=0x3600000]
+[virtual=x86_64,multiboot] boot = {
+    startup-x86 -v -D8250..115200 -zz
+    PATH=/proc/boot
+    LD_LIBRARY_PATH=/proc/boot
+    [+keeplinked] procnto-smp-instr
+}
+
+[+script] startup-script = {
+    procmgr_symlink /dev/shmem /tmp
+
+    display_msg Welcome to QNX OS 8.0 on x86_64 - score_logging component tests
+
+    SYSNAME=nto
+    TERM=qansi
+
+    devc-ser8250 &
+    waitfor /dev/ser1
+    reopen /dev/ser1
+
+    etc/startup.sh
+
+    [+session] /bin/sh &
+}
+
+on
+[type=link] waitfor=on
+[type=link] ability=on
+ksh
+pidin
+[type=link] /bin/sh=/proc/boot/ksh
+mount
+getconf
+[type=link] setconf=getconf
+devc-ser8250
+slog2info
+slogger2
+
+libc.so.6
+/usr/lib/ldqnx-64.so.2=ldqnx-64.so.2
+libsocket.so.4
+[type=link] libsocket.so=libsocket.so.4
+libslog2.so.1
+[type=link] libslog2.so=libslog2.so.1
+
+[+include] ${MAIN_BUILD_FILE_DIR}/system.build
