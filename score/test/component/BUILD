@@ -23,6 +23,7 @@ pkg_tar(
     srcs = [
         "@score_itf//third_party/dlt:dlt-receive",
     ],
+    target_compatible_with = ["@platforms//os:linux"],
     visibility = ["//score/test/component:__subpackages__"],
 )
 
@@ -30,6 +31,7 @@ pkg_tar(
     name = "datarouter_bin_pkg",
     srcs = ["//score/datarouter"],
     package_dir = "opt/datarouter/bin",
+    target_compatible_with = ["@platforms//os:linux"],
 )
 
 pkg_tar(
@@ -37,10 +39,12 @@ pkg_tar(
     srcs = ["//score/test/component/datarouter:datarouter_test_config_files"],
     package_dir = "opt/datarouter",
     strip_prefix = "/score/test/component/datarouter",
+    target_compatible_with = ["@platforms//os:linux"],
 )
 
 pkg_tar(
     name = "datarouter_pkg",
+    target_compatible_with = ["@platforms//os:linux"],
     visibility = ["//score/test/component:__subpackages__"],
     deps = [
         ":datarouter_bin_pkg",
