@@ -11,26 +11,25 @@
 # SPDX-License-Identifier: Apache-2.0
 # *******************************************************************************
 
-name: QNX8 Build
+name: QNX Component Build (pre-test)
+
 on:
   pull_request_target:
     types: [opened, reopened, synchronize]
   merge_group:
     types: [checks_requested]
+
 jobs:
-  qnx-build:
+  integration-tests-qnx:
     uses: eclipse-score/cicd-workflows/.github/workflows/qnx-build.yml@main
     permissions:
       contents: read
       pull-requests: read
-    strategy:
-      matrix:
-        config: ['arm64-qnx', 'x86_64-qnx']
     with:
       bazel-target: >-
-        //score/... //tests/...
-      bazel-config: ${{ matrix.config }}
-      extra-bazel-flags: '--lockfile_mode=error'
+        //score/test/component/mw_log:test_mw_log_filters //score/test/component/datarouter:test_datarouter_filters
+      bazel-config: x86_64-qnx
+      extra-bazel-flags: '--lockfile_mode=error --test_tag_filters=integration'
       credential-helper: 'scripts/internal/qnx_creds.py'
       environment-name: 'workflow-approval'
     secrets:

@@ -22,6 +22,7 @@ load("//score/test/component:defs.bzl", "py_logging_itf_test")
 cc_binary(
     name = "filetransfer_app",
     srcs = ["filetransfer_app.cpp"],
+    visibility = ["//score/test/component:__subpackages__"],
     deps = [
         "//score/datarouter/dlt_filetransfer_trigger_lib",
         "//score/mw/log",
@@ -65,7 +66,7 @@ filegroup(
         "etc/logging.json",
         "etc/raw-channels.json",
     ],
-    visibility = ["//score/test/component:__pkg__"],
+    visibility = ["//score/test/component:__subpackages__"],
 )
 
 py_logging_itf_test(

@@ -1,0 +1,217 @@
+# *******************************************************************************
+# Copyright (c) 2025 Contributors to the Eclipse Foundation
+#
+# See the NOTICE file(s) distributed with this work for additional
+# information regarding copyright ownership.
+#
+# This program and the accompanying materials are made available under the
+# terms of the Apache License Version 2.0 which is available at
+# https://www.apache.org/licenses/LICENSE-2.0
+#
+# SPDX-License-Identifier: Apache-2.0
+# *******************************************************************************
+
+#############################################
+### SHARED LIBRARIES ###
+#############################################
+libfsnotify.so.1
+cam-disk.so
+fs-qnx6.so
+io-blk.so
+libbz2.so.1
+libc++.so.2
+libc.so
+libcam.so.2
+libcatalog.so.1
+libcrypto.so.3
+libgcc_s.so.1
+libiconv.so.1
+liblzma.so.5
+libm.so
+libpci.so.3.0
+libqcrypto.so.1.0
+libqh.so
+libregex.so.1
+libsecpol.so.1
+libslog2parse.so.1
+libssl.so.3
+libtracelog.so.1
+libxml2.so.2
+libz.so
+libexpat.so.2
+libjail.so.1
+qcrypto-openssl-3.so
+libpam.so.2
+
+#############################################
+### FILE MANIPULATION UTILITIES ###
+#############################################
+[type=link] /bin/ls=/proc/boot/ls
+toybox
+[type=link] cp=toybox
+[type=link] ls=toybox
+[type=link] cat=toybox
+[type=link] chmod=toybox
+[type=link] rm=toybox
+[type=link] dd=toybox
+[type=link] echo=toybox
+[type=link] grep=toybox
+[type=link] mkdir=toybox
+[type=link] awk=toybox
+[type=link] base64=toybox
+[type=link] basename=toybox
+[type=link] chgrp=toybox
+[type=link] chown=toybox
+[type=link] cmp=toybox
+[type=link] cut=toybox
+[type=link] date=toybox
+[type=link] diff=toybox
+[type=link] dirname=toybox
+[type=link] du=toybox
+[type=link] egrep=toybox
+[type=link] env=toybox
+[type=link] expr=toybox
+[type=link] false=toybox
+[type=link] fgrep=toybox
+[type=link] find=toybox
+[type=link] groups=toybox
+[type=link] gunzip=toybox
+[type=link] gzip=toybox
+[type=link] head=toybox
+[type=link] hexdump=toybox
+[type=link] id=toybox
+[type=link] ln=toybox
+[type=link] md5sum=toybox
+[type=link] mkfifo=toybox
+[type=link] mktemp=toybox
+[type=link] more=toybox
+[type=link] mv=toybox
+[type=link] nohup=toybox
+[type=link] od=toybox
+[type=link] paste=toybox
+[type=link] printenv=toybox
+[type=link] printf=toybox
+[type=link] pwd=toybox
+[type=link] readlink=toybox
+[type=link] realpath=toybox
+[type=link] rmdir=toybox
+[type=link] sed=toybox
+[type=link] seq=toybox
+[type=link] sha1sum=toybox
+[type=link] sleep=toybox
+[type=link] sort=toybox
+[type=link] stat=toybox
+[type=link] strings=toybox
+[type=link] tail=toybox
+[type=link] tee=toybox
+[type=link] test=toybox
+[type=link] time=toybox
+[type=link] timeout=toybox
+[type=link] touch=toybox
+[type=link] tr=toybox
+[type=link] true=toybox
+[type=link] truncate=toybox
+[type=link] tty=toybox
+[type=link] uname=toybox
+[type=link] uniq=toybox
+[type=link] unlink=toybox
+[type=link] uuidgen=toybox
+[type=link] wc=toybox
+[type=link] which=toybox
+[type=link] whoami=toybox
+[type=link] xargs=toybox
+[type=link] xxd=toybox
+[type=link] nc=toybox
+[type=link] netcat=toybox
+[type=link] pkill=slay
+
+#############################################
+### Tools ###
+#############################################
+awk
+devb-ram
+devc-pty
+fsevmgr
+if_up
+ifconfig
+ln
+mkqnx6fs
+mqueue
+pci-server
+pdebug
+pipe
+random
+slay
+sshd
+/usr/lib/ssh/sftp-server=${QNX_TARGET}/${PROCESSOR}/usr/libexec/sftp-server
+hostname
+route
+sysctl
+sync
+
+#############################################
+### NETWORKING COMPONENTS ###
+#############################################
+io-sock
+mods-pci.so
+mods-phy.so
+libfdt.so.1
+devs-vtnet_pci.so
+librpc.so.2
+
+#############################################
+### PCI COMPONENTS ###
+#############################################
+pci/pci_hw-Intel_x86.so
+pci/pci_slog2.so
+pci/pci_cap-0x05.so
+pci/pci_cap-0x10.so
+pci/pci_cap-0x11.so
+pci/pci_strings.so
+pci/pci_bkwd_compat.so
+pci/pci_debug2.so
+
+#############################################
+### SYSTEM DIRECTORIES ###
+#############################################
+[gid=0 uid=0 dperms=755 type=dir] /var/chroot/sshd
+[gid=0 uid=0 dperms=700 type=dir] /var/ssh
+
+#############################################
+### SCRIPTS ###
+#############################################
+[perms=700] /etc/startup.sh = ${MAIN_BUILD_FILE_DIR}/startup.sh
+[perms=700] /etc/network_setup.sh = ${MAIN_BUILD_FILE_DIR}/network_setup.sh
+[perms=755] /etc/network_capture = ${MAIN_BUILD_FILE_DIR}/network_capture.sh
+
+#############################################
+### CONFIGURATION FILES ###
+#############################################
+[perms=0444] pci_server.cfg = ${MAIN_BUILD_FILE_DIR}/pci_server.cfg
+[perms=0444] pci_hw.cfg = ${MAIN_BUILD_FILE_DIR}/pci_hw.cfg
+[perms=0444] qcrypto.conf = ${MAIN_BUILD_FILE_DIR}/qcrypto.conf
+
+/etc/hostname = ${MAIN_BUILD_FILE_DIR}/hostname
+/etc/profile = ${MAIN_BUILD_FILE_DIR}/profile
+/etc/passwd = ${MAIN_BUILD_FILE_DIR}/passwd
+/etc/group = ${MAIN_BUILD_FILE_DIR}/group
+
+#############################################
+### SSH CONFIGURATION ###
+#############################################
+[perms=444] /var/ssh/sshd_config = ${MAIN_BUILD_FILE_DIR}/sshd_config
+[uid=0 gid=0 perms=400] /var/ssh/ssh_host_rsa_key = ${MAIN_BUILD_FILE_DIR}/ssh_host_rsa_key
+[uid=0 gid=0 perms=400] /var/ssh/ssh_host_rsa_key.pub = ${MAIN_BUILD_FILE_DIR}/ssh_host_rsa_key.pub
+
+#############################################
+### DATAROUTER ###
+#############################################
+[perms=777] /usr/bin/datarouter/datarouter = ${DATAROUTER}
+[perms=644] /usr/bin/datarouter/etc/logging.json = ${MAIN_BUILD_FILE_DIR}/../../../../score/test/component/datarouter/etc/logging.json
+[perms=644] /usr/bin/datarouter/etc/log-channels.json = ${MAIN_BUILD_FILE_DIR}/../../../../score/test/component/datarouter/etc/log-channels.json
+[perms=644] /usr/bin/datarouter/etc/raw-channels.json = ${MAIN_BUILD_FILE_DIR}/../../../../score/test/component/datarouter/etc/raw-channels.json
+
+#############################################
+### PER-TEST FILESYSTEM ###
+#############################################
+[perms=777] / = ${FILESYSTEM}
