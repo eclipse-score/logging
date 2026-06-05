@@ -52,11 +52,11 @@ std::uint32_t AlternatingReaderProxy::Switch() noexcept
     auto [restarting_control_block, terminating_control_block_intermediate] =
         GetSplitBlocks(block_id_active_for_writing, alternating_control_block_);
 
-    std::ignore = terminating_control_block_intermediate;
+    std::ignore = std::move(terminating_control_block_intermediate);
 
     //  Reset counters for writing new data into restarting block.
-    const auto acquired_index = restarting_control_block.GetReusedCleanupBlock().acquired_index.exchange(0);
-    const auto written_index = restarting_control_block.GetReusedCleanupBlock().written_index.exchange(0);
+    const auto acquired_index = restarting_control_block.GetReusedCleanupBlock().acquired_index.exchange(0U);
+    const auto written_index = restarting_control_block.GetReusedCleanupBlock().written_index.exchange(0U);
     std::ignore = acquired_index;
     std::ignore = written_index;
 
@@ -68,7 +68,7 @@ std::uint32_t AlternatingReaderProxy::Switch() noexcept
     // Writer switch may be incomplete. It is not yet safe to read the data in the buffer.
     // It is left as reader responsibility to check if writers released buffer.
 
-    previous_logging_ipc_counter_value_ = save_switch_count + 1;
+    previous_logging_ipc_counter_value_ = save_switch_count + 1U;
     return save_switch_count;
 }
 

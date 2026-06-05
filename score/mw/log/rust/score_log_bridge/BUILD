@@ -50,9 +50,13 @@ cc_library(
     }),
     visibility = ["//visibility:private"],
     deps = [
-        "//score/mw/log/detail/common:recorder_factory",
-        "@score_baselibs//score/mw/log:frontend",
-    ],
+        "//score/mw/log/backend:file",  # TODO: Remove after score/issues/2848 is resolved
+        "//score/mw/log/backend:remote",  # TODO: Remove after score/issues/2848 is resolved
+        "@score_baselibs//score/mw/log",
+    ] + select({
+        "@platforms//os:qnx": ["//score/mw/log/backend:slog"],  # TODO: Remove after score/issues/2848 is resolved
+        "//conditions:default": [],
+    }),
 )
 
 rust_library(
@@ -91,11 +95,17 @@ rust_test(
     crate_features = select({
         ":x86_64-linux": ["x86_64_linux"],
         ":arm64-qnx": ["arm64_qnx"],
+        ":x86_64-qnx": ["x86_64_qnx"],
         "//conditions:default": [],
     }),
     edition = "2021",
     rustc_flags = RUSTC_FLAGS,
     tags = [
+        "no-asan",  # Rust tests with C++ FFI require sanitizer-instrumented stdlib
+        "no-lsan",
+        "no-tsan",
+        "no-ubsan",
+        "rust",
         "unit_tests",
         "ut",
     ],
@@ -113,6 +123,7 @@ rust_binary(
     ],
     edition = "2021",
     rustc_flags = RUSTC_FLAGS,
+    tags = ["rust"],
     visibility = ["//visibility:public"],
     deps = [
         ":score_log_bridge",

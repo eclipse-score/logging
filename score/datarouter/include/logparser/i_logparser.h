@@ -39,12 +39,12 @@ using TimestampT = score::os::HighResolutionSteadyClock::time_point;
 
 struct TypeInfo
 {
-    const score::mw::log::config::NvMsgDescriptor* nv_msg_desc;
-    BufsizeT id;
-    std::string params;
-    std::string type_name;
-    DltidT ecu_id;
-    DltidT app_id;
+    const score::mw::log::config::NvMsgDescriptor* nv_msg_desc{nullptr};
+    BufsizeT id{};
+    std::string params{};
+    std::string type_name{};
+    DltidT ecu_id{};
+    DltidT app_id{};
 };
 
 namespace internal
@@ -68,34 +68,19 @@ class ILogParser
         virtual ~AnyHandler() = default;
     };
 
+    struct TypeHandlerBinding
+    {
+        std::string type_name;
+        TypeHandler* handler;
+    };
+
     virtual ~ILogParser() = default;
-
-    // a function object to return whether the message parameter passes some encapsulted filter
-    // (in order to support content-based forwarding)
-    using FilterFunction = std::function<bool(const char*, BufsizeT)>;
-
-    // a function to create such function objects based on the type of the message,
-    // the type of the filter object, and the serialized payload of the filter object
-    // (called on the request data provided by add_data_forwarder())
-    using FilterFunctionFactory = std::function<FilterFunction(const std::string&, const DataFilter&)>;
-
-    virtual void SetFilterFactory(FilterFunctionFactory factory) = 0;
 
     virtual void AddIncomingType(const BufsizeT map_index, const std::string& params) = 0;
     virtual void AddIncomingType(const score::mw::log::detail::TypeRegistration&) = 0;
 
-    virtual void AddTypeHandler(const std::string& type_name, TypeHandler& handler) = 0;
-    virtual void AddGlobalHandler(AnyHandler& handler) = 0;
-
-    virtual void RemoveTypeHandler(const std::string& type_name, TypeHandler& handler) = 0;
-    virtual void RemoveGlobalHandler(AnyHandler& handler) = 0;
-
-    virtual bool IsTypeHndlRegistered(const std::string& type_name, const TypeHandler& handler) = 0;
-    virtual bool IsGlbHndlRegistered(const AnyHandler& handler) = 0;
-
-    virtual void ResetInternalMapping() = 0;
     virtual void Parse(TimestampT timestamp, const char* data, BufsizeT size) = 0;
-    virtual void Parse(const score::mw::log::detail::SharedMemoryRecord& record) = 0;
+    virtual void ParseSharedMemoryRecord(const score::mw::log::detail::SharedMemoryRecord& record) = 0;
 };
 
 }  // namespace internal

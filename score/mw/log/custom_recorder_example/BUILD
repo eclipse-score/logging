@@ -12,18 +12,6 @@
 # *******************************************************************************
 
 load("@rules_cc//cc:defs.bzl", "cc_binary", "cc_library")
-load("@score_baselibs//score/quality/clang_tidy:extra_checks.bzl", "clang_tidy_extra_checks")
-
-clang_tidy_extra_checks(
-    name = "clang_tidy_extra_checks",
-    extra_features = [
-        "spp_code_style_check_header_guards",
-        "spp_code_style_check_method_names",
-        "spp_code_style_check_readability",
-        "spp_code_style_check_type_names",
-        "spp_code_style_check_variable_names",
-    ],
-)
 
 cc_library(
     name = "custom_recorder_example",
@@ -50,7 +38,6 @@ cc_binary(
         "main.cpp",
     ],
     deps = [
-        "//score/mw/log/detail/common:recorder_factory",
-        "@score_baselibs//score/mw/log:frontend",
+        "@score_baselibs//score/mw/log:console",
     ],
 )

@@ -46,6 +46,23 @@ config_setting(
     ],
 )
 
+bool_flag(
+    name = "shm_dma_enabled",
+    build_setting_default = False,
+)
+
+config_setting(
+    name = "config_use_shm_dma_enabled",
+    flag_values = {
+        ":KRemote_Logging": "True",
+        ":shm_dma_enabled": "True",
+    },
+    visibility = [
+        "//score/mw/log:__subpackages__",
+        "@score_baselibs//score/mw/log:__subpackages__",
+    ],
+)
+
 cc_library(
     name = "unfilled",
 )

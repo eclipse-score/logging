@@ -39,6 +39,7 @@ class MockFTOutput : public FileTransferStreamHandler::IOutput
                  uint8_t nor,
                  uint32_t time_tmsp),
                 (override));
+    MOCK_METHOD(bool, IsOutputEnabled, (), (const, noexcept, override));
 
     virtual ~MockFTOutput() = default;
 };
@@ -52,6 +53,7 @@ class FileTransferStreamTest : public ::testing::Test
     void SetUp() override
     {
         mock_output_ = std::make_unique<MockFTOutput>();
+        ON_CALL(*mock_output_, IsOutputEnabled()).WillByDefault(Return(true));
         handler_ = std::make_unique<FileTransferStreamHandler>(*mock_output_);
     }
 
@@ -156,5 +158,17 @@ TEST_F(FileTransferStreamTest, ShouldReturnExtraPackageWhenFileNotDivisible)
     std::this_thread::sleep_for(std::chrono::milliseconds(500));
     std::ifstream file(path);
     EXPECT_TRUE(file.good());
+    std::remove(path.c_str());
+}
+
+TEST_F(FileTransferStreamTest, HandleDoesNothingWhenOutputDisabled)
+{
+    ON_CALL(*mock_output_, IsOutputEnabled()).WillByDefault(Return(false));
+    EXPECT_CALL(*mock_output_, SendFtVerbose(_, _, _, _, _, _)).Times(0);
+
+    auto path = CreateTempFile(512);
+    auto data = SerializeFileTransferEntry(path, false);
+
+    handler_->Handle({}, data.c_str(), static_cast<BufsizeT>(data.size()));
     std::remove(path.c_str());
 }

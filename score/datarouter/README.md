@@ -42,6 +42,21 @@ Example gap detection message:
 ```
 The source ID corresponds to its PID. In this example, the source with PID `485` lost 37 messages because the datarouter did not read the ring buffer fast enough.
 
+## Thread Safety — LogParser
+
+Each `LogParser` instance is owned by exactly one `SourceSession` inside the
+datarouter. It is **not** thread-safe, but the current design guarantees
+correctness through structural single-threading:
+
+| Concern | Guarantee |
+|---|---|
+| **Handler maps** (`handle_request_map_`, `global_handlers_`) | Populated once at construction via constructor injection and never mutated afterward (fix for Ticket-254408). |
+| **Type/index maps** (`index_parser_map_`) | Mutated by `AddIncomingType()` and read by `Parse()` / `ParseSharedMemoryRecord()`, but both are called exclusively from `SourceSession::Tick()`, which runs single-threaded per session. |
+
+If the design ever evolves to allow concurrent access to a `LogParser`
+(e.g. parallel readers or writers from different threads), `index_parser_map_`
+would need protection (e.g. `std::shared_mutex`).
+
 ## Configuration
 
 Configure logging to match application requirements through static configuration during application deployment. Deploy the configuration file relative to the binary under the `etc` directory (e.g., `./etc/logging.json`).

@@ -14,12 +14,13 @@
 #ifndef SCORE_DATAROUTER_INCLUDE_DLT_DLTID_H
 #define SCORE_DATAROUTER_INCLUDE_DLT_DLTID_H
 
-#include "score/mw/log/detail/logging_identifier.h"
-#include <cstring>
+#include <algorithm>
+#include <array>
 #include <functional>
 #include <iostream>
 #include <string>
 
+#include "score/mw/log/detail/logging_identifier.h"
 #include <score/string_view.hpp>
 
 namespace score
@@ -30,56 +31,71 @@ namespace platform
 // multiple translation units shall be declared in one and only one file.
 // false positive : dltid_t is only declared once in this file.
 // coverity[autosar_cpp14_m3_2_3_violation]
-struct DltidT
+class DltidT
 {
+  private:
     constexpr static size_t kSize{4U};
 
-    score::mw::log::detail::LoggingIdentifier bytes;
-    std::int32_t value;
+    std::array<char, kSize> bytes_;
 
-    DltidT() noexcept : value() {}
-    explicit DltidT(const char* str) noexcept : DltidT(std::string_view{str}) {}
-    explicit DltidT(const std::string_view str) noexcept : bytes{str}, value{}
+  public:
+    DltidT() noexcept : bytes_{'\0', '\0', '\0', '\0'} {}
+
+    // class data members have been initialized indirectly via delegating constructor.
+    // coverity[autosar_cpp14_a12_6_1_violation]: Explanation above.
+    explicit DltidT(const std::string_view str) noexcept : DltidT()
     {
-        value = static_cast<std::int32_t>(score::mw::log::detail::LoggingIdentifier::HashFunction{}(bytes));
+        const auto len = std::min(str.size(), kSize);
+        std::ignore = std::copy_n(str.begin(), len, bytes_.begin());
     }
 
-    explicit DltidT(const std::string& str) noexcept : DltidT(std::string_view{str.data(), str.size()}) {}
-    explicit DltidT(const score::cpp::string_view& str) noexcept : DltidT(std::string_view{str.data(), str.size()}) {};
+    explicit DltidT(const char* str) noexcept : DltidT(std::string_view{str}) {}
 
-    DltidT& operator=(const std::string& str)
+    explicit DltidT(const std::string& str) noexcept : DltidT(std::string_view{str}) {}
+
+    explicit DltidT(const score::mw::log::detail::LoggingIdentifier& logging_identifier) noexcept
+        : DltidT{logging_identifier.GetStringView()}
     {
-        bytes = score::mw::log::detail::LoggingIdentifier(std::string_view(str));
-        value = static_cast<std::int32_t>(score::mw::log::detail::LoggingIdentifier::HashFunction{}(bytes));
+    }
 
+    DltidT& operator=(const std::string& str) noexcept
+    {
+        bytes_.fill('\0');
+        const auto len = std::min(str.size(), kSize);
+        std::ignore = std::copy_n(str.data(), len, bytes_.begin());
         return *this;
     }
 
     explicit operator std::string() const
     {
-        // Determine the length of the C-string stored in bytes,
-        // but do not exceed the size of the array.
-        return std::string(bytes.data.data(), bytes.data.size());
+        const auto actual_len = std::count_if(bytes_.begin(), bytes_.end(), [](char byte) {
+            return byte != '\0';
+        });
+        return std::string(bytes_.data(), static_cast<std::size_t>(actual_len));
     }
 
-    bool operator==(const DltidT& id) const
+    friend bool operator==(const DltidT& lhs, const DltidT& rhs) noexcept
     {
-        return this->value == id.value;
+        return lhs.bytes_ == rhs.bytes_;
     }
 
-    char* Data()
+    std::string_view Data() const noexcept
     {
-        return bytes.data.data();
-    }
-
-    const char* Data() const
-    {
-        return bytes.data.data();
+        const auto actual_len = std::count_if(bytes_.begin(), bytes_.end(), [](char byte) {
+            return byte != '\0';
+        });
+        return std::string_view{bytes_.data(), static_cast<std::size_t>(actual_len)};
     }
 
     constexpr static size_t size()
     {
         return kSize;
+    }
+
+    std::int32_t GetHash() const noexcept
+    {
+        const auto value = score::cpp::bit_cast<std::int32_t>(bytes_);
+        return static_cast<std::int32_t>(std::hash<std::int32_t>{}(value));
     }
 };
 
@@ -99,7 +115,7 @@ struct hash<score::platform::DltidT>
 {
     std::size_t operator()(const score::platform::DltidT& d) const noexcept
     {
-        return static_cast<std::size_t>(d.value);
+        return static_cast<std::size_t>(d.GetHash());
     }
 };
 

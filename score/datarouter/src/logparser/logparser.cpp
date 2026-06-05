@@ -59,39 +59,27 @@ namespace platform
 namespace internal
 {
 
-LogParser::LogParser(const score::mw::log::INvConfig& nv_config)
+LogParser::LogParser(const score::mw::log::INvConfig& nv_config,
+                     std::vector<AnyHandler*> global_handlers,
+                     HandleRequestMap handle_request_map)
     : ILogParser(),
-      filter_factory_{},
-      handle_request_map_{},
-      typename_to_index_{},
+      handle_request_map_{std::move(handle_request_map)},
       index_parser_map_{},
-      global_handlers_{},
+      global_handlers_{std::move(global_handlers)},
       nv_config_(nv_config)
 {
 }
 
-void LogParser::IndexParser::AddHandler(const LogParser::HandleRequestMap::value_type& request)
+void LogParser::IndexParser::AddHandler(TypeHandler* handler)
 {
-    handlers_.push_back(Handler{&request, request.second.handler});
-}
-
-void LogParser::IndexParser::RemoveHandler(const LogParser::HandleRequestMap::value_type& request)
-{
-    const auto finder = [&request](const auto& v) {
-        return v.request == &request;
-    };
-    const auto it = std::find_if(handlers_.begin(), handlers_.end(), finder);
-    if (it != handlers_.end())
-    {
-        handlers_.erase(it);
-    }
+    handlers_.push_back(handler);
 }
 
 void LogParser::IndexParser::Parse(const TimestampT timestamp, const char* const data, const BufsizeT size)
 {
     for (const auto& handler : handlers_)
     {
-        handler.handler->Handle(timestamp, data, size);
+        handler->Handle(timestamp, data, size);
     }
 }
 
@@ -110,13 +98,12 @@ void LogParser::AddIncomingType(const BufsizeT map_index, const std::string& par
     std::string type_name;
     LoggerUnpackString(params.substr(12U), type_name);
 
-    typename_to_index_.emplace(type_name, map_index);
     IndexParser index_parser{
         TypeInfo{nv_config_.GetDltMsgDesc(type_name), map_index, params, type_name, ecu_id, app_id}};
     const auto ith_range = handle_request_map_.equal_range(type_name);
     for (auto ith = ith_range.first; ith != ith_range.second; ++ith)
     {
-        index_parser.AddHandler(*ith);
+        index_parser.AddHandler(ith->second);
     }
     index_parser_map_.emplace(map_index, std::move(index_parser));
 }
@@ -126,87 +113,6 @@ void LogParser::AddIncomingType(const score::mw::log::detail::TypeRegistration& 
     std::string params{type_registration.registration_data.data(),
                        score::mw::log::detail::GetDataSizeAsLength(type_registration.registration_data)};
     this->AddIncomingType(type_registration.type_id, params);
-}
-
-void LogParser::AddGlobalHandler(AnyHandler& handler)
-{
-    if (IsGlbHndlRegistered(handler) == false)
-    {
-        global_handlers_.push_back(&handler);
-    }
-}
-
-void LogParser::RemoveGlobalHandler(AnyHandler& handler)
-{
-    const auto it = std::find(global_handlers_.begin(), global_handlers_.end(), &handler);
-    if (it != global_handlers_.end())
-    {
-        global_handlers_.erase(it);
-    }
-}
-
-void LogParser::AddTypeHandler(const std::string& type_name, TypeHandler& handler)
-{
-    if (IsTypeHndlRegistered(type_name, handler))
-    {
-        return;
-    }
-    const auto ith = handle_request_map_.emplace(type_name, HandleRequest{&handler});
-    const auto iti_range = typename_to_index_.equal_range(type_name);
-    for (auto iti = iti_range.first; iti != iti_range.second; ++iti)
-    {
-        index_parser_map_.at(iti->second).AddHandler(*ith);
-    }
-}
-
-void LogParser::RemoveTypeHandler(const std::string& type_name, TypeHandler& handler)
-{
-    const auto ith_range = handle_request_map_.equal_range(type_name);
-    const auto finder = [&handler](const auto& v) {
-        return v.second.handler == &handler;
-    };
-    const auto ith = std::find_if(ith_range.first, ith_range.second, finder);
-    if (ith != ith_range.second)
-    {
-        const auto iti_range = typename_to_index_.equal_range(type_name);
-        for (auto iti = iti_range.first; iti != iti_range.second; ++iti)
-        {
-            index_parser_map_.at(iti->second).RemoveHandler(*ith);
-        }
-        handle_request_map_.erase(ith);
-    }
-}
-
-bool LogParser::IsTypeHndlRegistered(const std::string& type_name, const TypeHandler& handler)
-{
-    bool retval = false;
-    const auto ith_range = handle_request_map_.equal_range(type_name);
-    const auto finder = [&handler](const auto& v) {
-        return v.second.handler == &handler;
-    };
-    const auto ith = std::find_if(ith_range.first, ith_range.second, finder);
-    if (ith != ith_range.second)
-    {
-        retval = true;
-    }
-    return retval;
-}
-
-bool LogParser::IsGlbHndlRegistered(const AnyHandler& handler)
-{
-    const auto it = std::find(global_handlers_.begin(), global_handlers_.end(), &handler);
-    bool retval = false;
-    if (it != global_handlers_.end())
-    {
-        retval = true;
-    }
-    return retval;
-}
-
-void LogParser::ResetInternalMapping()
-{
-    typename_to_index_.clear();
-    index_parser_map_.clear();
 }
 
 void LogParser::Parse(TimestampT timestamp, const char* data, BufsizeT size)
@@ -247,7 +153,7 @@ void LogParser::Parse(TimestampT timestamp, const char* data, BufsizeT size)
     }
 }
 
-void LogParser::Parse(const score::mw::log::detail::SharedMemoryRecord& record)
+void LogParser::ParseSharedMemoryRecord(const score::mw::log::detail::SharedMemoryRecord& record)
 {
     const auto index_parser_entry = index_parser_map_.find(record.header.type_identifier);
     if (index_parser_entry == index_parser_map_.end())

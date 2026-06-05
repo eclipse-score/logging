@@ -1,0 +1,62 @@
+@startuml wait_free_linear_buffer
+
+participant "Producer Thread 1\n(WaitFreeLinearWriter)" as P1
+participant "LinearControlBlock" as LCB
+participant "Producer Thread 2\n(WaitFreeLinearWriter)" as P2
+
+note over LCB: acquired_index == 0, written_index == 0
+
+P1 -> LCB : Acquire(64 bytes)
+note right of P1
+  ++number_of_writers  (number_of_writers == 1)
+  offset = acquired_index.fetch_add(8 + 64)
+  acquired_index == 72
+  offset == 0
+  length (64) written to [0:8)
+  AcquiredData.data == [8:72)
+end note
+
+note over P1, P2: happens before
+
+P2 -> LCB : Acquire(16 bytes)
+note right of P2
+  ++number_of_writers  (number_of_writers == 2)
+  offset = acquired_index.fetch_add(8 + 16)
+  acquired_index == 96
+  offset == 72
+  length (16) written to [72:80)
+  AcquiredData.data == [80:96)
+end note
+
+par Concurrent Writing
+  note over P1: WriteDataProducer1(acquired_data)\nWriting on range [8:72)
+else
+  note over P2: WriteDataProducer2(acquired_data)\nWriting on range [80:96)
+end
+
+note over P1, P2: happens before
+
+P2 -> LCB : Release(16 bytes)
+note right of P2
+  written_index.fetch_add(8 + 16)
+  written_index == 24
+  --number_of_writers  (number_of_writers == 1)
+end note
+
+P1 -> LCB : Release(64 bytes)
+note right of P1
+  written_index.fetch_add(8 + 64)
+  written_index == 24 + 72 == 96
+  --number_of_writers  (number_of_writers == 0)
+end note
+
+note over LCB: acquired_index == written_index == 96, number_of_writers == 0
+
+legend bottom
+  **Linear Buffer Content:**
+  | **Index Range** | **0..8**     | **8..72**             | **72..80**   | **80..96**            |
+  | Data            | 64           | WriteDataProducer1()  | 16           | WriteDataProducer2()  |
+  | Description     | Length of P1 | Payload of Producer 1 | Length of P2 | Payload of Producer 2 |
+endlegend
+
+@enduml

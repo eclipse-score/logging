@@ -19,24 +19,50 @@ module(
 # Bazel global rules
 bazel_dep(name = "rules_python", version = "1.4.1")
 bazel_dep(name = "bazel_skylib", version = "1.7.1")
-bazel_dep(name = "rules_rust", version = "0.61.0")
+bazel_dep(name = "rules_rust", version = "0.68.1-score")
 bazel_dep(name = "rules_cc", version = "0.1.1")
 bazel_dep(name = "aspect_rules_lint", version = "1.0.3")
 bazel_dep(name = "buildifier_prebuilt", version = "7.3.1")
 bazel_dep(name = "platforms", version = "1.0.0")
 
 # S-CORE process rules
-bazel_dep(name = "score_bazel_platforms", version = "0.0.4")
-bazel_dep(name = "score_docs_as_code", version = "3.0.0")
-bazel_dep(name = "score_tooling", version = "1.1.0")
+bazel_dep(name = "score_bazel_platforms", version = "0.1.2")
+bazel_dep(name = "score_docs_as_code", version = "4.0.1")
+single_version_override(
+    module_name = "score_docs_as_code",
+    version = "4.0.1",
+)
+
+bazel_dep(name = "score_tooling", version = "1.1.2")
 bazel_dep(name = "score_rust_policies", version = "0.0.3")
 
-bazel_dep(name = "score_process", version = "1.4.3", dev_dependency = True)
-bazel_dep(name = "score_platform", version = "0.5.3", dev_dependency = True)
+bazel_dep(name = "score_process", version = "1.5.4", dev_dependency = True)
+bazel_dep(name = "score_platform", version = "0.5.5", dev_dependency = True)
+bazel_dep(name = "score_itf", version = "0.4.0", dev_dependency = True)
+
+# OCI / Docker image rules for integration tests
+bazel_dep(name = "rules_oci", version = "2.2.7", dev_dependency = True)
+bazel_dep(name = "rules_pkg", version = "1.2.0", dev_dependency = True)
+
+oci = use_extension("@rules_oci//oci:extensions.bzl", "oci", dev_dependency = True)
+oci.pull(
+    name = "ubuntu_24_04",
+    digest = "sha256:2e863c44b718727c860746568e1d54afd13b2fa71b160f5cd9058fc436217b30",
+    image = "ubuntu",
+    platforms = ["linux/amd64"],
+    tag = "24.04",
+)
+use_repo(oci, "ubuntu_24_04", "ubuntu_24_04_linux_amd64")
 
 # Toolchains and extensions
-bazel_dep(name = "score_bazel_cpp_toolchains", version = "0.2.2", dev_dependency = True)
-bazel_dep(name = "score_toolchains_rust", version = "0.4.0", dev_dependency = True)
+bazel_dep(name = "score_bazel_cpp_toolchains", version = "0.5.1", dev_dependency = True)
+bazel_dep(name = "score_toolchains_rust", version = "0.8.0", dev_dependency = True)
+bazel_dep(name = "score_cpp_policies", version = "0.0.0", dev_dependency = True)
+git_override(
+    module_name = "score_cpp_policies",
+    commit = "6348b27",
+    remote = "https://github.com/eclipse-score/score_cpp_policies.git",
+)
 
 # S-CORE crates
 bazel_dep(name = "score_crates", version = "0.0.6")
@@ -92,19 +118,8 @@ python.toolchain(
 
 bazel_dep(name = "googletest", version = "1.17.0.bcr.1")
 bazel_dep(name = "rapidjson", version = "1.1.0")
-bazel_dep(name = "score_baselibs", version = "0.2.4")
-git_override(
-    module_name = "score_baselibs",
-    commit = "4b67ce1929575801405c77f7e3c79ab36156a976",
-    remote = "https://github.com/eclipse-score/baselibs.git",
-)
-
-bazel_dep(name = "score_communication", version = "0.1.2")
-git_override(
-    module_name = "score_communication",
-    commit = "56448a5589a5f7d3921b873e8127b824a8c1ca95",
-    remote = "https://github.com/eclipse-score/communication.git",
-)
+bazel_dep(name = "score_baselibs", version = "0.2.7")
+bazel_dep(name = "score_communication", version = "0.2.1")
 
 # Rust dependencies
 

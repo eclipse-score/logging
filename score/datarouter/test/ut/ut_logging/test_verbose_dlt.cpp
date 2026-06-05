@@ -26,12 +26,14 @@ class MockDltVerboseHandlerOutput : public DltVerboseHandler::IOutput
                 SendVerbose,
                 (uint32_t, const score::mw::log::detail::log_entry_deserialization::LogEntryDeserializationReflection&),
                 (override));
+    MOCK_METHOD(bool, IsOutputEnabled, (), (const, noexcept, override));
     virtual ~MockDltVerboseHandlerOutput() = default;
 };
 
 TEST(DltVerboseHandlerTest, sendVerboseTest)
 {
     MockDltVerboseHandlerOutput mock_dlt_output;
+    ON_CALL(mock_dlt_output, IsOutputEnabled()).WillByDefault(Return(true));
     DltVerboseHandler handler(mock_dlt_output);
 
     const TimestampT timestamp = score::os::HighResolutionSteadyClock::time_point{};
@@ -39,6 +41,21 @@ TEST(DltVerboseHandlerTest, sendVerboseTest)
     const BufsizeT data_size = static_cast<BufsizeT>(strlen(data));
 
     EXPECT_CALL(mock_dlt_output, SendVerbose(_, _)).Times(1);
+
+    handler.Handle(timestamp, data, data_size);
+}
+
+// Covers the !IsOutputEnabled() early-return branch in Handle().
+TEST(DltVerboseHandlerTest, HandleDoesNothingWhenOutputDisabled)
+{
+    MockDltVerboseHandlerOutput mock_dlt_output;
+    ON_CALL(mock_dlt_output, IsOutputEnabled()).WillByDefault(Return(false));
+    EXPECT_CALL(mock_dlt_output, SendVerbose(_, _)).Times(0);
+    DltVerboseHandler handler(mock_dlt_output);
+
+    const TimestampT timestamp = score::os::HighResolutionSteadyClock::time_point{};
+    const char* data = "data";
+    const BufsizeT data_size = static_cast<BufsizeT>(strlen(data));
 
     handler.Handle(timestamp, data, data_size);
 }

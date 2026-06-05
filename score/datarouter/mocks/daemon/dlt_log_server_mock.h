@@ -30,7 +30,7 @@ namespace mock
 class DltLogServerMock : public IDltLogServer
 {
   public:
-    MOCK_METHOD(std::string, ReadLogChannelNames, (), (override));
+    MOCK_METHOD(std::string, ReadLogChannelNames, (), (const, override));
     MOCK_METHOD(std::string, ResetToDefault, (), (override));
     MOCK_METHOD(std::string, StoreDltConfig, (), (override));
     MOCK_METHOD(std::string, SetTraceState, (), (override));

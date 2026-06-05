@@ -24,7 +24,7 @@ config_setting(
         ":persistent_logging": "True",
     },
     visibility = [
-        "//platform/aas/test/pas/datarouterconf:__subpackages__",
+        "//platform/aas/pas/datarouterconf:__subpackages__",
         "@score_logging//score/datarouter:__subpackages__",
     ],
 )
@@ -101,6 +101,22 @@ config_setting(
 )
 
 bool_flag(
+    name = "dlt_output_enable",
+    build_setting_default = False,
+)
+
+config_setting(
+    name = "dlt_output_enabled",
+    flag_values = {
+        ":dlt_output_enable": "True",
+    },
+    visibility = [
+        # Visibility scope updated during migration
+        "@score_logging//score/datarouter:__subpackages__",
+    ],
+)
+
+bool_flag(
     name = "use_local_vlan",
     build_setting_default = False,
 )
@@ -108,4 +124,8 @@ bool_flag(
 config_setting(
     name = "enable_local_vlan",
     flag_values = {":use_local_vlan": "True"},
+    visibility = [
+        "//score/datarouter/network:__pkg__",
+        # "@xyz//score/datarouter/network:__pkg__",
+    ],
 )

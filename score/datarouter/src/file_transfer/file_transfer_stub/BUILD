@@ -42,9 +42,9 @@ cc_library(
     ],
     deps = [
         "@score_baselibs//score/language/futurecpp",
+        "@score_baselibs//score/mw/log",
         "@score_logging//score/datarouter:dltprotocol",
         "@score_logging//score/datarouter:dltserver_common",
-        "@score_logging//score/datarouter:log",
         "@score_logging//score/datarouter:logparser",
     ],
 )

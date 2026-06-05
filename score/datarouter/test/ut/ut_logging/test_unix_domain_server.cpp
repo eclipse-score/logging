@@ -20,6 +20,8 @@
 #include "score/os/utils/mocklib/signalmock.h"
 #include "unix_domain/unix_domain_server.h"
 
+#include <sys/stat.h>
+
 #include <gtest/gtest.h>
 
 namespace score
@@ -268,6 +270,24 @@ UnixDomainSockAddr MakeTempAddrAbstractFalse(std::string& name)
     return UnixDomainSockAddr(name, /*isAbstract=*/false);
 }
 
+/// Block until the filesystem socket at \p path exists (i.e. bind() completed).
+/// Returns true on success, false on timeout.
+bool WaitForSocketFile(const std::string& path, std::chrono::milliseconds timeout = std::chrono::milliseconds(5000))
+{
+    constexpr auto kPollInterval = std::chrono::milliseconds(10);
+    auto deadline = std::chrono::steady_clock::now() + timeout;
+    while (std::chrono::steady_clock::now() < deadline)
+    {
+        struct stat st{};
+        if (::stat(path.c_str(), &st) == 0 && (st.st_mode & S_IFSOCK) != 0)
+        {
+            return true;
+        }
+        std::this_thread::sleep_for(kPollInterval);
+    }
+    return false;
+}
+
 TEST(UnixDomainSockAddr, NonAbstractRoundTrip)
 {
     UnixDomainSockAddr addr("datarouter_socket", false);
@@ -350,7 +370,7 @@ TEST(UnixDomainServerAcceptTest, AcceptsOneClientConnection)
     UnixDomainSockAddr addr(path, /* isAbstract = */ false);
     UnixDomainServer* server = new UnixDomainServer(addr, kFactory);
 
-    std::this_thread::sleep_for(std::chrono::milliseconds(50));
+    ASSERT_TRUE(WaitForSocketFile(path)) << "server did not bind in time";
 
     // create a client socket
     int client = ::socket(AF_UNIX, SOCK_STREAM, 0);
@@ -380,8 +400,8 @@ TEST(UnixDomainServerCleanup, DestructorProcessesPendingConnections)
     {
         UnixDomainServer server(addr, kFactory);
 
-        // give server a moment to bind & start listening
-        std::this_thread::sleep_for(std::chrono::milliseconds(50));
+        // wait for the server to bind the socket file
+        ASSERT_TRUE(WaitForSocketFile(path)) << "server did not bind in time";
 
         // open two real UNIX‐domain clients and connect them
         for (int i = 0; i < 2; ++i)
@@ -423,7 +443,7 @@ TEST(UnixDomainServerHandleCmd, AllBranchesViaFramedMessages)
 
     UnixDomainServer server(addr, factory);
 
-    std::this_thread::sleep_for(std::chrono::milliseconds(50));  // bind & listen
+    ASSERT_TRUE(WaitForSocketFile(path)) << "server did not bind in time";
 
     // open one client and connect
     int cfd = ::socket(AF_UNIX, SOCK_STREAM, 0);
@@ -466,7 +486,7 @@ TEST(UnixDomainServerHandleCommand, IdleClientTriggersDeleteBranch)
     {
         UnixDomainServer server(addr, /*factory*/ {});
 
-        std::this_thread::sleep_for(std::chrono::milliseconds(40));  // bind+listen
+        ASSERT_TRUE(WaitForSocketFile(path)) << "server did not bind in time";
 
         /* connect client but **do not send** anything */
         int cli = ::socket(AF_UNIX, SOCK_STREAM, 0);
@@ -519,7 +539,7 @@ TEST(UnixDomainServerExceptions, CatchStdExceptionInServerRoutine)
 
     /* start the server (on its background thread) */
     UnixDomainServer server(addr, factory);
-    std::this_thread::sleep_for(std::chrono::milliseconds(100));  // let bind()
+    ASSERT_TRUE(WaitForSocketFile(path)) << "server did not bind in time";
 
     /* create a client, subscribe (no throw), then send a 2nd string which triggers
      * CommandErrorInjectingSession::on_command() */
@@ -586,7 +606,7 @@ TEST(UnixDomainServer, NotifiesClosedByPeer)
 
     UnixDomainServer server(addr, factory);
 
-    std::this_thread::sleep_for(std::chrono::milliseconds(60));  // bind & listen
+    ASSERT_TRUE(WaitForSocketFile(path)) << "server did not bind in time";
 
     // create client, subscribe, then close() to simulate peer hang‑up
     int cfd = ::socket(AF_UNIX, SOCK_STREAM, 0);
@@ -647,7 +667,7 @@ TEST(UnixDomainServer, WorkerRequeuesOnTrueTick)
 
     UnixDomainServer server(addr, MakeFactory());
 
-    std::this_thread::sleep_for(std::chrono::milliseconds(60));
+    ASSERT_TRUE(WaitForSocketFile(path)) << "server did not bind in time";
 
     int cfd = ::socket(AF_UNIX, SOCK_STREAM, 0);
     ASSERT_GE(cfd, 0) << strerror(errno);
@@ -695,8 +715,8 @@ TEST(UnixDomainServer, ServerCatchesSessionFailure)
     auto addr = MakeTempAddrAbstractFalse(path);
     UnixDomainServer server(addr, gKErrorInjectingFactory);
 
-    /* give server time to bind & listen */
-    std::this_thread::sleep_for(std::chrono::milliseconds(80));
+    /* wait for server to bind the socket file */
+    ASSERT_TRUE(WaitForSocketFile(path)) << "server did not bind in time";
 
     int cfd = ::socket(AF_UNIX, SOCK_STREAM, 0);
     ASSERT_GE(cfd, 0) << strerror(errno);

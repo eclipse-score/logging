@@ -13,8 +13,8 @@
 #ifndef SCORE_MW_LOG_TEST_FAKE_RECORDER_FAKE_RECORDER_H
 #define SCORE_MW_LOG_TEST_FAKE_RECORDER_FAKE_RECORDER_H
 
+#include "score/concurrency/synchronized.h"
 #include "score/mw/log/recorder.h"
-#include "score/datarouter/lib/synchronized/synchronized.h"
 
 #include <array>
 #include <cstddef>
@@ -80,15 +80,16 @@ class FakeRecorder final : public score::mw::log::Recorder
     void AppendToSlot(const SlotHandle& slot, std::string_view text) noexcept;
     void FlushSlot(const SlotHandle& slot) noexcept;
 
-    static constexpr std::size_t kMaxSlots{256U};
-
     struct State
     {
+        static constexpr std::size_t kMaxSlots{256U};
         std::array<std::optional<std::string>, kMaxSlots> in_flight{};
         std::vector<std::string> recorded_messages{};
     };
 
-    score::platform::datarouter::Synchronized<State> state_{};
+    using SyncState = score::concurrency::Synchronized<State>;
+
+    SyncState state_{};
 };
 
 }  // namespace test

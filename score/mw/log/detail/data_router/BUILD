@@ -14,18 +14,6 @@
 load("@rules_cc//cc:defs.bzl", "cc_library", "cc_test")
 load("@score_baselibs//:bazel/unit_tests.bzl", "cc_unit_test_suites_for_host_and_qnx")
 load("@score_baselibs//score/language/safecpp:toolchain_features.bzl", "COMPILER_WARNING_FEATURES")
-load("@score_baselibs//score/quality/clang_tidy:extra_checks.bzl", "clang_tidy_extra_checks")
-
-clang_tidy_extra_checks(
-    name = "clang_tidy_extra_checks",
-    extra_features = [
-        "spp_code_style_check_header_guards",
-        "spp_code_style_check_method_names",
-        "spp_code_style_check_readability",
-        "spp_code_style_check_type_names",
-        "spp_code_style_check_variable_names",
-    ],
-)
 
 cc_library(
     name = "data_router_backend",
@@ -101,12 +89,12 @@ cc_library(
     features = COMPILER_WARNING_FEATURES,
     tags = ["FFI"],
     visibility = [
+        "//score/mw/log/backend:__pkg__",
         "//score/mw/log/detail/common:__pkg__",
         "@score_baselibs//score/mw/log/detail:__pkg__",
     ],
     deps = [
         ":data_router_backend",
-        "@score_baselibs//score/mw/log:recorder_interface",
         "@score_baselibs//score/mw/log/configuration",
         "@score_baselibs//score/mw/log/detail:log_recorder_factory",
         "@score_baselibs//score/os/utils:signal",
@@ -119,6 +107,7 @@ cc_test(
         "data_router_backend_test.cpp",
         "data_router_message_client_factory_mock.h",
         "data_router_message_client_factory_test.cpp",
+        "data_router_message_client_identifiers_test.cpp",
         "data_router_message_client_mock.h",
         "data_router_message_client_test.cpp",
         "data_router_messages_test.cpp",
@@ -135,13 +124,14 @@ cc_test(
     deps = [
         ":data_router_backend",
         ":message_passing_interface",
-        "//score/mw/log/detail/common:recorder_factory",
+        "//score/mw/log/backend:remote",
         "//score/mw/log/detail/data_router/shared_memory:reader",
         "//score/mw/log/test/console_logging_environment",
         "@googletest//:gtest_main",
         "@score_baselibs//score/language/futurecpp:futurecpp_test_support",
         "@score_baselibs//score/mw/log/configuration:target_config_reader_mock",
         "@score_baselibs//score/mw/log/detail:backend_mock",
+        "@score_baselibs//score/mw/log/detail/text_recorder",
         "@score_baselibs//score/os/mocklib:fcntl_mock",
         "@score_baselibs//score/os/mocklib:mman_mock",
         "@score_baselibs//score/os/mocklib:pthread_mock",

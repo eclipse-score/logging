@@ -32,16 +32,12 @@ clang_tidy_extra_checks(
 
 cc_library(
     name = "dltprotocol",
-    srcs = [
-        "src/dlt/dltid_converter.cpp",
-    ],
     hdrs = [
         "include/dlt/dlt_common.h",
         "include/dlt/dlt_headers.h",
         "include/dlt/dlt_protocol.h",
         "include/dlt/dlt_types.h",
         "include/dlt/dltid.h",
-        "include/dlt/dltid_converter.h",
         "include/dlt/logentry_trace.h",
         "include/dlt/plogfilterdesc.h",
     ],
@@ -77,6 +73,7 @@ cc_library(
     strip_include_prefix = "include",
     visibility = [
         "//platform/aas/pas/datarouterconf:__subpackages__",
+        "@score_logging//score/datarouter:__subpackages__",
     ],
     deps = [
         "@score_baselibs//score/language/futurecpp",
@@ -210,9 +207,10 @@ cc_library(
     deps = [
         ":datarouter_types",
         ":dltprotocol",
-        ":log",
         ":logparser_interface",
         "//score/mw/log/detail/data_router/shared_memory:reader",
+        "@score_baselibs//score/mw/log",
+        "@score_baselibs//score/mw/log/configuration:nvconfig",
         "@score_baselibs//score/static_reflection_with_serialization/serialization",
     ],
 )
@@ -250,6 +248,38 @@ cc_library(
     ],
 )
 
+cc_library(
+    name = "logparser_factory_interface",
+    hdrs = [
+        "include/logparser/i_log_parser_factory.h",
+    ],
+    features = COMPILER_WARNING_FEATURES,
+    strip_include_prefix = "include",
+    visibility = [
+        "//score/datarouter/src/dlt/nonverbose_dlt_impl:__pkg__",
+        "//score/datarouter/src/dlt/nonverbose_dlt_stub:__pkg__",
+        "//score/datarouter/test:__subpackages__",
+        "@score_logging//score/datarouter:__subpackages__",
+    ],
+    deps = [
+        ":logparser_interface",
+    ],
+)
+
+cc_library(
+    name = "logparser_factory_mock",
+    hdrs = [
+        "mocks/log_parser_factory_mock.h",
+    ],
+    features = COMPILER_WARNING_FEATURES,
+    strip_include_prefix = "mocks",
+    visibility = ["//score/datarouter/test:__subpackages__"],
+    deps = [
+        ":logparser_factory_interface",
+        "@googletest//:gtest_main",
+    ],
+)
+
 ## ===========================================================================
 ## libtracing
 ## ---------------------------------------------------------------------------
@@ -276,21 +306,6 @@ cc_library(
     visibility = [
         "//score/mw/log:__subpackages__",
         "@score_baselibs//score/mw/log:__subpackages__",
-    ],
-)
-
-alias(
-    name = "libtracing",
-    actual = ":log",
-    visibility = ["//visibility:public"],
-)
-
-cc_library(
-    name = "log",
-    visibility = ["//visibility:public"],
-    deps = [
-        "//score/mw/log/detail/common:recorder_factory",
-        "@score_baselibs//score/mw/log:frontend",
     ],
 )
 
@@ -368,7 +383,7 @@ cc_library(
     strip_include_prefix = "src/applications",
     visibility = ["//score/datarouter/test:__subpackages__"],
     deps = [
-        ":log",
+        "@score_baselibs//score/mw/log",
     ],
 )
 
@@ -385,7 +400,7 @@ cc_library(
         "@score_logging//score/datarouter:__subpackages__",
     ],
     deps = [
-        ":log",
+        "@score_baselibs//score/mw/log",
     ],
 )
 
@@ -401,13 +416,14 @@ cc_library(
     visibility = ["//visibility:private"],
     deps = [
         ":datarouter_types",
-        ":log",
         ":logparser",
+        ":logparser_factory_interface",
         ":message_passing_server",
         ":unixdomain_server",
-        "//score/datarouter/lib/synchronized:synchronized_utility",
         "//score/mw/log/detail/data_router/shared_memory:reader",
+        "@score_baselibs//score/concurrency:synchronized",
         "@score_baselibs//score/language/futurecpp",
+        "@score_baselibs//score/mw/log",
     ],
 )
 
@@ -424,11 +440,12 @@ cc_library(
         "//score/datarouter/test/benchmark:__subpackages__",
     ],
     deps = [
-        ":log",
         ":logparser",
+        ":logparser_factory_interface",
         ":message_passing_server",
         ":unixdomain_mock",
-        "//score/datarouter/lib/synchronized:synchronized_utility",
+        "@score_baselibs//score/concurrency:synchronized",
+        "@score_baselibs//score/mw/log",
     ],
 )
 
@@ -446,11 +463,12 @@ cc_library(
     ],
     deps = [
         ":datarouter_types",
-        ":log",
+        ":logparser_factory_interface",
         ":logparser_testing",
         ":message_passing_server",
         ":unixdomain_mock",
-        "//score/datarouter/lib/synchronized:synchronized_utility",
+        "@score_baselibs//score/concurrency:synchronized",
+        "@score_baselibs//score/mw/log",
     ],
 )
 
@@ -602,8 +620,6 @@ cc_library(
         ":dlt_log_channel_lib",
         ":dltserver_common",
         ":libdrconfighdrs",
-        ":libtracing",
-        ":log",
         ":log_entry_deserialization",
         ":log_sender",
         ":logchannel_utility",
@@ -612,6 +628,7 @@ cc_library(
         "//score/datarouter/network:vlan",
         "//score/datarouter/src/persistent_logging/persistent_logging_stub:sysedr_stub",
         "@score_baselibs//score/language/futurecpp",
+        "@score_baselibs//score/mw/log",
         "@score_baselibs//score/mw/log/configuration:nvconfig",
         "@score_baselibs//score/os:socket",
         "@score_baselibs//score/os:stat",
@@ -639,7 +656,7 @@ cc_library(
         ],
         deps = [
             ":dltserver_common",
-            ":log",
+            "@score_baselibs//score/mw/log",
             "@score_baselibs//score/mw/log/configuration:nvconfig",
             "@score_baselibs//score/os:socket",
             "@score_baselibs//score/os:stat",
@@ -712,11 +729,11 @@ cc_library(
     ],
     deps = [
         ":dltprotocol",
-        ":log",
         ":logchannel_utility",
         ":socketserver_config_helpers",
         "//score/datarouter/src/persistency:interface",
         "@rapidjson",
+        "@score_baselibs//score/mw/log",
     ],
 )
 
@@ -724,11 +741,9 @@ cc_library(
     name = "socketserver_config_lib",
     srcs = [
         "src/daemon/socketserver_config.cpp",
-        "src/daemon/socketserver_filter_factory.cpp",
     ],
     hdrs = [
         "include/daemon/socketserver_config.h",
-        "include/daemon/socketserver_filter_factory.h",
     ],
     features = COMPILER_WARNING_FEATURES,
     strip_include_prefix = "include",
@@ -754,11 +769,9 @@ cc_library(
     testonly = True,
     srcs = [
         "src/daemon/socketserver_config.cpp",
-        "src/daemon/socketserver_filter_factory.cpp",
     ],
     hdrs = [
         "include/daemon/socketserver_config.h",
-        "include/daemon/socketserver_filter_factory.h",
     ],
     features = COMPILER_WARNING_FEATURES,
     strip_include_prefix = "include",
@@ -786,7 +799,12 @@ cc_library(
     hdrs = [
         "include/daemon/socketserver.h",
     ],
-    # Configuration block updated during migration
+    defines = select({
+        "//score/datarouter/build_configuration_flags:dlt_output_enabled": [
+            "DLT_OUTPUT_ENABLED",
+        ],
+        "//conditions:default": [],
+    }),
     features = COMPILER_WARNING_FEATURES,
     local_defines = select({
         "//score/datarouter/build_configuration_flags:config_persistent_logging": ["PERSISTENT_LOGGING"],
@@ -822,7 +840,12 @@ cc_library(
     hdrs = [
         "include/daemon/socketserver.h",
     ],
-    # Configuration block updated during migration
+    defines = select({
+        "//score/datarouter/build_configuration_flags:dlt_output_enabled": [
+            "DLT_OUTPUT_ENABLED",
+        ],
+        "//conditions:default": [],
+    }),
     features = COMPILER_WARNING_FEATURES,
     local_defines = select({
         "//score/datarouter/build_configuration_flags:config_persistent_logging": ["PERSISTENT_LOGGING"],
@@ -832,7 +855,7 @@ cc_library(
     visibility = ["//score/datarouter/test:__subpackages__"],
     deps = [
         ":datarouter_feature_config_testing",
-        ":datarouter_lib",
+        ":datarouter_testing",
         ":dltserver_testing",
         ":persistentlogconfig",
         ":socket_config",
@@ -861,7 +884,7 @@ cc_library(
         visibility = ["//score/datarouter/test:__subpackages__"],
         deps = [
             ":datarouter_options",
-            ":log",
+            "@score_baselibs//score/mw/log",
         ] + deps,
     )
     for (name, deps, test_only) in [
@@ -893,8 +916,10 @@ cc_binary(
     ],
     deps = [
         ":datarouter_app",
+        "@score_baselibs//score/os:errno_logging",
         "@score_baselibs//score/os:pthread",
         "@score_baselibs//score/os/utils:path",
+        "@score_baselibs//score/mw/log",
         # "//third_party/jemalloc", # Ticket-231781
     ],
 )
@@ -916,6 +941,7 @@ cc_library(
         "//score/mw/log/detail/data_router/shared_memory:reader",
         "@score_baselibs//score/concurrency",
         "@score_baselibs//score/os:pthread",
+        "@score_baselibs//score/os:unistd",
         "@score_communication//score/message_passing",
     ],
 )
@@ -1095,7 +1121,7 @@ cc_library(
         "@score_baselibs//score/os:stdio",
         "@score_baselibs//score/os/utils:path",
         "@score_baselibs//score/os/utils:thread",
-        ":log",
+        "@score_baselibs//score/mw/log",
         "@score_baselibs//score/mw/log/configuration:nvconfig",
         "//score/datarouter/dlt_filetransfer_trigger_lib:filetransfer_message_types",
         "//score/datarouter/src/persistent_logging/persistent_logging_stub:sysedr_stub",
@@ -1109,7 +1135,6 @@ cc_library(
 test_suite(
     name = "unit_tests",
     tests = [
-        "//score/datarouter/lib/synchronized:synchronized_test",
         #"//score/datarouter/persistent_log_request:unit_tests",
         #"//score/datarouter/test:unit_tests",
         #"//score/datarouter/tools/generator:unit_tests",
