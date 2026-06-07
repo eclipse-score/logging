@@ -72,7 +72,7 @@ cc_library(
     features = COMPILER_WARNING_FEATURES,
     strip_include_prefix = "include",
     visibility = [
-        "//platform/aas/pas/datarouterconf:__subpackages__",
+        "//platform/aas/log_and_trace/datarouterconf:__subpackages__",
         "@score_logging//score/datarouter:__subpackages__",
     ],
     deps = [
@@ -290,7 +290,7 @@ cc_library(
     features = COMPILER_WARNING_FEATURES,
     strip_include_prefix = "include/daemon",
     visibility = [
-        "//platform/aas/pas/datarouterconf:__subpackages__",
+        "//platform/aas/log_and_trace/datarouterconf:__subpackages__",
     ],
 )
 
@@ -350,7 +350,7 @@ cc_library(
         "include/daemon/configurator_commands.h",
     ],
     visibility = [
-        "//platform/aas/pas/datarouterconf:__subpackages__",
+        "//platform/aas/log_and_trace/datarouterconf:__subpackages__",
         "@score_logging//score/datarouter:__subpackages__",
     ],
 )
