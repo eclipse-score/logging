@@ -71,7 +71,7 @@ using AncillaryDataFileHandleReceptionCallback =
 
 /* @file_handle - is optional and used to pass file descriptor on Linux */
 void SendSocketMessage(std::int32_t connection_file_descriptor,
-                       score::cpp::string_view message,
+                       std::string_view message,
                        score::cpp::optional<SharedMemoryFileHandle> file_handle = score::cpp::nullopt);
 
 /* @data - data to be send over the socket */
@@ -83,11 +83,11 @@ void SendAncillaryDataOverSocket(int connection_file_descriptor, score::cpp::spa
  * way to retrive fd. For Linux part of the implementation it may be passed by native socket ancillary data. Overload
  * function with reduced number of arguments is provided when file handle is not expected.
  */
-score::cpp::optional<std::string> RecvSocketMessage(
+std::optional<std::string> RecvSocketMessage(
     std::int32_t socket_fd,
     AncillaryDataFileHandleReceptionCallback ancillary_data_process = AncillaryDataFileHandleReceptionCallback{});
 
-score::cpp::optional<std::string> RecvSocketMessage(
+std::optional<std::string> RecvSocketMessage(
     std::int32_t socket_fd,
     score::cpp::optional<SharedMemoryFileHandle>& file_handle,
     score::cpp::optional<std::int32_t>& peer_pid,
