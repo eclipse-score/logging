@@ -27,3 +27,10 @@ This section is reserved for data router-specific documentation.
    :belongs_to: feat__logging
 
    This is the datarouter component responsible for routing log messages to remote Diagnostics Log and Trace (DLT) backend.
+
+.. toctree::
+   :titlesonly:
+   :maxdepth: 1
+   :glob:
+
+   *
