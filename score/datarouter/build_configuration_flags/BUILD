@@ -110,10 +110,7 @@ config_setting(
     flag_values = {
         ":dlt_output_enable": "True",
     },
-    visibility = [
-        # Visibility scope updated during migration
-        "@score_logging//score/datarouter:__subpackages__",
-    ],
+    visibility = ["//visibility:public"],
 )
 
 bool_flag(
