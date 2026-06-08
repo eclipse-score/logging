@@ -157,7 +157,7 @@ void SendAncillaryDataOverSocket(int connection_file_descriptor, score::cpp::spa
 /* Send message without file descriptor option *
  * One of the function is to pass a handle to shared memory file */
 void SendSocketMessage(std::int32_t connection_file_descriptor,
-                       score::cpp::string_view message,
+                       std::string_view message,
                        score::cpp::optional<SharedMemoryFileHandle> file_handle)
 {
     // TODO: currently checking viability. Redo in a safe way
@@ -270,7 +270,7 @@ void SendSocketMessage(std::int32_t connection_file_descriptor,
     }
 }
 
-score::cpp::optional<std::string> RecvSocketMessage(std::int32_t socket_fd,
+std::optional<std::string> RecvSocketMessage(std::int32_t socket_fd,
                                              AncillaryDataFileHandleReceptionCallback ancillary_data_process)
 {
     score::cpp::optional<SharedMemoryFileHandle> discard_file_handle = score::cpp::nullopt;
@@ -278,12 +278,12 @@ score::cpp::optional<std::string> RecvSocketMessage(std::int32_t socket_fd,
     return RecvSocketMessage(socket_fd, discard_file_handle, discard_pid, std::move(ancillary_data_process));
 }
 
-score::cpp::optional<std::string> RecvSocketMessage(std::int32_t socket_fd,
+std::optional<std::string> RecvSocketMessage(std::int32_t socket_fd,
                                              score::cpp::optional<SharedMemoryFileHandle>& file_handle,
                                              score::cpp::optional<std::int32_t>& peer_pid,
                                              AncillaryDataFileHandleReceptionCallback ancillary_data_process)
 {
-    score::cpp::optional<std::string> result = score::cpp::nullopt;
+    std::optional<std::string> result = std::nullopt;
 
     // TODO: currently checking viability. Redo in a safe way
     struct msghdr msg{};
@@ -363,7 +363,7 @@ score::cpp::optional<std::string> RecvSocketMessage(std::int32_t socket_fd,
         static_cast<size_t>(messanger_header.len) > sizeof(iobuf))
     {
         std::cerr << "Unix Domain Socket communication is corrupted!, ret = " << ret.value() << std::endl;
-        return score::cpp::nullopt;
+        return std::nullopt;
     }
     // can not be tested since no control on fdptr.
     // LCOV_EXCL_START
@@ -423,7 +423,7 @@ score::cpp::optional<std::string> RecvSocketMessage(std::int32_t socket_fd,
         }
         else  //  ret == 0
         {
-            result = score::cpp::nullopt;
+            result = std::nullopt;
         }
     }
     return result;
