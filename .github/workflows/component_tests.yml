@@ -62,4 +62,5 @@ jobs:
             --test_output=errors \
             //score/test/component/datarouter:test_datarouter_filters \
             //score/test/component/mw_log:test_mw_log \
-            //score/test/component/mw_log:test_mw_log_filters
+            //score/test/component/mw_log:test_mw_log_filters \
+            //score/test/integration/datarouter:test_datarouter_scenarios

@@ -21,7 +21,7 @@ pkg_tar(
         "@score_itf//third_party/dlt:dlt-receive",
     ],
     target_compatible_with = ["@platforms//os:linux"],
-    visibility = ["//score/test/component:__subpackages__"],
+    visibility = ["//score/test:__subpackages__"],
 )
 
 pkg_tar(
@@ -42,7 +42,7 @@ pkg_tar(
 pkg_tar(
     name = "datarouter_pkg",
     target_compatible_with = ["@platforms//os:linux"],
-    visibility = ["//score/test/component:__subpackages__"],
+    visibility = ["//score/test:__subpackages__"],
     deps = [
         ":_datarouter_bin_pkg",
         ":_datarouter_conf_pkg",
@@ -63,5 +63,6 @@ py_itf_plugin(
     ],
     py_library = ":logging_plugin_lib",
     tags = ["integration"],
-    visibility = ["//score/test/component:__subpackages__"],
+    target_compatible_with = ["@platforms//os:linux"],
+    visibility = ["//score/test:__subpackages__"],
 )

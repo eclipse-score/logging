@@ -46,7 +46,7 @@ pkg_tar(
 
 pkg_tar(
     name = "dlt_generator_filesystem",
-    visibility = ["//score/test/component:__subpackages__"],
+    visibility = ["//score/test:__subpackages__"],
     deps = [
         ":dlt_generator_bin_pkg",
         ":dlt_generator_config_pkg",
