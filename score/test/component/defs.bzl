@@ -57,14 +57,14 @@ def py_logging_itf_test(name, srcs, filesystem, **kwargs):
         name = qnx_image,
         srcs = [
             filesystem,
-            "//score/datarouter",
+            "//score/datarouter:datarouter",
             "//score/test/component/datarouter:datarouter_test_config_files",
             "{}:qnx8_qemu_env".format(_ENV),
         ],
         build_file = "{}:init_build".format(_ENV),
         ext_repo_maping = {
             "FILESYSTEM": "$(location {})".format(filesystem),
-            "DATAROUTER": "$(location //score/datarouter)",
+            "DATAROUTER": "$(location //score/datarouter:datarouter)",
         },
         target_compatible_with = select({
             "@platforms//cpu:x86_64": ["@platforms//cpu:x86_64"],

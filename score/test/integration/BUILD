@@ -10,24 +10,3 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 # *******************************************************************************
-
-load("@rules_python//python:defs.bzl", "py_library")
-load("@score_itf//bazel:py_itf_plugin.bzl", "py_itf_plugin")
-
-py_library(
-    name = "logging_plugin_lib",
-    srcs = ["logging_plugin.py"],
-    imports = ["."],
-    tags = ["integration"],
-    deps = ["@score_itf//score/itf/plugins/dlt"],
-)
-
-py_itf_plugin(
-    name = "logging_plugin",
-    enabled_plugins = [
-        "logging_plugin",
-    ],
-    py_library = ":logging_plugin_lib",
-    tags = ["integration"],
-    visibility = ["//score/test/component:__subpackages__"],
-)

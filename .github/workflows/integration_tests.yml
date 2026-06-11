@@ -11,13 +11,14 @@
 # SPDX-License-Identifier: Apache-2.0
 # *******************************************************************************
 
-name: QNX Component Build (pre-test)
+name: QNX Integration Tests
 
 on:
   pull_request_target:
-    types: [opened, reopened, synchronize]
+    types: [opened, reopened, synchronize, labeled]
   merge_group:
     types: [checks_requested]
+  workflow_dispatch: {}
 
 jobs:
   integration-tests-qnx:
@@ -26,8 +27,7 @@ jobs:
       contents: read
       pull-requests: read
     with:
-      bazel-target: >-
-        //score/test/component/mw_log:test_mw_log_filters //score/test/component/datarouter:test_datarouter_filters
+      bazel-target: '//score/test/component/...'
       bazel-config: x86_64-qnx
       extra-bazel-flags: '--lockfile_mode=error --test_tag_filters=integration'
       credential-helper: 'scripts/internal/qnx_creds.py'
