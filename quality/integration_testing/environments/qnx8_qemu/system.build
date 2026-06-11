@@ -182,7 +182,6 @@ pci/pci_debug2.so
 #############################################
 [perms=700] /etc/startup.sh = ${MAIN_BUILD_FILE_DIR}/startup.sh
 [perms=700] /etc/network_setup.sh = ${MAIN_BUILD_FILE_DIR}/network_setup.sh
-[perms=755] /etc/network_capture = ${MAIN_BUILD_FILE_DIR}/network_capture.sh
 
 #############################################
 ### CONFIGURATION FILES ###
