@@ -30,6 +30,7 @@
 #include "score/os/unistd.h"
 #include "score/mw/log/configuration/nvconfig.h"
 #include "score/mw/log/configuration/nvconfigfactory.h"
+#include "score/mw/log/detail/data_router/shared_memory/path_utils.h"
 
 // Constants
 #include "data_router_cfg.h"
@@ -56,6 +57,21 @@ constexpr std::uint32_t kStatisticsLogPeriodUs{10000000U};
 constexpr std::uint32_t kDltFlushPeriodUs{100000U};
 constexpr std::uint32_t kThrottleTimeUs{100000U};
 
+// Lazy-initialized shared memory directory (memoized to avoid repeated getenv calls)
+std::string GetSharedMemoryDir()
+{
+    static const std::string dir = []() {
+        auto result = score::mw::log::detail::GetAndEnsureSharedMemoryDirectory();
+        if (!result.has_value())
+        {
+            std::cerr << "Warning: Failed to setup shared memory directory, using /tmp/\n";
+            return std::string("/tmp/");
+        }
+        return result.value();
+    }();
+    return dir;
+}
+
 }  // namespace
 
 void SocketServer::SetThreadName() noexcept
@@ -76,6 +92,7 @@ void SocketServer::SetThreadName(score::os::Pthread& pthread_instance) noexcept
 std::string SocketServer::ResolveSharedMemoryFileName(const score::mw::log::detail::ConnectMessageFromClient& conn,
                                                       const std::string& appid)
 {
+    const std::string shm_dir = GetSharedMemoryDir();
     std::string return_file_name_string;
 
     // constuct the file from the 6 random chars
@@ -88,11 +105,11 @@ std::string SocketServer::ResolveSharedMemoryFileName(const score::mw::log::deta
         {
             random_part += s;
         }
-        return_file_name_string = std::string("/tmp/logging-") + random_part;
+        return_file_name_string = shm_dir + "logging-" + random_part;
     }
     else
     {
-        return_file_name_string = std::string("/tmp/logging.") + appid + "." + std::to_string(conn.GetUid());
+        return_file_name_string = shm_dir + "logging." + appid + "." + std::to_string(conn.GetUid());
     }
     return_file_name_string += ".shmem";
     return return_file_name_string;
