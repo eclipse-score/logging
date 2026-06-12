@@ -96,6 +96,13 @@ pkg_tar(
     name = "filtertest_classid_pkg",
     srcs = ["etc/class-id.json"],
     package_dir = "bmw/platform/opt/datarouter/etc",
+    visibility = ["//score/test/component:__subpackages__"],
+)
+
+filegroup(
+    name = "class_id_json",
+    srcs = ["etc/class-id.json"],
+    visibility = ["//score/test/component:__subpackages__"],
 )
 
 pkg_tar(
@@ -103,7 +110,6 @@ pkg_tar(
     visibility = ["//score/test/component:__subpackages__"],
     deps = [
         ":filtertest_bin_pkg",
-        ":filtertest_classid_pkg",
         ":filtertest_config_pkg",
     ],
 )

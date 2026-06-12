@@ -53,6 +53,7 @@ py_library(
     name = "logging_plugin_lib",
     srcs = ["logging_plugin.py"],
     imports = ["."],
+    target_compatible_with = ["@platforms//os:linux"],
     deps = ["@score_itf//score/itf/plugins/dlt"],
 )
 
