@@ -90,7 +90,10 @@ TEST(DltProtocolTest, DISABLED_PackageFileDataShallReturnsNulloptIfItWorkedOnAlr
     ASSERT_TRUE(file != nullptr) << "The file used in the unit test is missed! The file: " << kFileName;
     fclose(file);  // Close the file immediately.
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wuse-after-free"
     auto result = PackageFileData(data_span, file, serial_number, pkg_number);
+#pragma GCC diagnostic pop
     EXPECT_EQ(result, std::nullopt);
 }
 

@@ -28,7 +28,7 @@ extern "C" fn set_default_logger(
     if !context_ptr.is_null() {
         let context = unsafe {
             let slice = from_raw_parts(context_ptr.cast(), context_size);
-            str::from_utf8(slice).expect("provided context is not a valid UTF-8 string")
+            core::str::from_utf8(slice).expect("provided context is not a valid UTF-8 string")
         };
         builder = builder.context(context);
     }
