@@ -42,10 +42,14 @@ jobs:
         uses: bazel-contrib/setup-bazel@0.18.0
         with:
           bazelisk-version: 1.26.0
-          disk-cache: true
+          # Per-workflow disk cache namespace; the action falls back to the
+          # most recent cache via its built-in restore-keys prefix.
+          disk-cache: ${{ github.workflow }}
           repository-cache: true
           bazelisk-cache: true
-          cache-save: ${{ github.event_name == 'push' }}
+          # Restore on PRs without polluting the shared cache; save on
+          # merge_group so the integrated state seeds the warm cache.
+          cache-save: ${{ github.event_name != 'pull_request' }}
 
       - name: Run sanitizer tests via Bazel
         run: |

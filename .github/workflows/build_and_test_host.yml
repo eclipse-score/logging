@@ -1,0 +1,114 @@
+# *******************************************************************************
+# Copyright (c) 2026 Contributors to the Eclipse Foundation
+#
+# See the NOTICE file(s) distributed with this work for additional
+# information regarding copyright ownership.
+#
+# This program and the accompanying materials are made available under the
+# terms of the Apache License Version 2.0 which is available at
+# https://www.apache.org/licenses/LICENSE-2.0
+#
+# SPDX-License-Identifier: Apache-2.0
+# *******************************************************************************
+
+# Consolidated x86_64-linux build_and_test_host pipeline.
+#
+# Pattern: build once, test many -- WITHIN THE SAME BAZEL CONFIG.
+#   - The `build` job compiles the x86_64-linux graph a single time and warms a
+#     shared Bazel disk cache (disk-cache namespace = this workflow).
+#   - Test jobs use the SAME config (--config x86_64-linux) and `needs: build`,
+#     so they start after the cache is saved, get cache hits, and only link +
+#     run tests.
+
+name: build_and_test_host
+
+on:
+  pull_request:
+    types: [opened, reopened, synchronize]
+  merge_group:
+    types: [checks_requested]
+
+permissions:
+  contents: read
+
+env:
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+# Shared by every job so they restore/save the same per-workflow disk cache.
+# cache-save is true only off-PR (merge_group) so PRs restore without polluting.
+jobs:
+  build:
+    name: Build (x86_64-linux)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4.2.2
+
+      - name: Setup Bazel
+        uses: bazel-contrib/setup-bazel@0.18.0
+        with:
+          bazelisk-version: 1.26.0
+          disk-cache: ${{ github.workflow }}
+          repository-cache: true
+          bazelisk-cache: true
+          cache-save: ${{ github.event_name != 'pull_request' }}
+
+      - name: Build with Bazel
+        run: |
+          # Exclude targets that are not expected to build the source code, e.g.
+          # documentation, format check, live preview, product integration tests.
+          bazel build --lockfile_mode=error --config x86_64-linux -- \
+            //... \
+            -//:* \
+            -//score/test/component/...
+
+  unit-tests:
+    name: Unit Tests (x86_64-linux)
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4.2.2
+
+      - name: Setup Bazel
+        uses: bazel-contrib/setup-bazel@0.18.0
+        with:
+          bazelisk-version: 1.26.0
+          disk-cache: ${{ github.workflow }}
+          repository-cache: true
+          bazelisk-cache: true
+          cache-save: ${{ github.event_name != 'pull_request' }}
+
+      - name: Test with Bazel
+        run: |
+          # Component tests run in their own job; exclude here to avoid QNX deps.
+          bazel test --lockfile_mode=error --config x86_64-linux \
+            --test_tag_filters=-no_ci \
+            -- //score/... -//score/test/component/...
+
+  component-tests:
+    name: Component Tests (x86_64-linux)
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4.2.2
+
+      - name: Setup Bazel
+        uses: bazel-contrib/setup-bazel@0.18.0
+        with:
+          bazelisk-version: 1.26.0
+          disk-cache: ${{ github.workflow }}
+          repository-cache: true
+          bazelisk-cache: true
+          cache-save: ${{ github.event_name != 'pull_request' }}
+
+      - name: Run component tests
+        run: |
+          bazel test --lockfile_mode=error --config x86_64-linux \
+            --test_tag_filters=integration \
+            --test_output=errors \
+            //score/test/component/datarouter:test_datarouter_filters \
+            //score/test/component/mw_log:test_mw_log \
+            //score/test/component/mw_log:test_mw_log_filters
+
