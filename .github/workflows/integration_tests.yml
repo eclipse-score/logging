@@ -20,19 +20,105 @@ on:
     types: [checks_requested]
   workflow_dispatch: {}
 
+env:
+  QNX_CREDENTIAL_HELPER: ${{ github.workspace }}/scripts/internal/qnx_creds.py
+
 jobs:
-  integration-tests-qnx:
-    uses: eclipse-score/cicd-workflows/.github/workflows/qnx-build.yml@main
+  approval:
+    # Gate fork PRs behind a manual approval — same-repo PRs and merge queues skip this.
+    if: >-
+      github.event_name == 'pull_request_target' && github.event.pull_request.head.repo.full_name != github.event.pull_request.base.repo.full_name
+    environment: workflow-approval
+    runs-on: ubuntu-latest
     permissions:
       contents: read
       pull-requests: read
-    with:
-      bazel-target: '//score/test/component/...'
-      bazel-config: x86_64-qnx
-      extra-bazel-flags: '--lockfile_mode=error --test_tag_filters=integration'
-      credential-helper: 'scripts/internal/qnx_creds.py'
-      environment-name: 'workflow-approval'
-    secrets:
-      score-qnx-license: ${{ secrets.SCORE_QNX_LICENSE }}
-      score-qnx-user: ${{ secrets.SCORE_QNX_USER }}
-      score-qnx-password: ${{ secrets.SCORE_QNX_PASSWORD }}
+    steps:
+      - name: Blocking on approval
+        run: "true"
+
+  integration-tests-qnx:
+    name: Build QNX target
+    needs: approval
+    if: ${{ !cancelled() && (needs.approval.result == 'success' || needs.approval.result == 'skipped') }}
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: read
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4.2.2
+        with:
+          ref: ${{ github.head_ref || github.event.pull_request.head.ref || github.ref }}
+          repository: ${{ github.event.pull_request.head.repo.full_name || github.repository }}
+
+      - name: Free disk space
+        uses: eclipse-score/more-disk-space@6a3b48901846bf7f8cc985925157d71a8973e61f
+
+      - name: Setup Bazel with shared caching
+        uses: bazel-contrib/setup-bazel@0.15.0
+        with:
+          bazelisk-version: 1.26.0
+          disk-cache: true
+          repository-cache: true
+          bazelisk-cache: true
+          cache-save: ${{ github.event_name == 'push' }}
+
+      - uses: eclipse-score/cicd-actions/unblock-user-namespace-for-linux-sandbox@30ed908edcf367bc38ebff5b386a244f9b6417a7
+
+      - name: Setup QNX SDP
+        uses: eclipse-score/cicd-actions/setup-qnx-sdp@a2b3c36fc7d1b9d03880d19935c7ac9cfffe58c6
+        with:
+          qnx-license: ${{ secrets.SCORE_QNX_LICENSE }}
+          qnx-user: ${{ secrets.SCORE_QNX_USER }}
+          qnx-password: ${{ secrets.SCORE_QNX_PASSWORD }}
+          qnx-credential-helper: scripts/internal/qnx_creds.py
+          qnx-license-dir: /opt/score_qnx/license
+
+      - name: Build with QNX toolchain
+        run: |
+          set -euo pipefail
+          bazel build --lockfile_mode=error --config x86_64-qnx \
+            --credential_helper=*.qnx.com="${QNX_CREDENTIAL_HELPER}" -- \
+            //score/test/component/...
+
+      - name: Install qemu
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y qemu-system
+
+      - name: Enable KVM group permissions
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+
+      - name: Allow unprivileged user namespaces
+        run: |
+          sudo sysctl kernel.apparmor_restrict_unprivileged_userns=0
+
+      - name: Run integration tests
+        run: |
+          set -euo pipefail
+          bazel test --lockfile_mode=error --config x86_64-qnx \
+            --credential_helper=*.qnx.com="${QNX_CREDENTIAL_HELPER}" \
+            --test_tag_filters=integration --test_output=all -- \
+            //score/test/component/datarouter:test_datarouter_filters \
+            //score/test/component/mw_log:test_mw_log \
+            //score/test/component/mw_log:test_mw_log_filters
+
+      - name: Upload test logs
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: qnx-itf-test-logs
+          path: |
+            bazel-testlogs/**/test.log
+            bazel-testlogs/**/test.xml
+            bazel-testlogs/**/test.outputs/**
+          if-no-files-found: warn
+          retention-days: 7
+
+      - name: Cleanup QNX license
+        if: always()
+        run: sudo rm -rf /opt/score_qnx

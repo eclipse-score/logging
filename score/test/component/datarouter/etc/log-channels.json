@@ -41,6 +41,14 @@
             ]
         }
     },
+    "quotas": {
+        "throughput": {
+            "overallMbps": 100,
+            "applicationsKbps": {
+                "DR": 10
+            }
+        }
+    },
     "defaultChannel": "3493",
     "defaultThresold": "kVerbose",
     "messageThresholds": {

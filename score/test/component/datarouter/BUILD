@@ -72,6 +72,19 @@ filegroup(
 py_logging_itf_test(
     name = "test_datarouter_filters",
     srcs = ["test_datarouter_filters.py"],
+    extra_oci_tars = ["//score/test/component/filters_app:filtertest_classid_pkg"],
     filesystem = "//score/test/component/filters_app:filtertest_filesystem",
     deps = ["@score_itf//score/itf/plugins/dlt"],
+)
+
+py_logging_itf_test(
+    name = "test_datarouter_scenarios",
+    srcs = ["test_datarouter_scenarios.py"],
+    filesystem = "//score/test/component/dlt_generator_app:dlt_generator_filesystem",
+)
+
+py_logging_itf_test(
+    name = "test_bandwidth_quotes_exists",
+    srcs = ["test_bandwidth_quotes_exists.py"],
+    filesystem = "//score/test/component/dlt_generator_app:dlt_generator_filesystem",
 )

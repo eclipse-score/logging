@@ -75,6 +75,43 @@ def _wait_for_datarouter(target, timeout=_DATAROUTER_READY_TIMEOUT):
     raise TimeoutError(f"Datarouter not ready within {timeout}s")
 
 
+class _DatarouterManager:
+    """Gives tests explicit start/stop control over DataRouter."""
+
+    def __init__(self, target):
+        self._target = target
+        self._proc = None
+
+    def start(self):
+        """Start DataRouter and wait until it is ready."""
+        if _is_qnx(self._target):
+            self._target.execute(_QNX_DR_CMD)
+        else:
+            self._proc = self._target.execute_async(
+                "/opt/datarouter/bin/datarouter",
+                args=["--no_adaptive_runtime"],
+                cwd="/opt/datarouter",
+            )
+        _wait_for_datarouter(self._target)
+
+    def stop(self):
+        """Stop DataRouter. Safe to call even if start() was never called."""
+        if _is_qnx(self._target):
+            self._target.execute(_QNX_DR_STOP_CMD)
+        elif self._proc is not None and self._proc.is_running():
+            self._proc.stop()
+
+
+@pytest.fixture(scope="function")
+def datarouter_manager(target):
+    """Like datarouter_on_target but DataRouter is NOT started automatically."""
+    manager = _DatarouterManager(target)
+    try:
+        yield manager
+    finally:
+        manager.stop()
+
+
 def download_dlt(target, remote_path):
     """Download a .dlt file from the target and return a DltLogRecord."""
     local_dir = tempfile.mkdtemp(prefix="dlt_")
