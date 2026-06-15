@@ -128,13 +128,11 @@ toybox
 #############################################
 ### Tools ###
 #############################################
-awk
 devb-ram
 devc-pty
 fsevmgr
 if_up
 ifconfig
-ln
 mkqnx6fs
 mqueue
 pci-server
