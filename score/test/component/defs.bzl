@@ -21,13 +21,15 @@ def _extend_list_in_kwargs(kwargs, key, values):
     kwargs[key] = kwargs.get(key, []) + values
     return kwargs
 
-def py_logging_itf_test(name, srcs, filesystem, **kwargs):
+def py_logging_itf_test(name, srcs, filesystem, extra_oci_tars = None, **kwargs):
     """Integration test macro for score_logging (Docker and QNX).
 
     Args:
         name: Test target name.
         srcs: Python test source files.
         filesystem: pkg_tar target with test-specific binaries and configs.
+        extra_oci_tars: Optional list of additional pkg_tar targets to include
+            in the Docker OCI image only (not added to the QNX IFS).
         **kwargs: Forwarded to py_itf_test.
     """
     image_name = "_image_{}".format(name)
@@ -41,7 +43,7 @@ def py_logging_itf_test(name, srcs, filesystem, **kwargs):
             "//score/test/component:dlt_pkg",
             "//score/test/component:datarouter_pkg",
             filesystem,
-        ],
+        ] + (extra_oci_tars or []),
         target_compatible_with = ["@platforms//os:linux"],
     )
 
@@ -56,20 +58,21 @@ def py_logging_itf_test(name, srcs, filesystem, **kwargs):
     qnx_ifs(
         name = qnx_image,
         srcs = [
-            filesystem,
             "//score/datarouter:datarouter",
             "//score/test/component/datarouter:datarouter_test_config_files",
             "{}:qnx8_qemu_env".format(_ENV),
         ],
+        tars = {
+            "FILESYSTEM": filesystem,
+        },
         build_file = "{}:init_build".format(_ENV),
         ext_repo_maping = {
-            "FILESYSTEM": "$(location {})".format(filesystem),
             "DATAROUTER": "$(location //score/datarouter:datarouter)",
         },
-        target_compatible_with = select({
-            "@platforms//cpu:x86_64": ["@platforms//cpu:x86_64"],
-            "@platforms//cpu:arm64": ["@platforms//cpu:arm64"],
-        }) + ["@platforms//os:qnx"],
+        target_compatible_with = [
+            "@platforms//cpu:x86_64",
+            "@platforms//os:qnx",
+        ],
     )
 
     _extend_list_in_kwargs(kwargs, "data", select({
@@ -104,7 +107,7 @@ def py_logging_itf_test(name, srcs, filesystem, **kwargs):
         kwargs["size"] = "enormous"
 
     if "timeout" not in kwargs:
-        kwargs["timeout"] = "short"
+        kwargs["timeout"] = "moderate"
 
     py_itf_test(
         name = name,

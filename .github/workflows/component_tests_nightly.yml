@@ -62,12 +62,3 @@ jobs:
             --test_tag_filters=integration \
             --test_output=errors \
             //score/test/component/...
-
-    # QNX integration tests — requires a self-hosted runner with QEMU + tap0 bridge.
-    # Enable once integration_tests.yml is available in cicd-workflows.
-    # - name: Run QNX component tests
-    #   uses: eclipse-score/cicd-workflows/.github/workflows/qnx-test.yml@main
-    #   with:
-    #     bazel-target: '//score/test/component/...'
-    #     bazel-config: 'x86_64-qnx'
-    #     test-tag-filters: 'integration'
