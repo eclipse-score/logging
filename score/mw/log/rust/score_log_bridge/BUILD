@@ -23,6 +23,14 @@ config_setting(
 )
 
 config_setting(
+    name = "arm64-linux",
+    constraint_values = [
+        "@platforms//cpu:arm64",
+        "@platforms//os:linux",
+    ],
+)
+
+config_setting(
     name = "arm64-qnx",
     constraint_values = [
         "@platforms//cpu:arm64",
@@ -44,6 +52,7 @@ cc_library(
     # C++/Rust interface objects must share layout.
     defines = select({
         ":x86_64-linux": ["x86_64_linux"],
+        ":arm64-linux": ["arm64_linux"],
         ":arm64-qnx": ["arm64_qnx"],
         ":x86_64-qnx": ["x86_64_qnx"],
         "//conditions:default": [],
@@ -65,6 +74,7 @@ rust_library(
     # C++/Rust interface objects must share layout.
     crate_features = select({
         ":x86_64-linux": ["x86_64_linux"],
+        ":arm64-linux": ["arm64_linux"],
         ":arm64-qnx": ["arm64_qnx"],
         ":x86_64-qnx": ["x86_64_qnx"],
         "//conditions:default": [],
@@ -94,6 +104,7 @@ rust_test(
     crate = "score_log_bridge",
     crate_features = select({
         ":x86_64-linux": ["x86_64_linux"],
+        ":arm64-linux": ["arm64_linux"],
         ":arm64-qnx": ["arm64_qnx"],
         ":x86_64-qnx": ["x86_64_qnx"],
         "//conditions:default": [],
