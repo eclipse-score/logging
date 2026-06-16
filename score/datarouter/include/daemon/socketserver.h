@@ -17,6 +17,7 @@
 #include "daemon/dlt_log_server.h"
 #include "daemon/message_passing_server.h"
 #include "logparser/i_log_parser_factory.h"
+#include "score/os/pthread.h"
 #include "score/mw/log/configuration/nvconfig.h"
 #include "score/mw/log/logging.h"
 #include "score/datarouter/datarouter/data_router.h"
@@ -42,14 +43,6 @@ class ConnectMessageFromClient;
 }
 }  // namespace log
 }  // namespace mw
-}  // namespace score
-
-namespace score
-{
-namespace os
-{
-class Pthread;
-}  // namespace os
 }  // namespace score
 
 #include "score/message_passing/client_factory.h"
