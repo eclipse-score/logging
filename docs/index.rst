@@ -98,4 +98,15 @@ Components
    :maxdepth: 1
    :glob:
 
-   components/**/index
+   components/datarouter/index.rst
+   components/mw/log/index.rst
+
+
+Requirements
+------------
+
+.. toctree::
+   :maxdepth: 1
+   :glob:
+
+   logging/stats.rst
