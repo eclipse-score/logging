@@ -15,7 +15,6 @@
 #include "score/mw/log/logging.h"
 
 #include <unistd.h>
-#include <filesystem>
 #include <fstream>
 #include <sstream>
 #include <string>
@@ -57,11 +56,13 @@ int main() {
         std::stringstream filename;
         filename << "/tmp/filetransfer_test_" << i << ".txt";
 
-        std::error_code ec;
-        std::filesystem::copy(original_file, filename.str(), ec);
-        if (ec) {
-            logger.LogError() << "Failed to copy file:" << ec.message();
-            continue;
+        {
+            std::ifstream src(original_file, std::ios::binary);
+            std::ofstream dst(filename.str(), std::ios::binary | std::ios::trunc);
+            if (!src || !dst || !(dst << src.rdbuf())) {
+                logger.LogError() << "Failed to copy file:" << filename.str();
+                continue;
+            }
         }
 
         file_transfer.TransferFile(filename.str(), false);

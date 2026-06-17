@@ -21,6 +21,7 @@
 
 [+script] startup-script = {
     procmgr_symlink /dev/shmem /tmp
+    procmgr_symlink /tmp_ram/tmp_discovery /tmp_discovery
 
     display_msg Welcome to QNX OS 8.0 on x86_64 - score_logging component tests
 
