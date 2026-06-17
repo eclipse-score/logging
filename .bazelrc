@@ -72,6 +72,10 @@ build:x86_64-qnx --platforms=@score_bazel_platforms//:x86_64-qnx-sdp_8.0.0-posix
 build:x86_64-qnx --extra_toolchains=@score_qcc_x86_64_toolchain//:x86_64-qnx-sdp_8.0.0
 build:x86_64-qnx --extra_toolchains=@score_qnx_x86_64_ifs_toolchain//:ifs-x86_64-qnx-sdp_8.0.0
 build:x86_64-qnx --extra_toolchains=@score_toolchains_rust//toolchains/ferrocene:ferrocene_x86_64_pc_nto_qnx800
+# Integration tests require direct device access (KVM, TAP) — bypass linux-sandbox
+test:x86_64-qnx --strategy=TestRunner=local
+# All QEMU instances share one tap0/IP — tests must run one at a time
+test:x86_64-qnx --local_test_jobs=1
 
 # TODO arm64 when rust support is there
 

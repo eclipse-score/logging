@@ -72,7 +72,6 @@ filegroup(
 py_logging_itf_test(
     name = "test_datarouter_filters",
     srcs = ["test_datarouter_filters.py"],
-    extra_oci_tars = ["//score/test/component/filters_app:filtertest_classid_pkg"],
     filesystem = "//score/test/component/filters_app:filtertest_filesystem",
     deps = ["@score_itf//score/itf/plugins/dlt"],
 )

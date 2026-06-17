@@ -110,6 +110,7 @@ pkg_tar(
     visibility = ["//score/test/component:__subpackages__"],
     deps = [
         ":filtertest_bin_pkg",
+        ":filtertest_classid_pkg",
         ":filtertest_config_pkg",
     ],
 )
