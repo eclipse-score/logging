@@ -1,0 +1,89 @@
+# *******************************************************************************
+# Copyright (c) 2026 Contributors to the Eclipse Foundation
+#
+# See the NOTICE file(s) distributed with this work for additional
+# information regarding copyright ownership.
+#
+# This program and the accompanying materials are made available under the
+# terms of the Apache License Version 2.0 which is available at
+# https://www.apache.org/licenses/LICENSE-2.0
+#
+# SPDX-License-Identifier: Apache-2.0
+# *******************************************************************************
+
+name: CodeQL Static Analysis
+
+on:
+  pull_request:
+    types: [opened, reopened, synchronize]
+  merge_group:
+    types: [checks_requested]
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+  schedule:
+    - cron: "0 6 * * 1"
+
+env:
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+jobs:
+  codeql-analysis:
+    name: CodeQL MISRA/CERT C++ Analysis
+    runs-on: ubuntu-latest
+
+    permissions:
+      security-events: write
+      contents: read
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4.2.2
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v4
+        with:
+          languages: cpp
+          packs: codeql/misra-cpp-coding-standards,codeql/cert-cpp-coding-standards
+          queries: security-and-quality
+          trap-caching: false
+      - name: Setup Bazel
+        uses: bazel-contrib/setup-bazel@0.15.0
+        with:
+          bazelisk-version: 1.26.0
+          repository-cache: true
+          bazelisk-cache: true
+
+      # Build the whole codebase. --keep_going lets CodeQL collect findings
+      # from every target that compiles even if one external dep (e.g. the
+      # flaky archive.ubuntu.com libacl1-dev download) fails to fetch.
+      # Cache flags are mandatory: cached actions skip compilation entirely
+      # and become invisible to CodeQL's LD_PRELOAD tracing.
+      - name: Build with Bazel (CodeQL traces compiler calls)
+        run: |
+          bazel build \
+            --lockfile_mode=error \
+            --config x86_64-linux \
+            --nouse_action_cache \
+            --disk_cache= \
+            --noremote_accept_cached \
+            --noremote_upload_local_results \
+            --keep_going \
+            //... \
+          || echo "Build had failures (expected when external downloads time out); continuing so CodeQL can analyze what compiled."
+
+      - name: Run CodeQL analysis
+        uses: github/codeql-action/analyze@v4
+        with:
+          category: cpp-misra-cert
+          output: _sca
+          upload: true
+
+      - name: Upload SARIF artifacts
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: codeql-results
+          path: _sca/
+          retention-days: 30
