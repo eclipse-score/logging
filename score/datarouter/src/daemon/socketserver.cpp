@@ -169,23 +169,15 @@ std::unique_ptr<score::platform::internal::ILogParserFactory> SocketServer::Crea
 
         std::unique_ptr<score::platform::internal::ILogParser> Create(const score::mw::log::NvConfig& nv_config) override
         {
-            using LogParser = score::platform::internal::LogParser;
+            auto global_handlers = dlt_server_.GetGlobalHandlers();
+            score::platform::internal::LogParser::HandleRequestMap handle_request_map;
 
-            const auto handler_vec = dlt_server_.GetGlobalHandlers();
-            std::array<ILogParser::AnyHandler*, LogParser::kMaxGlobalHandlers> global_handlers{};
-            const std::size_t handler_count = std::min(handler_vec.size(), LogParser::kMaxGlobalHandlers);
-            for (std::size_t i = 0U; i < handler_count; ++i)
-            {
-                global_handlers[i] = handler_vec[i];
-            }
-
-            LogParser::HandleRequestMap handle_request_map;
             for (auto& binding : dlt_server_.GetTypeHandlerBindings())
             {
                 handle_request_map.emplace(std::move(binding.type_name), binding.handler);
             }
-            return std::make_unique<LogParser>(
-                nv_config, global_handlers, handler_count, std::move(handle_request_map));
+            return std::make_unique<score::platform::internal::LogParser>(
+                nv_config, std::move(global_handlers), std::move(handle_request_map));
         }
 
       private:

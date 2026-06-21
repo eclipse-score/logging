@@ -104,7 +104,6 @@ TEST(LogParserTest, SingleMessageHandler)
     const std::string message = MakeMessage(kTestMessageIndex, TestMessage{2345});
     LogParser parser(CreateTestNvConfig(),
                      {&any_handler},
-                     1U,
                      LogParser::HandleRequestMap{{"test::TestMessage", &type_handler_yes},
                                                  {"test::notTestMessage", &type_handler_no}});
 

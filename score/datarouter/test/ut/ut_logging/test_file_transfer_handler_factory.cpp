@@ -22,7 +22,6 @@
 
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
-#include <atomic>
 #include <memory>
 
 namespace score
@@ -52,14 +51,15 @@ TEST(FileTransferStreamHandlerFactoryTest,
      CreateWithFileTransferFeatureEnabledShallReturnConcreteFileTransferStreamHandler)
 {
 
+    Output output;
 #if defined(DLT_FILE_TRANSFER_FEATURE)
-    std::atomic<bool> output_enabled{true};
-    Output output{output_enabled};
     output.SendFtVerbose(score::cpp::span<const std::uint8_t>{}, mw::log::LogLevel::kInfo, DltidT{}, DltidT{}, 0, 0);
+#endif
     EXPECT_TRUE(output.IsOutputEnabled());
+
+#if defined(DLT_FILE_TRANSFER_FEATURE)
     FileTransferStreamHandlerFactory factory(output);
 #else
-    Output output;
     StubFileTransferHandlerFactory factory(output);
 #endif
     std::unique_ptr<LogParser::TypeHandler> stream_handler = factory.Create();

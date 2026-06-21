@@ -213,18 +213,19 @@ void DltLogServer::InitLogChannelsDefault(const bool reloading)
 
 void DltLogServer::SetOutputEnabled(const bool enabled)
 {
-    const bool update = (dlt_output_enabled_.load(std::memory_order_acquire) != enabled);
-
-    if (update)
+    bool expected = !enabled;
+    // Atomically flips only if the current value differs — avoids the TOCTOU
+    // window between load() and store() for the flag itself.
+    if (dlt_output_enabled_.compare_exchange_strong(
+            expected, enabled, std::memory_order_acq_rel, std::memory_order_acquire))
     {
-        dlt_output_enabled_.store(enabled, std::memory_order_release);
+        // Entered only by the thread that won the CAS; callback fires exactly once.
         if (enabled_callback_)
         {
             enabled_callback_(enabled);
         }
     }
 }
-
 bool DltLogServer::GetDltEnabled() const noexcept
 {
     return dlt_output_enabled_.load(std::memory_order_acquire);
