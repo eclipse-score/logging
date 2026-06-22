@@ -123,10 +123,6 @@ jobs:
           ip link show tap0
           ip -4 addr show dev tap0 | grep -q "169.254.21.88/16"
 
-      - name: Allow unprivileged user namespaces
-        run: |
-          sudo sysctl kernel.apparmor_restrict_unprivileged_userns=0
-
       - name: Run integration tests
         run: |
           set -euo pipefail
