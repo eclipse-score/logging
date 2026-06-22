@@ -22,7 +22,7 @@ on:
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
-  cancel-in-progress: ${{ github.event_name == 'pull_request_target' }}
+  cancel-in-progress: true
 
 jobs:
   approval:
@@ -39,7 +39,14 @@ jobs:
   integration-tests-qnx:
     name: QNX Integration Tests (x86_64-qnx)
     needs: approval
-    if: ${{ !cancelled() }}
+    # Run for all events except 'labeled', which only triggers on the opt-in label
+    # to avoid rerunning this expensive job on unrelated label changes.
+    if: >-
+      ${{ !cancelled()
+          && (github.event_name != 'pull_request_target'
+              || github.event.action != 'labeled'
+              || github.event.label.name == 'integration_testing') }}
+    timeout-minutes: 45
     runs-on: ${{ vars.runner_labels_ghub_standard_x64 && fromJSON(vars.runner_labels_ghub_standard_x64) || vars.REPO_RUNNER_LABELS && fromJSON(vars.REPO_RUNNER_LABELS) || 'ubuntu-latest' }}
     permissions:
       contents: read
@@ -51,13 +58,13 @@ jobs:
           level: 4
 
       - name: Checkout repository (Handle all events)
-        uses: actions/checkout@v4.2.2
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
           ref: ${{ github.head_ref || github.event.pull_request.head.ref || github.ref }}
           repository: ${{ github.event.pull_request.head.repo.full_name || github.repository }}
 
       - name: Setup Bazel with shared caching
-        uses: bazel-contrib/setup-bazel@0.18.0
+        uses: bazel-contrib/setup-bazel@77a1d3d18379c7cb0a7e3b9fcaaa4d94f1029763 # 0.18.0
         with:
           bazelisk-version: 1.26.0
           disk-cache: true
@@ -79,7 +86,7 @@ jobs:
       - name: Install qemu
         run: |
           sudo apt-get update
-          sudo apt-get install -y qemu-system
+          sudo apt-get install -y --no-install-recommends qemu-system-x86
 
       - name: Enable KVM group permissons
         run: |
@@ -89,9 +96,32 @@ jobs:
 
       - name: Setup tap0 network interface for QEMU
         run: |
-          sudo ip tuntap add dev tap0 mode tap user runner
-          sudo ip link set dev tap0 up
+          set -euo pipefail
+
+          RUNNER_USER="${SUDO_USER:-$USER}"
+          if ! getent passwd "$RUNNER_USER" > /dev/null; then
+            RUNNER_USER="$(id -un)"
+          fi
+
+          if [ ! -c /dev/net/tun ]; then
+            echo "Missing /dev/net/tun; TAP devices are unavailable on this runner." >&2
+            exit 1
+          fi
+
+          if ! ip link show tap0 > /dev/null 2>&1; then
+            sudo ip tuntap add dev tap0 mode tap user "$RUNNER_USER"
+          fi
+
+          sudo ip addr flush dev tap0
           sudo ip addr add 169.254.21.88/16 dev tap0
+          sudo ip link set dev tap0 up
+
+      - name: Verify QEMU tap0 network preflight
+        run: |
+          set -euo pipefail
+          test -c /dev/net/tun
+          ip link show tap0
+          ip -4 addr show dev tap0 | grep -q "169.254.21.88/16"
 
       - name: Allow unprivileged user namespaces
         run: |
@@ -100,22 +130,23 @@ jobs:
       - name: Run integration tests
         run: |
           set -euo pipefail
+          : "${QNX_CREDENTIAL_HELPER:?QNX_CREDENTIAL_HELPER is not set (expected from setup-qnx-sdp)}"
 
           bazel test --config x86_64-qnx \
             --credential_helper=*.qnx.com="${QNX_CREDENTIAL_HELPER}" \
-            --lockfile_mode=error --test_tag_filters=integration --test_output=all -- \
+            --lockfile_mode=error --test_tag_filters=integration --test_output=errors -- \
             //score/test/component/...
 
       - name: Upload QNX ITF test logs
-        if: always()
-        uses: actions/upload-artifact@v6
+        if: ${{ failure() || cancelled() }}
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
         with:
           name: qnx-itf-test-logs
           path: |
             bazel-testlogs/**/test.log
             bazel-testlogs/**/test.outputs/**
           if-no-files-found: warn
-          retention-days: 7
+          retention-days: 3
 
       - name: Cleanup tap0 network interface
         if: always()
