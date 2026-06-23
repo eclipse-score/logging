@@ -102,6 +102,8 @@ coverage --combined_report=lcov
 coverage --test_env=COVERAGE_GCOV_OPTIONS=-bcu
 coverage --features=coverage
 coverage --cache_test_results=no
+# fixes negative gcov counts under concurrent code, see https://gcc.gnu.org/bugzilla/show_bug.cgi?id=68080
+coverage --cxxopt=-fprofile-update=atomic
 
 # ==============================================================================
 # Dynamic analysis (sanitizers) for Linux host builds/tests
