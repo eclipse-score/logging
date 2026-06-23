@@ -98,7 +98,7 @@ impl From<&str> for Context {
         let size = min(value.len(), 4);
 
         // Copy data into array.
-        let mut data = [0; _];
+        let mut data = [0; 4];
         // SAFETY:
         // Copying is safe:
         // - source is a `&str`.
@@ -127,7 +127,7 @@ impl From<&Context> for &str {
             // Create a slice from pointer and size.
             let slice = from_raw_parts(data, size);
             // Create a UTF-8 string from a slice.
-            str::from_utf8_unchecked(slice)
+            core::str::from_utf8_unchecked(slice)
         }
     }
 }
@@ -180,13 +180,23 @@ unsafe impl Sync for Recorder {}
 /// Those parameters must be:
 /// - managed by build system (using defines and features)
 /// - cross-checked between `ffi.rs` and `adapter.cpp`
-#[cfg(any(feature = "x86_64_linux", feature = "arm64_qnx", feature = "x86_64_qnx"))]
+#[cfg(any(
+    feature = "x86_64_linux",
+    feature = "aarch64_linux",
+    feature = "arm64_qnx",
+    feature = "x86_64_qnx"
+))]
 #[repr(C, align(8))]
 pub struct SlotHandleStorage {
     _private: [u8; 24],
 }
 
-#[cfg(not(any(feature = "x86_64_linux", feature = "arm64_qnx", feature = "x86_64_qnx")))]
+#[cfg(not(any(
+    feature = "x86_64_linux",
+    feature = "aarch64_linux",
+    feature = "arm64_qnx",
+    feature = "x86_64_qnx"
+)))]
 compile_error!("Unknown configuration, unable to check layout");
 
 impl SlotHandleStorage {
@@ -212,7 +222,7 @@ impl SlotHandleStorage {
 impl Default for SlotHandleStorage {
     /// Create storage for `SlotHandle`.
     fn default() -> Self {
-        Self { _private: [0; _] }
+        Self { _private: [0; 24] }
     }
 }
 
