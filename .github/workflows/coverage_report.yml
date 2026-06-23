@@ -38,5 +38,3 @@ jobs:
       # Please execute "bazel query 'kind(rule, //:*)'" to find the list of all excluded targets by this option.
       bazel-target: "//... -//:*"
       extra-bazel-flags: "--lockfile_mode=error --test_tag_filters=-integration"
-      # FIXME (tech-debt): lcov merge-consistency workaround, see https://github.com/eclipse-score/logging/issues/156
-      genhtml-extra-flags: "--ignore-errors inconsistent,corrupt"

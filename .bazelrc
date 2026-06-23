@@ -102,14 +102,16 @@ coverage --combined_report=lcov
 coverage --test_env=COVERAGE_GCOV_OPTIONS=-bcu
 coverage --features=coverage
 coverage --cache_test_results=no
-# fixes negative gcov counts under concurrent code, see https://gcc.gnu.org/bugzilla/show_bug.cgi?id=68080
+# See -fprofile-update in the GCC manual (recommended for multithreaded applications):
+# https://gcc.gnu.org/onlinedocs/gcc/Instrumentation-Options.html
+# Reasoning: https://github.com/eclipse-score/logging/issues/156
 coverage --cxxopt=-fprofile-update=atomic
 
 # ==============================================================================
 # Dynamic analysis (sanitizers) for Linux host builds/tests
 # ==============================================================================
 
-# Debug symbols for sanitizer stack traces  
+# Debug symbols for sanitizer stack traces
 test:with_debug_symbols --cxxopt=-g1
 test:with_debug_symbols --strip=never
 
