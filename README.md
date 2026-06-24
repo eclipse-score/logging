@@ -47,7 +47,7 @@ cd YOUR_PROJECT
 To build all targets of the module the following command can be used:
 
 ```sh
-bazel build //score/...
+bazel build --config=x86_64-linux //score/...
 ```
 
 This command will instruct Bazel to build all targets that are under Bazel
@@ -67,7 +67,7 @@ artifacts of the module.
 ### 3️⃣ Run Tests
 
 ```sh
-bazel test //tests/...
+bazel test --config=x86_64-linux -- //score/... -//score/test/component/...
 ```
 
 ---
