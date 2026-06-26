@@ -27,3 +27,10 @@ This section is reserved for middleware-specific documentation.
    :belongs_to: feat__logging
 
    This is the logging component library responsible for selecting the appropriate log sinks based on configuration at runtime. It can perform tasks such as log formatting, filtering, and composite backend selection based on runtime context and configuration. The logging component is designed to be extensible, allowing for custom logging backend to be added as needed.
+
+.. toctree::
+   :titlesonly:
+   :maxdepth: 1
+   :glob:
+
+   *

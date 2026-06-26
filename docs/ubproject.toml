@@ -10,7 +10,7 @@ id_regex = "^[A-Za-z0-9_-]{6,}"
 id_required = true
 json_remove_defaults = true
 reproducible_json = true
-schema_debug_path = "/home/jhr2hi/logging/docs/schema_debug"
+schema_debug_path = "/home/kam1yok/score/logging/docs/schema_debug"
 
 [[needs.external_needs]]
 base_url = "https://eclipse-score.github.io/score/main"
@@ -26,7 +26,7 @@ handwritten = "\n        skinparam handwritten true\n    "
 lefttoright = "\n        left to right direction\n    "
 mixing = "\n        allowmixing\n    "
 monochrome = "\n        skinparam monochrome true\n    "
-score_config = "!include ../../.cache/bazel/_bazel_jhr2hi/cache/repos/v1/contents/398660b6c0b4b628e7bee7b59b8daf33769eb87702e4816b9086945d5bd23316/2/src/extensions/score_layout/assets/puml-theme-score.puml"
+score_config = "!include ../../../.cache/bazel/_bazel_kam1yok/cache/repos/v1/contents/398660b6c0b4b628e7bee7b59b8daf33769eb87702e4816b9086945d5bd23316/1/src/extensions/score_layout/assets/puml-theme-score.puml"
 tne = "\n    ' Based on \"Tomorrow night eighties\" color theme (see https://github.com/chriskempson/tomorrow-theme)\n    ' Provided by gabrieljoelc (https://github.com/gabrieljoelc/plantuml-themes)\n    !define Background   #2d2d2d\n    !define CurrentLine  #393939\n    !define Selection    #515151\n    !define Foregound    #cccccc\n    !define Comment      #999999\n    !define Red          #f2777a\n    !define Orange       #f99157\n    !define Yellow       #ffcc66\n    !define Green        #99cc99\n    !define Aqua         #66cccc\n    !define Blue         #6699cc\n    !define Purple       #cc99cc\n\n    skinparam Shadowing false\n    skinparam backgroundColor #2d2d2d\n    skinparam Arrow {\n      Color Foregound\n      FontColor Foregound\n      FontStyle Bold\n    }\n    skinparam Default {\n      FontName Menlo\n      FontColor #fdfdfd\n    }\n    skinparam package {\n      FontColor Purple\n      BackgroundColor CurrentLine\n      BorderColor Selection\n    }\n    skinparam node {\n      FontColor Yellow\n      BackgroundColor CurrentLine\n      BorderColor Selection\n    }\n    skinparam component {\n      BackgroundColor Selection\n      BorderColor Blue\n      FontColor Blue\n      Style uml2\n    }\n    skinparam database {\n      BackgroundColor CurrentLine\n      BorderColor Selection\n      FontColor Orange\n    }\n\n    skinparam cloud {\n      BackgroundColor CurrentLine\n      BorderColor Selection\n    }\n\n    skinparam interface {\n      BackgroundColor CurrentLine\n      BorderColor Selection\n      FontColor Green\n    }\n    "
 toptobottom = "\n        top to bottom direction\n    "
 transparent = "\n    skinparam backgroundcolor transparent\n    "

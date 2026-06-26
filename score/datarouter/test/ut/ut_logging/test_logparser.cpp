@@ -114,6 +114,12 @@ TEST(LogParserTest, SingleMessageHandler)
 
 TEST(LogParserTest, FilterForwarderWithSingleForwarder)
 {
+    RecordProperty("PartiallyVerifies", "comp_req__log__use_log_trace_framework");
+    RecordProperty("ASIL", "B");
+    RecordProperty("Description", "Verifies that the log parser correctly forwards a single message through the filter forwarder");
+    RecordProperty("TestType", "requirements-based");
+    RecordProperty("DerivationTechnique", "requirements-analysis");
+
     using namespace std::chrono_literals;
     const std::string type_params = MakeTypeParams<TestMessage>(DltidT{"ECU4"}, DltidT{"APP0"});
 
