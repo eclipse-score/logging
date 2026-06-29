@@ -155,12 +155,16 @@ python.toolchain(
 
 bazel_dep(name = "googletest", version = "1.17.0.bcr.2")
 bazel_dep(name = "rapidjson", version = "1.1.0.bcr.20241007")
-bazel_dep(name = "score_baselibs", version = "0.2.7")
+bazel_dep(name = "score_baselibs", version = "0.2.8")
+git_override(
+    module_name = "score_baselibs",
+    commit = "f4f9df39275760a60e54e5e3c5112210e35ae2a3",
+    remote = "https://github.com/eclipse-score/baselibs.git",
+)
+
 bazel_dep(name = "score_communication", version = "0.2.1")
 
 # Rust dependencies
-
-bazel_dep(name = "score_baselibs_rust", version = "0.1.0")
 
 # Due to incoming transitive deps from baselibs flatbuffers module.
 # FIXME: To be removed after https://github.com/eclipse-score/baselibs/issues/266 is resolved
