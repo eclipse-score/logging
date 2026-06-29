@@ -11,6 +11,9 @@
 # SPDX-License-Identifier: Apache-2.0
 # *******************************************************************************
 
+# Sanitizer and clang-tidy flags from score_cpp_policies
+import %workspace%/tools/preset.bazelrc
+
 build --java_language_version=17
 build --tool_java_language_version=17
 build --java_runtime_version=remotejdk_17
@@ -111,43 +114,25 @@ coverage --cxxopt=-fprofile-update=atomic
 # Dynamic analysis (sanitizers) for Linux host builds/tests
 # ==============================================================================
 
-# Debug symbols for sanitizer stack traces
-test:with_debug_symbols --cxxopt=-g1
-test:with_debug_symbols --strip=never
+# FIXME: GCC-only workaround until score_gcc_x86_64_toolchain registers
+# score_cpp_policies' sanitizer features via extra_known_features — blocked on
+# eclipse-score/bazel_cpp_toolchains#52.
+build:asan  --config=x86_64-linux
+build:asan  --features=asan
+build:ubsan --config=x86_64-linux
+build:ubsan --features=ubsan
+build:lsan  --config=x86_64-linux
+build:lsan  --features=lsan
+build:tsan  --config=x86_64-linux
+build:tsan  --features=tsan
 
-# AddressSanitizer + UndefinedBehaviorSanitizer + LeakSanitizer (Combined)
-build:asan_ubsan_lsan --config=x86_64-linux
-build:asan_ubsan_lsan --features=asan
-build:asan_ubsan_lsan --features=ubsan
-build:asan_ubsan_lsan --features=lsan
-build:asan_ubsan_lsan --platform_suffix=asan_ubsan_lsan
-test:asan_ubsan_lsan --config=with_debug_symbols
 test:asan_ubsan_lsan --test_tag_filters=-no-asan,-no-lsan,-no-ubsan
-test:asan_ubsan_lsan --@score_cpp_policies//sanitizers/flags:sanitizer=asan_ubsan_lsan
-test:asan_ubsan_lsan --run_under=@score_cpp_policies//sanitizers:wrapper
+test:asan  --test_tag_filters=-no-asan
+test:ubsan --test_tag_filters=-no-ubsan
+test:lsan  --test_tag_filters=-no-lsan
+test:tsan  --test_tag_filters=-no-tsan
 
-# Shortcuts for individual sanitizers
-build:asan  --config=asan_ubsan_lsan
-test:asan   --test_tag_filters=-no-asan
-build:ubsan --config=asan_ubsan_lsan
-test:ubsan  --test_tag_filters=-no-ubsan
-build:lsan  --config=asan_ubsan_lsan
-test:lsan   --test_tag_filters=-no-lsan
-
-# ThreadSanitizer (cannot be combined with ASan/LSan)
-build:tsan --config=x86_64-linux
-build:tsan --features=tsan
-build:tsan --platform_suffix=tsan
 # GCC 12 promotes TSan limitation on atomic_thread_fence to -Werror=tsan.
 # Downgrade to warning so external deps (score_baselibs) compile; TSan still runs.
 build:tsan --cxxopt=-Wno-error=tsan
-test:tsan --config=with_debug_symbols
 test:tsan --cxxopt=-O1
-test:tsan --test_tag_filters=-no-tsan
-test:tsan --@score_cpp_policies//sanitizers/flags:sanitizer=tsan
-test:tsan --run_under=@score_cpp_policies//sanitizers:wrapper
-
-# Clang-tidy: bazel test --config=clang-tidy //score/...
-test:clang-tidy --aspects=//tools/lint:linters.bzl%clang_tidy_aspect
-test:clang-tidy --output_groups=+rules_lint_report
-test:clang-tidy --extra_toolchains=@llvm_toolchain//:cc-toolchain-x86_64-linux
