@@ -440,7 +440,7 @@ TEST(DataRouterBackendTests, CheckSizeValid)
     RecordProperty("TestType", "Interface test");
     RecordProperty("DerivationTechnique", "Analysis of boundary values");
 
-    const std::size_t k_max_slots_size = 255UL;
+    const std::size_t k_max_slots_size = std::numeric_limits<SlotIndex>::max();
     DatarouterMessageClientStubFactory message_client_factory;
     //  Give the try to allocate one more then possible number of slots
     const Configuration config{};
