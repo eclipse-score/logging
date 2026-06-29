@@ -24,12 +24,15 @@ bazel_dep(name = "rules_cc", version = "0.2.17")
 bazel_dep(name = "aspect_rules_lint", version = "2.5.0")
 
 bazel_dep(name = "score_cpp_policies", version = "0.0.0", dev_dependency = True)
+
+# FIXME: pinned to score_cpp_policies#13, switch to upstream once merged.
 git_override(
     module_name = "score_cpp_policies",
-    commit = "b6551c217fbb0daf948b493c4ba69eb7fe8359a5",
-    remote = "https://github.com/eclipse-score/score_cpp_policies.git",
+    commit = "b2bec2a914d358606aac3fc29f861a63ce1a5d92",
+    remote = "https://github.com/RSingh1511/score_cpp_policies.git",
 )
 
+bazel_dep(name = "bazelrc-preset.bzl", version = "1.9.2", dev_dependency = True)
 bazel_dep(name = "toolchains_llvm", version = "1.7.0", dev_dependency = True)
 
 bazel_dep(name = "buildifier_prebuilt", version = "8.5.1")
