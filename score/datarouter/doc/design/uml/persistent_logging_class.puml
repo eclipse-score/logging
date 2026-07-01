@@ -11,7 +11,7 @@ DltLogServer *-- SysedrHandler : owns
 DltLogServer --> LogParser : registers handlers
 SysedrHandler --> LogParser : uses
 SysedrHandler *-- ICompressedFile : owns
-SysedrHandler *-- IDdadVersionReader : owns
+SysedrHandler *-- IBuildInfo : owns
 SysedrHandler *-- INvConfig : owns
 
 @enduml

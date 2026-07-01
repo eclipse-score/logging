@@ -33,7 +33,7 @@ class VersionChangeFileCleaner {
   -LocalSwVersionDoesNotExists(): bool
   -NotSameAsLocalSwVersion(ecu_sw_version): bool
   -filesystem_: Filesystem
-  -ddad_version_reader_: unique_ptr<IDdadVersionReader>
+  -build_info_: unique_ptr<IBuildInfo>
 }
 
 GenericDataIdentifier <|.. PersistentLogging : implements

@@ -6,7 +6,7 @@ participant "PersistentLoggingService" as PLS
 participant "DltLogServer" as DLS
 participant "SysedrHandler" as SH
 participant "FileCleanUpManager" as FCM
-participant "DdadVersionReader" as DVR
+participant "BuildInfo" as DVR
 participant "FileOperations" as FO
 participant "ZlibCompressedFile" as ZF
 
