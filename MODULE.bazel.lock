@@ -918,8 +918,8 @@
     "https://raw.githubusercontent.com/eclipse-score/bazel_registry/main/modules/score_process/1.5.3/MODULE.bazel": "65024b7f23ce5f72bd6ffd455a67c042ecf56d267f0bf63a90330a3241781b7a",
     "https://raw.githubusercontent.com/eclipse-score/bazel_registry/main/modules/score_process/1.5.4/MODULE.bazel": "efd56704f1a93e670032e7c0e4fad97669aa3b348fb1a4cd40f67e4dd4c7037c",
     "https://raw.githubusercontent.com/eclipse-score/bazel_registry/main/modules/score_process/1.5.4/source.json": "f3aef1e0b1f524f92acdcbda47ba0ade10fcdeed5c686524ec69d89eb4cda835",
-    "https://raw.githubusercontent.com/eclipse-score/bazel_registry/main/modules/score_rules_imagefs/0.0.1/MODULE.bazel": "1778b64b50002e31f8531bc4cc63c454eb830e769af5034825361c5d408edf68",
-    "https://raw.githubusercontent.com/eclipse-score/bazel_registry/main/modules/score_rules_imagefs/0.0.1/source.json": "ddb7e72bcda5e6ed3ac67d0c628c837204bb52f051fce55e349ee7c3fdc18714",
+    "https://raw.githubusercontent.com/eclipse-score/bazel_registry/main/modules/score_rules_imagefs/0.0.3/MODULE.bazel": "d87fcd3485438284fa96d6a5a81923d6b6672468947423517cc43c4d7692ca6a",
+    "https://raw.githubusercontent.com/eclipse-score/bazel_registry/main/modules/score_rules_imagefs/0.0.3/source.json": "5f2de07264fbc8f3adecffde5aea326b9f8fccf9e74fd6a057fc9c3556b00cfa",
     "https://raw.githubusercontent.com/eclipse-score/bazel_registry/main/modules/score_rust_policies/0.0.2/MODULE.bazel": "ade2bad4a331b02d9b7e7d9842e8de8c6fded6186486e02c4f7db5cd4b71d34d",
     "https://raw.githubusercontent.com/eclipse-score/bazel_registry/main/modules/score_rust_policies/0.0.5/MODULE.bazel": "7de02547bdf121d3dedf5141b97f0fd9a545bd255ff5c7b699056b35816ffad9",
     "https://raw.githubusercontent.com/eclipse-score/bazel_registry/main/modules/score_rust_policies/0.0.5/source.json": "22c8bf0a5cbf7c7b06f774f3f66498e0bc14346a8b2208f7427a8fbb78a42547",
@@ -8760,7 +8760,7 @@
     },
     "@@score_rules_imagefs+//extensions:imagefs.bzl%imagefs": {
       "general": {
-        "bzlTransitiveDigest": "zLYmWEY98gVKXRCdoO6/Z4w0JIJh5rkjD5lKPf5tE0w=",
+        "bzlTransitiveDigest": "S35QnR5byCQ6yCWQxC3JSqrOLbGM77MQ4cSA00Dpg44=",
         "usagesDigest": "mnA0DoTfTgfr4/PncdyAaTFT8HysIeD9zCgxJ8YwDAA=",
         "recordedFileInputs": {},
         "recordedDirentsInputs": {},
