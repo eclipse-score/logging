@@ -101,6 +101,8 @@
     "https://bcr.bazel.build/modules/bazel_skylib/1.8.2/MODULE.bazel": "69ad6927098316848b34a9142bcc975e018ba27f08c4ff403f50c1b6e646ca67",
     "https://bcr.bazel.build/modules/bazel_skylib/1.9.0/MODULE.bazel": "72997b29dfd95c3fa0d0c48322d05590418edef451f8db8db5509c57875fb4b7",
     "https://bcr.bazel.build/modules/bazel_skylib/1.9.0/source.json": "7ad77c1e8c1b84222d9b3f3cae016a76639435744c19330b0b37c0a3c9da7dc0",
+    "https://bcr.bazel.build/modules/bazelrc-preset.bzl/1.9.2/MODULE.bazel": "9354bc3d91ee66e804642419af601b853e3228f6493f9263d51c5cd7b25c2a55",
+    "https://bcr.bazel.build/modules/bazelrc-preset.bzl/1.9.2/source.json": "d78791185eae5a8af3a5793f312f0ba21185bd8a115b9419fb99527d03ab112b",
     "https://bcr.bazel.build/modules/boost.any/1.83.0.bcr.4/MODULE.bazel": "b0dd78068b3d4b509e7d2cbafc498687ac347621e303bec26312f63baee1c97d",
     "https://bcr.bazel.build/modules/boost.any/1.83.0.bcr.4/source.json": "0b0e71cc436ae601b4ecacf85c7246866c6d39178af0689906b9b997890f984d",
     "https://bcr.bazel.build/modules/boost.array/1.83.0.bcr.4/MODULE.bazel": "419a97f36e8cc9cc75a783707051d51e6eaa88f49fda575811c78c76885f097a",
@@ -609,6 +611,7 @@
     "https://raw.githubusercontent.com/eclipse-score/bazel_registry/main/modules/bazel_skylib/1.8.1/MODULE.bazel": "not found",
     "https://raw.githubusercontent.com/eclipse-score/bazel_registry/main/modules/bazel_skylib/1.8.2/MODULE.bazel": "not found",
     "https://raw.githubusercontent.com/eclipse-score/bazel_registry/main/modules/bazel_skylib/1.9.0/MODULE.bazel": "not found",
+    "https://raw.githubusercontent.com/eclipse-score/bazel_registry/main/modules/bazelrc-preset.bzl/1.9.2/MODULE.bazel": "not found",
     "https://raw.githubusercontent.com/eclipse-score/bazel_registry/main/modules/boost.any/1.83.0.bcr.4/MODULE.bazel": "not found",
     "https://raw.githubusercontent.com/eclipse-score/bazel_registry/main/modules/boost.array/1.83.0.bcr.4/MODULE.bazel": "not found",
     "https://raw.githubusercontent.com/eclipse-score/bazel_registry/main/modules/boost.assert/1.83.0.bcr.4/MODULE.bazel": "not found",
@@ -892,8 +895,6 @@
     "https://raw.githubusercontent.com/eclipse-score/bazel_registry/main/modules/rules_swift/2.1.1/MODULE.bazel": "not found",
     "https://raw.githubusercontent.com/eclipse-score/bazel_registry/main/modules/score_baselibs_rust/0.1.0/MODULE.bazel": "e9f8781fa23b58a7c4815d662d82a9a472d8dddc306f08cba3853928f3b760fe",
     "https://raw.githubusercontent.com/eclipse-score/bazel_registry/main/modules/score_baselibs_rust/0.1.0/source.json": "f569a33fda1de61ccb962e19b72af745d93ba3f543c98b6ee72f81c9b890185f",
-    "https://raw.githubusercontent.com/eclipse-score/bazel_registry/main/modules/score_bazel_cpp_toolchains/0.5.1/MODULE.bazel": "c92d6f92b79fc96c4d9f033af21d65a0f8ce714da387da61160111e3b3babd25",
-    "https://raw.githubusercontent.com/eclipse-score/bazel_registry/main/modules/score_bazel_cpp_toolchains/0.5.1/source.json": "e3bb1beaf9e8e08fe682a616647d17badb1d7f8eeed4d2582277a9d7a1186c62",
     "https://raw.githubusercontent.com/eclipse-score/bazel_registry/main/modules/score_bazel_platforms/0.0.3/MODULE.bazel": "14c96e378c08705a46abe0799d6236fe3095c342c34f83f8d1b3f6046ce00651",
     "https://raw.githubusercontent.com/eclipse-score/bazel_registry/main/modules/score_bazel_platforms/0.0.4/MODULE.bazel": "57dce05e4eb4ac25250d67e47caef99f4cbaedf38083de26aa53979ee6a3ae4b",
     "https://raw.githubusercontent.com/eclipse-score/bazel_registry/main/modules/score_bazel_platforms/0.1.1/MODULE.bazel": "236e5bdff6f2d6de6f96cc4f5f4b1bf2cd6137547ce279668a2dd4c54cd4236c",
@@ -8556,8 +8557,8 @@
     },
     "@@score_bazel_cpp_toolchains+//extensions:gcc.bzl%gcc": {
       "general": {
-        "bzlTransitiveDigest": "FPdomjlUToKRMMVvxdB1HPeVVF0Bk9iaEODAcgx7tcw=",
-        "usagesDigest": "L/VhetNaL00ZyHgLw/g93XmgOPJcWDGc3l+4BGkMwrg=",
+        "bzlTransitiveDigest": "YrPJYJO0PQdML6DXKYgAbIadfxKSMiM875qmam1tIcM=",
+        "usagesDigest": "e3cAPDRPRHarGK0LgIjaO4j+qwPndPJEjS6lKTbgN+k=",
         "recordedFileInputs": {},
         "recordedDirentsInputs": {},
         "envVariables": {},
@@ -8601,6 +8602,8 @@
               "extra_compile_flags": [],
               "extra_c_compile_flags": [],
               "extra_cxx_compile_flags": [],
+              "extra_known_features": [],
+              "extra_enabled_features": [],
               "extra_link_flags": [],
               "license_info_variable": "",
               "license_info_value": "",
@@ -8626,6 +8629,14 @@
               "extra_compile_flags": [],
               "extra_c_compile_flags": [],
               "extra_cxx_compile_flags": [],
+              "extra_known_features": [
+                "@@score_cpp_policies+//sanitizers/features:asan",
+                "@@score_cpp_policies+//sanitizers/features:ubsan",
+                "@@score_cpp_policies+//sanitizers/features:lsan",
+                "@@score_cpp_policies+//sanitizers/features:tsan",
+                "@@score_cpp_policies+//sanitizers/features:debug_symbols"
+              ],
+              "extra_enabled_features": [],
               "extra_link_flags": [],
               "license_info_variable": "",
               "license_info_value": "",
@@ -8651,6 +8662,8 @@
               "extra_compile_flags": [],
               "extra_c_compile_flags": [],
               "extra_cxx_compile_flags": [],
+              "extra_known_features": [],
+              "extra_enabled_features": [],
               "extra_link_flags": [],
               "license_info_variable": "",
               "license_info_value": "",
@@ -8672,6 +8685,11 @@
           }
         },
         "recordedRepoMappingEntries": [
+          [
+            "",
+            "score_cpp_policies",
+            "score_cpp_policies+"
+          ],
           [
             "bazel_tools",
             "rules_cc",
