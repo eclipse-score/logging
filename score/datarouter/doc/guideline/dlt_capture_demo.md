@@ -10,11 +10,12 @@ This guide configures a minimal setup for capturing DLT logs on a loopback inter
   - [dlt-viewer](https://github.com/COVESA/dlt-viewer) - GUI-based DLT log viewer
   - [dlt-receive](https://github.com/COVESA/dlt-daemon/blob/master/doc/dlt-receive.1.md) - Command-line DLT receiver
   - [Wireshark](https://www.wireshark.org/) - Network protocol analyzer with DLT support
+  - [Chipmunk](https://github.com/esrlabs/chipmunk) - GUI-based DLT log viewer and analysis tool
 
 ### System Requirements
 
 - x86 target platform
-- Network loopback interface (127.0.0.1) configured and operational as a multicast interface.
+- Network loopback interface (127.0.0.1) and Docker interface (172.17.0.1) configured and operational as multicast interfaces.
 - UDP port 3490 available for DLT traffic
 
 ## Datarouter Setup
@@ -86,11 +87,15 @@ Capture DLT messages on the loopback interface using the command-line tool:
 
 ### Option 2: Using DLT Viewer (GUI)
 
-1. Launch [dlt-viewer](https://github.com/COVESA/dlt-viewer)
-2. Configure UDP connection:
-   - Interface: `127.0.0.1`
-   - Port: `3490`
-3. Start capture to view real-time log messages
+1. Launch [dlt-viewer](https://github.com/COVESA/dlt-viewer).
+2. Open **ECU Configuration** and select the **UDP** tab.
+3. Configure the connection:
+   - **Receiving interface**: Select the network interface on which the datarouter is transmitting (for example, `eth0`, `enp0s3`, `wlan0`, or another interface available on your platform).
+   - **IP Port**: `3490`
+4. If multicast is enabled in the datarouter configuration:
+   - Enable **Multicast on network interface**.
+   - Set the **Multicast address** to the address configured in `log-channels.json` (for example, `239.255.42.99`).
+5. Apply the configuration and start capturing to view real-time DLT log messages.
 
 ### Option 3: Using Wireshark
 
@@ -99,6 +104,18 @@ Capture DLT messages on the loopback interface using the command-line tool:
 3. Select **Adapter for loopback traffic capture**
 4. Apply display filter: `udp.port == 3490`
 5. Start capture to monitor raw DLT UDP packets
+
+### Option 4: Using Chipmunk (GUI)
+
+1. Download and install [Chipmunk](https://github.com/esrlabs/chipmunk).
+2. Launch Chipmunk and create or open a UDP stream.
+3. Configure the connection:
+   - **Socket Address**: `<ip>:3490` (replace `<ip>` with the IP address of the network endpoint on which the datarouter is transmitting.
+      For example, if the datarouter application and client are running on the same machine, use `0.0.0.0:3490`,)
+4. If multicast is enabled in the datarouter configuration:
+   - **Address**: Set the multicast address configured in `log-channels.json` (for example, `239.255.42.99`).
+5. Interface Address : Enter the IP address of the network Interface.
+5. Start the stream to view incoming DLT log messages.
 
 ## Verification
 
@@ -124,6 +141,8 @@ Verify the setup operates correctly by checking:
 - Check UDP port 3490 availability: `netstat -uln | grep 3490`
 - Confirm loopback interface configuration: `ip addr show lo`
 - Validate configuration files in `/opt/datarouter/etc/`
+- Ensure the datarouter daemon and the DLT client are running before starting the application.
+
 
 ### Configuration file errors
 
