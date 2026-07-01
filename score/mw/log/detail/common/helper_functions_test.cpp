@@ -11,7 +11,6 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 #include "score/mw/log/detail/common/helper_functions.h"
-#include <tuple>
 
 #include "gtest/gtest.h"
 
@@ -20,7 +19,6 @@ namespace helper
 using testing::Types;
 TEST(SumTest, SumNoOverflow)
 {
-    std::numeric_limits<std::size_t>::max();
     const std::size_t expected_value = 6U;
     std::size_t result = Sum<uint8_t>(1U, 2U, 3U);
     EXPECT_EQ(result, expected_value);
