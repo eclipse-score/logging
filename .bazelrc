@@ -114,17 +114,10 @@ coverage --cxxopt=-fprofile-update=atomic
 # Dynamic analysis (sanitizers) for Linux host builds/tests
 # ==============================================================================
 
-# FIXME: GCC-only workaround until score_gcc_x86_64_toolchain registers
-# score_cpp_policies' sanitizer features via extra_known_features — blocked on
-# eclipse-score/bazel_cpp_toolchains#52.
 build:asan  --config=x86_64-linux
-build:asan  --features=asan
 build:ubsan --config=x86_64-linux
-build:ubsan --features=ubsan
 build:lsan  --config=x86_64-linux
-build:lsan  --features=lsan
 build:tsan  --config=x86_64-linux
-build:tsan  --features=tsan
 
 test:asan_ubsan_lsan --test_tag_filters=-no-asan,-no-lsan,-no-ubsan
 test:asan  --test_tag_filters=-no-asan
