@@ -91,7 +91,7 @@ bazel_dep(name = "score_bazel_cpp_toolchains", version = "0.5.1", dev_dependency
 bazel_dep(name = "score_toolchains_rust", version = "0.8.0", dev_dependency = True)
 
 # S-CORE crates
-bazel_dep(name = "score_crates", version = "0.0.9")
+bazel_dep(name = "score_crates", version = "0.0.10")
 
 # TRLC dependency for requirements traceability
 bazel_dep(name = "trlc", version = "0.0.0", dev_dependency = True)
