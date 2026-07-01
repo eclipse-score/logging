@@ -33,6 +33,25 @@ cc_library(
 )
 
 cc_library(
+    name = "path_utils",
+    srcs = ["path_utils.cpp"],
+    hdrs = ["path_utils.h"],
+    features = [
+        "treat_warnings_as_errors",
+        "additional_warnings",
+        "strict_warnings",
+    ],
+    tags = ["FFI"],
+    visibility = [
+        "//score/mw/log/detail/data_router:__subpackages__",
+        "//score/datarouter:__subpackages__",
+    ],
+    deps = [
+        "@score_baselibs//score/language/futurecpp",
+    ],
+)
+
+cc_library(
     name = "writer",
     srcs = [
         "shared_memory_writer.cpp",
@@ -54,6 +73,7 @@ cc_library(
     ],
     deps = [
         ":common",
+        ":path_utils",
         "//score/mw/log/detail/wait_free_producer_queue:alternating_proxy_reader",
         "//score/mw/log/detail/wait_free_producer_queue:alternating_writer",
         "@score_baselibs//score/os:fcntl",
@@ -120,6 +140,7 @@ cc_test(
     name = "unit_test",
     srcs = [
         "common_test.cpp",
+        "path_utils_test.cpp",
         "reader_factory_test.cpp",
         "shared_memory_reader_test.cpp",
         "shared_memory_writer_test.cpp",
