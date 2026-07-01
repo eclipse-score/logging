@@ -39,9 +39,10 @@ const std::string kDefaultPersistentLoggingJsonFilepath = "etc/persistent-loggin
 PersistentLoggingConfig ReadPersistentLoggingConfig(const std::string& file_path)
 {
     using ReadResult = PersistentLoggingConfig::ReadResult;
+    using FileCloseFn = int(*)(std::FILE*);
 
     PersistentLoggingConfig config;
-    using UniqueFileT = std::unique_ptr<std::FILE, decltype(&fclose)>;
+    using UniqueFileT = std::unique_ptr<std::FILE, FileCloseFn>;
     UniqueFileT fp(std::fopen(file_path.c_str(), "r"), &fclose);
     if (nullptr == fp)
     {
