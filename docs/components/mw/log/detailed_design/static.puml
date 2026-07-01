@@ -1,0 +1,168 @@
+@startuml mw_log_static_design
+skinparam classAttributeIconSize 0
+skinparam linetype ortho
+hide empty members
+
+package "mw::log" {
+
+  abstract class Recorder <<baselibs>> {
+    + {abstract} StartRecord(context_id, level) : optional<SlotHandle>
+    + {abstract} StopRecord(slot)
+    + {abstract} Log(slot, T)
+  }
+
+  abstract class Backend <<baselibs>> {
+    + {abstract} ReserveSlot() : optional<SlotHandle>
+    + {abstract} FlushSlot(slot)
+    + {abstract} GetLogRecord(slot) : LogRecord&
+  }
+
+  class DataRouterRecorder {
+    - backend_ : unique_ptr<Backend>
+    + StartRecord(context_id, level) : optional<SlotHandle>
+    + StopRecord(slot)
+  }
+
+  class FileRecorder {
+    - backend_ : unique_ptr<Backend>
+    - config_ : Configuration
+    + StartRecord(context_id, level) : optional<SlotHandle>
+    + StopRecord(slot)
+  }
+
+  class TextRecorder <<QNX only>> {
+    + StartRecord(context_id, level) : optional<SlotHandle>
+    + StopRecord(slot)
+  }
+
+  class DataRouterBackend {
+    - buffer_ : CircularAllocator<LogRecord>
+    - message_client_ : unique_ptr<DatarouterMessageClient>
+    + ReserveSlot() : optional<SlotHandle>
+    + FlushSlot(slot)
+    + GetLogRecord(slot) : LogRecord&
+  }
+
+  class SlogBackend <<QNX only>> {
+    - buffer_ : CircularAllocator<LogRecord>
+    - slog2_instance_ : unique_ptr<Slog2>
+    + ReserveSlot() : optional<SlotHandle>
+    + FlushSlot(slot)
+    + GetLogRecord(slot) : LogRecord&
+  }
+
+  abstract class DatarouterMessageClient {
+    + {abstract} Run()
+    + {abstract} Shutdown()
+  }
+
+  class DatarouterMessageClientImpl {
+    - shared_memory_writer_ : SharedMemoryWriter&
+    - message_passing_factory_ : unique_ptr<MessagePassingFactory>
+    + Run()
+    + Shutdown()
+    note "Owns background thread;\nall IPC (kAcquireRequest,\nkAcquireResponse) runs here.\nMsgClientBackend is a constructor parameter\ndecomposed into direct members at init."
+  }
+
+  class SharedMemoryWriter {
+    + AllocAndWrite(timestamp, type_id, size, callback) noexcept
+    + TryRegisterType(info) : optional<TypeIdentifier>
+    + ReadAcquire() : ReadAcquireResult
+    + DetachWriter() noexcept
+    .. drop counters in SharedData ..
+    note "noexcept, wait-free.\nDrops entry + increments counter\nwhen buffer full. Never blocks."
+  }
+
+  struct SharedData <<shared memory>> {
+    control_block : AlternatingControlBlock
+    linear_buffer_1_offset : uint64
+    linear_buffer_2_offset : uint64
+    number_of_drops_buffer_full : atomic<uint64>
+    size_of_drops_buffer_full : atomic<uint64>
+    number_of_drops_invalid_size : atomic<uint64>
+    number_of_drops_type_registration_failed : atomic<uint64>
+    writer_detached : atomic<bool>
+    producer_pid : pid_t
+  }
+
+  struct AlternatingControlBlock {
+    control_block_even : LinearControlBlock
+    control_block_odd : LinearControlBlock
+    switch_count_points_active_for_writing : atomic<uint32>
+  }
+
+  struct LinearControlBlock {
+    data : span<byte>
+    acquired_index : atomic<uint64>
+    written_index : atomic<uint64>
+    number_of_writers : atomic<uint64>
+  }
+
+  class AlternatingReaderProxy {
+    + Switch() : uint32_t
+    note "Called by SharedMemoryWriter::ReadAcquire()\non client background thread only.\nNot thread-safe — Switch() must\nnot be called concurrently."
+  }
+
+  interface ISharedMemoryReader {
+    + {abstract} PeekNumberOfBytesAcquiredInBuffer(block_id_count) : optional<Length>
+    + {abstract} IsBlockReleasedByWriters(block_count) : bool
+    + {abstract} NotifyAcquisitionSetReader(acquire_result) : optional<Length>
+    + {abstract} Read(type_reg_cb, new_record_cb) : optional<Length>
+    + {abstract} ReadDetached(type_reg_cb, new_record_cb) : optional<Length>
+  }
+
+  class SharedMemoryReader {
+    - alternating_read_only_reader_ : AlternatingReadOnlyReader
+    + PeekNumberOfBytesAcquiredInBuffer(block_id_count) : optional<Length>
+    + IsBlockReleasedByWriters(block_count) : bool
+    + NotifyAcquisitionSetReader(acquire_result) : optional<Length>
+    + Read(type_reg_cb, new_record_cb) : optional<Length>
+    note "Used by datarouter daemon.\nNot thread-safe."
+  }
+
+  class AlternatingReadOnlyReader {
+    + IsBlockReleasedByWriters(block_id_count) : bool
+    + CreateLinearReader(block_id_count) : LinearReader
+    note "Owned by SharedMemoryReader.\nPolls two-part gate before\ndaemon reads old block."
+  }
+
+  DataRouterRecorder --|> Recorder
+  FileRecorder --|> Recorder
+  TextRecorder --|> Recorder
+  DataRouterBackend --|> Backend
+  SlogBackend --|> Backend
+  DatarouterMessageClientImpl --|> DatarouterMessageClient
+  SharedMemoryReader ..|> ISharedMemoryReader
+
+  DataRouterRecorder *-- Backend : owns >
+  FileRecorder *-- Backend : owns >
+  TextRecorder *-- Backend : owns >
+  DataRouterBackend *-- DatarouterMessageClient : owns >
+  DatarouterMessageClientImpl o-- SharedMemoryWriter : references >
+  SharedMemoryWriter --> SharedData : writes to (shared memory) >
+  SharedMemoryWriter *-- AlternatingReaderProxy : owns (for ReadAcquire) >
+  SharedData *-- AlternatingControlBlock
+  AlternatingControlBlock *-- LinearControlBlock : "×2 (even/odd)"
+  AlternatingReaderProxy ..> AlternatingControlBlock : uses >
+  SharedMemoryReader *-- AlternatingReadOnlyReader : owns >
+  AlternatingReadOnlyReader ..> AlternatingControlBlock : uses >
+  SharedMemoryReader ..> SharedData : reads (shared memory) >
+}
+
+note right of AlternatingControlBlock
+  switch_count selects active-for-writing
+  block (even → even block, odd → odd).
+  number_of_writers tracks in-flight writes
+  per block. Reader polls IsBlockReleasedByWriters()
+  before reading old block: requires both
+  number_of_writers==0 AND written_index==acquired_index,
+  followed by an acquire fence.
+  All atomics use seq_cst ordering.
+end note
+
+note right of TextRecorder
+  Selected at build time via Bazel select()
+  for QNX targets. Linux default: DataRouterRecorder.
+  Both share the Recorder interface from baselibs.
+end note
+@enduml

@@ -1,0 +1,132 @@
+@startuml datarouter_static_design
+skinparam classAttributeIconSize 0
+skinparam linetype ortho
+hide empty members
+
+package "Data Router daemon" {
+
+  class SocketServer {
+    + {static} Run(exit_requested, no_adaptive_runtime)
+    + {static} InitializePersistentStorage() : PersistentStorageHandlers
+    + {static} CreateDltServer() : unique_ptr<DltLogServer>
+    + {static} CreateLogParserFactory() : unique_ptr<ILogParserFactory>
+    + {static} CreateMessagePassingSession(...) : unique_ptr<ISession>
+    + {static} CreateConfigSession() : unique_ptr<ISession>
+    + {static} RunEventLoop(...)
+    - DoWork(exit_requested, no_adaptive_runtime)
+    note "Run() creates a function-local\nstatic SocketServer instance and\ncalls non-static DoWork() as the\nevent loop. All other public methods\nare static factory/helper functions."
+  }
+
+  class DataRouter {
+    - sources_ : unordered_set<SourceSession*>
+    - subscriber_mutex_ : mutex
+    - log_parser_factory_ : unique_ptr<ILogParserFactory>
+    + NewSourceSession(...) : MessagingSessionPtr
+    + ForEachSource(enable_logging_client)
+    + ShowSourceStatistics(series_num)
+  }
+
+  class SourceSession {
+    + Tick()
+    + OnClosedByPeer()
+    + IsSourceClosed() : bool
+    note "Private nested class of DataRouter.\nInherits both UnixDomainServer::ISession\nand MessagePassingServer::ISession.\nOwned by MessagePassingServer;\nDataRouter holds a non-owning pointer."
+  }
+
+  class DltLogServer {
+    - dlt_output_enabled_ : atomic<bool>
+    - filtering_enabled_ : bool
+    - config_mutex_ : mutex
+  }
+
+  interface "DltNonverboseHandlerType::IOutput" as INonVerbose {
+    + {abstract} SendNonVerbose(entry)
+  }
+  interface "DltVerboseHandler::IOutput" as IVerbose {
+    + {abstract} SendVerbose(entry)
+  }
+  interface "FileTransferStreamHandlerType::IOutput" as IFileTransfer {
+    + {abstract} SendFtVerbose(data, loglevel, app_id, ctx_id)
+  }
+
+  class MessagePassingServer {
+    - mutex_ : mutex
+    - pid_session_map_ : unordered_map<pid_t, SessionWrapper>
+    - work_queue_ : queue<pid_t>
+    - worker_thread_ : jthread
+    - stop_source_ : stop_source
+  }
+
+  class UnixDomainServer {
+  }
+
+  class LogParser {
+    - index_parser_map_ : unordered_map<BufsizeT, IndexParser>
+    - handle_request_map_ : const HandleRequestMap
+    + AddIncomingType(map_index, params)
+    + Parse(timestamp, data, size)
+    + ParseSharedMemoryRecord(record)
+    note "One instance per SourceSession.\nNot thread-safe. Called only\nfrom worker thread (SourceSession::Tick)."
+  }
+
+  interface ISharedMemoryReader {
+    + {abstract} PeekNumberOfBytesAcquiredInBuffer(block_id_count) : optional<Length>
+    + {abstract} IsBlockReleasedByWriters(block_count) : bool
+    + {abstract} NotifyAcquisitionSetReader(acquire_result) : optional<Length>
+    + {abstract} Read(type_reg_cb, new_record_cb) : optional<Length>
+    + {abstract} ReadDetached(type_reg_cb, new_record_cb) : optional<Length>
+    note "Defined in mw::log detail.\nSourceSession holds unique_ptr<ISharedMemoryReader>."
+  }
+
+  class SharedMemoryReader {
+    - alternating_read_only_reader_ : AlternatingReadOnlyReader
+    + PeekNumberOfBytesAcquiredInBuffer(block_id_count) : optional<Length>
+    + IsBlockReleasedByWriters(block_count) : bool
+    + NotifyAcquisitionSetReader(acquire_result) : optional<Length>
+    + Read(type_reg_cb, new_record_cb) : optional<Length>
+    note "AlternatingReadOnlyReader polls\ntwo-part gate before reading old block.\nCreated by ReaderFactory; one per session."
+  }
+
+  DltLogServer ..|> INonVerbose
+  DltLogServer ..|> IVerbose
+  DltLogServer ..|> IFileTransfer
+
+  SocketServer ..> DataRouter : creates and runs >
+  SocketServer ..> DltLogServer : creates and owns >
+  SocketServer ..> MessagePassingServer : creates >
+  SocketServer ..> UnixDomainServer : creates >
+
+  SharedMemoryReader ..|> ISharedMemoryReader
+  MessagePassingServer *-- SourceSession : owns via SessionWrapper\n(unique_ptr<ISession> in pid_session_map_) >
+  DataRouter o-- SourceSession : observes via sources_ (non-owning) >
+  SourceSession *-- LogParser : owns (unique_ptr) >
+  SourceSession *-- ISharedMemoryReader : owns (unique_ptr) >
+  LogParser ..> DltLogServer : dispatches via IOutput handlers >
+  DataRouter ..> MessagePassingServer : session lifecycle >
+}
+
+note right of MessagePassingServer
+  Dispatch thread: receives QNX
+  message-passing connections.
+  Worker thread: reads shared memory
+  and routes log entries.
+  mutex_ protects pid_session_map_
+  and work_queue_ (both threads).
+  Shutdown: stop_source signalled,
+  worker_thread joined before
+  any session state freed.
+end note
+
+note right of DataRouter
+  subscriber_mutex_ protects sources_.
+  Per-session mutable fields wrapped in
+  Synchronized<T> (mutex-guarded accessor).
+end note
+
+note right of LogParser
+  Unknown TypeIdentifier in Parse()
+  → entry silently dropped, session continues.
+  AddIncomingType() may allocate;
+  not called on the log-forwarding hot path.
+end note
+@enduml

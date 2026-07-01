@@ -1,0 +1,69 @@
+@startuml mw_log_dynamic_design
+
+participant "Application\nThread" as App
+participant "DataRouterRecorder" as DRR
+participant "DataRouterBackend" as DRB
+participant "SharedMemoryWriter" as SMW
+participant "AlternatingControlBlock\n(shared memory)" as ACB
+participant "DatarouterMessageClientImpl\nbackground thread" as BG
+participant "MessagePassingServer\n(daemon)" as MPS
+
+note over App, ACB
+  Hot path — entirely wait-free on the application thread
+end note
+
+App -> DRR : StartRecord(context_id, level)
+DRR -> DRB : ReserveSlot()
+DRB --> DRR : SlotHandle (from CircularAllocator)
+DRR --> App : SlotHandle
+
+App -> DRR : Log(slot, value) [repeats for each value]
+note right of DRR : Serialize value into LogRecord in slot
+
+App -> DRR : StopRecord(slot)
+DRR -> DRB : FlushSlot(slot)
+DRB -> SMW : AllocAndWrite(timestamp, type_id, size, callback)
+
+alt buffer full (active LinearControlBlock has no remaining capacity)
+  SMW -> SMW : increment number_of_drops_buffer_full\nand size_of_drops_buffer_full in SharedData
+  SMW --> DRB : return (no write, no block)
+else oversized payload (> 65,500 bytes)
+  SMW -> SMW : increment number_of_drops_invalid_size in SharedData
+  SMW --> DRB : return (no write)
+else capacity available
+  SMW -> ACB : WaitFreeAlternatingWriter::Acquire(size)\n— increment number_of_writers (register-before-reserve)\n— fetch_add acquired_index to reserve bytes
+  ACB --> SMW : span<byte> in active buffer
+  SMW -> ACB : copy BufferEntryHeader + serialized LogRecord bytes
+  SMW -> ACB : WaitFreeAlternatingWriter::Release()\n— release fence → written_index.fetch_add()\n— decrement number_of_writers (last)
+  note right of ACB
+    No mutex taken. All atomics seq_cst.
+    Release ordering: fence → written_index
+    → number_of_writers (last) ensures
+    reader gate not unblocked prematurely.
+  end note
+  SMW --> DRB : done
+end
+
+DRB --> DRR : done
+DRR --> App : done
+
+note over BG, MPS
+  Background path — IPC runs independently of the application thread.
+  Daemon polls PeekNumberOfBytesAcquiredInBuffer; when data is ready,
+  it sends kAcquireRequest to the client.
+end note
+
+MPS -> BG : kAcquireRequest\n(daemon requests buffer switch)
+BG -> ACB : SharedMemoryWriter::ReadAcquire()\n— OnAcquireRequest() handler:\n  AlternatingReaderProxy::Switch():\n  resets opposite block, increments switch_count\n— returns ReadAcquireResult{acquired_buffer}
+ACB --> BG : ReadAcquireResult
+BG -> MPS : kAcquireResponse(ReadAcquireResult)\n(OnAcquireResponse stores in data_acquired)
+
+note over MPS, ACB
+  Next Tick():
+end note
+MPS -> ACB : SharedMemoryReader::IsBlockReleasedByWriters(block_count)\n— Phase 1: TryFinalizeAcquisition()\n— polls until number_of_writers==0\n  AND written_index==acquired_index\n— acquire fence on true
+ACB --> MPS : gate cleared
+MPS -> MPS : SharedMemoryReader::NotifyAcquisitionSetReader(acquire_result)\n— sets up reader for acquired buffer
+MPS -> MPS : SharedMemoryReader::Read(on_new_type, on_new_record)\n— Phase 2: ProcessAndRouteLogMessages()\n— on_new_type → AddIncomingType()\n— on_new_record → ParseSharedMemoryRecord()\n  → dispatch to DltLogServer via IOutput
+
+@enduml

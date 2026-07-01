@@ -1,0 +1,97 @@
+@startuml datarouter_dynamic_design
+
+participant "DatarouterMessageClientImpl\n(client process)" as Client
+participant "MessagePassingServer\ndispatch thread" as Dispatch
+participant "SocketServer" as SS
+participant "DataRouter" as DR
+participant "MessagePassingServer\nworker thread" as Worker
+participant "SharedMemoryReader" as SMR
+participant "LogParser\n(per session)" as LP
+participant "DltLogServer" as DLS
+
+== Session establishment ==
+
+Client -> Dispatch : kConnect(appid, uid, random_part)\n[client PID from QNX transport, not message field]
+note over Dispatch
+  Dispatch thread holds mutex_.
+  Cross-checks transport PID against SharedData::producer_pid.
+  Rejects if mismatch (security check).
+end note
+Dispatch -> SS : CreateMessagePassingSession(pid, conn, handle)
+SS -> DR : NewSourceSession(pid, ...)
+DR -> DR : create SourceSession\n(allocates LogParser + SharedMemoryReader;\nadds to sources_ under subscriber_mutex_)
+DR --> SS : MessagingSessionPtr
+SS --> Dispatch : ISession
+Dispatch --> Client : ConnectResponse
+
+== Log data transfer (per flush) ==
+
+note over Client
+  Application thread writes to shared memory
+  via SharedMemoryWriter::AllocAndWrite()
+  without contacting the daemon.
+end note
+
+Worker -> Client : kAcquireRequest\n(daemon requests buffer switch)
+Client -> Dispatch : kAcquireResponse(ReadAcquireResult)\n(client called SharedMemoryWriter::ReadAcquire())
+Dispatch -> Worker : store data_acquired;\nenqueue pid in work_queue_\n(under mutex_; signal worker_cond_)
+
+note over Worker, SMR
+  Tick() runs two phases.
+  The ReadAcquireResult received above
+  is stored in command_data_.data_acquired.
+end note
+
+note over Worker, SMR
+  Phase 1: TryFinalizeAcquisition()
+end note
+Worker -> SMR : IsBlockReleasedByWriters(block_count)\n— polls until number_of_writers==0\n  AND written_index==acquired_index\n— acquire fence on true
+SMR --> Worker : gate cleared
+Worker -> SMR : NotifyAcquisitionSetReader(acquire_result)\n— sets up reader for acquired buffer
+
+note over Worker, SMR
+  Phase 2: ProcessAndRouteLogMessages()
+end note
+Worker -> SMR : Read(on_new_type, on_new_record)\n— AlternatingReadOnlyReader::CreateLinearReader()\n— iterate entries; invoke callbacks per entry
+note right of SMR
+  Two callbacks per Read():
+  on_new_type → parser_->AddIncomingType()
+  on_new_record → parser_->ParseSharedMemoryRecord()
+  (skipped when quota_overlimit_detected)
+end note
+
+Worker -> LP : on_new_record: ParseSharedMemoryRecord(record)\n— per-type handlers dispatch\n  to DltLogServer via IOutput
+alt unknown TypeIdentifier
+  LP -> LP : silently drop entry\n(not in index_parser_map_)
+else known TypeIdentifier
+  LP -> DLS : SendVerbose() or SendNonVerbose()\n(via registered per-type handler)
+  DLS -> DLS : apply context filters (config_mutex_)
+  DLS -> DLS : forward to DLT subsystem\n(UDP multicast / file)
+end
+
+== Session teardown — clean disconnect and crash ==
+
+note over Client, Dispatch
+  QNX message-passing channel fires peer-close event.
+  Clean disconnect: client already called DetachWriter()
+  (SharedData::writer_detached = true).
+  Crash: writer_detached = false.
+  Both paths are handled identically.
+end note
+
+Dispatch -> Dispatch : disconnect_callback\n— to_force_finish = true\n— EnqueueForDeleteWhileLocked(true):\n  to_delete = true, closed_by_peer = true
+
+Worker -> Worker : closed_by_peer == true\n→ NotifyClosedByPeer()\n→ SourceSession::OnClosedByPeer():\n  command_detach_on_closed = true
+
+Worker -> SMR : ReadDetached(on_new_type, on_new_record)\n(drains remaining records if writer_detached;\nsets detach_on_closed_processed = true)
+
+Worker -> Worker : to_force_finish == true\n→ pid_session_map_.extract(pid)\n→ SourceSession destructor\n  (unmaps shared memory, frees LogParser)
+
+note over Worker
+  Stale-session watchdog:
+  ticks_without_write incremented each tick.
+  Exceeding threshold → schedule for teardown
+  (guards against crash before channel-close propagates).
+end note
+
+@enduml
