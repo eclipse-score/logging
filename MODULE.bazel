@@ -88,7 +88,7 @@ use_repo(oci, "ubuntu_24_04", "ubuntu_24_04_linux_amd64")
 
 # Toolchains and extensions
 bazel_dep(name = "score_bazel_cpp_toolchains", version = "0.5.1", dev_dependency = True)
-bazel_dep(name = "score_toolchains_rust", version = "0.8.0", dev_dependency = True)
+bazel_dep(name = "score_toolchains_rust", version = "0.9.1", dev_dependency = True)
 
 # S-CORE crates
 bazel_dep(name = "score_crates", version = "0.0.9")
