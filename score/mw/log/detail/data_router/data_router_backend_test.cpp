@@ -440,7 +440,7 @@ TEST(DataRouterBackendTests, CheckSizeValid)
     RecordProperty("TestType", "Interface test");
     RecordProperty("DerivationTechnique", "Analysis of boundary values");
 
-    const std::size_t k_max_slots_size = std::numeric_limits<SlotIndex>::max();
+    const std::size_t k_max_slots_size = 255UL;
     DatarouterMessageClientStubFactory message_client_factory;
     //  Give the try to allocate one more then possible number of slots
     const Configuration config{};
@@ -448,8 +448,8 @@ TEST(DataRouterBackendTests, CheckSizeValid)
     DataRouterBackend datarouter_backend{
         k_max_slots_size + 1, LogRecord{}, message_client_factory, config, std::move(writer_factory)};
 
-    // Given depleted allocator:
-    for (std::size_t i = 0; i < k_max_slots_size; i++)
+    // Given depleted allocator (backend has k_max_slots_size + 1 slots):
+    for (std::size_t i = 0; i < k_max_slots_size + 1; i++)
     {
         const auto& slot = datarouter_backend.ReserveSlot();
         EXPECT_TRUE(slot.has_value());
@@ -468,7 +468,7 @@ TEST(DataRouterBackendTests, WhenAllPossibleSlotsUsedFailToAllocateMore)
     RecordProperty("DerivationTechnique", "Analysis of boundary values");
 
     // Given maksimum allocation size:
-    const std::uint8_t k_max_slots_size = 255UL;
+    const std::size_t k_max_slots_size = 255UL;
     DatarouterMessageClientStubFactory message_client_factory{};
     const Configuration config{};
     DataRouterBackend datarouter_backend(k_max_slots_size,
@@ -496,7 +496,7 @@ TEST_F(DataRouterBackendFixture, WhenSafeIpcIsTrueMessageClientIsCreated)
     RecordProperty("TestType", "Interface test");
     RecordProperty("DerivationTechnique", "Generation and analysis of equivalence classes");
 
-    const std::uint8_t k_max_slots_size = 255UL;
+    const score::mw::log::SlotIndex k_max_slots_size = 255U;
     DatarouterMessageClientFactoryMock message_client_factory{};
 
     EXPECT_CALL(*fcntl_mock_raw_ptr, open(StrEq(GetStaticSharedMemoryFileName()), kOpenReadFlags, kOpenModeFlags))
@@ -540,7 +540,7 @@ TEST_F(DataRouterBackendFixture, ConstructWithDynamicIdentifier)
     RecordProperty("TestType", "Interface test");
     RecordProperty("DerivationTechnique", "Generation and analysis of equivalence classes");
 
-    const std::uint8_t k_max_slots_size = 255UL;
+    const score::mw::log::SlotIndex k_max_slots_size = 255U;
     DatarouterMessageClientFactoryMock message_client_factory{};
     config.SetDynamicDatarouterIdentifiers(true);
 
@@ -560,7 +560,7 @@ TEST_F(DataRouterBackendFixture, ConstructWithDynamicIdentifier)
 
 TEST_F(DataRouterBackendFixture, ConstructWithDynamicIdentifierAndChmodSuccess)
 {
-    const std::uint8_t k_max_slots_size = 255UL;
+    const score::mw::log::SlotIndex k_max_slots_size = 255U;
     DatarouterMessageClientFactoryMock message_client_factory{};
     config.SetDynamicDatarouterIdentifiers(true);
 
@@ -587,7 +587,7 @@ TEST_F(DataRouterBackendFixture, DataRouterBackEndConstructedWithEmptyIdentifier
 
     config.SetDynamicDatarouterIdentifiers(true);
 
-    const std::uint8_t k_max_slots_size = 255UL;
+    const score::mw::log::SlotIndex k_max_slots_size = 255U;
     DatarouterMessageClientFactoryMock message_client_factory{};
 
     EXPECT_CALL(*stdlib_mock_raw_ptr, mkstemps(_, _))

@@ -25,7 +25,7 @@
 #include "score/mw/log/configuration/nvconfig.h"
 #include "score/mw/log/detail/data_router/shared_memory/writer_factory.h"
 #include "score/mw/log/detail/logging_identifier.h"
-#include "score/mw/log/runtime.h"
+#include "score/mw/log/logging.h"
 
 namespace score
 {
@@ -290,7 +290,7 @@ class LogEntry
     }
 
     LogEntry() noexcept
-        : recorder_{score::mw::log::detail::Runtime::GetRecorder()},
+        : recorder_{score::mw::log::GetDefaultLogRecorder()},
           shared_memory_id_{GetInitialTypeId()},
           default_enabled_{GetDefaultEnabledForInit()},
           level_enabled_{GetThresholdForInit()},
