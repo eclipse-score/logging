@@ -23,6 +23,7 @@
 #include "score/mw/log/detail/utils/signal_handling/signal_handling.h"
 #include <array>
 #include <thread>
+#include <tuple>
 
 namespace score
 {
@@ -200,8 +201,7 @@ bool DatarouterMessageClientImpl::StartReceiver()
 
     auto* this_ptr = this;
     auto connect_callback = [this_ptr](score::message_passing::IServerConnection& connection) noexcept -> std::uintptr_t {
-        const auto result = SignalHandling::PThreadBlockSigTerm(this_ptr->utils_.GetSignal());
-        static_cast<void>(result);
+        std::ignore = SignalHandling::PThreadBlockSigTerm(this_ptr->utils_.GetSignal());
         const pid_t client_pid = connection.GetClientIdentity().pid;
         return static_cast<std::uintptr_t>(client_pid);
     };
