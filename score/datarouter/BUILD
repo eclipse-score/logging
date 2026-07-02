@@ -208,8 +208,8 @@ cc_library(
         ":datarouter_types",
         ":dltprotocol",
         ":logparser_interface",
+        "//score/mw/log",
         "//score/mw/log/detail/data_router/shared_memory:reader",
-        "@score_baselibs//score/mw/log",
         "@score_baselibs//score/mw/log/configuration:nvconfig",
         "@score_baselibs//score/static_reflection_with_serialization/serialization",
     ],
@@ -383,7 +383,7 @@ cc_library(
     strip_include_prefix = "src/applications",
     visibility = ["//score/datarouter/test:__subpackages__"],
     deps = [
-        "@score_baselibs//score/mw/log",
+        "//score/mw/log",
     ],
 )
 
@@ -400,7 +400,7 @@ cc_library(
         "@score_logging//score/datarouter:__subpackages__",
     ],
     deps = [
-        "@score_baselibs//score/mw/log",
+        "//score/mw/log",
     ],
 )
 
@@ -420,10 +420,10 @@ cc_library(
         ":logparser_factory_interface",
         ":message_passing_server",
         ":unixdomain_server",
+        "//score/mw/log",
         "//score/mw/log/detail/data_router/shared_memory:reader",
         "@score_baselibs//score/concurrency:synchronized",
         "@score_baselibs//score/language/futurecpp",
-        "@score_baselibs//score/mw/log",
     ],
 )
 
@@ -444,8 +444,8 @@ cc_library(
         ":logparser_factory_interface",
         ":message_passing_server",
         ":unixdomain_mock",
+        "//score/mw/log",
         "@score_baselibs//score/concurrency:synchronized",
-        "@score_baselibs//score/mw/log",
     ],
 )
 
@@ -467,8 +467,8 @@ cc_library(
         ":logparser_testing",
         ":message_passing_server",
         ":unixdomain_mock",
+        "//score/mw/log",
         "@score_baselibs//score/concurrency:synchronized",
-        "@score_baselibs//score/mw/log",
     ],
 )
 
@@ -627,8 +627,8 @@ cc_library(
         ":unixdomain_server",
         "//score/datarouter/network:vlan",
         "//score/datarouter/src/persistent_logging/persistent_logging_stub:sysedr_stub",
+        "//score/mw/log",
         "@score_baselibs//score/language/futurecpp",
-        "@score_baselibs//score/mw/log",
         "@score_baselibs//score/mw/log/configuration:nvconfig",
         "@score_baselibs//score/os:socket",
         "@score_baselibs//score/os:stat",
@@ -656,7 +656,7 @@ cc_library(
         ],
         deps = [
             ":dltserver_common",
-            "@score_baselibs//score/mw/log",
+            "//score/mw/log",
             "@score_baselibs//score/mw/log/configuration:nvconfig",
             "@score_baselibs//score/os:socket",
             "@score_baselibs//score/os:stat",
@@ -716,8 +716,8 @@ cc_library(
         ":logchannel_utility",
         ":socketserver_config_helpers",
         "//score/datarouter/src/persistency:interface",
+        "//score/mw/log",
         "@rapidjson",
-        "@score_baselibs//score/mw/log",
     ],
 )
 
@@ -866,7 +866,7 @@ cc_library(
         visibility = ["//score/datarouter/test:__subpackages__"],
         deps = [
             ":datarouter_options",
-            "@score_baselibs//score/mw/log",
+            "//score/mw/log",
         ] + deps,
     )
     for (name, deps, test_only) in [
@@ -901,15 +901,9 @@ cc_binary(
         "@score_baselibs//score/os:errno_logging",
         "@score_baselibs//score/os:pthread",
         "@score_baselibs//score/os/utils:path",
-        "@score_baselibs//score/mw/log:console",
-        "@score_baselibs//score/mw/log:frontend",
-        "//score/mw/log/backend:file",
-        "//score/mw/log/backend:remote",
+        "//score/mw/log",
         # "//third_party/jemalloc", # Ticket-231781
-    ] + select({
-        "@platforms//os:qnx": ["//score/mw/log/backend:slog"],
-        "//conditions:default": [],
-    }),
+    ],
 )
 
 cc_library(
@@ -1109,7 +1103,7 @@ cc_library(
         "@score_baselibs//score/os:stdio",
         "@score_baselibs//score/os/utils:path",
         "@score_baselibs//score/os/utils:thread",
-        "@score_baselibs//score/mw/log",
+        "//score/mw/log",
         "@score_baselibs//score/mw/log/configuration:nvconfig",
         "//score/datarouter/dlt_filetransfer_trigger_lib:filetransfer_message_types",
         "//score/datarouter/src/persistent_logging/persistent_logging_stub:sysedr_stub",

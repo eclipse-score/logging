@@ -1,0 +1,23 @@
+@startuml
+
+title Tracing startup
+
+participant main as main
+participant TracingLifecycle
+participant "logger::instance : Logger" as logger
+participant "writer : MwsrWriter" as writer
+
+main -> TracingLifecycle ++: Start()
+
+TracingLifecycle -> logger ++: instance()
+logger -> logger: Logger()
+logger -> writer **: MwsrWriter()
+activate writer
+logger --> TracingLifecycle --: logger_instance
+
+TracingLifecycle -> writer ++: initialize()
+TracingLifecycle <-- writer --: success
+
+main <-- TracingLifecycle --: startup_complete
+
+@enduml

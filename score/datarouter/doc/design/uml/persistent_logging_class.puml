@@ -1,0 +1,17 @@
+@startuml persistent_logging_class
+title Persistent Logging Class Diagram
+
+SocketServer --> DltLogServer : creates
+SocketServer --> DataRouter : creates
+DataRouter *-- LogParser : owns
+DltLogServer *-- DltNonverboseHandler : owns
+DltLogServer *-- DltVerboseHandler : owns
+DltLogServer *-- FileTransferStreamHandler : owns
+DltLogServer *-- SysedrHandler : owns
+DltLogServer --> LogParser : registers handlers
+SysedrHandler --> LogParser : uses
+SysedrHandler *-- ICompressedFile : owns
+SysedrHandler *-- IDdadVersionReader : owns
+SysedrHandler *-- INvConfig : owns
+
+@enduml

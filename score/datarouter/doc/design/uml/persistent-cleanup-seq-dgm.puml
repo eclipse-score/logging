@@ -1,0 +1,130 @@
+@startuml persistent_cleanup_sequence
+title Persistent Logging Cleanup Integration Sequence
+
+participant "DiagnosticClient" as DC
+participant "PersistentLoggingService" as PLS
+participant "DltLogServer" as DLS
+participant "SysedrHandler" as SH
+participant "FileCleanUpManager" as FCM
+participant "DdadVersionReader" as DVR
+participant "FileOperations" as FO
+participant "ZlibCompressedFile" as ZF
+
+== Service Initialization ==
+PLS -> PLS : Initialize()
+PLS -> PLS : InitializeDTCHandling()
+PLS -> FCM : create(version_reader, file_operations)
+FCM -> DVR : create()
+FCM -> FO : create()
+
+== Version-Based Cleanup on Startup ==
+PLS -> FCM : CheckVersionChange()
+FCM -> DVR : ReadEcuSwVersion()
+DVR --> FCM : current_ecu_version
+
+FCM -> FO : FileExists(version_file_path)
+FO --> FCM : file_exists_status
+
+alt version_file_exists
+    FCM -> FO : ReadFile(version_file_path)
+    FO --> FCM : stored_version, read_status
+
+    alt read_success && stored_version != current_ecu_version
+        note right of FCM : Version changed - cleanup required
+        PLS -> PLS : FetchListOfPersistentFiles()
+        PLS -> SH : GetPersistentLogFileList()
+        SH --> PLS : persistent_file_list
+
+        PLS -> FCM : DoCleanUp(persistent_file_list)
+
+        loop for each file in persistent_file_list
+            FCM -> FO : RemoveFile(file_path)
+            FO --> FCM : removal_status
+        end
+
+        FCM -> FO : WriteFile(version_file_path, current_ecu_version)
+        FO --> FCM : write_status
+
+    else read_failed
+        FCM -> FCM : LogError("Failed to read version file")
+    end
+
+else version_file_not_exists
+    note right of FCM : First run - create version file
+    FCM -> FO : CreateFile(version_file_path)
+    FCM -> FO : WriteFile(version_file_path, current_ecu_version)
+    FCM -> FCM : LogInfo("Don't delete files on first run")
+end
+
+== Diagnostic Service Offering ==
+PLS -> PLS : OfferService()
+note right of PLS : Service available for diagnostic requests
+
+== Diagnostic Read Request (File List) ==
+DC -> PLS : Read(data_identifier, meta_info, cancellation_handler)
+PLS -> PLS : FetchListOfPersistentFiles()
+PLS -> SH : GetPersistentLogFileList()
+SH --> PLS : file_list_string
+PLS --> DC : OperationOutput(file_list)
+
+== Diagnostic Write Request (Trigger Cleanup) ==
+DC -> PLS : Write(data_identifier, request_data, meta_info, cancellation_handler)
+PLS -> PLS : ProcessCleanupRequest(request_data)
+
+alt cleanup_all_files
+    PLS -> PLS : FetchListOfPersistentFiles()
+    PLS -> FCM : DoCleanUp(all_persistent_files)
+
+    loop for each persistent file
+        FCM -> FO : RemoveFile(file_path)
+        FO --> FCM : removal_status
+        alt removal_failed
+            FCM -> FCM : LogError("Failed to remove file")
+        end
+    end
+
+else cleanup_by_age
+    PLS -> PLS : FilterFilesByAge(max_age_days)
+    PLS -> FCM : DoCleanUp(old_files)
+
+    loop for each old file
+        FCM -> FO : RemoveFile(file_path)
+    end
+end
+
+PLS -> PLS : CheckAndSetDtc()
+note right of PLS : Set DTC if cleanup issues occurred
+
+== Integration with Active Logging ==
+note over SH, ZF
+**During Active Persistent Logging:**
+- SysedrHandler continues normal operation
+- Files being written are protected from cleanup
+- Cleanup only affects completed/closed files
+end note
+
+SH -> ZF : write(dlt_data, size)
+note right of SH : Active logging continues uninterrupted
+
+== Service Cleanup ==
+PLS -> FCM : ~FileCleanUpManager()
+PLS -> PLS : UnInitialize()
+
+note over PLS, FCM
+**Key Integration Points:**
+- PersistentLoggingService manages both diagnostic access and cleanup
+- FileCleanUpManager handles version-based and on-demand cleanup
+- Integration with SysedrHandler for file status monitoring
+- DTC handling for cleanup operation status
+- Protection of active logging operations
+end note
+
+note over DVR, FO
+**Cleanup Strategy:**
+- Version-based: Automatic cleanup on ECU software update
+- On-demand: Diagnostic request-triggered cleanup
+- Age-based: Remove files older than specified threshold
+- Safe operation: Never interfere with active logging
+end note
+
+@enduml

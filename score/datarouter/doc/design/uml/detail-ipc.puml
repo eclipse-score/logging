@@ -1,0 +1,32 @@
+@startuml
+
+node AdaptiveApplication {
+    component "Application" as app
+}
+
+node "Datarouter" {
+  component "Message Server" as msg_server
+  component [Source Session] as sourcesession
+  component UnixDomainServer
+}
+
+node "DatarouterConf" {
+  component UnixDomainClient as config_client
+}
+
+queue "SourceBuffer: MWSR buffer" as RB1
+note top of RB1
+  Shared memory
+  allocated by Application
+end note
+
+app -> msg_server : connect()
+config_client -> UnixDomainServer : connect()
+
+app .> RB1 : create()
+app -> RB1 : write()
+
+RB1 <- sourcesession : read()
+msg_server ..> sourcesession: create()
+
+@enduml

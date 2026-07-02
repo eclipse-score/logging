@@ -1,0 +1,38 @@
+@startuml
+
+title Datarouter Packages
+
+package datarouter {
+  package Datarouter {
+    class synchronized
+    class DataRouter
+    class DataRouter::SourceSession
+    class SocketServer
+    class IPersistentDictionary
+    class PersistentDictionaryFactory
+    class AraPerPersistentDictionaryFactory
+    class AraPerPersistentDictionary
+    class StubPersistentDictionaryFactory
+    class StubPersistentDictionary
+  }
+
+  package internal {
+    class LogParser
+    class LogParser::AnyHandler
+    class LogParser::TypeHandler
+    class MessagePassingServer::ISession
+    class EmptySysedrFactory
+    class EmptySysedrHandler
+    class ISysedrHandler
+    class LogEntryFactory
+    class SysedrConcreteFactory
+    class SysedrFactory
+    class SysedrHandler
+    class UnixDomainClient
+    class UnixDomainSockAddr
+    class UnixDomainServer::SessionHandle
+    class UnixDomainServer::SessionWrapper
+  }
+}
+
+@enduml

@@ -1,0 +1,47 @@
+@startuml
+title log message filtering based on log_level (client - Frontend)
+
+start
+
+if (logging.json file is found) then (yes)
+    NOTE: logging.json
+    :log_level is updated;
+else (no)
+    if (ecu_logging_config.json is found) then (yes)
+        :log_level is updated;
+    else (no)
+        :log_level = kWarn (default; hardcoded);
+    endif
+    NOTE: ecu_logging_config.json (fallback if logging.json is NOT found)
+endif
+
+if (Logging) then (Verbose logging)
+    :log_level_threshold = kWarn (Default);
+    :log_level_threshold = log_level based on logging.json OR 
+      if extracted ContextConfigs (ctx_id and log_level pairs);
+else (Non-Verbose logging)
+    :log_level_threshold = kVerbose (default);
+    if (class-id.json file (message table) is found) then (yes)
+        NOTE: class-id.json
+        :Parse class-id.json file (message-ID table);
+        :Register type based on NvMsgDescriptor (message_id, app_id, ctx_id, log_level);
+        if (context configs specified in the logging.json file?) then (yes)
+            NOTE: logging.json
+            :log_level_threshold = log_level for the respective ctx_id;
+        else (no)
+        endif
+    else (no)
+    endif
+endif
+
+if (log_level > logLevel_threshold) then (yes)
+    :Drop the log message 
+    - Will NOT write the message into logging buffers;
+else (no)
+    :Write the log message into logging buffers;
+endif
+
+NOTE: logging buffers are maintained in shared_memory (shared between client and datarouter)
+
+stop
+@enduml

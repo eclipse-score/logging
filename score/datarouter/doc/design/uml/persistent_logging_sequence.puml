@@ -1,0 +1,98 @@
+@startuml persistent_logging_sequence
+title Persistent Logging Sequence Diagram
+
+participant "SocketServer" as SS
+participant "DataRouter" as DR
+participant "DltLogServer" as DLS
+participant "SysedrFactory" as SF
+participant "SysedrHandler" as SH
+participant "LogParser" as LP
+participant "DltVerboseHandler" as VH
+participant "DltNonverboseHandler" as NH
+participant "Client" as CL
+participant "ZlibCompressedFile" as ZF
+
+== System Initialization ==
+SS -> DR : create()
+SS -> DLS : create(staticConfig, enabled)
+DLS -> SF : CreateSysedrHandler()
+SF -> SH : new SysedrHandler()
+SF --> DLS : sysedr_handler_
+
+== Handler Registration ==
+DLS -> LP : add_handlers(parser)
+LP -> SH : add_global_handler(*sysedr_handler_)
+LP -> SH : add_type_handler(PERSISTENT_REQUEST_TYPE_NAME, *sysedr_handler_)
+LP -> NH : add_global_handler(nvhandler_)
+LP -> VH : add_type_handler(LOG_ENTRY_TYPE_NAME, vhandler_)
+
+== Normal Message Processing ==
+DR -> LP : Parse(SharedMemoryRecord)
+
+alt Verbose LogEntry
+    LP -> VH : handle(timestamp, data, size)
+    VH -> DLS : sendVerbose(tmsp, entry)
+    LP -> SH : handle(TypeInfo, timestamp, data, size)
+    SH -> SH : saveVerbose(ecuId, tmsp, entry, write_to_file=false)
+    SH -> SH : saveDltMsgToBuffer(dlt_message)
+    note right of SH : Buffer in circular_buffer
+
+else NonVerbose message
+    LP -> NH : handle(TypeInfo, timestamp, data, size)
+    NH -> DLS : sendNonVerbose(desc, tmsp, data, size)
+    LP -> SH : handle(TypeInfo, timestamp, data, size)
+    SH -> SH : saveNonVerbose(ecuId, desc, tmsp, data, size)
+    SH -> SH : saveDltMsgToBuffer(dlt_message)
+end
+
+== Persistent Logging Trigger ==
+CL -> DR : send PersistentLoggingRequestStructure
+note right of CL
+  Request contains:
+  - log_file_destination_path
+  - reason
+  - triggered_by
+end note
+DR -> LP : Parse(PersistentLoggingRequestStructure)
+LP -> SH : handle(timestamp, request_data, size)
+SH -> SH : deserialize(data, size, request)
+SH -> SH : selectDestAndOpenFile(log_file_destination_path)
+SH -> ZF : open(filename)
+SH -> SH : writeContextMessage(request)
+SH -> SH : saveBufferToFile()
+
+loop for each buffered message
+    SH -> ZF : write(dlt_data, size)
+end
+
+SH -> SH : closeFile()
+
+== Continuous Persistent Logging ==
+DR -> LP : Parse(new messages)
+LP -> SH : handle(TypeInfo, timestamp, data, size)
+
+alt persistent logging active
+    SH -> SH : saveDltMsgToFile(dlt_message)
+    SH -> ZF : write(dlt_data, size)
+else normal mode
+    SH -> SH : saveDltMsgToBuffer(dlt_message)
+end
+
+note over SH
+**Key SysedrHandler Functions:**
+- saveDltMsgToBuffer(): Buffer messages normally
+- saveBufferToFile(): Flush buffer on trigger
+- saveDltMsgToFile(): Direct file writing
+- saveVerbose()/saveNonVerbose(): Format messages
+- selectDestAndOpenFile(): Open compressed file
+- writeContextMessage(): Write request context
+- closeFile(): Close compressed file
+end note
+
+note over VH, NH
+**Other DLT Handlers:**
+Continue processing for
+regular DLT output
+end note
+
+@enduml

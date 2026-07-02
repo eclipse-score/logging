@@ -1,0 +1,52 @@
+@startuml
+
+title Implementation approach
+
+frame "Adaptive AUTOSAR ECU" {
+  node AdaptiveApplication {
+    component ApplicationLogic
+    interface "mw::log" as aralog1
+    component "mw::log implementation" as aralog1_impl
+
+    aralog1 - aralog1_impl
+    ApplicationLogic --> aralog1 : verbose
+    ApplicationLogic --> aralog1 : non-verbose
+
+  }
+  note right of AdaptiveApplication
+    EV Application,
+    e.g., RoadModel
+  end note
+
+
+
+  node SystemApplication {
+    component SystemApplicationLogic
+    interface "mw::log" as aralog2
+    component "mw::log implementation" as aralog2_impl
+
+    aralog2 - aralog2_impl
+    SystemApplicationLogic --> aralog2 : verbose
+  }
+  note right of SystemApplication
+    e.g. SOME/IP daemon,
+    ABAC component, etc.
+  end note
+
+
+  node Datarouter {
+  }
+  note right of Datarouter
+    central logging daemon
+  end note
+}
+
+boundary "UDP Multicast" as udp
+
+aralog1_impl --> Datarouter : write
+aralog2_impl --> Datarouter : write
+
+Datarouter --> udp: "send DLT messages:"
+
+
+@enduml

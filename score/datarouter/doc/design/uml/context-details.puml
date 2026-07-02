@@ -1,0 +1,135 @@
+@startuml
+
+skinparam component {
+  backgroundColor<<safety critical>> Aquamarine
+  backgroundColor<<needs review>> DarkCyan
+  fontColor<<needs review>> White
+}
+
+skinparam queue {
+	backgroundColor<<safety critical>> Aquamarine
+}
+
+frame {
+  node AdaptiveApplication {
+    component ApplicationLogic
+    interface "mw::log" as aralog1
+    component "mw::log implementation" <<safety critical>> as aralog1_impl
+    component rapidjson <<safety critical>> as rj1
+
+    aralog1 - aralog1_impl
+    ApplicationLogic --> aralog1 : verbose
+    ApplicationLogic --> aralog1 : non-verbose
+    aralog1_impl .> rj1 : use
+  }
+
+  queue Ringbuffer1 <<safety critical>> as RB1
+  database "AdaptiveApplication/logging.json" as cfg1
+  rj1 -> cfg1
+}
+
+
+frame {
+  node SystemApplication {
+    component SystemApplicationLogic
+    interface "mw::log" as aralog2
+    component "mw::log implementation" <<safety critical>> as aralog2_impl
+    component rapidjson <<safety critical>> as rj2
+
+    aralog2 - aralog2_impl
+    SystemApplicationLogic --> aralog2 : verbose
+    aralog2_impl .> rj2 : use
+  }
+
+  queue Ringbuffer2 <<safety critical>> as RB2
+  database "SystemApplication/logging.json" as cfg2
+  rj2 -> cfg2
+}
+
+note right of RB1
+  Shared memory
+  allocated by AdaptiveApplication
+end note
+
+aralog1_impl ..> RB1 : own
+aralog2_impl ..> RB2 : own
+aralog1_impl --> RB1 : write
+aralog2_impl --> RB2 : write
+
+database "MessageIDs" as type_id
+
+node "Datarouter"{
+
+  component [Source Session 1] <<needs review>> as sourcesession1
+  component [Source Session 2] <<needs review>> as sourcesession2
+
+
+  component "NonVerboseHandler" as nvh {
+    component "Filter" as nvfilter
+    component "Pack" as nvpack
+
+    type_id <.. nvfilter
+    type_id <.. nvpack
+    nvfilter --> nvpack
+  }
+
+  RB1 <-- sourcesession1 : read
+  RB2 <-- sourcesession2 : read
+
+  component "VerboseHandler" as vh {
+    component "Pack" as vpack
+    component "Filter" as vfilter
+
+    vfilter --> vpack
+  }
+
+  component "DLT Output" as dlt_out {
+    component "Dispatch" as Demux
+    component "Traffic shaping queues" as out {
+      queue "High Priority DLT" as dlt1
+      queue "Low Priority DLT" as dlt2
+      queue "Raw data" as dlt3
+    }
+    Demux -> dlt1
+    Demux -> dlt2
+    Demux -> dlt3
+  }
+
+  component "Type T Handler" as type_handler {
+  }
+}
+
+queue "Subscriber Buffer" as sub_rb
+note right of sub_rb
+  Shared memory
+  allocated by Datarouter
+end note
+
+
+node TypeXSubscriber as type_subscriber {
+}
+
+type_forwarder ==> sub_rb
+sub_rb ==> type_subscriber
+
+frame "UDP ports"  {
+  boundary HighPriorityMessages as udp_1
+  boundary LowPriorityMessages as udp_2
+  boundary RawData as udp_3
+}
+
+sourcesession1 ~~> vfilter: <verbose>
+sourcesession2 ~~> vfilter: <verbose>
+sourcesession1 ..> nvfilter: *
+sourcesession2 ..> nvfilter: *
+sourcesession1 --> type_handler: <T>
+sourcesession2 --> type_handler: <T>
+
+vpack -> Demux
+nvpack -> Demux
+
+dlt1 -> udp_1
+dlt2 -> udp_2
+dlt3 -> udp_3
+
+@enduml

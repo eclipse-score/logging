@@ -16,7 +16,7 @@
 
 #include "score/datarouter/datarouter/data_router.h"
 
-#include "score/static_reflection_with_serialization/serialization/include/serialization/for_logging.h"
+#include "common/serialization/include/serialization/for_logging.h"
 
 namespace test::utils
 {

@@ -1,0 +1,23 @@
+@startuml
+title Logging context in Safe-Posix-Platform (SPP)
+frame SPP {
+
+  frame "Adaptive AUTOSAR CPU" {
+      node Application1
+      node Application2
+      node SystemApplication
+      node "Logging framework" as DataRouter
+      boundary "UDP multicast" as UDP
+
+      Application1 ..> DataRouter : LOG()
+      Application2 ..> DataRouter : TRACE()
+      SystemApplication ..> DataRouter : LOG()
+      DataRouter ..> UDP: DLT
+  }
+}
+
+node Logger
+
+UDP ==> Logger
+
+@enduml

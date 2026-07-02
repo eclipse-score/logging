@@ -1,0 +1,129 @@
+@startuml IPC Status Quo - Datarouter Communication
+title ARA Logging IPC Architecture\nLogging Client ↔ Datarouter Communication
+
+!theme plain
+skinparam BoxPadding 10
+skinparam ParticipantPadding 20
+skinparam SequenceMessageAlignment center
+
+actor "Logging Client" as Client
+participant "Shared Memory\n(ring buffer)" as SHM
+participant "IPC Channel\n(Message Passing)" as IPC
+participant "Datarouter" as DR
+
+== Initialization Phase ==
+activate Client
+activate SHM
+
+Client -> IPC: **2. Connect to Datarouter**
+activate IPC
+note right
+  Platform-specific IPC:
+  - Linux: Unix Domain Socket
+  - QNX: QNX Message Passing
+end note
+
+IPC -> DR: **3. Connection established**
+activate DR
+
+Client -> IPC: **4. Send ConnectMessage**
+note right
+  Metadata includes:
+  - AppID, UID, PID
+  - Shared memory filename
+  - Dynamic identifier flag
+end note
+
+IPC -> DR: ConnectMessage received
+
+DR -> SHM: **5. Open & map shared memory**
+note right
+  Datarouter opens client's file
+  Maps same memory region
+  Now both share ring buffer
+end note
+
+SHM --> DR: Shared memory mapped
+note left
+  Client can log immediately
+  Datarouter polls asynchronously
+  Fully decoupled
+end note
+
+== Data Exchange Loop ==
+
+note over Client, DR
+  **Ring Buffer Protocol**
+  Zero-copy via shared memory
+end note
+
+Client -> SHM: **Write log messages**
+note right
+  LOG_INFO() << "message"
+  TRACE(structure)
+
+  Updates ring buffer:
+  - Write pointer advances
+  - No system calls
+end note
+
+DR -> IPC: **Send kAcquireRequest (0x01)**
+note right
+  Message: Single byte [0x01]
+  Datarouter polls for new data
+  Sent periodically (keepalive)
+end note
+
+IPC --> Client: **received_send_message_callback**
+note left
+  Callback triggered in client's
+  receiver when message arrives
+
+  Internally handles:
+  - ReadAcquire() for buffer ID
+  - Unlink file (first time only)
+  - Send kAcquireResponse
+end note
+
+Client -> IPC: **Send kAcquireResponse (0x02)**
+note right
+  Contains ReadAcquireResult:
+  - acquired_buffer (0 or 1)
+
+  Tells datarouter which
+  buffer to read from
+end note
+
+IPC -> DR: AcquireResponse received
+
+DR -> SHM: **Read log messages directly**
+note right
+  Zero-copy read from
+  shared memory buffer
+
+  Parse log entries
+  Route to DLT channels
+  Apply quotas/filters
+end note
+
+note over Client, DR
+  **Next kAcquireRequest implicitly releases previous buffer**
+  No explicit release message in protocol
+end note
+
+== Shutdown ==
+
+Client ->x IPC: Connection closed
+deactivate IPC
+IPC -> DR: **on_closed_by_peer()**
+note right
+  Drain remaining logs
+  Cleanup session
+end note
+
+DR ->x SHM: **munmap()** - Unmap
+deactivate DR
+deactivate SHM
+deactivate Client
+
+@enduml

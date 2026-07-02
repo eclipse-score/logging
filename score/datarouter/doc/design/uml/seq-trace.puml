@@ -1,0 +1,46 @@
+@startuml
+
+title Tracing operation: write
+
+participant UserFunction
+participant TRACE_MACRO
+participant "log_entry<TYPE>::instance()" as log_entry
+participant "a : log_entry_allocator" as log_entry_allocator
+participant "logger::instance()" as loggerinst
+participant "serializer<log_entry_allocator, const TYPE>" as serializer
+
+UserFunction -> TRACE_MACRO ++: TRACE_INFO(TYPE variable)
+
+group First time trace only
+TRACE_MACRO -> log_entry ** : instance()
+note left
+register type TYPE when
+creating the log_entry instance
+and get back ID
+end note
+log_entry -> log_entry ++: log_entry<TYPE>()
+log_entry -> loggerinst ++: add_type<T>()
+log_entry <-- loggerinst-- : id
+log_entry --> TRACE_MACRO --: instance&
+end
+
+|||
+
+group Normal serialization process
+TRACE_MACRO -> log_entry ++: operator=(variable)
+log_entry -> log_entry_allocator** : log_entry_allocator()
+activate log_entry_allocator
+
+serializer <- log_entry **: serializer<log_entry_allocator, const TYPE>()
+activate serializer
+serializer -> log_entry_allocator++: allocate()
+serializer <-- log_entry_allocator--: buffer
+log_entry <-- serializer--: serialized_data
+destroy serializer
+
+TRACE_MACRO <-- log_entry --: success
+end
+
+UserFunction <-- TRACE_MACRO--
+
+@enduml

@@ -1,0 +1,70 @@
+@startuml kvs_threads_sequence_diagram
+
+participant "DataRouterConfigurator App" as DRConf
+participant "DiagnosticManager" as DiagM
+participant "DataRouterConfiguratorService" as DRConfService
+participant "UnixDomainClient" as Client
+participant "UnixDomainServer" as Server
+participant "UnixDomainSocket" as Socket
+participant "ConfigSession" as ConfigSession
+participant "DltLogServer" as DLTS
+participant "PersistentDictionary" as PD
+
+== Runtime Phase: Enable/Disable Event, Write/Read to KVS ==
+note over Socket
+  Acts as the transport layer, handling low-level IPC
+  and forwarding raw data between the client and server.
+end note
+
+-> DRConf: Run
+note over DRConf
+  Client connections are established, and diagnostic jobs are initialized.
+end note
+
+DiagM -> DRConfService: SerializedStart(...)
+note over DRConfService
+  Initializes runtime environment for diagnostic jobs.
+end note
+
+DRConfService -> Client: send_dlt_config_command
+note over Client
+  The server creates a ConfigSession to process
+  client commands and maintains the session for communication.
+end note
+
+Client -> Server: send_dlt_config_command
+Server -> Socket: receive_dlt_config_command
+Socket -> Server: forward_dlt_config_command
+Server -> ConfigSession: process_dlt_config_command
+
+ConfigSession -> DLTS: Process command
+note over DLTS
+- Parse the diagnostic job command.
+- Prepare the required response.
+- Save or retrieve DLT configuration in persistent storage.
+end note
+
+DLTS -> PD: Save/Retrieve DLT configuration or update dlt_enabled flag
+note over PD
+- Save configuration using writeDlt().
+- Retrieve configuration using readDlt().
+- Update dlt_enabled using writeDltEnabled().
+end note
+
+DLTS -> ConfigSession: Return diagnostic job response
+ConfigSession -> Socket: forward_diag_job_response
+Socket -> Server: forward_diag_job_response
+Server -> Client: diag_job_response
+
+Client -> DRConfService: diag_job_response
+DRConfService -> DRConf: diag_job_result
+
+deactivate DRConf
+deactivate DRConfService
+deactivate Server
+deactivate Socket
+deactivate ConfigSession
+deactivate DLTS
+deactivate PD
+
+@enduml

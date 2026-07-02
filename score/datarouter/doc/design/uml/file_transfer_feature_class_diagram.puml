@@ -1,0 +1,143 @@
+@startuml file_transfer_feature_class_diagram
+title File Transfer Feature - Class Diagram
+
+interface "LogParser::TypeHandler" as TypeHandler {
+  + handle(timestamp_t, const char*, bufsize_t): void
+}
+
+class StubFileTransferStreamHandler {
+  - _output: IOutput&
+  --
+  + StubFileTransferStreamHandler(IOutput& output)
+  + handle(timestamp_t, const char*, bufsize_t): void
+}
+
+interface "StubFileTransferStreamHandler::IOutput" as StubIOutput {
+  + sendFTVerbose(score::cpp::span<const std::uint8_t>,
+    mw::log::LogLevel, dltid_t, dltid_t,
+    uint8_t, uint32_t): void
+}
+
+class FileTransferStreamHandler {
+  - output_: IOutput&
+  - filetransfer_thread: std::thread
+  - exit_requested: std::atomic_bool
+  - filetransfer_mutex: std::shared_timed_mutex
+  - container: std::queue<FileTransferEntry>
+  - readfile: std::string
+  - creationdate: std::string
+  - appid: dltid_t
+  - ctxid: dltid_t
+  - serialno_: std::uint32_t
+  - fsize: std::uint32_t
+  - packagecount: std::uint32_t
+  --
+  + FileTransferStreamHandler(IOutput& output)
+  + ~FileTransferStreamHandler()
+  + handle(timestamp_t, const char*, bufsize_t): void
+  - ProcessFileTransfer(): void
+  - ReadFileHeaderInfo(const std::string&): bool
+  - LogFileHeader(): bool
+  - LogFileData(): void
+  - LogFileEnd(): void
+  - LogFileError(int16_t, std::string): void
+}
+
+interface "FileTransferStreamHandler::IOutput" as FileIOutput {
+  + sendFTVerbose(score::cpp::span<const std::uint8_t>,
+    mw::log::LogLevel, dltid_t, dltid_t,
+    uint8_t, uint32_t): void
+}
+
+class "dltserver::Output (Mock)" as MockOutput {
+  + ~Output()
+  + MOCK_METHOD(sendFTVerbose,
+    (score::cpp::span<const std::uint8_t>,
+     mw::log::LogLevel, dltid_t, dltid_t,
+     uint8_t, uint32_t), (override))
+}
+
+class "dltserver::Output" as Output {
+  + ~Output()
+  + sendFTVerbose(score::cpp::span<const std::uint8_t>,
+    mw::log::LogLevel, dltid_t, dltid_t,
+    uint8_t, uint32_t): void
+}
+
+class "FileTransferHandlerFactory<DerivedFactory>" as Factory {
+  + create(): std::unique_ptr<LogParser::TypeHandler>
+  # FileTransferHandlerFactory() = default
+}
+
+class StubFileTransferHandlerFactory {
+  - mock_output_: Output&
+  --
+  + StubFileTransferHandlerFactory(Output& mock_output)
+  + createConcreteHandler(): std::unique_ptr<LogParser::TypeHandler>
+}
+
+class FileTransferStreamHandlerFactory {
+  - output_: Output&
+  --
+  + FileTransferStreamHandlerFactory(Output& output)
+  + createConcreteHandler(): std::unique_ptr<LogParser::TypeHandler>
+}
+
+class DltLogServer {
+  + createFileTransferHandler():
+    std::unique_ptr<TypeHandler>
+}
+
+class "score::logging::FileTransferEntry" as FileTransferEntry {
+  + appid: dltid_t
+  + ctxid: dltid_t
+  + file_name: std::string
+  + delete_file: uint8_t
+}
+
+interface "score::logging::IFileTransfer" as IFileTransfer {
+  + TransferFile(const std::string& file_name,
+    const bool delete_file): void
+}
+
+class "score::logging::FileTransfer" as FileTransfer {
+  - appid_: std::string
+  - ctxid_: std::string
+  --
+  + FileTransfer(const std::string& appid,
+    const std::string& ctxid)
+  + TransferFile(const std::string&, bool): void
+}
+
+note bottom of StubFileTransferHandlerFactory
+#if defined(ENABLE_FILETRANSFER_FEATURE)
+  using HandlerType = FileTransferStreamHandlerFactory;
+#else
+  using HandlerType = StubFileTransferHandlerFactory;
+#endif
+end note
+
+TypeHandler <|.. StubFileTransferStreamHandler
+TypeHandler <|.. FileTransferStreamHandler
+
+StubFileTransferStreamHandler ..> StubIOutput
+FileTransferStreamHandler ..> FileIOutput
+
+StubIOutput <|.. MockOutput
+FileIOutput <|.. Output
+
+Factory <|-- StubFileTransferHandlerFactory
+Factory <|-- FileTransferStreamHandlerFactory
+
+StubFileTransferHandlerFactory ..> StubFileTransferStreamHandler : <<creates>>
+FileTransferStreamHandlerFactory ..> FileTransferStreamHandler : <<creates>>
+
+DltLogServer ..> Factory : uses factory
+Output ..> Factory : injects
+
+FileTransferStreamHandler *-- "queue<FileTransferEntry>" FileTransferEntry
+
+IFileTransfer <|.. FileTransfer
+FileTransfer ..> FileTransferEntry : <<creates>>
+
+@enduml

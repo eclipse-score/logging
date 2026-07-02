@@ -1,0 +1,71 @@
+@startuml
+
+frame ApplicationProcess {
+  node AdaptiveApplication {
+    component ApplicationLogic
+    interface "ara::log" <<API>> as aralog
+    component "ara::log implementation" as a1 {
+      component LogManager
+      component Logger
+      component LogStream
+    }
+    component "score::mw::log" {
+      component log_entry
+      component "logging_serializer" as serializer
+      component logger {
+        component SharedMemoryWriter
+      }
+
+      component MessagePassingClient
+      SharedMemoryWriter ..> MessagePassingClient : notify
+
+      interface TRACE <<macro>>
+
+      TRACE -> log_entry
+      log_entry --> serializer : TryWriteIntoSharedMemory()
+      serializer --> SharedMemoryWriter : AllocAndWrite()
+      log_entry --> logger : instance()
+
+    }
+
+    component "Configuration" {
+      component "score::mw::log::detail::Configuration" as LogConfig
+      component "JSON Parser\n(rapidjson)" as ConfigReader
+    }
+
+    component rapidjson
+    ConfigReader ..> LogConfig
+    ConfigReader -- rapidjson
+
+    aralog -> LogManager
+
+    LogManager ~> Logger
+    Logger ~> LogStream
+
+    aralog -> LogStream
+
+    LogStream -> TRACE
+    ApplicationLogic --> aralog : verbose
+    ApplicationLogic --> TRACE : non-verbose
+    a1 ..> "score::mw::log" : use
+  }
+
+  queue "Shared Memory Buffer" as RB
+}
+
+node "Datarouter"{
+  component MessagePassingServer
+  component "Source Session" as session {
+    component SharedMemoryReader
+  }
+
+  MessagePassingServer ...> session
+}
+
+MessagePassingClient ..> MessagePassingServer: connect
+MessagePassingClient -> session: ping
+
+SharedMemoryWriter .> RB : write
+RB <. SharedMemoryReader : read
+
+@enduml

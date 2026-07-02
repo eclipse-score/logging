@@ -88,9 +88,7 @@ TEST(DltProtocolTest, DISABLED_PackageFileDataShallReturnsNulloptIfItWorkedOnAlr
 
     FILE* file = fopen(kFileName.c_str(), "rb");
     ASSERT_TRUE(file != nullptr) << "The file used in the unit test is missed! The file: " << kFileName;
-    // Close the file immediately.
-    fclose(file);
-    file = nullptr; 
+    fclose(file);  // Close the file immediately.
 
     auto result = PackageFileData(data_span, file, serial_number, pkg_number);
     EXPECT_EQ(result, std::nullopt);

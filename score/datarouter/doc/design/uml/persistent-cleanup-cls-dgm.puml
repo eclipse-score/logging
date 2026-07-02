@@ -1,0 +1,43 @@
+@startuml persistent_cleanup_updated
+title Persistent Logging Cleanup Integration
+
+interface GenericDataIdentifier {
+  +{abstract} Read(data_identifier, meta_info, cancellation_handler): Future<OperationOutput>
+  +{abstract} Write(data_identifier, request_data, meta_info, cancellation_handler): Future<void>
+}
+
+interface IVersionChangeFileCleaner {
+  +{abstract} DoFileCleanUp(file_list): void
+}
+
+class PersistentLogging {
+  +SerializedRead(): Result<ByteVector>
+  +SerializedWrite(ByteVector): Result<void>
+  -ConstructReadFileList(): string
+  -DoCleanUp(): void
+  -SendPersistentLogFiles(): void
+  -FetchListOfPersistentFiles(): vector<string>
+  -ThreadMethod(): void
+  -version_chng_file_cleaner_: unique_ptr<IVersionChangeFileCleaner>
+  -file_transfer_: FileTransfer
+  -file_list_: vector<string>
+  -worker_thread_: jthread
+}
+
+class VersionChangeFileCleaner {
+  +DoFileCleanUp(file_list): void
+  -ReadLocalSwVersion(local_sw_version): bool
+  -ReadEcuSwVersion(ecu_sw_version): bool
+  -StoreLocalSwVersion(new_sw_version): void
+  -DeleteExistingPersistentLogFiles(file_list): void
+  -LocalSwVersionDoesNotExists(): bool
+  -NotSameAsLocalSwVersion(ecu_sw_version): bool
+  -filesystem_: Filesystem
+  -ddad_version_reader_: unique_ptr<IDdadVersionReader>
+}
+
+GenericDataIdentifier <|.. PersistentLogging : implements
+PersistentLogging *-- IVersionChangeFileCleaner : owns
+IVersionChangeFileCleaner <|.. VersionChangeFileCleaner : implements
+
+@enduml
