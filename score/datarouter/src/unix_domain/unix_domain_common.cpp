@@ -240,8 +240,12 @@ void SendSocketMessage(std::int32_t connection_file_descriptor,
         std::int32_t* fdptr = CmsgDataSuppressWarning(cmsg);
         if (num_fds > 0)
         {
-            const auto file_handle_val = file_handle.value();
-            fdptr[0] = file_handle_val;
+            // Disable maybe uninitialized warning for optional.
+            // Initialization is already checked using `has_value`.
+            DISABLE_WARNING_PUSH
+            DISABLE_WARNING_MAYBE_UNINITIALIZED
+            fdptr[0] = file_handle.value();
+            DISABLE_WARNING_POP
         }
 #endif  //  USE_SECURE_FILE_HANDLE_IPC
     }
