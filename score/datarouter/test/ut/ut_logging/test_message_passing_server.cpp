@@ -430,7 +430,7 @@ TEST_F(MessagePassingServerFixture, TestStartListeningFailure)
                                Matcher<score::message_passing::MessageCallback>(_)))
         .WillOnce(Return(score::cpp::make_unexpected(score::os::Error::createFromErrno(EINVAL))));
 
-    server.emplace(factory, server_factory_mock, client_factory_mock);
+    server.emplace(factory, server_factory_mock);
     ExpectServerDestruction();
     UninstantiateServer();
 }
@@ -892,7 +892,6 @@ TEST_F(MessagePassingServerFixture, DisconnectDuringNotifyShouldNotCrash)
     ExpectServerDestruction();
     UninstantiateServer();
 }
-
 TEST(MessagePassingServerTests, sessionWrapperCreateTest)
 {
     InSequence s;
@@ -1090,25 +1089,12 @@ TEST_F(MessagePassingServerFixture, MessageCallbackUnknownMessageType)
 TEST(MessagePassingServerTests, SessionHandleAcquireRequestNotReady)
 {
     const pid_t pid = 0;
-
-    auto client = score::cpp::pmr::make_unique<score::message_passing::ClientConnectionMock>(score::cpp::pmr::get_default_resource());
-    auto* client_raw_ptr = client.get();
     MessagePassingServer* msg_server = nullptr;
 
-    EXPECT_CALL(*client_raw_ptr,
-                Start(Matcher<score::message_passing::IClientConnection::StateCallback>(_),
-                      Matcher<score::message_passing::IClientConnection::NotifyCallback>(_)));
-
-    // Return a non-Ready state to trigger "return false"
-    EXPECT_CALL(*client_raw_ptr, GetState())
-        .WillRepeatedly(Return(score::message_passing::IClientConnection::State::kStarting));
-
-    MessagePassingServer::SessionHandle session_handle(pid, msg_server, std::move(client));
+    MessagePassingServer::SessionHandle session_handle(pid, msg_server);
 
     const bool result = session_handle.AcquireRequest();
     EXPECT_FALSE(result);
-
-    EXPECT_CALL(*client_raw_ptr, Destruct()).Times(AnyNumber());
 }
 
 // Covers OnConnectRequest "ConnectMessageFromClient too small" branch:
@@ -1202,17 +1188,6 @@ TEST_F(MessagePassingServerFixture, OnConnectRequestStopRequestedCoversEarlyExit
     // Request stop on the server's stop_source_ before invoking the callback
     auto* server_for_test = &(*server);
     server_for_test->stop_source_.request_stop();
-
-    // client_factory_->Create() is called before the stop check — set up the mock
-    auto client = score::cpp::pmr::make_unique<testing::StrictMock<score::message_passing::ClientConnectionMock>>(
-        score::cpp::pmr::get_default_resource());
-    auto* client_mock = client.get();
-    EXPECT_CALL(*client_factory_mock,
-                Create(Matcher<const score::message_passing::ServiceProtocolConfig&>(_),
-                       Matcher<const score::message_passing::IClientFactory::ClientConfig&>(_)))
-        .WillOnce(Return(ByMove(std::move(client))));
-    // sender is destroyed at the early return inside OnConnectRequest
-    EXPECT_CALL(*client_mock, Destruct()).Times(1);
 
     StrictMock<::score::message_passing::ServerConnectionMock> connection;
     score::message_passing::ClientIdentity client_identity{kClienT0Pid, 0, 0};

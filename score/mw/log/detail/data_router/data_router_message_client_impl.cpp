@@ -182,6 +182,11 @@ void DatarouterMessageClientImpl::RequestInternalShutdown() noexcept
 
 void DatarouterMessageClientImpl::CheckExitRequestAndSendConnectMessage() noexcept
 {
+    // LCOV_EXCL_START : Defensive check for the rare race between the stop_requested() guard in
+    // ConnectToDatarouter() and this call site. ConnectToDatarouter() already returns early when
+    // stop is requested, so reaching this function with stop_requested() == true requires stop to
+    // be requested in the narrow window between the two checks. That window is not deterministically
+    // coverable in a unit test.
     if (stop_source_.stop_requested())
     {
         ReportInitializationError(score::mw::log::detail::Error::kShutdownDuringInitialization,
@@ -189,6 +194,7 @@ void DatarouterMessageClientImpl::CheckExitRequestAndSendConnectMessage() noexce
                                   msg_client_ids_.GetAppID().GetStringView());
         return;
     }
+    // LCOV_EXCL_STOP
     SendConnectMessage();
 }
 
