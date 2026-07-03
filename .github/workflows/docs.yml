@@ -36,11 +36,13 @@ jobs:
       contents: read
     with:
       bazel-docs-verify-target: "--lockfile_mode=error //:docs_check"
+
   run-tests:
     uses: ./.github/workflows/coverage_report.yml
     permissions:
       contents: read
       pull-requests: read
+
   build-docs:
     needs: run-tests
     if: ${{ needs.run-tests.result == 'success' }}
@@ -50,8 +52,8 @@ jobs:
       pages: write
       pull-requests: write
       id-token: write
-
     with:
       # the bazel-target depends on your repo specific docs_targets configuration (e.g. "suffix")
       bazel-target: "--lockfile_mode=error //:docs -- --github_user=${{ github.repository_owner }} --github_repo=${{ github.event.repository.name }}"
       retention-days: 3
+      tests-report-artifact: logging_cpp_coverage
