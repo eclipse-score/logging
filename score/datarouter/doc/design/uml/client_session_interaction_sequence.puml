@@ -1,0 +1,171 @@
+@startuml sequence_notify_acquire_request
+
+title IServerConnection::Notify() + Watchdog\n(Non-blocking MsgDeliverEvent)
+
+skinparam sequenceMessageAlign center
+skinparam responseMessageBelowArrow true
+
+box "Client A (healthy)" #LightBlue
+    participant "User Threads\n(Client A)" as UTA
+    participant "SharedMemoryWriter\n(Client A)" as SHMA
+    participant "QnxDispatchEngine\n(Client A)" as AE
+end box
+
+box "Client X (unhealthy)" #PeachPuff
+    participant "QnxDispatchEngine\n(Client X)" as XE
+end box
+
+box "Datarouter Process" #LightGreen
+    participant "QnxDispatchEngine\n(server engine)" as SE
+    participant "mp_worker thread" as MW
+    participant "Watchdog Timer" as WD
+    participant "DLT output" as DLT
+end box
+
+note over SE
+  Datarouter sends kAcquireRequest
+  via **IServerConnection::Notify()** on the already-
+  established server connection for each client.
+
+  Notify() calls **MsgDeliverEvent()** which delivers
+  a QNX pulse to the client — **fire-and-forget,
+  returns immediately, never blocks**.
+end note
+
+== Initialization ==
+
+UTA -> AE : DatarouterMessageClientImpl::Run()
+AE -> SE : kConnect (appid, uid, pid)\n[Send() — one-time, acceptable]
+
+SE -> SE : connect_callback()\nStore IServerConnection\nfor this client
+
+note over SE
+  Datarouter now holds the
+  IServerConnection reference
+  for each connected client.
+  This is the handle for Notify().
+end note
+
+MW -> MW : Create session + start watchdog\n(per-client deadline timer)
+
+== Steady-State: Acquire via Notify ==
+
+MW -> MW : RunWorkerThread()\ntick() fires for Client A
+
+MW -> SE : **connection_A.Notify(kAcquireRequest)**
+
+SE -> SE : QnxDispatchServer::\nServerConnection::Notify()
+
+note over SE #LightGreen
+  Internally:
+  1. Copy message to notify_pool_ slot
+  2. Push to send_queue_
+  3. **MsgDeliverEvent(rcvid, &pulse)** - Returns immediately and never blocks.
+end note
+
+SE -->> AE : QNX pulse delivered\n(async, non-blocking)
+
+AE -> AE : dispatch_block() receives pulse\n→ readv() → ProcessInput(NOTIFY)\n→ notify_callback_()
+
+note over AE
+  Client's NotifyCallback
+  (new, registered at Start()):
+  validates message, calls
+  ReadAcquire(), sends response.
+end note
+
+AE -> SHMA : ReadAcquire()
+SHMA -> SHMA : alternating_reader_.Switch()\nBuffer A → B
+
+AE -> SE : **Send(kAcquireResponse + result)**\n[Client → Datarouter: Send is safe,\nDatarouter is always ready to receive]
+
+SE -> MW : MessageCallback()\n→ OnAcquireResponse()
+MW -> MW : session.on_acquire_response(acq)
+
+MW -> SHMA : Wait for writers to release\nRead acquired Buffer A
+MW -> DLT : Forward log records ✓
+
+MW -> WD : Reset watchdog timer for Client A
+
+== Client X is unhealthy ==
+
+note over XE #PeachPuff
+  X's engine thread is unhealthy (probable causes):
+  • crash leading to suspended thread
+  • Priority inversion
+  • CPU starvation
+end note
+
+MW -> MW : tick() fires for Client X
+MW -> SE : **connection_XYZ.Notify(kAcquireRequest)**
+
+SE -> SE : MsgDeliverEvent()\n→ **returns immediately!**
+
+note over SE #LightGreen
+  Pulse is queued in X's
+  QNX receive channel.
+  Datarouter does NOT block.
+  Server engine thread is free.
+end note
+
+note over XE #PeachPuff
+  X never processes the pulse.
+  No response comes back.
+  **But Datarouter is NOT blocked.**
+end note
+
+== Meanwhile: Client A continues unaffected ==
+
+MW -> MW : tick() fires for Client A
+MW -> SE : **connection_A.Notify(kAcquireRequest)**
+SE -->> AE : pulse delivered
+AE -> SHMA : ReadAcquire()
+AE -> SE : Send(kAcquireResponse)
+MW -> DLT : Forward Client A's logs
+
+note over DLT #LightGreen
+  **Client A is unaffected**
+  by X being unhealthy.
+end note
+
+== Watchdog: Detect unresponsive X ==
+
+WD -> WD : Client X deadline expired\n(no kAcquireResponse within T seconds)
+
+WD -> MW : Notify: X unresponsive
+
+MW -> MW : Increment X miss counter
+
+alt X misses < max_allowed_misses
+    MW -> MW : Retry: enqueue next tick\n(X gets another chance)
+    MW -> SE : connection_XYZ.Notify(kAcquireRequest)\n[still non-blocking, still safe]
+else X misses >= max_allowed_misses
+    MW -> MW : **Tear down X session**
+
+    note over MW #LightYellow
+      Session teardown:
+      1. Mark session for delete
+      2. Attempt post-mortem read
+         of X's current buffer
+         (best-effort, no IPC needed)
+      3. Remove from pid_session_map_
+      4. Log diagnostic event
+    end note
+
+    MW -> SHMA : Post-mortem: read whatever\nis in X's last buffer\n(shmem is still mapped)
+    MW -> DLT : Forward recovered records\n(if any valid ones found)
+
+    MW -> MW : Erase session from map\nClose server connection
+    destroy XE
+end
+
+== Subsequent X reconnect (if X recovers) ==
+
+note over MW
+  If X was merely slow (not dead),
+  it may reconnect later with a new
+  kConnect. Datarouter creates a
+  fresh session — clean slate.
+end note
+
+@enduml

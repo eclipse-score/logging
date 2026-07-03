@@ -143,13 +143,15 @@ The Adaptive AUTOSAR logging interface implementation follows standard specifica
 The ring buffer operates in shared memory to minimize copy overhead.
 Shared memory IPC provides optimal speed and flexibility for this implementation.
 
-### Message passing interaction
+### Datarouter-Client Session
 
-The message passing connection transmits initial connection information, notifications, and handles disconnections. The connection lifecycle proceeds as follows:
+The Datarouter-Client Session uses [message_passing](https://github.com/eclipse-score/communication/tree/main/score/message_passing) IPC for the initial connection, buffer acquire requests, notifications, and disconnections. The `DataRouterRecorder` sets up the session when it is created and closes it when it is destroyed. In between, the datarouter keeps one `IServerConnection` handle per client and drives the log acquisition from the server side.
 
-- The `DataRouterRecorder` constructor creates a `DatarouterMessageClient` instance, spawning a thread that attempts server connections every 100ms.
-- Upon successful connection, the client transmits a message containing application information to the server.
-- The `DataRouterRecorder` destructor notifies the thread, causing normal termination.
+The main idea is to keep clients independent, so that one non-responsive client should not stall the datarouter. This matters because the datarouter serves all clients from a single thread, one after another on each periodic tick, so a single blocking call would hold up every other client. To avoid this, the datarouter asks for buffers (to read) using non-blocking QNX pulses (`IServerConnection::Notify()`), which return right away and never wait on the client. So if a client is slow or stuck, its pulse simply stays unanswered while the healthy clients keep getting served. See [session_sequence_diagram](uml/client_session_interaction_sequence.puml) for the full flow.
+
+However, with such a design there are risks of stale sessions. A small per-session watchdog limits how long the datarouter waits for an acquire response. If a client keeps missing its deadline, the watchdog cleans up the stale session, but first it does a best-effort read of the client's last buffer so no logs are lost unnecessarily. See [activity_watchdog_session](uml/activity_watchdog_session_lifecycle.puml).
+
+The setup also handles an early-disconnect race, wherein if a client crashes while the datarouter is still building its session, the connect and disconnect paths work together to throw away the half-built session instead of keeping a dangling connection pointer. The client can then reconnect cleanly afterwards. See [early_disconnect_race](uml/sequence_early_disconnect_race.puml).
 
 ### datarouter
 

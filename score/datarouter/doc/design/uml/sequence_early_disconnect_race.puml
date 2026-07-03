@@ -1,0 +1,71 @@
+@startuml sequence_early_disconnect_race
+
+title Race: Client Disconnects during OnConnectRequest
+
+skinparam sequenceMessageAlign center
+skinparam responseMessageBelowArrow true
+
+box "Client Process" #LightBlue
+    participant "Client" as C
+end box
+
+box "Datarouter Process" #LightGreen
+    participant "Server Engine\n(message thread)" as SE
+    participant "OnConnectRequest\n(processes connect)" as OC
+    participant "disconnect_callback\n(connection teardown)" as DC
+end box
+
+== Client sends kConnect, then crashes ==
+
+C -> SE : kConnect(appid, uid, pid)
+SE -> OC : MessageCallback → OnConnectRequest()
+
+note over OC
+  OnConnectRequest releases mutex
+  to call session factory (avoids
+  deadlock with subscriber mutex).
+end note
+
+OC -> OC : Release mutex_\nCall factory_(pid, conn, ...)
+
+C -[#red]x C : **Client crashes / exits**
+
+SE -> DC : disconnect_callback(pid)
+
+note over DC #PeachPuff
+  **Unsafe**: pid not yet in
+  pid_session_map_, so disconnect
+  cannot clear connection_ → stale
+  pointer stored when OnConnect
+  resumes.
+end note
+
+DC -> DC : Lock mutex_\npid NOT in pid_session_map_
+
+alt Unsafe (control flow)
+  DC -> DC : pid not found → no-op
+  DC -> DC : Unlock mutex_
+
+  OC -> OC : Factory returns session\nLock mutex_
+  OC -> OC : Emplace session in map
+  OC -> OC : **Store &connection**\n(already destroyed!)
+  note over OC #Tomato
+    connection_ is a dangling pointer.
+    Next Notify() call → undefined behavior.
+  end note
+
+else Safe (control flow)
+  DC -> DC : pid not found in map\n→ Insert pid into\n**disconnected_pids_**
+  DC -> DC : Unlock mutex_
+
+  OC -> OC : Factory returns session\nLock mutex_
+  OC -> OC : Check disconnected_pids_\npid IS present
+  OC -> OC : **Refuse to store session**\nErase pid from disconnected_pids_
+  note over OC #LightGreen
+    Session is discarded safely.
+    No dangling connection pointer.
+    Client can reconnect cleanly.
+  end note
+end
+
+@enduml

@@ -1,0 +1,41 @@
+@startuml activity_watchdog_lifecycle
+
+title Per-Session Acquire Watchdog Lifecycle
+
+start
+
+:mp_worker tick fires;
+
+if (Session has acquire_in_flight?) then (yes)
+  if (now() > acquire_deadline?) then (yes)
+    :Clear acquire_in_flight;
+    :Increment acquire_miss_count;
+    if (acquire_miss_count >= max_misses?) then (yes)
+      :Tear down session;
+      stop
+    else (no)
+      :Allow next tick to\nretry acquire;
+    endif
+  else (no)
+    :Wait for response\nor deadline expiry;
+  endif
+else (no)
+  :connection.Notify(kAcquireRequest);
+  :Set acquire_in_flight = true;
+  :Set acquire_deadline =\nnow() + watchdog_config.deadline;
+endif
+
+:Wait for next tick;
+
+if (kAcquireResponse received?) then (yes)
+  :Clear acquire_in_flight;
+  :Reset acquire_deadline;
+  :Reset acquire_miss_count = 0;
+  :Process acquired buffer;
+else (no)
+  :Continue waiting;
+endif
+
+stop
+
+@enduml
