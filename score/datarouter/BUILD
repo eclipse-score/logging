@@ -901,9 +901,15 @@ cc_binary(
         "@score_baselibs//score/os:errno_logging",
         "@score_baselibs//score/os:pthread",
         "@score_baselibs//score/os/utils:path",
-        "@score_baselibs//score/mw/log",
+        "@score_baselibs//score/mw/log:console",
+        "@score_baselibs//score/mw/log:frontend",
+        "//score/mw/log/backend:file",
+        "//score/mw/log/backend:remote",
         # "//third_party/jemalloc", # Ticket-231781
-    ],
+    ] + select({
+        "@platforms//os:qnx": ["//score/mw/log/backend:slog"],
+        "//conditions:default": [],
+    }),
 )
 
 cc_library(
