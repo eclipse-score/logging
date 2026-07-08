@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Explicit initialization of logging &#8212; Logging  documentation</title>
+    <title>Component Requirements Statistics &#8212; Logging  documentation</title>
   
   
   
@@ -62,7 +62,7 @@
     <script src="../_static/sphinx-needs/libs/html/datatables.min.js?v=8a4aee21"></script>
     <script src="../_static/sphinx-needs/libs/html/datatables_loader.js?v=a2cae175"></script>
     <script src="../_static/sphinx-needs/libs/html/sphinx_needs_collapse.js?v=dca66431"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'design_decisions/explicit_init';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'logging/stats';</script>
     <script>
         DOCUMENTATION_OPTIONS.theme_version = '0.17.0';
         DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://eclipse-score.github.io/logging/versions.json';
@@ -73,8 +73,7 @@
     <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Data Router Documentation" href="../components/datarouter/index.html" />
-    <link rel="prev" title="Logging Module View" href="../features/logging/architecture/index.html" />
+    <link rel="prev" title="mw::log Component Requirements" href="../components/mw/log/requirements.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="0.1" />
@@ -164,8 +163,8 @@
 </li>
 
 
-<li class="nav-item current active">
-  <a class="nav-link nav-internal" href="#">
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../design_decisions/explicit_init.html">
     Explicit initialization of logging
   </a>
 </li>
@@ -185,8 +184,8 @@
 </li>
 
 
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../logging/stats.html">
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="#">
     Component Requirements Statistics
   </a>
 </li>
@@ -307,8 +306,8 @@
 </li>
 
 
-<li class="nav-item current active">
-  <a class="nav-link nav-internal" href="#">
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../design_decisions/explicit_init.html">
     Explicit initialization of logging
   </a>
 </li>
@@ -328,8 +327,8 @@
 </li>
 
 
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../logging/stats.html">
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="#">
     Component Requirements Statistics
   </a>
 </li>
@@ -443,7 +442,7 @@
         <i class="fa-solid fa-home"></i>
       </a>
     </li>
-    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Explicit initialization of logging</span></li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Component Requirements Statistics</span></li>
   </ul>
 </nav>
 </div>
@@ -460,84 +459,102 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section id="explicit-initialization-of-logging">
-<h1>Explicit initialization of logging<a class="headerlink" href="#explicit-initialization-of-logging" title="Link to this heading">#</a></h1>
-<div class="need_container docutils container" id="SNCB-4bb20063">
-<div class="pst-scrollable-table-container"><table class="need needs_grid_complex needs_layout_score needs_style_none needs_type_dec_rec table" id="dec_rec__log__explicit_init">
+  <section id="component-requirements-statistics">
+<span id="log-statistics"></span><h1>Component Requirements Statistics<a class="headerlink" href="#component-requirements-statistics" title="Link to this heading">#</a></h1>
+<section id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Link to this heading">#</a></h2>
+<img alt="../_images/need_pie_024bc.svg" id="needpie-logging/stats-0" src="../_images/need_pie_024bc.svg" />
+</section>
+<section id="in-detail">
+<h2>In Detail<a class="headerlink" href="#in-detail" title="Link to this heading">#</a></h2>
+<div class="sd-container-fluid sd-sphinx-override sd-mb-4 score-grid docutils">
+<div class="sd-row sd-row-cols-2 sd-row-cols-xs-2 sd-row-cols-sm-2 sd-row-cols-md-2 sd-row-cols-lg-2 docutils">
+<div class="sd-col sd-d-flex-row docutils">
+<div class="sd-card sd-sphinx-override sd-w-100 sd-shadow-sm docutils">
+<div class="sd-card-body docutils">
+<img alt="../_images/need_pie_2b44d.svg" id="needpie-logging/stats-1" src="../_images/need_pie_2b44d.svg" />
+</div>
+</div>
+</div>
+<div class="sd-col sd-d-flex-row docutils">
+<div class="sd-card sd-sphinx-override sd-w-100 sd-shadow-sm docutils">
+<div class="sd-card-body docutils">
+<img alt="../_images/need_pie_6810b.svg" id="needpie-logging/stats-2" src="../_images/need_pie_6810b.svg" />
+</div>
+</div>
+</div>
+<div class="sd-col sd-d-flex-row docutils">
+<div class="sd-card sd-sphinx-override sd-w-100 sd-shadow-sm docutils">
+<div class="sd-card-body docutils">
+<img alt="../_images/need_pie_6cf07.svg" id="needpie-logging/stats-3" src="../_images/need_pie_6cf07.svg" />
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="sd-container-fluid sd-sphinx-override sd-mb-4 docutils">
+<div class="sd-row sd-row-cols-2 sd-row-cols-xs-2 sd-row-cols-sm-2 sd-row-cols-md-2 sd-row-cols-lg-2 docutils">
+<div class="sd-col sd-d-flex-row docutils">
+<div class="sd-card sd-sphinx-override sd-w-100 sd-shadow-sm docutils">
+<div class="sd-card-body docutils">
+<p class="sd-card-text">Failed Tests</p>
+<p class="sd-card-text"><em>Hint: This table should be empty. Before a PR can be merged all tests have to be successful.</em></p>
+<p class="needs_filter_warning" id="needtable-logging/stats-0">No needs passed the filters</p>
+</div>
+</div>
+</div>
+<div class="sd-col sd-d-flex-row docutils">
+<div class="sd-card sd-sphinx-override sd-w-100 sd-shadow-sm docutils">
+<div class="sd-card-body docutils">
+<p class="sd-card-text">Skipped / Disabled Tests</p>
+<p class="needs_filter_warning" id="needtable-logging/stats-1">No needs passed the filters</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="all-passed-tests">
+<h2>All passed Tests<a class="headerlink" href="#all-passed-tests" title="Link to this heading">#</a></h2>
+<div class="pst-scrollable-table-container"><span id="needtable-logging/stats-2"></span><table class="NEEDS_DATATABLES table" id="needtable-logging/stats-2-table_node">
+<caption><span class="caption-text">SUCCESSFUL TESTS</span><a class="headerlink" href="#needtable-logging/stats-2-table_node" title="Link to this table">#</a></caption>
+<colgroup>
+<col style="width: 14.3%" />
+<col style="width: 14.3%" />
+<col style="width: 14.3%" />
+<col style="width: 14.3%" />
+<col style="width: 14.3%" />
+<col style="width: 14.3%" />
+<col style="width: 14.3%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>testcase</p></th>
+<th class="head"><p>Result</p></th>
+<th class="head"><p>Fully Verifies</p></th>
+<th class="head"><p>Partially Verifies</p></th>
+<th class="head"><p>Test Type</p></th>
+<th class="head"><p>Derivation Technique</p></th>
+<th class="head"><p>link</p></th>
+</tr>
+</thead>
 <tbody>
-<tr class="head row-odd"><td class="head_left" colspan="2"><div class="needs_head_left line-block">
-<div class="line"><span><span class="needs_title"><span class="needs_data">Explicit initialization of logging</span></span></span></div>
-</div>
-</td>
-<td class="head_center" colspan="2"><div class="needs_head line-block">
-<div class="line"><span><span class="needs_status"><span class="needs_label">status: </span><span class="needs_data">proposed</span></span></span></div>
-<div class="line"><span></span></div>
-<div class="line"><span></span></div>
-</div>
-</td>
-<td class="head_right" colspan="2"><div class="needs_head_right line-block">
-<div class="line"><span><span class="needs needs_collapse" id="target__show__meta"><span class="needs collapsed"><svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-down-circle"><circle cx="12" cy="12" r="10"></circle><polyline points="8 12 12 16 16 12"></polyline><line x1="12" y1="8" x2="12" y2="16"></line></svg></span><span class="needs visible collapse_is_hidden"><svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-right-circle"><circle cx="12" cy="12" r="10"></circle><polyline points="12 16 16 12 12 8"></polyline><line x1="8" y1="12" x2="16" y2="12"></line></svg></span></span></span></div>
-</div>
-</td>
-</tr>
-<tr class="meta row-even"><td class="meta" colspan="3"><div class="needs_meta_left line-block">
-<div class="line"><span><span><div class="line"><span class="needs_context"><span class="needs_label">context: </span><span class="needs_data">See below.</span></span></div>
-<div class="line"><span class="needs_decision"><span class="needs_label">decision: </span><span class="needs_data">TBA</span></span></div>
-</span></span></div>
-<div class="line"><span></span></div>
-</div>
-</td>
-<td class="meta" colspan="3"></td>
-</tr>
-<tr class="content row-odd"><td class="content" colspan="6"><p>Provide a library for explicit initialization of logging.</p>
-<p><strong>Context:</strong></p>
-<p>Currently there are multiple approaches to logging initialization.
-Rust frontend configuration is provided as code and requires explicit initialization before any logging starts.
-C++ configuration is lazily loaded on first use and based on a JSON file with path provided using environment variable.</p>
-<p>This approach discrepancy makes it difficult to manage logging in multi-language environment.
-Issue can be solved by providing an explicit initialization library.</p>
-<p>Such explicit logging initialization shall:</p>
-<ul class="simple">
-<li><p>Initialize logging for Rust and C++ environments.</p></li>
-<li><p>Handle configuration of all sub-components of the logging environment.</p></li>
-<li><p>Provide interfaces to Rust and C++.</p></li>
-</ul>
-<p>Examples of use:</p>
-<ul class="simple">
-<li><p>Initialize logging in Rust application:
-- Rust logging frontend
-- C++-based backend
-- Rust/C++ log bridge</p></li>
-<li><p>Initialize logging in C++ application utilizing Rust-based libraries:
-- C++ logging
-- Rust logging frontend utilized by libraries
-- C++-based backend
-- Rust/C++ log bridge</p></li>
-</ul>
-<p><strong>Consequences</strong></p>
-<p>Such change will require design changes to middleware logging.</p>
-<p>In Rust it is a common practice to explicitly initialize logging before any logging starts.
-This is true to both <cite>score_log</cite> logging frontend and ubiquitous <cite>log</cite> crate that is a defacto standard for logging in Rust.</p>
-<p>Middleware logging library is currently initialized lazily on first use, using JSON config file.
-It is not possible to perform the initialization operation explicitly.</p>
-<p><strong>Justification for the Decision</strong></p>
-<p>Explicit logging initialization will simplify logging initialization in multi-language environments.</p>
-</td>
-</tr>
-<tr class="footer row-even"><td class="footer_left" colspan="2"><div class="needs_footer_left line-block">
-<div class="line"><span><span class="needs-id"><a class="reference internal" href="#dec_rec__log__explicit_init" title="dec_rec__log__explicit_init">dec_rec__log__explicit_init</a></span></span></div>
-</div>
-</td>
-<td class="footer" colspan="2"><div class="needs_footer line-block">
-<div class="line"><span><span class="needs_type_name"><span class="needs_data">Decision Record</span></span></span></div>
-</div>
-</td>
-<td class="footer_right" colspan="2"></td>
+<tr class="need row-even"><td class="needs_name"><p>LogParserTest__FilterForwarderWithSingleForwarder</p></td>
+<td class="needs_result"><p>passed</p></td>
+<td class="needs_fully_verifies"><p></p></td>
+<td class="needs_partially_verifies"><p><a class="reference external" href="../components/datarouter/requirements.html#comp_req__data_router__dlt_verbose_messages">comp_req__data_router__dlt_verbose_messages</a></p></td>
+<td class="needs_test_type"><p>requirements-based</p></td>
+<td class="needs_derivation_technique"><p>requirements-analysis</p></td>
+<td class="needs_id external_link"><p><a class="external_link reference external" href="https://github.com/eclipse-score/logging/blob/f33c31b8a451bf8c67e7776e78bdb9f4ecc859a6/score/datarouter/test/ut/ut_logging/test_logparser.cpp#L115">testcase__LogParserTest__FilterForwarderWithSingleForwarder_slenl</a></p></td>
 </tr>
 </tbody>
 </table>
 </div>
-</div>
+</section>
+<section id="details-about-testcases">
+<h2>Details About Testcases<a class="headerlink" href="#details-about-testcases" title="Link to this heading">#</a></h2>
+<img alt="../_images/need_pie_9afba.svg" id="needpie-logging/stats-4" src="../_images/need_pie_9afba.svg" />
+<img alt="../_images/need_pie_91b7b.svg" id="needpie-logging/stats-5" src="../_images/need_pie_91b7b.svg" />
+</section>
 </section>
 
 
@@ -551,22 +568,13 @@ It is not possible to perform the initialization operation explicitly.</p>
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="../features/logging/architecture/index.html"
+       href="../components/mw/log/requirements.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Logging Module View</p>
+        <p class="prev-next-title">mw::log Component Requirements</p>
       </div>
-    </a>
-    <a class="right-next"
-       href="../components/datarouter/index.html"
-       title="next page">
-      <div class="prev-next-info">
-        <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Data Router Documentation</p>
-      </div>
-      <i class="fa-solid fa-angle-right"></i>
     </a>
 </div>
                 </footer>
@@ -580,10 +588,25 @@ It is not possible to perform the initialization operation explicitly.</p>
 
 
   <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#overview">Overview</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#in-detail">In Detail</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#all-passed-tests">All passed Tests</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#details-about-testcases">Details About Testcases</a></li>
+</ul>
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
 
   
   <div class="tocsection editthispage">
-    <a href="https://github.com/eclipse-score/logging/edit/main/docs/design_decisions/explicit_init.rst">
+    <a href="https://github.com/eclipse-score/logging/edit/main/docs/logging/stats.rst">
       <i class="fa-solid fa-pencil"></i>
       
       
