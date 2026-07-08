@@ -30,7 +30,7 @@ Datarouter Services
    :reqtype: Functional
    :security: NO
    :safety: QM
-   :satisfies: feat_req__logging__compat_dlt, feat_req__logging__log_sinks_network
+   :derived_from: feat_req__logging__compat_dlt, feat_req__logging__log_sinks_network
    :status: valid
    :belongs_to: comp__data_router
 
@@ -42,7 +42,7 @@ Datarouter Services
    :reqtype: Functional
    :security: NO
    :safety: QM
-   :satisfies: feat_req__logging__compat_dlt, feat_req__logging__config_log_filter, feat_req__logging__config_entity_id
+   :derived_from: feat_req__logging__compat_dlt, feat_req__logging__config_log_filter, feat_req__logging__config_entity_id
    :status: valid
    :belongs_to: comp__data_router
 
@@ -58,7 +58,7 @@ Datarouter Services
    :reqtype: Functional
    :security: NO
    :safety: QM
-   :satisfies: feat_req__logging__filtering_log_levels, feat_req__logging__filtering_entity_id, feat_req__logging__config_log_filter
+   :derived_from: feat_req__logging__filtering_log_levels, feat_req__logging__filtering_entity_id, feat_req__logging__config_log_filter
    :status: valid
    :belongs_to: comp__data_router
 
@@ -72,7 +72,7 @@ Datarouter Services
    :reqtype: Functional
    :security: NO
    :safety: QM
-   :satisfies: feat_req__logging__compat_dlt
+   :derived_from: feat_req__logging__compat_dlt
    :status: valid
    :belongs_to: comp__data_router
 
@@ -87,7 +87,7 @@ DLT Quotas
    :reqtype: Functional
    :security: NO
    :safety: QM
-   :satisfies: feat_req__logging__config_buffer_size, feat_req__logging__resource_comm_channel
+   :derived_from: feat_req__logging__config_buffer_size, feat_req__logging__resource_comm_channel
    :status: valid
    :belongs_to: comp__data_router
 
@@ -99,7 +99,7 @@ DLT Quotas
    :reqtype: Functional
    :security: NO
    :safety: QM
-   :satisfies: feat_req__logging__message_loss_handling, feat_req__logging__qos_message_handling
+   :derived_from: feat_req__logging__message_loss_handling, feat_req__logging__qos_message_handling
    :status: valid
    :belongs_to: comp__data_router
 

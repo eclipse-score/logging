@@ -34,7 +34,7 @@ forward log messages from applications as DLT messages.*
    :reqtype: Functional
    :security: NO
    :safety: QM
-   :satisfies: feat_req__logging__log_sources_user_app, feat_req__logging__log_sources
+   :derived_from: feat_req__logging__log_sources_user_app, feat_req__logging__log_sources
    :status: valid
    :belongs_to: comp__logging
 
@@ -50,7 +50,7 @@ mw::log
    :reqtype: Functional
    :security: YES
    :safety: ASIL_B
-   :satisfies: feat_req__logging__error_handling_isolation, feat_req__logging__asil_support
+   :derived_from: feat_req__logging__error_handling_isolation, feat_req__logging__asil_support
    :status: valid
    :belongs_to: comp__logging
 
@@ -61,7 +61,7 @@ mw::log
    :reqtype: Functional
    :security: YES
    :safety: ASIL_B
-   :satisfies: feat_req__logging__security_log_access
+   :derived_from: feat_req__logging__security_log_access
    :status: valid
    :belongs_to: comp__logging
 
@@ -77,7 +77,7 @@ mw::log
    :reqtype: Functional
    :security: NO
    :safety: QM
-   :satisfies: feat_req__logging__compat_dlt
+   :derived_from: feat_req__logging__compat_dlt
    :status: valid
    :belongs_to: comp__logging
 
@@ -90,7 +90,7 @@ mw::log
    :reqtype: Functional
    :security: YES
    :safety: QM
-   :satisfies: feat_req__logging__compat_dlt, feat_req__logging__severity_levels
+   :derived_from: feat_req__logging__compat_dlt, feat_req__logging__severity_levels
    :status: valid
    :belongs_to: comp__logging
 
@@ -102,7 +102,7 @@ mw::log
    :reqtype: Functional
    :security: NO
    :safety: QM
-   :satisfies: feat_req__logging__log_sources_user_app, feat_req__logging__log_sinks_network
+   :derived_from: feat_req__logging__log_sources_user_app, feat_req__logging__log_sinks_network
    :status: valid
    :belongs_to: comp__logging
 
@@ -115,7 +115,7 @@ mw::log
    :reqtype: Functional
    :security: NO
    :safety: QM
-   :satisfies: feat_req__logging__filtering_log_levels, feat_req__logging__resource_performance
+   :derived_from: feat_req__logging__filtering_log_levels, feat_req__logging__resource_performance
    :status: valid
    :belongs_to: comp__logging
 
@@ -128,7 +128,7 @@ mw::log
    :reqtype: Functional
    :security: YES
    :safety: ASIL_B
-   :satisfies: feat_req__logging__security_log_access, feat_req__logging__config_permissions
+   :derived_from: feat_req__logging__security_log_access, feat_req__logging__config_permissions
    :status: valid
    :belongs_to: comp__logging
 
@@ -147,7 +147,7 @@ System Backend
    :reqtype: Functional
    :security: NO
    :safety: QM
-   :satisfies: feat_req__logging__log_sinks_console
+   :derived_from: feat_req__logging__log_sinks_console
    :status: valid
    :belongs_to: comp__logging
 
@@ -160,7 +160,7 @@ System Backend
    :reqtype: Functional
    :security: NO
    :safety: QM
-   :satisfies: feat_req__logging__config_on_demand
+   :derived_from: feat_req__logging__config_on_demand
    :status: valid
    :belongs_to: comp__logging
 
@@ -174,7 +174,7 @@ Non-Functional Requirements
    :reqtype: Non-Functional
    :security: YES
    :safety: ASIL_B
-   :satisfies: feat_req__logging__resource_runtime, feat_req__logging__asil_support
+   :derived_from: feat_req__logging__resource_runtime, feat_req__logging__asil_support
    :status: valid
    :belongs_to: comp__logging
 
@@ -186,7 +186,7 @@ Non-Functional Requirements
    :reqtype: Non-Functional
    :security: YES
    :safety: ASIL_B
-   :satisfies: feat_req__logging__asil_support, feat_req__logging__resource_performance
+   :derived_from: feat_req__logging__asil_support, feat_req__logging__resource_performance
    :status: valid
    :belongs_to: comp__logging
 
@@ -197,7 +197,7 @@ Non-Functional Requirements
    :reqtype: Non-Functional
    :security: YES
    :safety: ASIL_B
-   :satisfies: feat_req__logging__asil_support, feat_req__logging__resource_performance
+   :derived_from: feat_req__logging__asil_support, feat_req__logging__resource_performance
    :status: valid
    :belongs_to: comp__logging
 
@@ -210,7 +210,7 @@ Non-Functional Requirements
    :reqtype: Non-Functional
    :security: YES
    :safety: ASIL_B
-   :satisfies: feat_req__logging__asil_support, feat_req__logging__error_handling_isolation
+   :derived_from: feat_req__logging__asil_support, feat_req__logging__error_handling_isolation
    :status: valid
    :belongs_to: comp__logging
 
@@ -222,7 +222,7 @@ Non-Functional Requirements
    :reqtype: Non-Functional
    :security: YES
    :safety: ASIL_B
-   :satisfies: feat_req__logging__asil_support
+   :derived_from: feat_req__logging__asil_support
    :status: valid
    :belongs_to: comp__logging
 
@@ -234,7 +234,7 @@ Non-Functional Requirements
    :reqtype: Non-Functional
    :security: YES
    :safety: ASIL_B
-   :satisfies: feat_req__logging__asil_support
+   :derived_from: feat_req__logging__asil_support
    :status: valid
    :belongs_to: comp__logging
 
