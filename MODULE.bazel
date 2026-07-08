@@ -13,7 +13,6 @@
 module(
     name = "score_logging",
     version = "0.0.0",
-    compatibility_level = 0,
 )
 
 # Bazel global rules
@@ -37,11 +36,8 @@ bazel_dep(name = "platforms", version = "1.0.0")
 
 # S-CORE process rules
 bazel_dep(name = "score_bazel_platforms", version = "0.1.2")
-bazel_dep(name = "score_docs_as_code", version = "4.0.1")
-single_version_override(
-    module_name = "score_docs_as_code",
-    version = "4.0.1",
-)
+
+bazel_dep(name = "score_docs_as_code", version = "4.6.0", dev_dependency = True)
 
 bazel_dep(name = "score_tooling", version = "1.2.0")
 single_version_override(
@@ -52,7 +48,7 @@ single_version_override(
 bazel_dep(name = "score_rust_policies", version = "0.0.5")
 
 bazel_dep(name = "score_process", version = "1.5.4", dev_dependency = True)
-bazel_dep(name = "score_platform", version = "0.5.5", dev_dependency = True)
+bazel_dep(name = "score_platform", version = "0.6.0", dev_dependency = True)
 bazel_dep(name = "score_itf", version = "0.4.0", dev_dependency = True)
 
 # OCI / Docker image rules for integration tests
@@ -87,7 +83,7 @@ oci.pull(
 use_repo(oci, "ubuntu_24_04", "ubuntu_24_04_linux_amd64")
 
 # Toolchains and extensions
-bazel_dep(name = "score_bazel_cpp_toolchains", version = "0.5.1", dev_dependency = True)
+bazel_dep(name = "score_bazel_cpp_toolchains", version = "0.5.4", dev_dependency = True)
 bazel_dep(name = "score_toolchains_rust", version = "0.8.0", dev_dependency = True)
 
 # S-CORE crates

@@ -51,9 +51,9 @@ jobs:
             ${{ env.BAZEL_OUTPUT_BASE }}/bazel-out
             ${{ env.BAZEL_OUTPUT_BASE }}/external
             ${{ env.BAZEL_OUTPUT_BASE }}/execroot
-          key: bazel-ob-component-v1-${{ runner.os }}-${{ hashFiles('.bazelversion', 'MODULE.bazel', 'MODULE.bazel.lock', '**/*.bzl') }}
+          key: bazel-ob-component-v2-${{ runner.os }}-${{ hashFiles('.bazelversion', 'MODULE.bazel', 'MODULE.bazel.lock', '**/*.bzl') }}
           restore-keys: |
-            bazel-ob-component-v1-${{ runner.os }}-
+            bazel-ob-component-v2-${{ runner.os }}-
 
       - name: Run component tests
         run: |
