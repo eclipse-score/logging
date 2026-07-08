@@ -24,12 +24,15 @@ bazel_dep(name = "rules_cc", version = "0.2.17")
 bazel_dep(name = "aspect_rules_lint", version = "2.5.0")
 
 bazel_dep(name = "score_cpp_policies", version = "0.0.0", dev_dependency = True)
+
+# FIXME: pinned to score_cpp_policies#13, switch to upstream once merged.
 git_override(
     module_name = "score_cpp_policies",
-    commit = "b6551c217fbb0daf948b493c4ba69eb7fe8359a5",
-    remote = "https://github.com/eclipse-score/score_cpp_policies.git",
+    commit = "b2bec2a914d358606aac3fc29f861a63ce1a5d92",
+    remote = "https://github.com/RSingh1511/score_cpp_policies.git",
 )
 
+bazel_dep(name = "bazelrc-preset.bzl", version = "1.9.2", dev_dependency = True)
 bazel_dep(name = "toolchains_llvm", version = "1.7.0", dev_dependency = True)
 
 bazel_dep(name = "buildifier_prebuilt", version = "8.5.1")
@@ -88,6 +91,15 @@ use_repo(oci, "ubuntu_24_04", "ubuntu_24_04_linux_amd64")
 
 # Toolchains and extensions
 bazel_dep(name = "score_bazel_cpp_toolchains", version = "0.5.1", dev_dependency = True)
+
+# FIXME: pinned to eclipse-score/bazel_cpp_toolchains#52 (adds extra_known_features to
+# gcc.toolchain). Drop this override and bump to the release version once that PR merges.
+git_override(
+    module_name = "score_bazel_cpp_toolchains",
+    commit = "c78d5e9f936e3c9d8791e420925d8b36c2564e52",
+    remote = "https://github.com/eclipse-score/bazel_cpp_toolchains.git",
+)
+
 bazel_dep(name = "score_toolchains_rust", version = "0.8.0", dev_dependency = True)
 
 # S-CORE crates
@@ -116,6 +128,13 @@ gcc.toolchain(
     target_os = "linux",
     use_default_package = True,
     version = "12.2.0",
+    extra_known_features = [
+        "@score_cpp_policies//sanitizers/features:asan",
+        "@score_cpp_policies//sanitizers/features:ubsan",
+        "@score_cpp_policies//sanitizers/features:lsan",
+        "@score_cpp_policies//sanitizers/features:tsan",
+        "@score_cpp_policies//sanitizers/features:debug_symbols",
+    ],
 )
 gcc.toolchain(
     name = "score_qcc_x86_64_toolchain",
