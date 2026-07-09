@@ -105,6 +105,7 @@ cc_test(
         "manual",
         "unit",
     ],
+    target_compatible_with = ["@platforms//os:qnx"],
     deps = [
         "@googletest//:gtest",
         "@googletest//:gtest_main",
