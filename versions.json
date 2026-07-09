@@ -20,8 +20,8 @@
     "url": "https://eclipse-score.github.io/logging/pr-124/"
   },
   {
-    "version": "pr-136",
-    "url": "https://eclipse-score.github.io/logging/pr-136/"
+    "version": "pr-179",
+    "url": "https://eclipse-score.github.io/logging/pr-179/"
   },
   {
     "version": "pr-44",
@@ -46,9 +46,5 @@
   {
     "version": "pr-99",
     "url": "https://eclipse-score.github.io/logging/pr-99/"
-  },
-  {
-    "version": "pr-179",
-    "url": "https://eclipse-score.github.io/logging/pr-179/"
   }
 ]
