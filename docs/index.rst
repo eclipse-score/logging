@@ -36,6 +36,7 @@ Requirements
    :safety: QM
    :security: YES
    :reqtype: Functional
+   :valid_from: v1.0.0
    :rationale: Ensure documentation builds are possible for all modules
 
 
