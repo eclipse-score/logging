@@ -116,7 +116,7 @@ This construct uses the `log_entry` singleton template to register type informat
 The diagrams below illustrate the high-level class structure of logging framework components.
 
 The [ara::log][1] implementation conforms to Adaptive AUTOSAR specification R1903.
-![alt text][package-ara-log]
+![alt text][package-mw-log]
 
 ![alt text][package-datarouter]
 
@@ -135,7 +135,6 @@ The activity diagram below depicts the first-run process:
 ### ara::log implementation
 
 The Adaptive AUTOSAR logging interface implementation follows standard specifications. The system creates LogStream objects dynamically to enable isolated collection of log message items and atomic message commits on stream flush.
-![alt text][seq-ara-log]
 ![alt text][log-filtering-client-end]
 
 ### Ring buffer and linear allocator buffer
@@ -173,9 +172,8 @@ The datarouter requires two configuration files:
 
 [context-ecu]: uml/context-ecu.png "Context: logging framework in xPAD ECU (hPAD example)"
 [context-highlevel]: uml/context-highlevel.png "Implementation details: general approach"
-[seq-ara-log]: uml/seq-ara-log.png "ara::log call conversion to libtracing"
 [seq-trace]: uml/seq-trace.png "Activity diagram for tracing functionality"
-[package-ara-log]: uml/package-ara-log.png "Package contents for ara::log"
+[package-mw-log]: uml/package-mw-log.png "Package contents for mw::log"
 [package-datarouter]: uml/package-datarouter.png "Package contents for datarouter"
 [log-filtering-client-end]: uml/dlt_message_filtering_frontend.png "DLT log filtering in the frontend (client side)"
 [log-filtering-datarouter]: uml/dlt_message_filtering_backend.png "DLT log filtering in the backend (Datarouter)"

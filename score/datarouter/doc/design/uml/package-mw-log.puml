@@ -1,8 +1,8 @@
 @startuml
 
-title ara::log Packages
+title mw::log Packages
 
-package ara {
+package mw {
   package log {
     enum LogLevel {
       + kOff
@@ -29,11 +29,11 @@ package ara {
     }
 
     class LogManager {
-      + CreateLogContext(const ara::core::StringView&, const ara::core::StringView&, const LogLevel) : Logger&
+      + CreateLogContext(const mw::core::StringView&, const mw::core::StringView&, const LogLevel) : Logger&
       + defaultLogContext() : Logger&
       + static instance() : LogManager&
-      - FindExistingLogger(const ara::core::StringView&) : score::cpp::optional<std::reference_wrapper<Logger>>
-      - InsertNewLogger(const ara::core::StringView&, const ara::core::StringView&, const LogLevel) : Logger&
+      - FindExistingLogger(const mw::core::StringView&) : score::cpp::optional<std::reference_wrapper<Logger>>
+      - InsertNewLogger(const mw::core::StringView&, const mw::core::StringView&, const LogLevel) : Logger&
     }
 
     class Logger {
