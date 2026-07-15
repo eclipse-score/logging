@@ -116,7 +116,6 @@ This construct uses the `log_entry` singleton template to register type informat
 The diagrams below illustrate the high-level class structure of logging framework components.
 
 The [ara::log][1] implementation conforms to Adaptive AUTOSAR specification R1903.
-![alt text][package-mw-log]
 
 ![alt text][package-datarouter]
 
@@ -173,7 +172,6 @@ The datarouter requires two configuration files:
 [context-ecu]: uml/context-ecu.png "Context: logging framework in xPAD ECU (hPAD example)"
 [context-highlevel]: uml/context-highlevel.png "Implementation details: general approach"
 [seq-trace]: uml/seq-trace.png "Activity diagram for tracing functionality"
-[package-mw-log]: uml/package-mw-log.png "Package contents for mw::log"
 [package-datarouter]: uml/package-datarouter.png "Package contents for datarouter"
 [log-filtering-client-end]: uml/dlt_message_filtering_frontend.png "DLT log filtering in the frontend (client side)"
 [log-filtering-datarouter]: uml/dlt_message_filtering_backend.png "DLT log filtering in the backend (Datarouter)"
