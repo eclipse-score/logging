@@ -100,7 +100,7 @@ Components
    :glob:
 
    components/datarouter/index.rst
-   components/mw/log/index.rst
+   components/mw_log/index.rst
 
 
 Requirements

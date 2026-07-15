@@ -1,0 +1,44 @@
+@startuml slot_drainer_action_diagram_design
+
+skinparam ActivityBackgroundColor white
+skinparam ActivityBorderColor black
+skinparam ArrowColor black
+skinparam PartitionBackgroundColor orange
+skinparam PartitionBorderColor black
+
+title Slot disposal diagram
+
+start
+
+:Flush slot call
+circular_buffer.push(LogRecord&);
+
+partition SlotDrainer #orange {
+  while (circular_buffer not empty) is (yes)
+    :get_next_slot;
+
+    partition NonBlockingWriter #3c7a00 {
+      while (next span available) is (yes)
+        :get_next_span;
+        :write_file;
+        if (result?) then ([would block])
+          #orange:exit;
+          detach
+        else ([all data written])
+        endif
+      endwhile (no)
+    }
+
+    :Load number of buffers flushed;
+    if (count?) then ([limit reached])
+      #orange:exit;
+      detach
+    else ([within limit])
+    endif
+
+  endwhile (no)
+}
+
+stop
+
+@enduml

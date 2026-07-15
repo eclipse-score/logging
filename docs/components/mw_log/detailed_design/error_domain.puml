@@ -1,0 +1,13 @@
+@startuml error_domain
+
+interface "score::result::ErrorDomain" as ErrorDomainInterface {
+  {abstract} +MessageFor(const score::result::ErrorCode&): std::string_view
+}
+
+class "score::mw::log::detail::ErrorDomain" as ErrorDomain {
+  +MessageFor(const score::result::ErrorCode&): std::string_view
+}
+
+ErrorDomainInterface <|.. ErrorDomain
+
+@enduml

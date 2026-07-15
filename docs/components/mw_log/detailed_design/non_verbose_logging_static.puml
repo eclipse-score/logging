@@ -1,0 +1,103 @@
+@startuml non_verbose_logging_static
+
+skinparam classBackgroundColor white
+skinparam classBorderColor black
+skinparam ArrowColor black
+skinparam NoteBackgroundColor blue
+skinparam NoteFontColor white
+skinparam NoteBorderColor black
+
+class "score::platform::logger" <<Singleton>> {
+  - config_: Configuration
+  - nvconfig_: NvConfig
+  - shared_memory_writer_: SharedMemoryWriter
+  - log_entry: log_entry
+  --
+  + instance(const score::cpp::optional<const score::mw::log::detail::Configuration>&,
+  const score::cpp::optional<const score::mw::log::NvConfig>&,
+  score::cpp::optional<score::mw::log::detail::SharedMemoryWriter>)
+  + RegisterType(): score::cpp::optional<score::mw::log::detail::TypeIdentifier>
+  + get_type_level(): LogLevel
+  + get_type_threshold: LogLevel
+  + get_config(): const Configuration&
+  + get_non_verbose_config(): const NvConfig&
+  + GetSharedMemoryWriter(): SharedMemoryWriter&
+  + InjectTestInstance(logger* const logger_ptr): static void
+}
+
+class log_entry {
+  - default_enabled_: bool
+  - shared_memory_id_: std::atomic<score::mw::log::detail::TypeIdentifier>
+  --
+  + instance(): static log_entry&
+  + RegisterTypeGetId(): score::cpp::optional<score::mw::log::detail::TypeIdentifier>
+  + TrySerializeIntoSharedMemory(T): void
+  + TryWriteIntoSharedMemoryrd(const T&): void
+  + log_at_time(timestamp_t, const T&): void
+  + log_serialized(const char*, const msgsize_t): void
+  + enabled(): bool
+  + enabled_at(LogLevel): bool
+}
+
+class Configuration {
+}
+
+class NvConfig {
+  - json_path_: const std::string
+  - typemap_: bool
+  --
+  + NvConfig(const std::string&)
+  + parseFromJson(): ReadResult
+  + getDltMsgDesc(const std::string&): const config::NvMsgDescriptor*
+}
+
+class SharedMemoryWriter {
+}
+
+class NvMsgDescriptor {
+  + id_msg_descriptor_: uint32_t
+  + appid_: LoggingIdentifier
+  + ctxid_: LoggingIdentifier
+  + logLevel_: uint8_t
+}
+
+class LoggingIdentifier {
+}
+
+class TRACE {
+}
+
+class "TRACE_*" {
+}
+
+class TRACE_LEVEL {
+}
+
+class LOG_ENTRY {
+}
+
+"score::platform::logger" *--> Configuration : owns
+"score::platform::logger" *--> NvConfig : owns
+"score::platform::logger" *--> SharedMemoryWriter : owns
+
+"score::platform::logger" .left.> log_entry : <<friend>>
+log_entry --> "score::platform::logger" : <<uses>>
+
+NvConfig --> NvMsgDescriptor : <<uses>>
+NvMsgDescriptor *--> LoggingIdentifier
+
+note as N_free_functions #blue
+  Free public functions
+end note
+
+N_free_functions .. LOG_ENTRY
+N_free_functions .. TRACE
+N_free_functions .. "TRACE_*"
+N_free_functions .. TRACE_LEVEL
+
+log_entry <-- LOG_ENTRY
+log_entry <-- TRACE
+log_entry <-- "TRACE_*"
+log_entry <-- TRACE_LEVEL
+
+@enduml

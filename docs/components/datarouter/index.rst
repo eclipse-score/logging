@@ -34,3 +34,30 @@ This section is reserved for data router-specific documentation.
    :glob:
 
    *
+
+.. document:: Data Router Detailed Design
+   :id: doc__data_router_detailed_design
+   :status: valid
+   :safety: QM
+   :security: YES
+   :realizes: wp__sw_implementation
+
+
+Static View
+-----------
+
+.. uml:: detailed_design/datarouter_class_diagram.puml
+
+.. uml:: detailed_design/inter_process_communication.puml
+
+.. uml:: detailed_design/mw_log_shared_memory_reader.puml
+
+
+Dynamic View
+------------
+
+.. uml:: detailed_design/datarouter_backend_datarouterbackend.puml
+
+.. uml:: detailed_design/shared_memory_reader_read.puml
+
+.. uml:: detailed_design/datarouter_message_client_impl_connecttodatarouter.puml
