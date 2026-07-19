@@ -54,6 +54,7 @@ py_itf_test(
         ":test_logging_detached_logs",
         ":test_logging_after_delayed_dr_start",
         ":test_dr_session_memory_leak",
+        "test_sender_timeout",
     ],
     visibility = ["//platform/aas/test:__pkg__"],
 )
@@ -422,5 +423,21 @@ py_itf_test(
     ],
     deps = [
         "//platform/aas/tools/xtf_common",
+    ],
+)
+
+py_itf_test(
+    name = "test_sender_timeout",
+    srcs = [
+        "main.py",
+        "test_sender_timeout.py",
+    ],
+    data_target = [
+        ":logging-app-artifacts",
+    ],
+    extra_tags = ["itf_bat"],
+    module_root = "platform/aas/pas/logging/test/itf",
+    deps = [
+        "//platform/aas/test/pas:pas_common",
     ],
 )
