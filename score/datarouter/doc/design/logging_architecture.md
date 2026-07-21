@@ -44,7 +44,7 @@ The following constraints influenced the logging infrastructure design:
 - System handles high data volumes in varying sizes, from single-value elements to grid fusion intermediate results
 - Both calling applications and logging daemon require minimal performance overhead
 - Static memory management or local allocators manage constrained memory resources
-- System components rely on `ara::log` or `mw::log` interfaces requiring backward compatibility
+- System components rely on `mw::log` interface providing compatibility
 - Application-side library requires safety-critical qualification
 
 ## Context
@@ -78,7 +78,7 @@ The logging framework implements multiple components to meet system goals:
 
 The `datarouter` operates as a non-safety-critical component, requiring freedom-from-interference analysis only for `mw::log` interactions.
 
-Data serialization for DLT format occurs during write operations in `mw::log` or `ara::log` interface for verbose messages. The system appends timestamps when `mw::log` processes log messages.
+Data serialization for DLT format occurs during write operations in `mw::log` interface for verbose messages. The system appends timestamps when `mw::log` processes log messages.
 
 ### Data exchange
 
@@ -115,25 +115,17 @@ This construct uses the `log_entry` singleton template to register type informat
 
 The diagrams below illustrate the high-level class structure of logging framework components.
 
-The [ara::log][1] implementation conforms to Adaptive AUTOSAR specification R1903.
-
 ![alt text][package-datarouter]
 
 ## Runtime view
 
-Applications access logging functionality either through `mw::log` directly or through the adpative AUTOSAR standardized `ara::log` interface.
+Applications access logging functionality through `mw::log` interface.
 
 ### Initialization
 
-The `ara::log` runtime depends entirely on `mw::log` functionality. Using `ara::log` implicitly triggers library initialization.
+The `mw::log` runtime initialization occurs when the first log request is made. This may occur in global object constructors before the `main()` function executes, causing implicit initialization that creates necessary singletons automatically.
 
-Initialization stage 1 executes when the first log request occurs. This may occur in global object constructors before the `main()` function executes, causing implicit initialization that creates necessary singletons automatically.
-The activity diagram below depicts the first-run process:
-![alt text][seq-trace]
-
-### ara::log implementation
-
-The Adaptive AUTOSAR logging interface implementation follows standard specifications. The system creates LogStream objects dynamically to enable isolated collection of log message items and atomic message commits on stream flush.
+The middleware logging implementation follows standardized specifications. The system creates LogStream objects dynamically to enable isolated collection of log message items and atomic message commits on stream flush.
 ![alt text][log-filtering-client-end]
 
 ### Ring buffer and linear allocator buffer
@@ -169,14 +161,8 @@ The datarouter requires two configuration files:
 
 ## Images
 
-[context-ecu]: uml/context-ecu.png "Context: logging framework in xPAD ECU (hPAD example)"
-[context-highlevel]: uml/context-highlevel.png "Implementation details: general approach"
-[seq-trace]: uml/seq-trace.png "Activity diagram for tracing functionality"
-[package-datarouter]: uml/package-datarouter.png "Package contents for datarouter"
-[log-filtering-client-end]: uml/dlt_message_filtering_frontend.png "DLT log filtering in the frontend (client side)"
-[log-filtering-datarouter]: uml/dlt_message_filtering_backend.png "DLT log filtering in the backend (Datarouter)"
-
-## References
-
-[1]: http://example.com/  "SWS_Log"
-[2]: http://example.com/ "DLT Protocol"
+[context-ecu]: uml/context-ecu.puml "Context: logging framework in xPAD ECU (hPAD example)"
+[context-highlevel]: uml/context-highlevel.puml "Implementation details: general approach"
+[package-datarouter]: uml/package-datarouter.puml "Package contents for datarouter"
+[log-filtering-client-end]: uml/dlt_message_filtering_frontend.puml "DLT log filtering in the frontend (client side)"
+[log-filtering-datarouter]: uml/dlt_message_filtering_backend.puml "DLT log filtering in the backend (Datarouter)"

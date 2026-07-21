@@ -2,13 +2,6 @@
 
 frame ApplicationProcess {
   node AdaptiveApplication {
-    component ApplicationLogic
-    interface "ara::log" <<API>> as aralog
-    component "ara::log implementation" as a1 {
-      component LogManager
-      component Logger
-      component LogStream
-    }
     component "score::mw::log" {
       component log_entry
       component "logging_serializer" as serializer
@@ -36,18 +29,6 @@ frame ApplicationProcess {
     component rapidjson
     ConfigReader ..> LogConfig
     ConfigReader -- rapidjson
-
-    aralog -> LogManager
-
-    LogManager ~> Logger
-    Logger ~> LogStream
-
-    aralog -> LogStream
-
-    LogStream -> TRACE
-    ApplicationLogic --> aralog : verbose
-    ApplicationLogic --> TRACE : non-verbose
-    a1 ..> "score::mw::log" : use
   }
 
   queue "Shared Memory Buffer" as RB
