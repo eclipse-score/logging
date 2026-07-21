@@ -24,12 +24,10 @@ frame ApplicationProcess {
 
     component "Configuration" {
       component "score::mw::log::detail::Configuration" as LogConfig
-      component "JSON Parser\n(rapidjson)" as ConfigReader
+      component "score::json::JsonParser" as ConfigReader
     }
 
-    component rapidjson
     ConfigReader ..> LogConfig
-    ConfigReader -- rapidjson
 
     ApplicationLogic --> "score::mw::log" : verbose
     ApplicationLogic --> TRACE : non-verbose
