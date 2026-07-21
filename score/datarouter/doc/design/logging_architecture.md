@@ -44,13 +44,13 @@ The following constraints influenced the logging infrastructure design:
 - System handles high data volumes in varying sizes, from single-value elements to grid fusion intermediate results
 - Both calling applications and logging daemon require minimal performance overhead
 - Static memory management or local allocators manage constrained memory resources
-- System components rely on `mw::log` interface providing compatibility
+- System components rely on `mw::log` interface
 - Application-side library requires safety-critical qualification
 
 ## Context
 
 The diagram below illustrates the logging framework context:
-![alt text][context-ecu]
+[context-ecu](uml/context-ecu.puml)
 
 Applications write log data through logging interfaces [^logging_vs_tracing].
 
@@ -66,7 +66,7 @@ The logging framework transmits data to the following sinks:
 
 ### Process structure
 
-![alt text][context-highlevel]
+[context-highlevel](uml/context-highlevel.puml)
 
 The logging framework implements multiple components to meet system goals:
 
@@ -78,7 +78,7 @@ The logging framework implements multiple components to meet system goals:
 
 The `datarouter` operates as a non-safety-critical component, requiring freedom-from-interference analysis only for `mw::log` interactions.
 
-Data serialization for DLT format occurs during write operations in `mw::log` interface for verbose messages. The system appends timestamps when `mw::log` processes log messages.
+Data serialization for DLT format occurs during write operations in `mw::log` for verbose messages. The system appends timestamps when `mw::log` processes log messages.
 
 ### Data exchange
 
@@ -103,30 +103,36 @@ The system defines the following visitors:
   - `serialized_reflection_visitor` - Generates metainformation
   - `fibex_helper_visitor` - Generates intermediate .json files containing FIBEX generation data
 
-2. The `TRACE(S)` macro expands at compile time to:
+2. `TRACE(S)` is a C++ **function template** (not a preprocessor macro). Its call chain at runtime is:
 
 ```c++
-log_entry<type(S)>::instance() = S
+TRACE(arg)
+  → LogEntry<T>::Instance().TryWriteIntoSharedMemory(arg)
+    → SharedMemoryWriter::AllocAndWrite(serialize_fn, type_id, size)
 ```
 
-This construct uses the `log_entry` singleton template to register type information in the logger once, then employs the type ID for serialization. The `serializer<allocator, T>` template writes the serialized structure representation while the `log_entry_allocator` allocates space in the ring buffer.
+On the first call for a given type `T`, `LogEntry<T>::Instance()` (a Meyers singleton) registers the type with `Logger::Instance()` and obtains a type identifier for compact serialization. Subsequent calls reuse the cached type ID. The `logging_serializer` template handles the actual serialization into the shared-memory ring buffer.
 
 ## Building block view
 
-The diagrams below illustrate the high-level class structure of logging framework components.
+The diagram below illustrates the high-level class structure of the datarouter component.
 
-![alt text][package-datarouter]
+[package-datarouter](uml/package-datarouter.puml)
 
 ## Runtime view
 
-Applications access logging functionality through `mw::log` interface.
+Applications access logging functionality through `mw::log`.
 
 ### Initialization
 
-The `mw::log` runtime initialization occurs when the first log request is made. This may occur in global object constructors before the `main()` function executes, causing implicit initialization that creates necessary singletons automatically.
+Initialization stage 1 executes when the first log request occurs. This may occur in global object constructors before the `main()` function executes, causing implicit initialization that creates necessary singletons automatically.
+The activity diagram below depicts the first-run process:
+[seq-trace](uml/seq-trace.puml)
 
-The middleware logging implementation follows standardized specifications. The system creates LogStream objects dynamically to enable isolated collection of log message items and atomic message commits on stream flush.
-![alt text][log-filtering-client-end]
+### mw::log implementation
+
+The `mw::log` implementation creates log records and commits them atomically to shared memory on flush.
+[log-filtering-client-end](uml/dlt_message_filtering_frontend.puml)
 
 ### Ring buffer and linear allocator buffer
 
@@ -145,7 +151,7 @@ The setup also handles an early-disconnect race, wherein if a client crashes whi
 
 ### datarouter
 
-![alt text][log-filtering-datarouter]
+[log-filtering-datarouter](uml/dlt_message_filtering_backend.puml)
 
 ### Application-side library configuration
 
@@ -163,6 +169,7 @@ The datarouter requires two configuration files:
 
 [context-ecu]: uml/context-ecu.puml "Context: logging framework in xPAD ECU (hPAD example)"
 [context-highlevel]: uml/context-highlevel.puml "Implementation details: general approach"
+[seq-trace]: uml/seq-trace.puml "Activity diagram for tracing functionality"
 [package-datarouter]: uml/package-datarouter.puml "Package contents for datarouter"
 [log-filtering-client-end]: uml/dlt_message_filtering_frontend.puml "DLT log filtering in the frontend (client side)"
 [log-filtering-datarouter]: uml/dlt_message_filtering_backend.puml "DLT log filtering in the backend (Datarouter)"

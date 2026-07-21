@@ -2,6 +2,7 @@
 
 frame ApplicationProcess {
   node AdaptiveApplication {
+    component ApplicationLogic
     component "score::mw::log" {
       component log_entry
       component "logging_serializer" as serializer
@@ -29,6 +30,9 @@ frame ApplicationProcess {
     component rapidjson
     ConfigReader ..> LogConfig
     ConfigReader -- rapidjson
+
+    ApplicationLogic --> "score::mw::log" : verbose
+    ApplicationLogic --> TRACE : non-verbose
   }
 
   queue "Shared Memory Buffer" as RB

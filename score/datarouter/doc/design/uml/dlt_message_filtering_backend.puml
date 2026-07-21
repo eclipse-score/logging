@@ -9,16 +9,16 @@ NOTE: This Flow diagram excludes the sequence for filtering DLT logs based on di
 :log_level = kInfo (Default; hardcoded);
 
     if (Parse class-id.json file (message ID table) success) then (yes)
-    note left 
+    note left
          The class-id.json file is an output of the dlt_create_fibex generator
-         containing unique message ids mapped to app_id, ctx_id and log_level pairs 
+         containing unique message ids mapped to app_id, ctx_id and log_level pairs
          for message Types that needs to be traced out
     end note
             :Register message based on NvMsgDescriptor (message_id, app_id, ctx_id, log_level);
              NOTE: class-id.json
             :log_level = log_level for app_id ctx_id pair;
     note left
-        The log_level is picked based on the inputs for the dlt_fibex_defenition 
+        The log_level is picked based on the inputs for the dlt_fibex_defenition
         generator for the respective Type that needs to be traced.
         E.g.: *_fibex.cpp
     end note
@@ -39,11 +39,11 @@ else (no)
    endif
 
 if (log_level > logLevel_threshold) then (yes)
-    :Drop the log message 
-    (Will NOT copy the DLT message 
-      to io-pkt buffers);
+    :Drop the log message
+    (Will NOT copy the DLT message
+      to UDP socket buffers);
 else (no)
-    :Copy the DLT message to io-pkt buffers;
+    :Copy the DLT message to UDP socket buffers;
 endif
 
 stop

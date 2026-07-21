@@ -21,12 +21,11 @@ package datarouter {
     class LogParser::AnyHandler
     class LogParser::TypeHandler
     class MessagePassingServer::ISession
-    class EmptySysedrFactory
-    class EmptySysedrHandler
+    class StubSysedrFactory
+    class StubSysedrHandler
     class ISysedrHandler
     class LogEntryFactory
     class SysedrConcreteFactory
-    class SysedrFactory
     class SysedrHandler
     class UnixDomainClient
     class UnixDomainSockAddr

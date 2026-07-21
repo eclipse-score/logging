@@ -15,35 +15,31 @@ frame {
     component ApplicationLogic
     interface "mw::log" as aralog1
     component "mw::log implementation" <<safety critical>> as aralog1_impl
-    component rapidjson <<safety critical>> as rj1
 
     aralog1 - aralog1_impl
     ApplicationLogic --> aralog1 : verbose
     ApplicationLogic --> aralog1 : non-verbose
-    aralog1_impl .> rj1 : use
   }
 
   queue Ringbuffer1 <<safety critical>> as RB1
-  database "AdaptiveApplication/logging.json" as cfg1
-  rj1 -> cfg1
+  database "/opt/<app>/etc/logging.json" as cfg1
+  aralog1_impl ..> cfg1 : read config
 }
-
 
 frame {
   node SystemApplication {
     component SystemApplicationLogic
     interface "mw::log" as aralog2
     component "mw::log implementation" <<safety critical>> as aralog2_impl
-    component rapidjson <<safety critical>> as rj2
 
     aralog2 - aralog2_impl
     SystemApplicationLogic --> aralog2 : verbose
-    aralog2_impl .> rj2 : use
+    SystemApplicationLogic --> aralog2 : non-verbose
   }
 
   queue Ringbuffer2 <<safety critical>> as RB2
-  database "SystemApplication/logging.json" as cfg2
-  rj2 -> cfg2
+  database "/opt/<app>/etc/logging.json" as cfg2
+  aralog2_impl ..> cfg2 : read config
 }
 
 note right of RB1
@@ -56,13 +52,12 @@ aralog2_impl ..> RB2 : own
 aralog1_impl --> RB1 : write
 aralog2_impl --> RB2 : write
 
-database "MessageIDs" as type_id
+database "class-id.json\n(MessageIDs)" as type_id
 
-node "Datarouter"{
+node "Datarouter" {
 
   component [Source Session 1] <<needs review>> as sourcesession1
   component [Source Session 2] <<needs review>> as sourcesession2
-
 
   component "NonVerboseHandler" as nvh {
     component "Filter" as nvfilter
@@ -83,53 +78,53 @@ node "Datarouter"{
     vfilter --> vpack
   }
 
-  component "DLT Output" as dlt_out {
-    component "Dispatch" as Demux
-    component "Traffic shaping queues" as out {
-      queue "High Priority DLT" as dlt1
-      queue "Low Priority DLT" as dlt2
-      queue "Raw data" as dlt3
-    }
-    Demux -> dlt1
-    Demux -> dlt2
-    Demux -> dlt3
+  component "FileTransferHandler" as fthandler {
   }
 
-  component "Type T Handler" as type_handler {
+  component "DltLogServer" as dlt_out {
+    component "Channel Assignment\n& Threshold Filter" as Demux
+    component "DltLogChannel 1\n(UDP, per log-channels.json)" as dlt_ch1
+    component "DltLogChannel 2\n(UDP, per log-channels.json)" as dlt_ch2
+    component "... DltLogChannel N" as dlt_chN
+    Demux -> dlt_ch1
+    Demux -> dlt_ch2
+    Demux -> dlt_chN
+  }
+
+  database "log-channels.json" as channels_cfg
+  channels_cfg ..> Demux : configure channels\n& assignments
+
+  component "SysedrHandler" as sysedr_handler {
   }
 }
 
-queue "Subscriber Buffer" as sub_rb
-note right of sub_rb
-  Shared memory
-  allocated by Datarouter
-end note
-
-
-node TypeXSubscriber as type_subscriber {
+node "Persistent Storage" as persistent_storage {
+  database "sysedr_N.dlt.gz" as sysedr_files
 }
 
-type_forwarder ==> sub_rb
-sub_rb ==> type_subscriber
+sysedr_handler --> persistent_storage
 
-frame "UDP ports"  {
-  boundary HighPriorityMessages as udp_1
-  boundary LowPriorityMessages as udp_2
-  boundary RawData as udp_3
+frame "DLT Channels (UDP multicast)" {
+  boundary "DltLogChannel 1" as udp_1
+  boundary "DltLogChannel 2" as udp_2
+  boundary "DltLogChannel N" as udp_N
 }
 
-sourcesession1 ~~> vfilter: <verbose>
-sourcesession2 ~~> vfilter: <verbose>
-sourcesession1 ..> nvfilter: *
-sourcesession2 ..> nvfilter: *
-sourcesession1 --> type_handler: <T>
-sourcesession2 --> type_handler: <T>
+sourcesession1 ~~> vfilter : <verbose>
+sourcesession2 ~~> vfilter : <verbose>
+sourcesession1 ..> nvfilter : *
+sourcesession2 ..> nvfilter : *
+sourcesession1 --> sysedr_handler : <SysedrMessage>
+sourcesession2 --> sysedr_handler : <SysedrMessage>
+sourcesession1 --> fthandler : <FileTransfer>
+sourcesession2 --> fthandler : <FileTransfer>
 
 vpack -> Demux
 nvpack -> Demux
+fthandler -> Demux
 
-dlt1 -> udp_1
-dlt2 -> udp_2
-dlt3 -> udp_3
+dlt_ch1 -> udp_1
+dlt_ch2 -> udp_2
+dlt_chN -> udp_N
 
 @enduml

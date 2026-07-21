@@ -1,23 +1,41 @@
 @startuml
 
-title Tracing startup
+title Tracing startup (lazy initialization on first TRACE() call)
 
 participant main as main
-participant TracingLifecycle
-participant "logger::instance : Logger" as logger
-participant "writer : MwsrWriter" as writer
+participant "TRACE(arg)" as TRACE_FN
+participant "LogEntry<T>::Instance()" as log_entry
+participant "Logger::Instance()" as logger
+participant "WriterFactory" as writer_factory
+participant "SharedMemoryWriter" as shm_writer
 
-main -> TracingLifecycle ++: Start()
+main -> TRACE_FN ++: TRACE(variable)\n(first call)
 
-TracingLifecycle -> logger ++: instance()
-logger -> logger: Logger()
-logger -> writer **: MwsrWriter()
-activate writer
-logger --> TracingLifecycle --: logger_instance
+group One-time lazy initialization
+TRACE_FN -> log_entry ++: Instance()
+log_entry -> logger ++: Instance()
+logger -> writer_factory ++: Create(app_id, ctx_id)
+writer_factory -> shm_writer **: SharedMemoryWriter(shmem_file)
+activate shm_writer
+note right
+Shared memory file:
+/tmp/logging.<appid>.<uid>.shmem
+or /tmp/logging-<random>.shmem
+end note
+writer_factory --> logger -- : shm_writer
+logger --> log_entry --: Logger&
+log_entry -> logger ++: RegisterType<T>()
+logger -> shm_writer ++: TryRegisterType()
+logger <-- shm_writer --: TypeIdentifier
+log_entry <-- logger --
+log_entry --> TRACE_FN --: LogEntry&
+end
 
-TracingLifecycle -> writer ++: initialize()
-TracingLifecycle <-- writer --: success
+TRACE_FN -> log_entry ++: TryWriteIntoSharedMemory(variable)
+log_entry -> shm_writer ++: AllocAndWrite(...)
+log_entry <-- shm_writer --
+TRACE_FN <-- log_entry --
 
-main <-- TracingLifecycle --: startup_complete
+main <-- TRACE_FN --
 
 @enduml
