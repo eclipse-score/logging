@@ -1,14 +1,1 @@
-[
-  {
-    "name": "LogParserTest__FilterForwarderWithSingleForwarder",
-    "file": "score/datarouter/test/ut/ut_logging/test_logparser.cpp",
-    "line": 115,
-    "need": "comp_req__data_router__dlt_verbose_messages",
-    "verify_type": "partially",
-    "result": "passed",
-    "result_text": "",
-    "repo_name": "local_repo",
-    "hash": "",
-    "url": ""
-  }
-]
+[]
