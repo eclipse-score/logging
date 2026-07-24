@@ -29,6 +29,7 @@ load("@rules_pkg//pkg:tar.bzl", "pkg_tar")
 cc_binary(
     name = "logging_app",
     srcs = ["logging_app.cpp"],
+    visibility = ["//visibility:public"],
     deps = ["//score/mw/log"],
 )
 
