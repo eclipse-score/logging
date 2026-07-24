@@ -30,16 +30,6 @@ It integrates best practices for build, test, CI/CD and documentation.
 Requirements
 ------------
 
-.. stkh_req:: Example Functional Requirement
-   :id: stkh_req__docgen_enabled__example
-   :status: valid
-   :safety: QM
-   :security: YES
-   :reqtype: Functional
-   :valid_from: v1.0.0
-   :rationale: Ensure documentation builds are possible for all modules
-
-
 Project Layout
 --------------
 
