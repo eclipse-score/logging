@@ -29,7 +29,6 @@ load("@rules_pkg//pkg:tar.bzl", "pkg_tar")
 cc_binary(
     name = "dlt_generator",
     srcs = ["dlt_generator.cpp"],
-    visibility = ["//visibility:public"],
     deps = ["//score/mw/log"],
 )
 
