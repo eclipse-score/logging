@@ -54,7 +54,7 @@ py_itf_test(
         ":test_logging_detached_logs",
         ":test_logging_after_delayed_dr_start",
         ":test_dr_session_memory_leak",
-        "test_sender_timeout",
+        "test_datarouter_stuck",
     ],
     visibility = ["//platform/aas/test:__pkg__"],
 )
@@ -427,10 +427,10 @@ py_itf_test(
 )
 
 py_itf_test(
-    name = "test_sender_timeout",
+    name = "test_datarouter_stuck",
     srcs = [
         "main.py",
-        "test_sender_timeout.py",
+        "test_datarouter_stuck.py",
     ],
     data_target = [
         ":logging-app-artifacts",
