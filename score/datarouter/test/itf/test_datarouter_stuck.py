@@ -29,7 +29,7 @@ _LOGGING_APP = "dlt_generator"
 
 # kTicksWithoutAcquireWhileNoWrites = 10 ticks, each tick = mp_worker 100 ms interval.
 # After the frozen client's ring buffer is drained, the session needs >10 consecutive
-# ticks with no data before tick() calls AcquireRequest() ? sender_->Send().
+# ticks with no data before tick() calls AcquireRequest() -> sender_->Send().
 # 10 * 100 ms = 1000 ms minimum; +500 ms margin = 1500 ms.
 _TICKS_UNTIL_ACQUIRE_MS = 10 * 100  # kTicksWithoutAcquireWhileNoWrites * tick interval
 _ACQUIRE_WAIT_SEC = (_TICKS_UNTIL_ACQUIRE_MS + 500) / 1000.0  # 1.5 s
@@ -39,6 +39,62 @@ _ACQUIRE_WAIT_SEC = (_TICKS_UNTIL_ACQUIRE_MS + 500) / 1000.0  # 1.5 s
 # and THSEND / THREPLY / THNET_SEND / THNET_REPLY for network IPC.
 # Both forms must be checked.
 _STUCK_THREAD_STATES = ["SEND", "REPLY", "THSEND", "THNET_SEND", "THREPLY", "THNET_REPLY"]
+
+# ---------------------------------------------------------------------------
+# RemoteBinaryExecution extension
+# ---------------------------------------------------------------------------
+
+class _FrozenClientExecution(RemoteBinaryExecution):
+    """Extends RemoteBinaryExecution with:
+      - PID capture after the process starts (obtained via get_app_pids).
+      - A custom shutdown procedure: SIGCONT + SIGKILL via a dedicated SSH
+        connection, so the frozen process is always cleaned up on context exit
+        without blocking the caller.
+    """
+
+    def __init__(self, target_fixture, app_path, app_name):
+        super().__init__(target_fixture, app_path, app_name)
+        self._target_fixture = target_fixture
+        self._app_name = app_name
+        self.pid = None
+
+    def start_and_capture_pid(self, iterations: int = 1000000, poll_attempts: int = 10):
+        """Launch the app in a background thread and poll until the PID appears.
+
+        Uses run() (not run_in_background) so the SSH channel is owned
+        internally and never shared with signal commands.
+        """
+        runner = threading.Thread(
+            target=self.run,
+            kwargs={"timeout": 300, "args": f"--it {iterations}"},
+            daemon=True,
+        )
+        runner.start()
+
+        for _ in range(poll_attempts):
+            time.sleep(0.5)
+            pids = get_app_pids(self._target_fixture, self._app_name)
+            if pids:
+                self.pid = pids[0]
+                break
+
+        return self.pid
+
+    def __exit__(self, exc_type, value, traceback):
+        """Resume + kill the (possibly frozen) process before the base class
+        teardown removes the binary from the target.  A dedicated SSH
+        connection is used so a frozen process cannot block the channel.
+        """
+        if self.pid is not None:
+            logger.info("_FrozenClientExecution teardown: SIGCONT + SIGKILL PID %d.", self.pid)
+            try:
+                with self._target_fixture.sut.ssh() as ssh:
+                    execute_command(ssh, f"kill -CONT {self.pid}", timeout=5, max_exec_time=10)
+                    execute_command(ssh, f"kill -9 {self.pid}", timeout=5, max_exec_time=10)
+            except Exception:  # pylint: disable=broad-except
+                logger.warning("Failed to kill PID %d during teardown -- ignoring.", self.pid)
+        super().__exit__(exc_type, value, traceback)
+
 
 # ---------------------------------------------------------------------------
 # Helpers
@@ -118,29 +174,12 @@ def test_datarouter_stuck_on_client_sigstop(target_fixture):
     """
 
     # ------------------------------------------------------------------
-    # Step 1 -- Start client A using run() on a background thread.
-    #           run() opens its own internal SSH connection, so it is
-    #           fully isolated -- no shared-channel bleed-over with any
-    #           later signal commands.
+    # Step 1 -- Start client A using _FrozenClientExecution.
+    #           run() opens its own internal SSH connection (fully isolated).
+    #           __exit__ automatically resumes + kills the frozen process.
     # ------------------------------------------------------------------
-    with RemoteBinaryExecution(
-        target_fixture, _APP_PATH, _LOGGING_APP
-    ) as client_a:
-        runner_thread = threading.Thread(
-            target=client_a.run,
-            kwargs={"timeout": 300, "args": "--it 1000000"},
-            daemon=True,
-        )
-        runner_thread.start()
-
-        # Poll until the process appears (up to 5 s).
-        client_pid = None
-        for _ in range(10):
-            time.sleep(0.5)
-            pids = get_app_pids(target_fixture, _LOGGING_APP)
-            if pids:
-                client_pid = pids[0]
-                break
+    with _FrozenClientExecution(target_fixture, _APP_PATH, _LOGGING_APP) as client_a:
+        client_pid = client_a.start_and_capture_pid()
 
         assert client_pid is not None, "Client A did not start within 5 s"
         logger.info("Client A PID: %d", client_pid)
@@ -185,6 +224,9 @@ def test_datarouter_stuck_on_client_sigstop(target_fixture):
 
         # ------------------------------------------------------------------
         # Step 4 -- Assert no mp_worker stuck in THSEND (still during freeze).
+        #           Cleanup is handled automatically by _FrozenClientExecution
+        #           __exit__: SIGCONT + SIGKILL are sent on context exit,
+        #           even if this assertion fails.
         # ------------------------------------------------------------------
         assert _datarouter_is_alive(target_fixture), (
             "datarouter died while client A was frozen."
@@ -192,14 +234,3 @@ def test_datarouter_stuck_on_client_sigstop(target_fixture):
         assert not _datarouter_has_stuck_threads(target_fixture, client_pid), (
             "At least one datarouter thread is stuck in THSEND while client A is frozen. "
         )
-
-        # ------------------------------------------------------------------
-        # Step 5 -- Cleanup: resume client A and then kill it so it does not
-        #           remain suspended on the target after the test completes.
-        #           SIGCONT is required first because SIGKILL is not delivered
-        #           to a stopped process on QNX until it is continued.
-        # ------------------------------------------------------------------
-        logger.info("Resuming and killing frozen client A PID %d (cleanup).", client_pid)
-        with target_fixture.sut.ssh() as signal_ssh:
-            execute_command(signal_ssh, f"kill -CONT {client_pid}", timeout=5, max_exec_time=10)
-            execute_command(signal_ssh, f"kill -9 {client_pid}", timeout=5, max_exec_time=10)
