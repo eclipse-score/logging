@@ -16,6 +16,7 @@
 #include "score/datarouter/include/daemon/configurator_commands.h"
 #include "score/datarouter/include/daemon/diagnostic_job_parser.h"
 #include "score/datarouter/include/daemon/i_diagnostic_job_handler.h"
+#include "score/mw/log/logging.h"
 
 #include <algorithm>
 #include <sstream>
