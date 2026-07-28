@@ -45,7 +45,8 @@ rust-project.json
 .ruff_cache
 
 # docs:incremental and docs:ide_support build artifacts
-/_build
+_build
+ubproject.toml
 
 # Vale - editorial style guide
 .vale.ini

@@ -10,11 +10,7 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 # *******************************************************************************
-module(
-    name = "score_logging",
-    version = "0.0.0",
-    compatibility_level = 0,
-)
+module(name = "score_logging")
 
 # Bazel global rules
 bazel_dep(name = "rules_python", version = "1.4.1")
@@ -27,18 +23,17 @@ bazel_dep(name = "platforms", version = "1.0.0")
 
 # S-CORE process rules
 bazel_dep(name = "score_bazel_platforms", version = "0.1.2")
-bazel_dep(name = "score_docs_as_code", version = "4.0.1")
-single_version_override(
-    module_name = "score_docs_as_code",
-    version = "4.0.1",
-)
+bazel_dep(name = "score_docs_as_code", version = "4.6.0")
 
 bazel_dep(name = "score_tooling", version = "1.1.2")
 bazel_dep(name = "score_rust_policies", version = "0.0.3")
 
-bazel_dep(name = "score_process", version = "1.5.4", dev_dependency = True)
-bazel_dep(name = "score_platform", version = "0.5.5", dev_dependency = True)
+bazel_dep(name = "score_process", version = "2.0.2", dev_dependency = True)
+bazel_dep(name = "score_platform", version = "0.6.2", dev_dependency = True)
 bazel_dep(name = "score_itf", version = "0.4.0", dev_dependency = True)
+
+# Provide the tools from the devcontainer to Bazel
+bazel_dep(name = "score_devcontainer", version = "1.9.0", dev_dependency = True)
 
 # OCI / Docker image rules for integration tests
 bazel_dep(name = "rules_oci", version = "2.2.7", dev_dependency = True)

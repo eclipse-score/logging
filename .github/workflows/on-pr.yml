@@ -10,18 +10,19 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 # *******************************************************************************
+name: On PR Checks
 
-name: Formatting checks
-
+permissions:
+  contents: read
 on:
   pull_request:
     types: [opened, reopened, synchronize]
   merge_group:
     types: [checks_requested]
-env:
-  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  push:
+    branches:
+      - main
+
 jobs:
-  formatting-check:
-    uses: eclipse-score/cicd-workflows/.github/workflows/format.yml@main
-    with:
-      bazel-target: "test --lockfile_mode=error //:format.check" # optional, this is the default
+  common:
+    uses: eclipse-score/cicd-workflows/.github/workflows/on-pr.yml@on-pr/v0.0.0

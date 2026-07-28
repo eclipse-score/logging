@@ -1,5 +1,5 @@
 # *******************************************************************************
-# Copyright (c) 2025 Contributors to the Eclipse Foundation
+# Copyright (c) 2026 Contributors to the Eclipse Foundation
 #
 # See the NOTICE file(s) distributed with this work for additional
 # information regarding copyright ownership.
@@ -11,17 +11,5 @@
 # SPDX-License-Identifier: Apache-2.0
 # *******************************************************************************
 
-name: Copyright checks
-on:
-  pull_request:
-    types: [opened, reopened, synchronize]
-  merge_group:
-    types: [checks_requested]
-env:
-  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-jobs:
-  copyright-check:
-    uses: eclipse-score/cicd-workflows/.github/workflows/copyright.yml@main
-    with:
-      bazel-target: "run --lockfile_mode=error //:copyright.check"
+# Use Dockerfile to get dependabot version bumps after new image is released
+FROM ghcr.io/eclipse-score/devcontainer:v1.9.0
