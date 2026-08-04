@@ -43,27 +43,12 @@
 #include "score/datarouter/src/file_transfer/file_transfer_stub/file_transfer_stream_handler_stub.h"
 #endif
 
-#if defined(PERSISTENT_LOGGING)
-#include "score/datarouter/src/persistent_logging/persistent_logging/sysedr_concrete_factory.h"
-#else
-#include "score/datarouter/src/persistent_logging/persistent_logging_stub/stub_sysedr_factory.h"
-#endif
-
 namespace score
 {
 namespace platform
 {
 namespace internal
 {
-
-#if defined(PERSISTENT_LOGGING)
-using SysedrHandlerType = SysedrHandler;
-using SysedrFactoryType = SysedrConcreteFactory;
-#else
-using SysedrHandlerType = StubSysedrHandler;
-using SysedrFactoryType = StubSysedrFactory;
-#endif
-
 }  // namespace internal
 
 namespace datarouter

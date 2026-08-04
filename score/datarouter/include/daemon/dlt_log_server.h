@@ -48,7 +48,6 @@ namespace dltserver
 {
 
 const std::string kLogEntryTypeName{"score::mw::log::detail::LogEntry"};
-const std::string kPersistentRequestTypeName{"score::logging::internal::PersistentLoggingRequestStructure"};
 const std::string kFileTransferTypeName{"score::logging::FileTransferEntry"};
 class DltLogServer : score::platform::datarouter::DltNonverboseHandlerType::IOutput,
                      DltVerboseHandler::IOutput,
@@ -93,8 +92,6 @@ class DltLogServer : score::platform::datarouter::DltNonverboseHandlerType::IOut
           parser_(parser ? std::move(parser) : std::make_unique<DiagnosticJobParser>())
     {
         InitLogChannels();
-        SysedrFactoryType sysedr_factory;
-        sysedr_handler_ = sysedr_factory.CreateSysedrHandler();
     }
 
     virtual ~DltLogServer() = default;
@@ -102,14 +99,12 @@ class DltLogServer : score::platform::datarouter::DltNonverboseHandlerType::IOut
     // LCOV_EXCL_START
     std::vector<ILogParser::AnyHandler*> GetGlobalHandlers()
     {
-        return {sysedr_handler_.get(), &nvhandler_};
+        return {&nvhandler_};
     }
 
     std::vector<ILogParser::TypeHandlerBinding> GetTypeHandlerBindings()
     {
-        return {{kPersistentRequestTypeName, sysedr_handler_.get()},
-                {kLogEntryTypeName, &vhandler_},
-                {kFileTransferTypeName, &fthandler_}};
+        return {{kLogEntryTypeName, &vhandler_}, {kFileTransferTypeName, &fthandler_}};
     }
 
     // LCOV_EXCL_STOP
@@ -312,8 +307,6 @@ class DltLogServer : score::platform::datarouter::DltNonverboseHandlerType::IOut
     ConfigWriteCallback writer_callback_;
     std::unique_ptr<ILogSender> log_sender_;
     std::unique_ptr<IDiagnosticJobParser> parser_;
-
-    std::unique_ptr<ISysedrHandler> sysedr_handler_;
 
     void SendNonVerbose(const score::mw::log::config::NvMsgDescriptor& desc,
                         uint32_t tmsp,
