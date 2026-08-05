@@ -163,7 +163,15 @@ class MessagePassingServerFixture : public ::testing::Test
             .WillOnce(Return(ByMove(std::move(server_ptr))));
     }
 
-    void TearDown() override {}
+    void TearDown() override
+    {
+        if (server.has_value())
+        {
+            // Keep teardown safe even when ASSERT_* aborts a test before explicit cleanup.
+            ExpectServerDestruction();
+            server.reset();
+        }
+    }
 
     auto GetCountingSessionFactory()
     {
@@ -179,13 +187,20 @@ class MessagePassingServerFixture : public ::testing::Test
             // expect that the pid is unique;
             // this also serves as a test for correct handling of recurring connections with same pid
             EXPECT_TRUE(emplace_result.second);
-            SessionStatus& status = emplace_result.first->second;
+            const pid_t session_pid = emplace_result.first->second.pid;
 
             ++construct_count;
             auto session = std::make_unique<MockSession>();
-            EXPECT_CALL(*session, Tick).Times(AnyNumber()).WillRepeatedly([this, &status]() {
+            EXPECT_CALL(*session, Tick).Times(AnyNumber()).WillRepeatedly([this, session_pid]() {
                 ++tick_count;
-                status.IncrementTickCount();
+                {
+                    std::lock_guard<std::mutex> lock(map_mutex);
+                    const auto found = session_map.find(session_pid);
+                    if (found != session_map.end())
+                    {
+                        found->second.IncrementTickCount();
+                    }
+                }
                 CheckWaitTickUnblock();
                 return false;
             });
@@ -198,10 +213,10 @@ class MessagePassingServerFixture : public ::testing::Test
                 ++closed_by_peer_count;
             });
             EXPECT_CALL(*session, IsSourceClosed).Times(AnyNumber()).WillRepeatedly(Return(false));
-            EXPECT_CALL(*session, Destruct).Times(1).WillOnce([this, &status]() {
+            EXPECT_CALL(*session, Destruct).Times(1).WillOnce([this, session_pid]() {
                 ++destruct_count;
                 std::lock_guard<std::mutex> erase_lock(map_mutex);
-                session_map.erase(status.pid);
+                session_map.erase(session_pid);
                 map_cond.notify_all();
             });
             return session;
@@ -222,6 +237,29 @@ class MessagePassingServerFixture : public ::testing::Test
         tick_blocker_cond.wait(lock, [this]() {
             return !tick_blocker;
         });
+    }
+
+    bool WaitForWatchdogState(pid_t pid,
+                              bool acquire_in_flight,
+                              std::uint32_t miss_count,
+                              std::chrono::milliseconds timeout)
+    {
+        const auto deadline = std::chrono::steady_clock::now() + timeout;
+        while (std::chrono::steady_clock::now() < deadline)
+        {
+            if (server.has_value())
+            {
+                std::lock_guard<std::mutex> lock(server->mutex_);
+                const auto found = server->pid_session_map_.find(pid);
+                if (found != server->pid_session_map_.end() && found->second.acquire_in_flight == acquire_in_flight &&
+                    found->second.acquire_miss_count == miss_count)
+                {
+                    return true;
+                }
+            }
+            std::this_thread::sleep_for(std::chrono::milliseconds{1});
+        }
+        return false;
     }
 
     void InstantiateServer(MessagePassingServer::SessionFactory factory = {})
@@ -769,7 +807,7 @@ TEST_F(MessagePassingServerFixture, WatchdogMissCountShouldResetOnValidResponse)
     // 1) First acquire request is missed by the client -> miss_count becomes 1.
     session_map.at(kClienT0Pid).handle->AcquireRequest();
     using namespace std::chrono_literals;
-    std::this_thread::sleep_for(100ms);
+    ASSERT_TRUE(WaitForWatchdogState(kClienT0Pid, false, 1U, 1s)) << "Timed out waiting for first watchdog miss";
 
     // 2) Late valid response arrives -> miss_count should reset to 0.
     score::mw::log::detail::ReadAcquireResult acquire_result{0U};
@@ -777,10 +815,11 @@ TEST_F(MessagePassingServerFixture, WatchdogMissCountShouldResetOnValidResponse)
     response[0] = score::cpp::to_underlying(DatarouterMessageIdentifier::kAcquireResponse);
     std::memcpy(&response[1], &acquire_result, sizeof(acquire_result));
     sent_callback(*connection_ptr, response);
+    ASSERT_TRUE(WaitForWatchdogState(kClienT0Pid, false, 0U, 1s)) << "Timed out waiting for watchdog miss-count reset";
 
     // 3) One more missed acquire should NOT tear down (max_misses = 2, miss_count should be 1).
     session_map.at(kClienT0Pid).handle->AcquireRequest();
-    std::this_thread::sleep_for(100ms);
+    ASSERT_TRUE(WaitForWatchdogState(kClienT0Pid, false, 1U, 1s)) << "Timed out waiting for second watchdog miss";
     EXPECT_FALSE(session_map.empty());
 
     // 4) Second miss after the reset should now tear down.
@@ -1156,15 +1195,14 @@ TEST_F(MessagePassingServerFixture, FinishPreviousSessionWhileLockedCoversBody)
         std::unique_lock<std::mutex> lock(server_for_test->mutex_);
 
         // Insert a session directly into the map
-        server_for_test->pid_session_map_.emplace(
-            std::piecewise_construct,
-            std::forward_as_tuple(test_pid),
-            std::forward_as_tuple(
-                [server_for_test](pid_t p) {
-                    server_for_test->EnqueueTickWhileLocked(p);
-                },
-                test_pid,
-                std::move(session_mock)));
+        server_for_test->pid_session_map_.emplace(std::piecewise_construct,
+                                                  std::forward_as_tuple(test_pid),
+                                                  std::forward_as_tuple(
+                                                      [server_for_test](pid_t p) {
+                                                          server_for_test->EnqueueTickWhileLocked(p);
+                                                      },
+                                                      test_pid,
+                                                      std::move(session_mock)));
 
         auto it = server_for_test->pid_session_map_.find(test_pid);
 
