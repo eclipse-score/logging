@@ -45,7 +45,7 @@ void MessagePassingServer::SessionWrapper::EnqueueForDeleteWhileLocked(bool by_p
     // to be deleted (or re-enqueued for post-mortem processing, if closed by peer) at the end of the tick processing
     if (!running && !enqueued)
     {
-        server->EnqueueTickWhileLocked(pid);
+        enqueue_tick(pid);
         enqueued = true;
     }
 }
@@ -86,7 +86,7 @@ void MessagePassingServer::SessionWrapper::EnqueueTickWhileLocked()
     {
         if (!running)
         {
-            server->EnqueueTickWhileLocked(pid);
+            enqueue_tick(pid);
         }
         enqueued = true;
     }
@@ -102,8 +102,7 @@ void MessagePassingServer::SessionWrapper::EnqueueTickWhileLocked()
 MessagePassingServer::MessagePassingServer(MessagePassingServer::SessionFactory factory,
                                            std::shared_ptr<score::message_passing::IServerFactory> server_factory,
                                            AcquireWatchdogConfig watchdog_config)
-    : IMessagePassingServerSessionWrapper(),
-      factory_{std::move(factory)},
+    : factory_{std::move(factory)},
       mutex_{},
       stop_source_{},
       connection_timeout_{},
@@ -485,7 +484,11 @@ void MessagePassingServer::OnConnectRequest(score::message_passing::IServerConne
             return;
         }
 
-        auto emplace_result = pid_session_map_.emplace(pid, SessionWrapper{this, pid, std::move(session)});
+        auto enqueue_tick_callback = [this](pid_t p) {
+            EnqueueTickWhileLocked(p);
+        };
+        auto emplace_result =
+            pid_session_map_.emplace(pid, SessionWrapper{std::move(enqueue_tick_callback), pid, std::move(session)});
         if (!emplace_result.second)
         {
             // Existing session for this PID is still present; do not overwrite it.

@@ -99,16 +99,11 @@ class MockSession : public MessagePassingServer::ISession
     }
 };
 
-class MockIMessagePassingServerSessionWrapper : public IMessagePassingServerSessionWrapper
-{
-  public:
-    MOCK_METHOD(void, EnqueueTickWhileLocked, (pid_t pid), (override));
-};
-
 class MessagePassingServer::MessagePassingServerForTest : public MessagePassingServer
 {
   public:
     using MessagePassingServer::connection_timeout_;
+    using MessagePassingServer::EnqueueTickWhileLocked;
     using MessagePassingServer::FinishPreviousSessionWhileLocked;
     using MessagePassingServer::MessagePassingServer;
     using MessagePassingServer::mutex_;
@@ -963,13 +958,13 @@ TEST_P(SessionWrapperParamTest, EnqueueForDeleteWhileLockedTest)
     const auto& test_params = GetParam();
 
     auto session_mock = std::make_unique<MockSession>();
-    MockIMessagePassingServerSessionWrapper server_mock;
+    testing::MockFunction<void(pid_t)> server_mock;
     const pid_t pid = 11;
 
     MessagePassingServer::MessagePassingServerForTest::SessionWrapper session_wrapper(
-        &server_mock, pid, std::move(session_mock));
+        server_mock.AsStdFunction(), pid, std::move(session_mock));
 
-    EXPECT_CALL(server_mock, EnqueueTickWhileLocked(pid)).Times(test_params.expected_enqueued_called_count);
+    EXPECT_CALL(server_mock, Call(pid)).Times(test_params.expected_enqueued_called_count);
 
     session_wrapper.enqueued = test_params.input_enqueued;
     session_wrapper.running = test_params.input_running;
@@ -1164,7 +1159,12 @@ TEST_F(MessagePassingServerFixture, FinishPreviousSessionWhileLockedCoversBody)
         server_for_test->pid_session_map_.emplace(
             std::piecewise_construct,
             std::forward_as_tuple(test_pid),
-            std::forward_as_tuple(server_for_test, test_pid, std::move(session_mock)));
+            std::forward_as_tuple(
+                [server_for_test](pid_t p) {
+                    server_for_test->EnqueueTickWhileLocked(p);
+                },
+                test_pid,
+                std::move(session_mock)));
 
         auto it = server_for_test->pid_session_map_.find(test_pid);
 
