@@ -92,9 +92,7 @@ TEST(AlternatingControlBlockTest, GetOppositeLinearControlBlockShallReturnkBlock
 {
     RecordProperty("DerivationTechnique", "Analysis of boundary values");
     RecordProperty("TestingTechnique", "Interface tests");
-    RecordProperty("Verifies",
-                   "score::mw::log::detail::wait_free_producer_queue::alternating_control_block_test::"
-                   "GetOppositeLinearControlBlock");
+    RecordProperty("Verifies", "::score::mw::log::detail::GetOppositeLinearControlBlock()");
     RecordProperty("ASIL", "B");
     RecordProperty("Description",
                    "Verifies the ability of returning the default value in case of passing unknown value to "
