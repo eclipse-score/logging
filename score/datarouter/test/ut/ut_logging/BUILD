@@ -452,8 +452,8 @@ py_unittest_qnx_test(
         ":utility_test",
         ":FileTransferHandlerFactoryUT",
         ":PersistentDictionaryFactoryUT",
-        # "//score/datarouter/persistent_log_request/test:test_persistent_log_request",
-        # "//score/datarouter/tools/generator:fibex_generator_test",
+        "//score/datarouter/persistent_log_request/test:test_persistent_log_request",
+        "//score/datarouter/tools/generator:fibex_generator_test",
     ],
     visibility = ["//visibility:public"],  # platform_only
 )
