@@ -11,8 +11,8 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 #include "score/mw/log/detail/common/dlt_format.h"
-#include "score/bitmanipulation/bit_manipulation.h"
 #include "score/mw/log/detail/common/helper_functions.h"
+#include "score/bitmanipulation/bit_manipulation.h"
 
 #include "score/assert.hpp"
 #include "score/span.hpp"
