@@ -93,7 +93,7 @@ The Serialization/Visitor pattern implements structure serialization using C++ c
 1. The compile-time macro:
 
 ```c++
-STRUCT_TRACEABLE(S, member1, member2)
+SCORE_STRUCT_TRACEABLE(S, member1, member2)
 ```
 
 generates a `visit(Visitor& v, T& s)` function template that iterates through arguments and their names (`S, "member1", member1, "member2", member2`) with a compile-time `Visitor`. The visitor type serves as a function template argument, enabling `visit(v,s)` usage with different visitor implementations. Each visitor defines a `visit_struct()` entry point function.

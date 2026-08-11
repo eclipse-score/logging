@@ -43,7 +43,7 @@ struct DisabledLoggerTestEntry
     bool dummy;
 };
 
-STRUCT_TRACEABLE(DisabledLoggerTestEntry, dummy)
+SCORE_STRUCT_TRACEABLE(DisabledLoggerTestEntry, dummy)
 }  // namespace test_data
 
 namespace
@@ -336,8 +336,8 @@ struct NonVerboseMessage
     bool bool_value;
 };
 
-STRUCT_TRACEABLE(NonVerboseMessage, bool_value)
-STRUCT_TRACEABLE(DropCounterTestEntry, test_value)
+SCORE_STRUCT_TRACEABLE(NonVerboseMessage, bool_value)
+SCORE_STRUCT_TRACEABLE(DropCounterTestEntry, test_value)
 
 TEST(TraceFixtureTest, WhenTraceWithLogEnabledAndTraceLevelDoesNotExceed)
 {

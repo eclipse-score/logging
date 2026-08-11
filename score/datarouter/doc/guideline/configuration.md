@@ -91,3 +91,21 @@ The file has multiple sections.
 - **messageThresholds**: specifies filter thresholds based on AppId and CtxId
 - **defaultChannel**: if no channelAssignment has been matched, this channel is used
 - **defaultThresold**: if no messageThreshold matched, this threshold is used to filter the messages
+
+### Overriding the config file path at runtime
+
+By default the datarouter reads `log-channels.json` from `./etc/log-channels.json` relative to its working directory. The path can be overridden at startup using the `-c` / `--config` flag:
+
+```bash
+./datarouter --no_adaptive_runtime --config /path/to/log-channels.json
+```
+
+This is useful for image-level configuration (different deployment images can supply different channel layouts without recompilation) or for manual testing against a local config file without modifying the installed `etc/` tree.
+
+Similarly, the non-verbose configuration file (`class-id.json`) uses a compiled-in deployment path when no override is given, and can be overridden with `-C` / `--nv-config`:
+
+```bash
+./datarouter --no_adaptive_runtime --nv-config /path/to/class-id.json
+```
+
+When neither flag is provided the datarouter uses its compiled-in default paths: `./etc/log-channels.json` for the channel configuration and a fixed deployment path for the non-verbose configuration.

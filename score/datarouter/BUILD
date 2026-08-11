@@ -384,6 +384,7 @@ cc_library(
     visibility = ["//score/datarouter/test:__subpackages__"],
     deps = [
         "//score/mw/log",
+        "@score_baselibs//score/os:getopt",
     ],
 )
 
@@ -563,7 +564,7 @@ cc_library(
             ],
         }) + select({
             "//score/datarouter/build_configuration_flags:config_persistent_logging": [
-                "//score/datarouter/src/persistent_logging/persistent_logging_stub:sysedr_stub",
+                "//score/datarouter/src/persistent_logging/persistent_logging:sysedr",
             ],
             "//conditions:default": [
                 "//score/datarouter/src/persistent_logging/persistent_logging_stub:sysedr_stub",
@@ -626,7 +627,7 @@ cc_library(
         ":udp_stream_output",
         ":unixdomain_server",
         "//score/datarouter/network:vlan",
-        "//score/datarouter/src/persistent_logging/persistent_logging_stub:sysedr_stub",
+        "//score/datarouter/src/persistent_logging/persistent_logging:sysedr",
         "//score/mw/log",
         "@score_baselibs//score/language/futurecpp",
         "@score_baselibs//score/mw/log/configuration:nvconfig",
@@ -808,7 +809,7 @@ cc_library(
         "@score_baselibs//score/mw/log/configuration:nvconfigfactory",
     ] + select({
         "//score/datarouter/build_configuration_flags:config_persistent_logging": [
-            "//score/datarouter/src/persistent_logging/persistent_logging_stub:sysedr_stub",
+            "//score/datarouter/src/persistent_logging/persistent_logging:sysedr",
         ],
         "//conditions:default": [],
     }),
@@ -845,7 +846,7 @@ cc_library(
         "@score_baselibs//score/mw/log/configuration:nvconfigfactory",
     ] + select({
         "//score/datarouter/build_configuration_flags:config_persistent_logging": [
-            "//score/datarouter/src/persistent_logging/persistent_logging_stub:sysedr_stub",
+            "//score/datarouter/src/persistent_logging/persistent_logging:sysedr",
         ],
         "//conditions:default": [],
     }),
@@ -1106,7 +1107,7 @@ cc_library(
         "//score/mw/log",
         "@score_baselibs//score/mw/log/configuration:nvconfig",
         "//score/datarouter/dlt_filetransfer_trigger_lib:filetransfer_message_types",
-        "//score/datarouter/src/persistent_logging/persistent_logging_stub:sysedr_stub",
+        "//score/datarouter/src/persistent_logging/persistent_logging:sysedr",
     ],
 )
 

@@ -60,7 +60,7 @@ Deviation from Rule M11-0-1:
 Justification:
 - Maintaining compatibility and avoiding performance overhead outweighs POD Type (class) based design for this
   particular struct. The Type is simple and does not require invariance (interface OR custom behavior) as per the
-  design. Moreover the type is used with STRUCT_TRACEABLE for serialization purpose
+  design. Moreover the type is used with SCORE_STRUCT_TRACEABLE for serialization purpose
 */
 // coverity[autosar_cpp14_a11_0_2_violation]
 struct LogEntryDeserializationReflection
@@ -84,20 +84,20 @@ struct LogEntryDeserializationReflection
 // NOLINTEND(score-struct-usage-compliance) See above
 
 // LCOV_EXCL_START
-// STRUCT_TRACEABLE macro tested in score/serialization/serializer_test.cpp
+// SCORE_STRUCT_TRACEABLE macro tested in score/serialization/serializer_test.cpp
 // Not required to test this macro with another structure/data
 /*
 Deviation from Rule A0-1-1:
 - A project shall not contain instances of non-volatile variables being given values that are not subsequently used.
 
 Justification:
-- we need to use STRUCT_TRACEABLE here and create an instance of LogEntryDeserializationReflection
+- we need to use SCORE_STRUCT_TRACEABLE here and create an instance of LogEntryDeserializationReflection
 - to get the size of LogEntryDeserializationReflection for serialization purpose
 */
 // coverity[autosar_cpp14_a11_0_2_violation]
 // coverity[autosar_cpp14_a0_1_1_violation]
 // coverity[autosar_cpp14_a18_9_4_violation]
-STRUCT_TRACEABLE(LogEntryDeserializationReflection, app_id, ctx_id, serialized_vector_data, num_of_args, log_level)
+SCORE_STRUCT_TRACEABLE(LogEntryDeserializationReflection, app_id, ctx_id, serialized_vector_data, num_of_args, log_level)
 // LCOV_EXCL_STOP
 
 }  // namespace log_entry_deserialization

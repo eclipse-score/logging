@@ -14,11 +14,11 @@
 #include "options.h"
 
 #include "score/mw/log/logging.h"
+#include "score/os/getopt.h"
 
-#include <score/span.hpp>
-#include <getopt.h>
 #include <array>
 #include <iostream>
+#include <optional>
 #include <string>
 #include <string_view>
 
@@ -31,28 +31,6 @@ void EmitMessage(const std::string& msg)
     score::mw::log::LogError() << "Error in command line:" << msg;
 }
 
-void ReportError(const std::string& text, const char opt_char, const std::string& arg)
-{
-    std::string msg = text;
-
-    msg += " option \"";
-
-    //  If a long option, take it as it is.
-    //  Otherwise use the single option character.
-    if (arg.rfind("--", 0) == 0)
-    {
-        msg += arg;
-    }
-    else
-    {
-        msg += opt_char;
-    }
-
-    msg += "\"";
-
-    EmitMessage(msg);
-}
-
 void PrintUsage(std::string_view program)
 {
     std::cout
@@ -62,8 +40,13 @@ void PrintUsage(std::string_view program)
            "  -h, --help Print this message and exit.\n"
            "  -v, --verbose Display plenty of output to stdout.\n"
            "  -n, --no_adaptive_runtime Do not use the Vector stack. Persistentcy features will not be available.\n"
-           "  -V, --version Print the version number of make and exit.\n";
+           "  -V, --version Print the version number of make and exit.\n"
+           "  -c, --config <path> Path to the channel configuration (log-channels.json). Defaults to the "
+           "built-in path when omitted.\n"
+           "  -C, --nv-config <path> Path to the non-verbose configuration (class-id.json). Defaults to the "
+           "built-in path when omitted.\n";
 }
+
 }  // namespace
 
 namespace score
@@ -80,74 +63,79 @@ bool Options::Parse(std::int32_t argc, char* const argv[])
 {
     Options& options = Options::Get();
 
-    score::cpp::span<char* const> args(argv, static_cast<score::cpp::span<char* const>::size_type>(argc));
+    // Suppress getopt's built-in stderr output; diagnostics are emitted via EmitMessage.
+    opterr = 0;
 
-    for (std::int32_t arg_index = 1; arg_index < argc; ++arg_index)
+    // NOLINTNEXTLINE(modernize-avoid-c-arrays): required by the getopt_long API.
+    static const std::array<::option, 7> kLongOptions{{
+        {"help", no_argument, nullptr, 'h'},
+        {"verbose", no_argument, nullptr, 'v'},
+        {"no_adaptive_runtime", no_argument, nullptr, 'n'},
+        {"version", no_argument, nullptr, 'V'},
+        {"config", required_argument, nullptr, 'c'},
+        {"nv-config", required_argument, nullptr, 'C'},
+        {nullptr, 0, nullptr, 0},
+    }};
+
+    score::os::Getopt& getopt_instance = score::os::Getopt::instance();
+    std::int32_t longindex{0};
+    std::int32_t opt{};
+
+    // Leading ':' in optstring causes getopt_long to return ':' (not '?') on missing arguments.
+    while ((opt = getopt_instance.getopt_long(argc, argv, ":hvnVc:C:", kLongOptions.data(), &longindex)) != -1)
     {
-        std::string_view argument_token{score::cpp::at(args, arg_index)};
-
-        // Long options: --help, --verbose, --no_adaptive_runtime, --version
-        if (argument_token.size() > 2 && argument_token[0] == '-' && argument_token[1] == '-')
+        switch (opt)
         {
-            std::string_view long_option_name = argument_token.substr(2);
-            if (long_option_name == "help")
-            {
-                PrintUsage(args.front());
+            case 'h':
+                PrintUsage(argv[0]);
                 options.do_nothing_ = true;
                 return true;
-            }
-            else if (long_option_name == "verbose")
-            {
+
+            case 'v':
                 options.verbose_ = true;
-            }
-            else if (long_option_name == "no_adaptive_runtime")
-            {
+                break;
+
+            case 'n':
                 options.no_adaptive_runtime_ = true;
-            }
-            else if (long_option_name == "version")
-            {
+                break;
+
+            case 'V':
                 options.print_version_ = true;
                 return true;
-            }
-            else
-            {
-                ReportError("Unknown", '?', score::cpp::at(args, arg_index));
-                return false;
-            }
-        }
 
-        // Short options: -h, -v, -n, -V
-        else if (argument_token.size() >= 2 && argument_token[0] == '-')
-        {
-            // In some "case" below we are not returning directly to support the grouping of options, for example : -vn
-            for (size_t short_option_index = 1; short_option_index < argument_token.size(); ++short_option_index)
+            case 'c':  // -c / --config
             {
-                char short_option_char = argument_token[short_option_index];
-                // using help or version results in exiting the parse function.
-                switch (short_option_char)
+                const std::string_view value{optarg};
+                if (value.empty())
                 {
-                    case 'h':
-                        PrintUsage(args.front());
-                        options.do_nothing_ = true;
-                        return true;
-
-                    case 'v':
-                        options.verbose_ = true;
-                        break;
-
-                    case 'n':
-                        options.no_adaptive_runtime_ = true;
-                        break;
-
-                    case 'V':
-                        options.print_version_ = true;
-                        return true;
-
-                    default:
-                        ReportError("Unknown", short_option_char, score::cpp::at(args, arg_index));
-                        return false;
+                    EmitMessage(R"(Missing value for option "-c/--config")");
+                    return false;
                 }
+                options.config_path_ = std::string{value};
+                break;
             }
+
+            case 'C':  // -C / --nv-config
+            {
+                const std::string_view value{optarg};
+                if (value.empty())
+                {
+                    EmitMessage(R"(Missing value for option "-C/--nv-config")");
+                    return false;
+                }
+                options.nv_config_path_ = std::string{value};
+                break;
+            }
+
+            case ':':
+                EmitMessage(std::string{"Missing value for option \""} +
+                            std::string{argv[getopt_instance.getoptind() - 1]} + "\"");
+                return false;
+
+            default:  // '?'
+                EmitMessage(std::string{"Unknown option \""} + std::string{argv[getopt_instance.getoptind() - 1]} +
+                            "\"");
+                return false;
         }
     }
 

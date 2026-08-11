@@ -28,6 +28,7 @@
 #include <functional>
 #include <iostream>
 #include <memory>
+#include <optional>
 #include <string>
 
 // Forward declaration for testing
@@ -68,10 +69,16 @@ class SocketServer
         bool is_dlt_enabled{false};
     };
 
-    static void Run(const std::atomic_bool& exit_requested, const bool no_adaptive_runtime)
+    // A std::nullopt log_channels_path / nv_config_path keeps the built-in
+    // default path, so the default behaviour is preserved unless --config /
+    // --nv-config were provided.
+    static void Run(const std::atomic_bool& exit_requested,
+                    const bool no_adaptive_runtime,
+                    const std::optional<std::string>& log_channels_path = std::nullopt,
+                    const std::optional<std::string>& nv_config_path = std::nullopt)
     {
         static SocketServer server;
-        server.DoWork(exit_requested, no_adaptive_runtime);
+        server.DoWork(exit_requested, no_adaptive_runtime, log_channels_path, nv_config_path);
     }
     //  static void run(const std::atomic_bool& exit_requested, const bool no_adaptive_runtime);
 
@@ -81,7 +88,8 @@ class SocketServer
         std::unique_ptr<IPersistentDictionary>& persistent_dictionary);
 
     static std::unique_ptr<score::logging::dltserver::DltLogServer> CreateDltServer(
-        const PersistentStorageHandlers& storage_handlers);
+        const PersistentStorageHandlers& storage_handlers,
+        const std::optional<std::string>& log_channels_path = std::nullopt);
 
     static std::unique_ptr<score::platform::internal::ILogParserFactory> CreateLogParserFactory(
         score::logging::dltserver::DltLogServer& dlt_server);
@@ -120,7 +128,10 @@ class SocketServer
                                                    const std::string& appid);
 
   private:
-    void DoWork(const std::atomic_bool& exit_requested, const bool no_adaptive_runtime);
+    void DoWork(const std::atomic_bool& exit_requested,
+                const bool no_adaptive_runtime,
+                const std::optional<std::string>& log_channels_path,
+                const std::optional<std::string>& nv_config_path);
 };
 
 }  // namespace datarouter
