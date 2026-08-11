@@ -23,13 +23,13 @@ namespace score
 namespace platform
 {
 
-// The MEMCPY_SERIALIZABLE macro is part of the Tracing infrastructure and is tested independently.
+// The SCORE_MEMCPY_SERIALIZABLE macro is part of the Tracing infrastructure and is tested independently.
 // This usage is declarative only and does not contain logic specific to this module.
 // Excluding from coverage to avoid inflating coverage metrics with non-functional declarations.
 // LCOV_EXCL_START : See above
-// MEMCPY_SERIALIZABLE won't cause data loss.
+// SCORE_MEMCPY_SERIALIZABLE won't cause data loss.
 // coverity[autosar_cpp14_a4_7_1_violation]
-MEMCPY_SERIALIZABLE(score::common::visitor::payload_tags::text, DltidT)
+SCORE_MEMCPY_SERIALIZABLE(score::common::visitor::payload_tags::text, DltidT)
 // LCOV_EXCL_STOP
 
 namespace internal
@@ -48,17 +48,17 @@ struct LogEntryFilter
     uint8_t log_level_threshold = 0U;
 };
 
-// The STRUCT_TRACEABLE macro is part of the Tracing infrastructure and is tested independently.
+// The SCORE_STRUCT_TRACEABLE macro is part of the Tracing infrastructure and is tested independently.
 // This usage is declarative only and does not contain logic specific to this module.
 // Excluding from coverage to avoid inflating coverage metrics with non-functional declarations.
 // LCOV_EXCL_START : See above
 // Suppress "AUTOSAR C++14 A18-9-4". The rule states: An argument to std::forward shall not be subsequently used.
-// Rationale: STRUCT_TRACEABLE is a macro, std::forward is from the macro definition
+// Rationale: SCORE_STRUCT_TRACEABLE is a macro, std::forward is from the macro definition
 // Suppress "AUTOSAR C++14 M3-2-3" rule finding. This rule states: "A type, object or function that is used in multiple
 // translation units shall be declared in one and only one file.".
 // coverity[autosar_cpp14_a18_9_4_violation]
 // coverity[autosar_cpp14_m3_2_3_violation]
-STRUCT_TRACEABLE(LogEntryFilter, app_id, ctx_id, log_level_threshold)
+SCORE_STRUCT_TRACEABLE(LogEntryFilter, app_id, ctx_id, log_level_threshold)
 // LCOV_EXCL_STOP
 
 }  // namespace internal

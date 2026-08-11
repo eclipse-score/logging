@@ -32,7 +32,7 @@ struct SerializedVectorStd
     std::uint32_t n;
 };
 
-STRUCT_TRACEABLE(SerializedVectorStd, m, payload, n)
+SCORE_STRUCT_TRACEABLE(SerializedVectorStd, m, payload, n)
 
 struct SerializedVectorDataWrapper
 {
@@ -41,7 +41,7 @@ struct SerializedVectorDataWrapper
     std::uint32_t n;
 };
 
-STRUCT_TRACEABLE(SerializedVectorDataWrapper, m, payload, n)
+SCORE_STRUCT_TRACEABLE(SerializedVectorDataWrapper, m, payload, n)
 
 namespace test
 {

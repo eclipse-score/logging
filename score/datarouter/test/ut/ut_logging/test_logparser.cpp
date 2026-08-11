@@ -48,8 +48,8 @@ struct TestFilter
     int32_t test_field;
 };
 
-STRUCT_VISITABLE(TestMessage, test_field)
-STRUCT_VISITABLE(TestFilter, test_field)
+SCORE_STRUCT_VISITABLE(TestMessage, test_field)
+SCORE_STRUCT_VISITABLE(TestFilter, test_field)
 
 template <typename T>
 std::string MakeTypeParams(DltidT ecu_id, DltidT app_id)
@@ -146,7 +146,7 @@ struct SmallTestMessage
 {
     uint8_t test_field;
 };
-STRUCT_VISITABLE(SmallTestMessage, test_field)
+SCORE_STRUCT_VISITABLE(SmallTestMessage, test_field)
 
 // The purpose of this test is to enhance the line coverage for
 // parse(TimestampT timestamp, const char* data, BufsizeT size) method.

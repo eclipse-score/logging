@@ -62,7 +62,7 @@ void DatarouterAppRun(const std::atomic_bool& exit_requested)
 
     score::mw::log::LogInfo() << "datarouter successfully completed initialization and goes live!";
 
-    SocketServer::Run(exit_requested, opts.NoAdaptiveRuntime());
+    SocketServer::Run(exit_requested, opts.NoAdaptiveRuntime(), opts.ConfigPath(), opts.NvConfigPath());
 }
 
 void DatarouterAppShutdown()

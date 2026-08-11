@@ -15,6 +15,8 @@
 #define SCORE_DATAROUTER_SRC_APPLICATIONS_OPTIONS_H
 
 #include <cstdint>
+#include <optional>
+#include <string>
 
 namespace score
 {
@@ -55,6 +57,22 @@ class Options
         return no_adaptive_runtime_;
     }
 
+    // Override for the channel configuration file (log-channels.json). Holds a
+    // value only when --config was provided; std::nullopt keeps the built-in
+    // default path.
+    const std::optional<std::string>& ConfigPath() const
+    {
+        return config_path_;
+    }
+
+    // Override for the non-verbose configuration file (class-id.json). Holds a
+    // value only when --nv-config was provided; std::nullopt keeps the built-in
+    // default path.
+    const std::optional<std::string>& NvConfigPath() const
+    {
+        return nv_config_path_;
+    }
+
   private:
     Options();
     Options(const Options&) = delete;
@@ -66,6 +84,8 @@ class Options
     bool print_version_;
     bool verbose_;
     bool no_adaptive_runtime_;
+    std::optional<std::string> config_path_;
+    std::optional<std::string> nv_config_path_;
 };
 
 }  // namespace options

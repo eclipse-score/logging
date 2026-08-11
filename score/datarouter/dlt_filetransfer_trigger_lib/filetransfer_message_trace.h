@@ -24,15 +24,15 @@
 namespace score::logging
 {
 
-MEMCPY_SERIALIZABLE(score::common::visitor::payload_tags::text, score::platform::DltidT)
+SCORE_MEMCPY_SERIALIZABLE(score::common::visitor::payload_tags::text, score::platform::DltidT)
 // Suppress "AUTOSAR C++14 A18-9-4". The rule states: An argument to std::forward shall not be subsequently used.
-// Rationale: STRUCT_TRACEABLE is a macro, std::forward is from the macro definition
+// Rationale: SCORE_STRUCT_TRACEABLE is a macro, std::forward is from the macro definition
 // Suppress "AUTOSAR C++14 M3-2-3". The rule states: "A type, object or function that is used in
 // multiple translation units shall be declared in one and only one file.".
 // Rationale: This is a forward declaration that does not vioalate this rule.
 // coverity[autosar_cpp14_a18_9_4_violation]
 // coverity[autosar_cpp14_m3_2_3_violation]
-STRUCT_TRACEABLE(FileTransferEntry, appid, ctxid, file_name, delete_file)
+SCORE_STRUCT_TRACEABLE(FileTransferEntry, appid, ctxid, file_name, delete_file)
 
 }  // namespace score::logging
 

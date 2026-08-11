@@ -37,6 +37,7 @@
 #include <score/math.hpp>
 #include <functional>
 #include <iostream>
+#include <optional>
 
 namespace score
 {
@@ -137,13 +138,17 @@ SocketServer::PersistentStorageHandlers SocketServer::InitializePersistentStorag
 }
 
 std::unique_ptr<score::logging::dltserver::DltLogServer> SocketServer::CreateDltServer(
-    const PersistentStorageHandlers& storage_handlers)
+    const PersistentStorageHandlers& storage_handlers,
+    const std::optional<std::string>& log_channels_path)
 {
-    const auto static_config = ReadStaticDlt(kLogChannelsPath);
+    // Use the caller-provided path only when --config was given; otherwise keep
+    // the built-in default so the existing behaviour is unchanged.
+    const std::string config_path = log_channels_path.value_or(kLogChannelsPath);
+    const auto static_config = ReadStaticDlt(config_path.c_str());
     if (!static_config.has_value())
     {
         score::mw::log::LogError() << static_config.error();
-        score::mw::log::LogError() << "Error during parsing file " << std::string_view{kLogChannelsPath}
+        score::mw::log::LogError() << "Error during parsing file " << std::string_view{config_path}
                                  << ", static config is not available, interrupt work";
         return nullptr;
     }
@@ -344,7 +349,10 @@ void SocketServer::RunEventLoop(const std::atomic_bool& exit_requested,
     }
 }
 
-void SocketServer::DoWork(const std::atomic_bool& exit_requested, const bool no_adaptive_runtime)
+void SocketServer::DoWork(const std::atomic_bool& exit_requested,
+                          const bool no_adaptive_runtime,
+                          const std::optional<std::string>& log_channels_path,
+                          const std::optional<std::string>& nv_config_path)
 {
     SetThreadName();
 
@@ -355,7 +363,7 @@ void SocketServer::DoWork(const std::atomic_bool& exit_requested, const bool no_
     const PersistentStorageHandlers storage_handlers = InitializePersistentStorage(pd);
 
     // Create DLT server
-    auto dlt_server = CreateDltServer(storage_handlers);
+    auto dlt_server = CreateDltServer(storage_handlers, log_channels_path);
     if (!dlt_server)
     {
         return;
@@ -372,8 +380,10 @@ void SocketServer::DoWork(const std::atomic_bool& exit_requested, const bool no_
     // Create Unix domain server for config sessions
     auto unix_domain_server = CreateUnixDomainServer(*dlt_server);
 
-    // Load NvConfig
-    const score::mw::log::NvConfig nv_config = LoadNvConfig(stats_logger);
+    // Load NvConfig. Use the caller-provided path only when --nv-config was
+    // given; otherwise fall back to LoadNvConfig's built-in default path.
+    const score::mw::log::NvConfig nv_config =
+        nv_config_path.has_value() ? LoadNvConfig(stats_logger, nv_config_path.value()) : LoadNvConfig(stats_logger);
 
     // Create message passing factory
     const auto mp_factory = [&router, &dlt_server, &nv_config](

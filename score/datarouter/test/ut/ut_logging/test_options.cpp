@@ -240,3 +240,91 @@ TEST_F(OptionsTest, ParseUnknownOptionDoubleQuestionDashDash)
     bool result = score::logging::options::Options::Parse(argc, argv);
     EXPECT_FALSE(result);
 }
+
+TEST_F(OptionsTest, ParseConfigLongOptionSeparateValue)
+{
+    // Simulate: ./program --config /path/to/log-channels.json
+    int argc = 3;
+    char program_name[] = "myProgram";
+    char config_option[] = "--config";
+    char config_value[] = "/path/to/log-channels.json";
+    char* argv[] = {program_name, config_option, config_value, nullptr};
+
+    bool result = score::logging::options::Options::Parse(argc, argv);
+    EXPECT_TRUE(result);
+
+    score::logging::options::Options& opts = score::logging::options::Options::Get();
+    EXPECT_EQ(opts.ConfigPath(), "/path/to/log-channels.json");
+}
+
+TEST_F(OptionsTest, ParseConfigLongOptionEqualsValue)
+{
+    // Simulate: ./program --config=/etc/log-channels.json
+    int argc = 2;
+    char program_name[] = "myProgram";
+    char config_option[] = "--config=/etc/log-channels.json";
+    char* argv[] = {program_name, config_option, nullptr};
+
+    bool result = score::logging::options::Options::Parse(argc, argv);
+    EXPECT_TRUE(result);
+
+    score::logging::options::Options& opts = score::logging::options::Options::Get();
+    EXPECT_EQ(opts.ConfigPath(), "/etc/log-channels.json");
+}
+
+TEST_F(OptionsTest, ParseNvConfigLongOptionSeparateValue)
+{
+    // Simulate: ./program --nv-config /path/to/class-id.json
+    int argc = 3;
+    char program_name[] = "myProgram";
+    char nv_config_option[] = "--nv-config";
+    char nv_config_value[] = "/path/to/class-id.json";
+    char* argv[] = {program_name, nv_config_option, nv_config_value, nullptr};
+
+    bool result = score::logging::options::Options::Parse(argc, argv);
+    EXPECT_TRUE(result);
+
+    score::logging::options::Options& opts = score::logging::options::Options::Get();
+    EXPECT_EQ(opts.NvConfigPath(), "/path/to/class-id.json");
+}
+
+TEST_F(OptionsTest, ParseNvConfigLongOptionEqualsValue)
+{
+    // Simulate: ./program --nv-config=/etc/class-id.json
+    int argc = 2;
+    char program_name[] = "myProgram";
+    char nv_config_option[] = "--nv-config=/etc/class-id.json";
+    char* argv[] = {program_name, nv_config_option, nullptr};
+
+    bool result = score::logging::options::Options::Parse(argc, argv);
+    EXPECT_TRUE(result);
+
+    score::logging::options::Options& opts = score::logging::options::Options::Get();
+    EXPECT_EQ(opts.NvConfigPath(), "/etc/class-id.json");
+}
+
+TEST_F(OptionsTest, ParseConfigLongOptionMissingValue)
+{
+    // Simulate: ./program --config   (no value follows)
+    int argc = 2;
+    char program_name[] = "myProgram";
+    char config_option[] = "--config";
+    char* argv[] = {program_name, config_option, nullptr};
+
+    // A value-taking option without a value must fail to parse.
+    bool result = score::logging::options::Options::Parse(argc, argv);
+    EXPECT_FALSE(result);
+}
+
+TEST_F(OptionsTest, ParseConfigLongOptionEmptyEqualsValue)
+{
+    // Simulate: ./program --config=   (empty value)
+    int argc = 2;
+    char program_name[] = "myProgram";
+    char config_option[] = "--config=";
+    char* argv[] = {program_name, config_option, nullptr};
+
+    // An empty value must fail to parse.
+    bool result = score::logging::options::Options::Parse(argc, argv);
+    EXPECT_FALSE(result);
+}
