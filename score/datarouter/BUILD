@@ -786,7 +786,9 @@ cc_library(
         ":dltserver",
         ":persistentlogconfig",
         ":socketserver_config_lib",
+        "@score_baselibs//score/concurrency:thread_pool",
         "@score_baselibs//score/mw/log/configuration:nvconfigfactory",
+        "@score_baselibs//score/os:pthread",
     ],
 )
 
@@ -814,7 +816,9 @@ cc_library(
         ":dltserver_testing",
         ":persistentlogconfig",
         ":socketserver_config_lib_testing",
+        "@score_baselibs//score/concurrency:thread_pool",
         "@score_baselibs//score/mw/log/configuration:nvconfigfactory",
+        "@score_baselibs//score/os:pthread",
     ],
 )
 
