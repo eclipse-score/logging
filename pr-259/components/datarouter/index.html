@@ -73,7 +73,7 @@
     <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="Datarouter Component Requirements" href="requirements.html" />
+    <link rel="next" title="Logging: architecture and SW design" href="detailed_design/logging_architecture.html" />
     <link rel="prev" title="Explicit initialization of logging" href="../mw_log/design_decisions/explicit_init.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
@@ -174,6 +174,13 @@
 <li class="nav-item ">
   <a class="nav-link nav-internal" href="../../logging/stats.html">
     Quality Stats
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../guides/index.html">
+    Guides
   </a>
 </li>
 
@@ -306,6 +313,13 @@
   </a>
 </li>
 
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../guides/index.html">
+    Guides
+  </a>
+</li>
+
   </ul>
 </nav></div>
           
@@ -377,6 +391,10 @@
      aria-label="Section Navigation">
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
   <div class="bd-toc-item navbar-nav"><ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="detailed_design/logging_architecture.html">Logging: architecture and SW design</a></li>
+<li class="toctree-l1"><a class="reference internal" href="detailed_design/shm_apis.html">Remote Logging implementation details</a></li>
+</ul>
+<ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="requirements.html">Datarouter Component Requirements</a></li>
 </ul>
 </div>
@@ -437,7 +455,7 @@
                   
   <section id="datarouter">
 <h1>Datarouter<a class="headerlink" href="#datarouter" title="Link to this heading">#</a></h1>
-<div class="need_container docutils container" id="SNCB-002f18b3">
+<div class="need_container docutils container" id="SNCB-a526dd4b">
 <div class="pst-scrollable-table-container"><table class="need needs_grid_complex needs_layout_score needs_style_none needs_type_comp table" id="comp__data_router">
 <tbody>
 <tr class="head row-odd"><td class="head_left" colspan="2"><div class="needs_head_left line-block">
@@ -466,7 +484,7 @@
 </td>
 <td class="meta" colspan="3"></td>
 </tr>
-<tr class="content row-odd"><td class="content" colspan="6"><p>Datarouter is the DLT daemon executable. It reads records from source shared-memory ring buffers, manages source
+<tr class="content row-odd"><td class="content" colspan="6"><p>Datarouter is the DLT (Diagnostic log and trace) daemon executable. It reads records from source shared-memory ring buffers, manages source
 sessions, routes messages to configured channels via UDP multicast, and reports source statistics and message drops.</p></td>
 </tr>
 <tr class="footer row-even"><td class="footer_left" colspan="2"><div class="needs_footer_left line-block">
@@ -482,6 +500,12 @@ sessions, routes messages to configured channels via UDP multicast, and reports 
 </tbody>
 </table>
 </div>
+</div>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="detailed_design/logging_architecture.html">Logging: architecture and SW design</a></li>
+<li class="toctree-l1"><a class="reference internal" href="detailed_design/shm_apis.html">Remote Logging implementation details</a></li>
+</ul>
 </div>
 <div class="toctree-wrapper compound">
 <ul>
@@ -510,11 +534,11 @@ sessions, routes messages to configured channels via UDP multicast, and reports 
       </div>
     </a>
     <a class="right-next"
-       href="requirements.html"
+       href="detailed_design/logging_architecture.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Datarouter Component Requirements</p>
+        <p class="prev-next-title">Logging: architecture and SW design</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
