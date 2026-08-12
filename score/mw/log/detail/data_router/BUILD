@@ -128,6 +128,7 @@ cc_test(
         "//score/mw/log/detail/data_router/shared_memory:reader",
         "//score/mw/log/test/console_logging_environment",
         "@googletest//:gtest_main",
+        "@score_baselibs//score/concurrency:thread_pool",
         "@score_baselibs//score/language/futurecpp:futurecpp_test_support",
         "@score_baselibs//score/mw/log/configuration:target_config_reader_mock",
         "@score_baselibs//score/mw/log/detail:backend_mock",
