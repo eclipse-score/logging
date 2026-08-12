@@ -289,21 +289,6 @@ cc_library(
     ],
 )
 
-cc_library(
-    name = "libtracing_legacy_public_headers",
-    hdrs = [
-        "include/Tracing",
-        "include/logger/logger.h",
-    ],
-    features = COMPILER_WARNING_FEATURES,
-    strip_include_prefix = "include",
-    tags = ["FFI"],
-    visibility = [
-        "//score/mw/log:__subpackages__",
-        "@score_baselibs//score/mw/log:__subpackages__",
-    ],
-)
-
 ## ===========================================================================
 ##  Datarouter
 ## ---------------------------------------------------------------------------

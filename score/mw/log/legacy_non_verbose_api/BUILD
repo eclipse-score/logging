@@ -22,14 +22,17 @@ cc_library(
     features = COMPILER_WARNING_FEATURES,
     tags = ["FFI"],
     visibility = [
+        "//platform/aas/ara/com/test/sctf:__subpackages__",
         "//platform/aas/ara/log:__subpackages__",
         "//platform/aas/log_and_trace/datarouterconf:__subpackages__",
+        "//platform/aas/pas/crash_handler:__subpackages__",
         "//platform/aas/pas/std_frame:__subpackages__",
         "//platform/aas/pas/uptime_counter:__subpackages__",
         "//platform/aas/system_monitoring/sysmon:__subpackages__",
         "//platform/aas/test/pas/perf_tests:__subpackages__",
         "//platform/aas/tools/proxy_app:__subpackages__",
         "//score/mw/log:__subpackages__",
+        "//third_party/ipnext_qnx/bsp_extensions/frameserver:__pkg__",
         "@score_baselibs//score/mw/log:__subpackages__",
         "@score_logging//score/datarouter:__subpackages__",
     ],
@@ -42,7 +45,6 @@ cc_library(
         "@score_baselibs//score/mw/log/configuration:nvconfigfactory",
         "@score_baselibs//score/mw/log/detail/wait_free_stack",
         "@score_baselibs//score/static_reflection_with_serialization/serialization",
-        "@score_logging//score/datarouter:libtracing_legacy_public_headers",
     ],
 )
 
