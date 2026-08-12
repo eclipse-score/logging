@@ -23,6 +23,7 @@ cc_library(
     tags = ["FFI"],
     visibility = [
         "//platform/aas/ara/log:__subpackages__",
+        "//platform/aas/log_and_trace/datarouterconf:__subpackages__",
         "//platform/aas/pas/std_frame:__subpackages__",
         "//platform/aas/pas/uptime_counter:__subpackages__",
         "//platform/aas/test/pas/perf_tests:__subpackages__",
