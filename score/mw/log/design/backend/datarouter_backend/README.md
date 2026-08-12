@@ -56,7 +56,7 @@ datarouter. Freedom of interference is ensured since the datarouter process has
 read-only access to the shared-memory. In order to reuse the logging buffers in
 shared-memory the client may overwrite them after datarouter has acknowledged it
 has successfully read them. This acknowledgement is sent via the
-safety-qualified message passing library.
+safety-qualified [message passing library](https://github.com/eclipse-score/communication/blob/main/score/message_passing/dependability/software_architectural_design/client-server.md).
 
 ## Class diagram
 
@@ -87,7 +87,8 @@ access to the ring buffer between Datarouter and the client.
 
 The log messages from apps are transferred to Datarouter through shared memory.
 For lock- and wait-free data exchange we use the `WaitFreeAlternatingWriter` as
-part of the `SharedMemoryWriter` class. The data in shared memory is layed out in
+documented [here](https://github.com/eclipse-score/logging/blob/main/score/mw/log/detail/wait_free_producer_queue/README.md) as part of the `SharedMemoryWriter` class.
+The data in shared memory is layed out in
 consecutive and contiguous segments:
 
 1. Control structure `mw::log::detail::SharedData` at offset = 0.
@@ -223,9 +224,7 @@ after each incoming request.
 ## Message exchange between Logging Clients and Datarouter
 
 The side channel in logging is needed to synchronize the access to the data in
-shared memory between the client and Datarouter. Previously, the channel was
-implemented using unix domain sockets. Here, we replace unix domain sockets by
-message passing.
+shared memory between the client and Datarouter.
 
 Datarouter periodically scans for new clients and initiates the message
 exchange. In the message exchange between Datarouter and the Clients,

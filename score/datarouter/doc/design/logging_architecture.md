@@ -50,9 +50,9 @@ The following constraints influenced the logging infrastructure design:
 ## Context
 
 The diagram below illustrates the logging framework context:
-[context-ecu](uml/context-ecu.puml)
+<img alt="CONTEXT_ECU" src="https://www.plantuml.com/plantuml/proxy?src=https://raw.githubusercontent.com/eclipse-score/logging/refs/heads/main/score/datarouter/doc/design/uml/context-ecu.puml">
 
-Applications write log data through logging interfaces [^logging_vs_tracing].
+Applications write log data through logging interfaces.
 
 The logging framework transmits data to the following sinks:
 
@@ -66,7 +66,7 @@ The logging framework transmits data to the following sinks:
 
 ### Process structure
 
-[context-highlevel](uml/context-highlevel.puml)
+<img alt="CONTEXT_HIGHLEVEL" src="https://www.plantuml.com/plantuml/proxy?src=https://raw.githubusercontent.com/eclipse-score/logging/refs/heads/main/score/datarouter/doc/design/uml/context-highlevel.puml">
 
 The logging framework implements multiple components to meet system goals:
 
@@ -105,7 +105,7 @@ The system defines the following visitors:
 
 2. `TRACE(S)` is a C++ **function template** (not a preprocessor macro). Its call chain at runtime is:
 
-```c++
+```text
 TRACE(arg)
   → LogEntry<T>::Instance().TryWriteIntoSharedMemory(arg)
     → SharedMemoryWriter::AllocAndWrite(serialize_fn, type_id, size)
@@ -117,7 +117,7 @@ On the first call for a given type `T`, `LogEntry<T>::Instance()` (a Meyers sing
 
 The diagram below illustrates the high-level class structure of the datarouter component.
 
-[package-datarouter](uml/package-datarouter.puml)
+<img alt="PACKAGE_DATAROUTER" src="https://www.plantuml.com/plantuml/proxy?src=https://raw.githubusercontent.com/eclipse-score/logging/refs/heads/main/score/datarouter/doc/design/uml/package-datarouter.puml">
 
 ## Runtime view
 
@@ -127,12 +127,12 @@ Applications access logging functionality through `mw::log`.
 
 Initialization stage 1 executes when the first log request occurs. This may occur in global object constructors before the `main()` function executes, causing implicit initialization that creates necessary singletons automatically.
 The activity diagram below depicts the first-run process:
-[seq-trace](uml/seq-trace.puml)
+<img alt="SEQ_TRACE" src="https://www.plantuml.com/plantuml/proxy?src=https://raw.githubusercontent.com/eclipse-score/logging/refs/heads/main/score/datarouter/doc/design/uml/seq-trace.puml">
 
 ### mw::log implementation
 
 The `mw::log` implementation creates log records and commits them atomically to shared memory on flush.
-[log-filtering-client-end](uml/dlt_message_filtering_frontend.puml)
+<img alt="DLT_MESSAGE_FILTERING_FRONTEND" src="https://www.plantuml.com/plantuml/proxy?src=https://raw.githubusercontent.com/eclipse-score/logging/refs/heads/main/score/datarouter/doc/design/uml/dlt_message_filtering_frontend.puml">
 
 ### Ring buffer and linear allocator buffer
 
@@ -143,15 +143,21 @@ Shared memory IPC provides optimal speed and flexibility for this implementation
 
 The Datarouter-Client Session uses [message_passing](https://github.com/eclipse-score/communication/tree/main/score/message_passing) IPC for the initial connection, buffer acquire requests, notifications, and disconnections. The `DataRouterRecorder` sets up the session when it is created and closes it when it is destroyed. In between, the datarouter keeps one `IServerConnection` handle per client and drives the log acquisition from the server side.
 
-The main idea is to keep clients independent, so that one non-responsive client should not stall the datarouter. This matters because the datarouter serves all clients from a single thread, one after another on each periodic tick, so a single blocking call would hold up every other client. To avoid this, the datarouter asks for buffers (to read) using non-blocking QNX pulses (`IServerConnection::Notify()`), which return right away and never wait on the client. So if a client is slow or stuck, its pulse simply stays unanswered while the healthy clients keep getting served. See [session_sequence_diagram](uml/client_session_interaction_sequence.puml) for the full flow.
+The main idea is to keep clients independent, so that one non-responsive client should not stall the datarouter. This matters because the datarouter serves all clients from a single thread, one after another on each periodic tick, so a single blocking call would hold up every other client. To avoid this, the datarouter asks for buffers (to read) using non-blocking QNX pulses (`IServerConnection::Notify()`), which return right away and never wait on the client. So if a client is slow or stuck, its pulse simply stays unanswered while the healthy clients keep getting served. See below for the full flow.
 
-However, with such a design there are risks of stale sessions. A small per-session watchdog limits how long the datarouter waits for an acquire response. If a client keeps missing its deadline, the watchdog cleans up the stale session, but first it does a best-effort read of the client's last buffer so no logs are lost unnecessarily. See [activity_watchdog_session](uml/activity_watchdog_session_lifecycle.puml).
+<img alt="CLIENT_SESSION_INTERACTION_SEQUENCE" src="https://www.plantuml.com/plantuml/proxy?src=https://raw.githubusercontent.com/eclipse-score/logging/refs/heads/main/score/datarouter/doc/design/uml/client_session_interaction_sequence.puml">
 
-The setup also handles an early-disconnect race, wherein if a client crashes while the datarouter is still building its session, the connect and disconnect paths work together to throw away the half-built session instead of keeping a dangling connection pointer. The client can then reconnect cleanly afterwards. See [early_disconnect_race](uml/sequence_early_disconnect_race.puml).
+However, with such a design there are risks of stale sessions. A small per-session watchdog limits how long the datarouter waits for an acquire response. If a client keeps missing its deadline, the watchdog cleans up the stale session, but first it does a best-effort read of the client's last buffer so no logs are lost unnecessarily. See below.
+
+<img alt="ACTIVITY_WATCHDOG_SESSION_LIFECYCLE" src="https://www.plantuml.com/plantuml/proxy?src=https://raw.githubusercontent.com/eclipse-score/logging/refs/heads/main/score/datarouter/doc/design/uml/activity_watchdog_session_lifecycle.puml">
+
+The setup also handles an early-disconnect race, wherein if a client crashes while the datarouter is still building its session, the connect and disconnect paths work together to throw away the half-built session instead of keeping a dangling connection pointer. The client can then reconnect cleanly afterwards. See below.
+
+<img alt="SEQUENCE_EARLY_DISCONNECT_RACE" src="https://www.plantuml.com/plantuml/proxy?src=https://raw.githubusercontent.com/eclipse-score/logging/refs/heads/main/score/datarouter/doc/design/uml/sequence_early_disconnect_race.puml">
 
 ### datarouter
 
-[log-filtering-datarouter](uml/dlt_message_filtering_backend.puml)
+<img alt="DLT_MESSAGE_FILTERING_BACKEND" src="https://www.plantuml.com/plantuml/proxy?src=https://raw.githubusercontent.com/eclipse-score/logging/refs/heads/main/score/datarouter/doc/design/uml/dlt_message_filtering_backend.puml">
 
 ### Application-side library configuration
 
@@ -161,15 +167,6 @@ The system reads configuration from the `logging.json` file located in `/opt/<ap
 
 The datarouter requires two configuration files:
 
-- **log-channels.json** - Defines channel configurations, thresholds, and assignments to contexts and ECUs. Example file: [log-channels.json](../../etc/log-channels.json)
+- **log-channels.json** - Defines channel configurations, thresholds, and assignments to contexts and ECUs. Example file: [log-channels.json](https://github.com/eclipse-score/logging/blob/main/score/datarouter/etc/log-channels.json)
 
 - **class-id.json** - Specifies message IDs for non-verbose DLT messages. The fibex generator produces this configuration file.
-
-## Images
-
-[context-ecu]: uml/context-ecu.puml "Context: logging framework in xPAD ECU (hPAD example)"
-[context-highlevel]: uml/context-highlevel.puml "Implementation details: general approach"
-[seq-trace]: uml/seq-trace.puml "Activity diagram for tracing functionality"
-[package-datarouter]: uml/package-datarouter.puml "Package contents for datarouter"
-[log-filtering-client-end]: uml/dlt_message_filtering_frontend.puml "DLT log filtering in the frontend (client side)"
-[log-filtering-datarouter]: uml/dlt_message_filtering_backend.puml "DLT log filtering in the backend (Datarouter)"
