@@ -1,6 +1,6 @@
 
+#include "score/mw/log/legacy_non_verbose_api/tracing.h"
 #include "score/mw/log/logging.h"
-#include <Tracing>
 #include <iostream>
 
 struct NonVerboseMessage
