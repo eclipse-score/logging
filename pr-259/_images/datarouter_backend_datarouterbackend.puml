@@ -1,0 +1,18 @@
+@startuml datarouter_backend_datarouterbackend
+
+title DataRouterBackend::DataRouterBackend
+
+[*] --> CreateSharedMemoryWriter
+
+state "Create shared memory writer" as CreateSharedMemoryWriter
+state "Initialize Logger\n::score::platform::Logger::Instance(config, {}, writer)" as InitLogger
+state "Create message client" as CreateMessageClient
+state "Run message client" as RunMessageClient
+
+CreateSharedMemoryWriter --> InitLogger : [writer.has_value()]
+CreateSharedMemoryWriter --> [*] : [else]
+InitLogger --> CreateMessageClient
+CreateMessageClient --> RunMessageClient
+RunMessageClient --> [*]
+
+@enduml
