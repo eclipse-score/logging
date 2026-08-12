@@ -1,7 +1,7 @@
 .. _log_statistics:
 
-Component Requirements Statistics
-=================================
+Quality Stats
+==============
 
 Overview
 --------
@@ -86,7 +86,9 @@ Details About Testcases
 ------------------------
 
 .. needpie:: Test Types Used In Testcases
-   :labels: static-code-analysis, structural-statement-coverage, structural-branch-coverage, walkthrough, inspection, interface-test, requirements-based, resource-usage, control-flow-analysis, data-flow-analysis, fault-injection, struct-func-cov, struct-call-cov
+   :labels: static-code-analysis, structural-statement-coverage, structural-branch-coverage, walkthrough, inspection,
+      interface-test, requirements-based, resource-usage, control-flow-analysis, data-flow-analysis, fault-injection,
+      struct-func-cov, struct-call-cov
    :legend:
 
    type == 'testcase' and test_type == 'static-code-analysis'

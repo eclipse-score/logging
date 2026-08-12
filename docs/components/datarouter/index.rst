@@ -13,12 +13,10 @@
    # *******************************************************************************
 
 
-Data Router Documentation
+Datarouter
 =========================
 
-This section is reserved for data router-specific documentation.
-
-.. comp:: Data Router
+.. comp:: Datarouter
    :id: comp__data_router
    :security: YES
    :safety: ASIL_B
@@ -26,7 +24,8 @@ This section is reserved for data router-specific documentation.
    :implements: logic_arc_int__logging__logging
    :belongs_to: feat__logging
 
-   This is the datarouter component responsible for routing log messages to remote Diagnostics Log and Trace (DLT) backend.
+   Datarouter is the DLT daemon executable. It reads records from source shared-memory ring buffers, manages source
+   sessions, routes messages to configured channels via UDP multicast, and reports source statistics and message drops.
 
 .. toctree::
    :titlesonly:
