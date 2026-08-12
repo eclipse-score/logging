@@ -43,14 +43,13 @@ are as follows:
 In the Datarouter backend the goal is to safely and efficiently transfer the log
 messages from the user process to the Datarouter process.
 
-The inter-process communication takes place via shared memory and the [message
-passing library](../../../com/message_passing/design/README.md). This library
-only supports unidirectional message transport. As we need bidirectional
+The inter-process communication takes place via shared memory and the message
+passing library. This library only supports unidirectional message transport. As we need bidirectional
 communication over the side channel, we establish two independent unidirectional
 channels. On the highest level of abstraction we see the ASIL-B qualified client
 process on the one side and the datarouter process on the other
 
-![Inter-process communication](./score/mw/log/design/backend/datarouter_backend/inter_process_communication.puml).
+<img alt="INTER_PROCESS_COMMUNICATION" src="https://www.plantuml.com/plantuml/proxy?src=https://raw.githubusercontent.com/eclipse-score/logging/refs/heads/main/score/mw/log/design/backend/datarouter_backend/inter_process_communication.puml">.
 
 The logs are written by the client into shared memory and read-out by
 datarouter. Freedom of interference is ensured since the datarouter process has
@@ -61,7 +60,7 @@ safety-qualified message passing library.
 
 ## Class diagram
 
-![Class diagram](./score/mw/log/design/backend/datarouter_backend/datarouter_class_diagram.puml)
+<img alt="DATAROUTER_CLASS_DIAGRAM" src="https://www.plantuml.com/plantuml/proxy?src=https://raw.githubusercontent.com/eclipse-score/logging/refs/heads/main/score/mw/log/design/backend/datarouter_backend/datarouter_class_diagram.puml">
 
 The class diagram above shows the relevant classes client-side and in
 Datarouter. Client-side the `DatarouterBackend` contains a circular allocator
@@ -82,14 +81,13 @@ access to the ring buffer between Datarouter and the client.
 
 ## Activity diagrams
 
-![DataRouterBackend::DataRouterBackend Activity diagram](./score/mw/log/design/backend/datarouter_backend/datarouter_backend_datarouterbackend.puml)
+<img alt="DATAROUTER_BACKEND_DATAROUTERBACKEND" src="https://www.plantuml.com/plantuml/proxy?src=https://raw.githubusercontent.com/eclipse-score/logging/refs/heads/main/score/mw/log/design/backend/datarouter_backend/datarouter_backend_datarouterbackend.puml">
 
 ## Lock-free Shared Memory Design
 
 The log messages from apps are transferred to Datarouter through shared memory.
 For lock- and wait-free data exchange we use the `WaitFreeAlternatingWriter` as
-documented [here](../../detail/wait_free_producer_queue/README.md) as part of
-the `SharedMemoryWriter` class. The data in shared memory is layed out in
+part of the `SharedMemoryWriter` class. The data in shared memory is layed out in
 consecutive and contiguous segments:
 
 1. Control structure `mw::log::detail::SharedData` at offset = 0.
@@ -201,7 +199,7 @@ readable without synchronization. Only after reading the remaining data from the
 ring buffer, should Datarouter unmap the shared memory page. Then the OS should
 free up the used resources.
 
-![SharedMemoryReader Class diagram](./score/mw/log/design/backend/datarouter_backend/mw_log_shared_memory_reader.puml)
+<img alt="MW_LOG_SHARED_MEMORY_READER" src="https://www.plantuml.com/plantuml/proxy?src=https://raw.githubusercontent.com/eclipse-score/logging/refs/heads/main/score/mw/log/design/backend/datarouter_backend/mw_log_shared_memory_reader.puml">
 
 ## Limited impact of incoming messages in the logging client
 
@@ -227,7 +225,7 @@ after each incoming request.
 The side channel in logging is needed to synchronize the access to the data in
 shared memory between the client and Datarouter. Previously, the channel was
 implemented using unix domain sockets. Here, we replace unix domain sockets by
-[message passing](../../../com/message_passing/design/README.md).
+message passing.
 
 Datarouter periodically scans for new clients and initiates the message
 exchange. In the message exchange between Datarouter and the Clients,

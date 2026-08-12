@@ -1,0 +1,51 @@
+@startuml mw_log_architecture
+title mw::log (ASIL B): repository boundary
+
+skinparam componentStyle rectangle
+skinparam packageStyle rectangle
+
+package "score_baselibs" as Baselibs #LightYellow {
+  component "mw::log Frontend API\n(logger, log_stream, runtime)" as Frontend
+  component "Console Backend\n(static, built-in)" as Console
+  component "Frontend safety plan\n+ AoU forwarding (Usage Contract)" as FrontendPlan
+
+  Frontend -down-> Console : static composition (baseline)
+  Frontend .. FrontendPlan
+}
+
+package "score_logging" as Logging #LightBlue {
+  component "mw::log Concrete Recorders\n(file, remote/DLT, slog)" as Recorders
+  component "Backend Integration\nArtifacts (datarouter_backend, ...)" as Integration
+  component "Backend safety plan\n+ AoU forwarding (Integration Contract)" as BackendPlan
+
+  Recorders -down-> Integration : static registration
+  Recorders .. BackendPlan
+}
+
+Recorders .up.> Frontend : implements Recorder interface\n(static registration via backend_table, baseline)
+
+package "Optional Future Evolution" as Future #WhiteSmoke {
+  component "Runtime Plugin Loading\n(dlopen-based)" as Runtime
+}
+
+Runtime .[#gray]right.> Frontend : experimental only
+
+note bottom of Future
+  Not an assumed production
+  commitment; decision-gated.
+end note
+
+note as N1
+  Each repo owns its own phase gates,
+  safety plan, and governance; the only
+  cross-repo contract is the Recorder
+  interface + static backend_table
+  registration (plugin_api.h is an
+  existing C ABI seam, not used
+  for static composition).
+end note
+
+Baselibs -[hidden]down-> N1
+Logging -[hidden]down-> N1
+
+@enduml

@@ -12,10 +12,10 @@
    # SPDX-License-Identifier: Apache-2.0
    # *******************************************************************************
 
-Logging Documentation
+Logging
 =====================
 
-This documentation describes the structure, usage and configuration of the Bazel-based C++/Rust logging module.
+This module provides components for safety-critical logging (incl. DLT) in embedded automotive systems.
 
 .. contents:: Table of Contents
    :depth: 2
@@ -24,32 +24,40 @@ This documentation describes the structure, usage and configuration of the Bazel
 Overview
 --------
 
-This repository provides a standardized setup for projects using **C++** or **Rust** and **Bazel** as a build system.
-It integrates best practices for build, test, CI/CD and documentation.
+``score_logging`` delivers three distinct logging components:
 
-Requirements
-------------
+- ``mw::log`` is the logging middleware library.
+   Applications use the frontend API owned by `score_baselibs <https://github.com/eclipse-score/baselibs/blob/main/score/mw/log/README.md>`_,
+   while `score_logging <https://github.com/eclipse-score/logging/tree/main/score/mw/log>`_ provides the concrete
+   file, remote/DLT, and system recorder backend implementations.
+- ``datarouter`` is the DLT daemon executable.
+   It reads records from source shared-memory ring buffers, manages source
+   sessions, routes messages to configured channels via UDP multicast, and reports source statistics and message drops.
+- ``score_log_bridge`` is a Rust library that implements the ``score_log`` facade
+   using the C++ ``mw::log`` recorder
+   through a layout-checked FFI adapter.
 
-.. stkh_req:: Example Functional Requirement
-   :id: stkh_req__docgen_enabled__example
-   :status: valid
-   :safety: QM
-   :security: YES
-   :reqtype: Functional
-   :valid_from: v1.0.0
-   :rationale: Ensure documentation builds are possible for all modules
-
-
-Project Layout
---------------
+Repository Layout
+-----------------
 
 The logging module includes the following top-level structure:
 
-- ``score/``: Main C++/Rust sources
-- ``tests/``: Unit and integration tests
-- ``examples/``: Usage examples
+- ``score/mw/log/``: ``mw::log`` recorders and concrete backends and Rust bridge
+- ``score/datarouter/``: DLT daemon and supporting libraries
+- ``test/``: Component and Integration tests
 - ``docs/``: Documentation using ``docs-as-code``
 - ``.github/workflows/``: CI/CD pipelines
+
+Components
+----------
+
+.. toctree::
+   :titlesonly:
+   :maxdepth: 1
+   :glob:
+
+   components/mw_log/index.rst
+   components/datarouter/index.rst
 
 Quick Start
 -----------
@@ -60,54 +68,31 @@ To build the module:
 
    bazel build //score/...
 
-To run tests:
+To run the supported test suites:
 
 .. code-block:: bash
 
-   bazel test //tests/...
+   # Unit tests on the Linux host
+   bazel test --config=x86_64-linux --test_tag_filters=unit //score/...
+
+   # Component tests in Docker
+   bazel test --config=x86_64-linux --test_tag_filters=integration //score/test/component/...
+
+   # Integration tests on QNX/QEMU
+   bazel test --config=x86_64-qnx --test_tag_filters=integration //score/test/integration/...
 
 Configuration
 -------------
 
-The ``project_config.bzl`` file defines metadata used by Bazel macros.
+See the `mw::log configuration documentation`_.
 
-Example:
+.. _mw::log configuration documentation: https://github.com/eclipse-score/baselibs/blob/main/score/mw/log/README.md#configuration
 
-.. code-block:: python
-
-   PROJECT_CONFIG = {
-       "asil_level": "QM",
-       "source_code": ["cpp", "rust"]
-   }
-
-This enables conditional behavior (e.g., choosing ``clang-tidy`` for C++ or ``clippy`` for Rust).
-
-Additional documentation
-------------------------
-
-.. toctree::
-   :maxdepth: 1
-
-   features/logging/architecture/index
-   design_decisions/explicit_init
-
-Components
-==========
+Stats
+-----
 
 .. toctree::
    :titlesonly:
    :maxdepth: 1
-   :glob:
-
-   components/datarouter/index.rst
-   components/mw/log/index.rst
-
-
-Requirements
-------------
-
-.. toctree::
-   :maxdepth: 1
-   :glob:
 
    logging/stats.rst
