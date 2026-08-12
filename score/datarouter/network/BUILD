@@ -48,3 +48,19 @@ cc_library(
         "@score_baselibs//score/os:socket",
     ],
 )
+
+cc_library(
+    name = "vlan_mock",
+    testonly = True,
+    hdrs = ["vlan_mock.h"],
+    features = [
+        "treat_warnings_as_errors",
+        "additional_warnings",
+        "strict_warnings",
+    ],
+    visibility = ["//visibility:public"],
+    deps = [
+        "@googletest//:gtest",
+        "@score_baselibs//score/network:vlan",
+    ],
+)
