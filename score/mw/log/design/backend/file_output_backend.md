@@ -38,6 +38,10 @@ data. First data gets inserted into circular buffer. After that step program
 flow enters a loop that iterates over available slots in ring buffer and then
 by means of `NonBlockingWriter` iterates over all spans of each message.
 
+<img alt="SlotDrainerSequenceDesign" src="https://www.plantuml.com/plantuml/proxy?src=https://raw.githubusercontent.com/eclipse-score/baselibs/refs/heads/main/score/mw/log/design/slot_drainer_sequence_design.puml">
+
 Flush procedure exits whenever all available data is written to the file or
 writing procedure would block i.e. write operation reports that number of bytes
 written is less then requested.
+
+<img alt="SlotDrainerActionDiagram" src="https://www.plantuml.com/plantuml/proxy?src=https://raw.githubusercontent.com/eclipse-score/baselibs/refs/heads/main/score/mw/log/design/slot_drainer_action_diagram_design.puml">

@@ -1,0 +1,1 @@
+../../../../score/datarouter/doc/design/logging_architecture.md

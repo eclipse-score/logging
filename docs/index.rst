@@ -42,10 +42,15 @@ Repository Layout
 
 The logging module includes the following top-level structure:
 
+- ``docs/``: Documentation using ``docs-as-code``
+- ``examples/``: Dash-tool license-check
+- ``quality/``: integration-test (QEMU) environment configs and sanitizer suppression files (ASan/LSan/TSan/UBSan).
 - ``score/mw/log/``: ``mw::log`` recorders and concrete backends and Rust bridge
 - ``score/datarouter/``: DLT daemon and supporting libraries
-- ``test/``: Component and Integration tests
-- ``docs/``: Documentation using ``docs-as-code``
+- ``score/test/``: Component and Integration tests
+- ``scripts/``: developer-tooling helpers
+- ``third_party/``: bazel wiring for external tooling deps
+- ``tools/``: developer-tooling
 - ``.github/workflows/``: CI/CD pipelines
 
 Components
@@ -81,13 +86,6 @@ To run the supported test suites:
    # Integration tests on QNX/QEMU
    bazel test --config=x86_64-qnx --test_tag_filters=integration //score/test/integration/...
 
-Configuration
--------------
-
-See the `mw::log configuration documentation`_.
-
-.. _mw::log configuration documentation: https://github.com/eclipse-score/baselibs/blob/main/score/mw/log/README.md#configuration
-
 Stats
 -----
 
@@ -96,3 +94,12 @@ Stats
    :maxdepth: 1
 
    logging/stats.rst
+
+Guides
+---------
+
+.. toctree::
+   :titlesonly:
+   :maxdepth: 1
+
+   guides/index

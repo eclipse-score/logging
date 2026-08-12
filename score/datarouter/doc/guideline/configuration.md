@@ -4,7 +4,7 @@ The JSON-based configuration system provides predictable and manageable logging 
 
 ## logging.json file
 
-**Reference**: score/mw/log/design/configuration_design.md
+[logging.json configuration](https://github.com/eclipse-score/baselibs/tree/main/score/mw/log#configuration)
 
 ### Logging Context
 
@@ -17,7 +17,7 @@ When logging to different contexts you are able to filter the logs coming from a
 ### How configuration works
 - There is a list of logging contexts in the config file on the application side. You do not have to call any ```InitLogging()``` function in your code. Just use the logging API.
 - The configuration file has a fixed name ```logging.json``` and resides in the directory of the adaptive application's configuration data (**/opt/&lt;AppName&gt;/etc**).
--  Developers have control over respective log output, and use [DLT Viewer](broken_link_ac/wiki/display/PSP/DLT+Viewer) or similar tools to read the logs.
+-  Developers have control over respective log output, and use DLT Viewer or similar tools to read the logs.
 ### Example
 Configuration file for an application (optional) is structured as follows:
 ```json
