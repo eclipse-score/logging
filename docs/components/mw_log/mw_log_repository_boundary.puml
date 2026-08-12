@@ -3,11 +3,13 @@ title mw::log (ASIL B): repository boundary
 
 skinparam componentStyle rectangle
 skinparam packageStyle rectangle
+skinparam linetype ortho
 
 package "score_baselibs" as Baselibs #LightYellow {
   component "mw::log Frontend API\n(logger, log_stream, runtime)" as Frontend
   component "Console Backend\n(static, built-in)" as Console
-  component "Frontend safety plan\n+ AoU forwarding (Usage Contract)" as FrontendPlan
+  component "score_log Rust Facade\n(score_log, score_log_fmt,\nscore_log_fmt_macro)" as RustFacade
+  artifact "Frontend safety plan\n+ AoU forwarding (Usage Contract)" as FrontendPlan #line.dashed
 
   Frontend -down-> Console : static composition (baseline)
   Frontend .. FrontendPlan
@@ -15,14 +17,21 @@ package "score_baselibs" as Baselibs #LightYellow {
 
 package "score_logging" as Logging #LightBlue {
   component "mw::log Concrete Recorders\n(file, remote/DLT, slog)" as Recorders
-  component "Backend Integration\nArtifacts (datarouter_backend, ...)" as Integration
-  component "Backend safety plan\n+ AoU forwarding (Integration Contract)" as BackendPlan
+  component "Backend Integration\ntargets (file, remote/datarouter, ...)" as Integration
+  component "Rust Log Bridge\n(score_log_bridge + adapter.cpp)" as RustBridge
+  component "Rust Bridge C++ Init API\n(score_log_bridge_cpp_init)" as RustCppInit
+  artifact "Backend safety plan\n+ AoU forwarding (Integration Contract)" as BackendPlan #line.dashed
 
   Recorders -down-> Integration : static registration
   Recorders .. BackendPlan
 }
 
 Recorders .up.> Frontend : implements Recorder interface\n(static registration via backend_table, baseline)
+
+RustBridge -up-> RustFacade : implements score_log\nlogger backend
+RustBridge -right-> Frontend : adapter.cpp calls\nRuntime::GetRecorder() (FFI)
+RustBridge .up.> Recorders : direct static link\n(score/issues/2848)
+RustCppInit -down-> RustBridge : set_default_logger (FFI)\nconfigures default logger
 
 package "Optional Future Evolution" as Future #WhiteSmoke {
   component "Runtime Plugin Loading\n(dlopen-based)" as Runtime
@@ -42,7 +51,10 @@ note as N1
   interface + static backend_table
   registration (plugin_api.h is an
   existing C ABI seam, not used
-  for static composition).
+  for static composition). The Rust
+  bridge reaches the Frontend/Recorders
+  the same way, via direct static
+  linkage rather than backend_table.
 end note
 
 Baselibs -[hidden]down-> N1
