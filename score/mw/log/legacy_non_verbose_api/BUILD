@@ -26,6 +26,7 @@ cc_library(
         "//platform/aas/log_and_trace/datarouterconf:__subpackages__",
         "//platform/aas/pas/std_frame:__subpackages__",
         "//platform/aas/pas/uptime_counter:__subpackages__",
+        "//platform/aas/system_monitoring/sysmon:__subpackages__",
         "//platform/aas/test/pas/perf_tests:__subpackages__",
         "//score/mw/log:__subpackages__",
         "@score_baselibs//score/mw/log:__subpackages__",
