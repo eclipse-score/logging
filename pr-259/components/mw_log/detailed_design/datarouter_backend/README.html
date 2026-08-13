@@ -180,7 +180,7 @@
 
 <li class="nav-item ">
   <a class="nav-link nav-internal" href="../../../../guides/index.html">
-    Guide Index
+    Userguide
   </a>
 </li>
 
@@ -316,7 +316,7 @@
 
 <li class="nav-item ">
   <a class="nav-link nav-internal" href="../../../../guides/index.html">
-    Guide Index
+    Userguide
   </a>
 </li>
 
@@ -529,7 +529,7 @@ datarouter. Freedom of interference is ensured since the datarouter process has
 read-only access to the shared-memory. In order to reuse the logging buffers in
 shared-memory the client may overwrite them after datarouter has acknowledged it
 has successfully read them. This acknowledgement is sent via the
-safety-qualified message passing library.</p>
+safety-qualified <a class="reference external" href="https://github.com/eclipse-score/communication/blob/main/score/message_passing/dependability/software_architectural_design/client-server.md">message passing library</a>.</p>
 </section>
 <section id="class-diagram">
 <h2>Class diagram<a class="headerlink" href="#class-diagram" title="Link to this heading">#</a></h2>
@@ -559,7 +559,8 @@ access to the ring buffer between Datarouter and the client.</p>
 <h2>Lock-free Shared Memory Design<a class="headerlink" href="#lock-free-shared-memory-design" title="Link to this heading">#</a></h2>
 <p>The log messages from apps are transferred to Datarouter through shared memory.
 For lock- and wait-free data exchange we use the <code class="docutils literal notranslate"><span class="pre">WaitFreeAlternatingWriter</span></code> as
-part of the <code class="docutils literal notranslate"><span class="pre">SharedMemoryWriter</span></code> class. The data in shared memory is layed out in
+documented <a class="reference external" href="https://github.com/eclipse-score/logging/blob/main/score/mw/log/detail/wait_free_producer_queue/README.md">here</a> as part of the <code class="docutils literal notranslate"><span class="pre">SharedMemoryWriter</span></code> class.
+The data in shared memory is layed out in
 consecutive and contiguous segments:</p>
 <ol class="arabic simple">
 <li><p>Control structure <code class="docutils literal notranslate"><span class="pre">mw::log::detail::SharedData</span></code> at offset = 0.</p></li>
@@ -686,9 +687,7 @@ after each incoming request.</p>
 <section id="message-exchange-between-logging-clients-and-datarouter">
 <h2>Message exchange between Logging Clients and Datarouter<a class="headerlink" href="#message-exchange-between-logging-clients-and-datarouter" title="Link to this heading">#</a></h2>
 <p>The side channel in logging is needed to synchronize the access to the data in
-shared memory between the client and Datarouter. Previously, the channel was
-implemented using unix domain sockets. Here, we replace unix domain sockets by
-message passing.</p>
+shared memory between the client and Datarouter.</p>
 <p>Datarouter periodically scans for new clients and initiates the message
 exchange. In the message exchange between Datarouter and the Clients,
 Datarouter always takes the active role. Datarouter sends a request and the

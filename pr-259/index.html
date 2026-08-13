@@ -179,7 +179,7 @@
 
 <li class="nav-item ">
   <a class="nav-link nav-internal" href="guides/index.html">
-    Guide Index
+    Userguide
   </a>
 </li>
 
@@ -317,7 +317,7 @@
 
 <li class="nav-item ">
   <a class="nav-link nav-internal" href="guides/index.html">
-    Guide Index
+    Userguide
   </a>
 </li>
 
@@ -417,8 +417,9 @@
 <li><p><a class="reference internal" href="#repository-layout" id="id2">Repository Layout</a></p></li>
 <li><p><a class="reference internal" href="#components" id="id3">Components</a></p></li>
 <li><p><a class="reference internal" href="#quick-start" id="id4">Quick Start</a></p></li>
-<li><p><a class="reference internal" href="#stats" id="id5">Stats</a></p></li>
-<li><p><a class="reference internal" href="#guides" id="id6">Guides</a></p></li>
+<li><p><a class="reference internal" href="#quality" id="id5">Quality</a></p></li>
+<li><p><a class="reference internal" href="#stats" id="id6">Stats</a></p></li>
+<li><p><a class="reference internal" href="#guides" id="id7">Guides</a></p></li>
 </ul>
 </nav>
 <section id="overview">
@@ -450,10 +451,15 @@ through a layout-checked FFI adapter.</p>
 <h2><a class="toc-backref" href="#id2" role="doc-backlink">Repository Layout</a><a class="headerlink" href="#repository-layout" title="Link to this heading">#</a></h2>
 <p>The logging module includes the following top-level structure:</p>
 <ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">docs/</span></code>: Documentation using <code class="docutils literal notranslate"><span class="pre">docs-as-code</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">examples/</span></code>: Dash-tool license-check</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">quality/</span></code>: integration-test (QEMU) environment configs and sanitizer suppression files (ASan/LSan/TSan/UBSan).</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">score/mw/log/</span></code>: <code class="docutils literal notranslate"><span class="pre">mw::log</span></code> recorders and concrete backends and Rust bridge</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">score/datarouter/</span></code>: DLT daemon and supporting libraries</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">test/</span></code>: Component and Integration tests</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">docs/</span></code>: Documentation using <code class="docutils literal notranslate"><span class="pre">docs-as-code</span></code></p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">score/test/</span></code>: Component and Integration tests</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">scripts/</span></code>: developer-tooling helpers</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">third_party/</span></code>: bazel wiring for external tooling deps</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">tools/</span></code>: developer-tooling</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">.github/workflows/</span></code>: CI/CD pipelines</p></li>
 </ul>
 </section>
@@ -484,8 +490,20 @@ bazel<span class="w"> </span><span class="nb">test</span><span class="w"> </span
 </pre></div>
 </div>
 </section>
+<section id="quality">
+<h2><a class="toc-backref" href="#id5" role="doc-backlink">Quality</a><a class="headerlink" href="#quality" title="Link to this heading">#</a></h2>
+<p>Existing tooling and the KPIs each one gates in CI (see <code class="docutils literal notranslate"><span class="pre">.github/workflows/</span></code>):</p>
+<ul class="simple">
+<li><p><strong>Static analysis</strong> — <code class="docutils literal notranslate"><span class="pre">clang-tidy</span></code> on every C++ target; <code class="docutils literal notranslate"><span class="pre">clippy</span></code>/<code class="docutils literal notranslate"><span class="pre">rustfmt</span></code> (<code class="docutils literal notranslate"><span class="pre">rustfmt.toml</span></code>) for Rust.</p></li>
+<li><p><strong>Sanitizers</strong> — ASan/UBSan/LSan/TSan runs per PR, suppressions are placed in <code class="docutils literal notranslate"><span class="pre">quality/sanitizer/</span></code>.</p></li>
+<li><p><strong>Code coverage</strong> — C++ line/branch coverage report, excluding integration-tagged tests.</p></li>
+<li><p><strong>Test suites</strong> — Google Test/Rust unit tests (Linux), component (Docker), and integration (QNX/QEMU) tests run separately.</p></li>
+<li><p><strong>License compliance</strong> — Dash license scan of C++/Rust dependencies.</p></li>
+<li><p><strong>Copyright &amp; format</strong> — header and formatting checks on every change.</p></li>
+</ul>
+</section>
 <section id="stats">
-<h2><a class="toc-backref" href="#id5" role="doc-backlink">Stats</a><a class="headerlink" href="#stats" title="Link to this heading">#</a></h2>
+<h2><a class="toc-backref" href="#id6" role="doc-backlink">Stats</a><a class="headerlink" href="#stats" title="Link to this heading">#</a></h2>
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="logging/stats.html">Quality Stats</a></li>
@@ -493,10 +511,10 @@ bazel<span class="w"> </span><span class="nb">test</span><span class="w"> </span
 </div>
 </section>
 <section id="guides">
-<h2><a class="toc-backref" href="#id6" role="doc-backlink">Guides</a><a class="headerlink" href="#guides" title="Link to this heading">#</a></h2>
+<h2><a class="toc-backref" href="#id7" role="doc-backlink">Guides</a><a class="headerlink" href="#guides" title="Link to this heading">#</a></h2>
 <div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="guides/index.html">Guide Index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="guides/index.html">Userguide</a></li>
 </ul>
 </div>
 </section>
@@ -544,6 +562,7 @@ bazel<span class="w"> </span><span class="nb">test</span><span class="w"> </span
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#repository-layout">Repository Layout</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#components">Components</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#quick-start">Quick Start</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#quality">Quality</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#stats">Stats</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#guides">Guides</a></li>
 </ul>
