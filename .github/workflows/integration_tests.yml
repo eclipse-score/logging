@@ -58,10 +58,11 @@ jobs:
           level: 4
 
       - name: Checkout repository (Handle all events)
-        uses: actions/checkout@v5
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           ref: ${{ github.head_ref || github.event.pull_request.head.ref || github.ref }}
           repository: ${{ github.event.pull_request.head.repo.full_name || github.repository }}
+          allow-unsafe-pr-checkout: true
 
       - name: Setup Bazel with shared caching
         uses: bazel-contrib/setup-bazel@77a1d3d18379c7cb0a7e3b9fcaaa4d94f1029763 # 0.18.0
