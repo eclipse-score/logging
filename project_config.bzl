@@ -12,6 +12,7 @@
 # *******************************************************************************
 # project_config.bzl
 PROJECT_CONFIG = {
-    "asil_level": "QM",
-    "source_code": ["rust"],
+    # Module is mixed-criticality (mw::log backends ASIL_B, datarouter QM); highest level is declared here.
+    "asil_level": "ASIL_B",
+    "source_code": ["cpp", "rust"],
 }

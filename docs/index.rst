@@ -86,6 +86,18 @@ To run the supported test suites:
    # Integration tests on QNX/QEMU
    bazel test --config=x86_64-qnx --test_tag_filters=integration //score/test/integration/...
 
+Quality
+-------
+
+Existing tooling and the KPIs each one gates in CI (see ``.github/workflows/``):
+
+- **Static analysis** — ``clang-tidy`` on every C++ target; ``clippy``/``rustfmt`` (``rustfmt.toml``) for Rust.
+- **Sanitizers** — ASan/UBSan/LSan/TSan runs per PR, suppressions are placed in ``quality/sanitizer/``.
+- **Code coverage** — C++ line/branch coverage report, excluding integration-tagged tests.
+- **Test suites** — Google Test/Rust unit tests (Linux), component (Docker), and integration (QNX/QEMU) tests run separately.
+- **License compliance** — Dash license scan of C++/Rust dependencies.
+- **Copyright & format** — header and formatting checks on every change.
+
 Stats
 -----
 

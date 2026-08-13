@@ -1,32 +1,25 @@
 
-# C++ & Rust Bazel Template Repository
+# Logging
 
-This repository serves as a **template** for setting up **C++ and Rust projects** using **Bazel**.
-It provides a **standardized project structure**, ensuring best practices for:
+This module provides components (`mw::log`, `datarouter`, `score_log_bridge`) for
+safety-critical logging (Diagnostic Log and Trace) in embedded automotive systems.
 
-- **Build configuration** with Bazel.
-- **Testing** (unit and integration tests).
-- **Documentation** setup.
-- **CI/CD workflows**.
-- **Development environment** configuration.
+See the [module documentation](docs/index.rst) for the full overview, repository layout, and component
+architecture.
 
 ---
 
-## 📂 Project Structure
+## 📂 Key Files
 
-| File/Folder                         | Description                                       |
-| ----------------------------------- | ------------------------------------------------- |
-| `README.md`                         | Short description & build instructions            |
-| `score/`                            | Source files for the module                       |
-| `tests/`                            | Unit tests (UT) and integration tests (IT)        |
-| `examples/`                         | Example files used for guidance                   |
-| `docs/`                             | Documentation (Doxygen for C++ / mdBook for Rust) |
-| `.github/workflows/`                | CI/CD pipelines                                   |
-| `.vscode/`                          | Recommended VS Code settings                      |
-| `.bazelrc`, `MODULE.bazel`, `BUILD` | Bazel configuration & settings                    |
-| `project_config.bzl`                | Project-specific metadata for Bazel macros        |
-| `LICENSE.md`                        | Licensing information                             |
-| `CONTRIBUTION.md`                   | Contribution guidelines                           |
+| File/Folder                          | Description                                        |
+| ------------------------------------ | -------------------------------------------------- |
+| `README.md`                          | Short description & build instructions             |
+| `score/`                             | Source files and tests for the module              |
+| `docs/`                              | Documentation using `docs-as-code`                 |
+| `.bazelrc`, `MODULE.bazel`, `BUILD`  | Bazel configuration & settings                     |
+| `project_config.bzl`                 | Project-specific metadata for Bazel macros         |
+| `LICENSE.md`                         | Licensing information                              |
+| `CONTRIBUTION.md`                    | Contribution guidelines                            |
 
 ---
 
@@ -35,83 +28,54 @@ It provides a **standardized project structure**, ensuring best practices for:
 ### 1️⃣ Clone the Repository
 
 ```sh
-git clone https://github.com/eclipse-score/YOUR_PROJECT.git
-cd YOUR_PROJECT
+git clone https://github.com/eclipse-score/logging.git
+cd logging
 ```
 
-### 2️⃣ Build the Examples of module
+### 2️⃣ Build & Run Tests
 
-> DISCLAIMER: Depending what module implements, it's possible that different
-> configuration flags needs to be set on command line.
+See the [Quick Start](docs/index.rst) section of the module documentation for the exact `bazel build`/
+`bazel test` commands (including the platform `--config` and `--test_tag_filters` needed to select
+unit, component, or QNX/QEMU integration tests).
 
-To build all targets of the module the following command can be used:
-
-```sh
-bazel build //score/...
-```
-
-This command will instruct Bazel to build all targets that are under Bazel
-package `score/`. The ideal solution is to provide single target that builds
-artifacts, for example:
-
-```sh
-bazel build //score/<module_name>:release_artifacts
-```
-
-where `:release_artifacts` is filegroup target that collects all release
-artifacts of the module.
-
-> NOTE: This is just proposal, the final decision is on module maintainer how
-> the module code needs to be built.
-
-### 3️⃣ Run Tests
-
-```sh
-bazel test //tests/...
-```
-
----
-
-## 🛠 Tools & Linters
-
-The template integrates **tools and linters** from **centralized repositories** to ensure consistency across projects.
-
-- **C++:** `clang-tidy`, `cppcheck`, `Google Test`
-- **Rust:** `clippy`, `rustfmt`, `Rust Unit Tests`
-- **CI/CD:** GitHub Actions for automated builds and tests
+> TIP: For a single release-artifact target, provide a `:release_artifacts` filegroup per module
+> (e.g. `bazel build //score/<module_name>:release_artifacts`) — final decision is up to the module
+> maintainer.
 
 ---
 
 ## 📖 Documentation
 
-- A **centralized docs structure** is planned.
+Documentation lives in `docs/` and is built with `docs-as-code` (Sphinx). Build it locally with:
+
+```sh
+bazel build //:docs
+```
+
+See the [module documentation](docs/index.rst) for the rendered content.
+
+---
+
+## ✅ Quality
+
+See the [Quality](docs/index.rst) section of the module documentation for the existing tooling and the
+KPIs each one gates in CI (static analysis/linters, sanitizers, coverage, test tiers, traceability, license compliance).
 
 ---
 
 ## ⚙️ `project_config.bzl`
 
-This file defines project-specific metadata used by Bazel macros, such as `dash_license_checker`.
-
-### 📌 Purpose
-
-It provides structured configuration that helps determine behavior such as:
-
-- Source language type (used to determine license check file format)
-- Safety level or other compliance info (e.g. ASIL level)
-
-### 📄 Example Content
+Project-specific metadata consumed by the shared Dash license-check CI convention (`license_check.yml`),
+`source_code` picks which dependency lockfile gets scanned (`cargo` for Rust); `asil_level` records
+the module's safety level for compliance reporting.
 
 ```python
 PROJECT_CONFIG = {
-    "asil_level": "QM",  # or "ASIL-A", "ASIL-B", etc.
-    "source_code": ["cpp", "rust"]  # Languages used in the module
+    # Module is mixed-criticality (mw::log backends ASIL_B, datarouter QM); highest level is declared here.
+    "asil_level": "ASIL_B",
+    "source_code": ["cpp", "rust"],
 }
 ```
-
-### 🔧 Use Case
-
-When used with macros like `dash_license_checker`, it allows dynamic selection of file types
- (e.g., `cargo`, `requirements`) based on the languages declared in `source_code`.
 
 ## IDE support
 
