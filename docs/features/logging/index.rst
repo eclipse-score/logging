@@ -12,19 +12,20 @@
    # SPDX-License-Identifier: Apache-2.0
    # *******************************************************************************
 
-Manuals
-=======
+Feature Logging
+###############
 
-Start with the `mw::log Usage Guide <https://github.com/eclipse-score/baselibs/blob/main/score/mw/log/README.md#usage>`_ to learn how to instrument your application with the logging API.
+Abstract
+========
 
-The guides below then walk through configuration and typical logging setups, from basic to advanced
-and contain the manual for safe usage:
+The logging feature provides a standardized logging framework for C++ and Rust projects using Bazel build system.
+
+For the main feature description and requirements, see the belonging `Feature <https://eclipse-score.github.io/score/main/features/index.html#features>`_ in the project repository.
 
 .. toctree::
-   :titlesonly:
-   :maxdepth: 1
+   :hidden:
 
-   config/configuration
-   examples/file_based_local
-   examples/dlt_capture_demo
-   safety_manual
+   architecture/index.rst
+   architecture/chklst_arc_inspection.rst
+   architecture/DR-001-logging.rst
+   safety_planning/index.rst

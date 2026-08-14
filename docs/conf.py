@@ -27,3 +27,5 @@ version = "0.1"
 extensions = [
     "score_sphinx_bundle",
 ]
+
+required_in_id = ["logging"]

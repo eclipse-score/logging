@@ -17,10 +17,6 @@ Logging
 
 This module provides components for safety-critical logging (incl. DLT) in embedded automotive systems.
 
-.. contents:: Table of Contents
-   :depth: 2
-   :local:
-
 Overview
 --------
 
@@ -53,25 +49,37 @@ The logging module includes the following top-level structure:
 - ``tools/``: developer-tooling
 - ``.github/workflows/``: CI/CD pipelines
 
-Architecture
-------------
+Feature Documentation
+---------------------
+
+The Feature documentation covers the feature-level definition of <module name>, including architecture and safety planning artifacts.
 
 .. toctree::
-   :titlesonly:
    :maxdepth: 1
 
-   features/architecture/index
+   features/logging/index
 
-Components
-----------
+Module Documentation
+--------------------
+
+The Module documentation covers the module-level view, including architecture, safety management documents, and the user manual.
 
 .. toctree::
-   :titlesonly:
    :maxdepth: 1
-   :glob:
 
-   components/mw_log/index.rst
+   module/index
+   verification_report/module_verification_report
+
+Component Documentation
+-----------------------
+
+The Components documentation provides detailed documentation for each individual library component, including requirements, architecture, and design decisions:
+
+.. toctree::
+   :maxdepth: 1
+
    components/datarouter/index.rst
+   components/mw_log/index.rst
 
 Quick Start
 -----------
@@ -107,20 +115,4 @@ Existing tooling and the KPIs each one gates in CI (see ``.github/workflows/``):
 - **License compliance** — Dash license scan of C++/Rust dependencies.
 - **Copyright & format** — header and formatting checks on every change.
 
-Stats
------
-
-.. toctree::
-   :titlesonly:
-   :maxdepth: 1
-
-   verification_report/stats.rst
-
-Guides
----------
-
-.. toctree::
-   :titlesonly:
-   :maxdepth: 1
-
-   module/manuals/index
+This enables conditional behavior (e.g., choosing ``clang-tidy`` for C++ or ``clippy`` for Rust).
