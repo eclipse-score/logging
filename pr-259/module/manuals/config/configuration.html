@@ -617,6 +617,19 @@ The file has multiple sections.</p>
 <li><p><strong>defaultChannel</strong>: if no channelAssignment has been matched, this channel is used</p></li>
 <li><p><strong>defaultThresold</strong>: if no messageThreshold matched, this threshold is used to filter the messages</p></li>
 </ul>
+<section id="overriding-the-config-file-path-at-runtime">
+<h3>Overriding the config file path at runtime<a class="headerlink" href="#overriding-the-config-file-path-at-runtime" title="Link to this heading">#</a></h3>
+<p>By default the datarouter reads <code class="docutils literal notranslate"><span class="pre">log-channels.json</span></code> from <code class="docutils literal notranslate"><span class="pre">./etc/log-channels.json</span></code> relative to its working directory. The path can be overridden at startup using the <code class="docutils literal notranslate"><span class="pre">-c</span></code> / <code class="docutils literal notranslate"><span class="pre">--config</span></code> flag:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>./datarouter<span class="w"> </span>--no_adaptive_runtime<span class="w"> </span>--config<span class="w"> </span>/path/to/log-channels.json
+</pre></div>
+</div>
+<p>This is useful for image-level configuration (different deployment images can supply different channel layouts without recompilation) or for manual testing against a local config file without modifying the installed <code class="docutils literal notranslate"><span class="pre">etc/</span></code> tree.</p>
+<p>Similarly, the non-verbose configuration file (<code class="docutils literal notranslate"><span class="pre">class-id.json</span></code>) uses a compiled-in deployment path when no override is given, and can be overridden with <code class="docutils literal notranslate"><span class="pre">-C</span></code> / <code class="docutils literal notranslate"><span class="pre">--nv-config</span></code>:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>./datarouter<span class="w"> </span>--no_adaptive_runtime<span class="w"> </span>--nv-config<span class="w"> </span>/path/to/class-id.json
+</pre></div>
+</div>
+<p>When neither flag is provided the datarouter uses its compiled-in default paths: <code class="docutils literal notranslate"><span class="pre">./etc/log-channels.json</span></code> for the channel configuration and a fixed deployment path for the non-verbose configuration.</p>
+</section>
 </section>
 </section>
 
@@ -676,7 +689,10 @@ The file has multiple sections.</p>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#what-the-options-are">What the options are</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#log-channels-json">log-channels.json</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#log-channels-json">log-channels.json</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#overriding-the-config-file-path-at-runtime">Overriding the config file path at runtime</a></li>
+</ul>
+</li>
 </ul>
   </nav></div>
 
