@@ -38,11 +38,11 @@
     <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
     <link rel="stylesheet" type="text/css" href="../../_static/sphinx-data-viewer/jsonview.bundle.css?v=f6ef2277" />
     <link rel="stylesheet" type="text/css" href="../../_static/sphinx-needs/libs/html/datatables.min.css?v=4b4fd840" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-needs/common_css/need_style.css?v=92936fa5" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-needs/common_css/needstable.css?v=5e1b6797" />
     <link rel="stylesheet" type="text/css" href="../../_static/sphinx-needs/common_css/need_toggle.css?v=5c6620df" />
     <link rel="stylesheet" type="text/css" href="../../_static/sphinx-needs/common_css/need_core.css?v=f5b60a78" />
-    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-needs/common_css/need_style.css?v=92936fa5" />
     <link rel="stylesheet" type="text/css" href="../../_static/sphinx-needs/common_css/need_links.css?v=2150a916" />
-    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-needs/common_css/needstable.css?v=5e1b6797" />
     <link rel="stylesheet" type="text/css" href="../../_static/sphinx-needs/modern.css?v=803738c0" />
   
   <!-- So that users can add custom icons -->
@@ -73,7 +73,7 @@
     <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
     <link rel="index" title="Index" href="../../genindex.html" />
     <link rel="search" title="Search" href="../../search.html" />
-    <link rel="next" title="Logging: architecture and SW design" href="detailed_design/logging_architecture.html" />
+    <link rel="next" title="Datarouter Component Requirements" href="requirements/index.html" />
     <link rel="prev" title="Explicit initialization of logging" href="../mw_log/design_decisions/explicit_init.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
@@ -158,6 +158,13 @@
   <ul class="bd-navbar-elements navbar-nav">
     
 <li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../features/architecture/index.html">
+    Logging Feature Architecture
+  </a>
+</li>
+
+
+<li class="nav-item ">
   <a class="nav-link nav-internal" href="../mw_log/index.html">
     mw::log
   </a>
@@ -172,15 +179,15 @@
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="../../logging/stats.html">
+  <a class="nav-link nav-internal" href="../../verification_report/stats.html">
     Quality Stats
   </a>
 </li>
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="../../guides/index.html">
-    Userguide
+  <a class="nav-link nav-internal" href="../../module/manuals/index.html">
+    Manuals
   </a>
 </li>
 
@@ -294,6 +301,13 @@
   <ul class="bd-navbar-elements navbar-nav">
     
 <li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../features/architecture/index.html">
+    Logging Feature Architecture
+  </a>
+</li>
+
+
+<li class="nav-item ">
   <a class="nav-link nav-internal" href="../mw_log/index.html">
     mw::log
   </a>
@@ -308,15 +322,15 @@
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="../../logging/stats.html">
+  <a class="nav-link nav-internal" href="../../verification_report/stats.html">
     Quality Stats
   </a>
 </li>
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="../../guides/index.html">
-    Userguide
+  <a class="nav-link nav-internal" href="../../module/manuals/index.html">
+    Manuals
   </a>
 </li>
 
@@ -391,11 +405,9 @@
      aria-label="Section Navigation">
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
   <div class="bd-toc-item navbar-nav"><ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="requirements/index.html">Datarouter Component Requirements</a></li>
 <li class="toctree-l1"><a class="reference internal" href="detailed_design/logging_architecture.html">Logging: architecture and SW design</a></li>
 <li class="toctree-l1"><a class="reference internal" href="detailed_design/shm_apis.html">Remote Logging implementation details</a></li>
-</ul>
-<ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="requirements.html">Datarouter Component Requirements</a></li>
 </ul>
 </div>
 </nav></div>
@@ -455,8 +467,8 @@
                   
   <section id="datarouter">
 <h1>Datarouter<a class="headerlink" href="#datarouter" title="Link to this heading">#</a></h1>
-<div class="need_container docutils container" id="SNCB-8718d3f4">
-<div class="pst-scrollable-table-container"><table class="need needs_grid_complex needs_layout_score needs_style_none needs_type_comp table" id="comp__data_router">
+<div class="need_container docutils container" id="SNCB-577168be">
+<div class="pst-scrollable-table-container"><table class="need needs_grid_complex needs_layout_score needs_style_none needs_type_comp table" id="comp__datarouter">
 <tbody>
 <tr class="head row-odd"><td class="head_left" colspan="2"><div class="needs_head_left line-block">
 <div class="line"><span><span class="needs_title"><span class="needs_data">Datarouter</span></span></span></div>
@@ -477,7 +489,7 @@
 <div class="line"><span><span><div class="line"><span class="needs_version"><span class="needs_label">version: </span>0</span></div>
 </span></span></div>
 <div class="line"><span><div class="line">belongs to: <span class="belongs_to"><span><a class="external_link reference external" href="https://eclipse-score.github.io/score/main/features/analysis-infra/logging/docs/architecture/index.html#feat__logging">feat__logging</a></span></span></div>
-<div class="line">has: <span class="belongs_to"><span><a class="reference internal" href="requirements.html#comp_req__data_router__dlt_server" title="comp__data_router">comp_req__data_router__dlt_server</a>, <a class="reference internal" href="requirements.html#comp_req__data_router__dlt_multiple_channels" title="comp__data_router">comp_req__data_router__dlt_multiple_channels</a>, <a class="reference internal" href="requirements.html#comp_req__data_router__dlt_message_filtering" title="comp__data_router">comp_req__data_router__dlt_message_filtering</a>, <a class="reference internal" href="requirements.html#comp_req__data_router__dlt_verbose_messages" title="comp__data_router">comp_req__data_router__dlt_verbose_messages</a>, <a class="reference internal" href="requirements.html#comp_req__data_router__dlt_bw_quota_config" title="comp__data_router">comp_req__data_router__dlt_bw_quota_config</a>, <a class="reference internal" href="requirements.html#comp_req__data_router__dlt_quota_bw_reduction" title="comp__data_router">comp_req__data_router__dlt_quota_bw_reduction</a></span></span></div>
+<div class="line">has: <span class="belongs_to"><span><a class="reference internal" href="requirements/index.html#comp_req__data_router__dlt_server" title="comp__datarouter">comp_req__data_router__dlt_server</a>, <a class="reference internal" href="requirements/index.html#comp_req__data_router__dlt_multiple_channels" title="comp__datarouter">comp_req__data_router__dlt_multiple_channels</a>, <a class="reference internal" href="requirements/index.html#comp_req__data_router__dlt_message_filtering" title="comp__datarouter">comp_req__data_router__dlt_message_filtering</a>, <a class="reference internal" href="requirements/index.html#comp_req__data_router__dlt_verbose_messages" title="comp__datarouter">comp_req__data_router__dlt_verbose_messages</a>, <a class="reference internal" href="requirements/index.html#comp_req__data_router__dlt_bw_quota_config" title="comp__datarouter">comp_req__data_router__dlt_bw_quota_config</a>, <a class="reference internal" href="requirements/index.html#comp_req__data_router__dlt_quota_bw_reduction" title="comp__datarouter">comp_req__data_router__dlt_quota_bw_reduction</a></span></span></div>
 <div class="line">implements: <span class="implements"><span><a class="external_link reference external" href="https://eclipse-score.github.io/score/main/modules/logging/logging/docs/architecture/index.html#logic_arc_int__logging__logging">logic_arc_int__logging__logging</a></span></span></div>
 </span></div>
 </div>
@@ -488,7 +500,7 @@
 sessions, routes messages to configured channels via UDP multicast, and reports source statistics and message drops.</p></td>
 </tr>
 <tr class="footer row-even"><td class="footer_left" colspan="2"><div class="needs_footer_left line-block">
-<div class="line"><span><span class="needs-id"><a class="reference internal" href="#comp__data_router" title="comp__data_router">comp__data_router</a></span></span></div>
+<div class="line"><span><span class="needs-id"><a class="reference internal" href="#comp__datarouter" title="comp__datarouter">comp__datarouter</a></span></span></div>
 </div>
 </td>
 <td class="footer" colspan="2"><div class="needs_footer line-block">
@@ -503,13 +515,9 @@ sessions, routes messages to configured channels via UDP multicast, and reports 
 </div>
 <div class="toctree-wrapper compound">
 <ul>
+<li class="toctree-l1"><a class="reference internal" href="requirements/index.html">Datarouter Component Requirements</a></li>
 <li class="toctree-l1"><a class="reference internal" href="detailed_design/logging_architecture.html">Logging: architecture and SW design</a></li>
 <li class="toctree-l1"><a class="reference internal" href="detailed_design/shm_apis.html">Remote Logging implementation details</a></li>
-</ul>
-</div>
-<div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="requirements.html">Datarouter Component Requirements</a></li>
 </ul>
 </div>
 </section>
@@ -534,11 +542,11 @@ sessions, routes messages to configured channels via UDP multicast, and reports 
       </div>
     </a>
     <a class="right-next"
-       href="detailed_design/logging_architecture.html"
+       href="requirements/index.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Logging: architecture and SW design</p>
+        <p class="prev-next-title">Datarouter Component Requirements</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>

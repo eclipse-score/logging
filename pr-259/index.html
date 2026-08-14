@@ -38,11 +38,11 @@
     <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
     <link rel="stylesheet" type="text/css" href="_static/sphinx-data-viewer/jsonview.bundle.css?v=f6ef2277" />
     <link rel="stylesheet" type="text/css" href="_static/sphinx-needs/libs/html/datatables.min.css?v=4b4fd840" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-needs/common_css/need_style.css?v=92936fa5" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-needs/common_css/needstable.css?v=5e1b6797" />
     <link rel="stylesheet" type="text/css" href="_static/sphinx-needs/common_css/need_toggle.css?v=5c6620df" />
     <link rel="stylesheet" type="text/css" href="_static/sphinx-needs/common_css/need_core.css?v=f5b60a78" />
-    <link rel="stylesheet" type="text/css" href="_static/sphinx-needs/common_css/need_style.css?v=92936fa5" />
     <link rel="stylesheet" type="text/css" href="_static/sphinx-needs/common_css/need_links.css?v=2150a916" />
-    <link rel="stylesheet" type="text/css" href="_static/sphinx-needs/common_css/needstable.css?v=5e1b6797" />
     <link rel="stylesheet" type="text/css" href="_static/sphinx-needs/modern.css?v=803738c0" />
   
   <!-- So that users can add custom icons -->
@@ -73,7 +73,7 @@
     <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="mw::log" href="components/mw_log/index.html" />
+    <link rel="next" title="Logging Feature Architecture" href="features/architecture/index.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="0.1" />
@@ -157,6 +157,13 @@
   <ul class="bd-navbar-elements navbar-nav">
     
 <li class="nav-item ">
+  <a class="nav-link nav-internal" href="features/architecture/index.html">
+    Logging Feature Architecture
+  </a>
+</li>
+
+
+<li class="nav-item ">
   <a class="nav-link nav-internal" href="components/mw_log/index.html">
     mw::log
   </a>
@@ -171,15 +178,15 @@
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="logging/stats.html">
+  <a class="nav-link nav-internal" href="verification_report/stats.html">
     Quality Stats
   </a>
 </li>
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="guides/index.html">
-    Userguide
+  <a class="nav-link nav-internal" href="module/manuals/index.html">
+    Manuals
   </a>
 </li>
 
@@ -295,6 +302,13 @@
   <ul class="bd-navbar-elements navbar-nav">
     
 <li class="nav-item ">
+  <a class="nav-link nav-internal" href="features/architecture/index.html">
+    Logging Feature Architecture
+  </a>
+</li>
+
+
+<li class="nav-item ">
   <a class="nav-link nav-internal" href="components/mw_log/index.html">
     mw::log
   </a>
@@ -309,15 +323,15 @@
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="logging/stats.html">
+  <a class="nav-link nav-internal" href="verification_report/stats.html">
     Quality Stats
   </a>
 </li>
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="guides/index.html">
-    Userguide
+  <a class="nav-link nav-internal" href="module/manuals/index.html">
+    Manuals
   </a>
 </li>
 
@@ -415,11 +429,12 @@
 <ul class="simple">
 <li><p><a class="reference internal" href="#overview" id="id1">Overview</a></p></li>
 <li><p><a class="reference internal" href="#repository-layout" id="id2">Repository Layout</a></p></li>
-<li><p><a class="reference internal" href="#components" id="id3">Components</a></p></li>
-<li><p><a class="reference internal" href="#quick-start" id="id4">Quick Start</a></p></li>
-<li><p><a class="reference internal" href="#quality" id="id5">Quality</a></p></li>
-<li><p><a class="reference internal" href="#stats" id="id6">Stats</a></p></li>
-<li><p><a class="reference internal" href="#guides" id="id7">Guides</a></p></li>
+<li><p><a class="reference internal" href="#architecture" id="id3">Architecture</a></p></li>
+<li><p><a class="reference internal" href="#components" id="id4">Components</a></p></li>
+<li><p><a class="reference internal" href="#quick-start" id="id5">Quick Start</a></p></li>
+<li><p><a class="reference internal" href="#quality" id="id6">Quality</a></p></li>
+<li><p><a class="reference internal" href="#stats" id="id7">Stats</a></p></li>
+<li><p><a class="reference internal" href="#guides" id="id8">Guides</a></p></li>
 </ul>
 </nav>
 <section id="overview">
@@ -463,8 +478,16 @@ through a layout-checked FFI adapter.</p>
 <li><p><code class="docutils literal notranslate"><span class="pre">.github/workflows/</span></code>: CI/CD pipelines</p></li>
 </ul>
 </section>
+<section id="architecture">
+<h2><a class="toc-backref" href="#id3" role="doc-backlink">Architecture</a><a class="headerlink" href="#architecture" title="Link to this heading">#</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="features/architecture/index.html">Logging Feature Architecture</a></li>
+</ul>
+</div>
+</section>
 <section id="components">
-<h2><a class="toc-backref" href="#id3" role="doc-backlink">Components</a><a class="headerlink" href="#components" title="Link to this heading">#</a></h2>
+<h2><a class="toc-backref" href="#id4" role="doc-backlink">Components</a><a class="headerlink" href="#components" title="Link to this heading">#</a></h2>
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="components/mw_log/index.html">mw::log</a></li>
@@ -473,7 +496,7 @@ through a layout-checked FFI adapter.</p>
 </div>
 </section>
 <section id="quick-start">
-<h2><a class="toc-backref" href="#id4" role="doc-backlink">Quick Start</a><a class="headerlink" href="#quick-start" title="Link to this heading">#</a></h2>
+<h2><a class="toc-backref" href="#id5" role="doc-backlink">Quick Start</a><a class="headerlink" href="#quick-start" title="Link to this heading">#</a></h2>
 <p>To build the module:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>bazel<span class="w"> </span>build<span class="w"> </span>//score/...
 </pre></div>
@@ -491,7 +514,7 @@ bazel<span class="w"> </span><span class="nb">test</span><span class="w"> </span
 </div>
 </section>
 <section id="quality">
-<h2><a class="toc-backref" href="#id5" role="doc-backlink">Quality</a><a class="headerlink" href="#quality" title="Link to this heading">#</a></h2>
+<h2><a class="toc-backref" href="#id6" role="doc-backlink">Quality</a><a class="headerlink" href="#quality" title="Link to this heading">#</a></h2>
 <p>Existing tooling and the KPIs each one gates in CI (see <code class="docutils literal notranslate"><span class="pre">.github/workflows/</span></code>):</p>
 <ul class="simple">
 <li><p><strong>Static analysis</strong> — <code class="docutils literal notranslate"><span class="pre">clang-tidy</span></code> on every C++ target; <code class="docutils literal notranslate"><span class="pre">clippy</span></code>/<code class="docutils literal notranslate"><span class="pre">rustfmt</span></code> (<code class="docutils literal notranslate"><span class="pre">rustfmt.toml</span></code>) for Rust.</p></li>
@@ -503,18 +526,18 @@ bazel<span class="w"> </span><span class="nb">test</span><span class="w"> </span
 </ul>
 </section>
 <section id="stats">
-<h2><a class="toc-backref" href="#id6" role="doc-backlink">Stats</a><a class="headerlink" href="#stats" title="Link to this heading">#</a></h2>
+<h2><a class="toc-backref" href="#id7" role="doc-backlink">Stats</a><a class="headerlink" href="#stats" title="Link to this heading">#</a></h2>
 <div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="logging/stats.html">Quality Stats</a></li>
+<li class="toctree-l1"><a class="reference internal" href="verification_report/stats.html">Quality Stats</a></li>
 </ul>
 </div>
 </section>
 <section id="guides">
-<h2><a class="toc-backref" href="#id7" role="doc-backlink">Guides</a><a class="headerlink" href="#guides" title="Link to this heading">#</a></h2>
+<h2><a class="toc-backref" href="#id8" role="doc-backlink">Guides</a><a class="headerlink" href="#guides" title="Link to this heading">#</a></h2>
 <div class="toctree-wrapper compound">
 <ul>
-<li class="toctree-l1"><a class="reference internal" href="guides/index.html">Userguide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="module/manuals/index.html">Manuals</a></li>
 </ul>
 </div>
 </section>
@@ -531,11 +554,11 @@ bazel<span class="w"> </span><span class="nb">test</span><span class="w"> </span
                   
 <div class="prev-next-area">
     <a class="right-next"
-       href="components/mw_log/index.html"
+       href="features/architecture/index.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">mw::log</p>
+        <p class="prev-next-title">Logging Feature Architecture</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -560,6 +583,7 @@ bazel<span class="w"> </span><span class="nb">test</span><span class="w"> </span
     <ul class="pst-show_toc_level nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#overview">Overview</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#repository-layout">Repository Layout</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#architecture">Architecture</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#components">Components</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#quick-start">Quick Start</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#quality">Quality</a></li>

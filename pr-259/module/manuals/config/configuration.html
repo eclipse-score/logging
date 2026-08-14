@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>mw::log Architecture &#8212; Logging  documentation</title>
+    <title>Logging configuration &#8212; Logging  documentation</title>
   
   
   
@@ -38,11 +38,11 @@
     <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-data-viewer/jsonview.bundle.css?v=f6ef2277" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-needs/libs/html/datatables.min.css?v=4b4fd840" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-needs/common_css/need_style.css?v=92936fa5" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-needs/common_css/needstable.css?v=5e1b6797" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-needs/common_css/need_toggle.css?v=5c6620df" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-needs/common_css/need_core.css?v=f5b60a78" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-needs/common_css/need_style.css?v=92936fa5" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-needs/common_css/need_links.css?v=2150a916" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-needs/common_css/needstable.css?v=5e1b6797" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-needs/modern.css?v=803738c0" />
   
   <!-- So that users can add custom icons -->
@@ -62,7 +62,7 @@
     <script src="../../../_static/sphinx-needs/libs/html/datatables.min.js?v=8a4aee21"></script>
     <script src="../../../_static/sphinx-needs/libs/html/datatables_loader.js?v=a2cae175"></script>
     <script src="../../../_static/sphinx-needs/libs/html/sphinx_needs_collapse.js?v=dca66431"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'components/mw_log/architecture/index';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'module/manuals/config/configuration';</script>
     <script>
         DOCUMENTATION_OPTIONS.theme_version = '0.17.0';
         DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://eclipse-score.github.io/logging/versions.json';
@@ -73,8 +73,8 @@
     <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
-    <link rel="next" title="mw::log backend Detailed Design" href="../detailed_design/index.html" />
-    <link rel="prev" title="mw::log Component Requirements" href="../requirements.html" />
+    <link rel="next" title="How to configure logging into a file" href="../examples/file_based_local.html" />
+    <link rel="prev" title="Manuals" href="../index.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="0.1" />
@@ -157,30 +157,37 @@
 <nav>
   <ul class="bd-navbar-elements navbar-nav">
     
-<li class="nav-item current active">
-  <a class="nav-link nav-internal" href="../index.html">
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../features/architecture/index.html">
+    Logging Feature Architecture
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../components/mw_log/index.html">
     mw::log
   </a>
 </li>
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="../../datarouter/index.html">
+  <a class="nav-link nav-internal" href="../../../components/datarouter/index.html">
     Datarouter
   </a>
 </li>
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="../../../logging/stats.html">
+  <a class="nav-link nav-internal" href="../../../verification_report/stats.html">
     Quality Stats
   </a>
 </li>
 
 
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../../../guides/index.html">
-    Userguide
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../index.html">
+    Manuals
   </a>
 </li>
 
@@ -293,30 +300,37 @@
 <nav>
   <ul class="bd-navbar-elements navbar-nav">
     
-<li class="nav-item current active">
-  <a class="nav-link nav-internal" href="../index.html">
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../features/architecture/index.html">
+    Logging Feature Architecture
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../components/mw_log/index.html">
     mw::log
   </a>
 </li>
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="../../datarouter/index.html">
+  <a class="nav-link nav-internal" href="../../../components/datarouter/index.html">
     Datarouter
   </a>
 </li>
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="../../../logging/stats.html">
+  <a class="nav-link nav-internal" href="../../../verification_report/stats.html">
     Quality Stats
   </a>
 </li>
 
 
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../../../guides/index.html">
-    Userguide
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../index.html">
+    Manuals
   </a>
 </li>
 
@@ -391,10 +405,9 @@
      aria-label="Section Navigation">
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
   <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../requirements.html">mw::log Component Requirements</a></li>
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">mw::log Architecture</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../detailed_design/index.html">mw::log backend Detailed Design</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../design_decisions/explicit_init.html">Explicit initialization of logging</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Logging configuration</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/file_based_local.html">How to configure logging into a file</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/dlt_capture_demo.html">Capturing DLT Logs</a></li>
 </ul>
 </div>
 </nav></div>
@@ -436,9 +449,9 @@
       </a>
     </li>
     
-    <li class="breadcrumb-item"><a href="../index.html" class="nav-link">mw::log</a></li>
+    <li class="breadcrumb-item"><a href="../index.html" class="nav-link">Manuals</a></li>
     
-    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">mw::log Architecture</span></li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Logging configuration</span></li>
   </ul>
 </nav>
 </div>
@@ -455,11 +468,156 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section id="mw-log-architecture">
-<h1>mw::log Architecture<a class="headerlink" href="#mw-log-architecture" title="Link to this heading">#</a></h1>
-<p>The backend composition and recorder relationships are shown below:</p>
-<p class="plantuml">
-<object data="../../../_images/plantuml-c7a36b73b8d1170fb11535b77ebc755c2335c8d2.svg" type="image/svg+xml" style="width:4094px;height:1091px;background:#FFFFFF;"></object></p>
+  <section id="logging-configuration">
+<h1>Logging configuration<a class="headerlink" href="#logging-configuration" title="Link to this heading">#</a></h1>
+<p>The JSON-based configuration system provides predictable and manageable logging behavior.</p>
+<section id="logging-json-file">
+<h2>logging.json file<a class="headerlink" href="#logging-json-file" title="Link to this heading">#</a></h2>
+<p><a class="reference external" href="https://github.com/eclipse-score/baselibs/tree/main/score/mw/log#configuration">logging.json configuration</a></p>
+<section id="logging-context">
+<h3>Logging Context<a class="headerlink" href="#logging-context" title="Link to this heading">#</a></h3>
+<p>The logging API creates logger instances with specific context names. For example, mw::log implements this as:</p>
+<div class="highlight-c++ notranslate"><div class="highlight"><pre><span></span><span class="n">CreateLogger</span><span class="p">(</span><span class="s">&quot;Ctx1&quot;</span><span class="p">).</span><span class="n">LogInfo</span><span class="p">()</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;Hello, world!&quot;</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>When logging to different contexts you are able to filter the logs coming from a particular context. It makes sense to use subsystem or component name abbreviation as context ID.</p>
+</section>
+<section id="how-configuration-works">
+<h3>How configuration works<a class="headerlink" href="#how-configuration-works" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>There is a list of logging contexts in the config file on the application side. You do not have to call any <code class="docutils literal notranslate"><span class="pre">InitLogging()</span></code> function in your code. Just use the logging API.</p></li>
+<li><p>The configuration file has a fixed name <code class="docutils literal notranslate"><span class="pre">logging.json</span></code> and resides in the directory of the adaptive application’s configuration data (<strong>/opt/&lt;AppName&gt;/etc</strong>).</p></li>
+<li><p>Developers have control over respective log output, and use DLT Viewer or similar tools to read the logs.</p></li>
+</ul>
+</section>
+<section id="example">
+<h3>Example<a class="headerlink" href="#example" title="Link to this heading">#</a></h3>
+<p>Configuration file for an application (optional) is structured as follows:</p>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+<span class="w">	</span><span class="nt">&quot;appId&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;App1&quot;</span><span class="p">,</span>
+<span class="w">	</span><span class="nt">&quot;appDesc&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;App1 general description&quot;</span><span class="p">,</span>
+<span class="w">	</span><span class="nt">&quot;logfilePath&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;/tmp&quot;</span><span class="p">,</span>
+<span class="w">	</span><span class="nt">&quot;logLevel&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;kWarn&quot;</span><span class="p">,</span>
+<span class="w">	</span><span class="nt">&quot;logLevelThresholdConsole&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;kError&quot;</span><span class="p">,</span>
+<span class="w">	</span><span class="nt">&quot;logMode&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;kRemote&quot;</span><span class="p">,</span>
+<span class="w">	</span><span class="nt">&quot;contextConfigs&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span>
+<span class="w">	</span><span class="p">{</span>
+<span class="w">		</span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;ctx1&quot;</span><span class="p">,</span>
+<span class="w">		</span><span class="nt">&quot;logLevel&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;kError&quot;</span>
+<span class="w">	</span><span class="p">},</span>
+<span class="w">	</span><span class="p">{</span>
+<span class="w">		</span><span class="nt">&quot;name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;ctx2&quot;</span><span class="p">,</span>
+<span class="w">		</span><span class="nt">&quot;logLevel&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;kWarn&quot;</span>
+<span class="w">	</span><span class="p">},</span>
+<span class="w">	</span><span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+<section id="how-the-translation-of-this-file-works">
+<h3>How the translation of this file works<a class="headerlink" href="#how-the-translation-of-this-file-works" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>application ID is set to <strong>App1</strong></p></li>
+<li><p>logMode <strong>kRemote</strong> is enforced across the application</p></li>
+<li><p>context log level for, e.g., <strong>ctx1</strong>, is inferred from the following places:</p>
+<ul>
+<li><p>defined in <strong>contextConfigs</strong> in the application defaults?</p>
+<ul>
+<li><p>yes =  this value is used (kError in example), no = continue;</p></li>
+</ul>
+</li>
+<li><p>default <strong>logLevel</strong> for the application is defined</p>
+<ul>
+<li><p>yes =  this value is used (kWarn in example), no = global default is used – normally set by your code’s <strong>InitLogging()</strong> call</p></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p><strong>Note</strong> Whichever options are <strong>not set</strong> the values used come from the call to <code class="docutils literal notranslate"><span class="pre">InitLogging()</span></code> function. If this function does not get called before actual logging, then some defaults are used, and AppId is set to PID of the process (this happens only if both no config file is provided <strong>and</strong> <code class="docutils literal notranslate"><span class="pre">InitLogging()</span></code> has not been called before)</p>
+</section>
+<section id="when-do-logs-appear-on-console">
+<h3>When do logs appear on console<a class="headerlink" href="#when-do-logs-appear-on-console" title="Link to this heading">#</a></h3>
+<p>This depends on the following options: <code class="docutils literal notranslate"><span class="pre">logMode</span></code>, <code class="docutils literal notranslate"><span class="pre">logLevelThresholdConsole</span></code>, <code class="docutils literal notranslate"><span class="pre">logLevel</span></code>.
+If <code class="docutils literal notranslate"><span class="pre">logMode</span></code> includes <code class="docutils literal notranslate"><span class="pre">kConsole</span></code> then log messages that are more severe than <code class="docutils literal notranslate"><span class="pre">logLevelThresholdConsole</span></code> will appear on the console. If the context is silenced or its <code class="docutils literal notranslate"><span class="pre">logLevel</span></code> is set to higher severity than <code class="docutils literal notranslate"><span class="pre">logLevelThresholdConsole</span></code> then only messages above <code class="docutils literal notranslate"><span class="pre">logLevel</span></code> will be appearing on the console.</p>
+</section>
+<section id="what-the-options-are">
+<h3>What the options are<a class="headerlink" href="#what-the-options-are" title="Link to this heading">#</a></h3>
+<p>Here is a short list of possible values and how to combine these:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">logLevel</span></code> values, severity decreasing, are exclusive, you can use only one:</p></li>
+</ul>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>logLevel</p></th>
+<th class="head"><p>Severity</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>kOff</p></td>
+<td><p>No logging</p></td>
+</tr>
+<tr class="row-odd"><td><p>kFatal</p></td>
+<td><p>Fatal error, not recoverable</p></td>
+</tr>
+<tr class="row-even"><td><p>kError</p></td>
+<td><p>Error with impact to correct functionality</p></td>
+</tr>
+<tr class="row-odd"><td><p>kWarn</p></td>
+<td><p>Warning if correct behavior cannot be ensured</p></td>
+</tr>
+<tr class="row-even"><td><p>kInfo</p></td>
+<td><p>Informational, providing high level understanding</p></td>
+</tr>
+<tr class="row-odd"><td><p>kDebug</p></td>
+<td><p>Detailed information for programmers</p></td>
+</tr>
+<tr class="row-even"><td><p>kVerbose</p></td>
+<td><p>Extra-verbose debug messages (highest detail of information)</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">logMode</span></code>’s are combined with or (<code class="docutils literal notranslate"><span class="pre">|</span></code>) operator, e.g., <code class="docutils literal notranslate"><span class="pre">kRemote|kConsole</span></code>, the effect is that both are used</p></li>
+</ul>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>logMode</p></th>
+<th class="head"><p>logSplained</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>kRemote</p></td>
+<td><p>Sent remotely to DLT daemon, and further via DLT protocol out</p></td>
+</tr>
+<tr class="row-odd"><td><p>kFile</p></td>
+<td><p>Save to file in a directory</p></td>
+</tr>
+<tr class="row-even"><td><p>kConsole</p></td>
+<td><p>Forward to console</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</section>
+<section id="log-channels-json">
+<h2>log-channels.json<a class="headerlink" href="#log-channels-json" title="Link to this heading">#</a></h2>
+<p>DLT protocol provides a possibility to define different log channels.
+These channels are different in our implementation in that they use different source port, so effectively datarouter splits the DLT datastream between a number of receiving channels, based on the configuration.</p>
+<p>This file contains the configuration of log channels. Some ECUs are required to have more than one channel for DLT logs, some have only one. This is required by the central test department, so that the amount of logs stored can be reduced.
+The specific requirements as to “what has to be put where” are not yet present, but infratructure is provided.
+An example file can be found in <code class="docutils literal notranslate"><span class="pre">./etc/log-channels.json</span></code>
+The file has multiple sections.</p>
+<ul class="simple">
+<li><p><strong>channels</strong> specifies log channels: with their IDs (4-byte), UDP source port, reported ECU ID</p></li>
+<li><p><strong>channelAssignments</strong>: based on AppID and CtxID the packets can be assigned to certain log channel</p></li>
+<li><p><strong>messageThresholds</strong>: specifies filter thresholds based on AppId and CtxId</p></li>
+<li><p><strong>defaultChannel</strong>: if no channelAssignment has been matched, this channel is used</p></li>
+<li><p><strong>defaultThresold</strong>: if no messageThreshold matched, this threshold is used to filter the messages</p></li>
+</ul>
+</section>
 </section>
 
 
@@ -473,20 +631,20 @@
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="../requirements.html"
+       href="../index.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">mw::log Component Requirements</p>
+        <p class="prev-next-title">Manuals</p>
       </div>
     </a>
     <a class="right-next"
-       href="../detailed_design/index.html"
+       href="../examples/file_based_local.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">mw::log backend Detailed Design</p>
+        <p class="prev-next-title">How to configure logging into a file</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -502,10 +660,31 @@
 
 
   <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#logging-json-file">logging.json file</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#logging-context">Logging Context</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#how-configuration-works">How configuration works</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#example">Example</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#how-the-translation-of-this-file-works">How the translation of this file works</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#when-do-logs-appear-on-console">When do logs appear on console</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#what-the-options-are">What the options are</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#log-channels-json">log-channels.json</a></li>
+</ul>
+  </nav></div>
+
+  <div class="sidebar-secondary-item">
 
   
   <div class="tocsection editthispage">
-    <a href="https://github.com/eclipse-score/logging/edit/main/docs/components/mw_log/architecture/index.rst">
+    <a href="https://github.com/eclipse-score/logging/edit/main/docs/module/manuals/config/configuration.md">
       <i class="fa-solid fa-pencil"></i>
       
       

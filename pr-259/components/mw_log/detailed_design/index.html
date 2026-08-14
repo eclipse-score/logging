@@ -38,11 +38,11 @@
     <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-data-viewer/jsonview.bundle.css?v=f6ef2277" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-needs/libs/html/datatables.min.css?v=4b4fd840" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-needs/common_css/need_style.css?v=92936fa5" />
+    <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-needs/common_css/needstable.css?v=5e1b6797" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-needs/common_css/need_toggle.css?v=5c6620df" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-needs/common_css/need_core.css?v=f5b60a78" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-needs/common_css/need_style.css?v=92936fa5" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-needs/common_css/need_links.css?v=2150a916" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-needs/common_css/needstable.css?v=5e1b6797" />
     <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-needs/modern.css?v=803738c0" />
   
   <!-- So that users can add custom icons -->
@@ -74,7 +74,7 @@
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
     <link rel="next" title="FileOutputBackend" href="file_output_backend.html" />
-    <link rel="prev" title="mw::log Architecture" href="../architecture/index.html" />
+    <link rel="prev" title="mw::log Component Requirements" href="../requirements/index.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="0.1" />
@@ -157,6 +157,13 @@
 <nav>
   <ul class="bd-navbar-elements navbar-nav">
     
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../features/architecture/index.html">
+    Logging Feature Architecture
+  </a>
+</li>
+
+
 <li class="nav-item current active">
   <a class="nav-link nav-internal" href="../index.html">
     mw::log
@@ -172,15 +179,15 @@
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="../../../logging/stats.html">
+  <a class="nav-link nav-internal" href="../../../verification_report/stats.html">
     Quality Stats
   </a>
 </li>
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="../../../guides/index.html">
-    Userguide
+  <a class="nav-link nav-internal" href="../../../module/manuals/index.html">
+    Manuals
   </a>
 </li>
 
@@ -293,6 +300,13 @@
 <nav>
   <ul class="bd-navbar-elements navbar-nav">
     
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../features/architecture/index.html">
+    Logging Feature Architecture
+  </a>
+</li>
+
+
 <li class="nav-item current active">
   <a class="nav-link nav-internal" href="../index.html">
     mw::log
@@ -308,15 +322,15 @@
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="../../../logging/stats.html">
+  <a class="nav-link nav-internal" href="../../../verification_report/stats.html">
     Quality Stats
   </a>
 </li>
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="../../../guides/index.html">
-    Userguide
+  <a class="nav-link nav-internal" href="../../../module/manuals/index.html">
+    Manuals
   </a>
 </li>
 
@@ -391,8 +405,7 @@
      aria-label="Section Navigation">
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
   <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../requirements.html">mw::log Component Requirements</a></li>
-<li class="toctree-l1"><a class="reference internal" href="../architecture/index.html">mw::log Architecture</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../requirements/index.html">mw::log Component Requirements</a></li>
 <li class="toctree-l1 current active has-children"><a class="current reference internal" href="#">mw::log backend Detailed Design</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2"><a class="reference internal" href="file_output_backend.html">FileOutputBackend</a></li>
 <li class="toctree-l2"><a class="reference internal" href="datarouter_backend/README.html">Safe Datarouter Backend</a></li>
@@ -461,6 +474,9 @@
                   
   <section id="mw-log-backend-detailed-design">
 <h1>mw::log backend Detailed Design<a class="headerlink" href="#mw-log-backend-detailed-design" title="Link to this heading">#</a></h1>
+<p>The backend composition and recorder relationships are shown below:</p>
+<p class="plantuml">
+<object data="../../../_images/plantuml-c7a36b73b8d1170fb11535b77ebc755c2335c8d2.svg" type="image/svg+xml" style="width:4094px;height:1091px;background:#FFFFFF;"></object></p>
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="file_output_backend.html">FileOutputBackend</a></li>
@@ -480,12 +496,12 @@
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="../architecture/index.html"
+       href="../requirements/index.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">mw::log Architecture</p>
+        <p class="prev-next-title">mw::log Component Requirements</p>
       </div>
     </a>
     <a class="right-next"
