@@ -12,19 +12,16 @@
    # SPDX-License-Identifier: Apache-2.0
    # *******************************************************************************
 
-Manuals
-=======
+Release Note
+============
 
-Start with the `mw::log Usage Guide <https://github.com/eclipse-score/baselibs/blob/main/score/mw/log/README.md#usage>`_ to learn how to instrument your application with the logging API.
+.. document:: Logging Release Note
+   :id: doc__logging_release_note
+   :status: valid
+   :version: 1
+   :safety: ASIL_B
+   :security: NO
+   :realizes: wp__module_sw_release_note
 
-The guides below then walk through configuration and typical logging setups, from basic to advanced
-and contain the manual for safe usage:
 
-.. toctree::
-   :titlesonly:
-   :maxdepth: 1
-
-   config/configuration
-   examples/file_based_local
-   examples/dlt_capture_demo
-   safety_manual
+For the release notes, see the `Logging releases <https://github.com/eclipse-score/logging/releases>`_ on GitHub.

@@ -12,19 +12,11 @@
    # SPDX-License-Identifier: Apache-2.0
    # *******************************************************************************
 
-Manuals
-=======
-
-Start with the `mw::log Usage Guide <https://github.com/eclipse-score/baselibs/blob/main/score/mw/log/README.md#usage>`_ to learn how to instrument your application with the logging API.
-
-The guides below then walk through configuration and typical logging setups, from basic to advanced
-and contain the manual for safe usage:
+Safety Management
+#################
 
 .. toctree::
    :titlesonly:
-   :maxdepth: 1
 
-   config/configuration
-   examples/file_based_local
-   examples/dlt_capture_demo
-   safety_manual
+   module_safety_plan
+   module_safety_analysis_fdr
