@@ -12,25 +12,17 @@
    # SPDX-License-Identifier: Apache-2.0
    # *******************************************************************************
 
+Manuals
+=======
 
-Datarouter
-=========================
+Start with the `mw::log Usage Guide <https://github.com/eclipse-score/baselibs/blob/main/score/mw/log/README.md#usage>`_ to learn how to instrument your application with the logging API.
 
-.. comp:: Datarouter
-   :id: comp__datarouter
-   :security: YES
-   :safety: QM
-   :status: valid
-   :implements: logic_arc_int__logging__logging
-   :belongs_to: feat__logging
-
-   Datarouter is the DLT (Diagnostic log and trace) daemon executable. It reads records from source shared-memory ring buffers, manages source
-   sessions, routes messages to configured channels via UDP multicast, and reports source statistics and message drops.
+The guides below then walk through configuration and typical logging setups, from basic to advanced:
 
 .. toctree::
    :titlesonly:
    :maxdepth: 1
 
-   requirements/index
-   detailed_design/logging_architecture
-   detailed_design/shm_apis
+   config/configuration
+   examples/file_based_local
+   examples/dlt_capture_demo

@@ -9,28 +9,7 @@ architecture.
 
 ---
 
-## 📂 Key Files
-
-| File/Folder                          | Description                                        |
-| ------------------------------------ | -------------------------------------------------- |
-| `README.md`                          | Short description & build instructions             |
-| `score/`                             | Source files and tests for the module              |
-| `docs/`                              | Documentation using `docs-as-code`                 |
-| `.bazelrc`, `MODULE.bazel`, `BUILD`  | Bazel configuration & settings                     |
-| `project_config.bzl`                 | Project-specific metadata for Bazel macros         |
-| `LICENSE.md`                         | Licensing information                              |
-| `CONTRIBUTION.md`                    | Contribution guidelines                            |
-
----
-
 ## 🚀 Getting Started
-
-### 1️⃣ Clone the Repository
-
-```sh
-git clone https://github.com/eclipse-score/logging.git
-cd logging
-```
 
 ### 2️⃣ Build & Run Tests
 
@@ -62,20 +41,6 @@ See the [Quality](docs/index.rst) section of the module documentation for the ex
 KPIs each one gates in CI (static analysis/linters, sanitizers, coverage, test tiers, traceability, license compliance).
 
 ---
-
-## ⚙️ `project_config.bzl`
-
-Project-specific metadata consumed by the shared Dash license-check CI convention (`license_check.yml`),
-`source_code` picks which dependency lockfile gets scanned (`cargo` for Rust); `asil_level` records
-the module's safety level for compliance reporting.
-
-```python
-PROJECT_CONFIG = {
-    # Module is mixed-criticality (mw::log backends ASIL_B, datarouter QM); highest level is declared here.
-    "asil_level": "ASIL_B",
-    "source_code": ["cpp", "rust"],
-}
-```
 
 ## IDE support
 

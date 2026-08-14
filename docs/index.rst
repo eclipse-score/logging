@@ -53,6 +53,15 @@ The logging module includes the following top-level structure:
 - ``tools/``: developer-tooling
 - ``.github/workflows/``: CI/CD pipelines
 
+Architecture
+------------
+
+.. toctree::
+   :titlesonly:
+   :maxdepth: 1
+
+   features/architecture/index
+
 Components
 ----------
 
@@ -105,7 +114,7 @@ Stats
    :titlesonly:
    :maxdepth: 1
 
-   logging/stats.rst
+   verification_report/stats.rst
 
 Guides
 ---------
@@ -114,4 +123,4 @@ Guides
    :titlesonly:
    :maxdepth: 1
 
-   guides/index
+   module/manuals/index

@@ -38,16 +38,32 @@ frame "ECU" {
 
       SystemApplicationLogic --> lt2_frontend : verbose <<mw::log API>>
     }
+
+    node RustApplication <<ASIL B>> {
+      component RustApplicationLogic
+      package "score_log + bridge" as lt3 {
+        component "score_log Facade\n(score_log, score_log_fmt)" as lt3_frontend <<score_baselibs>>
+        component "score_log_bridge\n(adapter.cpp)" as lt3_bridge <<score_logging>>
+        component "Remote Backend" as lt3_backend <<score_logging>> {
+          component "/dev/shmem/ra_*" as shmem_ra <<memory,shared>>
+        }
+        lt3_frontend ..> lt3_bridge : implements\nLog trait
+        lt3_bridge ..> lt3_backend : FFI, direct static link\n(Runtime::GetRecorder)
+      }
+
+      RustApplicationLogic --> lt3_frontend : score_log! macros\n(info!, error!, ...)
+    }
   }
   note top of SystemApplication
     E.g.: StartupManager, etc.
   end note
 
-
   node Datarouter <<ASIL QM>> <<score_logging>> {
     node SourceSession1 {
     }
     node SourceSession2 {
+    }
+    node SourceSession3 {
     }
   }
 
@@ -60,21 +76,27 @@ frame "ECU" {
 
 lt1_backend ..> shmem_fa : write
 lt2_backend ..> shmem_sa : write
+lt3_backend ..> shmem_ra : write
 
 shmem_fa <.. Datarouter : read
 shmem_sa <.. Datarouter : read
+shmem_ra <.. Datarouter : read
 
 FeatureApplication -[hidden]right-> SystemApplication
+SystemApplication -[hidden]right-> RustApplication
 FeatureApplication -[hidden]down-> Datarouter
 SystemApplication -[hidden]down-> Datarouter
+RustApplication -[hidden]down-> Datarouter
 lt1_backend -[hidden]down-> SourceSession1
 lt2_backend -[hidden]down-> SourceSession2
+lt3_backend -[hidden]down-> SourceSession3
 
 lt1_backend <-0)-> SourceSession1 : message_passing
 lt2_backend <-0)-> SourceSession2 : message_passing
+lt3_backend <-0)-> SourceSession3 : message_passing
 
 Datarouter -(0-> [NetworkStack]: socket
-[NetworkStack] -r-> Multicast: sends multicast
+[NetworkStack] -r-> Multicast: sends UDP multicast
 
 legend right
   |Color| Repository | Contents |
