@@ -28,26 +28,14 @@ mw::log
    implementations. The logging component is designed to be extensible, allowing supported as well as custom logging
    backend to be added as needed.
 
-   The ``mw::log`` implementation spans two repositories:
-
-    ``score_baselibs/score/mw/log`` provides the frontend API, console backend, and static recorder composition.
-
-    ``score_logging/score/mw/log`` provides concrete file, remote/DLT, and slog recorders together with their backend
-    integration artifacts.
-
-   Both repositories own their own safety plan, phase gates, and governance. The
-   cross-repository contract is the Recorder interface and static ``backend_table``
-   registration. The existing C ABI seam is not used for static composition.
-   Runtime plugin loading remains experimental and is not a supported
-   production capability.
-
-   .. uml:: mw_log_repository_boundary.puml
+   The ``mw::log`` implementation spans the ``score_baselibs`` (frontend) and ``score_logging`` (backend)
+   repositories; see the :doc:`feature architecture </features/architecture/index>` for the repository boundary
+   and cross-repository contract.
 
 .. toctree::
    :titlesonly:
    :maxdepth: 1
 
-   requirements
-   architecture/index
+   requirements/index
    detailed_design/index
    design_decisions/explicit_init

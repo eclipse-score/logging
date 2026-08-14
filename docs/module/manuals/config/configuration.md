@@ -1,0 +1,1 @@
+../../../../score/datarouter/doc/guideline/configuration.md

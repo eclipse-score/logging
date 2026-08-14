@@ -1,16 +1,14 @@
-@startuml
+@startuml context-highlevel
 
-title Implementation approach
-
-frame "Adaptive AUTOSAR ECU" {
+frame "ECU" {
   node AdaptiveApplication {
     component ApplicationLogic
-    interface "mw::log" as aralog1
-    component "mw::log implementation" as aralog1_impl
+    interface "mw::log" as mwlog1
+    component "mw::log implementation" as mwlog1_impl
 
-    aralog1 - aralog1_impl
-    ApplicationLogic --> aralog1 : verbose
-    ApplicationLogic --> aralog1 : non-verbose
+    mwlog1 - mwlog1_impl
+    ApplicationLogic --> mwlog1 : verbose
+    ApplicationLogic --> mwlog1 : non-verbose
 
   }
   note right of AdaptiveApplication
@@ -22,29 +20,28 @@ frame "Adaptive AUTOSAR ECU" {
 
   node SystemApplication {
     component SystemApplicationLogic
-    interface "mw::log" as aralog2
-    component "mw::log implementation" as aralog2_impl
+    interface "mw::log" as mwlog2
+    component "mw::log implementation" as mwlog2_impl
 
-    aralog2 - aralog2_impl
-    SystemApplicationLogic --> aralog2 : verbose
+    mwlog2 - mwlog2_impl
+    SystemApplicationLogic --> mwlog2 : verbose
   }
   note right of SystemApplication
-    e.g. SOME/IP daemon,
-    ABAC component, etc.
+    e.g. StartupApp
   end note
 
 
   node Datarouter {
   }
   note right of Datarouter
-    central logging daemon
+    DLT logging daemon
   end note
 }
 
 boundary "UDP Multicast" as udp
 
-aralog1_impl --> Datarouter : write
-aralog2_impl --> Datarouter : write
+mwlog1_impl --> Datarouter : write
+mwlog2_impl --> Datarouter : write
 
 Datarouter --> udp: "send DLT messages:"
 

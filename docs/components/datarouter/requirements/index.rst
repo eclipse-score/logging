@@ -32,7 +32,7 @@ Datarouter Services
    :safety: QM
    :derived_from: feat_req__logging__compat_dlt, feat_req__logging__log_sinks_network
    :status: valid
-   :belongs_to: comp__data_router
+   :belongs_to: comp__datarouter
 
    Datarouter shall implement DLT server component. Datarouter provides the functionality to
    send messages using DLT protocol over UDP multicast transport.
@@ -44,7 +44,7 @@ Datarouter Services
    :safety: QM
    :derived_from: feat_req__logging__compat_dlt, feat_req__logging__config_log_filter, feat_req__logging__config_entity_id
    :status: valid
-   :belongs_to: comp__data_router
+   :belongs_to: comp__datarouter
 
    DLT server shall support multiple log channels as specified in AUTOSAR Diagnostic, Log and
    Trace Protocol Specification. The following parameters shall be configurable statically via
@@ -60,7 +60,7 @@ Datarouter Services
    :safety: QM
    :derived_from: feat_req__logging__filtering_log_levels, feat_req__logging__filtering_entity_id, feat_req__logging__config_log_filter
    :status: valid
-   :belongs_to: comp__data_router
+   :belongs_to: comp__datarouter
 
    DLT server shall support filtering of messages within each channel. The filter shall be
    parametrized with application ID, context ID, log level threshold. Initial filter set shall
@@ -74,7 +74,7 @@ Datarouter Services
    :safety: QM
    :derived_from: feat_req__logging__compat_dlt
    :status: valid
-   :belongs_to: comp__data_router
+   :belongs_to: comp__datarouter
 
    DLT server shall provide support for verbose DLT messages. Messages sent from mw::log
    library shall be sent via DLT using verbose mode.
@@ -89,7 +89,7 @@ DLT Quotas
    :safety: QM
    :derived_from: feat_req__logging__config_buffer_size, feat_req__logging__resource_comm_channel
    :status: valid
-   :belongs_to: comp__data_router
+   :belongs_to: comp__datarouter
 
    The component shall have the DLT bandwidth quota configuration in the file located at
    ``./etc/log-channels.json`` relative to the application specific location ``/opt/``.
@@ -101,7 +101,7 @@ DLT Quotas
    :safety: QM
    :derived_from: feat_req__logging__message_loss_handling, feat_req__logging__qos_message_handling
    :status: valid
-   :belongs_to: comp__data_router
+   :belongs_to: comp__datarouter
 
    It shall be possible to configure the action to drop DLT messages when a quota is exceeded.
 
