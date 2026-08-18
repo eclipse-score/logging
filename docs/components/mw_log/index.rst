@@ -16,8 +16,8 @@
 mw::log Backend
 ###############
 
-.. document:: Logging Backend
-   :id: doc__logging_backend
+.. document:: mw::log Backend
+   :id: doc__mw_log_backend
    :status: draft
    :version: 1
    :safety: ASIL_B
@@ -37,7 +37,7 @@ and cross-repository contract.
 Specification
 =============
 
-see :need:`doc__logging_backend_requirements`
+see :need:`doc__mw_log_backend_requirements`
 
 Further Documentation of the component can be found in the following sections:
 

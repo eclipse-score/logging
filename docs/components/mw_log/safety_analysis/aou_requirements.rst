@@ -15,8 +15,8 @@
 AoU Component Requirements Template
 ===================================
 
-.. document:: Logging Backend Component AoU
-   :id: doc__logging_backend_comp_aou
+.. document:: mw::log Backend Component AoU
+   :id: doc__mw_log_backend_comp_aou
    :status: draft
    :version: 1
    :safety: ASIL_B

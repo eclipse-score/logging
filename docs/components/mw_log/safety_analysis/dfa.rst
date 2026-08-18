@@ -16,8 +16,8 @@
 DFA (Dependent Failure Analysis)
 ================================
 
-.. document:: Logging Backend DFA
-   :id: doc__logging_backend_dfa
+.. document:: mw::log Backend DFA
+   :id: doc__mw_log_backend_dfa
    :status: draft
    :version: 1
    :safety: ASIL_B

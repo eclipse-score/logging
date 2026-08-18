@@ -13,8 +13,8 @@
    # *******************************************************************************
 
 
-.. document:: Logging Backend Requirements Inspection Checklist
-  :id: doc__logging_backend_req_inspection
+.. document:: mw::log Backend Requirements Inspection Checklist
+  :id: doc__mw_log_backend_req_inspection
   :status: draft
   :version: 1
   :safety: ASIL_B
@@ -162,10 +162,10 @@ Note: If a Review ID is not applicable for your requirement, then state ""n/a" i
 The following requirements in "valid" state and with "inspected" tag set are in the scope of this inspection:
 
 .. needtable::
-   :filter: "logging_backend" in docname and "requirements" in docname and docname is not None and status == "valid"
+   :filter: "mw_log_backend" in docname and "requirements" in docname and docname is not None and status == "valid"
    :style: table
    :types: comp_req
-   :tags: logging_backend
+   :tags: mw_log_backend
    :columns: id;status;tags
    :colwidths: 25,25,25
    :sort: title
@@ -173,10 +173,10 @@ The following requirements in "valid" state and with "inspected" tag set are in 
 And also the following AoUs in "valid" state and with "inspected" tag set (for these please answer the questions above as if the AoUs are requirements, except question REQ_03_01):
 
 .. needtable::
-   :filter: "logging_backend" in docname and "requirements" in docname and docname is not None and status == "valid"
+   :filter: "mw_log_backend" in docname and "requirements" in docname and docname is not None and status == "valid"
    :style: table
    :types: aou_req
-   :tags: logging_backend
+   :tags: mw_log_backend
    :columns: id;status;tags
    :colwidths: 25,25,25
    :sort: title
