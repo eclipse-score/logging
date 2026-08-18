@@ -18,6 +18,7 @@ mw::log
 
 .. comp:: Logging Component
    :id: comp__mw_logging
+   :version: 1
    :security: YES
    :safety: ASIL_B
    :status: valid

@@ -18,6 +18,7 @@ Datarouter
 
 .. comp:: Datarouter
    :id: comp__datarouter
+   :version: 1
    :security: YES
    :safety: QM
    :status: valid

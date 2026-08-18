@@ -3,6 +3,7 @@ Explicit initialization of logging
 
 .. dec_rec:: Explicit initialization of logging
    :id: dec_rec__log__explicit_init
+   :version: 1
    :status: proposed
    :context: See below.
    :decision: TBA

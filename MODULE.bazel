@@ -35,9 +35,9 @@ bazel_dep(name = "buildifier_prebuilt", version = "8.5.1")
 bazel_dep(name = "platforms", version = "1.0.0")
 
 # S-CORE process rules
-bazel_dep(name = "score_bazel_platforms", version = "0.1.2")
+bazel_dep(name = "score_bazel_platforms", version = "1.0.0")
 
-bazel_dep(name = "score_docs_as_code", version = "4.6.1", dev_dependency = True)
+bazel_dep(name = "score_docs_as_code", version = "7.1.0", dev_dependency = True)
 
 bazel_dep(name = "score_tooling", version = "1.2.0")
 single_version_override(
@@ -47,9 +47,9 @@ single_version_override(
 
 bazel_dep(name = "score_rust_policies", version = "0.0.5")
 
-bazel_dep(name = "score_process", version = "1.5.4", dev_dependency = True)
-bazel_dep(name = "score_platform", version = "0.6.2", dev_dependency = True)
-bazel_dep(name = "score_itf", version = "0.4.0", dev_dependency = True)
+bazel_dep(name = "score_process", version = "2.0.3", dev_dependency = True)
+bazel_dep(name = "score_platform", version = "0.6.4", dev_dependency = True)
+bazel_dep(name = "score_itf", version = "0.5.0", dev_dependency = True)
 
 # OCI / Docker image rules for integration tests
 bazel_dep(name = "rules_oci", version = "2.2.7", dev_dependency = True)
