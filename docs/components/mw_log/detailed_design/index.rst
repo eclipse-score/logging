@@ -16,15 +16,6 @@
 Detailed Design
 ###############
 
-.. attention::
-
-   The detailed design document is optional and should be created if the design of the component is complex and cannot be easily understood from the architecture documentation and interface documentation alone.
-   But the inspection checklist for the implementation is mandatory.
-
-
-Detail design
--------------
-
 The backend composition and recorder relationships are shown below:
 
 .. uml:: ../../../../score/mw/log/design/backend/mw_log_recorders.puml

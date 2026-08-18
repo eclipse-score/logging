@@ -13,8 +13,8 @@
    # *******************************************************************************
 
 
-Logging Backend Component
-#########################
+mw::log Backend
+###############
 
 .. document:: Logging Backend
    :id: doc__logging_backend
@@ -38,21 +38,6 @@ Specification
 =============
 
 see :need:`doc__logging_backend_requirements`
-
-
-How to Teach This
-=================
-
-[How to teach users, new and experienced, how to apply the CR to their work.]
-
-.. note::
-   For a CR that adds new functionality or changes behaviour, it is helpful to include a section on how to teach users, new and experienced, how to apply the CR to their work.
-
-Footnotes
-=========
-
-[A collection of footnotes cited in the CR, and a place to list non-inline hyperlink targets.]
-
 
 Further Documentation of the component can be found in the following sections:
 

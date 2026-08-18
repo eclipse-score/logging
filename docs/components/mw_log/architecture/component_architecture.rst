@@ -14,7 +14,7 @@
 
 .. _component_architecture:
 
-Component Architecture Documentation
+Component Architecture
 ====================================
 
 .. document:: Logging Backend Architecture
@@ -72,7 +72,7 @@ A component can optional also consist of lower level components to further struc
    :status: valid
    :version: 1
    :belongs_to: comp__logging_backend
-   :fulfils: comp_req__log__local_allocation_strategy
+   :fulfils: comp_req__log__avoid_signal_processing, comp_req__log__file_descriptor_flags, comp_req__log__dlt_verbose_mode, comp_req__log__autosar_log_trace_spec, comp_req__log__send_to_datarouter, comp_req__log__inactive_logstream, comp_req__log__shm_file_permissions, comp_req__log__forward_to_system_logger, comp_req__log__system_backend_activation, comp_req__log__local_allocation_strategy, comp_req__log__no_endless_loops, comp_req__log__avoid_locks, comp_req__log__cross_locking, comp_req__log__index_size_checking, comp_req__log__memory_bound_checking
 
    .. needarch::
       :scale: 50
@@ -89,3 +89,8 @@ Interfaces
 ----------
 
 not needed
+
+Decision Records
+----------------
+
+:need:`dec_rec__logging__explicit_init`

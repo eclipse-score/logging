@@ -82,17 +82,18 @@ for ``datarouter`` to read.
 
 .. uml:: _assets/remote_logging.puml
 
-Design Decisions - :need:`dec_rec__logging__explicit_init`
+Design Constraint
+-----------------
 
-Design Constraint: The logging function is not safety relevant (its output can not be used for safety functionality).
-But it must be usable also for safety related applications, so the design shall provide Freedom From Interference (FFI).
+The logging function is not safety relevant (its output can not be used for safety functionality).
+But it must be usable also for safety related applications, hence the design shall guarantee Freedom From Interference (FFI).
 
 Requirements
 ------------
 
 The requirements for the feature architecture are defined in the `requirements` section of the feature documentation in the project repository.
 
-Rationale Behind Architecture Decomposition
+Architecture Decomposition
 *******************************************
 
 The feature is decomposed into a QM component which delivers the functionality and ASIL components
