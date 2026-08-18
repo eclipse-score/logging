@@ -110,6 +110,7 @@ Static Architecture
    :security: YES
    :safety: ASIL_B
    :status: valid
+   :version: 1
    :includes: logic_arc_int__log_cpp__logging
    :fulfils: feat_req__logging__log_sources_user_app
    :belongs_to: feat__logging

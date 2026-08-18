@@ -16,8 +16,8 @@
 FMEA (Failure Modes and Effects Analysis)
 =========================================
 
-.. document:: Logging Backend FMEA
-   :id: doc__logging_backend_fmea
+.. document:: mw::log Backend FMEA
+   :id: doc__mw_log_backend_fmea
    :status: draft
    :version: 1
    :safety: ASIL_B

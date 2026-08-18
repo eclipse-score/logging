@@ -17,8 +17,8 @@
 Component Architecture
 ====================================
 
-.. document:: Logging Backend Architecture
-   :id: doc__logging_backend_architecture
+.. document:: mw::log Backend Architecture
+   :id: doc__mw_log_backend_architecture
    :status: draft
    :version: 1
    :safety: ASIL_B
@@ -54,24 +54,25 @@ The components are designed to cover the expectations from the feature architect
 
 A component can optional also consist of lower level components to further structure the architecture. The component and its static views can also optionally use interfaces provided by other components.
 
-.. comp:: Logging Backend
-   :id: comp__logging_backend
+.. comp:: mw::log Backend
+   :id: comp__mw_log_backend
    :security: YES
    :safety: ASIL_B
    :status: valid
-   :implements: logic_arc_int__log_cpp__logging
+   :version: 1
+   :implements: logic_arc_int__log_cpp__logging, logic_arc_int__logging__shm, logic_arc_int__logging__session_ctrl_channel
    :belongs_to: feat__logging
 
    This is the logging component library responsible for selecting the appropriate log sinks based on configuration at runtime. It can perform tasks such as log formatting, filtering, and composite backend selection based on runtime context and configuration. The logging component is designed to be extensible, allowing for custom logging backend to be added as needed.
 
 
-.. comp_arc_sta:: Logging Backend (Static View)
+.. comp_arc_sta:: mw::log Backend (Static View)
    :id: comp_arc_sta__log__sv
    :security: YES
    :safety: ASIL_B
    :status: valid
    :version: 1
-   :belongs_to: comp__logging_backend
+   :belongs_to: comp__mw_log_backend
    :fulfils: comp_req__log__avoid_signal_processing, comp_req__log__file_descriptor_flags, comp_req__log__dlt_verbose_mode, comp_req__log__autosar_log_trace_spec, comp_req__log__send_to_datarouter, comp_req__log__inactive_logstream, comp_req__log__shm_file_permissions, comp_req__log__forward_to_system_logger, comp_req__log__system_backend_activation, comp_req__log__local_allocation_strategy, comp_req__log__no_endless_loops, comp_req__log__avoid_locks, comp_req__log__cross_locking, comp_req__log__index_size_checking, comp_req__log__memory_bound_checking
 
    .. needarch::
@@ -88,7 +89,29 @@ not needed
 Interfaces
 ----------
 
-not needed
+.. logic_arc_int:: Log Record Shared-Memory
+   :id: logic_arc_int__logging__shm
+   :security: YES
+   :safety: ASIL_B
+   :status: valid
+   :version: 1
+
+   Shared-memory ring buffer carrying only serialized log records: the remote/DLT recorder
+   backend writes into it, and ``comp__datarouter`` reads from it to route records onward to the
+   network stack. Connection setup and buffer-acquire requests are not carried on this channel;
+   see :need:`logic_arc_int__logging__session_ctrl_channel` for that.
+
+.. logic_arc_int:: Control Channel
+   :id: logic_arc_int__logging__session_ctrl_channel
+   :security: YES
+   :safety: ASIL_B
+   :status: valid
+   :version: 1
+
+   ``mw::com`` message-passing session between the remote/DLT recorder and its source session
+   inside ``comp__datarouter``: used to initiate the connection and for ``comp__datarouter`` to
+   send buffer-acquire requests back to the recorder. Carries no log record payload; see
+   :need:`logic_arc_int__logging__shm` for that.
 
 Decision Records
 ----------------

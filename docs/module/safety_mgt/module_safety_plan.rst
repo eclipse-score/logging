@@ -133,22 +133,22 @@ Component Logging Backend Work products List
         * - :need:`wp__requirements_comp`
           - :need:`gd_temp__req_comp_req`
           - :ndf:`copy('status', need_id='gd_temp__req_comp_req')`
-          - :need:`doc__logging_backend_requirements`
+          - :need:`doc__mw_log_backend_requirements`
 
         * - :need:`wp__requirements_comp_aou`
           - :need:`gd_temp__req_aou_req`
           - :ndf:`copy('status', need_id='gd_temp__req_aou_req')`
-          - :need:`doc__logging_backend_comp_aou`
+          - :need:`doc__mw_log_backend_comp_aou`
 
         * - :need:`wp__requirements_inspect`
           - :need:`gd_chklst__req_inspection`
           - :ndf:`copy('status', need_id='gd_chklst__req_inspection')`
-          - :need:`doc__logging_backend_req_inspection`
+          - :need:`doc__mw_log_backend_req_inspection`
 
         * - :need:`wp__component_arch`
           - :need:`gd_temp__arch_comp`
           - :ndf:`copy('status', need_id='gd_temp__arch_comp')`
-          - :need:`doc__logging_backend_architecture`
+          - :need:`doc__mw_log_backend_architecture`
 
         * - :need:`wp__sw_arch_verification`
           - :need:`gd_chklst__arch_inspection_checklist`
@@ -158,12 +158,12 @@ Component Logging Backend Work products List
         * - :need:`wp__sw_component_fmea`
           - :need:`gd_temp__comp_saf_fmea`
           - :ndf:`copy('status', need_id='gd_temp__comp_saf_fmea')`
-          - :need:`doc__logging_backend_fmea`
+          - :need:`doc__mw_log_backend_fmea`
 
         * - :need:`wp__sw_component_dfa`
           - :need:`gd_temp__comp_saf_dfa`
           - :ndf:`copy('status', need_id='gd_temp__comp_saf_dfa')`
-          - :need:`doc__logging_backend_dfa`
+          - :need:`doc__mw_log_backend_dfa`
 
         * - :need:`wp__sw_implementation`
           - :need:`gd_guidl__implementation`
@@ -178,7 +178,7 @@ Component Logging Backend Work products List
         * - :need:`wp__sw_implementation_inspection`
           - :need:`gd_chklst__impl_inspection_checklist`
           - :ndf:`copy('status', need_id='gd_chklst__impl_inspection_checklist')`
-          - :need:`doc__logging_backend_impl_inspection`
+          - :need:`doc__mw_log_backend_impl_inspection`
 
         * - :need:`wp__verification_comp_int_test`
           - :need:`gd_guidl__verification_guide`
@@ -247,7 +247,7 @@ Component Architecture Status
   :colwidths: 25,25,25
   :sort: title
 
-.. _logging_backend_safety_package_deviations:
+.. _mw_log_backend_safety_package_deviations:
 
 Deviations from Module Safety Plan
 ----------------------------------

@@ -18,9 +18,10 @@ Module
 .. mod:: Logging
    :id: mod__logging_repo
    :status: valid
+   :version: 1
    :safety: ASIL_B
    :security: YES
-   :includes: comp__datarouter, comp__logging_backend
+   :includes: comp__datarouter, comp__mw_log_backend
 
    The logging module provides a standardized logging framework for C++ and Rust projects using Bazel build system. It includes components for log routing allowing for flexible log management and integration with various logging backends. The module is designed to be extensible and configurable to meet the needs of different applications and environments.
 
@@ -29,7 +30,8 @@ Module View
 
 .. mod_view_sta:: Logging module view
    :id: mod_view_sta__logging__static_view
-   :includes: comp__datarouter, comp__logging_backend
+   :version: 1
+   :includes: comp__datarouter, comp__mw_log_backend
    :belongs_to: mod__logging_repo
 
    .. needarch::

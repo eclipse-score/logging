@@ -12,8 +12,8 @@
    # SPDX-License-Identifier: Apache-2.0
    # *******************************************************************************
 
-.. document:: Logging Backend Implementation Inspection Checklist
-  :id: doc__logging_backend_impl_inspection
+.. document:: mw::log Backend Implementation Inspection Checklist
+  :id: doc__mw_log_backend_impl_inspection
   :status: draft
   :version: 1
   :safety: ASIL_B
