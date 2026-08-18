@@ -22,26 +22,6 @@ Component Requirements
    :security: YES
    :realizes: wp__requirements_comp
 
-Log and Trace
--------------
-
-*Log and Trace Framework consists of logging libraries and datarouter. The applications use
-logging libraries to write logs. datarouter implements logging daemon functionality, and can
-forward log messages from applications as DLT messages.*
-
-.. comp_req:: Use Log and Trace Framework
-   :id: comp_req__log__use_log_trace_framework
-   :reqtype: Functional
-   :security: NO
-   :safety: QM
-   :derived_from: feat_req__logging__log_sources_user_app, feat_req__logging__log_sources
-   :status: valid
-   :belongs_to: comp__logging
-
-   All output from logging and instrumentation based logging shall go through "mw::log"
-   framework.
-
-
 mw::log
 -------
 
