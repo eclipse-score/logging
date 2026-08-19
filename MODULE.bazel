@@ -152,7 +152,18 @@ python.toolchain(
 bazel_dep(name = "googletest", version = "1.17.0.bcr.2")
 bazel_dep(name = "rapidjson", version = "1.1.0.bcr.20241007")
 bazel_dep(name = "score_baselibs", version = "0.2.11")
-bazel_dep(name = "score_communication", version = "0.2.1")
+bazel_dep(name = "score_communication", version = "0.3.0")
+
+# score_baselibs 0.2.11 migrated score/memory/shared (incl. the use_typedshmd
+# flag) to score_communication, but no released score_communication version
+# contains it yet. Pin to a commit on main that has the migration until a new
+# score_communication release is cut.
+# TODO: Remove once a score_communication release >0.3.0 is available.
+git_override(
+    module_name = "score_communication",
+    commit = "e83ad9b74488ccd3a8ba3cf7edb550799e6b782d",
+    remote = "https://github.com/eclipse-score/communication.git",
+)
 
 # Rust dependencies
 
