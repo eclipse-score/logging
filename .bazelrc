@@ -33,7 +33,7 @@ build:_common --extra_toolchains=@score_toolchains_rust//toolchains/ferrocene:fe
 build:_common --features=minimal_warnings --features=-strict_warnings --features=warnings_as_errors
 
 # Common flags for all builds
-common --@score_baselibs//score/memory/shared/flags:use_typedshmd=False
+common --@score_communication//score/memory/shared/flags:use_typedshmd=False
 common --@score_baselibs//score/mw/log/flags:KRemote_Logging=False
 common --@score_baselibs//score/json:base_library=nlohmann
 common --//score/datarouter/build_configuration_flags:persistent_config_feature_enabled=False
