@@ -72,7 +72,7 @@ cc_library(
             "//score/mw/log/legacy_non_verbose_api",
             "@score_baselibs//score/concurrency",
             "@score_baselibs//score/os:errno_logging",
-            "@score_baselibs//score/memory/shared",
+            "@score_communication//score/memory/shared",
         ],
         "//conditions:default": [],
     }),
