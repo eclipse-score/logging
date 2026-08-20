@@ -12,7 +12,6 @@
 # *******************************************************************************
 
 load("@rules_cc//cc:defs.bzl", "cc_test")
-load("@score_baselibs//third_party/itf:py_unittest_qnx_test.bzl", "py_unittest_qnx_test")
 
 FEAT_COMPILER_WARNINGS_AS_ERRORS = [
     "treat_warnings_as_errors",
@@ -423,37 +422,4 @@ cc_test(
         "@score_baselibs//score/os/mocklib:socket_mock",
         "@score_logging//score/datarouter:unixdomain_common",
     ],
-)
-
-py_unittest_qnx_test(
-    name = "unit_tests_qnx",
-    data_files = [
-        "//score/datarouter/test/ut/etc:fg_persistent_logging_test_json",
-        "//score/datarouter/test/ut/etc:fg_socketserver_config_test_json",
-        "//score/datarouter/test/ut/etc:fg_socket_server_log_channels_test_json",
-    ],
-    test_cases = [
-        ":errorUT",
-        ":filetransferUT",
-        ":datarouterAppUT",
-        ":dltprotocolUT",
-        ":optionsUT",
-        ":dltserverUT",
-        ":logparserUT",
-        ":persistentLogConfigUT",
-        ":dlt_verbose_handler_test",
-        ":udp_stream_output_test",
-        ":unix_domain_common_test",
-        ":unix_domain_server_test",
-        ":messagePassingServerUT",
-        ":socketserverConfigUT",
-        ":socketserverUT",
-        ":log_entry_deserialize_test",
-        ":utility_test",
-        ":FileTransferHandlerFactoryUT",
-        ":PersistentDictionaryFactoryUT",
-        "//score/datarouter/persistent_log_request/test:test_persistent_log_request",
-        "//score/datarouter/tools/generator:fibex_generator_test",
-    ],
-    visibility = ["//visibility:public"],  # platform_only
 )

@@ -12,7 +12,6 @@
 # *******************************************************************************
 
 load("@rules_cc//cc:defs.bzl", "cc_library", "cc_test")
-load("@score_baselibs//third_party/itf:py_unittest_qnx_test.bzl", "py_unittest_qnx_test")
 load("//:score/mw/common_features.bzl", "COMPILER_WARNING_FEATURES")
 
 cc_library(
@@ -118,15 +117,6 @@ cc_test(
             "@score_baselibs//score/os/mocklib/qnx:slog2_mock",
         ],
     }),
-)
-
-py_unittest_qnx_test(
-    name = "unit_tests_qnx",
-    test_cases = [
-        ":slog_backend_test",
-        ":slog_recorder_factory_test",
-    ],
-    visibility = ["@score_baselibs//score/mw/log/detail:__pkg__"],
 )
 
 test_suite(

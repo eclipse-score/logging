@@ -11,8 +11,6 @@
 # SPDX-License-Identifier: Apache-2.0
 # *******************************************************************************
 
-load("@score_baselibs//third_party/itf:py_unittest_qnx_test.bzl", "py_unittest_qnx_test")
-
 ## ---------------------------------------------------------------------------
 ## Unit tests
 ## ---------------------------------------------------------------------------
@@ -23,12 +21,4 @@ test_suite(
         "//score/datarouter/test/ut:unit_tests",
     ],
     visibility = ["@score_logging//score/datarouter:__pkg__"],
-)
-
-py_unittest_qnx_test(
-    name = "unit_tests_qnx",
-    test_suites = [
-        "//score/datarouter/test/ut:unit_tests_qnx",
-    ],
-    visibility = ["//visibility:public"],  # platform_only
 )

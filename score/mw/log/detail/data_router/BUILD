@@ -61,7 +61,6 @@ cc_library(
         "@score_baselibs//score/concurrency",
         "@score_baselibs//score/concurrency:thread_pool",
         "@score_baselibs//score/language/futurecpp",
-        "@score_baselibs//score/memory/shared",  # Preperation for full rollout of (Ticket-105741), build cyclic dependency is broken (runtime, in next commit)
         "@score_baselibs//score/mw/log:recorder",
         "@score_baselibs//score/mw/log/configuration",
         "@score_baselibs//score/mw/log/detail:backend_interface",
@@ -74,6 +73,7 @@ cc_library(
         "@score_baselibs//score/os:pthread",
         "@score_baselibs//score/os:stdlib",
         "@score_baselibs//score/os/utils:signal",
+        "@score_communication//score/memory/shared",  # Preperation for full rollout of (Ticket-105741), build cyclic dependency is broken (runtime, in next commit)
         "@score_communication//score/message_passing",
     ],
 )
