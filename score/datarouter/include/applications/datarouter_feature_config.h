@@ -14,14 +14,8 @@
 #ifndef SCORE_DATAROUTER_DATAROUTER_FEATURE_CONFIG_H
 #define SCORE_DATAROUTER_DATAROUTER_FEATURE_CONFIG_H
 
-// --- Conditional Compilation Feature Switch ---
-#if defined(PERSISTENT_CONFIG_FEATURE_ENABLED)
-#include "score/datarouter/src/persistency/ara_per_persistent_dictionary/ara_per_persistent_dictionary.h"
-#include "score/datarouter/src/persistency/ara_per_persistent_dictionary/ara_per_persistent_dictionary_factory.h"
-#else
 #include "score/datarouter/src/persistency/stub_persistent_dictionary/stub_persistent_dictionary.h"
 #include "score/datarouter/src/persistency/stub_persistent_dictionary/stub_persistent_dictionary_factory.h"
-#endif
 
 #if defined(NON_VERBOSE_DLT)
 #include "score/datarouter/src/dlt/nonverbose_dlt_impl/nonverbose_dlt.h"
@@ -54,14 +48,8 @@ namespace internal
 namespace datarouter
 {
 
-// --- Conditional Compilation Feature Switch ---
-#if defined(PERSISTENT_CONFIG_FEATURE_ENABLED)
-using PersistentDictionaryFactoryType = AraPerPersistentDictionaryFactory;
-inline constexpr bool kPersistentConfigFeatureEnabled = true;
-#else
 using PersistentDictionaryFactoryType = StubPersistentDictionaryFactory;
 inline constexpr bool kPersistentConfigFeatureEnabled = false;
-#endif
 
 #if defined(NON_VERBOSE_DLT)
 using DltNonverboseHandlerType = score::logging::dltserver::DltNonverboseHandler;
