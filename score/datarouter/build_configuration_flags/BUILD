@@ -14,17 +14,6 @@
 load("@bazel_skylib//rules:common_settings.bzl", "bool_flag")
 
 bool_flag(
-    name = "persistent_config_feature_enabled",
-    build_setting_default = True,
-)
-
-config_setting(
-    name = "config_persistent_configuration",
-    flag_values = {":persistent_config_feature_enabled": "True"},
-    visibility = ["@score_logging//score/datarouter:__subpackages__"],
-)
-
-bool_flag(
     name = "enable_nonverbose_dlt",
     build_setting_default = True,
 )

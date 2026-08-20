@@ -167,25 +167,13 @@ cc_test(
 
 cc_test(
     name = "PersistentDictionaryFactoryUT",
-    srcs = select({
-        "//score/datarouter/build_configuration_flags:config_persistent_configuration": [
-            "test_persistent_dictionary_factory.cpp",
-            "test_stub_persistent_dictionary_factory.cpp",
-        ],
-        "//conditions:default": [
-            "test_stub_persistent_dictionary_factory.cpp",
-        ],
-    }),
+    srcs = [
+        "test_stub_persistent_dictionary_factory.cpp",
+    ],
     features = FEAT_COMPILER_WARNINGS_AS_ERRORS,
     tags = ["unit"],
-    deps = select({
-        "//score/datarouter/build_configuration_flags:config_persistent_configuration": [
-            "//score/datarouter/src/persistency/ara_per_persistent_dictionary:ara_per_persistent_dictionary_factory_testing",
-        ],
-        "//conditions:default": [
-            "//score/datarouter/src/persistency/stub_persistent_dictionary:stub_persistent_dictionary_factory",
-        ],
-    }) + [
+    deps = [
+        "//score/datarouter/src/persistency/stub_persistent_dictionary:stub_persistent_dictionary_factory",
         "@googletest//:gtest_main",
     ],
 )

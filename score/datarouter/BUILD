@@ -508,9 +508,6 @@ cc_library(
             "include/applications/datarouter_feature_config.h",
         ],
         defines = select({
-            "//score/datarouter/build_configuration_flags:config_persistent_configuration": ["PERSISTENT_CONFIG_FEATURE_ENABLED"],
-            "//conditions:default": [],
-        }) + select({
             "//score/datarouter/build_configuration_flags:config_datarouter_nonverbose_dlt": [
                 "NON_VERBOSE_DLT",
             ],
@@ -528,12 +525,9 @@ cc_library(
         visibility = [
             "@score_logging//score/datarouter:__subpackages__",
         ],
-        deps = select({
-            "//score/datarouter/build_configuration_flags:config_persistent_configuration": [
-                ara_fact_dep,
-            ],
-            "//conditions:default": ["//score/datarouter/src/persistency/stub_persistent_dictionary:stub_persistent_dictionary_factory"],
-        }) + select({
+        deps = [
+            "//score/datarouter/src/persistency/stub_persistent_dictionary:stub_persistent_dictionary_factory",
+        ] + select({
             "//score/datarouter/build_configuration_flags:config_file_transfer": [
                 ft_dep,
             ],
@@ -556,10 +550,9 @@ cc_library(
             ],
         }),
     )
-    for name, ara_fact_dep, nv_dep, nv_stub_dep, dc_dep, dc_stub_dep, ft_dep, test_only in [
+    for name, nv_dep, nv_stub_dep, dc_dep, dc_stub_dep, ft_dep, test_only in [
         (
             "",
-            "//score/datarouter/src/persistency/ara_per_persistent_dictionary:ara_per_persistent_dictionary_factory",
             "//score/datarouter/src/dlt/nonverbose_dlt_impl:nonverbose_dlt_handler",
             "//score/datarouter/src/dlt/nonverbose_dlt_stub:nonverbose_dlt_handler_stub",
             "//score/datarouter/src/configuration/dynamic_config/dynamic_config_impl:dynamic_config_session",
@@ -569,7 +562,6 @@ cc_library(
         ),
         (
             "_testing",
-            "//score/datarouter/src/persistency/ara_per_persistent_dictionary:ara_per_persistent_dictionary_factory_testing",
             "//score/datarouter/src/dlt/nonverbose_dlt_impl:nonverbose_dlt_handler_testing",
             "//score/datarouter/src/dlt/nonverbose_dlt_stub:nonverbose_dlt_handler_stub_testing",
             "//score/datarouter/src/configuration/dynamic_config/dynamic_config_impl:dynamic_config_session_testing",
