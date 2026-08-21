@@ -12,7 +12,7 @@
 # *******************************************************************************
 
 load("@rules_cc//cc:defs.bzl", "cc_library", "cc_test")
-load("@score_baselibs//third_party/itf:py_unittest_qnx_test.bzl", "py_unittest_qnx_test")
+load("@score_logging//third_party/itf:py_unittest_qnx_test.bzl", "py_unittest_qnx_test")
 load("//:score/mw/common_features.bzl", "COMPILER_WARNING_FEATURES")
 
 cc_library(
