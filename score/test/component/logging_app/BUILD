@@ -24,6 +24,7 @@
 # ********************************************************************************
 
 load("@rules_cc//cc:cc_binary.bzl", "cc_binary")
+load("@rules_pkg//pkg:mappings.bzl", "pkg_attributes", "pkg_filegroup", "pkg_files")
 load("@rules_pkg//pkg:tar.bzl", "pkg_tar")
 
 cc_binary(
@@ -33,23 +34,30 @@ cc_binary(
     deps = ["//score/mw/log"],
 )
 
-pkg_tar(
+pkg_files(
     name = "logging_app_bin_pkg",
     srcs = [":logging_app"],
-    package_dir = "opt/test_apps/logging_app/bin",
+    attributes = pkg_attributes(mode = "0755"),
+    prefix = "opt/test_apps/logging_app/bin",
 )
 
-pkg_tar(
+pkg_files(
     name = "logging_app_config_pkg",
     srcs = ["etc/logging.json"],
-    package_dir = "opt/test_apps/logging_app/etc",
+    prefix = "opt/test_apps/logging_app/etc",
+)
+
+pkg_filegroup(
+    name = "logging_app_filesystem_pkg",
+    srcs = [
+        ":logging_app_bin_pkg",
+        ":logging_app_config_pkg",
+    ],
+    visibility = ["//score/test/component:__subpackages__"],
 )
 
 pkg_tar(
     name = "logging_app_filesystem",
+    srcs = [":logging_app_filesystem_pkg"],
     visibility = ["//score/test/component:__subpackages__"],
-    deps = [
-        ":logging_app_bin_pkg",
-        ":logging_app_config_pkg",
-    ],
 )

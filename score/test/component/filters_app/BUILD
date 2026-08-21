@@ -24,6 +24,7 @@
 # ********************************************************************************
 
 load("@rules_cc//cc:defs.bzl", "cc_binary")
+load("@rules_pkg//pkg:mappings.bzl", "pkg_attributes", "pkg_filegroup", "pkg_files")
 load("@rules_pkg//pkg:tar.bzl", "pkg_tar")
 
 # ---------------------------------------------------------------------------
@@ -35,25 +36,32 @@ cc_binary(
     deps = ["//score/mw/log"],
 )
 
-pkg_tar(
+pkg_files(
     name = "mwfiltertest_bin_pkg",
     srcs = [":mwfiltertest"],
-    package_dir = "opt/test_apps/mwfiltertest/bin",
+    attributes = pkg_attributes(mode = "0755"),
+    prefix = "opt/test_apps/mwfiltertest/bin",
 )
 
-pkg_tar(
+pkg_files(
     name = "mwfiltertest_config_pkg",
     srcs = ["etc/logging.json"],
-    package_dir = "opt/test_apps/mwfiltertest/etc",
+    prefix = "opt/test_apps/mwfiltertest/etc",
+)
+
+pkg_filegroup(
+    name = "mwfiltertest_filesystem_pkg",
+    srcs = [
+        ":mwfiltertest_bin_pkg",
+        ":mwfiltertest_config_pkg",
+    ],
+    visibility = ["//score/test/component:__subpackages__"],
 )
 
 pkg_tar(
     name = "mwfiltertest_filesystem",
+    srcs = [":mwfiltertest_filesystem_pkg"],
     visibility = ["//score/test/component:__subpackages__"],
-    deps = [
-        ":mwfiltertest_bin_pkg",
-        ":mwfiltertest_config_pkg",
-    ],
 )
 
 # ---------------------------------------------------------------------------
@@ -72,10 +80,11 @@ cc_binary(
     ],
 )
 
-pkg_tar(
+pkg_files(
     name = "filtertest_bin_pkg",
     srcs = [":filtertest"],
-    package_dir = "opt/test_apps/filtertest/bin",
+    attributes = pkg_attributes(mode = "0755"),
+    prefix = "opt/test_apps/filtertest/bin",
 )
 
 genrule(
@@ -85,17 +94,17 @@ genrule(
     cmd = "cp $< $@",
 )
 
-pkg_tar(
+pkg_files(
     name = "filtertest_config_pkg",
     srcs = [":filtertest_logging_json"],
-    package_dir = "opt/test_apps/filtertest/etc",
+    prefix = "opt/test_apps/filtertest/etc",
     strip_prefix = "filtertest_etc",
 )
 
-pkg_tar(
+pkg_files(
     name = "filtertest_classid_pkg",
     srcs = ["etc/class-id.json"],
-    package_dir = "bmw/platform/opt/datarouter/etc",
+    prefix = "bmw/platform/opt/datarouter/etc",
     visibility = ["//score/test/component:__subpackages__"],
 )
 
@@ -105,12 +114,18 @@ filegroup(
     visibility = ["//score/test/component:__subpackages__"],
 )
 
-pkg_tar(
-    name = "filtertest_filesystem",
-    visibility = ["//score/test/component:__subpackages__"],
-    deps = [
+pkg_filegroup(
+    name = "filtertest_filesystem_pkg",
+    srcs = [
         ":filtertest_bin_pkg",
         ":filtertest_classid_pkg",
         ":filtertest_config_pkg",
     ],
+    visibility = ["//score/test/component:__subpackages__"],
+)
+
+pkg_tar(
+    name = "filtertest_filesystem",
+    srcs = [":filtertest_filesystem_pkg"],
+    visibility = ["//score/test/component:__subpackages__"],
 )
