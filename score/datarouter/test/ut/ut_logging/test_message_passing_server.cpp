@@ -201,6 +201,10 @@ class MessagePassingServerFixture : public ::testing::Test
                         found->second.IncrementTickCount();
                     }
                 }
+                {
+                    std::lock_guard<std::mutex> lock(state_change_mutex);
+                    state_change_cond.notify_all();
+                }
                 CheckWaitTickUnblock();
                 return false;
             });
@@ -208,9 +212,13 @@ class MessagePassingServerFixture : public ::testing::Test
                 .Times(AnyNumber())
                 .WillRepeatedly([this](const score::mw::log::detail::ReadAcquireResult&) {
                     ++acquire_response_count;
+                    std::lock_guard<std::mutex> lock(state_change_mutex);
+                    state_change_cond.notify_all();
                 });
             EXPECT_CALL(*session, OnClosedByPeer).Times(AtMost(1)).WillOnce([this]() {
                 ++closed_by_peer_count;
+                std::lock_guard<std::mutex> lock(state_change_mutex);
+                state_change_cond.notify_all();
             });
             EXPECT_CALL(*session, IsSourceClosed).Times(AnyNumber()).WillRepeatedly(Return(false));
             EXPECT_CALL(*session, Destruct).Times(1).WillOnce([this, session_pid]() {
@@ -218,6 +226,10 @@ class MessagePassingServerFixture : public ::testing::Test
                 std::lock_guard<std::mutex> erase_lock(map_mutex);
                 session_map.erase(session_pid);
                 map_cond.notify_all();
+                {
+                    std::lock_guard<std::mutex> lock(state_change_mutex);
+                    state_change_cond.notify_all();
+                }
             });
             return session;
         };
@@ -257,7 +269,42 @@ class MessagePassingServerFixture : public ::testing::Test
                     return true;
                 }
             }
-            std::this_thread::sleep_for(std::chrono::milliseconds{1});
+            std::unique_lock<std::mutex> state_lock(state_change_mutex);
+            state_change_cond.wait_until(state_lock, deadline);
+        }
+        return false;
+    }
+
+    bool WaitForSessionPresent(pid_t pid, bool expected_present, std::chrono::milliseconds timeout)
+    {
+        const auto deadline = std::chrono::steady_clock::now() + timeout;
+        while (std::chrono::steady_clock::now() < deadline)
+        {
+            std::lock_guard<std::mutex> lock(map_mutex);
+            const bool is_present = session_map.find(pid) != session_map.end();
+            if (is_present == expected_present)
+            {
+                return true;
+            }
+            std::this_thread::yield();
+        }
+        return false;
+    }
+
+    bool WaitForStopRequested(std::chrono::milliseconds timeout)
+    {
+        const auto deadline = std::chrono::steady_clock::now() + timeout;
+        while (std::chrono::steady_clock::now() < deadline)
+        {
+            if (server.has_value())
+            {
+                std::lock_guard<std::mutex> lock(server->mutex_);
+                if (server->stop_source_.stop_requested())
+                {
+                    return true;
+                }
+            }
+            std::this_thread::yield();
         }
         return false;
     }
@@ -390,6 +437,9 @@ class MessagePassingServerFixture : public ::testing::Test
     std::mutex map_mutex;
     std::condition_variable map_cond;  // currently only used for destruction
     std::unordered_map<pid_t, SessionStatus> session_map;
+
+    std::mutex state_change_mutex;
+    std::condition_variable state_change_cond;
 
     std::int32_t construct_count{0};
     std::int32_t acquire_response_count{0};
@@ -851,8 +901,8 @@ TEST_F(MessagePassingServerFixture, EnobufsFromNotifyShouldNotKillSession)
 
     // Session should still be alive — ENOBUFS is treated as a transient error.
     using namespace std::chrono_literals;
-    std::this_thread::sleep_for(50ms);
-    EXPECT_FALSE(session_map.empty());
+    ASSERT_TRUE(WaitForSessionPresent(kClienT0Pid, true, 1s))
+        << "Timed out waiting for session to remain alive after ENOBUFS";
 
     // A subsequent successful Notify() should work normally.
     ::testing::Sequence seq;
@@ -860,8 +910,8 @@ TEST_F(MessagePassingServerFixture, EnobufsFromNotifyShouldNotKillSession)
     session_map.at(kClienT0Pid).handle->AcquireRequest();
 
     // Verify session is still alive after successful notify.
-    std::this_thread::sleep_for(50ms);
-    EXPECT_FALSE(session_map.empty());
+    ASSERT_TRUE(WaitForSessionPresent(kClienT0Pid, true, 1s))
+        << "Timed out waiting for session to remain alive after successful notify";
 
     ExpectServerDestruction();
     UninstantiateServer();
@@ -932,9 +982,10 @@ TEST(MessagePassingServerTests, sessionWrapperCreateTest)
 
     auto session_mock = std::make_unique<MockSession>();
     auto* session_mock_ptr = session_mock.get();
+    testing::MockFunction<void(pid_t)> enqueue_tick_mock;
 
     MessagePassingServer::MessagePassingServerForTest::SessionWrapper session_wrapper(
-        nullptr, 0, std::move(session_mock));
+        enqueue_tick_mock.AsStdFunction(), 0, std::move(session_mock));
 
     EXPECT_FALSE(session_wrapper.IsMarkedForDelete());
     session_wrapper.to_delete = true;
@@ -1016,9 +1067,10 @@ TEST_P(SessionWrapperParamTest, EnqueueForDeleteWhileLockedTest)
 TEST(SessionWrapperTest, ResetRunningWhileLocked)
 {
     auto session_mock = std::make_unique<MockSession>();
+    testing::MockFunction<void(pid_t)> enqueue_tick_mock;
 
     MessagePassingServer::MessagePassingServerForTest::SessionWrapper session_wrapper(
-        nullptr, 0, std::move(session_mock));
+        enqueue_tick_mock.AsStdFunction(), 0, std::move(session_mock));
 
     {
         // with enqueued
@@ -1167,9 +1219,9 @@ TEST_F(MessagePassingServerFixture, RunWorkerThreadConnectionTimeoutExpired)
         server_for_test->connection_timeout_ = std::chrono::steady_clock::now() - std::chrono::milliseconds(1);
     }
 
-    // Give the worker thread time to execute one iteration and hit the branch
+    // Wait until worker observes timeout and requests stop.
     using namespace std::chrono_literals;
-    std::this_thread::sleep_for(250ms);
+    ASSERT_TRUE(WaitForStopRequested(1s)) << "Timed out waiting for worker thread to request stop";
 
     ExpectServerDestruction();
     UninstantiateServer();
