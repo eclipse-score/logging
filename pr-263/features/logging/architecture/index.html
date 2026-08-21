@@ -74,7 +74,7 @@
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
     <link rel="next" title="Architecture Inspection Checklist" href="chklst_arc_inspection.html" />
-    <link rel="prev" title="Feature" href="../index.html" />
+    <link rel="prev" title="Feature Logging" href="../index.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="0.1" />
@@ -159,7 +159,7 @@
     
 <li class="nav-item current active">
   <a class="nav-link nav-internal" href="../index.html">
-    Feature
+    Feature Logging
   </a>
 </li>
 
@@ -180,14 +180,14 @@
 
 <li class="nav-item ">
   <a class="nav-link nav-internal" href="../../../components/datarouter/index.html">
-    Datarouter
+    Datarouter Component
   </a>
 </li>
 
 
 <li class="nav-item ">
   <a class="nav-link nav-internal" href="../../../components/mw_log/index.html">
-    mw::log Backend
+    Logging Backend Component
   </a>
 </li>
 
@@ -302,7 +302,7 @@
     
 <li class="nav-item current active">
   <a class="nav-link nav-internal" href="../index.html">
-    Feature
+    Feature Logging
   </a>
 </li>
 
@@ -323,14 +323,14 @@
 
 <li class="nav-item ">
   <a class="nav-link nav-internal" href="../../../components/datarouter/index.html">
-    Datarouter
+    Datarouter Component
   </a>
 </li>
 
 
 <li class="nav-item ">
   <a class="nav-link nav-internal" href="../../../components/mw_log/index.html">
-    mw::log Backend
+    Logging Backend Component
   </a>
 </li>
 
@@ -450,7 +450,7 @@
       </a>
     </li>
     
-    <li class="breadcrumb-item"><a href="../index.html" class="nav-link">Feature</a></li>
+    <li class="breadcrumb-item"><a href="../index.html" class="nav-link">Feature Logging</a></li>
     
     <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Logging Architecture</span></li>
   </ul>
@@ -471,7 +471,7 @@
                   
   <section id="logging-architecture">
 <h1>Logging Architecture<a class="headerlink" href="#logging-architecture" title="Link to this heading">#</a></h1>
-<div class="need_container docutils container" id="SNCB-f328d2b9">
+<div class="need_container docutils container" id="SNCB-1c711d5b">
 <div class="pst-scrollable-table-container"><table class="need needs_grid_complex needs_layout_score needs_style_none needs_type_document table" id="doc__logging_module_architecture">
 <tbody>
 <tr class="head row-odd"><td class="head_left" colspan="2"><div class="needs_head_left line-block">
@@ -563,18 +563,16 @@ way the C++ remote backend does and writes into its own shared-memory segment
 for <code class="docutils literal notranslate"><span class="pre">datarouter</span></code> to read.</p>
 <p class="plantuml">
 <object data="../../../_images/plantuml-7ba8ef989631395ce7ed4c69b76c322ebbdb943b.svg" type="image/svg+xml" style="width:1990px;height:1238px;background:#FFFFFF;"></object></p>
+<p>Design Decisions - <a class="reference internal" href="DR-001-logging.html#dec_rec__logging__explicit_init" title="dec_rec__logging__explicit_init"><em class="xref need">Explicit initialization of ... (dec_rec__logging__explicit_init)</em></a></p>
+<p>Design Constraint: The logging function is not safety relevant (its output can not be used for safety functionality).
+But it must be usable also for safety related applications, so the design shall provide Freedom From Interference (FFI).</p>
 </section>
-</section>
-<section id="design-constraint">
-<h2>Design Constraint<a class="headerlink" href="#design-constraint" title="Link to this heading">#</a></h2>
-<p>The logging function is not safety relevant (its output can not be used for safety functionality).
-But it must be usable also for safety related applications, hence the design shall guarantee Freedom From Interference (FFI).</p>
 </section>
 <section id="requirements">
 <h2>Requirements<a class="headerlink" href="#requirements" title="Link to this heading">#</a></h2>
 <p>The requirements for the feature architecture are defined in the <cite>requirements</cite> section of the feature documentation in the project repository.</p>
-<section id="architecture-decomposition">
-<h3>Architecture Decomposition<a class="headerlink" href="#architecture-decomposition" title="Link to this heading">#</a></h3>
+<section id="rationale-behind-architecture-decomposition">
+<h3>Rationale Behind Architecture Decomposition<a class="headerlink" href="#rationale-behind-architecture-decomposition" title="Link to this heading">#</a></h3>
 <p>The feature is decomposed into a QM component which delivers the functionality and ASIL components
 providing the interface (divided into frontend and backend) which are included into the context of the using application.
 The frontend interface which is included by the users is deployed in the baselibs module.
@@ -584,7 +582,7 @@ but also the logging components want to use baselibs functions.</p>
 </section>
 <section id="static-architecture">
 <h2>Static Architecture<a class="headerlink" href="#static-architecture" title="Link to this heading">#</a></h2>
-<div class="need_container docutils container" id="SNCB-57a590b8">
+<div class="need_container docutils container" id="SNCB-f5f6eb52">
 <div class="pst-scrollable-table-container"><table class="need needs_grid_complex needs_layout_score needs_style_none needs_type_feat_arc_sta table" id="feat_arc_sta__logging__static_view">
 <tbody>
 <tr class="head row-odd"><td class="head_left" colspan="2"><div class="needs_head_left line-block">
@@ -614,7 +612,7 @@ but also the logging components want to use baselibs functions.</p>
 <td class="meta" colspan="3"></td>
 </tr>
 <tr class="content row-odd"><td class="content" colspan="6"><p class="plantuml" id="needarch-features/logging/architecture/index-0">
-<object data="../../../_images/plantuml-bcc55b1251a653bfb68c5b549033b91ba6a98855.svg" type="image/svg+xml" style="width:552px;height:381px;background:#FFFFFF;"></object></p>
+<object data="../../../_images/plantuml-da73214bcc65df2e88b0c30d56b0f9757c2d274e.svg" type="image/svg+xml" style="width:358px;height:381px;background:#FFFFFF;"></object></p>
 </td>
 </tr>
 <tr class="footer row-even"><td class="footer_left" colspan="2"><div class="needs_footer_left line-block">
@@ -663,7 +661,7 @@ but also the logging components want to use baselibs functions.</p>
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Feature</p>
+        <p class="prev-next-title">Feature Logging</p>
       </div>
     </a>
     <a class="right-next"
@@ -700,9 +698,8 @@ but also the logging components want to use baselibs functions.</p>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#datarouter">Datarouter</a></li>
 </ul>
 </li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#design-constraint">Design Constraint</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#requirements">Requirements</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#architecture-decomposition">Architecture Decomposition</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#rationale-behind-architecture-decomposition">Rationale Behind Architecture Decomposition</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#static-architecture">Static Architecture</a></li>

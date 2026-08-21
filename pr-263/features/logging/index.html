@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Feature &#8212; Logging  documentation</title>
+    <title>Feature Logging &#8212; Logging  documentation</title>
   
   
   
@@ -159,7 +159,7 @@
     
 <li class="nav-item current active">
   <a class="nav-link nav-internal" href="#">
-    Feature
+    Feature Logging
   </a>
 </li>
 
@@ -180,14 +180,14 @@
 
 <li class="nav-item ">
   <a class="nav-link nav-internal" href="../../components/datarouter/index.html">
-    Datarouter
+    Datarouter Component
   </a>
 </li>
 
 
 <li class="nav-item ">
   <a class="nav-link nav-internal" href="../../components/mw_log/index.html">
-    mw::log Backend
+    Logging Backend Component
   </a>
 </li>
 
@@ -302,7 +302,7 @@
     
 <li class="nav-item current active">
   <a class="nav-link nav-internal" href="#">
-    Feature
+    Feature Logging
   </a>
 </li>
 
@@ -323,14 +323,14 @@
 
 <li class="nav-item ">
   <a class="nav-link nav-internal" href="../../components/datarouter/index.html">
-    Datarouter
+    Datarouter Component
   </a>
 </li>
 
 
 <li class="nav-item ">
   <a class="nav-link nav-internal" href="../../components/mw_log/index.html">
-    mw::log Backend
+    Logging Backend Component
   </a>
 </li>
 
@@ -449,7 +449,7 @@
         <i class="fa-solid fa-home"></i>
       </a>
     </li>
-    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Feature</span></li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Feature Logging</span></li>
   </ul>
 </nav>
 </div>
@@ -466,25 +466,12 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section id="feature">
-<h1>Feature<a class="headerlink" href="#feature" title="Link to this heading">#</a></h1>
+  <section id="feature-logging">
+<h1>Feature Logging<a class="headerlink" href="#feature-logging" title="Link to this heading">#</a></h1>
 <section id="abstract">
 <h2>Abstract<a class="headerlink" href="#abstract" title="Link to this heading">#</a></h2>
 <p>The logging feature provides a standardized logging framework for C++ and Rust projects using Bazel build system.</p>
-<p>For the main feature description and requirements, see the belonging <a class="reference external" href="https://eclipse-score.github.io/score/main/features/log_trace/index.html">Feature</a> in the project repository.</p>
-</section>
-<section id="change-request-cr-guidelines">
-<h2>Change Request (CR) Guidelines<a class="headerlink" href="#change-request-cr-guidelines" title="Link to this heading">#</a></h2>
-<p>New contributors to the logging feature should start with the
-<a class="reference internal" href="architecture/index.html"><span class="doc">feature architecture</span></a> to understand the split between the
-<code class="docutils literal notranslate"><span class="pre">mw::log</span> <span class="pre">frontend</span></code> (owned by <code class="docutils literal notranslate"><span class="pre">score_baselibs</span></code>) and the <code class="docutils literal notranslate"><span class="pre">mw::log</span> <span class="pre">backend</span></code> recorders implemented in this repository,
-and how <code class="docutils literal notranslate"><span class="pre">datarouter</span></code> fits into the remote/DLT path.</p>
-<p>Adding or integrating a backend (file, slog, remote/DLT, or a custom recorder) means implementing the
-Recorder interface and registering it in the static <code class="docutils literal notranslate"><span class="pre">backend_table</span></code>; the existing C ABI seam is not used
-for static composition, and runtime plugin loading is experimental and not supported for production use.
-The <a class="reference internal" href="architecture/index.html"><span class="doc">Logging Architecture</span></a> and <a class="reference internal" href="../../components/mw_log/detailed_design/index.html"><span class="doc">Detailed Design</span></a> sections document this
-contract in detail, while the <a class="reference internal" href="../../components/mw_log/requirements/index.html"><span class="doc">Requirements</span></a> and the safety analyses below
-capture the safety and security constraints that any backend implementation must respect.</p>
+<p>For the main feature description and requirements, see the belonging <a class="reference external" href="https://eclipse-score.github.io/score/main/features/index.html#features">Feature</a> in the project repository.</p>
 <div class="toctree-wrapper compound">
 </div>
 </section>
@@ -538,7 +525,6 @@ capture the safety and security constraints that any backend implementation must
   <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="pst-show_toc_level nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#abstract">Abstract</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#change-request-cr-guidelines">Change Request (CR) Guidelines</a></li>
 </ul>
   </nav></div>
 

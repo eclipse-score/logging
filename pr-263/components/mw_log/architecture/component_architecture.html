@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Component Architecture &#8212; Logging  documentation</title>
+    <title>Component Architecture Documentation &#8212; Logging  documentation</title>
   
   
   
@@ -159,7 +159,7 @@
     
 <li class="nav-item ">
   <a class="nav-link nav-internal" href="../../../features/logging/index.html">
-    Feature
+    Feature Logging
   </a>
 </li>
 
@@ -180,14 +180,14 @@
 
 <li class="nav-item ">
   <a class="nav-link nav-internal" href="../../datarouter/index.html">
-    Datarouter
+    Datarouter Component
   </a>
 </li>
 
 
 <li class="nav-item current active">
   <a class="nav-link nav-internal" href="../index.html">
-    mw::log Backend
+    Logging Backend Component
   </a>
 </li>
 
@@ -302,7 +302,7 @@
     
 <li class="nav-item ">
   <a class="nav-link nav-internal" href="../../../features/logging/index.html">
-    Feature
+    Feature Logging
   </a>
 </li>
 
@@ -323,14 +323,14 @@
 
 <li class="nav-item ">
   <a class="nav-link nav-internal" href="../../datarouter/index.html">
-    Datarouter
+    Datarouter Component
   </a>
 </li>
 
 
 <li class="nav-item current active">
   <a class="nav-link nav-internal" href="../index.html">
-    mw::log Backend
+    Logging Backend Component
   </a>
 </li>
 
@@ -406,7 +406,7 @@
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
   <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
 <li class="toctree-l1 current active has-children"><a class="reference internal" href="index.html">Component Architecture</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
-<li class="toctree-l2 current active"><a class="current reference internal" href="#">Component Architecture</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">Component Architecture Documentation</a></li>
 </ul>
 </details></li>
 <li class="toctree-l1"><a class="reference internal" href="../detailed_design/index.html">Detailed Design</a></li>
@@ -455,12 +455,12 @@
       </a>
     </li>
     
-    <li class="breadcrumb-item"><a href="../index.html" class="nav-link">mw::log Backend</a></li>
+    <li class="breadcrumb-item"><a href="../index.html" class="nav-link">Logging Backend Component</a></li>
     
     
     <li class="breadcrumb-item"><a href="index.html" class="nav-link">Component Architecture</a></li>
     
-    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Component Architecture</span></li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Component Architecture Documentation</span></li>
   </ul>
 </nav>
 </div>
@@ -477,9 +477,9 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section id="component-architecture">
-<span id="id1"></span><h1>Component Architecture<a class="headerlink" href="#component-architecture" title="Link to this heading">#</a></h1>
-<div class="need_container docutils container" id="SNCB-5cfb1187">
+  <section id="component-architecture-documentation">
+<span id="component-architecture"></span><h1>Component Architecture Documentation<a class="headerlink" href="#component-architecture-documentation" title="Link to this heading">#</a></h1>
+<div class="need_container docutils container" id="SNCB-447ca172">
 <div class="pst-scrollable-table-container"><table class="need needs_grid_complex needs_layout_score needs_style_none needs_type_document table" id="doc__logging_backend_architecture">
 <tbody>
 <tr class="head row-odd"><td class="head_left" colspan="2"><div class="needs_head_left line-block">
@@ -545,8 +545,8 @@
 <p>The components are designed to cover the expectations from the feature architecture
 (i.e. if already exists a definition it should be taken over and enriched).</p>
 <p>A component can optional also consist of lower level components to further structure the architecture. The component and its static views can also optionally use interfaces provided by other components.</p>
-<div class="need_container docutils container" id="SNCB-92291204">
-<div class="pst-scrollable-table-container"><table class="need needs_grid_complex needs_layout_score needs_style_none needs_type_comp table" id="comp__mw_log_backend">
+<div class="need_container docutils container" id="SNCB-e5ec27ce">
+<div class="pst-scrollable-table-container"><table class="need needs_grid_complex needs_layout_score needs_style_none needs_type_comp table" id="comp__logging_backend">
 <tbody>
 <tr class="head row-odd"><td class="head_left" colspan="2"><div class="needs_head_left line-block">
 <div class="line"><span><span class="needs_title"><span class="needs_data">Logging Backend</span></span></span></div>
@@ -567,10 +567,9 @@
 <div class="line"><span><span><div class="line"><span class="needs_version"><span class="needs_label">version: </span>1</span></div>
 </span></span></div>
 <div class="line"><span><div class="line">belongs to: <span class="belongs_to"><span><a class="external_link reference external" href="https://eclipse-score.github.io/score/main/features/analysis-infra/logging/docs/architecture/index.html#feat__logging">feat__logging</a></span></span></div>
-<div class="line">has: <span class="belongs_to"><span><a class="reference internal" href="#comp_arc_sta__log__sv" title="comp__mw_log_backend">comp_arc_sta__log__sv</a></span></span></div>
-<div class="line">satisfies: <span class="satisfied_by"><span><a class="reference internal" href="../requirements/requirements.html#comp_req__log__avoid_signal_processing" title="comp__mw_log_backend">comp_req__log__avoid_signal_processing</a>, <a class="reference internal" href="../requirements/requirements.html#comp_req__log__file_descriptor_flags" title="comp__mw_log_backend">comp_req__log__file_descriptor_flags</a>, <a class="reference internal" href="../requirements/requirements.html#comp_req__log__dlt_verbose_mode" title="comp__mw_log_backend">comp_req__log__dlt_verbose_mode</a>, <a class="reference internal" href="../requirements/requirements.html#comp_req__log__autosar_log_trace_spec" title="comp__mw_log_backend">comp_req__log__autosar_log_trace_spec</a>, <a class="reference internal" href="../requirements/requirements.html#comp_req__log__send_to_datarouter" title="comp__mw_log_backend">comp_req__log__send_to_datarouter</a>, <a class="reference internal" href="../requirements/requirements.html#comp_req__log__inactive_logstream" title="comp__mw_log_backend">comp_req__log__inactive_logstream</a>, <a class="reference internal" href="../requirements/requirements.html#comp_req__log__shm_file_permissions" title="comp__mw_log_backend">comp_req__log__shm_file_permissions</a>, <a class="reference internal" href="../requirements/requirements.html#comp_req__log__forward_to_system_logger" title="comp__mw_log_backend">comp_req__log__forward_to_system_logger</a>, <a class="reference internal" href="../requirements/requirements.html#comp_req__log__system_backend_activation" title="comp__mw_log_backend">comp_req__log__system_backend_activation</a>, <a class="reference internal" href="../requirements/requirements.html#comp_req__log__local_allocation_strategy" title="comp__mw_log_backend">comp_req__log__local_allocation_strategy</a>, <a class="reference internal" href="../requirements/requirements.html#comp_req__log__no_endless_loops" title="comp__mw_log_backend">comp_req__log__no_endless_loops</a>, <a class="reference internal" href="../requirements/requirements.html#comp_req__log__avoid_locks" title="comp__mw_log_backend">comp_req__log__avoid_locks</a>, <a class="reference internal" href="../requirements/requirements.html#comp_req__log__cross_locking" title="comp__mw_log_backend">comp_req__log__cross_locking</a>, <a class="reference internal" href="../requirements/requirements.html#comp_req__log__index_size_checking" title="comp__mw_log_backend">comp_req__log__index_size_checking</a>, <a class="reference internal" href="../requirements/requirements.html#comp_req__log__memory_bound_checking" title="comp__mw_log_backend">comp_req__log__memory_bound_checking</a></span></span></div>
-<div class="line">implements: <span class="implements"><span><a class="external_link reference external" href="https://eclipse-score.github.io/score/main/features/analysis-infra/logging/docs/architecture/index.html#logic_arc_int__log_cpp__logging">logic_arc_int__log_cpp__logging</a>, <a class="reference internal" href="#logic_arc_int__logging__shm" title="comp__mw_log_backend">logic_arc_int__logging__shm</a>, <a class="reference internal" href="#logic_arc_int__logging__session_ctrl_channel" title="comp__mw_log_backend">logic_arc_int__logging__session_ctrl_channel</a></span></span></div>
-<div class="line">included by: <span class="includes"><span><a class="reference internal" href="../../../module/index.html#mod__logging_repo" title="comp__mw_log_backend">mod__logging_repo</a>, <a class="reference internal" href="../../../module/index.html#mod_view_sta__logging__static_view" title="comp__mw_log_backend">mod_view_sta__logging__static_view</a></span></span></div>
+<div class="line">has: <span class="belongs_to"><span><a class="reference internal" href="#comp_arc_sta__log__sv" title="comp__logging_backend">comp_arc_sta__log__sv</a></span></span></div>
+<div class="line">implements: <span class="implements"><span><a class="external_link reference external" href="https://eclipse-score.github.io/score/main/features/analysis-infra/logging/docs/architecture/index.html#logic_arc_int__log_cpp__logging">logic_arc_int__log_cpp__logging</a></span></span></div>
+<div class="line">included by: <span class="includes"><span><a class="reference internal" href="../../../module/index.html#mod__logging_repo" title="comp__logging_backend">mod__logging_repo</a>, <a class="reference internal" href="../../../module/index.html#mod_view_sta__logging__static_view" title="comp__logging_backend">mod_view_sta__logging__static_view</a></span></span></div>
 </span></div>
 </div>
 </td>
@@ -579,7 +578,7 @@
 <tr class="content row-odd"><td class="content" colspan="6"><p>This is the logging component library responsible for selecting the appropriate log sinks based on configuration at runtime. It can perform tasks such as log formatting, filtering, and composite backend selection based on runtime context and configuration. The logging component is designed to be extensible, allowing for custom logging backend to be added as needed.</p></td>
 </tr>
 <tr class="footer row-even"><td class="footer_left" colspan="2"><div class="needs_footer_left line-block">
-<div class="line"><span><span class="needs-id"><a class="reference internal" href="#comp__mw_log_backend" title="comp__mw_log_backend">comp__mw_log_backend</a></span></span></div>
+<div class="line"><span><span class="needs-id"><a class="reference internal" href="#comp__logging_backend" title="comp__logging_backend">comp__logging_backend</a></span></span></div>
 </div>
 </td>
 <td class="footer" colspan="2"><div class="needs_footer line-block">
@@ -592,7 +591,7 @@
 </table>
 </div>
 </div>
-<div class="need_container docutils container" id="SNCB-16bd252d">
+<div class="need_container docutils container" id="SNCB-42110324">
 <div class="pst-scrollable-table-container"><table class="need needs_grid_complex needs_layout_score needs_style_none needs_type_comp_arc_sta table" id="comp_arc_sta__log__sv">
 <tbody>
 <tr class="head row-odd"><td class="head_left" colspan="2"><div class="needs_head_left line-block">
@@ -613,15 +612,15 @@
 <tr class="meta row-even"><td class="meta" colspan="3"><div class="needs_meta_left line-block">
 <div class="line"><span><span><div class="line"><span class="needs_version"><span class="needs_label">version: </span>1</span></div>
 </span></span></div>
-<div class="line"><span><div class="line">belongs to: <span class="belongs_to"><span><a class="reference internal" href="#comp__mw_log_backend" title="comp_arc_sta__log__sv">comp__mw_log_backend</a></span></span></div>
-<div class="line">fulfils: <span class="fulfils"><span><a class="reference internal" href="../requirements/requirements.html#comp_req__log__avoid_signal_processing" title="comp_arc_sta__log__sv">comp_req__log__avoid_signal_processing</a>, <a class="reference internal" href="../requirements/requirements.html#comp_req__log__file_descriptor_flags" title="comp_arc_sta__log__sv">comp_req__log__file_descriptor_flags</a>, <a class="reference internal" href="../requirements/requirements.html#comp_req__log__dlt_verbose_mode" title="comp_arc_sta__log__sv">comp_req__log__dlt_verbose_mode</a>, <a class="reference internal" href="../requirements/requirements.html#comp_req__log__autosar_log_trace_spec" title="comp_arc_sta__log__sv">comp_req__log__autosar_log_trace_spec</a>, <a class="reference internal" href="../requirements/requirements.html#comp_req__log__send_to_datarouter" title="comp_arc_sta__log__sv">comp_req__log__send_to_datarouter</a>, <a class="reference internal" href="../requirements/requirements.html#comp_req__log__inactive_logstream" title="comp_arc_sta__log__sv">comp_req__log__inactive_logstream</a>, <a class="reference internal" href="../requirements/requirements.html#comp_req__log__shm_file_permissions" title="comp_arc_sta__log__sv">comp_req__log__shm_file_permissions</a>, <a class="reference internal" href="../requirements/requirements.html#comp_req__log__forward_to_system_logger" title="comp_arc_sta__log__sv">comp_req__log__forward_to_system_logger</a>, <a class="reference internal" href="../requirements/requirements.html#comp_req__log__system_backend_activation" title="comp_arc_sta__log__sv">comp_req__log__system_backend_activation</a>, <a class="reference internal" href="../requirements/requirements.html#comp_req__log__local_allocation_strategy" title="comp_arc_sta__log__sv">comp_req__log__local_allocation_strategy</a>, <a class="reference internal" href="../requirements/requirements.html#comp_req__log__no_endless_loops" title="comp_arc_sta__log__sv">comp_req__log__no_endless_loops</a>, <a class="reference internal" href="../requirements/requirements.html#comp_req__log__avoid_locks" title="comp_arc_sta__log__sv">comp_req__log__avoid_locks</a>, <a class="reference internal" href="../requirements/requirements.html#comp_req__log__cross_locking" title="comp_arc_sta__log__sv">comp_req__log__cross_locking</a>, <a class="reference internal" href="../requirements/requirements.html#comp_req__log__index_size_checking" title="comp_arc_sta__log__sv">comp_req__log__index_size_checking</a>, <a class="reference internal" href="../requirements/requirements.html#comp_req__log__memory_bound_checking" title="comp_arc_sta__log__sv">comp_req__log__memory_bound_checking</a></span></span></div>
+<div class="line"><span><div class="line">belongs to: <span class="belongs_to"><span><a class="reference internal" href="#comp__logging_backend" title="comp_arc_sta__log__sv">comp__logging_backend</a></span></span></div>
+<div class="line">fulfils: <span class="fulfils"><span><a class="reference internal" href="../requirements/requirements.html#comp_req__log__local_allocation_strategy" title="comp_arc_sta__log__sv">comp_req__log__local_allocation_strategy</a></span></span></div>
 </span></div>
 </div>
 </td>
 <td class="meta" colspan="3"></td>
 </tr>
 <tr class="content row-odd"><td class="content" colspan="6"><p class="plantuml" id="needarch-components/mw_log/architecture/component_architecture-0">
-<object data="../../../_images/plantuml-40e8799afd223daf67b88426002daffd1f7481d6.svg" type="image/svg+xml" style="width:544px;height:192px;background:#FFFFFF;"></object></p>
+<object data="../../../_images/plantuml-b687535cb84137e8374b7bd3401803b856956a71.svg" type="image/svg+xml" style="width:173px;height:192px;background:#FFFFFF;"></object></p>
 </td>
 </tr>
 <tr class="footer row-even"><td class="footer_left" colspan="2"><div class="needs_footer_left line-block">
@@ -645,104 +644,7 @@
 </section>
 <section id="interfaces">
 <h2>Interfaces<a class="headerlink" href="#interfaces" title="Link to this heading">#</a></h2>
-<div class="need_container docutils container" id="SNCB-34d46f3a">
-<div class="pst-scrollable-table-container"><table class="need needs_grid_complex needs_layout_score needs_style_none needs_type_logic_arc_int table" id="logic_arc_int__logging__shm">
-<tbody>
-<tr class="head row-odd"><td class="head_left" colspan="2"><div class="needs_head_left line-block">
-<div class="line"><span><span class="needs_title"><span class="needs_data">Log Record Shared-Memory</span></span></span></div>
-</div>
-</td>
-<td class="head_center" colspan="2"><div class="needs_head line-block">
-<div class="line"><span><span class="needs_status"><span class="needs_label">status: </span><span class="needs_data">valid</span></span></span></div>
-<div class="line"><span><span class="needs_security"><span class="needs_label">security: </span><span class="needs_data">YES</span></span></span></div>
-<div class="line"><span><span class="needs_safety"><span class="needs_label">safety: </span><span class="needs_data">ASIL_B</span></span></span></div>
-</div>
-</td>
-<td class="head_right" colspan="2"><div class="needs_head_right line-block">
-<div class="line"><span><span class="needs needs_collapse" id="target__show__meta"><span class="needs collapsed"><svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-down-circle"><circle cx="12" cy="12" r="10"></circle><polyline points="8 12 12 16 16 12"></polyline><line x1="12" y1="8" x2="12" y2="16"></line></svg></span><span class="needs visible collapse_is_hidden"><svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-right-circle"><circle cx="12" cy="12" r="10"></circle><polyline points="12 16 16 12 12 8"></polyline><line x1="8" y1="12" x2="16" y2="12"></line></svg></span></span></span></div>
-</div>
-</td>
-</tr>
-<tr class="meta row-even"><td class="meta" colspan="3"><div class="needs_meta_left line-block">
-<div class="line"><span><span><div class="line"><span class="needs_version"><span class="needs_label">version: </span>1</span></div>
-</span></span></div>
-<div class="line"><span><div class="line">implemented by: <span class="implements"><span><a class="reference internal" href="#comp__mw_log_backend" title="logic_arc_int__logging__shm">comp__mw_log_backend</a></span></span></div>
-<div class="line">used by: <span class="uses"><span><a class="reference internal" href="../../datarouter/index.html#comp__datarouter" title="logic_arc_int__logging__shm">comp__datarouter</a></span></span></div>
-</span></div>
-</div>
-</td>
-<td class="meta" colspan="3"></td>
-</tr>
-<tr class="content row-odd"><td class="content" colspan="6"><p>Shared-memory ring buffer carrying only serialized log records: the remote/DLT recorder
-backend writes into it, and <code class="docutils literal notranslate"><span class="pre">comp__datarouter</span></code> reads from it to route records onward to the
-network stack. Connection setup and buffer-acquire requests are not carried on this channel;
-see <a class="reference internal" href="#logic_arc_int__logging__session_ctrl_channel" title="logic_arc_int__logging__session_ctrl_channel"><em class="xref need">Control Channel (logic_arc_int__logging__session_ctrl_channel)</em></a> for that.</p></td>
-</tr>
-<tr class="footer row-even"><td class="footer_left" colspan="2"><div class="needs_footer_left line-block">
-<div class="line"><span><span class="needs-id"><a class="reference internal" href="#logic_arc_int__logging__shm" title="logic_arc_int__logging__shm">logic_arc_int__logging__shm</a></span></span></div>
-</div>
-</td>
-<td class="footer" colspan="2"><div class="needs_footer line-block">
-<div class="line"><span><span class="needs_type_name"><span class="needs_data">Logical Interface &amp; Feature Interface View</span></span></span></div>
-</div>
-</td>
-<td class="footer_right" colspan="2"></td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<div class="need_container docutils container" id="SNCB-ed708f30">
-<div class="pst-scrollable-table-container"><table class="need needs_grid_complex needs_layout_score needs_style_none needs_type_logic_arc_int table" id="logic_arc_int__logging__session_ctrl_channel">
-<tbody>
-<tr class="head row-odd"><td class="head_left" colspan="2"><div class="needs_head_left line-block">
-<div class="line"><span><span class="needs_title"><span class="needs_data">Control Channel</span></span></span></div>
-</div>
-</td>
-<td class="head_center" colspan="2"><div class="needs_head line-block">
-<div class="line"><span><span class="needs_status"><span class="needs_label">status: </span><span class="needs_data">valid</span></span></span></div>
-<div class="line"><span><span class="needs_security"><span class="needs_label">security: </span><span class="needs_data">YES</span></span></span></div>
-<div class="line"><span><span class="needs_safety"><span class="needs_label">safety: </span><span class="needs_data">ASIL_B</span></span></span></div>
-</div>
-</td>
-<td class="head_right" colspan="2"><div class="needs_head_right line-block">
-<div class="line"><span><span class="needs needs_collapse" id="target__show__meta"><span class="needs collapsed"><svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-down-circle"><circle cx="12" cy="12" r="10"></circle><polyline points="8 12 12 16 16 12"></polyline><line x1="12" y1="8" x2="12" y2="16"></line></svg></span><span class="needs visible collapse_is_hidden"><svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-right-circle"><circle cx="12" cy="12" r="10"></circle><polyline points="12 16 16 12 12 8"></polyline><line x1="8" y1="12" x2="16" y2="12"></line></svg></span></span></span></div>
-</div>
-</td>
-</tr>
-<tr class="meta row-even"><td class="meta" colspan="3"><div class="needs_meta_left line-block">
-<div class="line"><span><span><div class="line"><span class="needs_version"><span class="needs_label">version: </span>1</span></div>
-</span></span></div>
-<div class="line"><span><div class="line">implemented by: <span class="implements"><span><a class="reference internal" href="#comp__mw_log_backend" title="logic_arc_int__logging__session_ctrl_channel">comp__mw_log_backend</a></span></span></div>
-<div class="line">used by: <span class="uses"><span><a class="reference internal" href="../../datarouter/index.html#comp__datarouter" title="logic_arc_int__logging__session_ctrl_channel">comp__datarouter</a></span></span></div>
-</span></div>
-</div>
-</td>
-<td class="meta" colspan="3"></td>
-</tr>
-<tr class="content row-odd"><td class="content" colspan="6"><p><code class="docutils literal notranslate"><span class="pre">mw::com</span></code> message-passing session between the remote/DLT recorder and its source session
-inside <code class="docutils literal notranslate"><span class="pre">comp__datarouter</span></code>: used to initiate the connection and for <code class="docutils literal notranslate"><span class="pre">comp__datarouter</span></code> to
-send buffer-acquire requests back to the recorder. Carries no log record payload; see
-<a class="reference internal" href="#logic_arc_int__logging__shm" title="logic_arc_int__logging__shm"><em class="xref need">Log Record Shared-Memory (logic_arc_int__logging__shm)</em></a> for that.</p></td>
-</tr>
-<tr class="footer row-even"><td class="footer_left" colspan="2"><div class="needs_footer_left line-block">
-<div class="line"><span><span class="needs-id"><a class="reference internal" href="#logic_arc_int__logging__session_ctrl_channel" title="logic_arc_int__logging__session_ctrl_channel">logic_arc_int__logging__session_ctrl_channel</a></span></span></div>
-</div>
-</td>
-<td class="footer" colspan="2"><div class="needs_footer line-block">
-<div class="line"><span><span class="needs_type_name"><span class="needs_data">Logical Interface &amp; Feature Interface View</span></span></span></div>
-</div>
-</td>
-<td class="footer_right" colspan="2"></td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-</section>
-<section id="decision-records">
-<h2>Decision Records<a class="headerlink" href="#decision-records" title="Link to this heading">#</a></h2>
-<p><a class="reference internal" href="../../../features/logging/architecture/DR-001-logging.html#dec_rec__logging__explicit_init" title="dec_rec__logging__explicit_init"><em class="xref need">Explicit initialization of ... (dec_rec__logging__explicit_init)</em></a></p>
+<p>not needed</p>
 </section>
 </section>
 
@@ -801,7 +703,6 @@ send buffer-acquire requests back to the recorder. Carries no log record payload
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#static-architecture">Static Architecture</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#dynamic-architecture">Dynamic Architecture</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#interfaces">Interfaces</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#decision-records">Decision Records</a></li>
 </ul>
   </nav></div>
 

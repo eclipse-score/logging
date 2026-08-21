@@ -159,7 +159,7 @@
     
 <li class="nav-item ">
   <a class="nav-link nav-internal" href="../../../features/logging/index.html">
-    Feature
+    Feature Logging
   </a>
 </li>
 
@@ -180,14 +180,14 @@
 
 <li class="nav-item ">
   <a class="nav-link nav-internal" href="../../datarouter/index.html">
-    Datarouter
+    Datarouter Component
   </a>
 </li>
 
 
 <li class="nav-item current active">
   <a class="nav-link nav-internal" href="../index.html">
-    mw::log Backend
+    Logging Backend Component
   </a>
 </li>
 
@@ -302,7 +302,7 @@
     
 <li class="nav-item ">
   <a class="nav-link nav-internal" href="../../../features/logging/index.html">
-    Feature
+    Feature Logging
   </a>
 </li>
 
@@ -323,14 +323,14 @@
 
 <li class="nav-item ">
   <a class="nav-link nav-internal" href="../../datarouter/index.html">
-    Datarouter
+    Datarouter Component
   </a>
 </li>
 
 
 <li class="nav-item current active">
   <a class="nav-link nav-internal" href="../index.html">
-    mw::log Backend
+    Logging Backend Component
   </a>
 </li>
 
@@ -456,7 +456,7 @@
       </a>
     </li>
     
-    <li class="breadcrumb-item"><a href="../index.html" class="nav-link">mw::log Backend</a></li>
+    <li class="breadcrumb-item"><a href="../index.html" class="nav-link">Logging Backend Component</a></li>
     
     
     <li class="breadcrumb-item"><a href="index.html" class="nav-link">Requirements</a></li>
@@ -480,7 +480,7 @@
                   
   <section id="component-requirements">
 <h1>Component Requirements<a class="headerlink" href="#component-requirements" title="Link to this heading">#</a></h1>
-<div class="need_container docutils container" id="SNCB-b8bfcdf7">
+<div class="need_container docutils container" id="SNCB-32f062e7">
 <div class="pst-scrollable-table-container"><table class="need needs_grid_complex needs_layout_score needs_style_none needs_type_document table" id="doc__logging_backend_requirements">
 <tbody>
 <tr class="head row-odd"><td class="head_left" colspan="2"><div class="needs_head_left line-block">
@@ -523,9 +523,61 @@
 </table>
 </div>
 </div>
+<section id="log-and-trace">
+<h2>Log and Trace<a class="headerlink" href="#log-and-trace" title="Link to this heading">#</a></h2>
+<p><em>Log and Trace Framework consists of logging libraries and datarouter. The applications use
+logging libraries to write logs. datarouter implements logging daemon functionality, and can
+forward log messages from applications as DLT messages.</em></p>
+<div class="need_container docutils container" id="SNCB-e228540a">
+<div class="pst-scrollable-table-container"><table class="need needs_grid_complex needs_layout_score needs_style_none needs_type_comp_req table" id="comp_req__log__use_log_trace_framework">
+<tbody>
+<tr class="head row-odd"><td class="head_left" colspan="2"><div class="needs_head_left line-block">
+<div class="line"><span><span class="needs_title"><span class="needs_data">Use Log and Trace Framework</span></span></span></div>
+</div>
+</td>
+<td class="head_center" colspan="2"><div class="needs_head line-block">
+<div class="line"><span><span class="needs_status"><span class="needs_label">status: </span><span class="needs_data">valid</span></span></span></div>
+<div class="line"><span><span class="needs_security"><span class="needs_label">security: </span><span class="needs_data">NO</span></span></span></div>
+<div class="line"><span><span class="needs_safety"><span class="needs_label">safety: </span><span class="needs_data">QM</span></span></span></div>
+</div>
+</td>
+<td class="head_right" colspan="2"><div class="needs_head_right line-block">
+<div class="line"><span><span class="needs needs_collapse" id="target__show__meta"><span class="needs collapsed"><svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-down-circle"><circle cx="12" cy="12" r="10"></circle><polyline points="8 12 12 16 16 12"></polyline><line x1="12" y1="8" x2="12" y2="16"></line></svg></span><span class="needs visible collapse_is_hidden"><svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-right-circle"><circle cx="12" cy="12" r="10"></circle><polyline points="12 16 16 12 12 8"></polyline><line x1="8" y1="12" x2="16" y2="12"></line></svg></span></span></span></div>
+</div>
+</td>
+</tr>
+<tr class="meta row-even"><td class="meta" colspan="3"><div class="needs_meta_left line-block">
+<div class="line"><span><span><div class="line"><span class="needs_reqtype"><span class="needs_label">reqtype: </span><span class="needs_data">Functional</span></span></div>
+<div class="line"><span class="needs_version"><span class="needs_label">version: </span>1</span></div>
+</span></span></div>
+<div class="line"><span><div class="line">derived from: <span class="derived_from"><span><a class="external_link reference external" href="https://eclipse-score.github.io/score/main/features/analysis-infra/logging/docs/requirements/mw-fr_logging_req.html#feat_req__logging__log_sources_user_app">feat_req__logging__log_sources_user_app</a>, <a class="external_link reference external" href="https://eclipse-score.github.io/score/main/features/analysis-infra/logging/docs/requirements/mw-fr_logging_req.html#feat_req__logging__log_sources">feat_req__logging__log_sources</a></span></span></div>
+<div class="line">satisfied by: <span class="satisfied_by"><span><a class="external_link reference external" href="https://eclipse-score.github.io/score/main/modules/logging/logging/docs/architecture/index.html#comp__logging">comp__logging</a></span></span></div>
+</span></div>
+</div>
+</td>
+<td class="meta" colspan="3"></td>
+</tr>
+<tr class="content row-odd"><td class="content" colspan="6"><p>All output from logging and instrumentation based logging shall go through “mw::log”
+framework.</p></td>
+</tr>
+<tr class="footer row-even"><td class="footer_left" colspan="2"><div class="needs_footer_left line-block">
+<div class="line"><span><span class="needs-id"><a class="reference internal" href="#comp_req__log__use_log_trace_framework" title="comp_req__log__use_log_trace_framework">comp_req__log__use_log_trace_framework</a></span></span></div>
+</div>
+</td>
+<td class="footer" colspan="2"><div class="needs_footer line-block">
+<div class="line"><span><span class="needs_type_name"><span class="needs_data">Component Requirement</span></span></span></div>
+</div>
+</td>
+<td class="footer_right" colspan="2"></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
 <section id="mw-log">
 <h2>mw::log<a class="headerlink" href="#mw-log" title="Link to this heading">#</a></h2>
-<div class="need_container docutils container" id="SNCB-4e461d03">
+<div class="need_container docutils container" id="SNCB-843d6d92">
 <div class="pst-scrollable-table-container"><table class="need needs_grid_complex needs_layout_score needs_style_none needs_type_comp_req table" id="comp_req__log__avoid_signal_processing">
 <tbody>
 <tr class="head row-odd"><td class="head_left" colspan="2"><div class="needs_head_left line-block">
@@ -548,8 +600,7 @@
 <div class="line"><span class="needs_version"><span class="needs_label">version: </span>1</span></div>
 </span></span></div>
 <div class="line"><span><div class="line">derived from: <span class="derived_from"><span><a class="external_link reference external" href="https://eclipse-score.github.io/score/main/features/analysis-infra/logging/docs/requirements/mw-fr_logging_req.html#feat_req__logging__error_handling_isolation">feat_req__logging__error_handling_isolation</a>, <a class="external_link reference external" href="https://eclipse-score.github.io/score/main/features/analysis-infra/logging/docs/requirements/mw-fr_logging_req.html#feat_req__logging__asil_support">feat_req__logging__asil_support</a></span></span></div>
-<div class="line">satisfied by: <span class="satisfied_by"><span><a class="reference internal" href="../architecture/component_architecture.html#comp__mw_log_backend" title="comp_req__log__avoid_signal_processing">comp__mw_log_backend</a></span></span></div>
-<div class="line">fulfilled by: <span class="fulfils"><span><a class="reference internal" href="../architecture/component_architecture.html#comp_arc_sta__log__sv" title="comp_req__log__avoid_signal_processing">comp_arc_sta__log__sv</a></span></span></div>
+<div class="line">satisfied by: <span class="satisfied_by"><span><a class="external_link reference external" href="https://eclipse-score.github.io/score/main/modules/logging/logging/docs/architecture/index.html#comp__logging">comp__logging</a></span></span></div>
 </span></div>
 </div>
 </td>
@@ -571,7 +622,7 @@
 </table>
 </div>
 </div>
-<div class="need_container docutils container" id="SNCB-bc1cd4b4">
+<div class="need_container docutils container" id="SNCB-e4fb060e">
 <div class="pst-scrollable-table-container"><table class="need needs_grid_complex needs_layout_score needs_style_none needs_type_comp_req table" id="comp_req__log__file_descriptor_flags">
 <tbody>
 <tr class="head row-odd"><td class="head_left" colspan="2"><div class="needs_head_left line-block">
@@ -594,8 +645,7 @@
 <div class="line"><span class="needs_version"><span class="needs_label">version: </span>1</span></div>
 </span></span></div>
 <div class="line"><span><div class="line">derived from: <span class="derived_from"><span><a class="external_link reference external" href="https://eclipse-score.github.io/score/main/features/analysis-infra/logging/docs/requirements/mw-fr_logging_req.html#feat_req__logging__security_log_access">feat_req__logging__security_log_access</a></span></span></div>
-<div class="line">satisfied by: <span class="satisfied_by"><span><a class="reference internal" href="../architecture/component_architecture.html#comp__mw_log_backend" title="comp_req__log__file_descriptor_flags">comp__mw_log_backend</a></span></span></div>
-<div class="line">fulfilled by: <span class="fulfils"><span><a class="reference internal" href="../architecture/component_architecture.html#comp_arc_sta__log__sv" title="comp_req__log__file_descriptor_flags">comp_arc_sta__log__sv</a></span></span></div>
+<div class="line">satisfied by: <span class="satisfied_by"><span><a class="external_link reference external" href="https://eclipse-score.github.io/score/main/modules/logging/logging/docs/architecture/index.html#comp__logging">comp__logging</a></span></span></div>
 </span></div>
 </div>
 </td>
@@ -622,7 +672,7 @@ file descriptor owned by the component.</p>
 </table>
 </div>
 </div>
-<div class="need_container docutils container" id="SNCB-74f9958d">
+<div class="need_container docutils container" id="SNCB-adfa765e">
 <div class="pst-scrollable-table-container"><table class="need needs_grid_complex needs_layout_score needs_style_none needs_type_comp_req table" id="comp_req__log__dlt_verbose_mode">
 <tbody>
 <tr class="head row-odd"><td class="head_left" colspan="2"><div class="needs_head_left line-block">
@@ -645,8 +695,7 @@ file descriptor owned by the component.</p>
 <div class="line"><span class="needs_version"><span class="needs_label">version: </span>1</span></div>
 </span></span></div>
 <div class="line"><span><div class="line">derived from: <span class="derived_from"><span><a class="external_link reference external" href="https://eclipse-score.github.io/score/main/features/analysis-infra/logging/docs/requirements/mw-fr_logging_req.html#feat_req__logging__compat_dlt">feat_req__logging__compat_dlt</a></span></span></div>
-<div class="line">satisfied by: <span class="satisfied_by"><span><a class="reference internal" href="../architecture/component_architecture.html#comp__mw_log_backend" title="comp_req__log__dlt_verbose_mode">comp__mw_log_backend</a></span></span></div>
-<div class="line">fulfilled by: <span class="fulfils"><span><a class="reference internal" href="../architecture/component_architecture.html#comp_arc_sta__log__sv" title="comp_req__log__dlt_verbose_mode">comp_arc_sta__log__sv</a></span></span></div>
+<div class="line">satisfied by: <span class="satisfied_by"><span><a class="external_link reference external" href="https://eclipse-score.github.io/score/main/modules/logging/logging/docs/architecture/index.html#comp__logging">comp__logging</a></span></span></div>
 </span></div>
 </div>
 </td>
@@ -670,7 +719,7 @@ reprocessing.</p></td>
 </table>
 </div>
 </div>
-<div class="need_container docutils container" id="SNCB-580916f8">
+<div class="need_container docutils container" id="SNCB-f12b9638">
 <div class="pst-scrollable-table-container"><table class="need needs_grid_complex needs_layout_score needs_style_none needs_type_comp_req table" id="comp_req__log__autosar_log_trace_spec">
 <tbody>
 <tr class="head row-odd"><td class="head_left" colspan="2"><div class="needs_head_left line-block">
@@ -693,8 +742,7 @@ reprocessing.</p></td>
 <div class="line"><span class="needs_version"><span class="needs_label">version: </span>1</span></div>
 </span></span></div>
 <div class="line"><span><div class="line">derived from: <span class="derived_from"><span><a class="external_link reference external" href="https://eclipse-score.github.io/score/main/features/analysis-infra/logging/docs/requirements/mw-fr_logging_req.html#feat_req__logging__compat_dlt">feat_req__logging__compat_dlt</a>, <a class="external_link reference external" href="https://eclipse-score.github.io/score/main/features/analysis-infra/logging/docs/requirements/mw-fr_logging_req.html#feat_req__logging__severity_levels">feat_req__logging__severity_levels</a></span></span></div>
-<div class="line">satisfied by: <span class="satisfied_by"><span><a class="reference internal" href="../architecture/component_architecture.html#comp__mw_log_backend" title="comp_req__log__autosar_log_trace_spec">comp__mw_log_backend</a></span></span></div>
-<div class="line">fulfilled by: <span class="fulfils"><span><a class="reference internal" href="../architecture/component_architecture.html#comp_arc_sta__log__sv" title="comp_req__log__autosar_log_trace_spec">comp_arc_sta__log__sv</a></span></span></div>
+<div class="line">satisfied by: <span class="satisfied_by"><span><a class="external_link reference external" href="https://eclipse-score.github.io/score/main/modules/logging/logging/docs/architecture/index.html#comp__logging">comp__logging</a></span></span></div>
 </span></div>
 </div>
 </td>
@@ -717,7 +765,7 @@ specification used shall be in agreement with the rest of Adaptive AUTOSAR stack
 </table>
 </div>
 </div>
-<div class="need_container docutils container" id="SNCB-6df49b33">
+<div class="need_container docutils container" id="SNCB-5e3ecdbb">
 <div class="pst-scrollable-table-container"><table class="need needs_grid_complex needs_layout_score needs_style_none needs_type_comp_req table" id="comp_req__log__send_to_datarouter">
 <tbody>
 <tr class="head row-odd"><td class="head_left" colspan="2"><div class="needs_head_left line-block">
@@ -740,8 +788,7 @@ specification used shall be in agreement with the rest of Adaptive AUTOSAR stack
 <div class="line"><span class="needs_version"><span class="needs_label">version: </span>1</span></div>
 </span></span></div>
 <div class="line"><span><div class="line">derived from: <span class="derived_from"><span><a class="external_link reference external" href="https://eclipse-score.github.io/score/main/features/analysis-infra/logging/docs/requirements/mw-fr_logging_req.html#feat_req__logging__log_sources_user_app">feat_req__logging__log_sources_user_app</a>, <a class="external_link reference external" href="https://eclipse-score.github.io/score/main/features/analysis-infra/logging/docs/requirements/mw-fr_logging_req.html#feat_req__logging__log_sinks_network">feat_req__logging__log_sinks_network</a></span></span></div>
-<div class="line">satisfied by: <span class="satisfied_by"><span><a class="reference internal" href="../architecture/component_architecture.html#comp__mw_log_backend" title="comp_req__log__send_to_datarouter">comp__mw_log_backend</a></span></span></div>
-<div class="line">fulfilled by: <span class="fulfils"><span><a class="reference internal" href="../architecture/component_architecture.html#comp_arc_sta__log__sv" title="comp_req__log__send_to_datarouter">comp_arc_sta__log__sv</a></span></span></div>
+<div class="line">satisfied by: <span class="satisfied_by"><span><a class="external_link reference external" href="https://eclipse-score.github.io/score/main/modules/logging/logging/docs/architecture/index.html#comp__logging">comp__logging</a></span></span></div>
 </span></div>
 </div>
 </td>
@@ -765,7 +812,7 @@ library.</p></td>
 </table>
 </div>
 </div>
-<div class="need_container docutils container" id="SNCB-ae0174ed">
+<div class="need_container docutils container" id="SNCB-15fbcfd0">
 <div class="pst-scrollable-table-container"><table class="need needs_grid_complex needs_layout_score needs_style_none needs_type_comp_req table" id="comp_req__log__inactive_logstream">
 <tbody>
 <tr class="head row-odd"><td class="head_left" colspan="2"><div class="needs_head_left line-block">
@@ -788,8 +835,7 @@ library.</p></td>
 <div class="line"><span class="needs_version"><span class="needs_label">version: </span>1</span></div>
 </span></span></div>
 <div class="line"><span><div class="line">derived from: <span class="derived_from"><span><a class="external_link reference external" href="https://eclipse-score.github.io/score/main/features/analysis-infra/logging/docs/requirements/mw-fr_logging_req.html#feat_req__logging__filtering_log_levels">feat_req__logging__filtering_log_levels</a>, <a class="external_link reference external" href="https://eclipse-score.github.io/score/main/features/analysis-infra/logging/docs/requirements/mw-fr_logging_req.html#feat_req__logging__resource_performance">feat_req__logging__resource_performance</a></span></span></div>
-<div class="line">satisfied by: <span class="satisfied_by"><span><a class="reference internal" href="../architecture/component_architecture.html#comp__mw_log_backend" title="comp_req__log__inactive_logstream">comp__mw_log_backend</a></span></span></div>
-<div class="line">fulfilled by: <span class="fulfils"><span><a class="reference internal" href="../architecture/component_architecture.html#comp_arc_sta__log__sv" title="comp_req__log__inactive_logstream">comp_arc_sta__log__sv</a></span></span></div>
+<div class="line">satisfied by: <span class="satisfied_by"><span><a class="external_link reference external" href="https://eclipse-score.github.io/score/main/modules/logging/logging/docs/architecture/index.html#comp__logging">comp__logging</a></span></span></div>
 </span></div>
 </div>
 </td>
@@ -813,7 +859,7 @@ the severity of the message does not allow it to be sent.</p></td>
 </table>
 </div>
 </div>
-<div class="need_container docutils container" id="SNCB-e18d1269">
+<div class="need_container docutils container" id="SNCB-238e3649">
 <div class="pst-scrollable-table-container"><table class="need needs_grid_complex needs_layout_score needs_style_none needs_type_comp_req table" id="comp_req__log__shm_file_permissions">
 <tbody>
 <tr class="head row-odd"><td class="head_left" colspan="2"><div class="needs_head_left line-block">
@@ -836,8 +882,7 @@ the severity of the message does not allow it to be sent.</p></td>
 <div class="line"><span class="needs_version"><span class="needs_label">version: </span>1</span></div>
 </span></span></div>
 <div class="line"><span><div class="line">derived from: <span class="derived_from"><span><a class="external_link reference external" href="https://eclipse-score.github.io/score/main/features/analysis-infra/logging/docs/requirements/mw-fr_logging_req.html#feat_req__logging__security_log_access">feat_req__logging__security_log_access</a>, <a class="external_link reference external" href="https://eclipse-score.github.io/score/main/features/analysis-infra/logging/docs/requirements/mw-fr_logging_req.html#feat_req__logging__config_permissions">feat_req__logging__config_permissions</a></span></span></div>
-<div class="line">satisfied by: <span class="satisfied_by"><span><a class="reference internal" href="../architecture/component_architecture.html#comp__mw_log_backend" title="comp_req__log__shm_file_permissions">comp__mw_log_backend</a></span></span></div>
-<div class="line">fulfilled by: <span class="fulfils"><span><a class="reference internal" href="../architecture/component_architecture.html#comp_arc_sta__log__sv" title="comp_req__log__shm_file_permissions">comp_arc_sta__log__sv</a></span></span></div>
+<div class="line">satisfied by: <span class="satisfied_by"><span><a class="external_link reference external" href="https://eclipse-score.github.io/score/main/modules/logging/logging/docs/architecture/index.html#comp__logging">comp__logging</a></span></span></div>
 </span></div>
 </div>
 </td>
@@ -866,7 +911,7 @@ The shared-memory file created by mw::log shall be read-only for group and other
 <section id="system-backend">
 <h2>System Backend<a class="headerlink" href="#system-backend" title="Link to this heading">#</a></h2>
 <p><em>System logger backend shall forward the logs to the native system logger.</em></p>
-<div class="need_container docutils container" id="SNCB-74c62f7b">
+<div class="need_container docutils container" id="SNCB-cc7adac7">
 <div class="pst-scrollable-table-container"><table class="need needs_grid_complex needs_layout_score needs_style_none needs_type_comp_req table" id="comp_req__log__forward_to_system_logger">
 <tbody>
 <tr class="head row-odd"><td class="head_left" colspan="2"><div class="needs_head_left line-block">
@@ -889,8 +934,7 @@ The shared-memory file created by mw::log shall be read-only for group and other
 <div class="line"><span class="needs_version"><span class="needs_label">version: </span>1</span></div>
 </span></span></div>
 <div class="line"><span><div class="line">derived from: <span class="derived_from"><span><a class="external_link reference external" href="https://eclipse-score.github.io/score/main/features/analysis-infra/logging/docs/requirements/mw-fr_logging_req.html#feat_req__logging__log_sinks_console">feat_req__logging__log_sinks_console</a></span></span></div>
-<div class="line">satisfied by: <span class="satisfied_by"><span><a class="reference internal" href="../architecture/component_architecture.html#comp__mw_log_backend" title="comp_req__log__forward_to_system_logger">comp__mw_log_backend</a></span></span></div>
-<div class="line">fulfilled by: <span class="fulfils"><span><a class="reference internal" href="../architecture/component_architecture.html#comp_arc_sta__log__sv" title="comp_req__log__forward_to_system_logger">comp_arc_sta__log__sv</a></span></span></div>
+<div class="line">satisfied by: <span class="satisfied_by"><span><a class="external_link reference external" href="https://eclipse-score.github.io/score/main/modules/logging/logging/docs/architecture/index.html#comp__logging">comp__logging</a></span></span></div>
 </span></div>
 </div>
 </td>
@@ -914,7 +958,7 @@ The shared-memory file created by mw::log shall be read-only for group and other
 </table>
 </div>
 </div>
-<div class="need_container docutils container" id="SNCB-d407f4c9">
+<div class="need_container docutils container" id="SNCB-fdfbe222">
 <div class="pst-scrollable-table-container"><table class="need needs_grid_complex needs_layout_score needs_style_none needs_type_comp_req table" id="comp_req__log__system_backend_activation">
 <tbody>
 <tr class="head row-odd"><td class="head_left" colspan="2"><div class="needs_head_left line-block">
@@ -937,8 +981,7 @@ The shared-memory file created by mw::log shall be read-only for group and other
 <div class="line"><span class="needs_version"><span class="needs_label">version: </span>1</span></div>
 </span></span></div>
 <div class="line"><span><div class="line">derived from: <span class="derived_from"><span><a class="external_link reference external" href="https://eclipse-score.github.io/score/main/features/analysis-infra/logging/docs/requirements/mw-fr_logging_req.html#feat_req__logging__config_on_demand">feat_req__logging__config_on_demand</a></span></span></div>
-<div class="line">satisfied by: <span class="satisfied_by"><span><a class="reference internal" href="../architecture/component_architecture.html#comp__mw_log_backend" title="comp_req__log__system_backend_activation">comp__mw_log_backend</a></span></span></div>
-<div class="line">fulfilled by: <span class="fulfils"><span><a class="reference internal" href="../architecture/component_architecture.html#comp_arc_sta__log__sv" title="comp_req__log__system_backend_activation">comp_arc_sta__log__sv</a></span></span></div>
+<div class="line">satisfied by: <span class="satisfied_by"><span><a class="external_link reference external" href="https://eclipse-score.github.io/score/main/modules/logging/logging/docs/architecture/index.html#comp__logging">comp__logging</a></span></span></div>
 </span></div>
 </div>
 </td>
@@ -963,7 +1006,7 @@ The shared-memory file created by mw::log shall be read-only for group and other
 </section>
 <section id="non-functional-requirements">
 <h2>Non-Functional Requirements<a class="headerlink" href="#non-functional-requirements" title="Link to this heading">#</a></h2>
-<div class="need_container docutils container" id="SNCB-88e45d38">
+<div class="need_container docutils container" id="SNCB-0418381a">
 <div class="pst-scrollable-table-container"><table class="need needs_grid_complex needs_layout_score needs_style_none needs_type_comp_req table" id="comp_req__log__local_allocation_strategy">
 <tbody>
 <tr class="head row-odd"><td class="head_left" colspan="2"><div class="needs_head_left line-block">
@@ -986,7 +1029,7 @@ The shared-memory file created by mw::log shall be read-only for group and other
 <div class="line"><span class="needs_version"><span class="needs_label">version: </span>1</span></div>
 </span></span></div>
 <div class="line"><span><div class="line">derived from: <span class="derived_from"><span><a class="external_link reference external" href="https://eclipse-score.github.io/score/main/features/analysis-infra/logging/docs/requirements/mw-fr_logging_req.html#feat_req__logging__resource_runtime">feat_req__logging__resource_runtime</a>, <a class="external_link reference external" href="https://eclipse-score.github.io/score/main/features/analysis-infra/logging/docs/requirements/mw-fr_logging_req.html#feat_req__logging__asil_support">feat_req__logging__asil_support</a></span></span></div>
-<div class="line">satisfied by: <span class="satisfied_by"><span><a class="reference internal" href="../architecture/component_architecture.html#comp__mw_log_backend" title="comp_req__log__local_allocation_strategy">comp__mw_log_backend</a></span></span></div>
+<div class="line">satisfied by: <span class="satisfied_by"><span><a class="external_link reference external" href="https://eclipse-score.github.io/score/main/modules/logging/logging/docs/architecture/index.html#comp__logging">comp__logging</a></span></span></div>
 <div class="line">fulfilled by: <span class="fulfils"><span><a class="reference internal" href="../architecture/component_architecture.html#comp_arc_sta__log__sv" title="comp_req__log__local_allocation_strategy">comp_arc_sta__log__sv</a></span></span></div>
 </span></div>
 </div>
@@ -1010,7 +1053,7 @@ any) shall be limited to initialization phase of application lifecycle.</p></td>
 </table>
 </div>
 </div>
-<div class="need_container docutils container" id="SNCB-135464c5">
+<div class="need_container docutils container" id="SNCB-9ed979ba">
 <div class="pst-scrollable-table-container"><table class="need needs_grid_complex needs_layout_score needs_style_none needs_type_comp_req table" id="comp_req__log__no_endless_loops">
 <tbody>
 <tr class="head row-odd"><td class="head_left" colspan="2"><div class="needs_head_left line-block">
@@ -1033,8 +1076,7 @@ any) shall be limited to initialization phase of application lifecycle.</p></td>
 <div class="line"><span class="needs_version"><span class="needs_label">version: </span>1</span></div>
 </span></span></div>
 <div class="line"><span><div class="line">derived from: <span class="derived_from"><span><a class="external_link reference external" href="https://eclipse-score.github.io/score/main/features/analysis-infra/logging/docs/requirements/mw-fr_logging_req.html#feat_req__logging__asil_support">feat_req__logging__asil_support</a>, <a class="external_link reference external" href="https://eclipse-score.github.io/score/main/features/analysis-infra/logging/docs/requirements/mw-fr_logging_req.html#feat_req__logging__resource_performance">feat_req__logging__resource_performance</a></span></span></div>
-<div class="line">satisfied by: <span class="satisfied_by"><span><a class="reference internal" href="../architecture/component_architecture.html#comp__mw_log_backend" title="comp_req__log__no_endless_loops">comp__mw_log_backend</a></span></span></div>
-<div class="line">fulfilled by: <span class="fulfils"><span><a class="reference internal" href="../architecture/component_architecture.html#comp_arc_sta__log__sv" title="comp_req__log__no_endless_loops">comp_arc_sta__log__sv</a></span></span></div>
+<div class="line">satisfied by: <span class="satisfied_by"><span><a class="external_link reference external" href="https://eclipse-score.github.io/score/main/modules/logging/logging/docs/architecture/index.html#comp__logging">comp__logging</a></span></span></div>
 </span></div>
 </div>
 </td>
@@ -1056,7 +1098,7 @@ any) shall be limited to initialization phase of application lifecycle.</p></td>
 </table>
 </div>
 </div>
-<div class="need_container docutils container" id="SNCB-c01217b7">
+<div class="need_container docutils container" id="SNCB-2baa4a11">
 <div class="pst-scrollable-table-container"><table class="need needs_grid_complex needs_layout_score needs_style_none needs_type_comp_req table" id="comp_req__log__avoid_locks">
 <tbody>
 <tr class="head row-odd"><td class="head_left" colspan="2"><div class="needs_head_left line-block">
@@ -1079,8 +1121,7 @@ any) shall be limited to initialization phase of application lifecycle.</p></td>
 <div class="line"><span class="needs_version"><span class="needs_label">version: </span>1</span></div>
 </span></span></div>
 <div class="line"><span><div class="line">derived from: <span class="derived_from"><span><a class="external_link reference external" href="https://eclipse-score.github.io/score/main/features/analysis-infra/logging/docs/requirements/mw-fr_logging_req.html#feat_req__logging__asil_support">feat_req__logging__asil_support</a>, <a class="external_link reference external" href="https://eclipse-score.github.io/score/main/features/analysis-infra/logging/docs/requirements/mw-fr_logging_req.html#feat_req__logging__resource_performance">feat_req__logging__resource_performance</a></span></span></div>
-<div class="line">satisfied by: <span class="satisfied_by"><span><a class="reference internal" href="../architecture/component_architecture.html#comp__mw_log_backend" title="comp_req__log__avoid_locks">comp__mw_log_backend</a></span></span></div>
-<div class="line">fulfilled by: <span class="fulfils"><span><a class="reference internal" href="../architecture/component_architecture.html#comp_arc_sta__log__sv" title="comp_req__log__avoid_locks">comp_arc_sta__log__sv</a></span></span></div>
+<div class="line">satisfied by: <span class="satisfied_by"><span><a class="external_link reference external" href="https://eclipse-score.github.io/score/main/modules/logging/logging/docs/architecture/index.html#comp__logging">comp__logging</a></span></span></div>
 </span></div>
 </div>
 </td>
@@ -1104,7 +1145,7 @@ Mutual exclusion mechanisms shall include priority inversion protection.</p></td
 </table>
 </div>
 </div>
-<div class="need_container docutils container" id="SNCB-a71c9efb">
+<div class="need_container docutils container" id="SNCB-d7fa5637">
 <div class="pst-scrollable-table-container"><table class="need needs_grid_complex needs_layout_score needs_style_none needs_type_comp_req table" id="comp_req__log__cross_locking">
 <tbody>
 <tr class="head row-odd"><td class="head_left" colspan="2"><div class="needs_head_left line-block">
@@ -1127,8 +1168,7 @@ Mutual exclusion mechanisms shall include priority inversion protection.</p></td
 <div class="line"><span class="needs_version"><span class="needs_label">version: </span>1</span></div>
 </span></span></div>
 <div class="line"><span><div class="line">derived from: <span class="derived_from"><span><a class="external_link reference external" href="https://eclipse-score.github.io/score/main/features/analysis-infra/logging/docs/requirements/mw-fr_logging_req.html#feat_req__logging__asil_support">feat_req__logging__asil_support</a>, <a class="external_link reference external" href="https://eclipse-score.github.io/score/main/features/analysis-infra/logging/docs/requirements/mw-fr_logging_req.html#feat_req__logging__error_handling_isolation">feat_req__logging__error_handling_isolation</a></span></span></div>
-<div class="line">satisfied by: <span class="satisfied_by"><span><a class="reference internal" href="../architecture/component_architecture.html#comp__mw_log_backend" title="comp_req__log__cross_locking">comp__mw_log_backend</a></span></span></div>
-<div class="line">fulfilled by: <span class="fulfils"><span><a class="reference internal" href="../architecture/component_architecture.html#comp_arc_sta__log__sv" title="comp_req__log__cross_locking">comp_arc_sta__log__sv</a></span></span></div>
+<div class="line">satisfied by: <span class="satisfied_by"><span><a class="external_link reference external" href="https://eclipse-score.github.io/score/main/modules/logging/logging/docs/architecture/index.html#comp__logging">comp__logging</a></span></span></div>
 </span></div>
 </div>
 </td>
@@ -1151,7 +1191,7 @@ shall not block other thread’s execution.</p></td>
 </table>
 </div>
 </div>
-<div class="need_container docutils container" id="SNCB-5a4f272a">
+<div class="need_container docutils container" id="SNCB-de86d9e5">
 <div class="pst-scrollable-table-container"><table class="need needs_grid_complex needs_layout_score needs_style_none needs_type_comp_req table" id="comp_req__log__index_size_checking">
 <tbody>
 <tr class="head row-odd"><td class="head_left" colspan="2"><div class="needs_head_left line-block">
@@ -1174,8 +1214,7 @@ shall not block other thread’s execution.</p></td>
 <div class="line"><span class="needs_version"><span class="needs_label">version: </span>1</span></div>
 </span></span></div>
 <div class="line"><span><div class="line">derived from: <span class="derived_from"><span><a class="external_link reference external" href="https://eclipse-score.github.io/score/main/features/analysis-infra/logging/docs/requirements/mw-fr_logging_req.html#feat_req__logging__asil_support">feat_req__logging__asil_support</a></span></span></div>
-<div class="line">satisfied by: <span class="satisfied_by"><span><a class="reference internal" href="../architecture/component_architecture.html#comp__mw_log_backend" title="comp_req__log__index_size_checking">comp__mw_log_backend</a></span></span></div>
-<div class="line">fulfilled by: <span class="fulfils"><span><a class="reference internal" href="../architecture/component_architecture.html#comp_arc_sta__log__sv" title="comp_req__log__index_size_checking">comp_arc_sta__log__sv</a></span></span></div>
+<div class="line">satisfied by: <span class="satisfied_by"><span><a class="external_link reference external" href="https://eclipse-score.github.io/score/main/modules/logging/logging/docs/architecture/index.html#comp__logging">comp__logging</a></span></span></div>
 </span></div>
 </div>
 </td>
@@ -1198,7 +1237,7 @@ plausibility to avoid high runtime utilization through long iterations or data c
 </table>
 </div>
 </div>
-<div class="need_container docutils container" id="SNCB-2faf1494">
+<div class="need_container docutils container" id="SNCB-831ac4de">
 <div class="pst-scrollable-table-container"><table class="need needs_grid_complex needs_layout_score needs_style_none needs_type_comp_req table" id="comp_req__log__memory_bound_checking">
 <tbody>
 <tr class="head row-odd"><td class="head_left" colspan="2"><div class="needs_head_left line-block">
@@ -1221,8 +1260,7 @@ plausibility to avoid high runtime utilization through long iterations or data c
 <div class="line"><span class="needs_version"><span class="needs_label">version: </span>1</span></div>
 </span></span></div>
 <div class="line"><span><div class="line">derived from: <span class="derived_from"><span><a class="external_link reference external" href="https://eclipse-score.github.io/score/main/features/analysis-infra/logging/docs/requirements/mw-fr_logging_req.html#feat_req__logging__asil_support">feat_req__logging__asil_support</a></span></span></div>
-<div class="line">satisfied by: <span class="satisfied_by"><span><a class="reference internal" href="../architecture/component_architecture.html#comp__mw_log_backend" title="comp_req__log__memory_bound_checking">comp__mw_log_backend</a></span></span></div>
-<div class="line">fulfilled by: <span class="fulfils"><span><a class="reference internal" href="../architecture/component_architecture.html#comp_arc_sta__log__sv" title="comp_req__log__memory_bound_checking">comp_arc_sta__log__sv</a></span></span></div>
+<div class="line">satisfied by: <span class="satisfied_by"><span><a class="external_link reference external" href="https://eclipse-score.github.io/score/main/modules/logging/logging/docs/architecture/index.html#comp__logging">comp__logging</a></span></span></div>
 </span></div>
 </div>
 </td>
@@ -1294,6 +1332,7 @@ plausibility to avoid high runtime utilization through long iterations or data c
   </div>
   <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
     <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#log-and-trace">Log and Trace</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mw-log">mw::log</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#system-backend">System Backend</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#non-functional-requirements">Non-Functional Requirements</a></li>
