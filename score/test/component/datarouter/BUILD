@@ -80,6 +80,15 @@ filegroup(
 
 # Packaged for inclusion in QNX component test images via qnx_ifs `srcs`.
 pkg_files(
+    name = "datarouter_bin_pkg",
+    srcs = ["//score/datarouter"],
+    attributes = pkg_attributes(mode = "0777"),
+    prefix = "usr/bin/datarouter",
+    visibility = ["//score/test/component:__subpackages__"],
+)
+
+# Packaged for inclusion in QNX component test images via qnx_ifs `srcs`.
+pkg_files(
     name = "datarouter_config_pkg",
     srcs = [":datarouter_test_config_files"],
     prefix = "usr/bin/datarouter/etc",

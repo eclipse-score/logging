@@ -60,7 +60,7 @@ def py_logging_itf_test(name, srcs, filesystem, filesystem_pkg, extra_oci_tars =
     qnx_ifs(
         name = qnx_image,
         srcs = [
-            "//score/datarouter:datarouter_bin_pkg",
+            "//score/test/component/datarouter:datarouter_bin_pkg",
             "//score/test/component/datarouter:datarouter_config_pkg",
             "{}:qnx8_qemu_env_pkg".format(_ENV),
             filesystem_pkg,
