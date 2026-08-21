@@ -11,7 +11,7 @@
 # SPDX-License-Identifier: Apache-2.0
 # *******************************************************************************
 
-load("@score_baselibs//third_party/itf:py_unittest_qnx_test.bzl", "py_unittest_qnx_test")
+load("@score_logging//third_party/itf:py_unittest_qnx_test.bzl", "py_unittest_qnx_test")
 
 ## ---------------------------------------------------------------------------
 ## Unit tests
