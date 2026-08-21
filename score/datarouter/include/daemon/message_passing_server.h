@@ -27,6 +27,7 @@
 
 #include "score/concurrency/interruptible_wait.h"
 #include <score/stop_token.hpp>
+#include <cassert>
 #include <chrono>
 #include <condition_variable>
 #include <functional>
@@ -62,8 +63,8 @@ class MessagePassingServer
   public:
     struct AcquireWatchdogConfig
     {
-        AcquireWatchdogConfig(std::chrono::milliseconds deadline_in = std::chrono::milliseconds{1000},
-                              std::uint32_t max_misses_in = 3U)
+        explicit AcquireWatchdogConfig(std::chrono::milliseconds deadline_in = std::chrono::milliseconds{1000},
+                                       std::uint32_t max_misses_in = 3U)
             : deadline(deadline_in), max_misses(max_misses_in)
         {
         }
@@ -106,9 +107,9 @@ class MessagePassingServer
                                                 const score::mw::log::detail::ConnectMessageFromClient&,
                                                 score::cpp::pmr::unique_ptr<daemon::ISessionHandle>)>;
 
-    MessagePassingServer(SessionFactory factory,
-                         std::shared_ptr<score::message_passing::IServerFactory> server_factory = nullptr,
-                         AcquireWatchdogConfig watchdog_config = AcquireWatchdogConfig{});
+    explicit MessagePassingServer(SessionFactory factory,
+                                  std::shared_ptr<score::message_passing::IServerFactory> server_factory = nullptr,
+                                  AcquireWatchdogConfig watchdog_config = AcquireWatchdogConfig{});
     ~MessagePassingServer() noexcept;
 
     // for unit test only. to keep rest of functions in private
@@ -145,6 +146,7 @@ class MessagePassingServer
               closed_by_peer(false),
               to_force_finish(false)
         {
+            assert(enqueue_tick);
         }
 
         void EnqueueForDeleteWhileLocked(bool by_peer = false);
