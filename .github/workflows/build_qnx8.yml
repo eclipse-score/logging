@@ -25,10 +25,19 @@ jobs:
       pull-requests: read
     strategy:
       matrix:
-        config: ['arm64-qnx', 'x86_64-qnx']
+        include:
+          - config: arm64-qnx
+            # See: bazel_cpp_toolchains/issues/124
+            # The aarch64 QNX SDP shipped by score_bazel_cpp_toolchains is missing the
+            # startup-qemu-virt boot file needed by score_qnx_unit_tests' QEMU image,
+            # hence QNX unit test suites are skipped for this arch yet.
+            bazel-target: >-
+              //score/... //tests/... -//score/datarouter/test:unit_tests_qnx -//score/datarouter/test/ut:unit_tests_qnx -//score/datarouter/test/ut/ut_logging/... -//score/mw/log/detail/slog/... //score/mw/log/detail/slog:slog //score/mw/log/detail/slog:slog_backend //score/mw/log/detail/slog:slog_backend_test //score/mw/log/detail/slog:slog_recorder_factory //score/mw/log/detail/slog:slog_recorder_factory_test
+          - config: x86_64-qnx
+            bazel-target: >-
+              //score/... //tests/...
     with:
-      bazel-target: >-
-        //score/... //tests/...
+      bazel-target: ${{ matrix.bazel-target }}
       bazel-config: ${{ matrix.config }}
       extra-bazel-flags: '--lockfile_mode=error'
       credential-helper: 'scripts/internal/qnx_creds.py'
