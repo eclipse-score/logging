@@ -21,13 +21,15 @@ def _extend_list_in_kwargs(kwargs, key, values):
     kwargs[key] = kwargs.get(key, []) + values
     return kwargs
 
-def py_logging_itf_test(name, srcs, filesystem, extra_oci_tars = None, **kwargs):
+def py_logging_itf_test(name, srcs, filesystem, filesystem_pkg, extra_oci_tars = None, **kwargs):
     """Integration test macro for score_logging (Docker and QNX).
 
     Args:
         name: Test target name.
         srcs: Python test source files.
-        filesystem: pkg_tar target with test-specific binaries and configs.
+        filesystem: pkg_tar target with test-specific binaries and configs (used for the Docker image).
+        filesystem_pkg: pkg_filegroup/pkg_files target with the same content as `filesystem`,
+            consumed directly by `qnx_ifs` (which requires rules_pkg providers, not a tarball).
         extra_oci_tars: Optional list of additional pkg_tar targets to include
             in the Docker OCI image only (not added to the QNX IFS).
         **kwargs: Forwarded to py_itf_test.
@@ -58,17 +60,13 @@ def py_logging_itf_test(name, srcs, filesystem, extra_oci_tars = None, **kwargs)
     qnx_ifs(
         name = qnx_image,
         srcs = [
-            "//score/datarouter:datarouter",
-            "//score/test/component/datarouter:datarouter_test_config_files",
-            "{}:qnx8_qemu_env".format(_ENV),
+            "//score/datarouter:datarouter_bin_pkg",
+            "//score/test/component/datarouter:datarouter_config_pkg",
+            "{}:qnx8_qemu_env_pkg".format(_ENV),
+            filesystem_pkg,
         ],
-        tars = {
-            "FILESYSTEM": filesystem,
-        },
         build_file = "{}:init_build".format(_ENV),
-        ext_repo_maping = {
-            "DATAROUTER": "$(location //score/datarouter:datarouter)",
-        },
+        extra_build_files = ["{}:system_build".format(_ENV)],
         target_compatible_with = [
             "@platforms//cpu:x86_64",
             "@platforms//os:qnx",

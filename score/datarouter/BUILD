@@ -12,6 +12,7 @@
 # *******************************************************************************
 
 load("@rules_cc//cc:defs.bzl", "cc_binary", "cc_library")
+load("@rules_pkg//pkg:mappings.bzl", "pkg_attributes", "pkg_files")
 load("@score_baselibs//score/language/safecpp:toolchain_features.bzl", "COMPILER_WARNING_FEATURES")
 load("@score_baselibs//score/quality/clang_tidy:extra_checks.bzl", "clang_tidy_extra_checks")
 
@@ -871,6 +872,15 @@ cc_binary(
         "//score/mw/log",
         # "//third_party/jemalloc", # Ticket-231781
     ],
+)
+
+# Packaged for inclusion in QNX component test images via qnx_ifs `srcs`.
+pkg_files(
+    name = "datarouter_bin_pkg",
+    srcs = [":datarouter"],
+    attributes = pkg_attributes(mode = "0777"),
+    prefix = "usr/bin/datarouter",
+    visibility = ["//score/test/component:__subpackages__"],
 )
 
 cc_library(

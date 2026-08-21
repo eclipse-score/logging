@@ -56,5 +56,3 @@ libsocket.so.4
 [type=link] libsocket.so=libsocket.so.4
 libslog2.so.1
 [type=link] libslog2.so=libslog2.so.1
-
-[+include] ${MAIN_BUILD_FILE_DIR}/system.build
