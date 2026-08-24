@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>mw::log backend Detailed Design &#8212; Logging  documentation</title>
+    <title>Detailed Design &#8212; Logging  documentation</title>
   
   
   
@@ -74,7 +74,7 @@
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
     <link rel="next" title="FileOutputBackend" href="file_output_backend.html" />
-    <link rel="prev" title="mw::log Component Requirements" href="../requirements/index.html" />
+    <link rel="prev" title="Component Architecture" href="../architecture/component_architecture.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="0.1" />
@@ -158,15 +158,22 @@
   <ul class="bd-navbar-elements navbar-nav">
     
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="../../../features/architecture/index.html">
-    Logging Feature Architecture
+  <a class="nav-link nav-internal" href="../../../features/logging/index.html">
+    Feature
   </a>
 </li>
 
 
-<li class="nav-item current active">
-  <a class="nav-link nav-internal" href="../index.html">
-    mw::log
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../module/index.html">
+    Module
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../verification_report/module_verification_report.html">
+    Verification Report
   </a>
 </li>
 
@@ -178,16 +185,9 @@
 </li>
 
 
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../../../verification_report/stats.html">
-    Quality Stats
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../../../module/manuals/index.html">
-    Manuals
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../index.html">
+    mw::log Backend
   </a>
 </li>
 
@@ -301,15 +301,22 @@
   <ul class="bd-navbar-elements navbar-nav">
     
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="../../../features/architecture/index.html">
-    Logging Feature Architecture
+  <a class="nav-link nav-internal" href="../../../features/logging/index.html">
+    Feature
   </a>
 </li>
 
 
-<li class="nav-item current active">
-  <a class="nav-link nav-internal" href="../index.html">
-    mw::log
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../module/index.html">
+    Module
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../verification_report/module_verification_report.html">
+    Verification Report
   </a>
 </li>
 
@@ -321,16 +328,9 @@
 </li>
 
 
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../../../verification_report/stats.html">
-    Quality Stats
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../../../module/manuals/index.html">
-    Manuals
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../index.html">
+    mw::log Backend
   </a>
 </li>
 
@@ -405,13 +405,17 @@
      aria-label="Section Navigation">
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
   <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../requirements/index.html">mw::log Component Requirements</a></li>
-<li class="toctree-l1 current active has-children"><a class="current reference internal" href="#">mw::log backend Detailed Design</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l1"><a class="reference internal" href="../architecture/index.html">Component Architecture</a></li>
+<li class="toctree-l1 current active has-children"><a class="current reference internal" href="#">Detailed Design</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2"><a class="reference internal" href="file_output_backend.html">FileOutputBackend</a></li>
 <li class="toctree-l2"><a class="reference internal" href="datarouter_backend/README.html">Safe Datarouter Backend</a></li>
+<li class="toctree-l2"><a class="reference internal" href="chklst_impl_inspection.html">Implementation Inspection Checklist</a></li>
 </ul>
 </details></li>
-<li class="toctree-l1"><a class="reference internal" href="../design_decisions/explicit_init.html">Explicit initialization of logging</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../requirements/index.html">Requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../safety_analysis/dfa.html">DFA (Dependent Failure Analysis)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../safety_analysis/fmea.html">FMEA (Failure Modes and Effects Analysis)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../safety_analysis/aou_requirements.html">AoU Component Requirements Template</a></li>
 </ul>
 </div>
 </nav></div>
@@ -453,9 +457,9 @@
       </a>
     </li>
     
-    <li class="breadcrumb-item"><a href="../index.html" class="nav-link">mw::log</a></li>
+    <li class="breadcrumb-item"><a href="../index.html" class="nav-link">mw::log Backend</a></li>
     
-    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">mw::log backend Detailed Design</span></li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Detailed Design</span></li>
   </ul>
 </nav>
 </div>
@@ -472,8 +476,8 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section id="mw-log-backend-detailed-design">
-<h1>mw::log backend Detailed Design<a class="headerlink" href="#mw-log-backend-detailed-design" title="Link to this heading">#</a></h1>
+  <section id="detailed-design">
+<h1>Detailed Design<a class="headerlink" href="#detailed-design" title="Link to this heading">#</a></h1>
 <p>The backend composition and recorder relationships are shown below:</p>
 <p class="plantuml">
 <object data="../../../_images/plantuml-dd4e94391e58792b5957c6206a711bd4321434f6.svg" type="image/svg+xml" style="width:4094px;height:1091px;background:#FFFFFF;"></object></p>
@@ -483,6 +487,20 @@
 <li class="toctree-l1"><a class="reference internal" href="datarouter_backend/README.html">Safe Datarouter Backend</a></li>
 </ul>
 </div>
+<section id="inspection-checklist">
+<h2>Inspection Checklist<a class="headerlink" href="#inspection-checklist" title="Link to this heading">#</a></h2>
+<p>The checklist for verification of the detailed design and code can be found here:</p>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="chklst_impl_inspection.html">Implementation Inspection Checklist</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="chklst_impl_inspection.html#purpose">Purpose</a></li>
+<li class="toctree-l2"><a class="reference internal" href="chklst_impl_inspection.html#conduct">Conduct</a></li>
+<li class="toctree-l2"><a class="reference internal" href="chklst_impl_inspection.html#checklist">Checklist</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</section>
 </section>
 
 
@@ -496,12 +514,12 @@
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="../requirements/index.html"
+       href="../architecture/component_architecture.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">mw::log Component Requirements</p>
+        <p class="prev-next-title">Component Architecture</p>
       </div>
     </a>
     <a class="right-next"
@@ -523,6 +541,18 @@
                 <dialog id="pst-secondary-sidebar-modal"></dialog>
                 <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
 
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#inspection-checklist">Inspection Checklist</a></li>
+</ul>
+  </nav></div>
 
   <div class="sidebar-secondary-item">
 
