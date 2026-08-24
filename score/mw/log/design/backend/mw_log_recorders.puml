@@ -82,6 +82,19 @@ class "mw::log::detail::SlogBackend" as SlogBackend {
   - Init(verbosity: std::uint8_t) : void
 }
 
+class "mw::log::detail::SyslogBackend" as SyslogBackend {
+  - app_id_: std::string
+  - buffer_: CircularAllocator<mw::log::detail::LogRecord>
+  - syslog_instance_: score::cpp::pmr::unique_ptr<score::os::Syslog>
+  __
+  + SyslogBackend(const std::size_t,\n  const LogRecord&,\n  const std::string_view,\n  score::cpp::pmr::unique_ptr<score::os::Syslog>)
+  + ReserveSlot(): score::cpp::optional<SlotHandle>
+  + FlushSlot(const SlotHandle&): void
+  + GetLogRecord(const SlotHandle&): LogRecord&
+  __
+  - Init(): void
+}
+
 class "mw::log::detail::DataRouterBackend" as DataRouterBackend {
 }
 
@@ -133,6 +146,7 @@ RecorderMock .up.|> Recorder
 ' Relationships - Backend interface
 FileOutputBackend .up.|> Backend
 SlogBackend .up.|> Backend
+SyslogBackend .up.|> Backend
 DataRouterBackend .up.|> Backend
 BackendMock .up.|> Backend
 
@@ -153,6 +167,8 @@ TextRecorder ..> DLTFormat : uses
 ' Backend composition
 SlogBackend *-- CircularAllocator
 SlogBackend --> LogRecord : uses
+SyslogBackend *-- CircularAllocator
+SyslogBackend --> LogRecord : uses
 
 ' External dependencies
 FileRecorder ..> fcntl : open\nSetNonBlocking / fctrl call

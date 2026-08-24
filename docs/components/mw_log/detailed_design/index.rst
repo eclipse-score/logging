@@ -9,4 +9,5 @@ The backend composition and recorder relationships are shown below:
    :maxdepth: 1
 
    file_output_backend
+   syslog_backend
    datarouter_backend/README
