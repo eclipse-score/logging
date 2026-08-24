@@ -8870,7 +8870,7 @@
     "@@score_rules_imagefs+//extensions:imagefs.bzl%imagefs": {
       "general": {
         "bzlTransitiveDigest": "6ZLANe53LXwcnne1ZrZm9GkJ9H5VdsCLSgSNHyUrqA4=",
-        "usagesDigest": "mnA0DoTfTgfr4/PncdyAaTFT8HysIeD9zCgxJ8YwDAA=",
+        "usagesDigest": "0AJy/z4/JJ/vA2KsvcKrdUtNj4LFPEzvcjvhVi1XPFg=",
         "recordedFileInputs": {},
         "recordedDirentsInputs": {},
         "envVariables": {},
@@ -8884,9 +8884,24 @@
               "sdp_version": "8.0.0",
               "tc_type": "ifs"
             }
+          },
+          "score_qnx_aarch64_ifs_toolchain": {
+            "repoRuleId": "@@score_rules_imagefs+//rules/qnx:imagefs_toolchain.bzl%imagefs_toolchain",
+            "attributes": {
+              "tc_cpu": "aarch64",
+              "tc_os": "qnx",
+              "tc_pkg_repo": "'@@score_bazel_cpp_toolchains++gcc+score_qcc_aarch64_toolchain_pkg'",
+              "sdp_version": "8.0.0",
+              "tc_type": "ifs"
+            }
           }
         },
         "recordedRepoMappingEntries": [
+          [
+            "",
+            "score_qcc_aarch64_toolchain_pkg",
+            "score_bazel_cpp_toolchains++gcc+score_qcc_aarch64_toolchain_pkg"
+          ],
           [
             "",
             "score_qcc_x86_64_toolchain_pkg",
