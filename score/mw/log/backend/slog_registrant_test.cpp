@@ -27,10 +27,11 @@ namespace
 
 TEST(SlogRegistrantTest, SlogBackendIsRegisteredAfterStaticInitialization)
 {
+    RecordProperty("PartiallyVerifies", "comp_req__log__system_backend_activation");
     RecordProperty("Description",
-                   "The slog backend registrant shall register a creator for LogMode::kSystem during static init.");
-    RecordProperty("TestType", "Verification of the control flow and data flow");
-    RecordProperty("DerivationTechnique", "Analysis of functional dependencies");
+                   "The slog backend registrant is registered for LogMode::kSystem during static init.");
+    RecordProperty("TestType", "requirements-based");
+    RecordProperty("DerivationTechnique", "requirements-analysis");
 
     EXPECT_TRUE(IsBackendAvailable(LogMode::kSystem));
 }

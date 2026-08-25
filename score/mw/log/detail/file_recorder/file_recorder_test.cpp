@@ -154,11 +154,14 @@ class FileRecorderFixture : public ::testing::Test
 
 TEST_F(FileRecorderFixture, TooManyArgumentsWillYieldTruncatedLog)
 {
+    RecordProperty("PartiallyVerifies", "comp_req__log__local_allocation_strategy");
+    RecordProperty("Description", "Check that logging more arguments than fit in the local buffer truncates the log instead of allocating from the heap.");
+    RecordProperty("TestType", "requirements-based");
+    RecordProperty("DerivationTechnique", "boundary-values");
     RecordProperty("Requirement", "SCR-861534, SCR-1016719");
     RecordProperty("ASIL", "B");
     RecordProperty("Description", "The log will be truncated in case of too many arguments.");
     RecordProperty("TestingTechnique", "Requirements-based test");
-    RecordProperty("DerivationTechnique", "Analysis of requirements");
 
     constexpr std::size_t kTypeInfoByteSizeAccordingToSpecification = 4;
     const std::size_t number_of_arguments = log_record_.GetLogEntry().payload.capacity() /
