@@ -25,13 +25,14 @@ namespace
 
 TEST(LinearReaderTests, LengthExceedingMaxThresholdShouldReturnEmpty)
 {
-    RecordProperty("Requirement", "SCR-1016719");
-    RecordProperty("ASIL", "B");
+    RecordProperty("PartiallyVerifies", "comp_req__log__index_size_checking");
     RecordProperty(
         "Description",
-        "The reader shall check if the length is valid and drop values that would lead to out of bounds access.");
-    RecordProperty("TestingTechnique", "Requirements-based test");
-    RecordProperty("DerivationTechnique", "Analysis of requirements");
+        "Check that the reader rejects a length exceeding the maximum threshold instead of accessing out of bounds.");
+    RecordProperty("TestType", "requirements-based");
+    RecordProperty("DerivationTechnique", "boundary-values");
+    RecordProperty("Requirement", "SCR-1016719");
+    RecordProperty("ASIL", "B");
 
     constexpr auto kBufferSize = score::mw::log::detail::GetLengthOffsetBytes() * 2U;
     std::vector<score::mw::log::detail::Byte> buffer(kBufferSize);

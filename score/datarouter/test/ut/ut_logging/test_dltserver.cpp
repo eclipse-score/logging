@@ -149,6 +149,11 @@ class DltServerCreatedWithoutConfigFixture : public ::testing::Test
 
 TEST_F(DltServerCreatedWithoutConfigFixture, WhenCreatedDefault)
 {
+    RecordProperty("PartiallyVerifies", "comp_req__data_router__dlt_server");
+    RecordProperty("Description", "Check that the DLT server component can be constructed with a default config.");
+    RecordProperty("TestType", "requirements-based");
+    RecordProperty("DerivationTechnique", "requirements-analysis");
+
     DltLogServer dlt_server(s_config, read_callback.AsStdFunction(), write_callback.AsStdFunction(), true);
 }
 
@@ -234,6 +239,11 @@ TEST_F(DltServerCreatedWithConfigFixture, FlushChannelsExpectNoThrowException)
 
 TEST_F(DltServerCreatedWithConfigFixture, GetQuotaCorrectAppNameExpectCorrectValue)
 {
+    RecordProperty("PartiallyVerifies", "comp_req__data_router__dlt_bw_quota_config");
+    RecordProperty("Description", "Check that the DLT bandwidth quota configured for an application is returned correctly.");
+    RecordProperty("TestType", "requirements-based");
+    RecordProperty("DerivationTechnique", "requirements-analysis");
+
     EXPECT_CALL(read_callback, Call()).Times(1).WillOnce(Return(p_config));
     EXPECT_CALL(write_callback, Call(_)).Times(0);
 

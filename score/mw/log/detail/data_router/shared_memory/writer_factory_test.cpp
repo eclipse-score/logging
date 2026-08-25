@@ -209,13 +209,18 @@ TEST(WriterFactory, MissingStdlibShallResultInEmptyOptional)
 
 TEST_F(WriterFactoryFixture, WhenTheFileExistsItShallBeUnlinked)
 {
+    RecordProperty("PartiallyVerifies", "comp_req__log__shm_file_permissions");
+    RecordProperty("PartiallyVerifies", "comp_req__log__file_descriptor_flags");
+    RecordProperty("Description",
+                   "Check that an existing shared-memory file is unlinked before being re-created read-only.");
+    RecordProperty("TestType", "requirements-based");
+    RecordProperty("DerivationTechnique", "requirements-analysis");
     RecordProperty("ParentRequirement", "SCR-1016729, SCR-26319707");
     RecordProperty("ASIL", "B");
     RecordProperty("Description",
                    "Verifies the ability of unlink the exist file. The component shall set the FD_CLOEXEC (or "
                    "O_CLOEXEC) flag on all the file descriptor it owns");
     RecordProperty("TestingTechnique", "Requirements-based test");
-    RecordProperty("DerivationTechnique", "Analysis of requirements");
     RecordProperty("Priority", "3");
 
     WriterFactory writer(std::move(osal));

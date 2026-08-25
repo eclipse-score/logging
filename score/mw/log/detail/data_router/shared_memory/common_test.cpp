@@ -36,11 +36,14 @@ TEST(CommonTests, TypesShallBeTriviallyCopyable)
 
 TEST(CommonTests, TypesShallBeLockFree)
 {
+    RecordProperty("PartiallyVerifies", "comp_req__log__avoid_locks");
+    RecordProperty("Description", "Check that the atomic fields of the shared-memory data structure are lock-free.");
+    RecordProperty("TestType", "requirements-based");
+    RecordProperty("DerivationTechnique", "requirements-analysis");
     RecordProperty("ParentRequirement", "SCR-861578");
     RecordProperty("ASIL", "B");
     RecordProperty("Description", "Checks data lock-free.");
     RecordProperty("TestingTechnique", "Requirements-based test");
-    RecordProperty("DerivationTechnique", "Analysis of requirements");
 
     score::mw::log::detail::SharedData data{};
     ASSERT_TRUE(data.number_of_drops_buffer_full.is_lock_free());

@@ -30,11 +30,14 @@ namespace
 
 TEST(WaitFreeAlternatingWriterTests, EnsureAtomicRequirements)
 {
+    RecordProperty("PartiallyVerifies", "comp_req__log__cross_locking");
+    RecordProperty("Description", "Check that the atomic types used by the wait-free alternating writer are lock-free.");
+    RecordProperty("TestType", "requirements-based");
+    RecordProperty("DerivationTechnique", "requirements-analysis");
     RecordProperty("Requirement", "SCR-861578,SCR-1016724,SCR-861550");
     RecordProperty("ASIL", "B");
     RecordProperty("Description", "The used atomic data types shall be lock free");
     RecordProperty("TestingTechnique", "Requirements-based test");
-    RecordProperty("DerivationTechnique", "Analysis of requirements");
 
     score::mw::log::detail::AlternatingControlBlock control_block{};
     ASSERT_TRUE(control_block.switch_count_points_active_for_writing.is_lock_free());

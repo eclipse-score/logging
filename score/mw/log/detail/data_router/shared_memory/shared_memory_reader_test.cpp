@@ -85,11 +85,14 @@ class TypeInfoTest
 
 TEST_F(SharedMemoryReaderFixture, GetterShallReadSharedDataNumberOfDropsInvalidSize)
 {
+    RecordProperty("PartiallyVerifies", "comp_req__log__memory_bound_checking");
+    RecordProperty("Description", "Check that the reader correctly reports the count of entries dropped due to invalid size, an explicit memory-boundary check.");
+    RecordProperty("TestType", "requirements-based");
+    RecordProperty("DerivationTechnique", "requirements-analysis");
     RecordProperty("ParentRequirement", "SCR-861827, SCR-12206795");
     RecordProperty("ASIL", "B");
     RecordProperty("Description", "Verifies the ability of getting the number of drops invalid size value properly.");
     RecordProperty("TestingTechnique", "Requirements-based test");
-    RecordProperty("DerivationTechnique", "Analysis of requirements");
 
     static constexpr Length kNumberOfDrops{13UL};
     shared_data.number_of_drops_invalid_size.store(kNumberOfDrops);
