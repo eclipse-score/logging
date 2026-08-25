@@ -98,7 +98,7 @@ impl From<&str> for Context {
         let size = min(value.len(), 4);
 
         // Copy data into array.
-        let mut data = [0; _];
+        let mut data = [0; 4];
         // SAFETY:
         // Copying is safe:
         // - source is a `&str`.
@@ -127,7 +127,7 @@ impl From<&Context> for &str {
             // Create a slice from pointer and size.
             let slice = from_raw_parts(data, size);
             // Create a UTF-8 string from a slice.
-            str::from_utf8_unchecked(slice)
+            core::str::from_utf8_unchecked(slice)
         }
     }
 }
@@ -212,7 +212,7 @@ impl SlotHandleStorage {
 impl Default for SlotHandleStorage {
     /// Create storage for `SlotHandle`.
     fn default() -> Self {
-        Self { _private: [0; _] }
+        Self { _private: [0; 24] }
     }
 }
 
