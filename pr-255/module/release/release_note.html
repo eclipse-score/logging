@@ -2,13 +2,13 @@
 <!DOCTYPE html>
 
 
-<html lang="en" data-content_root="../../../" >
+<html lang="en" data-content_root="../../" >
 
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Remote Logging implementation details &#8212; Logging  documentation</title>
+    <title>Release Note &#8212; Logging  documentation</title>
   
   
   
@@ -27,42 +27,42 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../../_static/styles/theme.css?digest=7f76b32a3354e82990f2" rel="stylesheet" />
-<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=7f76b32a3354e82990f2" rel="stylesheet" />
+  <link href="../../_static/styles/theme.css?digest=7f76b32a3354e82990f2" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=7f76b32a3354e82990f2" rel="stylesheet" />
 
-    <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/css/score.css?v=bb63a8e1" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/css/score_needs.css?v=82a1844f" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/css/score_design.css?v=8048e6ee" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-design.min.css?v=95c83b7e" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-data-viewer/jsonview.bundle.css?v=f6ef2277" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-needs/libs/html/datatables.min.css?v=4b4fd840" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-needs/common_css/need_style.css?v=92936fa5" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-needs/common_css/needstable.css?v=5e1b6797" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-needs/common_css/need_toggle.css?v=5c6620df" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-needs/common_css/need_core.css?v=f5b60a78" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-needs/common_css/need_links.css?v=2150a916" />
-    <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-needs/modern.css?v=803738c0" />
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=4ae1632d" />
+    <link rel="stylesheet" type="text/css" href="../../_static/css/score.css?v=bb63a8e1" />
+    <link rel="stylesheet" type="text/css" href="../../_static/css/score_needs.css?v=82a1844f" />
+    <link rel="stylesheet" type="text/css" href="../../_static/css/score_design.css?v=8048e6ee" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-data-viewer/jsonview.bundle.css?v=f6ef2277" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-needs/libs/html/datatables.min.css?v=4b4fd840" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-needs/common_css/need_style.css?v=92936fa5" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-needs/common_css/needstable.css?v=5e1b6797" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-needs/common_css/need_toggle.css?v=5c6620df" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-needs/common_css/need_core.css?v=f5b60a78" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-needs/common_css/need_links.css?v=2150a916" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-needs/modern.css?v=803738c0" />
   
   <!-- So that users can add custom icons -->
-  <script defer src="../../../_static/scripts/fontawesome.js?digest=7f76b32a3354e82990f2"></script>
+  <script defer src="../../_static/scripts/fontawesome.js?digest=7f76b32a3354e82990f2"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=7f76b32a3354e82990f2" />
-<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=7f76b32a3354e82990f2" />
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=7f76b32a3354e82990f2" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=7f76b32a3354e82990f2" />
 
-    <script src="../../../_static/jquery.js?v=5d32c60e"></script>
-    <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
-    <script src="../../../_static/documentation_options.js?v=7f41d439"></script>
-    <script src="../../../_static/doctools.js?v=fd6eb6e6"></script>
-    <script src="../../../_static/sphinx_highlight.js?v=6ffebe34"></script>
-    <script src="../../../_static/design-tabs.js?v=f930bc37"></script>
-    <script src="../../../_static/sphinx-data-viewer/jsonview.bundle.js?v=18cd53c5"></script>
-    <script src="../../../_static/sphinx-data-viewer/jsonview_loader.js?v=f7ff7e7d"></script>
-    <script src="../../../_static/sphinx-needs/libs/html/datatables.min.js?v=8a4aee21"></script>
-    <script src="../../../_static/sphinx-needs/libs/html/datatables_loader.js?v=a2cae175"></script>
-    <script src="../../../_static/sphinx-needs/libs/html/sphinx_needs_collapse.js?v=dca66431"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'components/datarouter/detailed_design/shm_apis';</script>
+    <script src="../../_static/jquery.js?v=5d32c60e"></script>
+    <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+    <script src="../../_static/documentation_options.js?v=7f41d439"></script>
+    <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../_static/design-tabs.js?v=f930bc37"></script>
+    <script src="../../_static/sphinx-data-viewer/jsonview.bundle.js?v=18cd53c5"></script>
+    <script src="../../_static/sphinx-data-viewer/jsonview_loader.js?v=f7ff7e7d"></script>
+    <script src="../../_static/sphinx-needs/libs/html/datatables.min.js?v=8a4aee21"></script>
+    <script src="../../_static/sphinx-needs/libs/html/datatables_loader.js?v=a2cae175"></script>
+    <script src="../../_static/sphinx-needs/libs/html/sphinx_needs_collapse.js?v=dca66431"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'module/release/release_note';</script>
     <script>
         DOCUMENTATION_OPTIONS.theme_version = '0.17.0';
         DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://eclipse-score.github.io/logging/versions.json';
@@ -71,18 +71,18 @@
             false;
         </script>
     <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
-    <link rel="index" title="Index" href="../../../genindex.html" />
-    <link rel="search" title="Search" href="../../../search.html" />
-    <link rel="next" title="mw::log Backend" href="../../mw_log/index.html" />
-    <link rel="prev" title="Logging: architecture and SW design" href="logging_architecture.html" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Safety Management" href="../safety_mgt/index.html" />
+    <link rel="prev" title="Safety Manual" href="../manuals/safety_manual.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="0.1" />
   
     
-    <script src="../../../_static/searchtools.js"></script>
-    <script src="../../../_static/language_data.js"></script>
-    <script src="../../../searchindex.js"></script>
+    <script src="../../_static/searchtools.js"></script>
+    <script src="../../_static/language_data.js"></script>
+    <script src="../../searchindex.js"></script>
   
   </head>
   <body data-default-mode="">
@@ -100,7 +100,7 @@
   <dialog id="pst-search-dialog">
     
 <form class="bd-search d-flex align-items-center"
-      action="../../../search.html"
+      action="../../search.html"
       method="get">
   <i class="fa-solid fa-magnifying-glass"></i>
   <input type="search"
@@ -136,7 +136,7 @@
     
   
 
-<a class="navbar-brand logo" href="../../../index.html">
+<a class="navbar-brand logo" href="../../index.html">
   
   
   
@@ -158,35 +158,35 @@
   <ul class="bd-navbar-elements navbar-nav">
     
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="../../../features/logging/index.html">
+  <a class="nav-link nav-internal" href="../../features/logging/index.html">
     Feature
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../../../module/index.html">
-    Module
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../../../verification_report/module_verification_report.html">
-    Verification Report
   </a>
 </li>
 
 
 <li class="nav-item current active">
   <a class="nav-link nav-internal" href="../index.html">
+    Module
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../verification_report/module_verification_report.html">
+    Verification Report
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../components/datarouter/index.html">
     Datarouter
   </a>
 </li>
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="../../mw_log/index.html">
+  <a class="nav-link nav-internal" href="../../components/mw_log/index.html">
     mw::log Backend
   </a>
 </li>
@@ -301,35 +301,35 @@
   <ul class="bd-navbar-elements navbar-nav">
     
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="../../../features/logging/index.html">
+  <a class="nav-link nav-internal" href="../../features/logging/index.html">
     Feature
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../../../module/index.html">
-    Module
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../../../verification_report/module_verification_report.html">
-    Verification Report
   </a>
 </li>
 
 
 <li class="nav-item current active">
   <a class="nav-link nav-internal" href="../index.html">
+    Module
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../verification_report/module_verification_report.html">
+    Verification Report
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../components/datarouter/index.html">
     Datarouter
   </a>
 </li>
 
 
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="../../mw_log/index.html">
+  <a class="nav-link nav-internal" href="../../components/mw_log/index.html">
     mw::log Backend
   </a>
 </li>
@@ -405,9 +405,9 @@
      aria-label="Section Navigation">
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
   <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../requirements/index.html">Datarouter Component Requirements</a></li>
-<li class="toctree-l1"><a class="reference internal" href="logging_architecture.html">Logging: architecture and SW design</a></li>
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">Remote Logging implementation details</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../manuals/index.html">Manuals</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Release Note</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../safety_mgt/index.html">Safety Management</a></li>
 </ul>
 </div>
 </nav></div>
@@ -444,14 +444,14 @@
   <ul class="bd-breadcrumbs">
     
     <li class="breadcrumb-item breadcrumb-home">
-      <a href="../../../index.html" class="nav-link" aria-label="Home">
+      <a href="../../index.html" class="nav-link" aria-label="Home">
         <i class="fa-solid fa-home"></i>
       </a>
     </li>
     
-    <li class="breadcrumb-item"><a href="../index.html" class="nav-link">Datarouter</a></li>
+    <li class="breadcrumb-item"><a href="../index.html" class="nav-link">Module</a></li>
     
-    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Remote Logging implementation details</span></li>
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Release Note</span></li>
   </ul>
 </nav>
 </div>
@@ -468,42 +468,52 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section id="remote-logging-implementation-details">
-<h1>Remote Logging implementation details<a class="headerlink" href="#remote-logging-implementation-details" title="Link to this heading">#</a></h1>
-<p>Remote Logging uses the <strong>message passing</strong> library (<code class="docutils literal notranslate"><span class="pre">MessagePassingServer</span></code> / <code class="docutils literal notranslate"><span class="pre">MessagePassingClient</span></code>) as the session channel between <code class="docutils literal notranslate"><span class="pre">mw::log</span></code> producers and DataRouter. It is used for log session registration (<code class="docutils literal notranslate"><span class="pre">kConnect</span></code>), shared memory buffer acquire requests (<code class="docutils literal notranslate"><span class="pre">kAcquireRequest</span></code> / <code class="docutils literal notranslate"><span class="pre">kAcquireResponse</span></code>), and disconnect handling. Shared memory is the data channel.</p>
-<p>For communications between a producer and the DataRouter, the producer is the writer and the DataRouter is the reader.</p>
-<p>Shared memory is allocated using <code class="docutils literal notranslate"><span class="pre">open()</span></code> syscall by the writer process, and a link is created as <code class="docutils literal notranslate"><span class="pre">/tmp/logging.&lt;app_id&gt;.&lt;uid&gt;.shmem</span></code> (static mode) or <code class="docutils literal notranslate"><span class="pre">/tmp/logging-&lt;random&gt;.shmem</span></code> (dynamic mode, when no app ID is available). At the moment, the reader can (and does) modify the shared memory; in the case of communications between ASIL D writers and ASIL QM reader it can be avoided by requesting such modifications through the control channel; in this case, the fd handle returned by <code class="docutils literal notranslate"><span class="pre">open()</span></code> could be reopened as a read-only fd handle (for the filename /proc/self/fd/<fd>) and this reopened handle passed to the reader process, thus guaranteeing that the ASIL QM process cannot modify the memory shared with ASIL D processes.</p>
-<p>The consistency of write and read pointers in the shared buffer is protected by a POSIX mutex. A writer takes the mutex for the time of writing a single message record. A reader takes the mutex to read the read and write pointer, and also takes the mutex to advance a reader pointer toward the previous value of the write pointer after the reader processes the existing records. During reading, the reader does not hold the lock. The writer is able to detect if reading is happening at the moment. If the buffer is full, the writer either advances the reading pointer if there is no reading happening, or discards the writing attempt if reading is happening. The writer never waits for the reader to finish reading.</p>
-<p>At the moment, the mutex is kept in the shared memory. If we need to make the memory read-only for the writer, the reader needs to request access to the read pointer value through the control channel. The the writer process will fully own the mutex both physically and logically (the mutex is still briefly locked before and after reading, but is not held during reading).</p>
-<p>When the producer starts it creates the shared memory buffer (for example, as a <a class="reference external" href="http://laristra.github.io/flecsi/src/developer-guide/patterns/meyers_singleton.html">Meyer’s singleton</a>) and can start writing into it immediately from multiple threads, if desired. The logic of starting a control channel for this buffer and connecting it to the DataRouter is separate and asynchronous. The message passing client for the control channel runs in a separate dedicated thread. The control channel detects disconnects of its peer and reconnects automatically if DataRouter restarts. If the producer exits, DataRouter only closes (and thus frees) the shared memory region when its content fully fed to DataRouter’s filters.</p>
-<section id="apis-in-use">
-<h2>APIs in use<a class="headerlink" href="#apis-in-use" title="Link to this heading">#</a></h2>
-<p>System/library calls used in particular (as implemented at the moment):</p>
-<section id="at-a-producer">
-<h3>At a Producer<a class="headerlink" href="#at-a-producer" title="Link to this heading">#</a></h3>
-<p>Producers obtain the fd of the shared memory with <code class="docutils literal notranslate"><span class="pre">open()</span></code> with flag <code class="docutils literal notranslate"><span class="pre">O_RDWR</span></code> (read-write, as the producer both creates and writes the shared memory region).</p>
-<p>Then a Producer would <code class="docutils literal notranslate"><span class="pre">ftruncate()</span></code> the obtained descriptor to the required size.</p>
-<p>Then <code class="docutils literal notranslate"><span class="pre">mmap()</span></code> the whole content of the memory region with flags <code class="docutils literal notranslate"><span class="pre">(PROT_READ</span> <span class="pre">|</span> <span class="pre">PROT_WRITE,</span> <span class="pre">MAP_SHARED)</span></code>, initialize it.</p>
-<p>In a separate thread starting later, a Producer</p>
-<ul class="simple">
-<li><p>creates a message passing client.</p></li>
-<li><p>sends a connect message with identifier <code class="docutils literal notranslate"><span class="pre">DatarouterMessageIdentifier::kConnect</span></code> and app id and uid.</p></li>
-<li><p>keeps listening the message passing channel for acquire requests.</p></li>
-</ul>
-<p>If the message passing connection is lost, the message passing library handles reconnection transparently.</p>
-</section>
-<section id="at-the-datarouter">
-<h3>At the DataRouter<a class="headerlink" href="#at-the-datarouter" title="Link to this heading">#</a></h3>
-<p>DataRouter will setup a message passing server. At each connection, DataRouter does the following:</p>
-<ul class="simple">
-<li><p>receive the shared memory file by constructing from the message as <code class="docutils literal notranslate"><span class="pre">/tmp/logging.&lt;app_id&gt;.&lt;uid&gt;.shmem</span></code> (or <code class="docutils literal notranslate"><span class="pre">/tmp/logging-&lt;random&gt;.shmem</span></code> in dynamic mode),</p></li>
-<li><p>calculate the size of the shared memory region using <code class="docutils literal notranslate"><span class="pre">fstat()</span></code>,</p></li>
-<li><p>map the whole region using mmap() with the flags <code class="docutils literal notranslate"><span class="pre">(PROT_READ,</span> <span class="pre">MAP_SHARED)</span></code>.</p></li>
-</ul>
-<p>DataRouter keeps the message passing channel monitored via a worker thread; once each message received (or once each 100 ms timeout) it processes the tick queue and reads the ring buffer content.</p>
-<p>If the control channel disconnects, DataRouter reads the content of the ring buffer for the last time and then close its file descriptor. Then DataRouter wait for the reconnect from the client.</p>
-</section>
-</section>
+  <section id="release-note">
+<h1>Release Note<a class="headerlink" href="#release-note" title="Link to this heading">#</a></h1>
+<div class="need_container docutils container" id="SNCB-c94b4630">
+<div class="pst-scrollable-table-container"><table class="need needs_grid_complex needs_layout_score needs_style_none needs_type_document table" id="doc__logging_release_note">
+<tbody>
+<tr class="head row-odd"><td class="head_left" colspan="2"><div class="needs_head_left line-block">
+<div class="line"><span><span class="needs_title"><span class="needs_data">Logging Release Note</span></span></span></div>
+</div>
+</td>
+<td class="head_center" colspan="2"><div class="needs_head line-block">
+<div class="line"><span><span class="needs_status"><span class="needs_label">status: </span><span class="needs_data">valid</span></span></span></div>
+<div class="line"><span><span class="needs_security"><span class="needs_label">security: </span><span class="needs_data">NO</span></span></span></div>
+<div class="line"><span><span class="needs_safety"><span class="needs_label">safety: </span><span class="needs_data">ASIL_B</span></span></span></div>
+</div>
+</td>
+<td class="head_right" colspan="2"><div class="needs_head_right line-block">
+<div class="line"><span><span class="needs needs_collapse" id="target__show__meta"><span class="needs collapsed"><svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-down-circle"><circle cx="12" cy="12" r="10"></circle><polyline points="8 12 12 16 16 12"></polyline><line x1="12" y1="8" x2="12" y2="16"></line></svg></span><span class="needs visible collapse_is_hidden"><svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-right-circle"><circle cx="12" cy="12" r="10"></circle><polyline points="12 16 16 12 12 8"></polyline><line x1="8" y1="12" x2="16" y2="12"></line></svg></span></span></span></div>
+</div>
+</td>
+</tr>
+<tr class="meta row-even"><td class="meta" colspan="3"><div class="needs_meta_left line-block">
+<div class="line"><span><span><div class="line"><span class="needs_version"><span class="needs_label">version: </span>1</span></div>
+</span></span></div>
+<div class="line"><span><div class="line">realizes: <span class="realizes"><span><a class="external_link reference external" href="https://eclipse-score.github.io/process_description//main/process_areas/release_management/release_workproducts.html#wp__module_sw_release_note">wp__module_sw_release_note</a></span></span></div>
+</span></div>
+</div>
+</td>
+<td class="meta" colspan="3"></td>
+</tr>
+<tr class="content row-odd"><td class="content" colspan="6"></td>
+</tr>
+<tr class="footer row-even"><td class="footer_left" colspan="2"><div class="needs_footer_left line-block">
+<div class="line"><span><span class="needs-id"><a class="reference internal" href="#doc__logging_release_note" title="doc__logging_release_note">doc__logging_release_note</a></span></span></div>
+</div>
+</td>
+<td class="footer" colspan="2"><div class="needs_footer line-block">
+<div class="line"><span><span class="needs_type_name"><span class="needs_data">Generic Document</span></span></span></div>
+</div>
+</td>
+<td class="footer_right" colspan="2"></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>For the release notes, see the <a class="reference external" href="https://github.com/eclipse-score/logging/releases">Logging releases</a> on GitHub.</p>
 </section>
 
 
@@ -517,20 +527,20 @@
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="logging_architecture.html"
+       href="../manuals/safety_manual.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Logging: architecture and SW design</p>
+        <p class="prev-next-title">Safety Manual</p>
       </div>
     </a>
     <a class="right-next"
-       href="../../mw_log/index.html"
+       href="../safety_mgt/index.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">mw::log Backend</p>
+        <p class="prev-next-title">Safety Management</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -546,26 +556,10 @@
 
 
   <div class="sidebar-secondary-item">
-<div
-    id="pst-page-navigation-heading-2"
-    class="page-toc tocsection onthispage">
-    <i class="fa-solid fa-list"></i> On this page
-  </div>
-  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
-    <ul class="pst-show_toc_level nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#apis-in-use">APIs in use</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#at-a-producer">At a Producer</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#at-the-datarouter">At the DataRouter</a></li>
-</ul>
-</li>
-</ul>
-  </nav></div>
-
-  <div class="sidebar-secondary-item">
 
   
   <div class="tocsection editthispage">
-    <a href="https://github.com/eclipse-score/logging/edit/main//home/runner/work/logging/logging/docs/components/datarouter/detailed_design/shm_apis.md">
+    <a href="https://github.com/eclipse-score/logging/edit/main//home/runner/work/logging/logging/docs/module/release/release_note.rst">
       <i class="fa-solid fa-pencil"></i>
       
       
@@ -590,8 +584,8 @@
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../../../_static/scripts/bootstrap.js?digest=7f76b32a3354e82990f2"></script>
-<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=7f76b32a3354e82990f2"></script>
+  <script defer src="../../_static/scripts/bootstrap.js?digest=7f76b32a3354e82990f2"></script>
+<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=7f76b32a3354e82990f2"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">

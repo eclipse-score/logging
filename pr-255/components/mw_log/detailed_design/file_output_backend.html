@@ -74,7 +74,7 @@
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
     <link rel="next" title="Safe Datarouter Backend" href="datarouter_backend/README.html" />
-    <link rel="prev" title="mw::log backend Detailed Design" href="index.html" />
+    <link rel="prev" title="Detailed Design" href="index.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="0.1" />
@@ -158,15 +158,22 @@
   <ul class="bd-navbar-elements navbar-nav">
     
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="../../../features/architecture/index.html">
-    Logging Feature Architecture
+  <a class="nav-link nav-internal" href="../../../features/logging/index.html">
+    Feature
   </a>
 </li>
 
 
-<li class="nav-item current active">
-  <a class="nav-link nav-internal" href="../index.html">
-    mw::log
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../module/index.html">
+    Module
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../verification_report/module_verification_report.html">
+    Verification Report
   </a>
 </li>
 
@@ -178,16 +185,9 @@
 </li>
 
 
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../../../verification_report/stats.html">
-    Quality Stats
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../../../module/manuals/index.html">
-    Manuals
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../index.html">
+    mw::log Backend
   </a>
 </li>
 
@@ -301,15 +301,22 @@
   <ul class="bd-navbar-elements navbar-nav">
     
 <li class="nav-item ">
-  <a class="nav-link nav-internal" href="../../../features/architecture/index.html">
-    Logging Feature Architecture
+  <a class="nav-link nav-internal" href="../../../features/logging/index.html">
+    Feature
   </a>
 </li>
 
 
-<li class="nav-item current active">
-  <a class="nav-link nav-internal" href="../index.html">
-    mw::log
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../module/index.html">
+    Module
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../../verification_report/module_verification_report.html">
+    Verification Report
   </a>
 </li>
 
@@ -321,16 +328,9 @@
 </li>
 
 
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../../../verification_report/stats.html">
-    Quality Stats
-  </a>
-</li>
-
-
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../../../module/manuals/index.html">
-    Manuals
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../index.html">
+    mw::log Backend
   </a>
 </li>
 
@@ -405,13 +405,17 @@
      aria-label="Section Navigation">
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
   <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../requirements/index.html">mw::log Component Requirements</a></li>
-<li class="toctree-l1 current active has-children"><a class="reference internal" href="index.html">mw::log backend Detailed Design</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../architecture/index.html">Component Architecture</a></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="index.html">Detailed Design</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
 <li class="toctree-l2 current active"><a class="current reference internal" href="#">FileOutputBackend</a></li>
 <li class="toctree-l2"><a class="reference internal" href="datarouter_backend/README.html">Safe Datarouter Backend</a></li>
+<li class="toctree-l2"><a class="reference internal" href="chklst_impl_inspection.html">Implementation Inspection Checklist</a></li>
 </ul>
 </details></li>
-<li class="toctree-l1"><a class="reference internal" href="../design_decisions/explicit_init.html">Explicit initialization of logging</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../requirements/index.html">Requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../safety_analysis/dfa.html">DFA (Dependent Failure Analysis)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../safety_analysis/fmea.html">FMEA (Failure Modes and Effects Analysis)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../safety_analysis/aou_requirements.html">AoU Component Requirements Template</a></li>
 </ul>
 </div>
 </nav></div>
@@ -453,10 +457,10 @@
       </a>
     </li>
     
-    <li class="breadcrumb-item"><a href="../index.html" class="nav-link">mw::log</a></li>
+    <li class="breadcrumb-item"><a href="../index.html" class="nav-link">mw::log Backend</a></li>
     
     
-    <li class="breadcrumb-item"><a href="index.html" class="nav-link">mw::log backend Detailed Design</a></li>
+    <li class="breadcrumb-item"><a href="index.html" class="nav-link">Detailed Design</a></li>
     
     <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">FileOutputBackend</span></li>
   </ul>
@@ -534,7 +538,7 @@ written is less then requested.</p>
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">mw::log backend Detailed Design</p>
+        <p class="prev-next-title">Detailed Design</p>
       </div>
     </a>
     <a class="right-next"
