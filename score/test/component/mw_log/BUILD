@@ -17,6 +17,7 @@ py_logging_itf_test(
     name = "test_mw_log",
     srcs = ["test_mw_log.py"],
     filesystem = "//score/test/component/logging_app:logging_app_filesystem",
+    filesystem_pkg = "//score/test/component/logging_app:logging_app_filesystem_pkg",
     deps = [
         "@score_itf//third_party/python_dlt",
     ],
@@ -26,6 +27,7 @@ py_logging_itf_test(
     name = "test_mw_log_kfile",
     srcs = ["test_mw_log_kfile.py"],
     filesystem = "//score/test/component/dlt_generator_app:dlt_generator_filesystem",
+    filesystem_pkg = "//score/test/component/dlt_generator_app:dlt_generator_filesystem_pkg",
     deps = [
         "@score_itf//third_party/python_dlt",
     ],
@@ -35,4 +37,5 @@ py_logging_itf_test(
     name = "test_mw_log_filters",
     srcs = ["test_mw_log_filters.py"],
     filesystem = "//score/test/component/filters_app:mwfiltertest_filesystem",
+    filesystem_pkg = "//score/test/component/filters_app:mwfiltertest_filesystem_pkg",
 )

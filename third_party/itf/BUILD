@@ -11,21 +11,4 @@
 # SPDX-License-Identifier: Apache-2.0
 # *******************************************************************************
 
-# Configuration file for the Sphinx documentation builder.
-#
-# For the full list of built-in configuration values, see the documentation:
-# https://www.sphinx-doc.org/en/master/usage/configuration.html
-
-
-# -- Project information -----------------------------------------------------
-# https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
-
-project = "Logging"
-project_url = "https://eclipse-score.github.io/logging/"
-version = "0.1"
-
-extensions = [
-    "score_sphinx_bundle",
-]
-
-required_in_id = ["logging"]
+exports_files(["py_unittest_qnx_test.bzl"])

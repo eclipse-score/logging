@@ -12,27 +12,11 @@
    # SPDX-License-Identifier: Apache-2.0
    # *******************************************************************************
 
-
-Detailed Design
-###############
-
-The backend composition and recorder relationships are shown below:
-
-.. uml:: ../../../../score/mw/log/design/backend/mw_log_recorders.puml
+Safety Management
+#################
 
 .. toctree::
-   :maxdepth: 1
+   :titlesonly:
 
-   file_output_backend
-   syslog_backend
-   datarouter_backend/README
-
-
-Inspection Checklist
---------------------
-
-The checklist for verification of the detailed design and code can be found here:
-
-.. toctree::
-
-   chklst_impl_inspection
+   module_safety_plan
+   module_safety_analysis_fdr

@@ -12,8 +12,24 @@
    # SPDX-License-Identifier: Apache-2.0
    # *******************************************************************************
 
-Logging Feature Architecture
-=============================
+
+Logging Architecture
+====================
+
+.. document:: Logging Architecture
+   :id: doc__logging_module_architecture
+   :status: draft
+   :version: 1
+   :safety: ASIL_B
+   :security: NO
+   :realizes: wp__feature_arch
+
+Overview
+--------
+The logging feature provides a standardized logging framework for C++ and Rust projects using Bazel build system.
+
+Description
+-----------
 
 The logging feature has two parts: the ``mw::log`` library that applications
 link against and ship as part of their own binary, and the ``datarouter``
@@ -27,7 +43,7 @@ the ``score_log_bridge`` described below, so ``datarouter`` sees one uniform
 set of sessions regardless of which frontend produced them.
 
 mw::log
--------
+*******
 
 The ``mw::log`` library spans across two repositories:
 
@@ -52,7 +68,7 @@ production capability.
 .. uml:: _assets/mw_log_repository_boundary.puml
 
 Datarouter
-----------
+**********
 
 The Datarouter is the Diagnostic log and trace (DLT) daemon.
 See :doc:`the Datarouter component </components/datarouter/index>`
@@ -65,3 +81,59 @@ way the C++ remote backend does and writes into its own shared-memory segment
 for ``datarouter`` to read.
 
 .. uml:: _assets/remote_logging.puml
+
+Design Constraint
+-----------------
+
+The logging function is not safety relevant (its output can not be used for safety functionality).
+But it must be usable also for safety related applications, hence the design shall guarantee Freedom From Interference (FFI).
+
+Requirements
+------------
+
+The requirements for the feature architecture are defined in the `requirements` section of the feature documentation in the project repository.
+
+Architecture Decomposition
+*******************************************
+
+The feature is decomposed into a QM component which delivers the functionality and ASIL components
+providing the interface (divided into frontend and backend) which are included into the context of the using application.
+The frontend interface which is included by the users is deployed in the baselibs module.
+This is to avoid cycylic dependencies, as the other baselibs components want to use logging functions
+but also the logging components want to use baselibs functions.
+
+Static Architecture
+-------------------
+
+.. feat_arc_sta:: Feature Architecture Logging
+   :id: feat_arc_sta__logging__static_view
+   :security: YES
+   :safety: ASIL_B
+   :status: valid
+   :version: 1
+   :includes: logic_arc_int__log_cpp__logging
+   :fulfils: feat_req__logging__log_sources_user_app
+   :belongs_to: feat__logging
+
+   .. needarch::
+      :scale: 50
+      :align: center
+
+      {{ draw_feature(need(), needs) }}
+
+Dynamic Architecture
+--------------------
+
+Simple routing of commands and replies, so dynamic view is not needed.
+
+Logical Interfaces
+------------------
+
+The logical interfaces of the feature are defined in the `logical interfaces` section of the feature documentation in the project repository.
+
+See `SCORE Features <https://eclipse-score.github.io/score/main/features/index.html>`_ for more information.
+
+Used Components
+---------------
+
+The components used by the feature are defined in the `components` section of the module documentation.

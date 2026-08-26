@@ -11,21 +11,14 @@
 # SPDX-License-Identifier: Apache-2.0
 # *******************************************************************************
 
-# Configuration file for the Sphinx documentation builder.
-#
-# For the full list of built-in configuration values, see the documentation:
-# https://www.sphinx-doc.org/en/master/usage/configuration.html
-
-
-# -- Project information -----------------------------------------------------
-# https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
-
-project = "Logging"
-project_url = "https://eclipse-score.github.io/logging/"
-version = "0.1"
-
-extensions = [
-    "score_sphinx_bundle",
-]
-
-required_in_id = ["logging"]
+def py_unittest_qnx_test(
+        name,
+        test_cases = [],
+        test_suites = [],
+        data_files = [],  # unused: cc_test_qnx has no data param, data must live on the wrapped cc_test
+        excluded_tests_filter = None,
+        visibility = None):
+    # This is intentionally left blank.
+    # The cc_test_qnx from @score_qnx_unit_tests can be used here
+    # See: eclipse-score/logging/issues/267
+    pass

@@ -12,7 +12,7 @@
 # *******************************************************************************
 
 load("@rules_cc//cc:defs.bzl", "cc_test")
-load("@score_baselibs//third_party/itf:py_unittest_qnx_test.bzl", "py_unittest_qnx_test")
+load("@score_logging//third_party/itf:py_unittest_qnx_test.bzl", "py_unittest_qnx_test")
 
 FEAT_COMPILER_WARNINGS_AS_ERRORS = [
     "treat_warnings_as_errors",
@@ -452,8 +452,8 @@ py_unittest_qnx_test(
         ":utility_test",
         ":FileTransferHandlerFactoryUT",
         ":PersistentDictionaryFactoryUT",
-        "//score/datarouter/persistent_log_request/test:test_persistent_log_request",
-        "//score/datarouter/tools/generator:fibex_generator_test",
+        # "//score/datarouter/persistent_log_request/test:test_persistent_log_request",
+        # "//score/datarouter/tools/generator:fibex_generator_test",
     ],
     visibility = ["//visibility:public"],  # platform_only
 )

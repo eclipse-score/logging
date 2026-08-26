@@ -12,27 +12,16 @@
    # SPDX-License-Identifier: Apache-2.0
    # *******************************************************************************
 
+Release Note
+============
 
-Detailed Design
-###############
-
-The backend composition and recorder relationships are shown below:
-
-.. uml:: ../../../../score/mw/log/design/backend/mw_log_recorders.puml
-
-.. toctree::
-   :maxdepth: 1
-
-   file_output_backend
-   syslog_backend
-   datarouter_backend/README
+.. document:: Logging Release Note
+   :id: doc__logging_release_note
+   :status: valid
+   :version: 1
+   :safety: ASIL_B
+   :security: NO
+   :realizes: wp__module_sw_release_note
 
 
-Inspection Checklist
---------------------
-
-The checklist for verification of the detailed design and code can be found here:
-
-.. toctree::
-
-   chklst_impl_inspection
+For the release notes, see the `Logging releases <https://github.com/eclipse-score/logging/releases>`_ on GitHub.

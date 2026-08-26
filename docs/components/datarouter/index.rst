@@ -14,7 +14,7 @@
 
 
 Datarouter
-=========================
+====================
 
 .. comp:: Datarouter
    :id: comp__datarouter
@@ -22,7 +22,7 @@ Datarouter
    :security: YES
    :safety: QM
    :status: valid
-   :implements: logic_arc_int__logging__logging
+   :uses: logic_arc_int__logging__shm, logic_arc_int__logging__session_ctrl_channel
    :belongs_to: feat__logging
 
    Datarouter is the DLT (Diagnostic log and trace) daemon executable. It reads records from source shared-memory ring buffers, manages source
