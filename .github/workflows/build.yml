@@ -44,7 +44,6 @@ jobs:
         id: bazel-info
         run: |
           echo "BAZEL_OUTPUT_BASE=$(bazel info output_base)" >> $GITHUB_ENV
-          echo "BAZEL_USER_ROOT=$(bazel info output_user_root)" >> $GITHUB_ENV
           echo "BAZEL_REPO_CACHE=$(bazel info repository_cache)" >> $GITHUB_ENV
           bazel info
 
