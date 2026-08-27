@@ -22,13 +22,13 @@ setup_starpls(
 copyright_checker(
     name = "copyright",
     srcs = [
-        "//:.bazelrc",
+        ".bazelrc",
         ".github",
-        "//:BUILD",
-        "//:MODULE.bazel",
+        "BUILD",
+        "MODULE.bazel",
         "docs",
         "examples",
-        "//:project_config.bzl",
+        "project_config.bzl",
         "score",
         "tests",
     ],
