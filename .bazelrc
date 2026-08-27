@@ -18,6 +18,12 @@ build --tool_java_runtime_version=remotejdk_17
 common --registry=https://raw.githubusercontent.com/eclipse-score/bazel_registry/main/
 common --registry=https://bcr.bazel.build
 
+# rules_android is pulled in transitively (lobster -> rules_jvm_external ->
+# rules_android since score_tooling 2.x). Its android_sdk_repository extension
+# fails on machines without Android SDK APIs (incl. GitHub runners). This
+# project does not use Android; unset ANDROID_HOME so the lookup is skipped.
+common --repo_env=ANDROID_HOME=
+
 # Retry HTTP downloads to handle transient failures (e.g. QNX toolchain)
 common --http_connector_attempts=10
 common --http_connector_retry_max_timeout=1s
@@ -137,6 +143,10 @@ test:tsan --run_under=@score_cpp_policies//sanitizers:wrapper
 test:clang-tidy --aspects=//tools/lint:linters.bzl%clang_tidy_aspect
 test:clang-tidy --output_groups=+rules_lint_report
 test:clang-tidy --extra_toolchains=@llvm_toolchain//:cc-toolchain-x86_64-linux
+# toolchains_llvm >= 1.8.0 emits -stdlib=libc++ together with -nostdinc++ (explicit
+# libc++ include paths); clang then reports -stdlib as unused, which the
+# warnings_as_errors feature turns into an error. Analysis is unaffected.
+test:clang-tidy --copt=-Wno-unused-command-line-argument
 
 # Unified LLVM source-based coverage (C++ + Rust), see quality/coverage/ and
 # @score_tooling//coverage. Use: bazel coverage --config=llvm_cov //score/... --build_tests_only
