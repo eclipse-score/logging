@@ -37,5 +37,9 @@ architectural_design(
         "mw_log_file_backend.puml",
         "mw_log_recorders.puml",
     ],
+    # score_tooling 2.x parses every .puml; the legacy diagrams here are not
+    # yet in the parser's supported subset (eclipse-score/tooling#447).
+    # Keep the target out of wildcard builds until they are reworked.
+    tags = ["manual"],
     visibility = ["//visibility:public"],
 )
