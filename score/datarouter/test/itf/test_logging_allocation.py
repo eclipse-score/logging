@@ -18,7 +18,7 @@ NON_VERBOSE_APP = "non_verbose_allocations"
 NON_VERBOSE_GOLDEN_APP = "non_verbose_golden_app"
 LOGGING_CONFIG = "etc/logging.json"
 
-MALLOC_PROFILER_PATH = "platform/aas/test/pas/perf_tests/tools/malloc_profiler"
+MALLOC_PROFILER_PATH = "platform/aas/performance/test/tools/malloc_profiler"
 MALLOC_PROFILER_LIB = "libmalloc-profiler.so"
 
 

@@ -13,7 +13,7 @@ cc_binary(
         "//score/datarouter/test/itf:__pkg__",
     ],
     deps = [
-        "//platform/aas/test/pas/perf_tests/tools/malloc_profiler:malloc-profiler",
+        "//platform/aas/performance/test/tools/malloc_profiler:malloc-profiler",
         "@score_baselibs//score/mw/log",
     ],
 )
@@ -29,7 +29,7 @@ cc_binary(
     ],
     deps = [
         "//platform/aas/ara/core",
-        "//platform/aas/test/pas/perf_tests/tools/malloc_profiler:malloc-profiler",
+        "//platform/aas/performance/test/tools/malloc_profiler:malloc-profiler",
         "@score_baselibs//score/mw/log",
     ],
 )
@@ -44,7 +44,7 @@ cc_binary(
         "//score/datarouter/test/itf:__pkg__",
     ],
     deps = [
-        "//platform/aas/test/pas/perf_tests/tools/malloc_profiler:malloc-profiler",
+        "//platform/aas/performance/test/tools/malloc_profiler:malloc-profiler",
         "//score/mw/log/legacy_non_verbose_api",
         "@score_baselibs//score/mw/log",
     ],
@@ -60,7 +60,7 @@ cc_binary(
         "//score/datarouter/test/itf:__pkg__",
     ],
     deps = [
-        "//platform/aas/test/pas/perf_tests/tools/malloc_profiler:malloc-profiler",
+        "//platform/aas/performance/test/tools/malloc_profiler:malloc-profiler",
         "//score/mw/log/legacy_non_verbose_api",
         "@score_baselibs//score/mw/log",
     ],
@@ -76,7 +76,7 @@ cc_binary(
         "//score/datarouter/test/itf:__pkg__",
     ],
     deps = [
-        "//platform/aas/test/pas/perf_tests/tools/malloc_profiler:malloc-profiler",
+        "//platform/aas/performance/test/tools/malloc_profiler:malloc-profiler",
         "@score_baselibs//score/mw/log",
     ],
 )
@@ -91,7 +91,7 @@ cc_binary(
         "//score/datarouter/test/itf:__pkg__",
     ],
     deps = [
-        "//platform/aas/test/pas/perf_tests/tools/malloc_profiler:malloc-profiler",
+        "//platform/aas/performance/test/tools/malloc_profiler:malloc-profiler",
         "@score_baselibs//score/mw/log",
     ],
 )
