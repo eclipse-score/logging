@@ -93,20 +93,6 @@ build:x86_64-linux --@rules_python//python/config_settings:precompile=force_disa
 
 
 
-# Coverage configuration for C++
-coverage --config=x86_64-linux
-coverage --instrumentation_filter="^//score/datarouter[/:],^//score/mw/log[/:],-//score/mw/.*/test[/:]"
-
-# GCC-based coverage configuration
-coverage --combined_report=lcov
-coverage --test_env=COVERAGE_GCOV_OPTIONS=-bcu
-coverage --features=coverage
-coverage --cache_test_results=no
-# See -fprofile-update in the GCC manual (recommended for multithreaded applications):
-# https://gcc.gnu.org/onlinedocs/gcc/Instrumentation-Options.html
-# Reasoning: https://github.com/eclipse-score/logging/issues/156
-coverage --cxxopt=-fprofile-update=atomic
-
 # ==============================================================================
 # Dynamic analysis (sanitizers) for Linux host builds/tests
 # ==============================================================================
@@ -151,3 +137,7 @@ test:tsan --run_under=@score_cpp_policies//sanitizers:wrapper
 test:clang-tidy --aspects=//tools/lint:linters.bzl%clang_tidy_aspect
 test:clang-tidy --output_groups=+rules_lint_report
 test:clang-tidy --extra_toolchains=@llvm_toolchain//:cc-toolchain-x86_64-linux
+
+# Unified LLVM source-based coverage (C++ + Rust), see quality/coverage/ and
+# @score_tooling//coverage. Use: bazel coverage --config=llvm_cov //score/... --build_tests_only
+import %workspace%/quality/coverage/coverage.bazelrc

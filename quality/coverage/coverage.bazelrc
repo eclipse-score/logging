@@ -1,0 +1,74 @@
+# *******************************************************************************
+# Copyright (c) 2026 Contributors to the Eclipse Foundation
+#
+# See the NOTICE file(s) distributed with this work for additional
+# information regarding copyright ownership.
+#
+# This program and the accompanying materials are made available under the
+# terms of the Apache License Version 2.0 which is available at
+# https://www.apache.org/licenses/LICENSE-2.0
+#
+# SPDX-License-Identifier: Apache-2.0
+# *******************************************************************************
+
+# ============================================================================
+# LLVM source-based coverage (Linux, Clang covmap + Ferrocene) — C++ and Rust
+# Pipeline: @score_tooling//coverage (see its README.md for the guide).
+# Use with: bazel coverage --config=llvm_cov //score/... --build_tests_only
+#
+# Do NOT combine with --config=x86_64-linux: it registers the GCC toolchain,
+# the last --extra_toolchains wins resolution, and GCC produces no covmap.
+# This config runs on the plain host platform with the toolchains below.
+# ============================================================================
+
+coverage:llvm_cov --nocache_test_results
+coverage:llvm_cov --cxxopt=-O0
+coverage:llvm_cov --combined_report=lcov
+coverage:llvm_cov --experimental_fetch_all_coverage_outputs
+coverage:llvm_cov --test_tag_filters=-manual,-integration
+
+# Per-test .so files can carry clashing instrumentation between production and
+# test code; the first object loaded wins, causing flaky coverage gaps.
+coverage:llvm_cov --dynamic_mode=off
+
+coverage:llvm_cov --experimental_generate_llvm_lcov
+# NOTE: --experimental_use_llvm_covmap instruments ALL targets; source
+# filtering happens at report time via the score_coverage_scope allowlist.
+coverage:llvm_cov --experimental_use_llvm_covmap
+coverage:llvm_cov --extra_toolchains=@llvm_toolchain_coverage//:cc-toolchain-x86_64-linux
+# Ferrocene (score_toolchains_rust >= 0.10.0 ships llvm-cov/llvm-profdata with
+# the toolchain, which is what activates Rust coverage instrumentation). The
+# regular builds register this toolchain inside the x86_64-linux config only,
+# so it is registered here explicitly.
+coverage:llvm_cov --extra_toolchains=@score_toolchains_rust//toolchains/ferrocene:ferrocene_x86_64_unknown_linux_gnu
+
+coverage:llvm_cov --coverage_output_generator=@score_tooling//coverage:merger
+coverage:llvm_cov --coverage_report_generator=//quality/coverage:reporter_wrapper
+
+# Keep raw profraw files; the merger handles profraw -> profdata directly.
+coverage:llvm_cov --test_env=GENERATE_LLVM_LCOV=0
+coverage:llvm_cov --test_env=COVERAGE_GCOV_PATH=/usr/bin/true
+
+# Continuous-mode profiling: covers abnormal termination (death tests). Needs
+# runtime counter relocation in both languages.
+coverage:llvm_cov --test_env=LLVM_PROFILE_CONTINUOUS_MODE=1
+coverage:llvm_cov --features=enable_llvm_coverage_for_death_tests
+coverage:llvm_cov --@rules_rust//rust/settings:extra_rustc_flag=-Cllvm-args=-runtime-counter-relocation
+
+# Under the LLVM toolchain the `coverage` feature expands to
+# -fprofile-instr-generate -fcoverage-mapping (the covmap instrumentation).
+coverage:llvm_cov --features=coverage
+
+# Keep unlinked functions in the coverage map so unreferenced code shows as
+# uncovered instead of vanishing.
+coverage:llvm_cov --@rules_rust//rust/settings:extra_rustc_flag=-Clink-dead-code
+
+# Rust branch coverage: unstable rustc option, works on the rolling
+# (nightly-based) Ferrocene build; drop if a stable-channel Ferrocene is pinned.
+coverage:llvm_cov --@rules_rust//rust/settings:extra_rustc_flag=-Zcoverage-options=branch
+
+# Clang 22 warns where GCC 12 does not; coverage runs must not fail on
+# instrumentation-unrelated warnings in third-party code (score_baselibs
+# requests treat_warnings_as_errors). --host_features covers the exec config.
+coverage:llvm_cov --features=-treat_warnings_as_errors
+coverage:llvm_cov --host_features=-treat_warnings_as_errors
