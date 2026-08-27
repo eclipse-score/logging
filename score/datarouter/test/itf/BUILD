@@ -269,7 +269,7 @@ py_itf_test(
         "//score/datarouter/test/itf/dynamic_allocation_apps:mw_log_allocations",
         "//score/datarouter/test/itf/dynamic_allocation_apps:non_verbose_allocations",
         "//score/datarouter/test/itf/dynamic_allocation_apps:non_verbose_golden_app",
-        "//platform/aas/test/pas/perf_tests/tools/malloc_profiler:malloc-profiler",
+        "//platform/aas/performance/test/tools/malloc_profiler:malloc-profiler",
     ],
     module_root = "platform/aas/pas/logging/test/itf",
     deps = [
