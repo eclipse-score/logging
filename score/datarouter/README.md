@@ -1,3 +1,16 @@
+<!-- ----------------------------------------------------------------------------
+  Copyright (c) 2026 Contributors to the Eclipse Foundation
+
+  See the NOTICE file(s) distributed with this work for additional
+  information regarding copyright ownership.
+
+  This program and the accompanying materials are made available under the
+  terms of the Apache License Version 2.0 which is available at
+  https://www.apache.org/licenses/LICENSE-2.0
+
+  SPDX-License-Identifier: Apache-2.0
+----------------------------------------------------------------------------- -->
+
 # Logging Framework
 
 This document provides an overview of the platform logging framework components that implement remote DLT (Diagnostic Log and Trace) logging capabilities. The framework enables efficient message routing from multiple sources to remote clients over a network.
