@@ -59,3 +59,8 @@ styles/
 .venv
 __pycache__/
 /.coverage
+
+# Local outputs of the coverage report generator
+coverage_linux/
+coverage_artifact/
+summary.md

@@ -11,7 +11,8 @@
 # SPDX-License-Identifier: Apache-2.0
 # *******************************************************************************
 load("@score_docs_as_code//:docs.bzl", "docs")
-load("@score_tooling//:defs.bzl", "copyright_checker", "setup_starpls", "use_format_targets")
+load("@score_tooling//:defs.bzl", "copyright_checker", "setup_starpls")
+load("@score_tooling//third_party/format:macros.bzl", "use_format_targets")
 
 setup_starpls(
     name = "starpls_server",
@@ -21,15 +22,15 @@ setup_starpls(
 copyright_checker(
     name = "copyright",
     srcs = [
-        ".github",
-        "docs",
-        "examples",
-        "score",
-        "tests",
         "//:.bazelrc",
+        ".github",
         "//:BUILD",
         "//:MODULE.bazel",
+        "docs",
+        "examples",
         "//:project_config.bzl",
+        "score",
+        "tests",
     ],
     config = "@score_tooling//cr_checker/resources:config",
     exclusion = "//:.copyright_exclusions",
