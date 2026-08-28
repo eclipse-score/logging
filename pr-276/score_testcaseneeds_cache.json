@@ -1654,7 +1654,7 @@
   {
     "name": "DltServerCreatedWithConfigFixture__SetLogChannelAssignmentCommandFoundChannelAssignmentFoundRemoveExpectReadCallback",
     "file": "score/datarouter/test/ut/ut_logging/test_dltserver.cpp",
-    "line": "402",
+    "line": "403",
     "result": "passed",
     "repo_name": null,
     "hash": null,
@@ -1668,7 +1668,7 @@
   {
     "name": "DltServerCreatedWithConfigFixture__SetLogChannelAssignmentCommandFoundChannelAssignmentNotFoundAddExpectReadCallback",
     "file": "score/datarouter/test/ut/ut_logging/test_dltserver.cpp",
-    "line": "470",
+    "line": "471",
     "result": "passed",
     "repo_name": null,
     "hash": null,
@@ -1906,7 +1906,7 @@
   {
     "name": "DltServerCreatedWithConfigFixture__SendNonVerboseNoAppIdAcceptedByFilteringNotAssignedToChannelExpectSendCallOnce",
     "file": "score/datarouter/test/ut/ut_logging/test_dltserver.cpp",
-    "line": "894",
+    "line": "895",
     "result": "passed",
     "repo_name": null,
     "hash": null,
@@ -2172,7 +2172,7 @@
   {
     "name": "DltServerWrongChannelsTest__SetLogChannelAssignmentCommandFoundChannelAssignmentFoundRemoveFailedExpectReadCallback",
     "file": "score/datarouter/test/ut/ut_logging/test_dltserver.cpp",
-    "line": "422",
+    "line": "423",
     "result": "passed",
     "repo_name": null,
     "hash": null,
@@ -2284,7 +2284,7 @@
   {
     "name": "FileTransferStreamHandlerFactoryTest__CreateWithFileTransferFeatureEnabledShallReturnConcreteFileTransferStreamHandler",
     "file": "score/datarouter/test/ut/ut_logging/test_file_transfer_handler_factory.cpp",
-    "line": "50",
+    "line": "51",
     "result": "passed",
     "repo_name": null,
     "hash": null,
@@ -3096,7 +3096,7 @@
   {
     "name": "MessagePassingServerFixture__TestNoSession",
     "file": "score/datarouter/test/ut/ut_logging/test_message_passing_server.cpp",
-    "line": "375",
+    "line": "458",
     "result": "passed",
     "repo_name": null,
     "hash": null,
@@ -3110,7 +3110,7 @@
   {
     "name": "MessagePassingServerFixture__TestFailedForSettingThreadName",
     "file": "score/datarouter/test/ut/ut_logging/test_message_passing_server.cpp",
-    "line": "382",
+    "line": "465",
     "result": "passed",
     "repo_name": null,
     "hash": null,
@@ -3124,7 +3124,7 @@
   {
     "name": "MessagePassingServerFixture__TestFailedStartListening",
     "file": "score/datarouter/test/ut/ut_logging/test_message_passing_server.cpp",
-    "line": "394",
+    "line": "477",
     "result": "passed",
     "repo_name": null,
     "hash": null,
@@ -3138,7 +3138,7 @@
   {
     "name": "MessagePassingServerFixture__TestStartListeningFailure",
     "file": "score/datarouter/test/ut/ut_logging/test_message_passing_server.cpp",
-    "line": "422",
+    "line": "505",
     "result": "passed",
     "repo_name": null,
     "hash": null,
@@ -3152,7 +3152,7 @@
   {
     "name": "MessagePassingServerFixture__TestOneConnectAcquireRelease",
     "file": "score/datarouter/test/ut/ut_logging/test_message_passing_server.cpp",
-    "line": "438",
+    "line": "521",
     "result": "passed",
     "repo_name": null,
     "hash": null,
@@ -3166,7 +3166,7 @@
   {
     "name": "MessagePassingServerFixture__TestTripleConnectDifferentPids",
     "file": "score/datarouter/test/ut/ut_logging/test_message_passing_server.cpp",
-    "line": "493",
+    "line": "576",
     "result": "passed",
     "repo_name": null,
     "hash": null,
@@ -3180,7 +3180,7 @@
   {
     "name": "MessagePassingServerFixture__TestTripleConnectSamePid",
     "file": "score/datarouter/test/ut/ut_logging/test_message_passing_server.cpp",
-    "line": "520",
+    "line": "603",
     "result": "passed",
     "repo_name": null,
     "hash": null,
@@ -3194,7 +3194,7 @@
   {
     "name": "MessagePassingServerFixture__StaleConnectionAcquireResponseShouldBeIgnored",
     "file": "score/datarouter/test/ut/ut_logging/test_message_passing_server.cpp",
-    "line": "572",
+    "line": "655",
     "result": "passed",
     "repo_name": null,
     "hash": null,
@@ -3208,7 +3208,7 @@
   {
     "name": "MessagePassingServerFixture__TestSamePidWhileRunning",
     "file": "score/datarouter/test/ut/ut_logging/test_message_passing_server.cpp",
-    "line": "614",
+    "line": "697",
     "result": "passed",
     "repo_name": null,
     "hash": null,
@@ -3222,7 +3222,7 @@
   {
     "name": "MessagePassingServerFixture__TestSamePidWhileQueued",
     "file": "score/datarouter/test/ut/ut_logging/test_message_passing_server.cpp",
-    "line": "674",
+    "line": "757",
     "result": "passed",
     "repo_name": null,
     "hash": null,
@@ -3236,7 +3236,7 @@
   {
     "name": "MessagePassingServerFixture__WatchdogShouldTearDownUnresponsiveClient",
     "file": "score/datarouter/test/ut/ut_logging/test_message_passing_server.cpp",
-    "line": "733",
+    "line": "816",
     "result": "passed",
     "repo_name": null,
     "hash": null,
@@ -3250,7 +3250,7 @@
   {
     "name": "MessagePassingServerFixture__WatchdogMissCountShouldResetOnValidResponse",
     "file": "score/datarouter/test/ut/ut_logging/test_message_passing_server.cpp",
-    "line": "758",
+    "line": "841",
     "result": "passed",
     "repo_name": null,
     "hash": null,
@@ -3264,7 +3264,7 @@
   {
     "name": "MessagePassingServerFixture__EnobufsFromNotifyShouldNotKillSession",
     "file": "score/datarouter/test/ut/ut_logging/test_message_passing_server.cpp",
-    "line": "804",
+    "line": "888",
     "result": "passed",
     "repo_name": null,
     "hash": null,
@@ -3278,7 +3278,7 @@
   {
     "name": "MessagePassingServerFixture__NonEnobufsNotifyFailureShouldStillKillSession",
     "file": "score/datarouter/test/ut/ut_logging/test_message_passing_server.cpp",
-    "line": "836",
+    "line": "920",
     "result": "passed",
     "repo_name": null,
     "hash": null,
@@ -3292,7 +3292,7 @@
   {
     "name": "MessagePassingServerFixture__DisconnectDuringNotifyShouldNotCrash",
     "file": "score/datarouter/test/ut/ut_logging/test_message_passing_server.cpp",
-    "line": "859",
+    "line": "943",
     "result": "passed",
     "repo_name": null,
     "hash": null,
@@ -3306,7 +3306,7 @@
   {
     "name": "MessagePassingServerFixture__ConnectCallbackReturnsClientPid",
     "file": "score/datarouter/test/ut/ut_logging/test_message_passing_server.cpp",
-    "line": "1005",
+    "line": "1091",
     "result": "passed",
     "repo_name": null,
     "hash": null,
@@ -3320,7 +3320,7 @@
   {
     "name": "MessagePassingServerFixture__SentWithReplyCallbackReturnsBlank",
     "file": "score/datarouter/test/ut/ut_logging/test_message_passing_server.cpp",
-    "line": "1023",
+    "line": "1109",
     "result": "passed",
     "repo_name": null,
     "hash": null,
@@ -3334,7 +3334,7 @@
   {
     "name": "MessagePassingServerFixture__MessageCallbackEmptyMessage",
     "file": "score/datarouter/test/ut/ut_logging/test_message_passing_server.cpp",
-    "line": "1039",
+    "line": "1125",
     "result": "passed",
     "repo_name": null,
     "hash": null,
@@ -3348,7 +3348,7 @@
   {
     "name": "MessagePassingServerFixture__MessageCallbackUnsupportedAcquireRequest",
     "file": "score/datarouter/test/ut/ut_logging/test_message_passing_server.cpp",
-    "line": "1056",
+    "line": "1142",
     "result": "passed",
     "repo_name": null,
     "hash": null,
@@ -3362,7 +3362,7 @@
   {
     "name": "MessagePassingServerFixture__MessageCallbackUnknownMessageType",
     "file": "score/datarouter/test/ut/ut_logging/test_message_passing_server.cpp",
-    "line": "1072",
+    "line": "1158",
     "result": "passed",
     "repo_name": null,
     "hash": null,
@@ -3376,7 +3376,7 @@
   {
     "name": "MessagePassingServerFixture__OnConnectRequestMessageTooSmall",
     "file": "score/datarouter/test/ut/ut_logging/test_message_passing_server.cpp",
-    "line": "1102",
+    "line": "1188",
     "result": "passed",
     "repo_name": null,
     "hash": null,
@@ -3390,7 +3390,7 @@
   {
     "name": "MessagePassingServerFixture__RunWorkerThreadConnectionTimeoutExpired",
     "file": "score/datarouter/test/ut/ut_logging/test_message_passing_server.cpp",
-    "line": "1123",
+    "line": "1209",
     "result": "passed",
     "repo_name": null,
     "hash": null,
@@ -3404,7 +3404,7 @@
   {
     "name": "MessagePassingServerFixture__FinishPreviousSessionWhileLockedCoversBody",
     "file": "score/datarouter/test/ut/ut_logging/test_message_passing_server.cpp",
-    "line": "1146",
+    "line": "1232",
     "result": "passed",
     "repo_name": null,
     "hash": null,
@@ -3418,7 +3418,7 @@
   {
     "name": "MessagePassingServerFixture__OnConnectRequestStopRequestedCoversEarlyExit",
     "file": "score/datarouter/test/ut/ut_logging/test_message_passing_server.cpp",
-    "line": "1184",
+    "line": "1274",
     "result": "passed",
     "repo_name": null,
     "hash": null,
@@ -3432,7 +3432,7 @@
   {
     "name": "MessagePassingServerTests__sessionWrapperCreateTest",
     "file": "score/datarouter/test/ut/ut_logging/test_message_passing_server.cpp",
-    "line": "895",
+    "line": "979",
     "result": "passed",
     "repo_name": null,
     "hash": null,
@@ -3446,7 +3446,7 @@
   {
     "name": "MessagePassingServerTests__sessionHandleCreateTest",
     "file": "score/datarouter/test/ut/ut_logging/test_message_passing_server.cpp",
-    "line": "919",
+    "line": "1004",
     "result": "passed",
     "repo_name": null,
     "hash": null,
@@ -3460,7 +3460,7 @@
   {
     "name": "MessagePassingServerTests__SessionHandleAcquireRequestNotReady",
     "file": "score/datarouter/test/ut/ut_logging/test_message_passing_server.cpp",
-    "line": "1089",
+    "line": "1175",
     "result": "passed",
     "repo_name": null,
     "hash": null,
@@ -3474,7 +3474,7 @@
   {
     "name": "SessionWrapperTest__ResetRunningWhileLocked",
     "file": "score/datarouter/test/ut/ut_logging/test_message_passing_server.cpp",
-    "line": "982",
+    "line": "1067",
     "result": "passed",
     "repo_name": null,
     "hash": null,
@@ -3488,7 +3488,7 @@
   {
     "name": "SessionWrapperTestEnqueueForDeleteWhileLockedTest/SessionWrapperParamTest__EnqueueForDeleteWhileLockedTest/0",
     "file": "score/datarouter/test/ut/ut_logging/test_message_passing_server.cpp",
-    "line": "961",
+    "line": "1046",
     "result": "passed",
     "repo_name": null,
     "hash": null,
@@ -3502,7 +3502,7 @@
   {
     "name": "SessionWrapperTestEnqueueForDeleteWhileLockedTest/SessionWrapperParamTest__EnqueueForDeleteWhileLockedTest/1",
     "file": "score/datarouter/test/ut/ut_logging/test_message_passing_server.cpp",
-    "line": "961",
+    "line": "1046",
     "result": "passed",
     "repo_name": null,
     "hash": null,
@@ -3516,7 +3516,7 @@
   {
     "name": "SessionWrapperTestEnqueueForDeleteWhileLockedTest/SessionWrapperParamTest__EnqueueForDeleteWhileLockedTest/2",
     "file": "score/datarouter/test/ut/ut_logging/test_message_passing_server.cpp",
-    "line": "961",
+    "line": "1046",
     "result": "passed",
     "repo_name": null,
     "hash": null,
@@ -3530,7 +3530,7 @@
   {
     "name": "SessionWrapperTestEnqueueForDeleteWhileLockedTest/SessionWrapperParamTest__EnqueueForDeleteWhileLockedTest/3",
     "file": "score/datarouter/test/ut/ut_logging/test_message_passing_server.cpp",
-    "line": "961",
+    "line": "1046",
     "result": "passed",
     "repo_name": null,
     "hash": null,
@@ -3544,7 +3544,7 @@
   {
     "name": "SessionWrapperTestEnqueueForDeleteWhileLockedTest/SessionWrapperParamTest__EnqueueForDeleteWhileLockedTest/4",
     "file": "score/datarouter/test/ut/ut_logging/test_message_passing_server.cpp",
-    "line": "961",
+    "line": "1046",
     "result": "passed",
     "repo_name": null,
     "hash": null,
@@ -3558,7 +3558,7 @@
   {
     "name": "SessionWrapperTestEnqueueForDeleteWhileLockedTest/SessionWrapperParamTest__EnqueueForDeleteWhileLockedTest/5",
     "file": "score/datarouter/test/ut/ut_logging/test_message_passing_server.cpp",
-    "line": "961",
+    "line": "1046",
     "result": "passed",
     "repo_name": null,
     "hash": null,
@@ -3572,7 +3572,7 @@
   {
     "name": "SessionWrapperTestEnqueueForDeleteWhileLockedTest/SessionWrapperParamTest__EnqueueForDeleteWhileLockedTest/6",
     "file": "score/datarouter/test/ut/ut_logging/test_message_passing_server.cpp",
-    "line": "961",
+    "line": "1046",
     "result": "passed",
     "repo_name": null,
     "hash": null,
@@ -3586,7 +3586,7 @@
   {
     "name": "SessionWrapperTestEnqueueForDeleteWhileLockedTest/SessionWrapperParamTest__EnqueueForDeleteWhileLockedTest/7",
     "file": "score/datarouter/test/ut/ut_logging/test_message_passing_server.cpp",
-    "line": "961",
+    "line": "1046",
     "result": "passed",
     "repo_name": null,
     "hash": null,
@@ -5364,7 +5364,7 @@
   {
     "name": "DynamicDataRouterIdentifiersFalseFixture__SendConnectMessageDynamicDataRouterIdentifiersFalseShouldSendExpectedPayload",
     "file": "score/mw/log/detail/data_router/data_router_message_client_test.cpp",
-    "line": "408",
+    "line": "409",
     "result": "passed",
     "repo_name": "local_repo",
     "hash": "",
@@ -9480,7 +9480,7 @@
   {
     "name": "LoggerFixture__GetSharedMemoryWriterShallFailWhenThereIsNoSharedMemoryAllocatedUsingLoggerInstanceInitializationAndCallingRegisterType",
     "file": "score/mw/log/legacy_non_verbose_api/tracing_test.cpp",
-    "line": "287",
+    "line": "289",
     "result": "passed",
     "repo_name": "local_repo",
     "hash": "",
@@ -9655,90 +9655,6 @@
     "url": "",
     "TestType": null,
     "DerivationTechnique": "Analysis of requirements",
-    "result_text": "",
-    "PartiallyVerifies": null,
-    "FullyVerifies": null
-  },
-  {
-    "name": "third_party/score_requirement_model/requirement_metamodel_test",
-    "file": null,
-    "line": null,
-    "result": "passed",
-    "repo_name": null,
-    "hash": null,
-    "url": null,
-    "TestType": null,
-    "DerivationTechnique": null,
-    "result_text": "",
-    "PartiallyVerifies": null,
-    "FullyVerifies": null
-  },
-  {
-    "name": "third_party/traceability/config/trlc/score_model/requirement_metamodel_test",
-    "file": null,
-    "line": null,
-    "result": "passed",
-    "repo_name": null,
-    "hash": null,
-    "url": null,
-    "TestType": null,
-    "DerivationTechnique": null,
-    "result_text": "",
-    "PartiallyVerifies": null,
-    "FullyVerifies": null
-  },
-  {
-    "name": "tests/rust/test-1416572525/rust_hello_test",
-    "file": null,
-    "line": null,
-    "result": "passed",
-    "repo_name": null,
-    "hash": null,
-    "url": null,
-    "TestType": null,
-    "DerivationTechnique": null,
-    "result_text": "",
-    "PartiallyVerifies": null,
-    "FullyVerifies": null
-  },
-  {
-    "name": "AdditionTest__HandlesPositiveNumbers",
-    "file": "tests/cpp/test_main.cpp",
-    "line": "22",
-    "result": "passed",
-    "repo_name": null,
-    "hash": null,
-    "url": null,
-    "TestType": null,
-    "DerivationTechnique": null,
-    "result_text": "",
-    "PartiallyVerifies": null,
-    "FullyVerifies": null
-  },
-  {
-    "name": "AdditionTest__HandlesNegativeNumbers",
-    "file": "tests/cpp/test_main.cpp",
-    "line": "27",
-    "result": "passed",
-    "repo_name": null,
-    "hash": null,
-    "url": null,
-    "TestType": null,
-    "DerivationTechnique": null,
-    "result_text": "",
-    "PartiallyVerifies": null,
-    "FullyVerifies": null
-  },
-  {
-    "name": "AdditionTest__HandlesZero",
-    "file": "tests/cpp/test_main.cpp",
-    "line": "32",
-    "result": "passed",
-    "repo_name": null,
-    "hash": null,
-    "url": null,
-    "TestType": null,
-    "DerivationTechnique": null,
     "result_text": "",
     "PartiallyVerifies": null,
     "FullyVerifies": null
