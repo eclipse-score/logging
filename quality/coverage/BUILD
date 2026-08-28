@@ -29,7 +29,7 @@ score_coverage_scope(
     testonly = True,
     visibility = ["//visibility:private"],
     deps = [
-        # Logging frontend (public facade; pulls in the backends it wires up)
+        # Logging backend (pulls in all the backends it wires up)
         "//score/mw/log",
         # Backend not reachable through the facade. (//score/mw/log/backend:slog
         # is QNX-only and cannot be measured on the Linux host; on-target
