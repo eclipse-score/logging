@@ -493,9 +493,53 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section id="component-requirements">
+  
+<style>
+.score-testcase-result {
+  font-weight: bold;
+}
+.score-testcase-result--passed {
+  color: #146c2e;
+}
+.score-testcase-result--failed {
+  color: #b42318;
+}
+.score-testcase-result--skipped {
+  color: #8a5300;
+}
+.score-testcase-result--disabled {
+  color: #5f6368;
+}
+html[data-theme="dark"] .score-testcase-result--passed {
+  color: #7ee787;
+}
+html[data-theme="dark"] .score-testcase-result--failed {
+  color: #ff7b72;
+}
+html[data-theme="dark"] .score-testcase-result--skipped {
+  color: #d29922;
+}
+html[data-theme="dark"] .score-testcase-result--disabled {
+  color: #c4cad2;
+}
+@media (prefers-color-scheme: dark) {
+  html:not([data-theme="light"]) .score-testcase-result--passed {
+    color: #7ee787;
+  }
+  html:not([data-theme="light"]) .score-testcase-result--failed {
+    color: #ff7b72;
+  }
+  html:not([data-theme="light"]) .score-testcase-result--skipped {
+    color: #d29922;
+  }
+  html:not([data-theme="light"]) .score-testcase-result--disabled {
+    color: #c4cad2;
+  }
+}
+</style>
+<section id="component-requirements">
 <h1>Component Requirements<a class="headerlink" href="#component-requirements" title="Link to this heading">#</a></h1>
-<div class="need_container docutils container" id="SNCB-4f602262">
+<div class="need_container docutils container" id="SNCB-bb6be278">
 <div class="pst-scrollable-table-container"><table class="need needs_grid_complex needs_layout_score needs_style_none needs_type_document table" id="doc__mw_log_backend_requirements">
 <tbody>
 <tr class="head row-odd"><td class="head_left" colspan="2"><div class="needs_head_left line-block">
@@ -540,7 +584,7 @@
 </div>
 <section id="mw-log">
 <h2>mw::log<a class="headerlink" href="#mw-log" title="Link to this heading">#</a></h2>
-<div class="need_container docutils container" id="SNCB-c995e2ef">
+<div class="need_container docutils container" id="SNCB-5728d83f">
 <div class="pst-scrollable-table-container"><table class="need needs_grid_complex needs_layout_score needs_style_none needs_type_comp_req table" id="comp_req__log__avoid_signal_processing">
 <tbody>
 <tr class="head row-odd"><td class="head_left" colspan="2"><div class="needs_head_left line-block">
@@ -586,7 +630,7 @@
 </table>
 </div>
 </div>
-<div class="need_container docutils container" id="SNCB-b8a47d2b">
+<div class="need_container docutils container" id="SNCB-2b71dc08">
 <div class="pst-scrollable-table-container"><table class="need needs_grid_complex needs_layout_score needs_style_none needs_type_comp_req table" id="comp_req__log__file_descriptor_flags">
 <tbody>
 <tr class="head row-odd"><td class="head_left" colspan="2"><div class="needs_head_left line-block">
@@ -606,6 +650,7 @@
 </tr>
 <tr class="meta row-even"><td class="meta" colspan="3"><div class="needs_meta_left line-block">
 <div class="line"><span><span><div class="line"><span class="needs_reqtype"><span class="needs_label">reqtype: </span><span class="needs_data">Functional</span></span></div>
+<div class="line"><span class="needs_testlink"><span class="needs_label">testlink: </span><span class="needs_data"><a class="reference external" href="https://github.com/eclipse-score/logging/blob/6d744cbc224d3e055e4f833427b005e6f66183be/score/mw/log/detail/data_router/shared_memory/writer_factory_test.cpp#L210">WriterFactoryFixture__WhenTheFileExistsItShallBeUnlinked<span class="score-testcase-result score-testcase-result--passed"> (passed)</span></a><em>; </em><a class="reference external" href="https://github.com/eclipse-score/logging/blob/6d744cbc224d3e055e4f833427b005e6f66183be/score/mw/log/detail/file_recorder/file_recorder_factory_test.cpp#L55">FileRecorderFactoryConfigFixture__FileConfigurionShallCallFileCreationAndReturnFileRecorder<span class="score-testcase-result score-testcase-result--passed"> (passed)</span></a><em>; </em></span></span></div>
 <div class="line"><span class="needs_version"><span class="needs_label">version: </span>1</span></div>
 </span></span></div>
 <div class="line"><span><div class="line">derived from: <span class="derived_from"><span><a class="external_link reference external" href="https://eclipse-score.github.io/score/main/features/log_and_trace/logging/requirements/index.html#feat_req__logging__security_log_access">feat_req__logging__security_log_access</a></span></span></div>
@@ -637,7 +682,7 @@ file descriptor owned by the component.</p>
 </table>
 </div>
 </div>
-<div class="need_container docutils container" id="SNCB-369c632e">
+<div class="need_container docutils container" id="SNCB-0d692fea">
 <div class="pst-scrollable-table-container"><table class="need needs_grid_complex needs_layout_score needs_style_none needs_type_comp_req table" id="comp_req__log__dlt_verbose_mode">
 <tbody>
 <tr class="head row-odd"><td class="head_left" colspan="2"><div class="needs_head_left line-block">
@@ -657,6 +702,7 @@ file descriptor owned by the component.</p>
 </tr>
 <tr class="meta row-even"><td class="meta" colspan="3"><div class="needs_meta_left line-block">
 <div class="line"><span><span><div class="line"><span class="needs_reqtype"><span class="needs_label">reqtype: </span><span class="needs_data">Functional</span></span></div>
+<div class="line"><span class="needs_testlink"><span class="needs_label">testlink: </span><span class="needs_data"><a class="reference external" href="https://github.com/eclipse-score/logging/blob/6d744cbc224d3e055e4f833427b005e6f66183be/score/mw/log/detail/data_router/data_router_backend_test.cpp#L332">DataRouterBackendFixture__LogLevelVerbose<span class="score-testcase-result score-testcase-result--passed"> (passed)</span></a><em>; </em></span></span></div>
 <div class="line"><span class="needs_version"><span class="needs_label">version: </span>1</span></div>
 </span></span></div>
 <div class="line"><span><div class="line">derived from: <span class="derived_from"><span><a class="external_link reference external" href="https://eclipse-score.github.io/score/main/features/log_and_trace/logging/requirements/index.html#feat_req__logging__compat_dlt">feat_req__logging__compat_dlt</a></span></span></div>
@@ -685,7 +731,7 @@ reprocessing.</p></td>
 </table>
 </div>
 </div>
-<div class="need_container docutils container" id="SNCB-a4d2b0ce">
+<div class="need_container docutils container" id="SNCB-c2eb0e72">
 <div class="pst-scrollable-table-container"><table class="need needs_grid_complex needs_layout_score needs_style_none needs_type_comp_req table" id="comp_req__log__autosar_log_trace_spec">
 <tbody>
 <tr class="head row-odd"><td class="head_left" colspan="2"><div class="needs_head_left line-block">
@@ -705,6 +751,7 @@ reprocessing.</p></td>
 </tr>
 <tr class="meta row-even"><td class="meta" colspan="3"><div class="needs_meta_left line-block">
 <div class="line"><span><span><div class="line"><span class="needs_reqtype"><span class="needs_label">reqtype: </span><span class="needs_data">Functional</span></span></div>
+<div class="line"><span class="needs_testlink"><span class="needs_label">testlink: </span><span class="needs_data"><a class="reference external" href="https://github.com/eclipse-score/logging/blob/6d744cbc224d3e055e4f833427b005e6f66183be/score/mw/log/detail/file_recorder/dlt_message_builder_test.cpp#L65">DltMessageBuilderFixture__ShallDepleteAfterHeaderAndPayload<span class="score-testcase-result score-testcase-result--passed"> (passed)</span></a><em>; </em></span></span></div>
 <div class="line"><span class="needs_version"><span class="needs_label">version: </span>1</span></div>
 </span></span></div>
 <div class="line"><span><div class="line">derived from: <span class="derived_from"><span><a class="external_link reference external" href="https://eclipse-score.github.io/score/main/features/log_and_trace/logging/requirements/index.html#feat_req__logging__compat_dlt">feat_req__logging__compat_dlt</a>, <a class="external_link reference external" href="https://eclipse-score.github.io/score/main/features/log_and_trace/logging/requirements/index.html#feat_req__logging__severity_levels">feat_req__logging__severity_levels</a></span></span></div>
@@ -732,7 +779,7 @@ specification used shall be in agreement with the rest of Adaptive AUTOSAR stack
 </table>
 </div>
 </div>
-<div class="need_container docutils container" id="SNCB-005d6b8c">
+<div class="need_container docutils container" id="SNCB-b2b82951">
 <div class="pst-scrollable-table-container"><table class="need needs_grid_complex needs_layout_score needs_style_none needs_type_comp_req table" id="comp_req__log__send_to_datarouter">
 <tbody>
 <tr class="head row-odd"><td class="head_left" colspan="2"><div class="needs_head_left line-block">
@@ -780,7 +827,7 @@ library.</p></td>
 </table>
 </div>
 </div>
-<div class="need_container docutils container" id="SNCB-88cd4b47">
+<div class="need_container docutils container" id="SNCB-584eb884">
 <div class="pst-scrollable-table-container"><table class="need needs_grid_complex needs_layout_score needs_style_none needs_type_comp_req table" id="comp_req__log__inactive_logstream">
 <tbody>
 <tr class="head row-odd"><td class="head_left" colspan="2"><div class="needs_head_left line-block">
@@ -828,7 +875,7 @@ the severity of the message does not allow it to be sent.</p></td>
 </table>
 </div>
 </div>
-<div class="need_container docutils container" id="SNCB-de5c627c">
+<div class="need_container docutils container" id="SNCB-c4320373">
 <div class="pst-scrollable-table-container"><table class="need needs_grid_complex needs_layout_score needs_style_none needs_type_comp_req table" id="comp_req__log__shm_file_permissions">
 <tbody>
 <tr class="head row-odd"><td class="head_left" colspan="2"><div class="needs_head_left line-block">
@@ -881,7 +928,7 @@ The shared-memory file created by mw::log shall be read-only for group and other
 <section id="system-backend">
 <h2>System Backend<a class="headerlink" href="#system-backend" title="Link to this heading">#</a></h2>
 <p><em>System logger backend shall forward the logs to the native system logger.</em></p>
-<div class="need_container docutils container" id="SNCB-eef129fd">
+<div class="need_container docutils container" id="SNCB-d28204ad">
 <div class="pst-scrollable-table-container"><table class="need needs_grid_complex needs_layout_score needs_style_none needs_type_comp_req table" id="comp_req__log__forward_to_system_logger">
 <tbody>
 <tr class="head row-odd"><td class="head_left" colspan="2"><div class="needs_head_left line-block">
@@ -929,7 +976,7 @@ The shared-memory file created by mw::log shall be read-only for group and other
 </table>
 </div>
 </div>
-<div class="need_container docutils container" id="SNCB-60d0a952">
+<div class="need_container docutils container" id="SNCB-2eaa7bfb">
 <div class="pst-scrollable-table-container"><table class="need needs_grid_complex needs_layout_score needs_style_none needs_type_comp_req table" id="comp_req__log__system_backend_activation">
 <tbody>
 <tr class="head row-odd"><td class="head_left" colspan="2"><div class="needs_head_left line-block">
@@ -978,7 +1025,7 @@ The shared-memory file created by mw::log shall be read-only for group and other
 </section>
 <section id="non-functional-requirements">
 <h2>Non-Functional Requirements<a class="headerlink" href="#non-functional-requirements" title="Link to this heading">#</a></h2>
-<div class="need_container docutils container" id="SNCB-6113c8c9">
+<div class="need_container docutils container" id="SNCB-634d5acf">
 <div class="pst-scrollable-table-container"><table class="need needs_grid_complex needs_layout_score needs_style_none needs_type_comp_req table" id="comp_req__log__local_allocation_strategy">
 <tbody>
 <tr class="head row-odd"><td class="head_left" colspan="2"><div class="needs_head_left line-block">
@@ -998,6 +1045,7 @@ The shared-memory file created by mw::log shall be read-only for group and other
 </tr>
 <tr class="meta row-even"><td class="meta" colspan="3"><div class="needs_meta_left line-block">
 <div class="line"><span><span><div class="line"><span class="needs_reqtype"><span class="needs_label">reqtype: </span><span class="needs_data">Non-Functional</span></span></div>
+<div class="line"><span class="needs_testlink"><span class="needs_label">testlink: </span><span class="needs_data"><a class="reference external" href="https://github.com/eclipse-score/logging/blob/6d744cbc224d3e055e4f833427b005e6f66183be/score/mw/log/detail/data_router/remote_dlt_recorder_factory_test.cpp#L78">RecorderFactoryConfigFixture__RemoteConfiguredShallReturnDataRouterRecorder<span class="score-testcase-result score-testcase-result--passed"> (passed)</span></a><em>; </em><a class="reference external" href="https://github.com/eclipse-score/logging/blob/6d744cbc224d3e055e4f833427b005e6f66183be/score/mw/log/detail/file_recorder/file_recorder_test.cpp#L155">FileRecorderFixture__TooManyArgumentsWillYieldTruncatedLog<span class="score-testcase-result score-testcase-result--passed"> (passed)</span></a><em>; </em></span></span></div>
 <div class="line"><span class="needs_version"><span class="needs_label">version: </span>1</span></div>
 </span></span></div>
 <div class="line"><span><div class="line">derived from: <span class="derived_from"><span><a class="external_link reference external" href="https://eclipse-score.github.io/score/main/features/log_and_trace/logging/requirements/index.html#feat_req__logging__asil_support">feat_req__logging__asil_support</a>, <a class="external_link reference external" href="https://eclipse-score.github.io/score/main/features/log_and_trace/logging/requirements/index.html#feat_req__logging__resource_runtime">feat_req__logging__resource_runtime</a></span></span></div>
@@ -1025,7 +1073,7 @@ any) shall be limited to initialization phase of application lifecycle.</p></td>
 </table>
 </div>
 </div>
-<div class="need_container docutils container" id="SNCB-e93282f3">
+<div class="need_container docutils container" id="SNCB-bfb1f56a">
 <div class="pst-scrollable-table-container"><table class="need needs_grid_complex needs_layout_score needs_style_none needs_type_comp_req table" id="comp_req__log__no_endless_loops">
 <tbody>
 <tr class="head row-odd"><td class="head_left" colspan="2"><div class="needs_head_left line-block">
@@ -1045,6 +1093,7 @@ any) shall be limited to initialization phase of application lifecycle.</p></td>
 </tr>
 <tr class="meta row-even"><td class="meta" colspan="3"><div class="needs_meta_left line-block">
 <div class="line"><span><span><div class="line"><span class="needs_reqtype"><span class="needs_label">reqtype: </span><span class="needs_data">Non-Functional</span></span></div>
+<div class="line"><span class="needs_testlink"><span class="needs_label">testlink: </span><span class="needs_data"><a class="reference external" href="https://github.com/eclipse-score/logging/blob/6d744cbc224d3e055e4f833427b005e6f66183be/score/mw/log/detail/wait_free_producer_queue/wait_free_linear_writer_test.cpp#L44">WaitFreeLinearWriter__WriteBufferFullShouldReturnExpectedData<span class="score-testcase-result score-testcase-result--passed"> (passed)</span></a><em>; </em></span></span></div>
 <div class="line"><span class="needs_version"><span class="needs_label">version: </span>1</span></div>
 </span></span></div>
 <div class="line"><span><div class="line">derived from: <span class="derived_from"><span><a class="external_link reference external" href="https://eclipse-score.github.io/score/main/features/log_and_trace/logging/requirements/index.html#feat_req__logging__asil_support">feat_req__logging__asil_support</a>, <a class="external_link reference external" href="https://eclipse-score.github.io/score/main/features/log_and_trace/logging/requirements/index.html#feat_req__logging__resource_performance">feat_req__logging__resource_performance</a></span></span></div>
@@ -1071,7 +1120,7 @@ any) shall be limited to initialization phase of application lifecycle.</p></td>
 </table>
 </div>
 </div>
-<div class="need_container docutils container" id="SNCB-74cbd2c6">
+<div class="need_container docutils container" id="SNCB-b2a92f9f">
 <div class="pst-scrollable-table-container"><table class="need needs_grid_complex needs_layout_score needs_style_none needs_type_comp_req table" id="comp_req__log__avoid_locks">
 <tbody>
 <tr class="head row-odd"><td class="head_left" colspan="2"><div class="needs_head_left line-block">
@@ -1091,6 +1140,7 @@ any) shall be limited to initialization phase of application lifecycle.</p></td>
 </tr>
 <tr class="meta row-even"><td class="meta" colspan="3"><div class="needs_meta_left line-block">
 <div class="line"><span><span><div class="line"><span class="needs_reqtype"><span class="needs_label">reqtype: </span><span class="needs_data">Non-Functional</span></span></div>
+<div class="line"><span class="needs_testlink"><span class="needs_label">testlink: </span><span class="needs_data"><a class="reference external" href="https://github.com/eclipse-score/logging/blob/6d744cbc224d3e055e4f833427b005e6f66183be/score/mw/log/detail/data_router/shared_memory/common_test.cpp#L37">CommonTests__TypesShallBeLockFree<span class="score-testcase-result score-testcase-result--passed"> (passed)</span></a><em>; </em><a class="reference external" href="https://github.com/eclipse-score/logging/blob/6d744cbc224d3e055e4f833427b005e6f66183be/score/mw/log/detail/wait_free_producer_queue/wait_free_linear_writer_test.cpp#L27">WaitFreeLinearWriter__EnsureAtomicRequirements<span class="score-testcase-result score-testcase-result--passed"> (passed)</span></a><em>; </em></span></span></div>
 <div class="line"><span class="needs_version"><span class="needs_label">version: </span>1</span></div>
 </span></span></div>
 <div class="line"><span><div class="line">derived from: <span class="derived_from"><span><a class="external_link reference external" href="https://eclipse-score.github.io/score/main/features/log_and_trace/logging/requirements/index.html#feat_req__logging__asil_support">feat_req__logging__asil_support</a>, <a class="external_link reference external" href="https://eclipse-score.github.io/score/main/features/log_and_trace/logging/requirements/index.html#feat_req__logging__resource_performance">feat_req__logging__resource_performance</a></span></span></div>
@@ -1119,7 +1169,7 @@ Mutual exclusion mechanisms shall include priority inversion protection.</p></td
 </table>
 </div>
 </div>
-<div class="need_container docutils container" id="SNCB-4a84c4aa">
+<div class="need_container docutils container" id="SNCB-9d11704e">
 <div class="pst-scrollable-table-container"><table class="need needs_grid_complex needs_layout_score needs_style_none needs_type_comp_req table" id="comp_req__log__cross_locking">
 <tbody>
 <tr class="head row-odd"><td class="head_left" colspan="2"><div class="needs_head_left line-block">
@@ -1139,6 +1189,7 @@ Mutual exclusion mechanisms shall include priority inversion protection.</p></td
 </tr>
 <tr class="meta row-even"><td class="meta" colspan="3"><div class="needs_meta_left line-block">
 <div class="line"><span><span><div class="line"><span class="needs_reqtype"><span class="needs_label">reqtype: </span><span class="needs_data">Non-Functional</span></span></div>
+<div class="line"><span class="needs_testlink"><span class="needs_label">testlink: </span><span class="needs_data"><a class="reference external" href="https://github.com/eclipse-score/logging/blob/6d744cbc224d3e055e4f833427b005e6f66183be/score/mw/log/detail/wait_free_producer_queue/wait_free_alternating_writer_test.cpp#L31">WaitFreeAlternatingWriterTests__EnsureAtomicRequirements<span class="score-testcase-result score-testcase-result--passed"> (passed)</span></a><em>; </em><a class="reference external" href="https://github.com/eclipse-score/logging/blob/6d744cbc224d3e055e4f833427b005e6f66183be/score/mw/log/detail/wait_free_producer_queue/wait_free_linear_writer_test.cpp#L27">WaitFreeLinearWriter__EnsureAtomicRequirements<span class="score-testcase-result score-testcase-result--passed"> (passed)</span></a><em>; </em></span></span></div>
 <div class="line"><span class="needs_version"><span class="needs_label">version: </span>1</span></div>
 </span></span></div>
 <div class="line"><span><div class="line">derived from: <span class="derived_from"><span><a class="external_link reference external" href="https://eclipse-score.github.io/score/main/features/log_and_trace/logging/requirements/index.html#feat_req__logging__asil_support">feat_req__logging__asil_support</a>, <a class="external_link reference external" href="https://eclipse-score.github.io/score/main/features/log_and_trace/logging/requirements/index.html#feat_req__logging__error_handling_isolation">feat_req__logging__error_handling_isolation</a></span></span></div>
@@ -1166,7 +1217,7 @@ shall not block other thread’s execution.</p></td>
 </table>
 </div>
 </div>
-<div class="need_container docutils container" id="SNCB-620b4d37">
+<div class="need_container docutils container" id="SNCB-0a292fa8">
 <div class="pst-scrollable-table-container"><table class="need needs_grid_complex needs_layout_score needs_style_none needs_type_comp_req table" id="comp_req__log__index_size_checking">
 <tbody>
 <tr class="head row-odd"><td class="head_left" colspan="2"><div class="needs_head_left line-block">
@@ -1186,6 +1237,7 @@ shall not block other thread’s execution.</p></td>
 </tr>
 <tr class="meta row-even"><td class="meta" colspan="3"><div class="needs_meta_left line-block">
 <div class="line"><span><span><div class="line"><span class="needs_reqtype"><span class="needs_label">reqtype: </span><span class="needs_data">Non-Functional</span></span></div>
+<div class="line"><span class="needs_testlink"><span class="needs_label">testlink: </span><span class="needs_data"><a class="reference external" href="https://github.com/eclipse-score/logging/blob/6d744cbc224d3e055e4f833427b005e6f66183be/score/mw/log/detail/wait_free_producer_queue/linear_reader_test.cpp#L26">LinearReaderTests__LengthExceedingMaxThresholdShouldReturnEmpty<span class="score-testcase-result score-testcase-result--passed"> (passed)</span></a><em>; </em></span></span></div>
 <div class="line"><span class="needs_version"><span class="needs_label">version: </span>1</span></div>
 </span></span></div>
 <div class="line"><span><div class="line">derived from: <span class="derived_from"><span><a class="external_link reference external" href="https://eclipse-score.github.io/score/main/features/log_and_trace/logging/requirements/index.html#feat_req__logging__asil_support">feat_req__logging__asil_support</a></span></span></div>
@@ -1213,7 +1265,7 @@ plausibility to avoid high runtime utilization through long iterations or data c
 </table>
 </div>
 </div>
-<div class="need_container docutils container" id="SNCB-5209b8e0">
+<div class="need_container docutils container" id="SNCB-80bad6d8">
 <div class="pst-scrollable-table-container"><table class="need needs_grid_complex needs_layout_score needs_style_none needs_type_comp_req table" id="comp_req__log__memory_bound_checking">
 <tbody>
 <tr class="head row-odd"><td class="head_left" colspan="2"><div class="needs_head_left line-block">
@@ -1233,6 +1285,7 @@ plausibility to avoid high runtime utilization through long iterations or data c
 </tr>
 <tr class="meta row-even"><td class="meta" colspan="3"><div class="needs_meta_left line-block">
 <div class="line"><span><span><div class="line"><span class="needs_reqtype"><span class="needs_label">reqtype: </span><span class="needs_data">Non-Functional</span></span></div>
+<div class="line"><span class="needs_testlink"><span class="needs_label">testlink: </span><span class="needs_data"><a class="reference external" href="https://github.com/eclipse-score/logging/blob/6d744cbc224d3e055e4f833427b005e6f66183be/score/mw/log/detail/data_router/shared_memory/shared_memory_reader_test.cpp#L86">SharedMemoryReaderFixture__GetterShallReadSharedDataNumberOfDropsInvalidSize<span class="score-testcase-result score-testcase-result--passed"> (passed)</span></a><em>; </em></span></span></div>
 <div class="line"><span class="needs_version"><span class="needs_label">version: </span>1</span></div>
 </span></span></div>
 <div class="line"><span><div class="line">derived from: <span class="derived_from"><span><a class="external_link reference external" href="https://eclipse-score.github.io/score/main/features/log_and_trace/logging/requirements/index.html#feat_req__logging__asil_support">feat_req__logging__asil_support</a></span></span></div>
