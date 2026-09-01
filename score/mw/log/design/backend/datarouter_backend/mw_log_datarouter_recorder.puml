@@ -21,7 +21,7 @@ class "DataRouterRecorder" as DataRouterRecorder {
   + DataRouterRecorder(std::unique_ptr<Backend>&&, const Configuration&)
   + StartRecord(const std::string_view, const LogLevel): score::cpp::optional<SlotHandle>
   + StopRecord(const SlotHandle&): void
-  + Log(const SlotHandle&, const T) - family of functions
+  + Log(slot: SlotHandle, data: T): void
   + IsLogEnabled(const LogLevel&, const std::string_view) : bool
   __
   - LogData(const SlotHandle&, const T data): void
