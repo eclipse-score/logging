@@ -86,7 +86,9 @@ class TypeInfoTest
 TEST_F(SharedMemoryReaderFixture, GetterShallReadSharedDataNumberOfDropsInvalidSize)
 {
     RecordProperty("PartiallyVerifies", "comp_req__log__memory_bound_checking");
-    RecordProperty("Description", "Check that the reader correctly reports the count of entries dropped due to invalid size, an explicit memory-boundary check.");
+    RecordProperty("Description",
+                   "Check that the reader correctly reports the count of entries dropped due to invalid size, an "
+                   "explicit memory-boundary check.");
     RecordProperty("TestType", "requirements-based");
     RecordProperty("DerivationTechnique", "requirements-analysis");
     RecordProperty("ParentRequirement", "SCR-861827, SCR-12206795");
