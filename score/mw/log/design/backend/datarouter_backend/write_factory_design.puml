@@ -58,26 +58,11 @@ WriterFactory --> Mman : uses mmap(), munmap()
 WriterFactory --> Stdlib : uses
 
 ' Notes on memory allocation and deallocation
-note right of WriterFactory::MapSharedMemory
-  Memory is allocated using Mman::mmap(), which maps a file into a shared memory region.
-  The size of the region is determined by the buffer_total_size parameter.
-  The mapped memory is used as a ring buffer for logging.
-  An unmap callback is set up to ensure memory is released when no longer needed.
-end note
+note right of WriterFactory : Memory is allocated using Mman::mmap() into a shared memory region used as a ring buffer. An unmap callback ensures cleanup.
 
-note top of WriterFactory
-  WriterFactory:
-  - Creates and manages a shared memory ring buffer for logging.
-  - Allocates memory using mmap (via Mman), ensures cleanup with munmap.
-  - Handles file creation, naming, permissions, and instantiates SharedMemoryWriter.
-end note
+note top of WriterFactory : Creates and manages a shared memory ring buffer. Allocates via Mman::mmap(), ensures cleanup with munmap. Handles file creation, naming, and permissions.
 
-note bottom of Mman
-  Mman abstracts POSIX memory management for safety and portability.
-  - mmap(addr, length, prot, flags, fd, offset): Maps files/devices into memory.
-  - munmap(addr, length): Releases mapped memory, preventing leaks.
-  All error codes are propagated to the caller for robust error handling.
-end note
+note bottom of Mman : Abstracts POSIX memory management. mmap() maps files into memory, munmap() releases it. All errors propagated to caller.
 
 SharedMemoryWriter --> SharedData : owns
 @enduml

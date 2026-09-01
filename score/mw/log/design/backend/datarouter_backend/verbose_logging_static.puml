@@ -11,286 +11,146 @@
 ' SPDX-License-Identifier: Apache-2.0
 ' *******************************************************************************
 
-@startuml verbose_logging_static
+@startuml component_diagram
 
-skinparam classBackgroundColor white
-skinparam classBorderColor black
-skinparam ArrowColor black
-skinparam NoteBackgroundColor white
-skinparam NoteBorderColor black
-skinparam packageStyle rectangle
+skinparam componentStyle rectangle
+left to right direction
 
-title This diagram only illustrates the use-case of verbose logging.
+title This diagram only illustrates the use-case of verbose logging and the corresponding unit bindings.
 
-' ============================================================
-' LEFT SIDE: NOT MOCKABLE PART
-' ============================================================
-
-package "Not Mockable Part" as NotMockablePart {
-
-  class "score::mw::LogLevel" as LogLevel <<enumeration>> {
-    kOff
-    kFatal
-    kError
-    kWarn
-    kInfo
-    kDebug
-    kVerbose
-  }
-
-  class "SlotHandle::RecorderIdentifier" as RecorderIdentifier {
-    + value: std::size_t
-  }
-
-  class "score::mw::log::SlotHandle" as SlotHandle {
-    - recorder_to_slot_: std::array<SlotIndex, kMaxRecorders>
-    - recorder_slot_available_: std::bitset<kMaxRecorders>
-    - selected_recorder_: RecorderIdentifier
-    --
-    + SlotHandle()
-    + SlotHandle(const SlotIndex)
-    + GetSlotOfSelectedRecorder(): SlotIndex
-    + GetSlot(const RecorderIdentifier): SlotIndex
-    + SetSlot(const SlotIndex, const RecorderIdentifier): void
-    + GetSelectedRecorder(): RecorderIdentifier
-    + SetSelectedRecorder(const RecorderIdentifier): void
-    + IsRecorderActive(const RecorderIdentifier): bool
-    + friend operator==(const SlotHandle& l_value, const SlotHandle& r_value): bool
-    + friend operator!=(const SlotHandle& l_value, const SlotHandle& r_value): bool
-    + kMaxRecorders: static constexpr std::size_t
-  }
-
-  class "score::mw::log::detail::Runtime" as Runtime {
-    - Runtime(Recorder* const recorder)
-    - {static} Instance(Recorder* const): Runtime&
-    - logger_container_instance_: LoggerContainer
-    - recorder_instance_: Recorder
-    - default_recorder_: std::unique_ptr<Recorder>
-    --
-    + {static} GetRecorder(): Recorder*
-    + {static} SetRecorder(Recorder*): void
-    + {static} GetLoggerContainer(): score::mw::log::LoggerContainer&
-  }
-
-  class "score::mw::LogStream" as LogStream {
-    - recorder_: Recorder&
-    - slot_handle_: score::cpp::optional<SlotHandle>
-    - context_id_: detail::LoggingIdentifier
-    - log_level_: LogLevel
-    - LogStream(Recorder&, const LogLevel, const std::string_view)
-    --
-    + LogStream(LogStream&&)
-    + Flush(): void
-  }
-
-  class "score::mw::log::detail::LogStreamFactory" as LogStreamFactory {
-    + {static} GetStream(LogLevel, ctxId: std::string_view = "DFLT"): LogStream
-  }
-
-  package "User-Facing API" as UserFacingAPI {
-    class "LoggingIdentifier" as LoggingIdentifier {
-    }
-
-    class "score::mw::Logger" as Logger {
-      - context_: LoggingIdentifier
-      --
-      + Logger(std::string_view ctxId)
-      + LogFatal(): LogStream
-      + LogError(): LogStream
-      + LogWarn(): LogStream
-      + LogInfo(): LogStream
-      + LogDebug(): LogStream
-      + LogVerbose(): LogStream
-      + WithLevel(const LogLevel): log::LogStream
-      + IsLogEnabled(const LogLevel): bool
-      + IsEnabled(const LogLevel): bool
-      + GetContext(): std::string_view
-    }
-
-    class "Free Functions" as FreeFunctions {
-      + score::mw::LogFatal(): LogStream
-      + score::mw::LogError(): LogStream
-      + score::mw::LogWarn(): LogStream
-      + score::mw::LogInfo(): LogStream
-      + score::mw::LogDebug(): LogStream
-      + score::mw::LogVerbose(): LogStream
-      + score::mw::LogFatal(std::string_view): LogStream
-      + score::mw::LogError(std::string_view): LogStream
-      + score::mw::LogWarn(std::string_view): LogStream
-      + score::mw::LogInfo(std::string_view): LogStream
-      + score::mw::LogDebug(std::string_view): LogStream
-      + score::mw::LogVerbose(std::string_view): LogStream
-      + score::mw::GetDefaultLogRecorder(): Recorder&
-      + score::mw::test::SetLogRecorder(score::mw::log::Recorder* const): void
-    }
-  }
+package "Backend: Logging" as backend_logging {
+    component "App" as App <<unit>>
+    component "FreeFunctions" as FreeFunctions <<unit>>
+    component "LogStreamFactory" as LogStreamFactory <<unit>>
+    component "Runtime" as Runtime <<unit>>
+    component "LogStream" as LogStream <<unit>>
+    component "DataRouterRecorder" as DataRouterRecorder <<unit>>
+    component "DLTFormater" as DLTFormater <<unit>>
+    component "DataRouterBackend" as DataRouterBackend <<unit>>
+    component "TRACE" as TRACE <<unit>>
+    component "WriterFactory" as WriterFactory <<unit>>
+    component "Logger" as Logger <<unit>>
+    component "MessageClientFactory" as MessageClientFactory <<unit>>
+    component "MessageClient" as MessageClient <<unit>>
+    component "Client" as Client <<unit>>
+    component "SignalHandling" as SignalHandling <<unit>>
+    component "Sender" as Sender <<unit>>
+    component "Receiver" as Receiver <<unit>>
+    component "SharedMemory" as SharedMemory <<unit>>
+    component "Connection" as Connection <<unit>>
+    component "ThreadPool" as ThreadPool <<unit>>
+    component "SharedMemoryReader" as SharedMemoryReader <<unit>>
+    component "SharedData" as SharedData <<unit>>
+    component "LinearReader" as LinearReader <<unit>>
+    component "TypeRegistrationCallback" as TypeRegistrationCallback <<unit>>
+    component "NewRecordCallback" as NewRecordCallback <<unit>>
+    component "SharedMemoryWriter" as SharedMemoryWriter <<unit>>
+    component "DropCounters" as DropCounters <<unit>>
 }
 
-' ============================================================
-' RIGHT SIDE: MOCKABLE PART
-' ============================================================
+interface "IAppFreeFunctions" as IAppFreeFunctions
+interface "IFreeFunctionsLogStreamFactory" as IFreeFunctionsLogStreamFactory
+interface "ILogStreamFactoryRuntime" as ILogStreamFactoryRuntime
+interface "ILogStreamFactoryLogStream" as ILogStreamFactoryLogStream
+interface "ILogStreamDataRouterRecorder" as ILogStreamDataRouterRecorder
+interface "IDataRouterRecorderDataRouterBackend" as IDataRouterRecorderDataRouterBackend
+interface "IDataRouterRecorderDLTFormater" as IDataRouterRecorderDLTFormater
+interface "IDataRouterBackendTrace" as IDataRouterBackendTrace
+interface "IDataRouterBackendWriterFactory" as IDataRouterBackendWriterFactory
+interface "IDataRouterBackendLogger" as IDataRouterBackendLogger
+interface "IDataRouterBackendMessageClientFactory" as IDataRouterBackendMessageClientFactory
+interface "IDataRouterBackendMessageClient" as IDataRouterBackendMessageClient
+interface "IRuntimeDataRouterRecorder" as IRuntimeDataRouterRecorder
+interface "IAppLogStream" as IAppLogStream
+interface "IClientSignalHandling" as IClientSignalHandling
+interface "IClientSender" as IClientSender
+interface "IClientReceiver" as IClientReceiver
+interface "IClientSharedMemory" as IClientSharedMemory
+interface "IClientConnection" as IClientConnection
+interface "IClientThreadPool" as IClientThreadPool
+interface "ISharedMemoryReaderSharedData" as ISharedMemoryReaderSharedData
+interface "ISharedMemoryReaderLinearReader" as ISharedMemoryReaderLinearReader
+interface "ISharedMemoryReaderTypeRegistrationCallback" as ISharedMemoryReaderTypeRegistrationCallback
+interface "ISharedMemoryReaderNewRecordCallback" as ISharedMemoryReaderNewRecordCallback
+interface "ISharedMemoryWriterSharedData" as ISharedMemoryWriterSharedData
+interface "ISharedMemoryWriterDropCounters" as ISharedMemoryWriterDropCounters
 
-package "Mockable Part" as MockablePart {
-  class "score::mw::log::LoggerContainer" as LoggerContainer {
-    - InsertNewLogger(const std::string_view): Logger&
-    - FindExistingLogger(const std::string_view): score::cpp::optional<std::reference_wrapper<Logger>>
-    - stack_: WaitFreeStack<Logger>
-    - default_logger_: Logger
-    --
-    + GetLogger(const std::string_view): Logger&
-    + GetCapacity(): size_t
-    + GetDefaultLogger(): Logger&
-  }
+App -( IAppFreeFunctions
+FreeFunctions )- IAppFreeFunctions
 
-  class "template <typename Element>\nscore::mw::log::detail::WaitFreeStack" as WaitFreeStack {
-    - elements_: std::vector<score::cpp::optional<Element>>
-    - elements_written_: std::vector<std::atomic_int>
-    - write_index_: AtomicIndex
-    - capacity_full_: AtomicBool
-    --
-    + WaitFreeStack(const size_t)
-    + TryPush(Element&&): score::cpp::optional<std::reference_wrapper<Element>>
-    + Find(const FindPredicate<Element>&): score::cpp::optional<std::reference_wrapper<Element>>
-  }
+FreeFunctions -( IFreeFunctionsLogStreamFactory
+LogStreamFactory )- IFreeFunctionsLogStreamFactory
 
-  class "TextFormat" as TextFormat {
-  }
+LogStreamFactory -( ILogStreamFactoryRuntime
+Runtime )- ILogStreamFactoryRuntime
 
-  interface "score::mw::log::Recorder" as Recorder {
-    + Recorder()
-    + {abstract} StartRecord(context_id: std::string_view, LogLevel): score::cpp::optional<SlotHandle>
-    + {abstract} StopRecord(SlotHandle const&): void
-    + {abstract} Log(SlotHandle, std::uint8_t): void
-    + {abstract} Log(SlotHandle, std::int8_t): void
-  }
+LogStreamFactory -( ILogStreamFactoryLogStream
+LogStream )- ILogStreamFactoryLogStream
 
-  note as N_RecorderUsage #blue
-    A user is allowed to use the Recorder interface
-    for its abstraction. But its not recommended due
-    to its more complicated usage.
-  end note
+LogStream -( ILogStreamDataRouterRecorder
+DataRouterRecorder )- ILogStreamDataRouterRecorder
 
-  class "DataRouterRecorder" as DataRouterRecorder {
-  }
+DataRouterRecorder -( IDataRouterRecorderDataRouterBackend
+DataRouterBackend )- IDataRouterRecorderDataRouterBackend
 
-  class "TextRecorder" as TextRecorder {
-  }
+DataRouterRecorder -( IDataRouterRecorderDLTFormater
+DLTFormater )- IDataRouterRecorderDLTFormater
 
-  class "FileRecorder" as FileRecorder {
-  }
+DataRouterBackend -( IDataRouterBackendTrace
+TRACE )- IDataRouterBackendTrace
 
-  class "EmptyRecorder" as EmptyRecorder {
-  }
+DataRouterBackend -( IDataRouterBackendWriterFactory
+WriterFactory )- IDataRouterBackendWriterFactory
 
-  class "Configuration" as Configuration {
-  }
+DataRouterBackend -( IDataRouterBackendLogger
+Logger )- IDataRouterBackendLogger
 
-  class "StatisticsReporter" as StatisticsReporter {
-  }
+DataRouterBackend -( IDataRouterBackendMessageClientFactory
+MessageClientFactory )- IDataRouterBackendMessageClientFactory
 
-  interface "score::mw::log::detail::Backend" as Backend {
-    + {abstract} ReserveSlot(): score::cpp::optional<SlotHandle>
-    + {abstract} FlushSlot(const SlotHandle&)
-    + {abstract} GetLogRecord(const SlotHandle&): LogRecord&
-  }
+DataRouterBackend -( IDataRouterBackendMessageClient
+MessageClient )- IDataRouterBackendMessageClient
 
-  class "score::mw::log::detail::DataRouterBackend" as DataRouterBackend {
-    + ReserveSlot(): score::cpp::optional<SlotHandle>
-    + FlushSlot(const SlotHandle&): void
-    + GetLogRecord(const SlotHandle&): LogRecord&
-    --
-    buffer_: CircularAllocator<score::mw::log::detail::LogRecord>
-    message_client_: std::unique_ptr<DatarouterMessageClient>
-  }
+Runtime -( IRuntimeDataRouterRecorder
+DataRouterRecorder )- IRuntimeDataRouterRecorder
 
-  note as N_DataRouterRecorder #red
-    For the time beeing,
-    DataRouterRecorder will not only be a facade
-    but contain DLT specific logic.
-    In this case calling
-    StartRecord() and StopRecord()
-  end note
+App -( IAppLogStream
+LogStream )- IAppLogStream
 
-  class "score::mw::log::detail::LogRecord" as LogRecord {
-    - logEntry_: LogEntry
-    - verbosePayload_: VerbosePayload
-    --
-    + getLogEntry(): LogEntry&
-    + getLogEntry: const LogEntry&
-    + getVerbosePayload(): detail::VerbosePayload&
-    + getVerbosePayload(): const detail::VerbosePayload&
-  }
+Client -( IClientSignalHandling
+SignalHandling )- IClientSignalHandling
 
-  class "TRACE_MACRO" as TRACE_MACRO {
-  }
+Client -( IClientSender
+Sender )- IClientSender
 
-  class "LogEntry" as LogEntry {
-    + appId: dltid_t
-    + ctxId: dltid_t
-    + sessionId: dltid_t
-    + logLevel: uint8_t
-    + num_of_args: int8_t
-    + payload: std::string
-  }
+Client -( IClientReceiver
+Receiver )- IClientReceiver
 
-  class "score::mw::log::detail::VerbosePayload" as VerbosePayload {
-    - buffer_: std::reference_wrapper<ByteVector>
-    --
-    + VerbosePayload(std::size_t, std::string&)
-    + Put(const Byte*, const std::size_t): void
-    + Put(const ReserveCallback, const std::size_t): std::size_t
-    + GetSpan(): score::cpp::span<const std::uint8_t>
-    + Reset(): void
-    + WillOverflow(const std::size_t): bool
-    + RemainingCapacity(): std::size_t
-    + SetBuffer(ByteVector&): void
-  }
+Client -( IClientSharedMemory
+SharedMemory )- IClientSharedMemory
 
-}
+Client -( IClientConnection
+Connection )- IClientConnection
 
-' ============================================================
-' RELATIONS - NON-MOCKABLE PART
-' ============================================================
+Client -( IClientThreadPool
+ThreadPool )- IClientThreadPool
 
-LogStreamFactory <-down- Logger : uses
-LogStreamFactory <-down- FreeFunctions : uses
-LogStreamFactory -up-> LogStream : create
-SlotHandle *-up-> LogStream : owns
-LoggingIdentifier *-down-> Logger : owns
+SharedMemoryReader -( ISharedMemoryReaderSharedData
+SharedData )- ISharedMemoryReaderSharedData
 
-' ============================================================
-' RELATIONS - CROSSING MOCKABLE BOUNDARY
-' ============================================================
+SharedMemoryReader -( ISharedMemoryReaderLinearReader
+LinearReader )- ISharedMemoryReaderLinearReader
 
-Runtime -down-> LogStreamFactory : get current\nrecorder
-Runtime -down-> FreeFunctions
-LogStream *-right-> Recorder : records data
-Runtime *-right-> Recorder : owns statically
-Runtime *-up-> LoggerContainer : owns
-LoggerContainer *-right-> WaitFreeStack : owns
-LoggerContainer *-down-> Logger : owns
+SharedMemoryReader -( ISharedMemoryReaderTypeRegistrationCallback
+TypeRegistrationCallback )- ISharedMemoryReaderTypeRegistrationCallback
 
-' ============================================================
-' RELATIONS - MOCKABLE PART
-' ============================================================
+SharedMemoryReader -( ISharedMemoryReaderNewRecordCallback
+NewRecordCallback )- ISharedMemoryReaderNewRecordCallback
 
-DataRouterRecorder .up.|> Recorder
-TextRecorder .up.|> Recorder
-FileRecorder .up.|> Recorder
-EmptyRecorder .up.|> Recorder
+SharedMemoryWriter -( ISharedMemoryWriterSharedData
+SharedData )- ISharedMemoryWriterSharedData
 
-DataRouterRecorder *-down-> Configuration : get application\nspecific config
-DataRouterRecorder *-down-> StatisticsReporter
-DataRouterRecorder *-down-> DataRouterBackend : << reserve and flush slots >>
-
-DataRouterBackend .up.|> Backend
-DataRouterBackend *-down-> LogRecord : << creates and fills >>
-
-LogRecord *-down-> LogEntry : << creates and fills >>
-LogRecord *-down-> VerbosePayload : << creates and fills >>
-
-TextFormat ..> Recorder : Log
-
-DataRouterBackend <-down- TRACE_MACRO : << on sync >>
+SharedMemoryWriter -( ISharedMemoryWriterDropCounters
+DropCounters )- ISharedMemoryWriterDropCounters
 
 @enduml

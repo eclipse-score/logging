@@ -11,38 +11,29 @@
 ' SPDX-License-Identifier: Apache-2.0
 ' *******************************************************************************
 
-@startuml
-!theme plain
+@startuml DatarouterMessageClientImpl_ConnectToDatarouter
 title DatarouterMessageClientImpl::ConnectToDatarouter
 
-partition "DatarouterMessageClientImpl::ConnectToDatarouter" {
-    start
+participant "Client" as Client
+participant "SignalHandling" as SignalHandling
+participant "Sender" as Sender
+participant "Receiver" as Receiver
+participant "SharedMemory" as SharedMemory
+participant "Connection" as Connection
+participant "ThreadPool" as ThreadPool
 
-    :Block termination Signal;
-    note right
-        **Note:**
-        The logger thread (owned by adaptive application)
-        should not react to the Terminate Signal. Instead
-        the Terminate Signal should be handled by
-        mw::lifecycle for Adaptive applications.
-    end note
+Client -> SignalHandling : Block termination signal
+Client -> Sender : Create sender
+Client -> Receiver : Start receiver
 
-    :Create sender;
-
-    :Start receiver;
-
-    if (Receiver started?) then (Yes)
-        if (Is exit requsted?) then (No)
-            :Send connect message;
-        else (Yes)
-        endif
-    else (No)
-        :Unlink shared memory file;
-        :Request stop for connection;
-        :Shutdown thread pool;
-    endif
-
-    stop
-}
+alt receiver started
+    opt exit not requested
+        Client -> Sender : Send connect message
+    end
+else receiver not started
+    Client -> SharedMemory : Unlink shared memory file
+    Client -> Connection : Request stop for connection
+    Client -> ThreadPool : Shutdown thread pool
+end
 
 @enduml

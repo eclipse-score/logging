@@ -16,43 +16,33 @@
 left to right direction
 skinparam linetype ortho
 
-rectangle "<<Process>>\nLogging Client" as LoggingClient {
-  component "mw::log\n\nDatarouterBackend" as Backend {
-    component "mw::com::Receiver" as ClientReceiver
-    component "mw::com::Sender" as ClientSender
-  }
-}
+class "Logging Client" as LoggingClient <<Process>>
+class "mw::log::DatarouterBackend" as Backend
+class "mw::com::Receiver" as ClientReceiver
+class "mw::com::Sender" as ClientSender
+class "Datarouter" as Datarouter <<Process>>
+class "mw::com::Sender" as DrSender
+class "mw::com::Receiver" as DrReceiver
+class "Shared Memory" as SharedMemory <<Shared Memory>>
 
-rectangle "<<Process>>\nDatarouter" as Datarouter {
-  component "mw::com::Sender" as DrSender
-  component "mw::com::Receiver" as DrReceiver
-}
+LoggingClient --> Backend
+Backend --> ClientReceiver
+Backend --> ClientSender
+Datarouter --> DrSender
+Datarouter --> DrReceiver
 
-rectangle "Shared Memory" as SharedMemory
+LoggingClient --> SharedMemory : Creates and writes to\n/tmp/logging.<appid>.<uid>.shmem\nwith permissions 0644
+Datarouter --> SharedMemory : Read-only access
 
-LoggingClient *-down- SharedMemory : Creates and writes to\n/tmp/logging.<appid>.<uid>.shmem\nwith permissions 0644
-Datarouter -down-> SharedMemory : Read-only access
+ClientReceiver --> DrSender
+ClientSender --> DrReceiver
 
-ClientReceiver -0)- DrSender
-ClientSender -(0- DrReceiver
+note top of ClientReceiver : Instantiates side channel to receive messages from /mw_com/message_passing/logging.<app>.<uid>
 
-note top of ClientReceiver
-  Instantiates side channel to receive messages from
-  /mw_com/message_passing/logging.<app>.<uid>
-end note
+note top of DrSender : Creates one sender per client for requests to the client.
 
-note top of DrSender
-  Creates a Sender for each client
-  to send requests to the client
-end note
+note bottom of ClientSender : Sends replies from the client to Datarouter.
 
-note bottom of ClientSender
-  Creates a Sender to reply to requests from Datarouter
-end note
-
-note bottom of DrReceiver
-  One receiver for all clients
-  /mw_com/message_passing/logging.datarouter_recv
-end note
+note bottom of DrReceiver : Shared receiver at /mw_com/message_passing/logging.datarouter_recv.
 
 @enduml
