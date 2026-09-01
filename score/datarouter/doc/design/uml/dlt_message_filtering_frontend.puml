@@ -30,7 +30,7 @@ endif
 
 if (Logging) then (Verbose logging)
     :log_level_threshold = kWarn (Default);
-    :log_level_threshold = log_level based on logging.json OR 
+    :log_level_threshold = log_level based on logging.json OR
       if extracted ContextConfigs (ctx_id and log_level pairs);
 else (Non-Verbose logging)
     :log_level_threshold = kVerbose (default);
@@ -48,7 +48,7 @@ else (Non-Verbose logging)
 endif
 
 if (log_level > logLevel_threshold) then (yes)
-    :Drop the log message 
+    :Drop the log message
     - Will NOT write the message into logging buffers;
 else (no)
     :Write the log message into logging buffers;
