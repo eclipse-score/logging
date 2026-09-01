@@ -65,7 +65,8 @@ class DltMessageBuilderFixture : public ::testing::Test
 TEST_F(DltMessageBuilderFixture, ShallDepleteAfterHeaderAndPayload)
 {
     RecordProperty("PartiallyVerifies", "comp_req__log__autosar_log_trace_spec");
-    RecordProperty("Description", "Check that the DLT message builder depletes after the header and payload spans are consumed.");
+    RecordProperty("Description",
+                   "Check that the DLT message builder depletes after the header and payload spans are consumed.");
     RecordProperty("TestType", "requirements-based");
     RecordProperty("DerivationTechnique", "requirements-analysis");
     RecordProperty("ParentRequirement", "SCR-1633236");

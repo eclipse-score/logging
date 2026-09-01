@@ -44,7 +44,9 @@ TEST(WaitFreeLinearWriter, EnsureAtomicRequirements)
 TEST(WaitFreeLinearWriter, WriteBufferFullShouldReturnExpectedData)
 {
     RecordProperty("PartiallyVerifies", "comp_req__log__no_endless_loops");
-    RecordProperty("Description", "Check that reading from a full write buffer terminates and returns the expected data instead of looping unbounded.");
+    RecordProperty("Description",
+                   "Check that reading from a full write buffer terminates and returns the expected data instead of "
+                   "looping unbounded.");
     RecordProperty("TestType", "requirements-based");
     RecordProperty("DerivationTechnique", "boundary-values");
     RecordProperty("Requirement", "SCR-861578, SCR-1016724, SCR-1016719, SCR-861550");
