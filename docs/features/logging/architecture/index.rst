@@ -71,7 +71,7 @@ Datarouter
 **********
 
 The Datarouter is the Diagnostic log and trace (DLT) daemon.
-See :doc:`the Datarouter component </components/datarouter/index>`
+See :doc:`the Datarouter component <../../../components/datarouter/index>`
 for its requirements and detailed design.
 
 The diagram highlights the logging components and traces the

@@ -26,15 +26,15 @@ Change Request (CR) Guidelines
 ==============================
 
 New contributors to the logging feature should start with the
-:doc:`feature architecture </features/logging/architecture/index>` to understand the split between the
+:doc:`feature architecture <architecture/index>` to understand the split between the
 ``mw::log frontend`` (owned by ``score_baselibs``) and the ``mw::log backend`` recorders implemented in this repository,
 and how ``datarouter`` fits into the remote/DLT path.
 
 Adding or integrating a backend (file, slog, remote/DLT, or a custom recorder) means implementing the
 Recorder interface and registering it in the static ``backend_table``; the existing C ABI seam is not used
 for static composition, and runtime plugin loading is experimental and not supported for production use.
-The :doc:`architecture/index` and :doc:`/components/mw_log/detailed_design/index` sections document this
-contract in detail, while the :doc:`/components/mw_log/requirements/index` and the safety analyses below
+The :doc:`architecture/index` and :doc:`../../components/mw_log/detailed_design/index` sections document this
+contract in detail, while the :doc:`../../components/mw_log/requirements/index` and the safety analyses below
 capture the safety and security constraints that any backend implementation must respect.
 
 .. toctree::
