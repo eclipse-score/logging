@@ -12,7 +12,7 @@
  ********************************************************************************/
 #include "filtertest.h"
 
-#include <Tracing>
+#include "score/mw/log/legacy_non_verbose_api/tracing.h"
 #include <unistd.h>
 
 #include "score/mw/log/logging.h"

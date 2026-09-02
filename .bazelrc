@@ -42,7 +42,6 @@ build:_common --features=minimal_warnings --features=-strict_warnings --features
 common --@score_communication//score/memory/shared/flags:use_typedshmd=False
 common --@score_baselibs//score/mw/log/flags:KRemote_Logging=False
 common --@score_baselibs//score/json:base_library=nlohmann
-common --//score/datarouter/build_configuration_flags:persistent_config_feature_enabled=False
 common --//score/datarouter/build_configuration_flags:enable_dynamic_configuration=False
 common --//score/datarouter/build_configuration_flags:file_transfer=False
 common --//score/datarouter/build_configuration_flags:use_local_vlan=True
