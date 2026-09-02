@@ -40,7 +40,7 @@ bazel_dep(name = "score_docs_as_code", version = "8.1.1")
 bazel_dep(name = "score_tooling", version = "2.2.0")
 bazel_dep(name = "score_rust_policies", version = "0.0.5")
 bazel_dep(name = "score_process_description", version = "2.1.2")
-bazel_dep(name = "score_platform", version = "0.7.1")
+bazel_dep(name = "score_platform", version = "0.7.2")
 
 bazel_dep(name = "score_itf", version = "0.5.0", dev_dependency = True)
 
