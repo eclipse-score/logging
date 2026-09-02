@@ -72,11 +72,13 @@ impl From<LogLevel> for score_log::LevelFilter {
     }
 }
 
+const CONTEXT_MAX_SIZE: usize = 4;
+
 /// Name of the context.
 /// Max 4 bytes containing ASCII characters.
 #[derive(Clone, Debug, PartialEq, Eq)]
 pub struct Context {
-    data: [c_char; 4],
+    data: [c_char; CONTEXT_MAX_SIZE],
     size: usize,
 }
 
@@ -95,10 +97,10 @@ impl From<&str> for Context {
         );
 
         // Get number of characters.
-        let size = min(value.len(), 4);
+        let size = min(value.len(), CONTEXT_MAX_SIZE);
 
         // Copy data into array.
-        let mut data = [0; 4];
+        let mut data = [0; CONTEXT_MAX_SIZE];
         // SAFETY:
         // Copying is safe:
         // - source is a `&str`.
@@ -122,7 +124,7 @@ impl From<&Context> for &str {
         // Characters are reinterpreted from `c_char` (`i8`) to `u8`.
         let data = value.data.as_ptr().cast();
         // Number of bytes is always bound to provided or max allowed size.
-        let size = min(value.size, 4);
+        let size = min(value.size, CONTEXT_MAX_SIZE);
         unsafe {
             // Create a slice from pointer and size.
             let slice = from_raw_parts(data, size);
@@ -173,6 +175,8 @@ unsafe impl Send for Recorder {}
 // Refer to `runtime.h` for more details.
 unsafe impl Sync for Recorder {}
 
+const SLOT_HANDLE_STORAGE_SIZE: usize = 24;
+
 /// Opaque storage type representing `SlotHandle`.
 ///
 /// `SlotHandle` is expected to be allocated on stack to reduce performance overhead.
@@ -183,7 +187,7 @@ unsafe impl Sync for Recorder {}
 #[cfg(any(feature = "x86_64_linux", feature = "arm64_qnx", feature = "x86_64_qnx"))]
 #[repr(C, align(8))]
 pub struct SlotHandleStorage {
-    _private: [u8; 24],
+    _private: [u8; SLOT_HANDLE_STORAGE_SIZE],
 }
 
 #[cfg(not(any(feature = "x86_64_linux", feature = "arm64_qnx", feature = "x86_64_qnx")))]
@@ -212,7 +216,9 @@ impl SlotHandleStorage {
 impl Default for SlotHandleStorage {
     /// Create storage for `SlotHandle`.
     fn default() -> Self {
-        Self { _private: [0; 24] }
+        Self {
+            _private: [0; SLOT_HANDLE_STORAGE_SIZE],
+        }
     }
 }
 
