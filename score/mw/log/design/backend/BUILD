@@ -26,7 +26,7 @@ architectural_design(
         "datarouter_backend/verbose_logging_sequence.puml",
     ],
     static = [
-        "datarouter_backend/README.md",
+        "datarouter_backend/index.md",
         "datarouter_backend/datarouter_class_diagram.puml",
         "datarouter_backend/inter_process_communication.puml",
         "datarouter_backend/mw_log_datarouter_recorder.puml",
