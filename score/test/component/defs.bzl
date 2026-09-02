@@ -112,6 +112,7 @@ def py_logging_itf_test(name, srcs, filesystem, filesystem_pkg, extra_oci_tars =
         srcs = srcs,
         plugins = [
             "@score_itf//score/itf/plugins:dlt_plugin",
+            "@score_itf//score/itf/plugins:attribute_plugin",
             "//score/test/component:logging_plugin",
         ] + select({
             "@platforms//os:qnx": ["@score_itf//score/itf/plugins:qemu_plugin"],

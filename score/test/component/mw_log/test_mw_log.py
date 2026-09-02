@@ -24,6 +24,7 @@ import os
 import tempfile
 
 import dlt.dlt as python_dlt
+from attribute_plugin import add_test_properties
 from logging_plugin import download_dlt
 
 
@@ -72,8 +73,21 @@ VALUES_TO_CHECK_CONSOLE = [
 ]
 
 
+@add_test_properties(
+    fully_verifies=[
+        "comp_req__log__send_to_datarouter",
+        "comp_req__log__autosar_log_trace_spec",
+        "comp_req__log__dlt_verbose_mode",
+    ],
+    test_type="requirements-based",
+    derivation_technique="requirements-analysis",
+)
 def test_mw_log_remote_logging(target, datarouter_on_target, dlt_capture):
-    """Verify all data types are correctly logged and received via DLT."""
+    """Verify all data types are correctly logged and received via DLT.
+
+    Check that mw::log sends verbose messages of all supported data types to
+    datarouter and they are received via DLT.
+    """
     with dlt_capture() as receiver:
         target.execute(LOGGING_APP_CMD)
 
@@ -107,6 +121,14 @@ def test_mw_log_console_logging(target, datarouter_on_target):
     assert not missing, f"Missing expected values in console output: {missing}"
 
 
+@add_test_properties(
+    fully_verifies=[
+        "comp_req__log__autosar_log_trace_spec",
+        "comp_req__log__dlt_verbose_mode",
+    ],
+    test_type="requirements-based",
+    derivation_technique="requirements-analysis",
+)
 def test_mw_log_file_logging(target, datarouter_on_target):
     """Verify all data types are correctly logged to a .dlt file on disk."""
     target.execute(LOGGING_APP_CMD)

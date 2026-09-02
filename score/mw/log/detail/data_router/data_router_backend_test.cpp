@@ -331,11 +331,14 @@ INSTANTIATE_TEST_SUITE_P(LogLevelSetCorrectly,
 
 TEST_F(DataRouterBackendFixture, LogLevelVerbose)
 {
+    RecordProperty("PartiallyVerifies", "comp_req__log__dlt_verbose_mode");
+    RecordProperty("Description", "Check that a message logged at verbose level is sent in DLT verbose mode.");
+    RecordProperty("TestType", "requirements-based");
+    RecordProperty("DerivationTechnique", "requirements-analysis");
     RecordProperty("ParentRequirement", "SCR-1633144");
     RecordProperty("ASIL", "B");
     RecordProperty("Description", "Verify the ability of logging verbose message.");
     RecordProperty("TestingTechnique", "Requirements-based test");
-    RecordProperty("DerivationTechnique", "Analysis of requirements");
 
     SimulateLogging(LogLevel::kVerbose);
 }

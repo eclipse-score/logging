@@ -13,6 +13,9 @@
 
 @startuml mw_log_recorders
 
+' NOTE: this is a manual copy of the source of truth at
+' score/mw/log/design/backend/mw_log_recorders.puml. Keep both in sync.
+
 ' Interface
 interface "mw::log::Recorder" as Recorder {
   + StartRecord(ctx:std::string_view, log_level:LogLevel) : score::cpp::optional<SlotHandle>
@@ -95,19 +98,6 @@ class "mw::log::detail::SlogBackend" as SlogBackend {
   - Init(verbosity: std::uint8_t) : void
 }
 
-class "mw::log::detail::SyslogBackend" as SyslogBackend {
-  - app_id_: std::string
-  - buffer_: CircularAllocator<mw::log::detail::LogRecord>
-  - syslog_instance_: score::cpp::pmr::unique_ptr<score::os::Syslog>
-  __
-  + SyslogBackend(const std::size_t,\n  const LogRecord&,\n  const std::string_view,\n  score::cpp::pmr::unique_ptr<score::os::Syslog>)
-  + ReserveSlot(): score::cpp::optional<SlotHandle>
-  + FlushSlot(const SlotHandle&): void
-  + GetLogRecord(const SlotHandle&): LogRecord&
-  __
-  - Init(): void
-}
-
 class "mw::log::detail::DataRouterBackend" as DataRouterBackend {
 }
 
@@ -159,7 +149,6 @@ RecorderMock .up.|> Recorder
 ' Relationships - Backend interface
 FileOutputBackend .up.|> Backend
 SlogBackend .up.|> Backend
-SyslogBackend .up.|> Backend
 DataRouterBackend .up.|> Backend
 BackendMock .up.|> Backend
 
@@ -180,8 +169,6 @@ TextRecorder ..> DLTFormat : uses
 ' Backend composition
 SlogBackend *-- CircularAllocator
 SlogBackend --> LogRecord : uses
-SyslogBackend *-- CircularAllocator
-SyslogBackend --> LogRecord : uses
 
 ' External dependencies
 FileRecorder ..> fcntl : open\nSetNonBlocking / fctrl call

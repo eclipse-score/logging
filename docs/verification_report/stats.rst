@@ -1,3 +1,17 @@
+..
+   # *******************************************************************************
+   # Copyright (c) 2026 Contributors to the Eclipse Foundation
+   #
+   # See the NOTICE file(s) distributed with this work for additional
+   # information regarding copyright ownership.
+   #
+   # This program and the accompanying materials are made available under the
+   # terms of the Apache License Version 2.0 which is available at
+   # https://www.apache.org/licenses/LICENSE-2.0
+   #
+   # SPDX-License-Identifier: Apache-2.0
+   # *******************************************************************************
+
 .. _log_statistics:
 
 Quality Stats
@@ -6,13 +20,19 @@ Quality Stats
 Overview
 --------
 
+*Scoped to requirements owned by this repository (this repo's own*
+``comp_req`` *needs). Requirements pulled in from external repositories
+(score_baselibs, score_platform, score_process) that this project links
+against for traceability purposes are excluded, since they are not owned
+or maintained here.*
+
 .. needpie:: Requirements Status
    :labels: not valid, valid but not tested, valid and tested
    :colors: red,yellow, green
 
-   type == 'comp_req' and status == 'invalid'
-   type == 'comp_req' and testlink == '' and (status == 'valid' or status == 'invalid')
-   type == 'comp_req' and testlink != '' and (status == 'valid' or status == 'invalid')
+   type == 'comp_req' and is_external == False and status == 'invalid'
+   type == 'comp_req' and is_external == False and testlink == '' and (status == 'valid' or status == 'invalid')
+   type == 'comp_req' and is_external == False and testlink != '' and (status == 'valid' or status == 'invalid')
 
 In Detail
 ---------
@@ -26,8 +46,8 @@ In Detail
          :labels: not valid, valid
          :colors: red, orange, green
 
-         type == 'comp_req' and status == 'invalid'
-         type == 'comp_req' and status == 'valid'
+         type == 'comp_req' and is_external == False and status == 'invalid'
+         type == 'comp_req' and is_external == False and status == 'valid'
 
    .. grid-item-card::
 
@@ -35,8 +55,8 @@ In Detail
          :labels: no codelink, with codelink
          :colors: red, green
 
-         type == 'comp_req' and source_code_link == ''
-         type == 'comp_req' and source_code_link != ''
+         type == 'comp_req' and is_external == False and source_code_link == ''
+         type == 'comp_req' and is_external == False and source_code_link != ''
 
    .. grid-item-card::
 

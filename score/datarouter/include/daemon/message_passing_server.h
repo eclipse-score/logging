@@ -27,6 +27,7 @@
 
 #include "score/concurrency/interruptible_wait.h"
 #include <score/stop_token.hpp>
+#include <cassert>
 #include <chrono>
 #include <condition_variable>
 #include <functional>
@@ -44,15 +45,6 @@ namespace platform
 namespace internal
 {
 
-// MessagePassingServer interface for SessionWrapper
-class IMessagePassingServerSessionWrapper
-{
-  public:
-    virtual ~IMessagePassingServerSessionWrapper() = default;
-
-    virtual void EnqueueTickWhileLocked(pid_t /*pid*/) = 0;
-};
-
 /// QNX message passing server for handling logging client connections.
 ///
 /// Manages multiple client sessions and processes their log data asynchronously.
@@ -66,13 +58,13 @@ class IMessagePassingServerSessionWrapper
 ///
 /// Each client session is scheduled on the worker thread via a work queue to avoid
 /// blocking the dispatch thread during potentially slow shared memory operations.
-class MessagePassingServer : public IMessagePassingServerSessionWrapper
+class MessagePassingServer
 {
   public:
     struct AcquireWatchdogConfig
     {
-        AcquireWatchdogConfig(std::chrono::milliseconds deadline_in = std::chrono::milliseconds{1000},
-                              std::uint32_t max_misses_in = 3U)
+        explicit AcquireWatchdogConfig(std::chrono::milliseconds deadline_in = std::chrono::milliseconds{1000},
+                                       std::uint32_t max_misses_in = 3U)
             : deadline(deadline_in), max_misses(max_misses_in)
         {
         }
@@ -115,9 +107,9 @@ class MessagePassingServer : public IMessagePassingServerSessionWrapper
                                                 const score::mw::log::detail::ConnectMessageFromClient&,
                                                 score::cpp::pmr::unique_ptr<daemon::ISessionHandle>)>;
 
-    MessagePassingServer(SessionFactory factory,
-                         std::shared_ptr<score::message_passing::IServerFactory> server_factory = nullptr,
-                         AcquireWatchdogConfig watchdog_config = AcquireWatchdogConfig{});
+    explicit MessagePassingServer(SessionFactory factory,
+                                  std::shared_ptr<score::message_passing::IServerFactory> server_factory = nullptr,
+                                  AcquireWatchdogConfig watchdog_config = AcquireWatchdogConfig{});
     ~MessagePassingServer() noexcept;
 
     // for unit test only. to keep rest of functions in private
@@ -140,10 +132,10 @@ class MessagePassingServer : public IMessagePassingServerSessionWrapper
 
     struct SessionWrapper
     {
-        SessionWrapper(IMessagePassingServerSessionWrapper* message_passing_server,
+        SessionWrapper(std::function<void(pid_t)> enqueue_tick_while_locked,
                        pid_t client_pid,
                        std::unique_ptr<ISession> message_passing_session)
-            : server(message_passing_server),
+            : enqueue_tick(std::move(enqueue_tick_while_locked)),
               pid(client_pid),
               session(std::move(message_passing_session)),
               connection(nullptr),
@@ -154,6 +146,7 @@ class MessagePassingServer : public IMessagePassingServerSessionWrapper
               closed_by_peer(false),
               to_force_finish(false)
         {
+            assert(enqueue_tick);
         }
 
         void EnqueueForDeleteWhileLocked(bool by_peer = false);
@@ -182,7 +175,7 @@ class MessagePassingServer : public IMessagePassingServerSessionWrapper
             return session->IsSourceClosed();
         }
 
-        IMessagePassingServerSessionWrapper* server;
+        std::function<void(pid_t)> enqueue_tick;
         pid_t pid;
         std::unique_ptr<ISession> session;
 
@@ -200,7 +193,7 @@ class MessagePassingServer : public IMessagePassingServerSessionWrapper
 
     void FinishPreviousSessionWhileLocked(std::unordered_map<pid_t, MessagePassingServer::SessionWrapper>::iterator it,
                                           std::unique_lock<std::mutex>& lock);
-    void EnqueueTickWhileLocked(pid_t pid) override;
+    void EnqueueTickWhileLocked(pid_t pid);
     void RunWorkerThread();
 
     SessionFactory factory_;

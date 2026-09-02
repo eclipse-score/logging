@@ -16,7 +16,7 @@
 #include "score/os/mocklib/stat_mock.h"
 #include "score/os/mocklib/stdlib_mock.h"
 #include "score/mw/log/detail/data_router/shared_memory/shared_memory_reader.h"
-#include "score/datarouter/include/logger/logger.h"
+#include "score/mw/log/legacy_non_verbose_api/tracing.h"
 
 #include "static_reflection_with_serialization/serialization/for_logging.h"
 

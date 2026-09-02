@@ -15,7 +15,7 @@
 
 #include "score/datarouter/dlt_filetransfer_trigger_lib/filetransfer_message_trace.h"
 
-#include <Tracing>
+#include "score/mw/log/legacy_non_verbose_api/tracing.h"
 
 namespace score::logging
 {

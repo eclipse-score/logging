@@ -31,6 +31,7 @@ NOTE: This test requires building with the nonverbose DLT flag:
 import ctypes
 import logging
 
+from attribute_plugin import add_test_properties
 from logging_plugin import download_dlt
 
 LOGGER = logging.getLogger(__name__)
@@ -38,8 +39,16 @@ LOGGER = logging.getLogger(__name__)
 TOTAL_NONVERBOSE_MESSAGES = 11
 
 
+@add_test_properties(
+    fully_verifies=["comp_req__data_router__dlt_message_filtering"],
+    test_type="requirements-based",
+    derivation_technique="equivalence-classes",
+)
 def test_datarouter_filters(target, datarouter_on_target, dlt_capture):
     """Verify per-context non-verbose log-level filtering via TRACE().
+
+    Check that non-verbose (TRACE) messages are filtered per-context by the
+    configured log-level threshold.
 
     Expected message counts per context group (type_id // 100):
       - group 1 (AAAA, kVerbose): 6 messages

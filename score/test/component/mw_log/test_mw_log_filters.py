@@ -24,6 +24,7 @@ exactly 22 messages should be visible.
 
 import logging
 
+from attribute_plugin import add_test_properties
 from logging_plugin import download_dlt
 
 LOGGER = logging.getLogger(__name__)
@@ -33,8 +34,16 @@ TEST_APP_ID = "TAP"
 CONTEXT_IDS = ["FAT", "ERR", "WRN", "INF", "DBG", "VBS"]
 
 
+@add_test_properties(
+    fully_verifies=["comp_req__log__inactive_logstream"],
+    test_type="requirements-based",
+    derivation_technique="equivalence-classes",
+)
 def test_mw_verbose_filters(target, datarouter_on_target, dlt_capture):
     """Verify per-context verbose log-level filtering with free-function API.
+
+    Check that LogStream objects below the configured per-context log level
+    threshold produce no output.
 
     Expected message counts per context (based on configured log levels):
     - FAT (kFatal):   1 message  (only Fatal passes)

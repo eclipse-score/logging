@@ -92,6 +92,11 @@ class DltChannelTest : public ::testing::Test
 
 TEST_F(DltChannelTest, WhenCreatedDefault)
 {
+    RecordProperty("PartiallyVerifies", "comp_req__data_router__dlt_multiple_channels");
+    RecordProperty("Description", "Check that a DLT log channel can be constructed with default parameters.");
+    RecordProperty("TestType", "requirements-based");
+    RecordProperty("DerivationTechnique", "requirements-analysis");
+
     testing::StrictMock<UdpStreamOutput::Tester> outputs;
     UdpStreamOutput::Tester::Instance() = &outputs;
     EXPECT_CALL(outputs, construct(_, nullptr, 3490U, Eq(std::string("")))).Times(1);
@@ -133,6 +138,11 @@ TEST_F(DltChannelTest, WhenSendingNonverboseTwice)
 
 TEST_F(DltChannelTest, WhenSendingVerboseTwice)
 {
+    RecordProperty("PartiallyVerifies", "comp_req__data_router__dlt_verbose_messages");
+    RecordProperty("Description", "Check that two verbose DLT messages sent in a row are correctly buffered and flushed.");
+    RecordProperty("TestType", "requirements-based");
+    RecordProperty("DerivationTechnique", "requirements-analysis");
+
     testing::StrictMock<UdpStreamOutput::Tester> outputs;
     UdpStreamOutput::Tester::Instance() = &outputs;
     mmsghdr mmsghdr_data;
@@ -445,6 +455,11 @@ TEST_F(DltChannelTest, WhenSendingFTVerboseHitsSleepCondition)
 
 TEST_F(DltChannelTest, WhenLogLevelExceedsThreshold_Verbose)
 {
+    RecordProperty("PartiallyVerifies", "comp_req__data_router__dlt_message_filtering");
+    RecordProperty("Description", "Check that a verbose message whose log level exceeds the channel threshold is filtered out.");
+    RecordProperty("TestType", "requirements-based");
+    RecordProperty("DerivationTechnique", "boundary-values");
+
     testing::StrictMock<UdpStreamOutput::Tester> outputs;
     UdpStreamOutput::Tester::Instance() = &outputs;
 
@@ -466,6 +481,11 @@ TEST_F(DltChannelTest, WhenLogLevelExceedsThreshold_Verbose)
 
 TEST_F(DltChannelTest, WhenNonVerboseLogLevelExceedsThreshold)
 {
+    RecordProperty("PartiallyVerifies", "comp_req__data_router__dlt_message_filtering");
+    RecordProperty("Description", "Check that a non-verbose message whose log level exceeds the channel threshold is filtered out.");
+    RecordProperty("TestType", "requirements-based");
+    RecordProperty("DerivationTechnique", "boundary-values");
+
     testing::StrictMock<UdpStreamOutput::Tester> outputs;
     UdpStreamOutput::Tester::Instance() = &outputs;
 

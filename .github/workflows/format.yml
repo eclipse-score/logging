@@ -24,4 +24,4 @@ jobs:
   formatting-check:
     uses: eclipse-score/cicd-workflows/.github/workflows/format.yml@main
     with:
-      bazel-target: "test --lockfile_mode=error //:format.check" # optional, this is the default
+      bazel-target: "test --lockfile_mode=error --test_tag_filters= //:format.check" # score_tooling >= 2.x tags the format tests manual; lift the repo default -manual filter

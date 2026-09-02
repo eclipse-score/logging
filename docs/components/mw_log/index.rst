@@ -30,7 +30,7 @@ Abstract
 Supports logging on several backends (file,slog,remote,custom).
 
 The ``mw::log`` implementation spans the ``score_baselibs`` (frontend) and ``score_logging`` (backend)
-repositories; see the :doc:`feature architecture </features/logging/architecture/index>` for the repository boundary
+repositories; see the :doc:`feature architecture <../../features/logging/architecture/index>` for the repository boundary
 and cross-repository contract.
 
 

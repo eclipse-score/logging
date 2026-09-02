@@ -15,7 +15,7 @@
 #define AAS_DATAROUTER_TRACING_TEST_H
 
 #include "gtest/gtest.h"
-#include <Tracing>
+#include "score/mw/log/legacy_non_verbose_api/tracing.h"
 // #include "appconfig_mock.h"
 
 namespace score

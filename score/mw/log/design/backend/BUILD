@@ -27,7 +27,7 @@ architectural_design(
         "syslog_backend_sequence.puml",
     ],
     static = [
-        "datarouter_backend/README.md",
+        "datarouter_backend/index.md",
         "datarouter_backend/datarouter_class_diagram.puml",
         "datarouter_backend/inter_process_communication.puml",
         "datarouter_backend/mw_log_datarouter_recorder.puml",
@@ -39,5 +39,9 @@ architectural_design(
         "mw_log_recorders.puml",
         "syslog_backend.md",
     ],
+    # score_tooling 2.x parses every .puml; the legacy diagrams here are not
+    # yet in the parser's supported subset (eclipse-score/tooling#447).
+    # Keep the target out of wildcard builds until they are reworked.
+    tags = ["manual"],
     visibility = ["//visibility:public"],
 )

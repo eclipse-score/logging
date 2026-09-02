@@ -18,6 +18,12 @@ build --tool_java_runtime_version=remotejdk_17
 common --registry=https://raw.githubusercontent.com/eclipse-score/bazel_registry/main/
 common --registry=https://bcr.bazel.build
 
+# rules_android is pulled in transitively (lobster -> rules_jvm_external ->
+# rules_android since score_tooling 2.x). Its android_sdk_repository extension
+# fails on machines without Android SDK APIs (incl. GitHub runners). This
+# project does not use Android; unset ANDROID_HOME so the lookup is skipped.
+common --repo_env=ANDROID_HOME=
+
 # Retry HTTP downloads to handle transient failures (e.g. QNX toolchain)
 common --http_connector_attempts=10
 common --http_connector_retry_max_timeout=1s
@@ -36,7 +42,6 @@ build:_common --features=minimal_warnings --features=-strict_warnings --features
 common --@score_communication//score/memory/shared/flags:use_typedshmd=False
 common --@score_baselibs//score/mw/log/flags:KRemote_Logging=False
 common --@score_baselibs//score/json:base_library=nlohmann
-common --//score/datarouter/build_configuration_flags:persistent_config_feature_enabled=False
 common --//score/datarouter/build_configuration_flags:enable_dynamic_configuration=False
 common --//score/datarouter/build_configuration_flags:file_transfer=False
 common --//score/datarouter/build_configuration_flags:use_local_vlan=True
@@ -93,20 +98,6 @@ build:x86_64-linux --@rules_python//python/config_settings:precompile=force_disa
 
 
 
-# Coverage configuration for C++
-coverage --config=x86_64-linux
-coverage --instrumentation_filter="^//score/datarouter[/:],^//score/mw/log[/:],-//score/mw/.*/test[/:]"
-
-# GCC-based coverage configuration
-coverage --combined_report=lcov
-coverage --test_env=COVERAGE_GCOV_OPTIONS=-bcu
-coverage --features=coverage
-coverage --cache_test_results=no
-# See -fprofile-update in the GCC manual (recommended for multithreaded applications):
-# https://gcc.gnu.org/onlinedocs/gcc/Instrumentation-Options.html
-# Reasoning: https://github.com/eclipse-score/logging/issues/156
-coverage --cxxopt=-fprofile-update=atomic
-
 # ==============================================================================
 # Dynamic analysis (sanitizers) for Linux host builds/tests
 # ==============================================================================
@@ -151,3 +142,11 @@ test:tsan --run_under=@score_cpp_policies//sanitizers:wrapper
 test:clang-tidy --aspects=//tools/lint:linters.bzl%clang_tidy_aspect
 test:clang-tidy --output_groups=+rules_lint_report
 test:clang-tidy --extra_toolchains=@llvm_toolchain//:cc-toolchain-x86_64-linux
+# toolchains_llvm >= 1.8.0 emits -stdlib=libc++ together with -nostdinc++ (explicit
+# libc++ include paths); clang then reports -stdlib as unused, which the
+# warnings_as_errors feature turns into an error. Analysis is unaffected.
+test:clang-tidy --copt=-Wno-unused-command-line-argument
+
+# Unified LLVM source-based coverage (C++ + Rust), see quality/coverage/ and
+# @score_tooling//coverage. Use: bazel coverage --config=llvm_cov //score/... --build_tests_only
+import %workspace%/quality/coverage/coverage.bazelrc
