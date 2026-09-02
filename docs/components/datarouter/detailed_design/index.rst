@@ -12,25 +12,20 @@
    # SPDX-License-Identifier: Apache-2.0
    # *******************************************************************************
 
+Detailed Design
+###############
 
-Datarouter
-====================
-
-.. comp:: Datarouter
-   :id: comp__datarouter
+.. document:: Datarouter Detailed Design
+   :id: doc__datarouter_detailed_design
+   :status: draft
    :version: 1
-   :security: YES
    :safety: QM
-   :status: valid
-   :uses: logic_arc_int__logging__shm, logic_arc_int__logging__session_ctrl_channel
-   :belongs_to: feat__logging
-
-   Datarouter is the DLT (Diagnostic log and trace) daemon executable. It reads records from source shared-memory ring buffers, manages source
-   sessions, routes messages to configured channels via UDP multicast, and reports source statistics and message drops.
+   :security: NO
+   :realizes: wp__sw_implementation[version==1]
 
 .. toctree::
    :titlesonly:
    :maxdepth: 1
 
-   requirements/index
-   detailed_design/index
+   logging_architecture
+   shm_apis
