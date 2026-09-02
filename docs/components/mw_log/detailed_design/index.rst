@@ -16,6 +16,14 @@
 Detailed Design
 ###############
 
+.. document:: mw::log Backend Detailed Design
+   :id: doc__mw_log_backend_detailed_design
+   :status: draft
+   :version: 1
+   :safety: ASIL_B
+   :security: YES
+   :realizes: wp__sw_implementation[version==1]
+
 The backend composition and recorder relationships are shown below:
 
 .. uml:: _assets/mw_log_recorders.puml
