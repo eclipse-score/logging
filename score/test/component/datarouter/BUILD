@@ -102,3 +102,100 @@ py_logging_itf_test(
     filesystem_pkg = "//score/test/component/filters_app:filtertest_filesystem_pkg",
     deps = ["@score_itf//score/itf/plugins/dlt"],
 )
+
+# =============================================================================
+# dr_restart test
+# =============================================================================
+
+# No app-under-test needed: datarouter itself is already baked into every
+# test image via //score/test/component:datarouter_pkg. Reused below by any
+# other test that only needs datarouter itself, with no additional app.
+pkg_filegroup(
+    name = "empty_filesystem_pkg",
+    srcs = [],
+)
+
+pkg_tar(
+    name = "empty_filesystem",
+    srcs = [":empty_filesystem_pkg"],
+)
+
+py_logging_itf_test(
+    name = "test_dr_restart",
+    srcs = ["test_dr_restart.py"],
+    filesystem = ":empty_filesystem",
+    filesystem_pkg = ":empty_filesystem_pkg",
+)
+
+# =============================================================================
+# bandwidth quotas test
+# =============================================================================
+
+py_logging_itf_test(
+    name = "test_bandwidth_quotes_exists",
+    srcs = ["test_bandwidth_quotes_exists.py"],
+    filesystem = ":empty_filesystem",
+    filesystem_pkg = ":empty_filesystem_pkg",
+)
+
+# =============================================================================
+# file_logging_test (kFile logging)
+# =============================================================================
+
+py_logging_itf_test(
+    name = "test_file_logging",
+    srcs = ["test_file_logging.py"],
+    filesystem = "//score/test/component/dlt_generator_app:dlt_generator_filesystem",
+    filesystem_pkg = "//score/test/component/dlt_generator_app:dlt_generator_filesystem_pkg",
+    deps = [
+        "@score_itf//third_party/python_dlt",
+    ],
+)
+
+# =============================================================================
+# quota_exceed test
+# =============================================================================
+
+py_logging_itf_test(
+    name = "test_quota_exceed",
+    timeout = "long",
+    srcs = ["test_quota_exceed.py"],
+    filesystem = "//score/test/component/dlt_generator_app:dlt_generator_filesystem",
+    filesystem_pkg = "//score/test/component/dlt_generator_app:dlt_generator_filesystem_pkg",
+    deps = ["@score_itf//score/itf/plugins/dlt"],
+)
+
+# =============================================================================
+# safe_logging_ipc test
+# =============================================================================
+
+py_logging_itf_test(
+    name = "test_safe_logging_ipc",
+    srcs = ["test_safe_logging_ipc.py"],
+    filesystem = ":empty_filesystem",
+    filesystem_pkg = ":empty_filesystem_pkg",
+)
+
+# =============================================================================
+# logging_after_delayed_dr_start test
+# =============================================================================
+
+py_logging_itf_test(
+    name = "test_logging_after_delayed_dr_start",
+    srcs = ["test_logging_after_delayed_dr_start.py"],
+    filesystem = "//score/test/component/dlt_generator_app:dlt_generator_filesystem",
+    filesystem_pkg = "//score/test/component/dlt_generator_app:dlt_generator_filesystem_pkg",
+    deps = ["@score_itf//score/itf/plugins/dlt"],
+)
+
+# =============================================================================
+# logging_detached_logs test
+# =============================================================================
+
+py_logging_itf_test(
+    name = "test_logging_detached_logs",
+    srcs = ["test_logging_detached_logs.py"],
+    filesystem = "//score/test/component/dlt_generator_app:dlt_generator_filesystem",
+    filesystem_pkg = "//score/test/component/dlt_generator_app:dlt_generator_filesystem_pkg",
+    deps = ["@score_itf//score/itf/plugins/dlt"],
+)

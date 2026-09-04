@@ -131,6 +131,49 @@ def datarouter_on_target(target):
                 proc.stop()
 
 
+class _DatarouterManager:
+    """Manual start/stop control over the DataRouter process on the target."""
+
+    def __init__(self, target):
+        self._target = target
+        self._proc = None
+        self._started = False
+
+    def start(self):
+        if self._started:
+            return
+        if _is_qnx(self._target):
+            self._target.execute(_QNX_DR_CMD)
+        else:
+            self._proc = self._target.execute_async(
+                "/opt/datarouter/bin/datarouter",
+                args=["--no_adaptive_runtime"],
+                cwd="/opt/datarouter",
+            )
+        _wait_for_datarouter(self._target)
+        self._started = True
+
+    def stop(self):
+        if not self._started:
+            return
+        if _is_qnx(self._target):
+            self._target.execute(_QNX_DR_STOP_CMD)
+        else:
+            if self._proc is not None and self._proc.is_running():
+                self._proc.stop()
+        self._started = False
+
+
+@pytest.fixture(scope="function")
+def datarouter_manager(target):
+    """Yield a _DatarouterManager for tests that need manual DR start/stop control."""
+    manager = _DatarouterManager(target)
+    try:
+        yield manager
+    finally:
+        manager.stop()
+
+
 @pytest.fixture(scope="function")
 def dlt_capture(target, dlt_on_target, request):
     """Start a DLT receiver. On QNX, runs dlt-receive on the host; on Docker, on the target."""
