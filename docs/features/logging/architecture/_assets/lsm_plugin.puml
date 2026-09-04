@@ -1,0 +1,102 @@
+' *******************************************************************************
+' Copyright (c) 2026 Contributors to the Eclipse Foundation
+'
+' See the NOTICE file(s) distributed with this work for additional
+' information regarding copyright ownership.
+'
+' This program and the accompanying materials are made available under the
+' terms of the Apache License Version 2.0 which is available at
+' https://www.apache.org/licenses/LICENSE-2.0
+'
+' SPDX-License-Identifier: Apache-2.0
+' *******************************************************************************
+
+@startuml network_stack_plugin
+
+skinparam componentStyle rectangle
+skinparam nodesep 40
+skinparam ranksep 60
+skinparam linetype ortho
+
+package "Network Stack (default instance)" <<QM>> {
+  component "devs-network-driver.so" as driver_default
+}
+component "mw::diag" as mwdiag
+component "DLT Diagnostics" as dltdiag <<QM>>
+
+driver_default -r-> mwdiag
+mwdiag -r-> dltdiag
+
+package "client" <<ASIL>> {
+  component "mw::log" as mwlog <<FFI>>
+  component "GTL" as gtl <<FFI>>
+}
+
+file "Client\nConfiguration" as clientconfig
+clientconfig -d-> mwlog
+
+interface "shm\n(payload)" as shmpayload
+interface "shm\n(metadata)" as shmmeta
+interface "shm\n(control block)" as shmctrl
+interface "DLT QNX\nControl Channel" as ctrlchannel
+
+gtl -r-> shmpayload
+gtl -r-> shmmeta
+gtl -r-> shmctrl
+mwlog -r-> ctrlchannel
+dltdiag -r-> ctrlchannel
+
+package "Network Stack (log_and_trace instance)" <<QM>> {
+  package "DLTv2 plugin" {
+    component "GTL Backend" as gtlbackend
+    component "Core" as core
+    component "Statistics\nModule" as stats
+    component "DLTv2 Router" as router
+    component "DLTv2 File\nWriter" as filewriter
+    component "DLTv2 Network\nWriter" as netwriter
+    component "Network Stack\nNative APIs" as fbsdapi
+    component "devs-network-driver.so" as driver
+  }
+}
+
+shmpayload -r-> gtlbackend : R/O
+shmmeta -r-> gtlbackend : R/W
+shmctrl -r-> core : R/W
+ctrlchannel -r-> core
+
+' Hidden constraints only: force the intended left-to-right column order
+' (diagnostics, client, shared memory, plugin) without drawing extra lines.
+driver_default -[hidden]r-> gtl
+gtl -[hidden]r-> gtlbackend
+
+gtlbackend -d-> core
+core -d-> router
+core -l-> stats
+router -d-> filewriter
+router -d-> netwriter
+filewriter -d-> fbsdapi
+netwriter -d-> fbsdapi
+fbsdapi -d-> driver
+
+file "Global\nConfiguration" as globalconfig
+globalconfig -d-> core
+
+file "Router\nConfiguration" as routerconfig
+routerconfig -d-> router
+
+database "filesystem\n(devb-*, fs-qnx6.so)" as fsdb
+filewriter -d-> fsdb
+
+' Optional/experimental time-sync path, greyed out in the source diagram
+component "gPTP\nLogger Time" as gptp <<optional>>
+interface "shm\n(logger time)" as shmtime <<optional>>
+note right of shmtime
+  Optional, not yet available: read by
+  ""mw::time::hw_logger_time"" for use by ""mw::log"".
+end note
+
+fbsdapi -d-> gptp
+gptp -r-> shmtime
+
+@enduml
+
