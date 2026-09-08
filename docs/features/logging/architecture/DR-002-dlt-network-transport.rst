@@ -98,7 +98,7 @@ DLT Network Transport Evolution
      applied specifically to the log and trace traffic instance without
      affecting other traffic.
 
-   .. uml:: _assets/lsm_plugin.puml
+   .. uml:: _assets/dlt_plugin.puml
 
    Out of scope / unaffected:
 
