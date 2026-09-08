@@ -11,75 +11,108 @@
 ' SPDX-License-Identifier: Apache-2.0
 ' *******************************************************************************
 
-@startuml network_stack_plugin
+@startuml lsm_plugin
 
 skinparam componentStyle rectangle
 skinparam nodesep 40
 skinparam ranksep 60
 skinparam linetype ortho
 
-package "Network Stack (default instance)" <<QM>> {
-  component "devs-network-driver.so" as driver_default
-}
-component "mw::diag" as mwdiag
-component "DLT Diagnostics" as dltdiag <<QM>>
+interface "mw::diag" as mwdiag
+component "DLT Diagnostics\nComponent" as dltdiag <<QM>>
+dltdiag --> mwdiag
 
-driver_default -r-> mwdiag
-mwdiag -r-> dltdiag
+note top of dltdiag
+  Independent component registered with the
+  Diagnostic Manager.
+end note
 
 package "client" <<ASIL>> {
   component "mw::log" as mwlog <<FFI>>
   component "GTL" as gtl <<FFI>>
+
+  mwlog -r-> gtl
 }
+
+note bottom of mwlog
+  Forwards records to GTL via an owned
+  DltTraceBackend/ITraceLibrary client.
+end note
 
 file "Client\nConfiguration" as clientconfig
 clientconfig -d-> mwlog
 
-interface "shm\n(payload)" as shmpayload
-interface "shm\n(metadata)" as shmmeta
-interface "shm\n(control block)" as shmctrl
-interface "DLT QNX\nControl Channel" as ctrlchannel
+'interface name left blank to avoid overlaps and instead highlighted via note below
+interface " " as shmpayload
+interface " " as shmmeta
+interface " " as shmctrl
+interface " " as ctrlchannel
 
-gtl -r-> shmpayload
-gtl -r-> shmmeta
-gtl -r-> shmctrl
-mwlog -r-> ctrlchannel
-dltdiag -r-> ctrlchannel
+note top of shmpayload #Wheat : shm\n(payload)
+note top of shmmeta #Wheat : shm\n(metadata)
+note bottom of shmctrl #Wheat : shm\n(control block)
+note top of ctrlchannel #Wheat :DLT QNX\nControl Channel
 
-package "Network Stack (log_and_trace instance)" <<QM>> {
-  package "DLTv2 plugin" {
+gtl -r-> shmpayload: R/W
+gtl -r-> shmmeta: R/W
+mwlog -r-> shmctrl: R/W
+dltdiag --> ctrlchannel
+
+package "Network Stack (log_and_trace instance)" <<QM>> as networkstackinstance {
+  package "DLT Plugin" {
     component "GTL Backend" as gtlbackend
     component "Core" as core
     component "Statistics\nModule" as stats
-    component "DLTv2 Router" as router
-    component "DLTv2 File\nWriter" as filewriter
-    component "DLTv2 Network\nWriter" as netwriter
+    component "DLT Router" as router
+    interface "DLT Wire Format\n(compile-time seam)" as wireformat
+    component "DLT File\nWriter" as filewriter
+    component "DLT Network\nWriter" as netwriter
     component "Network Stack\nNative APIs" as fbsdapi
     component "devs-network-driver.so" as driver
+    component "gPTP\nLogger Time" as gptp <<optional>>
   }
 }
 
-shmpayload -r-> gtlbackend : R/O
-shmmeta -r-> gtlbackend : R/W
-shmctrl -r-> core : R/W
-ctrlchannel -r-> core
+package "DLT Wire Format Implementations" as wireformatpkg {
+  component "DLTv2 \n(closed-source)" as dltv2wire <<external>> #OrangeRed
+  component "DLTv1 \n(this repository)" as dltv1wire
+}
 
-' Hidden constraints only: force the intended left-to-right column order
-' (diagnostics, client, shared memory, plugin) without drawing extra lines.
-driver_default -[hidden]r-> gtl
-gtl -[hidden]r-> gtlbackend
+' Optional/experimental time-sync path
+package "mw::time" as mwtime <<optional>> {
+  component "shm\n(logger time)" as shmloggertime <<optional>>
+}
+
+dltv2wire -[hidden]r-> dltv1wire
+
+shmpayload -r-> gtlbackend : R/O
+shmmeta -r-> gtlbackend : R/O
+
+shmctrl <-r-> core : R/W
+ctrlchannel -u-> core
 
 gtlbackend -d-> core
 core -d-> router
 core -l-> stats
 router -d-> filewriter
 router -d-> netwriter
+
+wireformat -u-> filewriter
+wireformat -u-> netwriter
+
+wireformatpkg ..|> wireformat
+
+note left of wireformat
+  Compile-time build-flag selection between
+  DLTv1 and DLTv2 wire formats.
+end note
+
 filewriter -d-> fbsdapi
 netwriter -d-> fbsdapi
 fbsdapi -d-> driver
 
 file "Global\nConfiguration" as globalconfig
-globalconfig -d-> core
+core <-d- globalconfig
 
 file "Router\nConfiguration" as routerconfig
 routerconfig -d-> router
@@ -87,16 +120,26 @@ routerconfig -d-> router
 database "filesystem\n(devb-*, fs-qnx6.so)" as fsdb
 filewriter -d-> fsdb
 
-' Optional/experimental time-sync path, greyed out in the source diagram
-component "gPTP\nLogger Time" as gptp <<optional>>
-interface "shm\n(logger time)" as shmtime <<optional>>
-note right of shmtime
-  Optional, not yet available: read by
-  ""mw::time::hw_logger_time"" for use by ""mw::log"".
-end note
+' Optional time-sync path
+fbsdapi <-r- gptp
+driver <-r- gptp
+gptp <-r- mwtime
+mwlog -r-> shmloggertime
 
-fbsdapi -d-> gptp
-gptp -r-> shmtime
+legend bottom
+  |= Acronym |= Meaning |
+  | DLT | Diagnostics Log and Trace |
+  | GTL | Generic Trace Library |
+  | QM | Quality Managed (non-ASIL) |
+  | ASIL | Automotive Safety Integrity Level |
+  | FFI | Freedom From Interference |
+  | shm | Shared Memory |
+  | R/O | Read-Only |
+  | R/W | Read/Write |
+  | gPTP | generalized Precision Time Protocol |
+  | mw::log | Middleware Logging (client-side logging API) |
+  | mw::diag | Middleware Diagnostics |
+  | mw::time | Middleware Time (time synchronisation) |
+end legend
 
 @enduml
-
