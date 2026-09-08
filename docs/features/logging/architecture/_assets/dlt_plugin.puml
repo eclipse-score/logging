@@ -11,7 +11,8 @@
 ' SPDX-License-Identifier: Apache-2.0
 ' *******************************************************************************
 
-@startuml lsm_plugin
+@startuml dlt_plugin
+title DLT Daemon functionality as a \nPlugin / Loadable Shared Module (a second dedicated Network Stack instance)
 
 skinparam componentStyle rectangle
 skinparam nodesep 40
