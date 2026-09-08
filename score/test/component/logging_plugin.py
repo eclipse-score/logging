@@ -139,11 +139,17 @@ class _DatarouterManager:
         self._proc = None
         self._started = False
 
-    def start(self):
+    def start(self, config_path=None):
         if self._started:
             return
         if _is_qnx(self._target):
-            self._target.execute(_QNX_DR_CMD)
+            cmd = _QNX_DR_CMD
+            if config_path:
+                cmd = cmd.replace(
+                    "--no_adaptive_runtime ",
+                    f"--no_adaptive_runtime --config {config_path} ",
+                )
+            self._target.execute(cmd)
         else:
             self._proc = self._target.execute_async(
                 "/opt/datarouter/bin/datarouter",

@@ -35,11 +35,15 @@ same local Docker/multicast limitation as test_filetransfer/
 test_datarouter_filters: build-verified locally, relies on CI for the actual
 pass/fail.
 
-Each scenario writes its own log-channels.json to the target (via
-target.upload, replacing the file datarouter reads its quota config from)
-and restarts datarouter via the datarouter_manager fixture to pick it up --
-this uses only datarouter's existing config-reload-on-restart behavior, not
-any new capability.
+Each scenario writes its own log-channels.json to the target and restarts
+datarouter via the datarouter_manager fixture to pick it up. On Linux this
+replaces datarouter's default config file directly (writable). On QNX the
+default config path is baked into the read-only IFS boot image, so the
+scenario config is written to /tmp instead (RAM-backed, writable) and
+datarouter is started with its existing --config flag (see
+score/datarouter/src/applications/options.cpp) pointing at that path --
+this uses only datarouter's already-documented config-path option, not any
+new capability.
 """
 
 import copy
@@ -56,7 +60,7 @@ APP_ID = "LGGG"
 DEFAULT_MESSAGE = "default message text for example log generating application"
 
 _LINUX_LOG_CHANNELS_PATH = "/opt/datarouter/etc/log-channels.json"
-_QNX_LOG_CHANNELS_PATH = "/usr/bin/datarouter/etc/log-channels.json"
+_QNX_LOG_CHANNELS_PATH = "/tmp/log-channels.json"
 
 # Sustained generation across ~30s (3 quota stats cycles @ 10s each): the
 # first cycle establishes the observed rate, enforcement (if enabled) then
@@ -157,11 +161,12 @@ def _apply_scenario_config(target, enabled, limit_kbps):
 def test_quota_exceed(target, datarouter_manager, dlt_capture):
     """Verify quota enforcement reduces observed throughput as configured."""
     results = {}
+    qnx_config_path = _QNX_LOG_CHANNELS_PATH if _is_qnx(target) else None
     for scenario in SCENARIOS:
         LOGGER.info(f"Scenario: {scenario['name']}")
         datarouter_manager.stop()
         _apply_scenario_config(target, scenario["enabled"], scenario["limit_kbps"])
-        datarouter_manager.start()
+        datarouter_manager.start(config_path=qnx_config_path)
 
         with dlt_capture() as receiver:
             target.execute(
