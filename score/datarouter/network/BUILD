@@ -30,7 +30,7 @@ cc_library(
     visibility = ["@score_logging//score/datarouter:__pkg__"],
     deps = select({
         "//score/datarouter/build_configuration_flags:enable_local_vlan": [":vlan_local"],
-        "//conditions:default": [":vlan_local"],
+        "//conditions:default": ["@score_baselibs//score/network:vlan"],
     }),
 )
 
