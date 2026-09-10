@@ -1,6 +1,0 @@
-{
-  "appId": "CLL",
-  "appDesc": "Change LogLevel Test Application",
-  "logLevel": "kWarn",
-  "logMode": "kRemote|kConsole|kFile|kSystem"
-}
