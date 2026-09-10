@@ -24,6 +24,7 @@ architectural_design(
         "datarouter_backend/shared_memory_reader_read.puml",
         "datarouter_backend/shared_memory_writer_allocandwrite.puml",
         "datarouter_backend/verbose_logging_sequence.puml",
+        "syslog_backend_sequence.puml",
     ],
     static = [
         "datarouter_backend/index.md",
@@ -36,6 +37,7 @@ architectural_design(
         "file_output_backend.md",
         "mw_log_file_backend.puml",
         "mw_log_recorders.puml",
+        "syslog_backend.md",
     ],
     # score_tooling 2.x parses every .puml; the legacy diagrams here are not
     # yet in the parser's supported subset (eclipse-score/tooling#447).
