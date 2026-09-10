@@ -1,8 +1,0 @@
-{
-  "appId": "LALO",
-  "appDesc": "Logging Allocation",
-  "ringBufferSize": 2097152,
-  "logLevel": "kVerbose",
-  "logLevelThresholdConsole": "kVerbose",
-  "logMode": "kRemote|kFile|kConsole|kSystem"
-}

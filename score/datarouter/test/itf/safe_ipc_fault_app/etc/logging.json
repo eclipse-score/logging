@@ -1,8 +1,0 @@
-{
-  "appId": "LISI",
-  "appDesc": "Test Log Generator",
-  "ringBufferSize": 2097152,
-  "logLevel": "kVerbose",
-  "logLevelThresholdConsole": "kError",
-  "logMode": "kRemote"
-}
