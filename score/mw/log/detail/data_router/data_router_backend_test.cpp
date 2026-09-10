@@ -339,6 +339,7 @@ TEST_F(DataRouterBackendFixture, LogLevelVerbose)
     RecordProperty("ASIL", "B");
     RecordProperty("Description", "Verify the ability of logging verbose message.");
     RecordProperty("TestingTechnique", "Requirements-based test");
+    RecordProperty("lobster-tracing", "MwLog.DltVerboseMode");
 
     SimulateLogging(LogLevel::kVerbose);
 }

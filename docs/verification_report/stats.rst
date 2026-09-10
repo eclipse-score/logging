@@ -90,6 +90,25 @@ In Detail
          :tags: TEST
          :columns: name as "testcase";result;fully_verifies;partially_verifies;test_type;derivation_technique;id as "link"
 
+TRLC/Lobster Traceability Reports
+----------------------------------
+
+*POC (see trlc_migration_plan.md option 2): mw::log backend requirements/tests*
+*wired via TRLC + rules_score's dependable_element(), independent of the*
+*sphinx-needs-based stats above. Coverage is enforced by*
+*`bazel test //score/mw/log/dependability:*`, gated against the committed*
+*test_case_coverage.lock.yaml.*
+
+.. list-table::
+   :widths: 30 70
+   :header-rows: 1
+
+   * - Report
+     - Description
+   * - `mw::log Backend <dependable_element_mw_log_backend_doc/index.html>`_
+     - Dependable Element (requirements, architecture, safety analysis, test coverage)
+
+
 
 
 

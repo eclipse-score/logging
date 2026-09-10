@@ -1,0 +1,68 @@
+/********************************************************************************
+ * Copyright (c) 2025 Contributors to the Eclipse Foundation
+ *
+ * See the NOTICE file(s) distributed with this work for additional
+ * information regarding copyright ownership.
+ *
+ * This program and the accompanying materials are made available under the
+ * terms of the Apache License Version 2.0 which is available at
+ * https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ ********************************************************************************/
+package MwLogAssumedSystemRequirements
+
+import ScoreReq
+
+/* Mirrors score/docs/requirements/stakeholder/index.rst (stkh_req__dev_experience__logging_support);
+   record name matches that RST :id: verbatim so rst_to_trlc-generated feature requirements
+   (score/docs/features/log_and_trace/logging/requirements/index.rst) resolve their derived_from. */
+ScoreReq.AssumedSystemReq stkh_req__dev_experience__logging_support {
+    description = '''The SW-platform shall support the following logging setups: Logging to external
+    disk via mounted filesystem on top of PCIe driver, logging via second dedicated Ethernet Channel,
+    logging/sensor data gathering via cloud native filesystem on top of second Ethernet Channel,
+    gathering of raw sensor data e.g. video streams, Diagnostic Log and Trace / Logcat format support,
+    and logging of early startup events.'''
+    safety = ScoreReq.Asil.QM
+    rationale = "tbd"
+    version = 1
+}
+
+ScoreReq.AssumedSystemReq stkh_req__dev_experience__boot_logging {
+    description = '''The SW-platform shall support logging of data to memory which survives a reboot
+    cycle.'''
+    safety = ScoreReq.Asil.QM
+    rationale = "tbd"
+    version = 1
+}
+
+ScoreReq.AssumedSystemReq stkh_req__dev_experience__prog_languages {
+    description = '''The SW-platform shall support implementation of applications in C++ and Rust up
+    to the highest ASIL level.'''
+    safety = ScoreReq.Asil.QM
+    rationale = "tbd"
+    version = 1
+}
+
+ScoreReq.AssumedSystemReq stkh_req__overall_goals__enable_cooperation {
+    description = '''The SW-platform shall where possible be based on existing standards (e.g. network
+    protocols).'''
+    safety = ScoreReq.Asil.QM
+    rationale = "To enable cooperation with other cooperation partners."
+    version = 1
+}
+
+ScoreReq.AssumedSystemReq stkh_req__dependability__security_features {
+    description = '''The SW-platform shall support the following security features: mandatory access
+    control, secure boot, secure onboard communication, IPSec and MACSec.'''
+    safety = ScoreReq.Asil.QM
+    rationale = "tbd"
+    version = 1
+}
+
+ScoreReq.AssumedSystemReq stkh_req__functional_req__safe_comput {
+    description = '''The SW-platform shall support safe computation.'''
+    safety = ScoreReq.Asil.B
+    rationale = "Safe systems require computations to be done in safe environments."
+    version = 1
+}

@@ -38,6 +38,7 @@ TEST(WaitFreeAlternatingWriterTests, EnsureAtomicRequirements)
     RecordProperty("ASIL", "B");
     RecordProperty("Description", "The used atomic data types shall be lock free");
     RecordProperty("TestingTechnique", "Requirements-based test");
+    RecordProperty("lobster-tracing", "MwLog.CrossLockingPrevention");
 
     score::mw::log::detail::AlternatingControlBlock control_block{};
     ASSERT_TRUE(control_block.switch_count_points_active_for_writing.is_lock_free());

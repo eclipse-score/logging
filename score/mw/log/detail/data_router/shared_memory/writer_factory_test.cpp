@@ -211,6 +211,7 @@ TEST_F(WriterFactoryFixture, WhenTheFileExistsItShallBeUnlinked)
 {
     RecordProperty("PartiallyVerifies", "comp_req__log__shm_file_permissions");
     RecordProperty("PartiallyVerifies", "comp_req__log__file_descriptor_flags");
+    RecordProperty("lobster-tracing", "MwLog.ShmFilePermissions, MwLog.FileDescriptorFlags");
     RecordProperty("Description",
                    "Check that an existing shared-memory file is unlinked before being re-created read-only.");
     RecordProperty("TestType", "requirements-based");

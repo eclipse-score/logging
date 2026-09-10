@@ -93,6 +93,7 @@ TEST_F(SharedMemoryReaderFixture, GetterShallReadSharedDataNumberOfDropsInvalidS
     RecordProperty("ASIL", "B");
     RecordProperty("Description", "Verifies the ability of getting the number of drops invalid size value properly.");
     RecordProperty("TestingTechnique", "Requirements-based test");
+    RecordProperty("lobster-tracing", "MwLog.MemoryBoundChecking");
 
     static constexpr Length kNumberOfDrops{13UL};
     shared_data.number_of_drops_invalid_size.store(kNumberOfDrops);

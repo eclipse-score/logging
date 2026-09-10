@@ -73,6 +73,7 @@ TEST_F(DltMessageBuilderFixture, ShallDepleteAfterHeaderAndPayload)
     RecordProperty("ASIL", "B");
     RecordProperty("Description", "Verifies Dlt will deplete after header and payload.");
     RecordProperty("TestingTechnique", "Requirements-based test");
+    RecordProperty("lobster-tracing", "MwLog.AutosarLogTraceSpec");
 
     unit_.SetNextMessage(log_record_);
     const auto first = unit_.GetNextSpan();
