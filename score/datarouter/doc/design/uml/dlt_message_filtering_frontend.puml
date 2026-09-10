@@ -11,7 +11,7 @@
 ' SPDX-License-Identifier: Apache-2.0
 ' *******************************************************************************
 
-@startuml
+@startuml dlt_message_filtering_frontend
 title log message filtering based on log_level (client - Frontend)
 
 start
@@ -23,7 +23,7 @@ else (no)
     if (ecu_logging_config.json is found) then (yes)
         :log_level is updated;
     else (no)
-        :log_level = kWarn (default; hardcoded);
+        :log_level = kWarn (default, hardcoded);
     endif
     NOTE: ecu_logging_config.json (fallback if logging.json is NOT found)
 endif
