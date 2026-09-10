@@ -11,7 +11,7 @@
 ' SPDX-License-Identifier: Apache-2.0
 ' *******************************************************************************
 
-@startuml
+@startuml context-details
 
 skinparam component {
   backgroundColor<<safety critical>> Aquamarine
@@ -23,7 +23,7 @@ skinparam queue {
 	backgroundColor<<safety critical>> Aquamarine
 }
 
-frame {
+frame "Adaptive Application" as adaptive_application_context {
   node AdaptiveApplication {
     component ApplicationLogic
     interface "mw::log" as aralog1
@@ -39,7 +39,7 @@ frame {
   aralog1_impl ..> cfg1 : read config
 }
 
-frame {
+frame "System Application" as system_application_context {
   node SystemApplication {
     component SystemApplicationLogic
     interface "mw::log" as aralog2

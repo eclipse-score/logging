@@ -11,15 +11,15 @@
 ' SPDX-License-Identifier: Apache-2.0
 ' *******************************************************************************
 
-@startuml
+@startuml dlt_message_filtering_backend
 title log message filtering based on log_level (Datarouter - Backend)
 
 start
 
 NOTE: This Flow diagram excludes the sequence for filtering DLT logs based on diagnostic job requests
 
-:log_level_threshold = kVerbose (Default; hardcoded in socketserver_config.h);
-:log_level = kInfo (Default; hardcoded);
+:log_level_threshold = kVerbose (Default, hardcoded in socketserver_config.h);
+:log_level = kInfo (Default, hardcoded);
 
     if (Parse class-id.json file (message ID table) success) then (yes)
     note left
