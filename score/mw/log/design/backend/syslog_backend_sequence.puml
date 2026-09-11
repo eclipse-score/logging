@@ -1,0 +1,100 @@
+@startuml syslog_backend_sequence
+
+participant "_:App_" as App
+participant "FreeFunctions" as FreeFunctions
+participant "LogStreamFactory" as LogStreamFactory
+participant "Runtime" as Runtime
+participant "_:LogStream_" as LogStream
+participant "_:TextRecorder_" as TextRecorder
+participant "_:SyslogBackend_" as SyslogBackend
+participant "score::os::Syslog" as Syslog
+
+activate App
+
+App -> FreeFunctions : score::mw::log::Info()
+
+FreeFunctions -> LogStreamFactory : GetStream(LogLevel)
+
+activate LogStreamFactory
+
+LogStreamFactory -> Runtime : GetRecorder()
+Runtime -> TextRecorder : creates
+LogStreamFactory <-- Runtime : Recorder
+
+LogStreamFactory -> LogStream : construct
+
+activate LogStream
+
+LogStream -> TextRecorder : StartRecord(ctx, LogLevel)
+activate TextRecorder
+
+TextRecorder -> SyslogBackend : ReserveSlot()
+activate SyslogBackend
+TextRecorder <-- SyslogBackend : score::cpp::optional<SlotHandle>
+deactivate SyslogBackend
+
+LogStream <-- TextRecorder : score::cpp::optional<SlotHandle>
+deactivate TextRecorder
+
+LogStreamFactory <-- LogStream : LogStream
+deactivate LogStream
+
+FreeFunctions <-- LogStreamFactory : LogStream
+deactivate LogStreamFactory
+
+App <-- FreeFunctions : LogStream
+
+App -> LogStream : << Some Data
+
+activate LogStream
+
+LogStream -> TextRecorder : Log(SlotHandle, Data)
+activate TextRecorder
+
+TextRecorder -> SyslogBackend : GetLogRecord(SlotHandle)
+activate SyslogBackend
+TextRecorder <-- SyslogBackend : LogRecord&
+deactivate SyslogBackend
+
+TextRecorder -> TextRecorder : format payload\ninto LogRecord
+
+LogStream <-- TextRecorder
+deactivate TextRecorder
+
+App <-- LogStream : LogStream
+deactivate LogStream
+
+App -> LogStream : Destruct
+
+activate LogStream
+
+LogStream -> TextRecorder : StopRecord(SlotHandle)
+activate TextRecorder
+
+TextRecorder -> SyslogBackend : FlushSlot(SlotHandle)
+activate SyslogBackend
+
+SyslogBackend -> Syslog : syslog(priority, "%.*s,%.*s: %.*s",\n  app_id, ctx_id, payload)
+
+Syslog -> Syslog : glibc vsyslog(3)
+
+TextRecorder <-- SyslogBackend
+deactivate SyslogBackend
+
+LogStream <-- TextRecorder
+deactivate TextRecorder
+
+destroy LogStream
+
+App <-- LogStream
+
+deactivate App
+
+note right of Syslog #red
+  Priority is derived from LogLevel via
+  ConvertMwLogLevelToSyslogPriority(). LogLevel::kOff
+  (and any out-of-range level) maps to kInvalid and is
+  not forwarded to syslog(3).
+end note
+
+@enduml
