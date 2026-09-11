@@ -86,6 +86,7 @@ TEST_F(SlogBackendFixture, SlogRegister)
     RecordProperty("ParentRequirement", "SCR-8017664");
     RecordProperty("Description", "Verifies normal slog registering.");
     RecordProperty("TestingTechnique", "Requirements-based test");
+    RecordProperty("lobster-tracing", "MwLog.ForwardToSystemLogger");
 
     EXPECT_CALL(*slog2_mock_raw_ptr_, slog2_register(_, _, _));
 

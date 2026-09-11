@@ -348,11 +348,13 @@ TEST_F(WriterFactoryFixture, MakeSureThatOpenCallWillOnlyBeDoneWithCorrectOpenRe
 {
     RecordProperty("ParentRequirement", "SCR-1016729");
     RecordProperty("ASIL", "B");
+    RecordProperty("PartiallyVerifies", "comp_req__log__shm_file_permissions, comp_req__log__file_descriptor_flags");
     RecordProperty("Description",
                    "Logging shared-memory files shall have read-only posix file permission for group and others");
     RecordProperty("TestingTechnique", "Requirements-based test");
     RecordProperty("DerivationTechnique", "Analysis of requirements");
     RecordProperty("Priority", "3");
+    RecordProperty("lobster-tracing", "MwLog.SharedMemoryFilePermissions, MwLog.FileDescriptorFlags");
 
     WriterFactory writer(std::move(osal));
     EXPECT_CALL(
