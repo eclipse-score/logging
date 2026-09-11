@@ -164,6 +164,7 @@ TEST_F(FileRecorderFixture, TooManyArgumentsWillYieldTruncatedLog)
     RecordProperty("ASIL", "B");
     RecordProperty("Description", "The log will be truncated in case of too many arguments.");
     RecordProperty("TestingTechnique", "Requirements-based test");
+    RecordProperty("lobster-tracing", "MwLog.LocalAllocationStrategy");
 
     constexpr std::size_t kTypeInfoByteSizeAccordingToSpecification = 4;
     const std::size_t number_of_arguments = log_record_.GetLogEntry().payload.capacity() /
