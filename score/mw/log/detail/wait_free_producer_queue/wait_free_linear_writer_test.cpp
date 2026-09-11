@@ -34,6 +34,7 @@ TEST(WaitFreeLinearWriter, EnsureAtomicRequirements)
     RecordProperty("ASIL", "B");
     RecordProperty("Description", "The used atomic data types shall be lock free");
     RecordProperty("TestingTechnique", "Requirements-based test");
+    RecordProperty("lobster-tracing", "MwLog.AvoidLocks, MwLog.CrossLockingPrevention");
 
     score::mw::log::detail::LinearControlBlock control_block{};
     ASSERT_TRUE(control_block.acquired_index.is_lock_free());
@@ -53,6 +54,7 @@ TEST(WaitFreeLinearWriter, WriteBufferFullShouldReturnExpectedData)
     RecordProperty("ASIL", "B");
     RecordProperty("Description", "Returning the expected data if the write buffer is full.");
     RecordProperty("TestingTechnique", "Requirements-based test");
+    RecordProperty("lobster-tracing", "MwLog.NoEndlessLoops");
 
     constexpr auto kBufferSize = 10U * 64U * 1024U;
     std::vector<score::mw::log::detail::Byte> buffer(kBufferSize);
@@ -215,9 +217,11 @@ TEST(WaitFreeLinearWriter, BufferSizeExceededShouldReturnEmpty)
 {
     RecordProperty("Requirement", "SCR-861578, SCR-1016724, SCR-1016719");
     RecordProperty("ASIL", "B");
+    RecordProperty("PartiallyVerifies", "comp_req__log__memory_bound_checking");
     RecordProperty("Description", "Shall return empty if buffer size exceeded.");
     RecordProperty("TestingTechnique", "Requirements-based test");
     RecordProperty("DerivationTechnique", "Analysis of requirements");
+    RecordProperty("lobster-tracing", "MwLog.MemoryBoundChecking");
 
     constexpr auto kBufferSize = 10U * 10U * 64U * 1024U;
     std::vector<score::mw::log::detail::Byte> buffer(kBufferSize);

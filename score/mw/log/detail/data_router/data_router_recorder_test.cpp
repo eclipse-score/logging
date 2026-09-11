@@ -116,10 +116,12 @@ TEST_F(DataRouterRecorderFixtureWithLogLevelCheck, WillObtainEmptySlotForInsuffi
 
 TEST_F(DataRouterRecorderFixtureWithLogLevelCheck, DisablesOrEnablesLogAccordingToLevel)
 {
+    RecordProperty("PartiallyVerifies", "comp_req__log__inactive_logstream");
     RecordProperty("ASIL", "B");
     RecordProperty("Description", "Verifies the ability of checking the log availability using 'IsLogEnabled' API.");
-    RecordProperty("TestType", "Interface test");
-    RecordProperty("DerivationTechnique", "Generation and analysis of equivalence classes");
+    RecordProperty("TestType", "requirements-based");
+    RecordProperty("DerivationTechnique", "requirements-analysis");
+    RecordProperty("lobster-tracing", "MwLog.InactiveLogStreamBehavior");
 
     EXPECT_TRUE(recorder_->IsLogEnabled(kActiveLogLevel, context_id_));
     EXPECT_FALSE(recorder_->IsLogEnabled(kInActiveLogLevel, context_id_));

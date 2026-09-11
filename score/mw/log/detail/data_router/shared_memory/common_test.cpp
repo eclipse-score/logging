@@ -44,6 +44,7 @@ TEST(CommonTests, TypesShallBeLockFree)
     RecordProperty("ASIL", "B");
     RecordProperty("Description", "Checks data lock-free.");
     RecordProperty("TestingTechnique", "Requirements-based test");
+    RecordProperty("lobster-tracing", "MwLog.AvoidLocks");
 
     score::mw::log::detail::SharedData data{};
     ASSERT_TRUE(data.number_of_drops_buffer_full.is_lock_free());

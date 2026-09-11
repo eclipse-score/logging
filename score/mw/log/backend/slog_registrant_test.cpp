@@ -31,6 +31,7 @@ TEST(SlogRegistrantTest, SlogBackendIsRegisteredAfterStaticInitialization)
     RecordProperty("Description", "The slog backend registrant is registered for LogMode::kSystem during static init.");
     RecordProperty("TestType", "requirements-based");
     RecordProperty("DerivationTechnique", "requirements-analysis");
+    RecordProperty("lobster-tracing", "MwLog.SystemBackendActivation");
 
     EXPECT_TRUE(IsBackendAvailable(LogMode::kSystem));
 }

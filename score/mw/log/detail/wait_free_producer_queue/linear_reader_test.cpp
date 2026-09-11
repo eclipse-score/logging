@@ -33,6 +33,7 @@ TEST(LinearReaderTests, LengthExceedingMaxThresholdShouldReturnEmpty)
     RecordProperty("DerivationTechnique", "boundary-values");
     RecordProperty("Requirement", "SCR-1016719");
     RecordProperty("ASIL", "B");
+    RecordProperty("lobster-tracing", "MwLog.IndexAndSizeChecking");
 
     constexpr auto kBufferSize = score::mw::log::detail::GetLengthOffsetBytes() * 2U;
     std::vector<score::mw::log::detail::Byte> buffer(kBufferSize);
