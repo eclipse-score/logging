@@ -18,6 +18,7 @@ py_logging_itf_test(
     srcs = ["test_mw_log.py"],
     filesystem = "//score/test/component/logging_app:logging_app_filesystem",
     filesystem_pkg = "//score/test/component/logging_app:logging_app_filesystem_pkg",
+    visibility = ["//score/mw/log/dependability:__pkg__"],
     deps = [
         "@score_itf//third_party/python_dlt",
     ],

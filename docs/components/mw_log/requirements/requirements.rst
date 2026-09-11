@@ -165,7 +165,7 @@ Non-Functional Requirements
    :reqtype: Non-Functional
    :security: YES
    :safety: ASIL_B
-   :derived_from: feat_req__logging__resource_runtime, feat_req__logging__asil_support
+   :derived_from: feat_req__logging__asil_support
    :status: valid
    :satisfied_by: comp__mw_log_backend
 
@@ -178,7 +178,7 @@ Non-Functional Requirements
    :reqtype: Non-Functional
    :security: YES
    :safety: ASIL_B
-   :derived_from: feat_req__logging__asil_support, feat_req__logging__resource_performance
+   :derived_from: feat_req__logging__asil_support
    :status: valid
    :satisfied_by: comp__mw_log_backend
 
@@ -190,7 +190,7 @@ Non-Functional Requirements
    :reqtype: Non-Functional
    :security: YES
    :safety: ASIL_B
-   :derived_from: feat_req__logging__asil_support, feat_req__logging__resource_performance
+   :derived_from: feat_req__logging__asil_support
    :status: valid
    :satisfied_by: comp__mw_log_backend
 
@@ -204,7 +204,7 @@ Non-Functional Requirements
    :reqtype: Non-Functional
    :security: YES
    :safety: ASIL_B
-   :derived_from: feat_req__logging__asil_support, feat_req__logging__error_handling_isolation
+   :derived_from: feat_req__logging__asil_support
    :status: valid
    :satisfied_by: comp__mw_log_backend
 

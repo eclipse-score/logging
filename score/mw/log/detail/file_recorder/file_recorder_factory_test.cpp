@@ -65,6 +65,7 @@ TEST_F(FileRecorderFactoryConfigFixture, FileConfigurionShallCallFileCreationAnd
                    "RecorderFactory can create FileRecorder and fileCreation will be called if file is configured. The "
                    "component shall set the FD_CLOEXEC (or O_CLOEXEC) flag on all the file descriptor it owns");
     RecordProperty("TestingTechnique", "Requirements-based test");
+    RecordProperty("lobster-tracing", "MwLog.FileDescriptorFlags");
 
     auto fcntl_mock = score::cpp::pmr::make_unique<score::os::FcntlMock>(memory_resource_);
     auto* fcntl_mock_raw_ptr = fcntl_mock.get();

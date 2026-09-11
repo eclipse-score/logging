@@ -13,6 +13,19 @@
 
 load("@rules_cc//cc:defs.bzl", "cc_library", "cc_test")
 load("@score_baselibs//:bazel/unit_tests.bzl", "cc_unit_test_suites_for_host_and_qnx")
+load("@score_tooling//bazel/rules/rules_score:rules_score.bzl", "unit")
+
+unit(
+    name = "shared_memory_unit",
+    implementation = [":reader"],
+    scope = [
+        ":common",
+        ":writer",
+    ],
+    tests = [":unit_test"],
+    unit_design = ["//score/mw/log/dependability/software_unit_design:shared_memory_unit_design"],
+    visibility = ["//score/mw/log/dependability:__pkg__"],
+)
 
 cc_library(
     name = "common",

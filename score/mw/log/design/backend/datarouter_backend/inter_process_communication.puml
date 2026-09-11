@@ -37,8 +37,7 @@ ClientReceiver -0)- DrSender
 ClientSender -(0- DrReceiver
 
 note top of ClientReceiver
-  Instantiates side channel to receive messages from
-  /mw_com/message_passing/logging.<app>.<uid>
+  Instantiates side channel to receive messages from /mw_com/message_passing/logging.<app>.<uid>
 end note
 
 note top of DrSender

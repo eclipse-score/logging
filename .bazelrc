@@ -23,6 +23,8 @@ common --registry=https://bcr.bazel.build
 # fails on machines without Android SDK APIs (incl. GitHub runners). This
 # project does not use Android; unset ANDROID_HOME so the lookup is skipped.
 common --repo_env=ANDROID_HOME=
+# POC: libclang toolchain for rules_score's unit()/component() C++ parser.
+common --extra_toolchains=//bazel/toolchains:score_logging_libclang_toolchain
 
 # Retry HTTP downloads to handle transient failures (e.g. QNX toolchain)
 common --http_connector_attempts=10

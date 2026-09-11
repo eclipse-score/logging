@@ -1,0 +1,31 @@
+/********************************************************************************
+ * Copyright (c) 2026 Contributors to the Eclipse Foundation
+ *
+ * See the NOTICE file(s) distributed with this work for additional
+ * information regarding copyright ownership.
+ *
+ * This program and the accompanying materials are made available under the
+ * terms of the Apache License Version 2.0 which is available at
+ * https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ ********************************************************************************/
+package MwLogBackend
+
+import ScoreReq
+
+// PLACEHOLDER FMEA (POC only): exercises the TRLC/dependable_element pipeline
+// end-to-end. A real safety engineer must author the actual FMEA for mw::log's
+// backend (data router, shared memory, file recorder, wait-free queue) before
+// this can serve as certification evidence -- see score_baselibs' own
+// score/mw/log/docs/safety_analysis/fmea.rst, which is itself only an unfilled
+// draft template.
+ScoreReq.FailureMode LogMessageLossOrCorruption {
+    guidewords = [ScoreReq.Guideword.LossOfFunction, ScoreReq.Guideword.Corrupted]
+    description = "A log message is lost, dropped, or its content is corrupted between being recorded by the frontend and reaching a configured backend sink."
+    failureeffect = "Diagnostic/verification data is missing or misleading. mw::log is not itself a safety-actuating function (QM), but missing or corrupted logs can hide evidence needed for post-incident or verification analysis."
+    interface = "DataRouterBackend, SharedMemoryWriter, SharedMemoryReader"
+    version = 1
+    safety = ScoreReq.Asil.B
+    note = "PLACEHOLDER entry -- not a completed FMEA."
+}

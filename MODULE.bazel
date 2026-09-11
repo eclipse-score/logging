@@ -40,7 +40,36 @@ bazel_dep(name = "score_docs_as_code", version = "8.1.1")
 bazel_dep(name = "score_tooling", version = "2.2.0")
 bazel_dep(name = "score_rust_policies", version = "0.0.5")
 bazel_dep(name = "score_process_description", version = "2.1.2")
-bazel_dep(name = "score_platform", version = "0.7.2")
+#bazel_dep(name = "score_platform", version = "0.7.2")
+
+# POC: local checkout has rst_to_trlc support needed to source feature
+# requirements directly from score/docs (not yet in any released version).
+local_path_override(
+    module_name = "score_tooling",
+    path = "../tooling",
+)
+
+# score_tooling's own git_override for rules_distroless (needed for
+# apt.sources_list()/apt.sysroot(), used by its hermetic libclang sysroot) is
+# only honored when score_tooling is the root module. Since it's a transitive
+# dependency here (via local_path_override), this override must be repeated,
+# or the registry rules_distroless 0.8.0 (lacking those tag classes) is used
+# instead and score_tooling's own MODULE.bazel fails to load.
+bazel_dep(name = "rules_distroless", version = "0.8.0")
+git_override(
+    module_name = "rules_distroless",
+    commit = "e1df344fde5adaef7397c34076b56f27771d08b8",
+    remote = "https://github.com/LittleHuba/rules_distroless.git",
+)
+
+bazel_dep(name = "score_platform", version = "0.6.4", dev_dependency = True)
+
+# POC: reference the local score checkout so mw::log feature requirements can
+# be sourced directly from score/docs/features/log_and_trace/logging/requirements.
+local_path_override(
+    module_name = "score_platform",
+    path = "../score",
+)
 
 bazel_dep(name = "score_itf", version = "0.5.0", dev_dependency = True)
 
@@ -93,12 +122,7 @@ bazel_dep(name = "score_toolchains_rust", version = "0.10.0", dev_dependency = T
 bazel_dep(name = "score_crates", version = "0.0.11")
 
 # TRLC dependency for requirements traceability
-bazel_dep(name = "trlc", version = "0.0.0", dev_dependency = True)
-git_override(
-    module_name = "trlc",
-    commit = "8f369f1208598c2e75f44a77a98d244634ed482a",  # trlc-3.0.1 (score_tooling >= 2.x needs trlc 3.x)
-    remote = "https://github.com/bmw-software-engineering/trlc.git",
-)
+bazel_dep(name = "trlc", version = "3.0.0", dev_dependency = True)
 
 gcc = use_extension("@score_bazel_cpp_toolchains//extensions:gcc.bzl", "gcc", dev_dependency = True)
 gcc.toolchain(
@@ -158,7 +182,7 @@ llvm.toolchain(
     llvm_version = "22.1.7",
     stdlib = {"": "stdc++"},
 )
-use_repo(llvm, "llvm_toolchain", "llvm_toolchain_coverage", "llvm_toolchain_coverage_llvm")
+use_repo(llvm, "llvm_toolchain", "llvm_toolchain_coverage", "llvm_toolchain_coverage_llvm", "llvm_toolchain_llvm")
 
 PYTHON_VERSION = "3.12"
 
@@ -173,6 +197,15 @@ python.toolchain(
 bazel_dep(name = "googletest", version = "1.17.0.bcr.2")
 bazel_dep(name = "rapidjson", version = "1.1.0.bcr.20241007")
 bazel_dep(name = "score_baselibs", version = "0.2.12")
+
+# POC: reference the local score_baselibs checkout so mw::log's backend can
+# consume+forward the frontend's AoU RST (score/mw/log/docs/safety_analysis)
+# live via rst_to_trlc.
+local_path_override(
+    module_name = "score_baselibs",
+    path = "../score_baselibs",
+)
+
 bazel_dep(name = "score_communication", version = "0.4.0")
 
 # Rust dependencies

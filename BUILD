@@ -39,7 +39,7 @@ copyright_checker(
 )
 
 # Add target for formatting checks
-use_format_targets()
+# use_format_targets()  # POC: disabled, see load-time note above.
 
 exports_files([
     "MODULE.bazel",
@@ -48,6 +48,10 @@ exports_files([
 
 # Creates all documentation targets:
 # - `:docs` for building documentation at build-time
+# POC: score_process (now score_process_description) content used needextend
+# without c.this_doc() scoping, which needs_json's hardcoded -W turned into a
+# fatal build failure. Re-added via local_path_override (see MODULE.bazel) to
+# a checkout with that fix applied.
 docs(
     data = [
         "@score_platform//:needs_json",

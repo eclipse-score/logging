@@ -34,6 +34,7 @@ TEST(WaitFreeLinearWriter, EnsureAtomicRequirements)
     RecordProperty("ASIL", "B");
     RecordProperty("Description", "The used atomic data types shall be lock free");
     RecordProperty("TestingTechnique", "Requirements-based test");
+    RecordProperty("lobster-tracing", "MwLog.AvoidLocks, MwLog.CrossLockingPrevention");
 
     score::mw::log::detail::LinearControlBlock control_block{};
     ASSERT_TRUE(control_block.acquired_index.is_lock_free());
