@@ -13,17 +13,13 @@
 
 load("@rules_cc//cc:defs.bzl", "cc_binary", "cc_library")
 load("@score_baselibs//score/language/safecpp:toolchain_features.bzl", "COMPILER_WARNING_FEATURES")
-load("@score_baselibs//score/quality/clang_tidy:extra_checks.bzl", "clang_tidy_extra_checks")
+load("//bazel/tools:json_schema_validator.bzl", "validate_json_schema_test")
 
-clang_tidy_extra_checks(
-    name = "clang_tidy_extra_checks",
-    extra_features = [
-        "spp_code_style_check_header_guards",
-        "spp_code_style_check_method_names",
-        "spp_code_style_check_readability",
-        "spp_code_style_check_type_names",
-        "spp_code_style_check_variable_names",
-    ],
+validate_json_schema_test(
+    name = "validate_mw_com_config_schema",
+    json = "etc/mw_com_config.json",
+    schema = "//platform/aas/mw/com:config_schema",
+    tags = ["lint"],
 )
 
 ## ===========================================================================
@@ -340,6 +336,7 @@ filegroup(
     srcs = [
         "etc/key_value_storage_list.json",
         "etc/logging.json",
+        "etc/mw_com_config.json",
         "etc/persistent-database-override.json",
         "etc/persistent-logging.json",
     ],
