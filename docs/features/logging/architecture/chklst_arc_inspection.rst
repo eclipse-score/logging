@@ -83,18 +83,19 @@ reviews in general and inspection in particular.
         ``feat_req__logging__log_sources_user_app``, there are more linked in
         (``comp_arc_sta__log__sv``) but they should be also added feature-level:
         - ``feat_req__logging__asil_support``
-        - ``feat_req__logging__security_log_access``
         - ``feat_req__logging__compat_dlt``
         - ``feat_req__logging__severity_levels``
         - ``feat_req__logging__log_sinks_network``
         - ``feat_req__logging__filtering_log_levels``
         - ``feat_req__logging__resource_performance``
-        - ``feat_req__logging__config_permissions``
         - ``feat_req__logging__log_sinks_console``
         - ``feat_req__logging__config_on_demand``
         - ``feat_req__logging__resource_runtime``
         - ``feat_req__logging__error_handling_isolation``
-      - TODO: open an issue to complete the ``fulfils`` list on ``feat_arc_sta__logging__static_view``
+
+        Requirements valid only from v2.0.0 onwards (out of scope for this
+        version-1 review) are excluded from this list.
+      - https://github.com/eclipse-score/logging/issues/309
     * - ARC_01_02
       - Does the software architecture design consider all the requirements
         allocated to the architectural element, including functional,
@@ -108,21 +109,32 @@ reviews in general and inspection in particular.
         design decisions are taken into account and documented in the
         architectural design.
       - No
-      - Related to the ARC_01_01 gap.
-        The following feature requirements are not linked and so not implemented
+      - Related to the ARC_01_01 gap. None of the ``comp_req`` items in
+        ``docs/components/mw_log/requirements`` or
+        ``docs/components/datarouter/requirements`` (the only two component
+        requirement sets in this repository) are ``derived_from`` the following
+        feature requirements, so they are not linked and so not implemented
         in the design yet:
+        ``feat_req__logging__timestamping_local``,
         ``feat_req__logging__timestamping_original``,
-        ``feat_req__logging__timestamping_sync``,
-        ``feat_req__logging__prioritization``,
+        ``feat_req__logging__entity_identifier``,
+        ``feat_req__logging__message_loss_detection``,
         ``feat_req__logging__context_log_level``,
         ``feat_req__logging__log_sources``,
         ``feat_req__logging__log_sinks_local_fs``,
-        ``feat_req__logging__log_sinks_cloud_drive``,
+        ``feat_req__logging__log_sinks_stdout``,
         ``feat_req__logging__boot_logging``,
-        ``feat_req__log__err_handling_nonrec``,
-        ``feat_req__logging__resource_storage``,
-        ``feat_req__logging__system_class``,
-      - TODO: open an issue.
+        ``feat_req__logging__config_log_level``,
+        ``feat_req__logging__config_fallback``,
+        ``feat_req__logging__config_custom_types``,
+        ``feat_req__logging__error_handling_recoverable``,
+        ``feat_req__logging__compat_os``,
+        ``feat_req__logging__compat_languages``,
+        ``feat_req__logging__resource_storage``.
+
+        Requirements valid only from v2.0.0 onwards (out of scope for this
+        version-1 review) are excluded from this list.
+      - https://github.com/eclipse-score/logging/issues/312
     * - ARC_01_03
       - If the architectural element is related to any supplier manuals
         (including safety and security), are the relevant parts covered?
@@ -139,17 +151,11 @@ reviews in general and inspection in particular.
         defined by the work product traceability?
       -
       - No
-      - The arch view ``logic_arc_int__log_cpp__logging`` is realized by
-        ``comp_arc_sta__log__sv``, which is further detailed in the mw_log
-        detailed design (``shm_apis.md``,
-        ``datarouter_backend/logging_architecture.md``). However, datarouter's
-        ``logging_architecture.md`` and ``shm_apis.md`` is
-        not actually part of the published/public docs, so that lower-level
-        artifact does not currently link back to this element for readers of the
-        site.
-      - TODO: open a ticket to move ``logging_architecture.md`` into the
-        public docs folder so it is actually published; no tracker link
-        available yet.
+      - There is detailed design pages (``datarouter_backend/README.md``,
+      ``file_output_backend.md``) but no sphinx-needs objects. So there is no
+      formal/tool-checkable need-link from the architectural elements down to
+      them.
+      - https://github.com/eclipse-score/logging/issues/313
     * - ARC_02_01
       - Is the software architecture design compliant with the overall feature
         architecture?
@@ -250,9 +256,7 @@ reviews in general and inspection in particular.
         itself, this writes into ``score::mw::log::gBackendCreators`` inside of
         ``@score_baselibs//score/mw/log:backend_table``. No design rationale
         for this global-state pattern is documented in the architecture docs.
-      - TODO: open an issue to add a design rationale for the static
-        backend-registration globals to the architecture documentation; no
-        tracker link available yet.
+      -  https://github.com/eclipse-score/logging/issues/310
     * - ARC_03_04
       - Is the software architecture design following best practices and design
         principles?
@@ -308,7 +312,7 @@ reviews in general and inspection in particular.
       - No
       - The user defines the sizes of the ring buffer and slot sizes, also the
         path of the file, we need to document the overhead for each log message
-      - TODO open issue
+      - https://github.com/eclipse-score/logging/issues/314
     * - ARC_04_03
       - If your software architectural design includes processes and tasks, are
         their scheduling policies and priorities (at least the necessary
@@ -322,7 +326,7 @@ reviews in general and inspection in particular.
       - No
       - Datarouter is a process and has no documentation about scheduling are
         documented.
-      - TODO: open an issue.
+      - https://github.com/eclipse-score/logging/issues/308
 
 
 .. attention::
