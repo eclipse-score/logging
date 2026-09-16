@@ -130,6 +130,7 @@ cc_test(
         "@googletest//:gtest_main",
         "@score_baselibs//score/concurrency:thread_pool",
         "@score_baselibs//score/language/futurecpp:futurecpp_test_support",
+        "@score_baselibs//score/mw/log:minimal",
         "@score_baselibs//score/mw/log/configuration:target_config_reader_mock",
         "@score_baselibs//score/mw/log/detail:backend_mock",
         "@score_baselibs//score/mw/log/detail/text_recorder",
