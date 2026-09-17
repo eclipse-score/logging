@@ -14,7 +14,7 @@
 #include "filetransfer_stream.h"
 #include "dlt/dlt_headers.h"
 #include "score/os/stat.h"
-#include "score/os/stdio.h"
+#include "score/os/stdio_impl.h"
 #include "score/os/utils/thread.h"
 #include "score/mw/log/logging.h"
 
