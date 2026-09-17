@@ -31,7 +31,8 @@ namespace
 TEST(WaitFreeAlternatingWriterTests, EnsureAtomicRequirements)
 {
     RecordProperty("PartiallyVerifies", "comp_req__log__cross_locking");
-    RecordProperty("Description", "Check that the atomic types used by the wait-free alternating writer are lock-free.");
+    RecordProperty("Description",
+                   "Check that the atomic types used by the wait-free alternating writer are lock-free.");
     RecordProperty("TestType", "requirements-based");
     RecordProperty("DerivationTechnique", "requirements-analysis");
     RecordProperty("Requirement", "SCR-861578,SCR-1016724,SCR-861550");

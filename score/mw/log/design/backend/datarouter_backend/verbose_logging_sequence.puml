@@ -13,14 +13,14 @@
 
 @startuml verbose_logging_sequence
 
-participant "_:App_" as App
+participant "App" as App
 participant "FreeFunctions" as FreeFunctions
 participant "LogStreamFactory" as LogStreamFactory
 participant "Runtime" as Runtime
-participant "_:LogStream_" as LogStream
-participant "_:DataRouterRecorder_" as DataRouterRecorder
+participant "LogStream" as LogStream
+participant "DataRouterRecorder" as DataRouterRecorder
 participant "DLTFormater" as DLTFormater
-participant "_:DataRouterBackend_" as DataRouterBackend
+participant "DataRouterBackend" as DataRouterBackend
 
 activate App
 
@@ -103,17 +103,17 @@ deactivate DataRouterBackend
 LogStream <-- DataRouterRecorder
 deactivate DataRouterRecorder
 
-destroy LogStream
-
 App <-- LogStream
+
+destroy LogStream
 
 deactivate App
 
 note right of TRACE #red
-  This part will be removed in future,
-  once we can directly stream into MrWriter
-  this will then remove any
-  dynamic memory allocation.
+	This part will be removed in future,
+	once we can directly stream into MrWriter
+	this will then remove any
+	dynamic memory allocation.
 end note
 
 @enduml

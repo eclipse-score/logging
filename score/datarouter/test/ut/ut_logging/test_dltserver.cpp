@@ -240,7 +240,8 @@ TEST_F(DltServerCreatedWithConfigFixture, FlushChannelsExpectNoThrowException)
 TEST_F(DltServerCreatedWithConfigFixture, GetQuotaCorrectAppNameExpectCorrectValue)
 {
     RecordProperty("PartiallyVerifies", "comp_req__data_router__dlt_bw_quota_config");
-    RecordProperty("Description", "Check that the DLT bandwidth quota configured for an application is returned correctly.");
+    RecordProperty("Description",
+                   "Check that the DLT bandwidth quota configured for an application is returned correctly.");
     RecordProperty("TestType", "requirements-based");
     RecordProperty("DerivationTechnique", "requirements-analysis");
 

@@ -73,8 +73,8 @@ lt2_backend -[hidden]down-> SourceSession2
 lt1_backend <-0)-> SourceSession1 : message_passing
 lt2_backend <-0)-> SourceSession2 : message_passing
 
-Datarouter -(0-> [NetworkStack]: socket
-[NetworkStack] -r-> Multicast: sends multicast
+Datarouter -(0-> NetworkStack: socket
+NetworkStack -r-> Multicast: sends multicast
 
 legend right
   |Color| Repository | Contents |

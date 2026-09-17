@@ -17,7 +17,7 @@
 interface "mw::log::Recorder" as Recorder {
   + StartRecord(ctx:std::string_view, log_level:LogLevel) : score::cpp::optional<SlotHandle>
   + StopRecord(slot:SlotHandle&): void
-  + Log(const SlotHandle&, const T data) - family of functions
+  + Log(slot: SlotHandle, data: T): void
   + IsLogEnabled(const LogLevel&, const std::string_view): bool
 }
 
@@ -37,7 +37,7 @@ class "mw::log::detail::FileRecorder" as FileRecorder {
   + StartRecord(ctx:std::string_view, const LogLevel): score::cpp::optional<SlotHandle>
   + StopRecord(const SlotHandle&): void
   + IsLogEnabled(const LogLevel&, const std::string_view): bool
-  + Log(const SlotHandle&, T data) - family of functions
+  + Log(slot: SlotHandle, data: T): void
 }
 
 class "mw::log::detail::TextRecorder" as TextRecorder {
@@ -49,7 +49,7 @@ class "mw::log::detail::TextRecorder" as TextRecorder {
   + StartRecord(ctx:std::string_view, const LogLevel): score::cpp::optional<SlotHandle>
   + StopRecord(const SlotHandle&): void
   + IsLogEnabled(const LogLevel&, const std::string_view): bool
-  + Log(const SlotHandle&, T data) - family of functions
+  + Log(slot: SlotHandle, data: T): void
 }
 
 class "mw::log::detail::DataRouterRecorder" as DataRouterRecorder {
@@ -63,14 +63,14 @@ class "mw::log::detail::CompositeRecorder" as CompositeRecorder {
   + StopRecord(slot:SlotHandle&): void
   + GetRecorders(): std::vector<std::unique_ptr<Recorder>>&
   + IsLogEnabled(const LogLevel&, const std::string_view): bool
-  + Log(const SlotHandle&, const T) - family of functions
+  + Log(slot: SlotHandle, data: T): void
 }
 
 class "mw::log::detail::EmptyRecorder" as EmptyRecorder {
   + StartRecord(const std::string_view, const LogLevel):\n  score::cpp::optional<SlotHandle>
   + StopRecord(const SlotHandle&): void
   + IsLogEnabled(const LogLevel&, const std::string_view): bool
-  + Log(const SlotHandle&, T data) - family of functions
+  + Log(slot: SlotHandle, data: T): void
 }
 
 class "mw::log::detail::RecorderMock" as RecorderMock #pink {
@@ -113,13 +113,13 @@ class "DltArgumentCounter" as DltArgumentCounter {
 class "mw::log::detail::TextFormat" as TextFormat {
   {static} + PutFormattedTime(VerbosePayload&) : void
   {static} + TerminateLog(VerbosePayload&) : void
-  {static} + Log(VerbosePayload&, const T, const IntegerRepresentation) : void\n  - family of functions
-  {static} + Log(VerbosePayload&, const T) : void\n  - family of functions
+  {static} + Log(payload: VerbosePayload&, data: T, representation: IntegerRepresentation): void
+  {static} + Log(payload: VerbosePayload&, data: T): void
 }
 
 class "mw::log::detail::DLTFormat" as DLTFormat {
   + Log(VerbosePayload&, const bool): AddArgumentResult
-  + Log(VerbosePayload&, T, const IntegerRepresentation):\n   AddArgumentResult - family of functions
+  + Log(payload: VerbosePayload&, data: T, representation: IntegerRepresentation): AddArgumentResult
 }
 
 class "mw::log::detail::CircularAllocator<T>" as CircularAllocator {
@@ -170,16 +170,5 @@ SlogBackend --> LogRecord : uses
 ' External dependencies
 FileRecorder ..> fcntl : open\nSetNonBlocking / fctrl call
 FileRecorder ..> Unistd : close
-
-' Notes
-note bottom of Recorder
-  Refer Recorder.h for all the Log(const SlotHandle&, const T data)
-  - family of functions
-end note
-
-note top of TextFormat
-  Refer text_format.h for all the Log(...)
-  - family of functions
-end note
 
 @enduml

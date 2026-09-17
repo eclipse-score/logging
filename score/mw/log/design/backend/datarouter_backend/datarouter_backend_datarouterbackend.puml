@@ -15,17 +15,20 @@
 
 title DataRouterBackend::DataRouterBackend
 
-[*] --> CreateSharedMemoryWriter
+participant "DataRouterBackend" as DataRouterBackend
+participant "WriterFactory" as WriterFactory
+participant "Logger" as Logger
+participant "MessageClientFactory" as MessageClientFactory
+participant "MessageClient" as MessageClient
 
-state "Create shared memory writer" as CreateSharedMemoryWriter
-state "Initialize Logger\n::score::platform::Logger::Instance(config, {}, writer)" as InitLogger
-state "Create message client" as CreateMessageClient
-state "Run message client" as RunMessageClient
+DataRouterBackend -> WriterFactory : Create shared memory writer
 
-CreateSharedMemoryWriter --> InitLogger : [writer.has_value()]
-CreateSharedMemoryWriter --> [*] : [else]
-InitLogger --> CreateMessageClient
-CreateMessageClient --> RunMessageClient
-RunMessageClient --> [*]
+alt writer has value
+  DataRouterBackend -> Logger : Initialize Logger::Instance()
+  DataRouterBackend -> MessageClientFactory : Create message client
+  MessageClientFactory --> DataRouterBackend : Message client
+  DataRouterBackend -> MessageClient : Run message client
+else no writer
+end
 
 @enduml

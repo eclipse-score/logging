@@ -55,8 +55,9 @@ class FileRecorderFactoryConfigFixture : public ::testing::Test
 TEST_F(FileRecorderFactoryConfigFixture, FileConfigurionShallCallFileCreationAndReturnFileRecorder)
 {
     RecordProperty("PartiallyVerifies", "comp_req__log__file_descriptor_flags");
-    RecordProperty("Description",
-                   "Check that the file recorder factory opens the configured log file with the close-on-exec flag set.");
+    RecordProperty(
+        "Description",
+        "Check that the file recorder factory opens the configured log file with the close-on-exec flag set.");
     RecordProperty("TestType", "requirements-based");
     RecordProperty("DerivationTechnique", "requirements-analysis");
     RecordProperty("Requirement", "SCR-861534, SCR-26319707");
