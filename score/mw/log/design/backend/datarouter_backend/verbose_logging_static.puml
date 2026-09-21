@@ -25,6 +25,9 @@ package "Backend: Logging" as backend_logging {
     component "Runtime" as Runtime <<unit>>
     component "LogStream" as LogStream <<unit>>
     component "DataRouterRecorder" as DataRouterRecorder <<unit>>
+    component "TextRecorder" as TextRecorder <<unit>>
+    component "SyslogBackend" as SyslogBackend <<unit>>
+    component "Syslog" as Syslog <<unit>>
     component "DLTFormater" as DLTFormater <<unit>>
     component "DataRouterBackend" as DataRouterBackend <<unit>>
     component "TRACE" as TRACE <<unit>>
@@ -62,6 +65,10 @@ interface "IDataRouterBackendMessageClientFactory" as IDataRouterBackendMessageC
 interface "IDataRouterBackendMessageClient" as IDataRouterBackendMessageClient
 interface "IRuntimeDataRouterRecorder" as IRuntimeDataRouterRecorder
 interface "IAppLogStream" as IAppLogStream
+interface "IRuntimeTextRecorder" as IRuntimeTextRecorder
+interface "ILogStreamTextRecorder" as ILogStreamTextRecorder
+interface "ITextRecorderSyslogBackend" as ITextRecorderSyslogBackend
+interface "ISyslogBackendSyslog" as ISyslogBackendSyslog
 interface "IClientSignalHandling" as IClientSignalHandling
 interface "IClientSender" as IClientSender
 interface "IClientReceiver" as IClientReceiver
@@ -113,6 +120,18 @@ MessageClient )- IDataRouterBackendMessageClient
 
 Runtime -( IRuntimeDataRouterRecorder
 DataRouterRecorder )- IRuntimeDataRouterRecorder
+
+Runtime -( IRuntimeTextRecorder
+TextRecorder )- IRuntimeTextRecorder
+
+LogStream -( ILogStreamTextRecorder
+TextRecorder )- ILogStreamTextRecorder
+
+TextRecorder -( ITextRecorderSyslogBackend
+SyslogBackend )- ITextRecorderSyslogBackend
+
+SyslogBackend -( ISyslogBackendSyslog
+Syslog )- ISyslogBackendSyslog
 
 App -( IAppLogStream
 LogStream )- IAppLogStream
