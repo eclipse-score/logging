@@ -59,7 +59,7 @@
         {
           "name": "DltChannelTest__WhenLogLevelExceedsThreshold_Verbose",
           "file": "score/datarouter/test/ut/ut_logging/test_dltchannel.cpp",
-          "line": 456,
+          "line": 457,
           "need": "comp_req__data_router__dlt_message_filtering",
           "verify_type": "partially",
           "result": "passed",
@@ -71,7 +71,7 @@
         {
           "name": "DltChannelTest__WhenNonVerboseLogLevelExceedsThreshold",
           "file": "score/datarouter/test/ut/ut_logging/test_dltchannel.cpp",
-          "line": 482,
+          "line": 484,
           "need": "comp_req__data_router__dlt_message_filtering",
           "verify_type": "partially",
           "result": "passed",
