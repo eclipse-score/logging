@@ -95,6 +95,22 @@ cc_library(
     alwayslink = True,
 )
 
+# Plugin: Linux syslog(3) System Logging
+# Automatically included on Linux (HGY aarch64 / x86 host) builds.
+cc_library(
+    name = "syslog",
+    srcs = ["syslog_registrant.cpp"],
+    features = COMPILER_WARNING_FEATURES,
+    tags = ["FFI"],
+    target_compatible_with = ["@platforms//os:linux"],
+    visibility = ["//visibility:public"],  # platform_only
+    deps = [
+        "//score/mw/log/detail/syslog:syslog_recorder_factory",
+        "@score_baselibs//score/mw/log:minimal",
+    ],
+    alwayslink = True,
+)
+
 # Plugin: Custom user-provided Logging backend
 # Opt-in. Build with --@score_logging//score/mw/log/flags:KCustom_Logging=True
 # and --@score_logging//score/mw/log/flags:custom_recorder_impl=//your:target.
