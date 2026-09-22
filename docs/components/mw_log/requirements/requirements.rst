@@ -142,9 +142,7 @@ System Backend
 
    The system logger backend shall forward the logs to the native system logger mechanism.
 
-   Note: Under QNX, slogger2 shall be used.
-
-   Note: Under Linux, syslog(3) shall be used.
+   Note: slogger2 shall be used for QNX. syslog(3) shall be used for Linux.
 
 .. comp_req:: System Backend Activation
    :id: comp_req__log__system_backend_activation

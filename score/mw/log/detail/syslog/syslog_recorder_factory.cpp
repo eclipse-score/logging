@@ -12,6 +12,8 @@
  ********************************************************************************/
 #include "score/mw/log/detail/syslog/syslog_recorder_factory.h"
 
+#include <score/assert.hpp>
+
 namespace score
 {
 namespace mw
@@ -24,7 +26,9 @@ std::unique_ptr<Recorder> SyslogRecorderFactory::CreateConcreteLogRecorder(
     const Configuration& config,
     score::cpp::pmr::memory_resource* memory_resource)
 {
+    SCORE_LANGUAGE_FUTURECPP_ASSERT_PRD(memory_resource != nullptr);
     auto backend = CreateSystemBackend(config, memory_resource);  // LCOV_EXCL_LINE : no branches to test
+    SCORE_LANGUAGE_FUTURECPP_ASSERT_PRD(backend != nullptr);
     constexpr bool kCheckLogLevelForConsole = false;
     return std::make_unique<TextRecorder>(config, std::move(backend), kCheckLogLevelForConsole);
 }
@@ -32,10 +36,12 @@ std::unique_ptr<Recorder> SyslogRecorderFactory::CreateConcreteLogRecorder(
 std::unique_ptr<Backend> SyslogRecorderFactory::CreateSystemBackend(const Configuration& config,
                                                                     score::cpp::pmr::memory_resource* memory_resource)
 {
+    auto syslog_instance = score::os::Syslog::Default(memory_resource);
+    SCORE_LANGUAGE_FUTURECPP_ASSERT_PRD(syslog_instance != nullptr);
     return std::make_unique<SyslogBackend>(config.GetNumberOfSlots(),
                                            LogRecord{config.GetSlotSizeInBytes()},
                                            config.GetAppId(),
-                                           score::os::Syslog::Default(memory_resource));
+                                           std::move(syslog_instance));
 }
 
 }  // namespace detail

@@ -30,6 +30,7 @@ cc_library(
         "@score_baselibs//score/mw/log:__subpackages__",
     ],
     deps = [
+        "@score_baselibs//score/language/futurecpp",
         "@score_baselibs//score/mw/log/detail:backend_interface",
         "@score_baselibs//score/mw/log/detail:circular_allocator",
         "@score_baselibs//score/mw/log/detail:initialization_reporter",
@@ -69,6 +70,7 @@ cc_library(
     ],
     deps = [
         ":syslog_backend",
+        "@score_baselibs//score/language/futurecpp",
         "@score_baselibs//score/mw/log/detail:log_recorder_factory",
         "@score_baselibs//score/mw/log/detail/text_recorder",
     ],
