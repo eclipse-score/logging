@@ -83,7 +83,7 @@ rust_library(
     visibility = ["//visibility:public"],
     deps = [
         ":adapter",
-        "@score_baselibs//src/log/score_log",
+        "@score_baselibs//score/log_rust/score_log",
     ],
 )
 
@@ -138,6 +138,6 @@ rust_binary(
     visibility = ["//visibility:public"],
     deps = [
         ":score_log_bridge",
-        "@score_baselibs//src/log/score_log",
+        "@score_baselibs//score/log_rust/score_log",
     ],
 )

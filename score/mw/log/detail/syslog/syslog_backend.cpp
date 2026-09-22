@@ -18,7 +18,6 @@
 #include <score/assert.hpp>
 #include <algorithm>
 #include <limits>
-#include <tuple>
 
 namespace score
 {
@@ -119,17 +118,11 @@ score::cpp::optional<SlotHandle> SyslogBackend::ReserveSlot() noexcept
     const auto& slot = buffer_.AcquireSlotToWrite();
     if (slot.has_value())
     {
-        if (slot.value() < std::numeric_limits<SlotIndex>::max())  // LCOV_EXCL_BR_LINE: As it always true case,we can't
-        //  control slot.value() it is received from AcquireSlotToWrite() function
-        // which wraps around and resulting in a value within the valid range.
-        {
-            // CircularAllocator has capacity limited by CheckTheMaxCapacity thus the cast is valid:
-            // We intentionally static cast to SlotIndex(uint8_t) to limit memory allocations
-            // to the required levels during startup, since there is no need to support slots greater
-            // than uint8 as per the current system needs.
-            // coverity[autosar_cpp14_a4_7_1_violation]
-            return SlotHandle{static_cast<SlotIndex>(slot.value())};
-        }
+        // CircularAllocator capacity is limited by CheckTheMaxCapacity(), so this conversion is safe.
+        // SlotHandle uses SlotIndex to keep slot storage within the required startup allocation limits.
+        SCORE_LANGUAGE_FUTURECPP_ASSERT_PRD(slot.value() < std::numeric_limits<SlotIndex>::max());
+        // coverity[autosar_cpp14_a4_7_1_violation]
+        return SlotHandle{static_cast<SlotIndex>(slot.value())};
     }
     return {};
 }
