@@ -12,6 +12,8 @@
  ********************************************************************************/
 #include "score/mw/log/detail/syslog/syslog_recorder_factory.h"
 
+#include <score/assert.hpp>
+
 namespace score
 {
 namespace mw
@@ -32,10 +34,12 @@ std::unique_ptr<Recorder> SyslogRecorderFactory::CreateConcreteLogRecorder(
 std::unique_ptr<Backend> SyslogRecorderFactory::CreateSystemBackend(const Configuration& config,
                                                                     score::cpp::pmr::memory_resource* memory_resource)
 {
+    auto syslog_instance = score::os::Syslog::Default(memory_resource);
+    SCORE_LANGUAGE_FUTURECPP_ASSERT_PRD(syslog_instance != nullptr);
     return std::make_unique<SyslogBackend>(config.GetNumberOfSlots(),
                                            LogRecord{config.GetSlotSizeInBytes()},
                                            config.GetAppId(),
-                                           score::os::Syslog::Default(memory_resource));
+                                           std::move(syslog_instance));
 }
 
 }  // namespace detail

@@ -38,7 +38,7 @@ TEST(SyslogRecorderFactoryTest, CreateRecorder)
     Configuration config;
     score::cpp::pmr::memory_resource* memory_resource = score::cpp::pmr::get_default_resource();
 
-    SyslogRecorderFactory factory{};
+    SyslogRecorderFactory factory;
     auto recorder = factory.CreateConcreteLogRecorder(config, memory_resource);
 
     // Syslog uses TextRecorder

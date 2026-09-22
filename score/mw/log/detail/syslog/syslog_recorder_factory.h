@@ -28,8 +28,6 @@ namespace detail
 class SyslogRecorderFactory : public LogRecorderFactory<SyslogRecorderFactory>
 {
   public:
-    ~SyslogRecorderFactory() = default;
-
     std::unique_ptr<Recorder> CreateConcreteLogRecorder(const Configuration& config,
                                                         score::cpp::pmr::memory_resource* memory_resource);
 
