@@ -180,12 +180,12 @@ python.toolchain(
 
 bazel_dep(name = "googletest", version = "1.17.0.bcr.2")
 bazel_dep(name = "rapidjson", version = "1.1.0.bcr.20241007")
-bazel_dep(name = "score_baselibs", version = "0.2.12")
+bazel_dep(name = "score_baselibs", version = "0.2.13")
 
 # Temporary cross-PR dependency; remove after the baselibs syslog change is released.
 git_override(
     module_name = "score_baselibs",
-    commit = "7667227d6779ba6562193a86d8108e2394909d3b",
+    commit = "7268b8f342e4be81138ee2e77e9ea1d9681c0dfa",
     remote = "https://github.com/qualcomm/baselibs.git",
 )
 
