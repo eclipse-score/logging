@@ -16,7 +16,7 @@ Module
 ======
 
 .. mod:: Logging
-   :id: mod__logging_repo
+   :id: mod__logging
    :status: valid
    :version: 1
    :safety: ASIL_B
@@ -32,7 +32,7 @@ Module View
    :id: mod_view_sta__logging__static_view
    :version: 1
    :includes: comp__datarouter, comp__mw_log_backend
-   :belongs_to: mod__logging_repo
+   :belongs_to: mod__logging
 
    .. needarch::
       :scale: 50
