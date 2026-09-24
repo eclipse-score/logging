@@ -184,13 +184,23 @@ const SLOT_HANDLE_STORAGE_SIZE: usize = 24;
 /// Those parameters must be:
 /// - managed by build system (using defines and features)
 /// - cross-checked between `ffi.rs` and `adapter.cpp`
-#[cfg(any(feature = "x86_64_linux", feature = "arm64_qnx", feature = "x86_64_qnx"))]
+#[cfg(any(
+    feature = "x86_64_linux",
+    feature = "aarch64_linux",
+    feature = "arm64_qnx",
+    feature = "x86_64_qnx"
+))]
 #[repr(C, align(8))]
 pub struct SlotHandleStorage {
     _private: [u8; SLOT_HANDLE_STORAGE_SIZE],
 }
 
-#[cfg(not(any(feature = "x86_64_linux", feature = "arm64_qnx", feature = "x86_64_qnx")))]
+#[cfg(not(any(
+    feature = "x86_64_linux",
+    feature = "aarch64_linux",
+    feature = "arm64_qnx",
+    feature = "x86_64_qnx"
+)))]
 compile_error!("Unknown configuration, unable to check layout");
 
 impl SlotHandleStorage {
