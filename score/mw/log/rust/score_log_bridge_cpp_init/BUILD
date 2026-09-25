@@ -51,7 +51,7 @@ rust_static_library(
     visibility = ["//visibility:private"],
     deps = [
         "//score/mw/log/rust/score_log_bridge",
-        "@score_baselibs//src/log/score_log",
+        "@score_baselibs//score/log_rust/score_log",
     ],
 )
 
