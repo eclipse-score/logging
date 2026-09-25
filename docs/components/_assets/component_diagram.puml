@@ -1,0 +1,94 @@
+@startuml
+title Logging (High-Level Component Diagram)
+skinparam componentStyle rectangle
+skinparam shadowing false
+skinparam packageStyle rectangle
+skinparam linetype ortho
+skinparam nodesep 25
+skinparam ranksep 55
+'top to bottom direction
+
+' ===== score_baselibs =====
+package "score_baselibs" {
+  package "mw/log frontend (component: ASIL-FFI)" {
+    component "Recorder\n<<interface>>" as Recorder #E8F4FF
+    component "Cpp frontend\n(Public API + Runtime)" as Frontend #E8F4FF
+    component "TextRecorder\n(console / slog)" as TextRecorder #E8F4FF
+    component "EmptyRecorder\n(fallback)" as EmptyRecorder #E8F4FF
+    component "FileOutputBackend\n(stdout / file sink)" as FileOutputBackend #E8F4FF
+    component "Rust frontend" as RustFrontend #d6d3e4
+  }
+}
+
+' ===== score_logging =====
+package "score_logging" {
+  package "mw/log backend (component: ASIL-FFI)" {
+    component "FileRecorder" as FileRecorder #E8F4FF
+    component "DataRouterRecorder\n(remote)" as DataRouterRecorder #E8F4FF
+    component "BackendTable\n(static registry)" as BackendTable #E8F4FF
+    component "custom_registrant\n(pre-wired bridge)" as CustomRegistrant #b7dfbb
+    component "SlogBackend" as SlogBackend #E8F4FF
+    component "DataRouterBackend" as DataRouterBackend #E8F4FF
+    component "Rust score_log_bridge" as RustLogBridge #d6d3e4
+  }
+
+  package "datarouter (component: ASIL-QM)" {
+    component "datarouter" as DataRouter #FFF2CC
+  }
+}
+
+' ===== User / Custom backend Impl. — external repo =====
+package "User code (external repo: ASIL-QM)" #EEFFF0 {
+component "CustomRecorderImpl\n(extends Recorder)" as UserRecorderImpl #CCFFCC
+component "CustomRecorderFactoryImpl\n(extends LogRecorderFactory<T>)" as UserFactoryImpl #CCFFCC
+component "custom_recorder.h\n(type aliases:\n  CustomRecorder -> CustomRecorderImpl\n  CustomRecorderFactory-> CustomRecorderFactoryImpl)" as AliasHeader #CCFFCC
+
+note bottom of AliasHeader
+Injected at build time - no source change in mw/log needed:
+    --//score/mw/log/flags:KCustom_Logging=True
+    --//score/mw/log/flags:custom_recorder_impl=//user:target
+    --cxxopt=-I<path/to/custom_recorder.h>
+    logging.json: "logMode": "kCustom"
+end note
+}
+
+' Frontend selects the active recorder via the BackendTable
+Frontend --> BackendTable
+BackendTable --> FileRecorder
+BackendTable --> DataRouterRecorder
+BackendTable --> CustomRegistrant
+
+' Recorder implementations
+TextRecorder ..> Recorder : implements
+EmptyRecorder ..> Recorder : implements
+FileRecorder ..> Recorder : implements
+DataRouterRecorder ..> Recorder : implements
+UserRecorderImpl ..> Recorder : implements
+
+' Custom wiring: registrant uses aliased user types (build-time injection)
+CustomRegistrant ..> AliasHeader : includes (build-time)
+AliasHeader ..> UserRecorderImpl : aliases
+AliasHeader ..> UserFactoryImpl : aliases
+UserFactoryImpl --> UserRecorderImpl : creates
+
+' Concrete backends -> sinks
+FileRecorder --> FileOutputBackend
+TextRecorder --> FileOutputBackend
+TextRecorder --> SlogBackend
+DataRouterRecorder --> DataRouterBackend
+
+' Remote transport
+DataRouterBackend --> DataRouter : IPC / shared memory
+
+' Rust bridge
+RustFrontend --> RustLogBridge : sets as global logger
+RustLogBridge ..> Recorder : via FFI (adapter.cpp → Runtime::GetRecorder())
+
+legend right
+  ASIL assignment
+  Blue, Purple = ASIL-FFI
+  Yellow = ASIL-QM  (datarouter only)
+  Orange = pre-wired extension bridge (score_logging)
+  Green  = user-provided implementation (external repo)
+endlegend
+@enduml
