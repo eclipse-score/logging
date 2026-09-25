@@ -88,7 +88,7 @@ To build the module:
 
 .. code-block:: bash
 
-   bazel build //score/...
+   bazel build --config=x86_64-linux //score/...
 
 To run the supported test suites:
 
