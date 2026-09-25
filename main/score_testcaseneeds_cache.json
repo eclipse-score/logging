@@ -3488,7 +3488,7 @@
   {
     "name": "UnixDomainSockAddr__NonAbstractRoundTrip",
     "file": "score/datarouter/test/ut/ut_logging/test_unix_domain_server.cpp",
-    "line": "291",
+    "line": "300",
     "result": "passed",
     "repo_name": null,
     "hash": null,
@@ -3502,7 +3502,7 @@
   {
     "name": "UnixDomainServerSessionWrapper__BasicFlagsAndTimeout",
     "file": "score/datarouter/test/ut/ut_logging/test_unix_domain_server.cpp",
-    "line": "301",
+    "line": "310",
     "result": "passed",
     "repo_name": null,
     "hash": null,
@@ -3516,7 +3516,7 @@
   {
     "name": "UnixDomainServerSessionWrapper__ServerSessionWrapperWithRealFactory",
     "file": "score/datarouter/test/ut/ut_logging/test_unix_domain_server.cpp",
-    "line": "345",
+    "line": "354",
     "result": "passed",
     "repo_name": null,
     "hash": null,
@@ -3530,7 +3530,7 @@
   {
     "name": "SessionHandle__PassMessage",
     "file": "score/datarouter/test/ut/ut_logging/test_unix_domain_server.cpp",
-    "line": "320",
+    "line": "329",
     "result": "passed",
     "repo_name": null,
     "hash": null,
@@ -3544,7 +3544,7 @@
   {
     "name": "SessionWrapperMove__CanMoveAndDestructWithoutCrash",
     "file": "score/datarouter/test/ut/ut_logging/test_unix_domain_server.cpp",
-    "line": "330",
+    "line": "339",
     "result": "passed",
     "repo_name": null,
     "hash": null,
@@ -3558,7 +3558,7 @@
   {
     "name": "UnixDomainServerAcceptTest__AcceptsOneClientConnection",
     "file": "score/datarouter/test/ut/ut_logging/test_unix_domain_server.cpp",
-    "line": "361",
+    "line": "370",
     "result": "passed",
     "repo_name": null,
     "hash": null,
@@ -3572,7 +3572,7 @@
   {
     "name": "UnixDomainServerCleanup__DestructorProcessesPendingConnections",
     "file": "score/datarouter/test/ut/ut_logging/test_unix_domain_server.cpp",
-    "line": "394",
+    "line": "403",
     "result": "passed",
     "repo_name": null,
     "hash": null,
@@ -3586,7 +3586,7 @@
   {
     "name": "UnixDomainServerHandleCmd__AllBranchesViaFramedMessages",
     "file": "score/datarouter/test/ut/ut_logging/test_unix_domain_server.cpp",
-    "line": "430",
+    "line": "439",
     "result": "passed",
     "repo_name": null,
     "hash": null,
@@ -3600,7 +3600,7 @@
   {
     "name": "UnixDomainServerHandleCommand__IdleClientTriggersDeleteBranch",
     "file": "score/datarouter/test/ut/ut_logging/test_unix_domain_server.cpp",
-    "line": "480",
+    "line": "489",
     "result": "passed",
     "repo_name": null,
     "hash": null,
@@ -3614,7 +3614,7 @@
   {
     "name": "UnixDomainServerExceptions__CatchStdExceptionInServerRoutine",
     "file": "score/datarouter/test/ut/ut_logging/test_unix_domain_server.cpp",
-    "line": "529",
+    "line": "538",
     "result": "passed",
     "repo_name": null,
     "hash": null,
@@ -3628,7 +3628,7 @@
   {
     "name": "UnixDomainServer__NotifiesClosedByPeer",
     "file": "score/datarouter/test/ut/ut_logging/test_unix_domain_server.cpp",
-    "line": "594",
+    "line": "603",
     "result": "passed",
     "repo_name": null,
     "hash": null,
@@ -3642,7 +3642,7 @@
   {
     "name": "UnixDomainServer__WorkerRequeuesOnTrueTick",
     "file": "score/datarouter/test/ut/ut_logging/test_unix_domain_server.cpp",
-    "line": "660",
+    "line": "669",
     "result": "passed",
     "repo_name": null,
     "hash": null,
@@ -3656,7 +3656,7 @@
   {
     "name": "UnixDomainServer__ServerCatchesSessionFailure",
     "file": "score/datarouter/test/ut/ut_logging/test_unix_domain_server.cpp",
-    "line": "712",
+    "line": "721",
     "result": "passed",
     "repo_name": null,
     "hash": null,
@@ -3670,7 +3670,7 @@
   {
     "name": "UnixDomainServerSocketFixture__ServerFailedToCreateSocket",
     "file": "score/datarouter/test/ut/ut_logging/test_unix_domain_server.cpp",
-    "line": "755",
+    "line": "764",
     "result": "passed",
     "repo_name": null,
     "hash": null,
@@ -3684,7 +3684,7 @@
   {
     "name": "UnixDomainServerSocketFixture__ServerFailedToCreateBind",
     "file": "score/datarouter/test/ut/ut_logging/test_unix_domain_server.cpp",
-    "line": "769",
+    "line": "778",
     "result": "passed",
     "repo_name": null,
     "hash": null,
@@ -3698,7 +3698,7 @@
   {
     "name": "UnixDomainServerSocketFixture__ServerFailedToListen",
     "file": "score/datarouter/test/ut/ut_logging/test_unix_domain_server.cpp",
-    "line": "782",
+    "line": "791",
     "result": "passed",
     "repo_name": null,
     "hash": null,
@@ -3712,7 +3712,7 @@
   {
     "name": "UnixDomainServerSocketFixture__FailedToPoll",
     "file": "score/datarouter/test/ut/ut_logging/test_unix_domain_server.cpp",
-    "line": "796",
+    "line": "805",
     "result": "passed",
     "repo_name": null,
     "hash": null,
@@ -3726,7 +3726,7 @@
   {
     "name": "UnixDomainServerSocketFixture__ServerFailedToAcceptClientConnection",
     "file": "score/datarouter/test/ut/ut_logging/test_unix_domain_server.cpp",
-    "line": "833",
+    "line": "842",
     "result": "passed",
     "repo_name": null,
     "hash": null,
@@ -3740,7 +3740,7 @@
   {
     "name": "PthreadMockFixture__ServerIgnoresSetnameError",
     "file": "score/datarouter/test/ut/ut_logging/test_unix_domain_server.cpp",
-    "line": "899",
+    "line": "908",
     "result": "passed",
     "repo_name": null,
     "hash": null,
@@ -3754,7 +3754,7 @@
   {
     "name": "UnixDomainCommon__SetupSignalsFailurePath",
     "file": "score/datarouter/test/ut/ut_logging/test_unix_domain_server.cpp",
-    "line": "933",
+    "line": "942",
     "result": "passed",
     "repo_name": null,
     "hash": null,
@@ -3768,7 +3768,7 @@
   {
     "name": "UnixDomainServerExtractedMethods__ProcessIdleConnectionsRemovesOrphanedFd",
     "file": "score/datarouter/test/ut/ut_logging/test_unix_domain_server.cpp",
-    "line": "975",
+    "line": "984",
     "result": "passed",
     "repo_name": null,
     "hash": null,
@@ -3782,7 +3782,7 @@
   {
     "name": "UnixDomainServerExtractedMethods__ProcessIdleConnectionsSkipsActiveConnections",
     "file": "score/datarouter/test/ut/ut_logging/test_unix_domain_server.cpp",
-    "line": "1009",
+    "line": "1018",
     "result": "passed",
     "repo_name": null,
     "hash": null,
@@ -3796,7 +3796,7 @@
   {
     "name": "UnixDomainServerExtractedMethods__ProcessActiveConnectionsRemovesOrphanedFd",
     "file": "score/datarouter/test/ut/ut_logging/test_unix_domain_server.cpp",
-    "line": "1036",
+    "line": "1045",
     "result": "passed",
     "repo_name": null,
     "hash": null,
