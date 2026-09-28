@@ -173,11 +173,13 @@ void UnixDomainServer::ServerRoutine(UnixDomainSockAddr addr)
 
 std::int32_t UnixDomainServer::SetupServerSocket(UnixDomainSockAddr& addr)
 {
+    const auto stat_instance = score::os::Stat::Default();
+    const auto unistd_instance = score::os::Unistd::Default();
     if (!addr.IsAbstract())
     {
         const char* path = static_cast<const char*>(addr.addr.sun_path);
         score::os::StatBuffer st{};
-        if (score::os::Stat::instance().stat(path, st).has_value())
+        if (stat_instance->stat(path, st).has_value())
         {
             // NOLINTNEXTLINE(hicpp-signed-bitwise) S_ISSOCK is a POSIX macro
             if (!S_ISSOCK(st.st_mode))
@@ -186,7 +188,7 @@ std::int32_t UnixDomainServer::SetupServerSocket(UnixDomainSockAddr& addr)
                 // NOLINTNEXTLINE(score-banned-function): Suppressed here because of error handling
                 std::exit(EXIT_FAILURE);
             }
-            const auto unlink_ret = score::os::Unistd::instance().unlink(path);
+            const auto unlink_ret = unistd_instance->unlink(path);
             if (!unlink_ret.has_value())
             {
                 std::perror("unlink");
@@ -225,8 +227,9 @@ std::int32_t UnixDomainServer::SetupServerSocket(UnixDomainSockAddr& addr)
     if (!addr.IsAbstract())
     {
         using Mode = score::os::Stat::Mode;
+        // Connecting requires write permission; group write supports non-root clients sharing the socket's GID.
         constexpr auto kSocketPerms = Mode::kReadUser | Mode::kWriteUser | Mode::kReadGroup | Mode::kWriteGroup;
-        if (!score::os::Stat::instance().chmod(static_cast<const char*>(addr.addr.sun_path), kSocketPerms).has_value())
+        if (!stat_instance->chmod(static_cast<const char*>(addr.addr.sun_path), kSocketPerms).has_value())
         {
             std::perror("chmod socket");
         }
