@@ -241,7 +241,8 @@ std::unique_ptr<score::platform::internal::UnixDomainServer> SocketServer::Creat
         return SocketServer::CreateConfigSession(dlt_server, std::move(handle));
     };
 
-    const UnixDomainSockAddr addr = score::logging::config::CreateSocketAddress(score::os::Stdlib::instance());
+    const auto stdlib = score::os::Stdlib::Default();
+    const UnixDomainSockAddr addr = score::logging::config::CreateSocketAddress(*stdlib);
     /*
     Deviation from Rule A5-1-4:
     - A lambda expression object shall not outlive any of its reference captured objects.
