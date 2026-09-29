@@ -1020,8 +1020,8 @@
     "https://raw.githubusercontent.com/eclipse-score/bazel_registry/main/modules/score_baselibs/0.2.11/MODULE.bazel": "8b58c55218c3e7139a36d911bdfd1bd4ed6fe104ec177d851bd5e6b5e168a2ea",
     "https://raw.githubusercontent.com/eclipse-score/bazel_registry/main/modules/score_baselibs/0.2.13/MODULE.bazel": "2f5579492aa6741d7ea98d9eaaf55eb8add24c2337bd2a0fbcf95017eb8a51e3",
     "https://raw.githubusercontent.com/eclipse-score/bazel_registry/main/modules/score_baselibs/0.2.13/source.json": "a0444ad4a1316ce58d6181f7eafc90a3d712c8cff2ccedc407d4985b558fe386",
-    "https://raw.githubusercontent.com/eclipse-score/bazel_registry/main/modules/score_bazel_cpp_toolchains/1.0.3/MODULE.bazel": "599f3f1123bc1400ade5bdd0c7c5470531885cf2fa1fa30024f23d5d21e6d58d",
-    "https://raw.githubusercontent.com/eclipse-score/bazel_registry/main/modules/score_bazel_cpp_toolchains/1.0.3/source.json": "47eab63b3a98244787a9ab611f825d9c62d48bfdb5000173144d2f9e24b521b8",
+    "https://raw.githubusercontent.com/eclipse-score/bazel_registry/main/modules/score_bazel_cpp_toolchains/1.0.4/MODULE.bazel": "d4e11b450511b94dcfaefe4774da8cb891d0471f8fade9fce54b0e14ac1cea7d",
+    "https://raw.githubusercontent.com/eclipse-score/bazel_registry/main/modules/score_bazel_cpp_toolchains/1.0.4/source.json": "4489079086d3cdd1e209cadeac5aac3b48120a0eb0bf855b5e0815cf7a8642b3",
     "https://raw.githubusercontent.com/eclipse-score/bazel_registry/main/modules/score_bazel_platforms/0.0.3/MODULE.bazel": "14c96e378c08705a46abe0799d6236fe3095c342c34f83f8d1b3f6046ce00651",
     "https://raw.githubusercontent.com/eclipse-score/bazel_registry/main/modules/score_bazel_platforms/0.1.1/MODULE.bazel": "236e5bdff6f2d6de6f96cc4f5f4b1bf2cd6137547ce279668a2dd4c54cd4236c",
     "https://raw.githubusercontent.com/eclipse-score/bazel_registry/main/modules/score_bazel_platforms/0.1.2/MODULE.bazel": "d1889bf36241521c5d5c401aaf1e98242a60f9cab9d223f8190e5d7087956e83",
@@ -11454,7 +11454,7 @@
     },
     "@@score_bazel_cpp_toolchains+//extensions:gcc.bzl%gcc": {
       "general": {
-        "bzlTransitiveDigest": "q6hXvCt3So3esFot1br87pd7Z5ujulkjUapUbRlUeIw=",
+        "bzlTransitiveDigest": "Nj8U7NPFVcEx27yeDyoy2LT/XDM9z/IzPO+KImFDYXI=",
         "usagesDigest": "fBH0N3PgyCNz4qN7P9MWndp5kPdomZPIbYlwZ7hjNeE=",
         "recordedFileInputs": {},
         "recordedDirentsInputs": {},
@@ -11467,9 +11467,14 @@
                 "https://www.qnx.com/download/download/79858/installation.tgz"
               ],
               "build_file": "@@score_bazel_cpp_toolchains+//packages/qnx/aarch64/sdp/8.0.0:sdp.BUILD",
+              "patch_args": [],
               "patch_cmds": [],
+              "patch_strip": 0,
+              "patch_tool": "",
               "sha256": "f2e0cb21c6baddbcb65f6a70610ce498e7685de8ea2e0f1648f01b327f6bac63",
-              "strip_prefix": "installation"
+              "strip_prefix": "installation",
+              "patches": [],
+              "files": {}
             }
           },
           "score_gcc_aarch64_toolchain_pkg": {
@@ -11479,9 +11484,14 @@
                 "https://github.com/eclipse-score/toolchains_gcc_packages/releases/download/v0.0.4/aarch64-unknown-linux-gnu_gcc12.tar.gz"
               ],
               "build_file": "@@score_bazel_cpp_toolchains+//packages/linux/aarch64/gcc/12.2.0:gcc.BUILD",
+              "patch_args": [],
               "patch_cmds": [],
+              "patch_strip": 0,
+              "patch_tool": "",
               "sha256": "7279b1adb50361b21f5266b001980b6febb35fa8d83170901196b9edae3f06d9",
-              "strip_prefix": "aarch64-unknown-linux-gnu"
+              "strip_prefix": "aarch64-unknown-linux-gnu",
+              "patches": [],
+              "files": {}
             }
           },
           "score_gcc_x86_64_toolchain_pkg": {
@@ -11491,9 +11501,14 @@
                 "https://github.com/eclipse-score/toolchains_gcc_packages/releases/download/v0.0.4/x86_64-unknown-linux-gnu_gcc12.tar.gz"
               ],
               "build_file": "@@score_bazel_cpp_toolchains+//packages/linux/x86_64/gcc/12.2.0:gcc.BUILD",
+              "patch_args": [],
               "patch_cmds": [],
+              "patch_strip": 0,
+              "patch_tool": "",
               "sha256": "e9b9a7a63a5f8271b76d6e2057906b95c7a244e4931a8e10edeaa241e9f7c11e",
-              "strip_prefix": "x86_64-unknown-linux-gnu"
+              "strip_prefix": "x86_64-unknown-linux-gnu",
+              "patches": [],
+              "files": {}
             }
           },
           "score_qcc_x86_64_toolchain_pkg": {
@@ -11503,9 +11518,14 @@
                 "https://www.qnx.com/download/download/79858/installation.tgz"
               ],
               "build_file": "@@score_bazel_cpp_toolchains+//packages/qnx/x86_64/sdp/8.0.0:sdp.BUILD",
+              "patch_args": [],
               "patch_cmds": [],
+              "patch_strip": 0,
+              "patch_tool": "",
               "sha256": "f2e0cb21c6baddbcb65f6a70610ce498e7685de8ea2e0f1648f01b327f6bac63",
-              "strip_prefix": "installation"
+              "strip_prefix": "installation",
+              "patches": [],
+              "files": {}
             }
           },
           "score_qcc_aarch64_toolchain": {
@@ -11530,8 +11550,7 @@
               "tc_system_toolchain": false,
               "tc_runtime_ecosystem": "",
               "gcc_version": "12.2.0",
-              "cc_toolchain_config": "@@score_bazel_cpp_toolchains+//templates/qnx:cc_toolchain_config.bzl.template",
-              "cc_toolchain_flags": "@@score_bazel_cpp_toolchains+//templates/qnx:cc_toolchain_flags.bzl.template",
+              "cc_toolchain_config": "@@score_bazel_cpp_toolchains+//templates:cc_toolchain_config.bzl.template",
               "use_base_constraints_only": false
             }
           },
@@ -11557,8 +11576,7 @@
               "tc_system_toolchain": false,
               "tc_runtime_ecosystem": "",
               "gcc_version": "12.2.0",
-              "cc_toolchain_config": "@@score_bazel_cpp_toolchains+//templates/linux:cc_toolchain_config.bzl.template",
-              "cc_toolchain_flags": "@@score_bazel_cpp_toolchains+//templates/linux:cc_toolchain_flags.bzl.template",
+              "cc_toolchain_config": "@@score_bazel_cpp_toolchains+//templates:cc_toolchain_config.bzl.template",
               "use_base_constraints_only": false
             }
           },
@@ -11584,8 +11602,7 @@
               "tc_system_toolchain": false,
               "tc_runtime_ecosystem": "",
               "gcc_version": "12.2.0",
-              "cc_toolchain_config": "@@score_bazel_cpp_toolchains+//templates/linux:cc_toolchain_config.bzl.template",
-              "cc_toolchain_flags": "@@score_bazel_cpp_toolchains+//templates/linux:cc_toolchain_flags.bzl.template",
+              "cc_toolchain_config": "@@score_bazel_cpp_toolchains+//templates:cc_toolchain_config.bzl.template",
               "use_base_constraints_only": false
             }
           },
@@ -11611,8 +11628,7 @@
               "tc_system_toolchain": false,
               "tc_runtime_ecosystem": "",
               "gcc_version": "12.2.0",
-              "cc_toolchain_config": "@@score_bazel_cpp_toolchains+//templates/qnx:cc_toolchain_config.bzl.template",
-              "cc_toolchain_flags": "@@score_bazel_cpp_toolchains+//templates/qnx:cc_toolchain_flags.bzl.template",
+              "cc_toolchain_config": "@@score_bazel_cpp_toolchains+//templates:cc_toolchain_config.bzl.template",
               "use_base_constraints_only": false
             }
           }
