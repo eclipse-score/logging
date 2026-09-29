@@ -11,7 +11,7 @@
 # SPDX-License-Identifier: Apache-2.0
 # *******************************************************************************
 
-load("@score_tooling//coverage:defs.bzl", "score_coverage_reporter", "score_coverage_scope")
+load("@score_coverage//:defs.bzl", "score_coverage_reporter", "score_coverage_scope")
 
 # The production components of this module — the same scope the previous gcov
 # configuration expressed as an instrumentation filter (//score/datarouter,
@@ -23,7 +23,7 @@ load("@score_tooling//coverage:defs.bzl", "score_coverage_reporter", "score_cove
 #
 # KNOWN GAP: the cc_binary entry-point sources of //score/datarouter:datarouter
 # (main) are not collected — cc_binary provides no CcInfo for the scope aspect;
-# its library deps are. Tracked as a scope-aspect enhancement in score_tooling.
+# its library deps are. Tracked as a scope-aspect enhancement in score_coverage.
 score_coverage_scope(
     name = "coverage_scope",
     testonly = True,

@@ -160,5 +160,5 @@ test:clang-tidy --extra_toolchains=@llvm_toolchain//:cc-toolchain-x86_64-linux
 test:clang-tidy --copt=-Wno-unused-command-line-argument
 
 # Unified LLVM source-based coverage (C++ + Rust), see quality/coverage/ and
-# @score_tooling//coverage. Use: bazel coverage --config=llvm_cov //score/... --build_tests_only
+# @score_coverage. Use: bazel coverage --config=llvm_cov //score/... --build_tests_only
 import %workspace%/quality/coverage/coverage.bazelrc

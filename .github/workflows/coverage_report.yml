@@ -46,7 +46,7 @@ jobs:
           repository-cache: true
           cache-save: ${{ github.event_name == 'push' }}
 
-      # Unified LLVM source-based coverage (C++ + Rust) from @score_tooling//coverage,
+      # Unified LLVM source-based coverage (C++ + Rust) from @score_coverage,
       # see quality/coverage/. Integration tests need docker/QNX and are excluded via
       # the llvm_cov config's test tag filter.
       - name: Run coverage
@@ -63,7 +63,7 @@ jobs:
           COVERAGE_THRESHOLD: "0"
         run: |
           set -euo pipefail
-          bazel run --lockfile_mode=error @score_tooling//coverage:generate_coverage_html -- \
+          bazel run --lockfile_mode=error @score_coverage//:generate_coverage_html -- \
             --testlogs-subdir score \
             --archive-dir coverage_artifact
 
