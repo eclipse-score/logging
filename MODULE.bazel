@@ -18,7 +18,7 @@ module(
 # Bazel global rules
 bazel_dep(name = "rules_python", version = "1.8.5")
 bazel_dep(name = "bazel_skylib", version = "1.9.0")
-bazel_dep(name = "rules_rust", version = "0.68.1-score")
+bazel_dep(name = "rules_rust", version = "0.68.2-score")
 bazel_dep(name = "rules_cc", version = "0.2.17")
 bazel_dep(name = "aspect_rules_lint", version = "2.5.0")
 
@@ -38,6 +38,10 @@ bazel_dep(name = "platforms", version = "1.1.0")
 bazel_dep(name = "score_bazel_platforms", version = "1.1.0")
 bazel_dep(name = "score_docs_as_code", version = "8.2.0")
 bazel_dep(name = "score_tooling", version = "2.2.0")
+
+# LLVM source-based coverage pipeline (C++ + Rust): the qualified S-CORE
+# coverage tool, successor of @score_tooling//coverage. See quality/coverage/.
+bazel_dep(name = "score_coverage", version = "0.3.0", dev_dependency = True)
 bazel_dep(name = "score_rust_policies", version = "0.0.5")
 bazel_dep(name = "score_process_description", version = "2.1.2")
 bazel_dep(name = "score_platform", version = "0.7.2")
@@ -151,13 +155,13 @@ llvm.toolchain(
 )
 
 # Coverage-only Clang instance (covmap instrumentation for the LLVM coverage
-# pipeline from @score_tooling//coverage; active only under --config=llvm_cov).
+# pipeline from @score_coverage; active only under --config=llvm_cov).
 # Separate from the 19.1.7 instance above so clang-tidy behavior is untouched.
 llvm.toolchain(
     name = "llvm_toolchain_coverage",
     cxx_standard = {"": "c++17"},
     extra_known_features = [
-        "@score_tooling//coverage:enable_llvm_coverage_for_death_tests",
+        "@score_coverage//:enable_llvm_coverage_for_death_tests",
     ],
     link_libs = {"": [
         "-lrt",
