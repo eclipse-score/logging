@@ -27,6 +27,8 @@ namespace log
 {
 namespace detail
 {
+using namespace score::mw::log::detail;  // NOLINT(google-build-using-namespace) keep names unqualified below
+using score::mw::log::SlotHandle;
 
 namespace
 {
@@ -56,7 +58,7 @@ void SetLogLevel(LogRecord& log_record, const LogLevel level) noexcept
 }  // namespace
 
 DataRouterRecorder::DataRouterRecorder(std::unique_ptr<Backend>&& backend, const Configuration& config) noexcept
-    : Recorder{},
+    : score::mw::log::Recorder{},
       backend_(std::move(backend)),
       config_{config},
       statistics_reporter_{*this, kStatisticsReportInterval, config.GetNumberOfSlots(), config.GetSlotSizeInBytes()}

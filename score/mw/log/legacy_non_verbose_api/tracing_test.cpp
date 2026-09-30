@@ -49,6 +49,9 @@ SCORE_STRUCT_TRACEABLE(DisabledLoggerTestEntry, dummy)
 namespace
 {
 
+using namespace score::mw::log::detail;  // NOLINT(google-build-using-namespace) keep names unqualified below
+using namespace score::mw::log;          // NOLINT(google-build-using-namespace) keep names unqualified below
+
 using SerializeNs = ::score::common::visitor::logging_serializer;
 const std::string kErrorContent1Path =
     "score/mw/log/legacy_non_verbose_api/test/error-content-json-class-id.json";

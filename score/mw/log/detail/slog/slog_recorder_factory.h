@@ -13,8 +13,8 @@
 #ifndef SCORE_MW_LOG_DETAIL_SLOG_SLOG_RECORDER_FACTORY_H
 #define SCORE_MW_LOG_DETAIL_SLOG_SLOG_RECORDER_FACTORY_H
 
-#include "score/mw/log/detail/log_recorder_factory.hpp"
 #include "score/mw/log/detail/slog/slog_backend.h"
+#include "score/mw/log/detail/log_recorder_factory.hpp"
 #include "score/mw/log/detail/text_recorder/text_recorder.h"
 
 namespace score
@@ -25,11 +25,12 @@ namespace log
 {
 namespace detail
 {
+using namespace score::mw::log::detail;  // NOLINT(google-build-using-namespace) keep names unqualified below
 class SlogRecorderFactory : public LogRecorderFactory<SlogRecorderFactory>
 {
   public:
-    std::unique_ptr<Recorder> CreateConcreteLogRecorder(const Configuration& config,
-                                                        score::cpp::pmr::memory_resource* memory_resource);
+    std::unique_ptr<score::mw::log::Recorder> CreateConcreteLogRecorder(const Configuration& config,
+                                                                        score::cpp::pmr::memory_resource* memory_resource);
 
   private:
     std::unique_ptr<Backend> CreateSystemBackend(const Configuration& config,

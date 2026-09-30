@@ -29,6 +29,7 @@ cc_library(
         "@score_baselibs//score/language/futurecpp",
         "@score_baselibs//score/mw/log:recorder",
         "@score_baselibs//score/mw/log/detail:log_recorder_factory",
+        "@score_baselibs//score/os:fcntl",
     ],
 )
 

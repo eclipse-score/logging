@@ -13,6 +13,8 @@
 #ifndef SCORE_MW_LOG_CUSTOM_RECORDER_EXAMPLE_CUSTOM_RECORDER_FACTORY_IMPL_H
 #define SCORE_MW_LOG_CUSTOM_RECORDER_EXAMPLE_CUSTOM_RECORDER_FACTORY_IMPL_H
 
+#include "score/os/fcntl.h"
+#include "score/mw/log/recorder.h"
 #include "score/mw/log/detail/log_recorder_factory.hpp"
 
 namespace user
@@ -23,6 +25,7 @@ namespace impl
 {
 namespace detail
 {
+using namespace score::mw::log::detail;  // NOLINT(google-build-using-namespace) keep names unqualified below
 class CustomRecorderFactoryImpl : public score::mw::log::detail::LogRecorderFactory<CustomRecorderFactoryImpl>
 {
   public:

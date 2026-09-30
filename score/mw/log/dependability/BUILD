@@ -22,7 +22,6 @@ load(
 component(
     name = "component_mw_log_backend",
     components = [
-        "@score_baselibs//score/mw/log:backend_table_unit",
         "//score/mw/log/detail/data_router:data_router_backend_unit",
         "//score/mw/log/detail/data_router/shared_memory:shared_memory_unit",
         "//score/mw/log/detail/file_recorder:file_recorder_unit",

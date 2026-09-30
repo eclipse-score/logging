@@ -27,6 +27,11 @@ namespace log
 {
 namespace detail
 {
+using namespace score::mw::log::detail;  // NOLINT(google-build-using-namespace) keep names unqualified below
+using score::mw::log::GetMaxLogLevelValue;
+using score::mw::log::LogLevel;
+using score::mw::log::SlotHandle;
+using score::mw::log::SlotIndex;
 
 namespace
 {

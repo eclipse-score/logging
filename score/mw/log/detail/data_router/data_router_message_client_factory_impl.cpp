@@ -14,9 +14,9 @@
 #include "score/mw/log/detail/data_router/data_router_message_client_factory_impl.h"
 
 #include "score/assert.hpp"
-#include "score/mw/log/configuration/configuration.h"
 #include "score/mw/log/detail/data_router/data_router_message_client_impl.h"
 #include "score/mw/log/legacy_non_verbose_api/tracing.h"
+#include "score/mw/log/configuration/configuration.h"
 #include <iostream>
 #include <sstream>
 namespace score

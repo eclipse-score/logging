@@ -34,7 +34,7 @@ namespace detail
 class StatisticsReporter final : public IStatisticsReporter
 {
   public:
-    explicit StatisticsReporter(Recorder&,
+    explicit StatisticsReporter(score::mw::log::Recorder&,
                                 const std::chrono::seconds report_interval,
                                 const std::size_t number_of_slots,
                                 const std::size_t slot_size_bytes) noexcept;
@@ -43,7 +43,7 @@ class StatisticsReporter final : public IStatisticsReporter
     void Update(const std::chrono::steady_clock::time_point& now) noexcept override;
 
   private:
-    Recorder& recorder_;
+    score::mw::log::Recorder& recorder_;
     std::chrono::seconds report_interval_;
     std::size_t number_of_slots_;
     std::size_t slot_size_bytes_;
