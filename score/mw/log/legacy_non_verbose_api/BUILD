@@ -43,6 +43,7 @@ cc_library(
         "@score_baselibs//score/mw/log/configuration",
         "@score_baselibs//score/mw/log/configuration:nvconfig",
         "@score_baselibs//score/mw/log/configuration:nvconfigfactory",
+        "@score_baselibs//score/mw/log/detail:log_data_types",
         "@score_baselibs//score/mw/log/detail/wait_free_stack",
         "@score_baselibs//score/static_reflection_with_serialization/serialization",
     ],

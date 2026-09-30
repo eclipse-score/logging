@@ -25,6 +25,8 @@ namespace log
 {
 namespace detail
 {
+using namespace score::mw::log::detail;  // NOLINT(google-build-using-namespace) keep names unqualified below
+using score::mw::log::SlotHandle;
 
 namespace
 {
@@ -47,7 +49,7 @@ inline void LogData(const SlotHandle& slot, detail::Backend& backend, const T da
 }  //  anonymous namespace
 
 FileRecorder::FileRecorder(const detail::Configuration& config, std::unique_ptr<detail::Backend> backend)
-    : Recorder(),
+    : score::mw::log::Recorder(),
       backend_(std::move(backend)),
       config_(config)  // LCOV_EXCL_BR_LINE: there are no branches to be covered, it is just pre-construction.
 {

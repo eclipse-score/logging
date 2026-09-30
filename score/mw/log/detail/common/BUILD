@@ -42,6 +42,9 @@ cc_library(
     ],
     features = COMPILER_WARNING_FEATURES,
     tags = ["FFI"],
+    visibility = [
+        "@score_baselibs//score/mw/log/detail:__pkg__",
+    ],
 )
 
 cc_library(
@@ -177,6 +180,7 @@ cc_test(
         "@googletest//:gtest_main",
         "@score_baselibs//score/mw/log:console",
         "@score_baselibs//score/mw/log:recorder_mock",
+        "@score_baselibs//score/mw/log/detail:empty_recorder",
     ] + select({
         "//score/mw/log/detail/flags:config_KConsole_Logging": [
             "@score_baselibs//score/mw/log/detail/text_recorder",

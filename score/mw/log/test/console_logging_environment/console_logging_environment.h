@@ -32,7 +32,7 @@ class ConsoleLoggingEnvironment : public ::testing::Environment
     void TearDown() override;
 
   private:
-    std::unique_ptr<Recorder> recorder_{nullptr};
+    std::unique_ptr<score::mw::log::Recorder> recorder_{nullptr};
 };
 
 }  // namespace log

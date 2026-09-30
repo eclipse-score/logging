@@ -24,6 +24,9 @@ namespace log
 namespace detail
 {
 
+using namespace score::mw::log::detail;  // NOLINT(google-build-using-namespace) keep names unqualified below
+using namespace score::mw::log;          // NOLINT(google-build-using-namespace) keep names unqualified below
+
 template <typename ConcreteRecorder>
 bool IsRecorderOfType(const std::unique_ptr<Recorder>& recorder) noexcept
 {
@@ -38,7 +41,8 @@ TEST(SlogRecorderFactoryTest, CreateRecorder)
     Configuration config;
     score::cpp::pmr::memory_resource* memory_resource = score::cpp::pmr::get_default_resource();
 
-    auto recorder = SlogRecorderFactory{}.CreateConcreteLogRecorder(config, memory_resource);
+    SlogRecorderFactory factory;
+    auto recorder = factory.CreateLogRecorder(config, memory_resource);
 
     // Slog uses TextRecorder
     EXPECT_TRUE(IsRecorderOfType<TextRecorder>(recorder));

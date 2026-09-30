@@ -58,6 +58,7 @@ cc_library(
         "@score_baselibs//score/mw/log/detail:backend_interface",
         "@score_baselibs//score/mw/log/detail/text_recorder:file_output_backend",
         "@score_baselibs//score/mw/log/detail/text_recorder:message_builder_interface",
+        "@score_baselibs//score/os:fcntl",
         "@score_baselibs//score/os/utils:high_resolution_steady_clock",
         "@score_baselibs//score/quality/compiler_warnings",
         "@score_baselibs//score/static_reflection_with_serialization/serialization",
@@ -83,8 +84,11 @@ cc_library(
         ":file_recorder",
         "@score_baselibs//score/mw/log:minimal",
         "@score_baselibs//score/mw/log/configuration",
+        "@score_baselibs//score/mw/log/detail:empty_recorder",
         "@score_baselibs//score/mw/log/detail:initialization_reporter",
         "@score_baselibs//score/mw/log/detail:log_recorder_factory",
+        "@score_baselibs//score/mw/log/detail:types_and_errors",
+        "@score_baselibs//score/os:fcntl",
     ],
 )
 
