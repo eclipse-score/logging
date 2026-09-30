@@ -182,6 +182,7 @@ cc_library(
     ],
     deps = [
         "//score/mw/log/detail/data_router/shared_memory:reader",
+        "@score_baselibs//score/mw/log/configuration:nvconfig_interface",
     ],
 )
 

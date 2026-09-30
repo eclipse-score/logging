@@ -67,6 +67,19 @@ inline std::uint16_t ClampAddNullTerminator(std::uint16_t length) noexcept
     return (length < kMaxU16) ? static_cast<std::uint16_t>(length + 1U) : length;
 }
 
+template <typename T>
+inline constexpr T HandleAddOverflow(T left, T right) noexcept
+{
+    static_assert(std::is_unsigned<T>::value, "HandleAddOverflow is designed for unsigned integral types only.");
+
+    if (left > std::numeric_limits<T>::max() - right)
+    {
+        return std::numeric_limits<T>::max();
+    }
+
+    return static_cast<T>(left + right);
+}
+
 }  // namespace helper
 
 #endif  // SCORE_MW_LOG_DETAIL_COMMON_HELPER_FUNCTIONS_H
