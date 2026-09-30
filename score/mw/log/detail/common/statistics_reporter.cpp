@@ -38,16 +38,16 @@ bool IsReportOverdue(const std::chrono::steady_clock::time_point& now,
     return false;
 }
 
-void ReportStatisticsViaRecorder(Recorder& recorder,
+void ReportStatisticsViaRecorder(score::mw::log::Recorder& recorder,
                                  const std::size_t& no_slot_available_counter,
                                  const std::size_t& message_too_long_counter,
                                  const std::size_t& number_of_slots,
                                  const std::size_t& slot_size_bytes) noexcept
 {
-    LogLevel log_level = LogLevel::kInfo;
+    score::mw::log::LogLevel log_level = score::mw::log::LogLevel::kInfo;
     if ((no_slot_available_counter > 0UL) || (message_too_long_counter > 0UL))
     {
-        log_level = LogLevel::kWarn;
+        log_level = score::mw::log::LogLevel::kWarn;
     }
 
     const auto slot = recorder.StartRecord("STAT", log_level);
@@ -69,7 +69,7 @@ void ReportStatisticsViaRecorder(Recorder& recorder,
 
 }  // namespace
 
-StatisticsReporter::StatisticsReporter(Recorder& recorder,
+StatisticsReporter::StatisticsReporter(score::mw::log::Recorder& recorder,
                                        const std::chrono::seconds report_interval,
                                        const std::size_t number_of_slots,
                                        const std::size_t slot_size_bytes) noexcept

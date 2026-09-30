@@ -32,6 +32,7 @@ namespace log
 {
 namespace test
 {
+using namespace score::mw::log;  // NOLINT(google-build-using-namespace) keep names unqualified below
 
 class FakeRecorder final : public score::mw::log::Recorder
 {

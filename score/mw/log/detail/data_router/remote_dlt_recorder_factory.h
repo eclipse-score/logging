@@ -23,12 +23,14 @@
 
 namespace score::mw::log::detail
 {
+using namespace score::mw::log::detail;  // NOLINT(google-build-using-namespace) score:: backward compatibility
 
 class RemoteDltRecorderFactory : public LogRecorderFactory<RemoteDltRecorderFactory>
 {
   public:
-    std::unique_ptr<Recorder> CreateConcreteLogRecorder(const Configuration& config,
-                                                        score::cpp::pmr::memory_resource* memory_resource) noexcept;
+    std::unique_ptr<score::mw::log::Recorder> CreateConcreteLogRecorder(
+        const Configuration& config,
+        score::cpp::pmr::memory_resource* memory_resource) noexcept;
 };
 
 }  //   namespace score::mw::log::detail

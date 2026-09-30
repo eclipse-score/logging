@@ -13,6 +13,7 @@
 #include "score/mw/log/test/console_logging_environment/console_logging_environment.h"
 
 #include "score/mw/log/detail/registry_aware_recorder_factory.h"
+#include "score/mw/log/log_mode.h"
 
 #include "score/mw/log/runtime.h"
 
@@ -20,6 +21,7 @@ namespace score
 {
 namespace mw
 {
+using score::mw::LogMode;
 namespace log
 {
 

@@ -12,8 +12,8 @@
  ********************************************************************************/
 #include "gtest/gtest.h"
 
-#include "score/mw/log/configuration/configuration.h"
 #include "score/mw/log/detail/syslog/syslog_backend.h"
+#include "score/mw/log/configuration/configuration.h"
 #include "score/os/mocklib/mock_syslog.h"
 
 #include "score/assert_support.hpp"
@@ -30,6 +30,8 @@ namespace log
 {
 namespace detail
 {
+using namespace score::mw::log;          // NOLINT(google-build-using-namespace) keep names unqualified below
+using namespace score::mw::log::detail;  // NOLINT(google-build-using-namespace) keep names unqualified below
 namespace
 {
 

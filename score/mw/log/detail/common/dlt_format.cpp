@@ -69,15 +69,6 @@ enum class StringEncoding : std::uint32_t
     kUTF8 = 0x01,
 };
 
-// \Requirement PRS_Dlt_00783
-enum class IntegerRepresentation : std::uint32_t
-{
-    kBase10 = 0x00U,
-    kBase8 = 0x01U,
-    kBase16 = 0x02U,
-    kBase2 = 0x03U
-};
-
 class TypeInfo
 {
   public:
@@ -134,13 +125,13 @@ class TypeInfo
         }
 
         // Make sure the enum values match the values from the standard requirement PRS_Dlt_00783.
-        static_assert(static_cast<std::uint8_t>(IntegerRepresentation::kBase10) == 0U,
+        static_assert(static_cast<std::uint8_t>(score::mw::log::detail::IntegerRepresentation::kDecimal) == 0U,
                       "Value shall match PRS_Dlt_00783");
-        static_assert(static_cast<std::uint8_t>(IntegerRepresentation::kBase8) == 1U,
+        static_assert(static_cast<std::uint8_t>(score::mw::log::detail::IntegerRepresentation::kOctal) == 1U,
                       "Value shall match PRS_Dlt_00783");
-        static_assert(static_cast<std::uint8_t>(IntegerRepresentation::kBase16) == 2U,
+        static_assert(static_cast<std::uint8_t>(score::mw::log::detail::IntegerRepresentation::kHex) == 2U,
                       "Value shall match PRS_Dlt_00783");
-        static_assert(static_cast<std::uint8_t>(IntegerRepresentation::kBase2) == 3U,
+        static_assert(static_cast<std::uint8_t>(score::mw::log::detail::IntegerRepresentation::kBinary) == 3U,
                       "Value shall match PRS_Dlt_00783");
 
         static_assert(
@@ -188,7 +179,7 @@ std::size_t SizeOf(const T& t)
     }
     // coverity[autosar_cpp14_m6_4_1_violation : FALSE]
     // coverity[autosar_cpp14_a7_1_8_violation : FALSE]
-    else if constexpr (std::is_same_v<T, score::mw::log::LogRawBuffer>)
+    else if constexpr (std::is_same_v<T, score::mw::log::detail::LogRawBuffer>)
     {
         return static_cast<std::size_t>(t.size());
     }
@@ -235,7 +226,7 @@ ByteView ToByteView(const T& t)
     }
     // coverity[autosar_cpp14_m6_4_1_violation : FALSE]
     // coverity[autosar_cpp14_a7_1_8_violation : FALSE]
-    else if constexpr (std::is_same_v<T, score::mw::log::LogRawBuffer>)
+    else if constexpr (std::is_same_v<T, score::mw::log::detail::LogRawBuffer>)
     {
         return ByteView{t.data(), t.size()};
     }

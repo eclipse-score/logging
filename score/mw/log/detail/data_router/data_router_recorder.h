@@ -16,8 +16,10 @@
 
 #include "score/mw/log/recorder.h"
 
-#include "score/mw/log/configuration/configuration.h"
 #include "score/mw/log/detail/common/statistics_reporter.h"
+#include "score/mw/log/configuration/configuration.h"
+#include "score/mw/log/detail/backend.h"
+#include "score/mw/log/detail/log_record.h"
 
 #include <memory>
 
@@ -29,9 +31,9 @@ namespace log
 {
 namespace detail
 {
-
-class Backend;
-class LogRecord;
+using namespace score::mw::log::detail;  // NOLINT(google-build-using-namespace) keep names unqualified below
+using namespace score::mw::log;          // NOLINT(google-build-using-namespace) keep names unqualified below
+using score::mw::log::SlotHandle;
 
 class DataRouterRecorder final : public Recorder
 {
