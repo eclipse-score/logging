@@ -76,7 +76,7 @@ ScoreReq.CompReq ForwardToSystemLogger {
     description = '''The system logger backend shall forward the logs to the native system logger mechanism.
     Under QNX, slogger2 shall be used.'''
     safety = ScoreReq.Asil.QM
-    derived_from = [MwLogFeature.LogSinksConsole@1]
+    derived_from = [MwLogFeature.EarlyStartupLogging@1]
     version = 1
 }
 
@@ -99,7 +99,7 @@ ScoreReq.CompReq LocalAllocationStrategy {
 ScoreReq.CompReq NoEndlessLoops {
     description = '''mw::log shall not contain unbound loops or loops with unchecked exit conditions.'''
     safety = ScoreReq.Asil.B
-    derived_from = [MwLogFeature.AsilLevelSupport@1, MwLogFeature.ResourceConsumptionPerformance@1]
+    derived_from = [MwLogFeature.AsilLevelSupport@1, MwLogFeature.ResourceConsumptionRuntime@1]
     version = 1
 }
 
