@@ -509,26 +509,20 @@
 ----------------------------------------------------------------------------- -->
 <section id="syslogbackend">
 <h1>SyslogBackend<a class="headerlink" href="#syslogbackend" title="Link to this heading">#</a></h1>
-<p><code class="docutils literal notranslate"><span class="pre">SyslogBackend</span></code> implements <code class="docutils literal notranslate"><span class="pre">mw::log::detail::Backend</span></code> and is the Linux counterpart
-of the QNX <code class="docutils literal notranslate"><span class="pre">SlogBackend</span></code>: it is selected by <code class="docutils literal notranslate"><span class="pre">SyslogRecorderFactory</span></code> when the
-configured log mode contains <code class="docutils literal notranslate"><span class="pre">kSystem</span></code> and the target platform is Linux
-(<code class="docutils literal notranslate"><span class="pre">target_compatible_with</span> <span class="pre">=</span> <span class="pre">[&quot;&#64;platforms//os:linux&quot;]</span></code>), wrapping it in a
-<code class="docutils literal notranslate"><span class="pre">TextRecorder</span></code> the same way <code class="docutils literal notranslate"><span class="pre">SlogBackend</span></code> is wrapped on QNX.</p>
-<p>Like <code class="docutils literal notranslate"><span class="pre">SlogBackend</span></code>, it stores <code class="docutils literal notranslate"><span class="pre">LogRecord</span></code>s in a <code class="docutils literal notranslate"><span class="pre">CircularAllocator</span></code> between
-<code class="docutils literal notranslate"><span class="pre">ReserveSlot()</span></code> and <code class="docutils literal notranslate"><span class="pre">FlushSlot()</span></code>. <code class="docutils literal notranslate"><span class="pre">ReserveSlot()</span></code> and <code class="docutils literal notranslate"><span class="pre">GetLogRecord()</span></code> only
-hand out and look up slots in that buffer; no data leaves the process until
-<code class="docutils literal notranslate"><span class="pre">FlushSlot()</span></code> is called.</p>
-<p><code class="docutils literal notranslate"><span class="pre">FlushSlot()</span></code> converts the <code class="docutils literal notranslate"><span class="pre">LogRecord</span></code>’s <code class="docutils literal notranslate"><span class="pre">LogLevel</span></code> to a syslog(3) priority via
-<code class="docutils literal notranslate"><span class="pre">ConvertMwLogLevelToSyslogPriority()</span></code> and forwards the record’s app ID, context
-ID and payload to the injected <code class="docutils literal notranslate"><span class="pre">score::os::Syslog</span></code> seam as a single
-<code class="docutils literal notranslate"><span class="pre">syslog(priority,</span> <span class="pre">&quot;%.*s,%.*s:</span> <span class="pre">%.*s&quot;,</span> <span class="pre">...)</span></code> call, which glibc delivers through
-<code class="docutils literal notranslate"><span class="pre">vsyslog(3)</span></code>. <code class="docutils literal notranslate"><span class="pre">LogLevel::kOff</span></code> (and any out-of-range level) maps to
-<code class="docutils literal notranslate"><span class="pre">SyslogPriority::kInvalid</span></code> and is dropped instead of being forwarded, mirroring
-<code class="docutils literal notranslate"><span class="pre">SlogBackend</span></code>’s handling of its own invalid level.</p>
-<p>The <code class="docutils literal notranslate"><span class="pre">score::os::Syslog</span></code> seam is opened once, in the constructor’s <code class="docutils literal notranslate"><span class="pre">Init()</span></code>, via
-<code class="docutils literal notranslate"><span class="pre">openlog(app_id,</span> <span class="pre">LOG_PID</span> <span class="pre">|</span> <span class="pre">LOG_NDELAY,</span> <span class="pre">LOG_USER)</span></code>; the object-seam wrapper
-(<code class="docutils literal notranslate"><span class="pre">Syslog</span></code> interface / <code class="docutils literal notranslate"><span class="pre">SyslogImpl</span></code> / <code class="docutils literal notranslate"><span class="pre">MockSyslog</span></code>) is what makes <code class="docutils literal notranslate"><span class="pre">SyslogBackend</span></code>
-host-unit-testable without a real syslog daemon.</p>
+<p><code class="docutils literal notranslate"><span class="pre">SyslogBackend</span></code> implements <code class="docutils literal notranslate"><span class="pre">mw::log::detail::Backend</span></code> for Linux.
+<code class="docutils literal notranslate"><span class="pre">SyslogRecorderFactory</span></code> selects it when the log mode contains <code class="docutils literal notranslate"><span class="pre">kSystem</span></code>.
+<code class="docutils literal notranslate"><span class="pre">TextRecorder</span></code> uses it in the same way as <code class="docutils literal notranslate"><span class="pre">SlogBackend</span></code> on QNX.</p>
+<p><code class="docutils literal notranslate"><span class="pre">SyslogBackend</span></code> stores <code class="docutils literal notranslate"><span class="pre">LogRecord</span></code> objects in a <code class="docutils literal notranslate"><span class="pre">CircularAllocator</span></code>.
+<code class="docutils literal notranslate"><span class="pre">ReserveSlot()</span></code> acquires a slot and <code class="docutils literal notranslate"><span class="pre">FlushSlot()</span></code> sends its contents to syslog.
+No log data leaves the process before <code class="docutils literal notranslate"><span class="pre">FlushSlot()</span></code> runs.</p>
+<p><code class="docutils literal notranslate"><span class="pre">FlushSlot()</span></code> maps <code class="docutils literal notranslate"><span class="pre">LogLevel</span></code> to a syslog(3) priority.
+It sends the application ID, context ID, and payload in one formatted call.
+<code class="docutils literal notranslate"><span class="pre">kOff</span></code> and out-of-range levels are ignored.</p>
+<p><code class="docutils literal notranslate"><span class="pre">Syslog::openlog()</span></code> runs once during construction.
+The <code class="docutils literal notranslate"><span class="pre">Syslog</span></code> object seam enables host tests without a running syslog daemon.</p>
+<img alt="MW_LOG_RECORDERS" src="https://www.plantuml.com/plantuml/proxy?src=https://raw.githubusercontent.com/eclipse-score/logging/refs/heads/main/score/mw/log/design/backend/mw_log_recorders.puml">
+<p>The sequence diagram shows a log call from stream construction to syslog(3).</p>
+<img alt="SyslogBackendSequenceDesign" src="https://www.plantuml.com/plantuml/proxy?src=https://raw.githubusercontent.com/eclipse-score/logging/refs/heads/main/score/mw/log/design/backend/syslog_backend_sequence.puml">
 <img alt="MW_LOG_RECORDERS" src="https://www.plantuml.com/plantuml/proxy?src=https://raw.githubusercontent.com/eclipse-score/logging/refs/heads/main/score/mw/log/design/backend/mw_log_recorders.puml">
 <p>The sequence below shows a single log call from <code class="docutils literal notranslate"><span class="pre">LogStream</span></code> construction
 through to the <code class="docutils literal notranslate"><span class="pre">syslog(3)</span></code> call made when the stream is destroyed and the slot
