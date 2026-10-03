@@ -15,6 +15,7 @@
 #include "score/os/pthread.h"
 
 #include "score/os/socket.h"
+#include "score/os/stat.h"
 #include "score/os/sys_poll.h"
 #include "score/os/unistd.h"
 #include "score/os/utils/signal_impl.h"
@@ -172,13 +173,27 @@ void UnixDomainServer::ServerRoutine(UnixDomainSockAddr addr)
 
 std::int32_t UnixDomainServer::SetupServerSocket(UnixDomainSockAddr& addr)
 {
+    const auto stat_instance = score::os::Stat::Default();
+    const auto unistd_instance = score::os::Unistd::Default();
     if (!addr.IsAbstract())
     {
-        const auto unlink_ret = score::os::Unistd::instance().unlink(static_cast<const char*>(addr.addr.sun_path));
-        if (!unlink_ret.has_value())
+        const char* path = static_cast<const char*>(addr.addr.sun_path);
+        score::os::StatBuffer st{};
+        if (stat_instance->stat(path, st).has_value())
         {
-            std::perror("unlink");
-            std::fprintf(stderr, "address: %s\n", static_cast<const char*>(addr.addr.sun_path));
+            // NOLINTNEXTLINE(hicpp-signed-bitwise) S_ISSOCK is a POSIX macro
+            if (!S_ISSOCK(st.st_mode))
+            {
+                std::fprintf(stderr, "Error: %s exists but is not a socket, refusing to unlink\n", path);
+                // NOLINTNEXTLINE(score-banned-function): Suppressed here because of error handling
+                std::exit(EXIT_FAILURE);
+            }
+            const auto unlink_ret = unistd_instance->unlink(path);
+            if (!unlink_ret.has_value())
+            {
+                std::perror("unlink");
+                std::fprintf(stderr, "address: %s\n", path);
+            }
         }
     }
     const auto socket_ret = score::os::Socket::instance().socket(score::os::Socket::Domain::kUnix, SOCK_STREAM, 0);
@@ -208,6 +223,16 @@ std::int32_t UnixDomainServer::SetupServerSocket(UnixDomainSockAddr& addr)
         std::cerr << "address: " << addr.GetAddressString() << std::endl;
         // NOLINTNEXTLINE(score-banned-function): Suppressed here because of error handling
         std::exit(EXIT_FAILURE);
+    }
+    if (!addr.IsAbstract())
+    {
+        using Mode = score::os::Stat::Mode;
+        // Connecting requires write permission; group write supports non-root clients sharing the socket's GID.
+        constexpr auto kSocketPerms = Mode::kReadUser | Mode::kWriteUser | Mode::kReadGroup | Mode::kWriteGroup;
+        if (!stat_instance->chmod(static_cast<const char*>(addr.addr.sun_path), kSocketPerms).has_value())
+        {
+            std::perror("chmod socket");
+        }
     }
     // Suppressed here as it is safely used, and it is among safety headers.
     // NOLINTNEXTLINE(score-banned-function) see comment above
