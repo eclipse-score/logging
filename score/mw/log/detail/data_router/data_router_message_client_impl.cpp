@@ -253,10 +253,11 @@ void DatarouterMessageClientImpl::Shutdown() noexcept
         connect_thread_.join();
     }
 
-    {
+    auto sender_to_destroy = [this]() noexcept {
         std::unique_lock<std::mutex> lock(sender_mutex_);
-        sender_.reset();
-    }
+        return std::move(sender_);
+    }();
+    sender_to_destroy.reset();
     // Block until all pending tasks and threads have finished.
     UnlinkSharedMemoryFile();
 }
