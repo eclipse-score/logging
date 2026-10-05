@@ -23,7 +23,7 @@ struct UndefinedStruct
     double b;
 };
 
-STRUCT_VISITABLE(UndefinedStruct, a, b)
+SCORE_STRUCT_VISITABLE(UndefinedStruct, a, b)
 
 int main(int, char**)
 {
