@@ -21,7 +21,7 @@ struct default_struct
     char b;
 };
 
-STRUCT_VISITABLE(default_struct, a, b)
+SCORE_STRUCT_VISITABLE(default_struct, a, b)
 
 #define dummy_struct_name(ctx, level) dummy_struct_name2(ctx, level)
 #define dummy_struct_name2(ctx, level) ctx##_##level
@@ -31,7 +31,7 @@ STRUCT_VISITABLE(default_struct, a, b)
     {                       \
         default_struct val; \
     };                      \
-    STRUCT_VISITABLE(name, val)
+    SCORE_STRUCT_VISITABLE(name, val)
 
 dummy_struct(dummy_struct_name(AAAA, kFatal));
 dummy_struct(dummy_struct_name(AAAA, kError));
