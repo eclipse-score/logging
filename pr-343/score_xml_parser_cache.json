@@ -238,5 +238,17 @@
     "repo_name": "local_repo",
     "hash": "",
     "url": ""
+  },
+  {
+    "name": "SyslogBackendFixture__SyslogOpenlog",
+    "file": "score/mw/log/detail/syslog/syslog_backend_test.cpp",
+    "line": 77,
+    "need": "comp_req__log__forward_to_system_logger",
+    "verify_type": "partially",
+    "result": "passed",
+    "result_text": "",
+    "repo_name": "local_repo",
+    "hash": "",
+    "url": ""
   }
 ]

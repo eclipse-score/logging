@@ -8,7 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-    <title>Detailed Design &#8212; Logging  documentation</title>
+    <title>SyslogBackend &#8212; Logging  documentation</title>
   
   
   
@@ -62,7 +62,7 @@
     <script src="../../../_static/sphinx-needs/libs/html/datatables.min.js?v=8a4aee21"></script>
     <script src="../../../_static/sphinx-needs/libs/html/datatables_loader.js?v=a2cae175"></script>
     <script src="../../../_static/sphinx-needs/libs/html/sphinx_needs_collapse.js?v=dca66431"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'components/datarouter/detailed_design/index';</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'components/mw_log/detailed_design/syslog_backend';</script>
     <script>
         DOCUMENTATION_OPTIONS.theme_version = '0.21.0';
         DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://eclipse-score.github.io/logging/versions.json';
@@ -73,8 +73,8 @@
     <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
-    <link rel="next" title="Logging: architecture and SW design" href="logging_architecture.html" />
-    <link rel="prev" title="Datarouter Component Requirements" href="../requirements/index.html" />
+    <link rel="next" title="Safe Datarouter Backend" href="datarouter_backend/index.html" />
+    <link rel="prev" title="FileOutputBackend" href="file_output_backend.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="0.1" />
@@ -180,15 +180,15 @@
 </li>
 
 
-<li class="nav-item current active">
-  <a class="nav-link nav-internal" href="../index.html">
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../datarouter/index.html">
     Datarouter
   </a>
 </li>
 
 
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../../mw_log/index.html">
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../index.html">
     mw::log Backend
   </a>
 </li>
@@ -329,15 +329,15 @@
 </li>
 
 
-<li class="nav-item current active">
-  <a class="nav-link nav-internal" href="../index.html">
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../datarouter/index.html">
     Datarouter
   </a>
 </li>
 
 
-<li class="nav-item ">
-  <a class="nav-link nav-internal" href="../../mw_log/index.html">
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../index.html">
     mw::log Backend
   </a>
 </li>
@@ -420,12 +420,18 @@
      aria-label="Section Navigation">
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
   <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../requirements/index.html">Datarouter Component Requirements</a></li>
-<li class="toctree-l1 current active has-children"><a class="current reference internal" href="#">Detailed Design</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="logging_architecture.html">Logging: architecture and SW design</a></li>
-<li class="toctree-l2"><a class="reference internal" href="shm_apis.html">Remote Logging implementation details</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../architecture/index.html">Component Architecture</a></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="index.html">Detailed Design</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="file_output_backend.html">FileOutputBackend</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">SyslogBackend</a></li>
+<li class="toctree-l2"><a class="reference internal" href="datarouter_backend/index.html">Safe Datarouter Backend</a></li>
+<li class="toctree-l2"><a class="reference internal" href="chklst_impl_inspection.html">Implementation Inspection Checklist</a></li>
 </ul>
 </details></li>
+<li class="toctree-l1"><a class="reference internal" href="../requirements/index.html">Requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../safety_analysis/dfa.html">DFA (Dependent Failure Analysis)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../safety_analysis/fmea.html">FMEA (Failure Modes and Effects Analysis)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../safety_analysis/aou_requirements.html">AoU Component Requirements Template</a></li>
 </ul>
 </div>
 </nav></div>
@@ -467,9 +473,12 @@
       </a>
     </li>
     
-    <li class="breadcrumb-item"><a href="../index.html" class="nav-link">Datarouter</a></li>
+    <li class="breadcrumb-item"><a href="../index.html" class="nav-link">mw::log Backend</a></li>
     
-    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Detailed Design</span></li>
+    
+    <li class="breadcrumb-item"><a href="index.html" class="nav-link">Detailed Design</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">SyslogBackend</span></li>
   </ul>
 </nav>
 </div>
@@ -486,57 +495,39 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section id="detailed-design">
-<h1>Detailed Design<a class="headerlink" href="#detailed-design" title="Link to this heading">#</a></h1>
-<div class="need_container docutils container" id="SNCB-0231717f">
-<div class="pst-scrollable-table-container"><table class="need needs_grid_complex needs_layout_score needs_style_none needs_type_document table" id="doc__datarouter_detailed_design">
-<tbody>
-<tr class="head row-odd"><td class="head_left" colspan="2"><div class="needs_head_left line-block">
-<div class="line"><span><span class="needs_title"><span class="needs_data">Datarouter Detailed Design</span></span></span></div>
-</div>
-</td>
-<td class="head_center" colspan="2"><div class="needs_head line-block">
-<div class="line"><span><span class="needs_status"><span class="needs_label">status: </span><span class="needs_data">draft</span></span></span></div>
-<div class="line"><span><span class="needs_security"><span class="needs_label">security: </span><span class="needs_data">NO</span></span></span></div>
-<div class="line"><span><span class="needs_safety"><span class="needs_label">safety: </span><span class="needs_data">QM</span></span></span></div>
-</div>
-</td>
-<td class="head_right" colspan="2"><div class="needs_head_right line-block">
-<div class="line"><span><span class="needs needs_collapse" id="target__show__meta"><span class="needs collapsed"><svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-down-circle"><circle cx="12" cy="12" r="10"></circle><polyline points="8 12 12 16 16 12"></polyline><line x1="12" y1="8" x2="12" y2="16"></line></svg></span><span class="needs visible collapse_is_hidden"><svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-arrow-right-circle"><circle cx="12" cy="12" r="10"></circle><polyline points="12 16 16 12 12 8"></polyline><line x1="8" y1="12" x2="16" y2="12"></line></svg></span></span></span></div>
-</div>
-</td>
-</tr>
-<tr class="meta row-even"><td class="meta" colspan="3"><div class="needs_meta_left line-block">
-<div class="line"><span><span><div class="line"><span class="needs_version"><span class="needs_label">version: </span>1</span></div>
-</span></span></div>
-<div class="line"><span><div class="line">realizes: <span class="realizes"><span><a class="external_link reference external" href="https://eclipse-score.github.io/process_description//main/process_areas/implementation/implementation_workproducts.html#wp__sw_implementation">wp__sw_implementation</a></span></span></div>
-</span></div>
-</div>
-</td>
-<td class="meta" colspan="3"></td>
-</tr>
-<tr class="content row-odd"><td class="content" colspan="6"></td>
-</tr>
-<tr class="footer row-even"><td class="footer_left" colspan="2"><div class="needs_footer_left line-block">
-<div class="line"><span><span class="needs-id"><a class="reference internal" href="#doc__datarouter_detailed_design" title="doc__datarouter_detailed_design">doc__datarouter_detailed_design</a></span></span></div>
-</div>
-</td>
-<td class="footer" colspan="2"><div class="needs_footer line-block">
-<div class="line"><span><span class="needs_type_name"><span class="needs_data">Generic Document</span></span></span></div>
-</div>
-</td>
-<td class="footer_right" colspan="2"></td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<div class="toctree-wrapper compound">
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="logging_architecture.html">Logging: architecture and SW design</a></li>
-<li class="toctree-l1"><a class="reference internal" href="shm_apis.html">Remote Logging implementation details</a></li>
-</ul>
-</div>
+  <!-- ----------------------------------------------------------------------------
+  Copyright (c) 2026 Contributors to the Eclipse Foundation
+
+  See the NOTICE file(s) distributed with this work for additional
+  information regarding copyright ownership.
+
+  This program and the accompanying materials are made available under the
+  terms of the Apache License Version 2.0 which is available at
+  https://www.apache.org/licenses/LICENSE-2.0
+
+  SPDX-License-Identifier: Apache-2.0
+----------------------------------------------------------------------------- -->
+<section id="syslogbackend">
+<h1>SyslogBackend<a class="headerlink" href="#syslogbackend" title="Link to this heading">#</a></h1>
+<p><code class="docutils literal notranslate"><span class="pre">SyslogBackend</span></code> implements <code class="docutils literal notranslate"><span class="pre">mw::log::detail::Backend</span></code> for Linux.
+<code class="docutils literal notranslate"><span class="pre">SyslogRecorderFactory</span></code> selects it when the log mode contains <code class="docutils literal notranslate"><span class="pre">kSystem</span></code>.
+<code class="docutils literal notranslate"><span class="pre">TextRecorder</span></code> uses it in the same way as <code class="docutils literal notranslate"><span class="pre">SlogBackend</span></code> on QNX.</p>
+<p><code class="docutils literal notranslate"><span class="pre">SyslogBackend</span></code> stores <code class="docutils literal notranslate"><span class="pre">LogRecord</span></code> objects in a <code class="docutils literal notranslate"><span class="pre">CircularAllocator</span></code>.
+<code class="docutils literal notranslate"><span class="pre">ReserveSlot()</span></code> acquires a slot and <code class="docutils literal notranslate"><span class="pre">FlushSlot()</span></code> sends its contents to syslog.
+No log data leaves the process before <code class="docutils literal notranslate"><span class="pre">FlushSlot()</span></code> runs.</p>
+<p><code class="docutils literal notranslate"><span class="pre">FlushSlot()</span></code> maps <code class="docutils literal notranslate"><span class="pre">LogLevel</span></code> to a syslog(3) priority.
+It sends the application ID, context ID, and payload in one formatted call.
+<code class="docutils literal notranslate"><span class="pre">kOff</span></code> and out-of-range levels are ignored.</p>
+<p><code class="docutils literal notranslate"><span class="pre">Syslog::openlog()</span></code> runs once during construction.
+The <code class="docutils literal notranslate"><span class="pre">Syslog</span></code> object seam enables host tests without a running syslog daemon.</p>
+<img alt="MW_LOG_RECORDERS" src="https://www.plantuml.com/plantuml/proxy?src=https://raw.githubusercontent.com/eclipse-score/logging/refs/heads/main/score/mw/log/design/backend/mw_log_recorders.puml">
+<p>The sequence diagram shows a log call from stream construction to syslog(3).</p>
+<img alt="SyslogBackendSequenceDesign" src="https://www.plantuml.com/plantuml/proxy?src=https://raw.githubusercontent.com/eclipse-score/logging/refs/heads/main/score/mw/log/design/backend/syslog_backend_sequence.puml">
+<img alt="MW_LOG_RECORDERS" src="https://www.plantuml.com/plantuml/proxy?src=https://raw.githubusercontent.com/eclipse-score/logging/refs/heads/main/score/mw/log/design/backend/mw_log_recorders.puml">
+<p>The sequence below shows a single log call from <code class="docutils literal notranslate"><span class="pre">LogStream</span></code> construction
+through to the <code class="docutils literal notranslate"><span class="pre">syslog(3)</span></code> call made when the stream is destroyed and the slot
+is flushed:</p>
+<img alt="SyslogBackendSequenceDesign" src="https://www.plantuml.com/plantuml/proxy?src=https://raw.githubusercontent.com/eclipse-score/logging/refs/heads/main/score/mw/log/design/backend/syslog_backend_sequence.puml">
 </section>
 
 
@@ -550,20 +541,20 @@
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="../requirements/index.html"
+       href="file_output_backend.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Datarouter Component Requirements</p>
+        <p class="prev-next-title">FileOutputBackend</p>
       </div>
     </a>
     <a class="right-next"
-       href="logging_architecture.html"
+       href="datarouter_backend/index.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Logging: architecture and SW design</p>
+        <p class="prev-next-title">Safe Datarouter Backend</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -582,7 +573,7 @@
 
   
   <div class="tocsection editthispage">
-    <a href="https://github.com/eclipse-score/logging/edit/main/docs/components/datarouter/detailed_design/index.rst">
+    <a href="https://github.com/eclipse-score/logging/edit/main/docs/components/mw_log/detailed_design/syslog_backend.md">
       <i class="fa-solid fa-pencil"></i>
       
       
