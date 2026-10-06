@@ -82,7 +82,7 @@ cc_library(
         "@score_baselibs//score/os:pthread",
         "@score_baselibs//score/os:stdlib",
         "@score_baselibs//score/os/utils:signal",
-        "@score_communication//score/memory/shared",
+        "@score_communication//score/memory/shared",  # Preperation for full rollout of (Ticket-105741), build cyclic dependency is broken (runtime, in next commit)
         "@score_communication//score/message_passing",
     ],
 )
