@@ -33,9 +33,7 @@ pkg_tar(
 
 pkg_tar(
     name = "_datarouter_conf_pkg",
-    srcs = ["//score/test/component/datarouter:datarouter_test_config_files"],
-    package_dir = "opt/datarouter",
-    strip_prefix = "/score/test/component/datarouter",
+    srcs = ["//score/test/component/datarouter:datarouter_docker_config_pkg"],
     target_compatible_with = ["@platforms//os:linux"],
 )
 
