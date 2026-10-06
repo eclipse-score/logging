@@ -43,4 +43,5 @@ capture the safety and security constraints that any backend implementation must
    architecture/index.rst
    architecture/chklst_arc_inspection.rst
    architecture/DR-001-logging.rst
+   architecture/DR-002-dlt-network-transport.rst
    safety_planning/index.rst

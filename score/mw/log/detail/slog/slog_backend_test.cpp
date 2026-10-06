@@ -79,7 +79,8 @@ struct SlogBackendFixture : ::testing::Test
 TEST_F(SlogBackendFixture, SlogRegister)
 {
     RecordProperty("PartiallyVerifies", "comp_req__log__forward_to_system_logger");
-    RecordProperty("Description", "Check that the system logger backend registers with slogger2 and forwards logs to it.");
+    RecordProperty("Description",
+                   "Check that the system logger backend registers with slogger2 and forwards logs to it.");
     RecordProperty("TestType", "requirements-based");
     RecordProperty("DerivationTechnique", "requirements-analysis");
     RecordProperty("ParentRequirement", "SCR-8017664");

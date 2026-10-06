@@ -15,7 +15,6 @@
 
 skinparam classAttributeIconSize 0
 skinparam linetype ortho
-hide empty members
 
 title data_router class diagram
 
@@ -71,7 +70,7 @@ package "datarouter_backend" {
     - message_passing_factory_: std::unique_ptr<MessagePassingFactory>
     - use_dynamic_datarouter_ids_: bool
     + GetShMemWriter(): SharedMemoryWriter&
-    + GetWriterFilename(): std::string const&
+    + GetWriterFilename(): const std::string&
     + GetMsgPassingFactory(): std::unique_ptr<MessagePassingFactory>&
     + IsUsingDynamicDatarouterIDs(): bool
   }
@@ -99,7 +98,7 @@ package "datarouter_backend" {
 
   class DatarouterMessageClientFactoryImpl {
     - created_once_: bool
-    - config_: Configuration const&
+    - config_: const Configuration&
     - message_passing_factory_: std::unique_ptr<MessagePassingFactory>
     - msg_client_utils_: MsgClientUtils
     + CreateOnce(identifier: std::string&, mwsr_file_name: std::string&): std::unique_ptr<DatarouterMessageClient>
@@ -188,7 +187,7 @@ package "shared_memory" {
   }
 
   class SharedMemoryReader {
-    - shared_data_: SharedData const&
+    - shared_data_: const SharedData&
     - unmap_callback_: UnmapCallback
     - linear_reader_: std::optional<LinearReader>
     - acquired_data_: std::optional<ReadAcquireResult>
@@ -212,7 +211,7 @@ package "shared_memory" {
     - alternating_reader_: AlternatingReaderProxy
     - unmap_callback_: UnmapCallback
     - type_identifier_: std::atomic<TypeIdentifier>
-    + AllocAndWrite(...): void
+    + AllocAndWrite(data): void
     + TryRegisterType(info: Typeinfo&): score::cpp::optional<TypeIdentifier>
     + ReadAcquire(): ReadAcquireResult
     + DetachWriter(): void
@@ -257,6 +256,12 @@ package "shared_memory" {
 abstract class Backend
 abstract class Recorder
 abstract class "LogRecorderFactory<RemoteDltRecorderFactory>" as LogRecorderFactoryT
+class Configuration
+class LoggingIdentifier
+class LogRecord
+class ServerFactory
+class ClientFactory
+class StatisticsReporter
 interface IClientConnection
 interface IServer
 
@@ -322,22 +327,8 @@ ReaderFactoryImpl ..> SharedMemoryReader : creates
 SharedMemoryReader *-- SharedData : views
 SharedMemoryWriter *-- SharedData : manages
 
-note right of DataRouterRecorder
-  Multiple Log(...) overloads are omitted
-  to keep the diagram focused on structure.
-end note
-
-note bottom of DatarouterMessageClientImpl
-  The implementation owns sender/receiver lifecycle
-  and runs a background connect thread.
-end note
-
-note bottom of WriterFactory
-  Creates and maps the shared memory file,
-  then returns a SharedMemoryWriter.
-end note
-
-note "Focused on production classes in data_router and shared_memory.\nTests, mocks, free functions, and minor POD helper structs are intentionally omitted." as N1
-N1 .. DataRouterBackend
+note right of DataRouterRecorder : Multiple Log(...) overloads omitted for clarity
+note bottom of DatarouterMessageClientImpl : Owns sender/receiver lifecycle and background connect thread
+note bottom of WriterFactory : Creates and maps shared memory file, returns SharedMemoryWriter
 
 @enduml

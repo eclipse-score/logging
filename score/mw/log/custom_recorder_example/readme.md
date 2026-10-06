@@ -11,6 +11,7 @@
   SPDX-License-Identifier: Apache-2.0
 ----------------------------------------------------------------------------- -->
 
+
 # Custom Recorder Support
 
 This document describes the custom recorder extension that allows external integrators to route logs to non-S-CORE backends, providing an alternative to the default S-CORE provided recorders.

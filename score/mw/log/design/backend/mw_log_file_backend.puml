@@ -17,14 +17,9 @@
 class "mw::log::Recorder" as Recorder {
   + StartRecord(ctx:std::string_view, ll:LogLevel): score::cpp::optional<SlotHandle>
   + StopRecord(slot:SlotHandle&)
-  + Log( T data ) - family of functions
+  + Log(data: T): void
   __
   - backend:unique_ptr<mw::log::Backend>
-  __
-  Responsibilities:
-  -- Opens and closes file.
-  Uses formatters to serialize
-  user data and header.
 }
 
 interface "mw::log::detail::Backend" as Backend {
@@ -41,9 +36,6 @@ class "mw::log::detail::FileOutputBackend" as FileOutputBackend {
   + ReserveSlot():score::cpp::optional<SlotHandle>
   + FlushSlot(const SlotHandle&):void
   + GetLogRecord(const SlotHandle&): LogRecord&
-  __
-  Responsibilities
-  -- keeps statistics of dropped messages
 }
 
 class "mw::log::detail::SlotDrainer" as SlotDrainer {
@@ -63,11 +55,6 @@ class "mw::log::detail::SlotDrainer" as SlotDrainer {
   - TryFlushSpans(): score::cpp::expected<FlushResult, score::mw::log::detail::Error>
   - MoreSlotsAvailableAndLoaded():bool
   - MoreSpansAvailableAndLoaded():bool
-  __
-  Responsibilities
-  -- Drains slots - empties circular_buffer
-  when subsequent data has been flushed
-  -- Returns status if data was flushed or stalled
 }
 
 class "mw::log::detail::NonBlockingWriter" as NonBlockingWriter {
@@ -84,18 +71,11 @@ class "mw::log::detail::NonBlockingWriter" as NonBlockingWriter {
   + GetMaxChunkSize(): std::size_t
   __
   - InternalFlush(const uint64_t): score::cpp::expected<ssize_t, score::os::Error>
-  __
-  Responsibilities
-  -- Write logs into file
 }
 
 interface "mw::log::detail::IMessageBuilder" as IMessageBuilder {
   + GetNextSpan() : score::cpp::optional<score::cpp::span<const std::uint8_t>>
   + SetNextMessage(LogRecord&): void
-  __
-  Responsibility:
-  iterates over spans of data to be
-  serialized into output stream.
 }
 
 class "mw::log::detail::DltMessageBuilder" as DltMessageBuilder {
@@ -105,7 +85,7 @@ class "mw::log::detail::DltMessageBuilder" as DltMessageBuilder {
 }
 
 class "mw::log::detail::TextMessageBuilder" as TextMessageBuilder {
-  + TextMessageBuilder(app_id, ecu_id, )
+  + TextMessageBuilder(app_id, ecu_id)
   + GetNextSpan() : score::cpp::optional<score::cpp::span<const std::uint8_t>>
   + SetNextMessage(log_record:LogRecord&): void
 }
@@ -122,10 +102,6 @@ class "mw::log::detail::CircularAllocator<T>" as CircularAllocator {
 }
 
 class "score::cpp::circular_buffer<T=SlotHandle,MaxSize>" as CircularBuffer {
-  Responsibilities
-  -- stores elements of static size
-  -- overwrites data when full
-  -- realizes FIFO pattern
 }
 
 class "mw::log::detail::Slot<T>" as Slot {
@@ -200,77 +176,13 @@ TextMessageBuilder *-- VerbosePayload
 Recorder ..> Fcntl : open\nSetNonBlocking / fctrl call
 Recorder ..> OsalUnistd2 : close
 
-' Notes
-note right of NonBlockingWriter
-  Test strategy:
-  Inject OSAL mock
-  by constructor argument
-  with default value
-end note
-
-note right of FileOutputBackend
-  Test strategy:
-  Inject NonBlocking Writer
-  and using OSAL mock
-  Configure circular buffer size
-  Use MessageBuilderMock
-end note
-
-note right of IMessageBuilder
-  Test strategy:
-  Insert the data, verify outcome
-end note
-
-note top of CircularBuffer
-  Test strategy:
-  using score::cpp::circular_buffer
-  not tested here
-end note
-
-note bottom of CircularBuffer
-  By design we exclude possibility of dropped
-  messages in CircularBuffer because the
-  size of SlotAllocator is smaller or less
-  than CircularBuffer size.
-
-  Size of score::cpp::CircularBuffer
-end note
-
-note right of LogRecord
-  Test strategy:
-  Tested in data_router
-end note
-
-note bottom of FileOutputBackend
-  Test strategy:
-  Test just a glue code and
-  not underlying classes
-  Inject SlotDrainer with
-  mocked OSAL
-  Use MessageBuilderMock
-
-  Only place that messages
-  may be dropped for the
-  reason of failure to get buffer
-  from SlotAllocator
-end note
-
-note bottom of BackendLogMock
-  Mock
-end note
-
-note bottom of LogRecord
-  Note..
-
-  Used for data types
-  that differ from message to message
-end note
-
-note as SyncNote
-  Synchronised access only: guarded by SlotDrainer context mutex.
-end note
-
-SyncNote .. IMessageBuilder
-SyncNote .. NonBlockingWriter
+note right of NonBlockingWriter : Inject OSAL mock by constructor with default value
+note right of FileOutputBackend : Inject NonBlockingWriter, OSAL mock, configure buffer size
+note right of IMessageBuilder : Insert data and verify outcome
+note top of CircularBuffer : Using score::cpp::circular_buffer, not tested
+note bottom of CircularBuffer : By design, dropped messages excluded as SlotAllocator size < CircularBuffer
+note right of LogRecord : Tested in data_router
+note bottom of FileOutputBackend : Test glue code, inject SlotDrainer with mocked OSAL
+note bottom of BackendLogMock : Mock implementation
 
 @enduml

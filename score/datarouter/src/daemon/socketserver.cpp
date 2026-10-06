@@ -24,12 +24,12 @@
 #include "unix_domain/unix_domain_common.h"
 #include "unix_domain/unix_domain_server.h"
 
-#include "score/concurrency/thread_pool.h"
 #include "score/os/fcntl.h"
 #include "score/os/pthread.h"
 #include "score/os/unistd.h"
 #include "score/mw/log/configuration/nvconfig.h"
 #include "score/mw/log/configuration/nvconfigfactory.h"
+#include "score/concurrency/thread_pool.h"
 
 // Constants
 #include "data_router_cfg.h"

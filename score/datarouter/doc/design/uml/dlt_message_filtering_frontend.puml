@@ -11,7 +11,7 @@
 ' SPDX-License-Identifier: Apache-2.0
 ' *******************************************************************************
 
-@startuml
+@startuml dlt_message_filtering_frontend
 title log message filtering based on log_level (client - Frontend)
 
 start
@@ -23,14 +23,14 @@ else (no)
     if (ecu_logging_config.json is found) then (yes)
         :log_level is updated;
     else (no)
-        :log_level = kWarn (default; hardcoded);
+        :log_level = kWarn (default, hardcoded);
     endif
     NOTE: ecu_logging_config.json (fallback if logging.json is NOT found)
 endif
 
 if (Logging) then (Verbose logging)
     :log_level_threshold = kWarn (Default);
-    :log_level_threshold = log_level based on logging.json OR 
+    :log_level_threshold = log_level based on logging.json OR
       if extracted ContextConfigs (ctx_id and log_level pairs);
 else (Non-Verbose logging)
     :log_level_threshold = kVerbose (default);
@@ -48,7 +48,7 @@ else (Non-Verbose logging)
 endif
 
 if (log_level > logLevel_threshold) then (yes)
-    :Drop the log message 
+    :Drop the log message
     - Will NOT write the message into logging buffers;
 else (no)
     :Write the log message into logging buffers;

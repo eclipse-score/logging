@@ -15,32 +15,22 @@
 
 title SharedMemoryWriter::AllocAndWrite
 
-start
+participant "SharedMemoryWriter" as SharedMemoryWriter
+participant "SharedData" as SharedData
+participant "DropCounters" as DropCounters
 
-if (Payload size > max payload size?) then ([Yes])
-    :Increment number of drops counter
-    due to invalid size;
-    stop
-else ([No])
-endif
-
-:Acquire data;
-
-if (Is data acquired?) then ([Yes])
-else ([No])
-    :Increment number of drops counter
-    due to buffer full;
-    stop
-endif
-
-:Write header;
-
-:Access memory;
-
-:Write payload;
-
-:Release acquired data;
-
-stop
+alt payload size exceeds limit
+    SharedMemoryWriter -> DropCounters : Increment invalid-size drops
+else payload size accepted
+    SharedMemoryWriter -> SharedData : Acquire data
+    alt data acquired
+        SharedMemoryWriter -> SharedData : Write header
+        SharedMemoryWriter -> SharedData : Access memory
+        SharedMemoryWriter -> SharedData : Write payload
+        SharedMemoryWriter -> SharedData : Release acquired data
+    else buffer full
+        SharedMemoryWriter -> DropCounters : Increment buffer-full drops
+    end
+end
 
 @enduml

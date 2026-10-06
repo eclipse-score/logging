@@ -1,0 +1,146 @@
+' *******************************************************************************
+' Copyright (c) 2026 Contributors to the Eclipse Foundation
+'
+' See the NOTICE file(s) distributed with this work for additional
+' information regarding copyright ownership.
+'
+' This program and the accompanying materials are made available under the
+' terms of the Apache License Version 2.0 which is available at
+' https://www.apache.org/licenses/LICENSE-2.0
+'
+' SPDX-License-Identifier: Apache-2.0
+' *******************************************************************************
+
+@startuml dlt_plugin
+title DLT Daemon functionality as a \nPlugin / Loadable Shared Module (a second dedicated Network Stack instance)
+
+skinparam componentStyle rectangle
+skinparam nodesep 40
+skinparam ranksep 60
+skinparam linetype ortho
+
+interface "mw::diag" as mwdiag
+component "DLT Diagnostics\nComponent" as dltdiag <<QM>>
+dltdiag --> mwdiag
+
+note top of dltdiag
+  Independent component registered with the
+  Diagnostic Manager.
+end note
+
+package "client" <<ASIL>> {
+  component "mw::log" as mwlog <<FFI>>
+  component "GTL" as gtl <<FFI>>
+
+  mwlog -r-> gtl
+}
+
+note bottom of mwlog
+  Forwards records to GTL via an owned
+  DltTraceBackend/ITraceLibrary client.
+end note
+
+file "Client\nConfiguration" as clientconfig
+clientconfig -d-> mwlog
+
+'interface name left blank to avoid overlaps and instead highlighted via note below
+interface " " as shmpayload
+interface " " as shmmeta
+interface " " as shmctrl
+interface " " as ctrlchannel
+
+note top of shmpayload #Wheat : shm\n(payload)
+note top of shmmeta #Wheat : shm\n(metadata)
+note bottom of shmctrl #Wheat : shm\n(control block)
+note top of ctrlchannel #Wheat :DLT QNX\nControl Channel
+
+gtl -r-> shmpayload: R/W
+gtl -r-> shmmeta: R/W
+mwlog -r-> shmctrl: R/W
+dltdiag --> ctrlchannel
+
+package "Network Stack (log_and_trace instance)" <<QM>> as networkstackinstance {
+  package "DLT Plugin" {
+    component "GTL Backend" as gtlbackend
+    component "Core" as core
+    component "Statistics\nModule" as stats
+    component "DLT Router" as router
+    interface "DLT Wire Format\n(compile-time seam)" as wireformat
+    component "DLT File\nWriter" as filewriter
+    component "DLT Network\nWriter" as netwriter
+    component "Network Stack\nNative APIs" as fbsdapi
+    component "devs-network-driver.so" as driver
+    component "gPTP\nLogger Time" as gptp <<optional>>
+  }
+}
+
+package "DLT Wire Format Implementations" as wireformatpkg {
+  component "DLTv2 \n(closed-source)" as dltv2wire <<external>> #OrangeRed
+  component "DLTv1 \n(this repository)" as dltv1wire
+}
+
+' Optional/experimental time-sync path
+package "mw::time" as mwtime <<optional>> {
+  component "shm\n(logger time)" as shmloggertime <<optional>>
+}
+
+dltv2wire -[hidden]r-> dltv1wire
+
+shmpayload -r-> gtlbackend : R/O
+shmmeta -r-> gtlbackend : R/O
+
+shmctrl <-r-> core : R/W
+ctrlchannel -u-> core
+
+gtlbackend -d-> core
+core -d-> router
+core -l-> stats
+router -d-> filewriter
+router -d-> netwriter
+
+wireformat -u-> filewriter
+wireformat -u-> netwriter
+
+wireformatpkg ..|> wireformat
+
+note left of wireformat
+  Compile-time build-flag selection between
+  DLTv1 and DLTv2 wire formats.
+end note
+
+filewriter -d-> fbsdapi
+netwriter -d-> fbsdapi
+fbsdapi -d-> driver
+
+file "Global\nConfiguration" as globalconfig
+core <-d- globalconfig
+
+file "Router\nConfiguration" as routerconfig
+routerconfig -d-> router
+
+database "filesystem\n(devb-*, fs-qnx6.so)" as fsdb
+filewriter -d-> fsdb
+
+' Optional time-sync path
+fbsdapi <-r- gptp
+driver <-r- gptp
+gptp <-r- mwtime
+mwlog -r-> shmloggertime
+
+legend bottom
+  |= Acronym |= Meaning |
+  | DLT | Diagnostics Log and Trace |
+  | GTL | Generic Trace Library |
+  | QM | Quality Managed (non-ASIL) |
+  | ASIL | Automotive Safety Integrity Level |
+  | FFI | Freedom From Interference |
+  | shm | Shared Memory |
+  | R/O | Read-Only |
+  | R/W | Read/Write |
+  | gPTP | generalized Precision Time Protocol |
+  | mw::log | Middleware Logging (client-side logging API) |
+  | mw::diag | Middleware Diagnostics |
+  | mw::time | Middleware Time (time synchronisation) |
+end legend
+
+@enduml

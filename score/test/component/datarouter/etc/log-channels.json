@@ -41,6 +41,13 @@
             ]
         }
     },
+    "quotas": {
+        "quotaEnforcementEnabled": false,
+        "throughput": {
+            "overallMbps": 100,
+            "applicationsKbps": {}
+        }
+    },
     "defaultChannel": "3493",
     "defaultThresold": "kVerbose",
     "messageThresholds": {

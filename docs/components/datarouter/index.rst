@@ -33,5 +33,4 @@ Datarouter
    :maxdepth: 1
 
    requirements/index
-   detailed_design/logging_architecture
-   detailed_design/shm_apis
+   detailed_design/index

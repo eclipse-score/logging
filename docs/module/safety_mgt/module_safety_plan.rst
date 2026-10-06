@@ -168,7 +168,7 @@ Component Logging Backend Work products List
         * - :need:`wp__sw_implementation`
           - :need:`gd_guidl__implementation`
           - :ndf:`copy('status', need_id='gd_guidl__implementation')`
-          - `DD mw/log <https://github.com/eclipse-score/logging/blob/main/score/mw/log/design/backend/file_output_backend.md>`_ & `mw/log .cpp <https://github.com/eclipse-score/logging/tree/main/score/mw/log/backend>`_
+          - :need:`doc__mw_log_backend_detailed_design` & `mw/log .cpp <https://github.com/eclipse-score/logging/tree/main/score/mw/log/backend>`_
 
         * - :need:`wp__verification_sw_unit_test`
           - :need:`gd_guidl__verification_guide`

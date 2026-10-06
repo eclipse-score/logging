@@ -78,7 +78,9 @@ class RecorderFactoryConfigFixture : public ::testing::Test
 TEST_F(RecorderFactoryConfigFixture, RemoteConfiguredShallReturnDataRouterRecorder)
 {
     RecordProperty("PartiallyVerifies", "comp_req__log__local_allocation_strategy");
-    RecordProperty("Description", "Check that the recorder factory creates a DataRouterRecorder using the provided memory resource when remote mode is configured.");
+    RecordProperty("Description",
+                   "Check that the recorder factory creates a DataRouterRecorder using the provided memory resource "
+                   "when remote mode is configured.");
     RecordProperty("TestType", "requirements-based");
     RecordProperty("DerivationTechnique", "requirements-analysis");
     RecordProperty("Requirement", "SCR-861534");
