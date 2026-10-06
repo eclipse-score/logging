@@ -34,6 +34,9 @@ test --test_output=errors
 build --incompatible_strict_action_env
 build --experimental_retain_test_configuration_across_testonly #https://github.com/bazelbuild/bazel/issues/6842
 
+# libclang toolchain required by rules_score's unit()/component() C++ parser
+common --extra_toolchains=//bazel/toolchains:score_logging_libclang_toolchain
+
 # Ferrocene must be common compiler for HOST. To ensure metadata compatibility for proc macro crates!
 build:_common --extra_toolchains=@score_toolchains_rust//toolchains/ferrocene:ferrocene_x86_64_unknown_linux_gnu
 build:_common --features=minimal_warnings --features=-strict_warnings --features=warnings_as_errors
@@ -158,6 +161,10 @@ test:clang-tidy --extra_toolchains=@llvm_toolchain//:cc-toolchain-x86_64-linux
 # libc++ include paths); clang then reports -stdlib as unused, which the
 # warnings_as_errors feature turns into an error. Analysis is unaffected.
 test:clang-tidy --copt=-Wno-unused-command-line-argument
+# The libclang toolchain (bazel/toolchains) pulls some targets (e.g.
+# backend_mock) into the exec/tool configuration, where --copt does not apply;
+# mirror the warning suppression there via --host_copt.
+test:clang-tidy --host_copt=-Wno-unused-command-line-argument
 
 # Unified LLVM source-based coverage (C++ + Rust), see quality/coverage/ and
 # @score_coverage. Use: bazel coverage --config=llvm_cov //score/... --build_tests_only
