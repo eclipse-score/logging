@@ -120,7 +120,7 @@ The system defines the following visitors:
 
 2. `TRACE(S)` is a C++ **function template** (not a preprocessor macro). Its call chain at runtime is:
 
-```text
+```c++
 TRACE(arg)
   → LogEntry<T>::Instance().TryWriteIntoSharedMemory(arg)
     → SharedMemoryWriter::AllocAndWrite(serialize_fn, type_id, size)
