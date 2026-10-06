@@ -37,6 +37,21 @@ TEST(SyslogRegistrantTest, SyslogBackendIsRegisteredAfterStaticInitialization)
     EXPECT_TRUE(IsBackendAvailable(LogMode::kSystem));
 }
 
+TEST(SyslogRegistrantTest, RegisteredCreatorProducesARecorder)
+{
+    RecordProperty("PartiallyVerifies", "comp_req__log__system_backend_activation");
+    RecordProperty("Description",
+                   "The creator function registered for LogMode::kSystem actually builds a usable Recorder.");
+    RecordProperty("TestType", "requirements-based");
+    RecordProperty("DerivationTechnique", "requirements-analysis");
+    RecordProperty("lobster-tracing", "MwLog.SystemBackendActivation");
+
+    Configuration config{};
+    const auto recorder = CreateRecorderForMode(LogMode::kSystem, config, score::cpp::pmr::get_default_resource());
+
+    EXPECT_NE(recorder, nullptr);
+}
+
 }  // namespace
 }  // namespace detail
 }  // namespace log

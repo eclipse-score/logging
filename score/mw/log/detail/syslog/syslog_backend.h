@@ -13,9 +13,9 @@
 #ifndef SCORE_MW_LOG_DETAIL_SYSLOG_SYSLOG_BACKEND_H
 #define SCORE_MW_LOG_DETAIL_SYSLOG_SYSLOG_BACKEND_H
 
-#include "score/os/syslog.h"
 #include "score/mw/log/detail/backend.h"
 #include "score/mw/log/detail/circular_allocator.h"
+#include "score/os/syslog.h"
 
 #include <cstdint>
 #include <string>

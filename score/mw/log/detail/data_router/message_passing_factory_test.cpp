@@ -11,8 +11,8 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-#include "score/concurrency/thread_pool.h"
 #include "score/mw/log/detail/data_router/message_passing_factory_impl.h"
+#include "score/concurrency/thread_pool.h"
 
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
