@@ -22,9 +22,8 @@ namespace log
 {
 namespace detail
 {
-std::unique_ptr<Recorder> SyslogRecorderFactory::CreateConcreteLogRecorder(
-    const Configuration& config,
-    score::cpp::pmr::memory_resource* memory_resource)
+std::unique_ptr<Recorder> SyslogRecorderFactory::CreateConcreteLogRecorder(const Configuration& config,
+                                                                           score::cpp::pmr::memory_resource* memory_resource)
 {
     SCORE_LANGUAGE_FUTURECPP_ASSERT_PRD(memory_resource != nullptr);
     auto backend = CreateSystemBackend(config, memory_resource);  // LCOV_EXCL_LINE : no branches to test

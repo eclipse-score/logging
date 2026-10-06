@@ -69,6 +69,7 @@ cc_library(
             "//score/mw/log/detail/dlt_trace:dlt_trace_registrant",
             # Temporary solution for fixing leaking transitively through @score_logging//score/mw/log, which only happens for
             # certain values of --@score_logging//score/mw/log/flags:shm_dma_enabled.
+            # Tracking ticket: Ticket-269309
             "//score/mw/log/legacy_non_verbose_api",
             "@score_baselibs//score/concurrency",
             "@score_baselibs//score/os:errno_logging",
@@ -122,7 +123,7 @@ cc_library(
     }),
     features = COMPILER_WARNING_FEATURES,
     tags = ["FFI"],
-    visibility = ["//visibility:public"],
+    visibility = ["//visibility:public"],  # platform_only
     deps = [
         "@score_baselibs//score/mw/log:minimal",
     ] + select({

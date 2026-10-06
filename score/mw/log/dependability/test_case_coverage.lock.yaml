@@ -71,8 +71,8 @@ requirements:
         when: ''
         then: ''
   - id: MwLog.ForwardToSystemLogger
-    version: '1'
-    description: 'The system logger backend shall forward the logs to the native system logger mechanism. #magic___^_^___line Under QNX, slogger2 shall be used.'
+    version: '2'
+    description: 'The system logger backend shall forward the logs to the native system logger mechanism. #magic___^_^___line slogger2 shall be used for QNX. syslog(3) shall be used for Linux.'
     test_cases:
       - uid: //score/mw/log/dependability/BackendTableTest:SystemModeUsesRegisteredBackendCreator
         given: ''

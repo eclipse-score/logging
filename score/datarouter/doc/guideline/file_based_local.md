@@ -43,4 +43,3 @@ The following config will set App1 to write into /tmp/App1.dlt
 - have a ```logging.json``` file. It is very useful at the moment.
 - in your ```logging.json``` file append **```|kFile```** to your _logMode_,
 and as _logfilePath_ use the target <u>directory</u>, e.g. "**/tmp**".
-
