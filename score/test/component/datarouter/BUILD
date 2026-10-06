@@ -12,7 +12,7 @@
 # *******************************************************************************
 
 load("@rules_cc//cc:cc_binary.bzl", "cc_binary")
-load("@rules_pkg//pkg:mappings.bzl", "pkg_attributes", "pkg_filegroup", "pkg_files")
+load("@rules_pkg//pkg:mappings.bzl", "pkg_attributes", "pkg_filegroup", "pkg_files", "strip_prefix")
 load("@rules_pkg//pkg:tar.bzl", "pkg_tar")
 load("//score/test/component:defs.bzl", "py_logging_itf_test")
 
@@ -92,6 +92,19 @@ pkg_files(
     name = "datarouter_config_pkg",
     srcs = [":datarouter_test_config_files"],
     prefix = "usr/bin/datarouter/etc",
+    visibility = ["//score/test/component:__subpackages__"],
+)
+
+# Docker image config. Package-relative strip so the etc/ files resolve to
+# opt/datarouter/etc/* whether score_logging is built as the root module or
+# consumed as an external dependency (an absolute strip_prefix only matches
+# when logging is root and silently leaves the external/score_logging+/ prefix
+# otherwise).
+pkg_files(
+    name = "datarouter_docker_config_pkg",
+    srcs = [":datarouter_test_config_files"],
+    prefix = "opt/datarouter",
+    strip_prefix = strip_prefix.from_pkg(),
     visibility = ["//score/test/component:__subpackages__"],
 )
 
