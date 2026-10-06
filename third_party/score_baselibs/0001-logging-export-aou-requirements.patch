@@ -1,0 +1,11 @@
+--- a/score/mw/log/BUILD
++++ b/score/mw/log/BUILD
+@@ -497,3 +497,8 @@
+     source_dir = "docs",
+     visibility = ["//visibility:public"],
+ )
++
++exports_files(
++    ["docs/safety_analysis/aou_requirements.rst"],
++    visibility = ["//visibility:public"],
++)
