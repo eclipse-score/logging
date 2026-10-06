@@ -4,27 +4,27 @@
   "overall_metrics": {
     "total": 21,
     "with_code_link": 0,
-    "with_test_link": 14,
+    "with_test_link": 15,
     "fully_linked": 0,
     "with_code_link_pct": 0.0,
-    "with_test_link_pct": 66.66666666666666,
+    "with_test_link_pct": 71.42857142857143,
     "fully_linked_pct": 0.0
   },
   "metrics_by_type": {
     "comp_req": {
       "total": 21,
       "with_code_link": 0,
-      "with_test_link": 14,
+      "with_test_link": 15,
       "fully_linked": 0,
       "with_code_link_pct": 0.0,
-      "with_test_link_pct": 66.66666666666666,
+      "with_test_link_pct": 71.42857142857143,
       "fully_linked_pct": 0.0
     }
   },
   "tests": {
-    "total": 690,
-    "linked_to_requirements": 19,
-    "linked_to_requirements_pct": 2.753623188405797,
+    "total": 707,
+    "linked_to_requirements": 34,
+    "linked_to_requirements_pct": 4.809052333804809,
     "broken_references": []
   }
 }
