@@ -475,9 +475,6 @@ inline void TraceWarn(const T& arg)
 /// \thread-safe
 // Using preprocessor here because we define function macro to use it any where with name SCORE_STRUCT_TRACEABLE
 // coverity[autosar_cpp14_a16_0_1_violation]
-#ifndef SCORE_STRUCT_TRACEABLE
-#define SCORE_STRUCT_TRACEABLE(...) SCORE_STRUCT_VISITABLE(__VA_ARGS__)
-#endif
 
 /// \public
 /// \thread-safe

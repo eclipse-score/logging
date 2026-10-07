@@ -97,7 +97,12 @@ Justification:
 // coverity[autosar_cpp14_a11_0_2_violation]
 // coverity[autosar_cpp14_a0_1_1_violation]
 // coverity[autosar_cpp14_a18_9_4_violation]
-SCORE_STRUCT_TRACEABLE(LogEntryDeserializationReflection, app_id, ctx_id, serialized_vector_data, num_of_args, log_level)
+SCORE_STRUCT_TRACEABLE(LogEntryDeserializationReflection,
+                       app_id,
+                       ctx_id,
+                       serialized_vector_data,
+                       num_of_args,
+                       log_level)
 // LCOV_EXCL_STOP
 
 }  // namespace log_entry_deserialization
