@@ -51,6 +51,7 @@ cc_library(
     deps = [
         "//score/mw/log/detail/common:log_entry_deserialize",
         "@score_baselibs//score/language/futurecpp",
+        "@score_baselibs//score/mw/log/detail:log_entry",
         "@score_baselibs//score/os/utils:path",
         "@score_baselibs//score/quality/compiler_warnings",
     ],
