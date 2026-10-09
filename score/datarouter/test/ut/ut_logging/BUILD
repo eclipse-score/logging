@@ -38,10 +38,12 @@ test_suite(
         ":logparserUT",
         ":messagePassingServerUT",
         ":persistentLogConfigUT",
+        ":socket_config_test",
         ":socketserverConfigUT",
         ":socketserverUT",
         ":udp_stream_output_test",
         ":unix_domain_common_test",
+        ":unix_domain_server_file_socket_integration_test",
         ":unix_domain_server_test",
         ":utility_test",
     ],
@@ -288,6 +290,20 @@ cc_test(
 )
 
 cc_test(
+    name = "socket_config_test",
+    srcs = [
+        "socket_config_test.cpp",
+    ],
+    features = FEAT_COMPILER_WARNINGS_AS_ERRORS,
+    tags = ["unit"],
+    deps = [
+        "@googletest//:gtest_main",
+        "@score_baselibs//score/os/mocklib:stdlib_mock",
+        "@score_logging//score/datarouter:socket_config",
+    ],
+)
+
+cc_test(
     name = "socketserverUT",
     srcs = [
         "test_socketserver.cpp",
@@ -335,6 +351,28 @@ cc_test(
         "@googletest//:gtest_main",
         "@score_baselibs//score/os/mocklib:socket_mock",
         "@score_logging//score/datarouter:udp_stream_output",
+    ],
+)
+
+cc_test(
+    name = "unix_domain_server_file_socket_integration_test",
+    srcs = [
+        "unix_domain_server_file_socket_integration_test.cpp",
+    ],
+    features = FEAT_COMPILER_WARNINGS_AS_ERRORS,
+    tags = [
+        "integration",
+        "unit",
+    ],
+    deps = [
+        "@googletest//:gtest",
+        "@googletest//:gtest_main",
+        "@score_baselibs//score/os/mocklib:stdlib_mock",
+        "@score_baselibs//score/os:socket",
+        "@score_baselibs//score/os:stat",
+        "@score_baselibs//score/os:unistd",
+        "@score_logging//score/datarouter:socket_config",
+        "@score_logging//score/datarouter:unixdomain_server",
     ],
 )
 
