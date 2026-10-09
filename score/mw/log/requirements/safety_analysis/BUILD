@@ -26,6 +26,7 @@ copy_file(
 assumptions_of_use(
     name = "assumptions_of_use",
     srcs = ["aou_requirements.rst"],
+    target_compatible_with = ["@platforms//os:linux"],
     visibility = [
         "//score/mw/log/dependability:__subpackages__",
         "//score/mw/log/requirements:__subpackages__",

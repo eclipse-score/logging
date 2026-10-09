@@ -19,6 +19,7 @@ load(
 assumed_system_requirements(
     name = "assumed_system_requirements",
     srcs = ["assumed_system_requirements.trlc"],
+    target_compatible_with = ["@platforms//os:linux"],
     visibility = [
         "//score/mw/log/dependability:__subpackages__",
         "//score/mw/log/requirements:__subpackages__",

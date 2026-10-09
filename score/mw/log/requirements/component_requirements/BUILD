@@ -19,6 +19,7 @@ load(
 component_requirements(
     name = "component_requirements",
     srcs = ["component_requirements.trlc"],
+    target_compatible_with = ["@platforms//os:linux"],
     visibility = [
         "//score/mw/log/dependability:__subpackages__",
         "//score/mw/log/requirements:__subpackages__",
