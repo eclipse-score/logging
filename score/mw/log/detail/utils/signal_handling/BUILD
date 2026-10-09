@@ -13,12 +13,21 @@
 
 load("@rules_cc//cc:defs.bzl", "cc_library", "cc_test")
 load("@score_baselibs//:bazel/unit_tests.bzl", "cc_unit_test_suites_for_host_and_qnx")
+load("@score_tooling//bazel/rules/rules_score:rules_score.bzl", "unit")
 
 COMPILER_WARNING_FEATURES = [
     "treat_warnings_as_errors",
     "additional_warnings",
     "strict_warnings",
 ]
+
+unit(
+    name = "signal_handling_unit",
+    tests = [":unit_test"],
+    unit_design = ["//score/mw/log/dependability/software_unit_design:signal_handling_unit_design"],
+    visibility = ["//score/mw/log/dependability:__pkg__"],
+    implementation = [":signal_handling"],
+)
 
 cc_library(
     name = "signal_handling",

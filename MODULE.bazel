@@ -171,7 +171,7 @@ llvm.toolchain(
     llvm_version = "22.1.7",
     stdlib = {"": "stdc++"},
 )
-use_repo(llvm, "llvm_toolchain", "llvm_toolchain_coverage", "llvm_toolchain_coverage_llvm")
+use_repo(llvm, "llvm_toolchain", "llvm_toolchain_coverage", "llvm_toolchain_coverage_llvm", "llvm_toolchain_llvm")
 
 PYTHON_VERSION = "3.12"
 
@@ -187,6 +187,15 @@ bazel_dep(name = "googletest", version = "1.17.0.bcr.2")
 bazel_dep(name = "rapidjson", version = "1.1.0.bcr.20241007")
 bazel_dep(name = "score_baselibs", version = "0.2.14")
 bazel_dep(name = "score_communication", version = "0.4.0")
+
+single_version_override(
+    module_name = "score_baselibs",
+    patch_strip = 1,
+    patches = [
+        # Export the AoU requirements file so downstream repos can consume it directly.
+        "//third_party/score_baselibs:0001-logging-export-aou-requirements.patch",
+    ],
+)
 
 # Rust dependencies
 

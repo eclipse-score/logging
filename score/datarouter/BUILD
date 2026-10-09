@@ -846,11 +846,10 @@ cc_binary(
     ],
     deps = [
         ":datarouter_app",
+        "//score/mw/log",
         "@score_baselibs//score/os:errno_logging",
         "@score_baselibs//score/os:pthread",
         "@score_baselibs//score/os/utils:path",
-        "//score/mw/log",
-        # "//third_party/jemalloc", # Ticket-231781
     ],
 )
 

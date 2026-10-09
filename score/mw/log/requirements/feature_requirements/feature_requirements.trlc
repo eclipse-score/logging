@@ -1,0 +1,383 @@
+/********************************************************************************
+ * Copyright (c) 2026 Contributors to the Eclipse Foundation
+ *
+ * See the NOTICE file(s) distributed with this work for additional
+ * information regarding copyright ownership.
+ *
+ * This program and the accompanying materials are made available under the
+ * terms of the Apache License Version 2.0 which is available at
+ * https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * SPDX-License-Identifier: Apache-2.0
+ ********************************************************************************/
+package MwLogFeature
+
+import MwLogAssumedSystemRequirements
+import ScoreReq
+
+ScoreReq.FeatReq TimestampingLocal {
+    description = '''The logging framework shall support local timestamps for each log entry.'''
+    safety = ScoreReq.Asil.QM
+    derived_from = [MwLogAssumedSystemRequirements.ASR_LoggingSupport@1]
+    version = 1
+}
+
+ScoreReq.FeatReq TimestampingOriginal {
+    description = '''The logging framework shall support original timestamps for routed log entries.'''
+    safety = ScoreReq.Asil.QM
+    derived_from = [MwLogAssumedSystemRequirements.ASR_LoggingSupport@1]
+    version = 1
+}
+
+ScoreReq.FeatReq TimestampingSync {
+    description = '''The logging framework shall support timestamp synchronization for log entries
+    coming from different logging nodes.'''
+    safety = ScoreReq.Asil.QM
+    derived_from = [MwLogAssumedSystemRequirements.ASR_LoggingSupport@1]
+    version = 1
+}
+
+ScoreReq.FeatReq SeverityLevels {
+    description = '''The logging framework shall support a log level for each log entry.'''
+    safety = ScoreReq.Asil.QM
+    derived_from = [MwLogAssumedSystemRequirements.ASR_LoggingSupport@1]
+    version = 1
+}
+
+ScoreReq.FeatReq Prioritization {
+    description = '''The logging framework shall prioritize logs in case of resource conflicts to
+    ensure critical logs are not lost.'''
+    safety = ScoreReq.Asil.QM
+    derived_from = [MwLogAssumedSystemRequirements.ASR_LoggingSupport@1]
+    version = 1
+}
+
+ScoreReq.FeatReq EarlyStartupLogging {
+    description = '''The logging framework shall support logging of early startup events to capture
+    critical initialization information.'''
+    safety = ScoreReq.Asil.QM
+    derived_from = [MwLogAssumedSystemRequirements.ASR_LoggingSupport@1]
+    version = 1
+}
+
+ScoreReq.FeatReq EntityIdentifier {
+    description = '''The logging framework shall support logging entity identifiers for each log
+    entry.'''
+    safety = ScoreReq.Asil.QM
+    derived_from = [MwLogAssumedSystemRequirements.ASR_LoggingSupport@1]
+    version = 1
+}
+
+ScoreReq.FeatReq FilteringLogLevels {
+    description = '''The logging framework shall support filtering by log levels.'''
+    safety = ScoreReq.Asil.QM
+    derived_from = [MwLogAssumedSystemRequirements.ASR_LoggingSupport@1]
+    version = 1
+}
+
+ScoreReq.FeatReq FilteringEntityId {
+    description = '''The logging framework shall support filtering by logging entity identifiers.'''
+    safety = ScoreReq.Asil.QM
+    derived_from = [MwLogAssumedSystemRequirements.ASR_LoggingSupport@1]
+    version = 1
+}
+
+ScoreReq.FeatReq MessageLossDetection {
+    description = '''The logging framework shall detect and report any message loss.'''
+    safety = ScoreReq.Asil.QM
+    derived_from = [MwLogAssumedSystemRequirements.ASR_LoggingSupport@1]
+    version = 1
+}
+
+ScoreReq.FeatReq MessageLossHandling {
+    description = '''The logging framework shall provide mechanisms to handle message loss
+    gracefully. Additional Information: e.g. buffering or prioritizing critical messages.'''
+    safety = ScoreReq.Asil.QM
+    derived_from = [MwLogAssumedSystemRequirements.ASR_LoggingSupport@1]
+    version = 1
+}
+
+ScoreReq.FeatReq ContextLogLevelActivation {
+    description = '''The logging framework shall allow context-specific log level activation at
+    runtime to enable fine-grained control over logging behavior.'''
+    safety = ScoreReq.Asil.QM
+    derived_from = [MwLogAssumedSystemRequirements.ASR_LoggingSupport@1]
+    version = 1
+}
+
+ScoreReq.FeatReq LogSourcesUserApp {
+    description = '''The logging framework shall support user application as log source.'''
+    safety = ScoreReq.Asil.QM
+    derived_from = [
+        MwLogAssumedSystemRequirements.ASR_LoggingSupport@1,
+        MwLogAssumedSystemRequirements.ASR_StablePublicApi@1,
+    ]
+    version = 1
+}
+
+ScoreReq.FeatReq LogSourcesComponentPlatform {
+    description = '''The logging framework shall support component features and platform as log
+    sources.'''
+    safety = ScoreReq.Asil.QM
+    derived_from = [MwLogAssumedSystemRequirements.ASR_LoggingSupport@1]
+    version = 1
+}
+
+ScoreReq.FeatReq LogSinksConsole {
+    description = '''The logging framework shall support console as a log sink.'''
+    safety = ScoreReq.Asil.QM
+    derived_from = [MwLogAssumedSystemRequirements.ASR_LoggingSupport@1]
+    version = 1
+}
+
+ScoreReq.FeatReq LogSinksLocalFs {
+    description = '''The logging framework shall support local file system as log sink.'''
+    safety = ScoreReq.Asil.QM
+    derived_from = [MwLogAssumedSystemRequirements.ASR_LoggingSupport@1]
+    version = 1
+}
+
+ScoreReq.FeatReq LogSinksCloudDrive {
+    description = '''The logging framework shall support cloud-native drives via network as log
+    sinks.'''
+    safety = ScoreReq.Asil.QM
+    derived_from = [MwLogAssumedSystemRequirements.ASR_LoggingSupport@1]
+    version = 1
+}
+
+ScoreReq.FeatReq LogSinksNetwork {
+    description = '''The logging framework shall support network channels, including a second
+    dedicated Ethernet channel, as log sinks.'''
+    safety = ScoreReq.Asil.QM
+    derived_from = [MwLogAssumedSystemRequirements.ASR_LoggingSupport@1]
+    version = 1
+}
+
+ScoreReq.FeatReq LogSinksStdout {
+    description = '''The logging framework shall ensure logs appear on stdout when running unit
+    tests.'''
+    safety = ScoreReq.Asil.QM
+    derived_from = [MwLogAssumedSystemRequirements.ASR_LoggingSupport@1]
+    version = 1
+}
+
+ScoreReq.FeatReq BootLogging {
+    description = '''The logging framework shall support logging of data to memory which survives a
+    reboot cycle.'''
+    safety = ScoreReq.Asil.QM
+    derived_from = [MwLogAssumedSystemRequirements.ASR_LoggingSupport@1]
+    version = 1
+}
+
+ScoreReq.FeatReq ConfigLogLevel {
+    description = '''The logging framework shall support configuration of log levels.'''
+    safety = ScoreReq.Asil.QM
+    derived_from = [MwLogAssumedSystemRequirements.ASR_LoggingSupport@1]
+    version = 1
+}
+
+ScoreReq.FeatReq SinkDevice {
+    description = '''The logging framework shall support configuration of the log storage device.'''
+    safety = ScoreReq.Asil.QM
+    derived_from = [MwLogAssumedSystemRequirements.ASR_LoggingSupport@1]
+    version = 1
+}
+
+ScoreReq.FeatReq SinkMultipleDevice {
+    description = '''The logging framework shall support multiple log storage devices.'''
+    safety = ScoreReq.Asil.QM
+    derived_from = [MwLogAssumedSystemRequirements.ASR_LoggingSupport@1]
+    version = 1
+}
+
+ScoreReq.FeatReq SinkStrategy {
+    description = '''The logging framework shall support configurable log storage strategy.'''
+    safety = ScoreReq.Asil.QM
+    derived_from = [MwLogAssumedSystemRequirements.ASR_LoggingSupport@1]
+    version = 1
+}
+
+ScoreReq.FeatReq ConfigBufferSize {
+    description = '''The logging framework shall allow configuration of internal buffer sizes.'''
+    safety = ScoreReq.Asil.QM
+    derived_from = [MwLogAssumedSystemRequirements.ASR_LoggingSupport@1]
+    version = 1
+}
+
+ScoreReq.FeatReq ConfigStorageSize {
+    description = '''The logging framework shall allow configuration of storage size per log file.'''
+    safety = ScoreReq.Asil.QM
+    derived_from = [MwLogAssumedSystemRequirements.ASR_LoggingSupport@1]
+    version = 1
+}
+
+ScoreReq.FeatReq ConfigPermissions {
+    description = '''The logging framework shall allow configuration of permission settings for log
+    access.'''
+    safety = ScoreReq.Asil.QM
+    derived_from = [MwLogAssumedSystemRequirements.ASR_LoggingSupport@1]
+    version = 1
+}
+
+ScoreReq.FeatReq ConfigLogFilter {
+    description = '''The logging framework shall allow configuration of log filters.'''
+    safety = ScoreReq.Asil.QM
+    derived_from = [MwLogAssumedSystemRequirements.ASR_LoggingSupport@1]
+    version = 1
+}
+
+ScoreReq.FeatReq ConfigEntityId {
+    description = '''The logging framework shall allow configuration of logging entity IDs.'''
+    safety = ScoreReq.Asil.QM
+    derived_from = [MwLogAssumedSystemRequirements.ASR_LoggingSupport@1]
+    version = 1
+}
+
+ScoreReq.FeatReq ConfigOnDemand {
+    description = '''The logging framework shall support on-demand functionality, such as enabling
+    or disabling log storage.'''
+    safety = ScoreReq.Asil.QM
+    derived_from = [MwLogAssumedSystemRequirements.ASR_LoggingSupport@1]
+    version = 1
+}
+
+ScoreReq.FeatReq ConfigFallback {
+    description = '''The logging framework shall provide fallback configurations, such as
+    application-wide or system-wide defaults.'''
+    safety = ScoreReq.Asil.QM
+    derived_from = [MwLogAssumedSystemRequirements.ASR_LoggingSupport@1]
+    version = 1
+}
+
+ScoreReq.FeatReq ConfigCustomTypes {
+    description = '''The logging framework shall allow extensions for custom log types.'''
+    safety = ScoreReq.Asil.QM
+    derived_from = [MwLogAssumedSystemRequirements.ASR_LoggingSupport@1]
+    version = 1
+}
+
+ScoreReq.FeatReq ErrorHandlingRecoverable {
+    description = '''In case of recoverable error, the logging framework shall continue the current
+    operations.'''
+    safety = ScoreReq.Asil.QM
+    derived_from = [
+        MwLogAssumedSystemRequirements.ASR_LoggingSupport@1,
+        MwLogAssumedSystemRequirements.ASR_ErrorHandling@1,
+    ]
+    version = 1
+}
+
+ScoreReq.FeatReq ErrorHandlingNonRecoverable {
+    // NOTE: upstream id is "feat_req__log__err_handling_nonrec", inconsistent with the
+    // "feat_req__logging__" prefix used by every other entry in the source document.
+    description = '''In case of non-recoverable error, the logging framework shall deactivate
+    silently and set an error state reported on shutdown.'''
+    safety = ScoreReq.Asil.QM
+    derived_from = [
+        MwLogAssumedSystemRequirements.ASR_LoggingSupport@1,
+        MwLogAssumedSystemRequirements.ASR_ErrorHandling@1,
+    ]
+    version = 1
+}
+
+ScoreReq.FeatReq ErrorHandlingIsolation {
+    description = '''The logging framework shall ensure that user applications are not affected by
+    logging framework errors.'''
+    safety = ScoreReq.Asil.QM
+    derived_from = [
+        MwLogAssumedSystemRequirements.ASR_LoggingSupport@1,
+        MwLogAssumedSystemRequirements.ASR_ErrorHandling@1,
+    ]
+    version = 1
+}
+
+ScoreReq.FeatReq CompatibilitySupportedOs {
+    description = '''The logging framework shall support QNX and Linux operating systems
+    (encapsulated via OSAL).'''
+    safety = ScoreReq.Asil.QM
+    derived_from = [MwLogAssumedSystemRequirements.ASR_LoggingSupport@1]
+    version = 1
+}
+
+ScoreReq.FeatReq CompatibilitySupportedLanguages {
+    description = '''The logging framework shall support C++ and Rust programming languages.'''
+    safety = ScoreReq.Asil.QM
+    derived_from = [
+        MwLogAssumedSystemRequirements.ASR_LoggingSupport@1,
+        MwLogAssumedSystemRequirements.ASR_ProgrammingLanguagesForApplicationDevelopment@1,
+    ]
+    version = 1
+}
+
+ScoreReq.FeatReq ResourceConsumptionStorage {
+    description = '''The logging framework shall minimize storage resource consumption.'''
+    safety = ScoreReq.Asil.QM
+    derived_from = [MwLogAssumedSystemRequirements.ASR_LoggingSupport@1]
+    version = 1
+}
+
+ScoreReq.FeatReq ResourceConsumptionCommChannel {
+    description = '''The logging framework shall minimize communication channel resource
+    consumption.'''
+    safety = ScoreReq.Asil.QM
+    derived_from = [MwLogAssumedSystemRequirements.ASR_LoggingSupport@1]
+    version = 1
+}
+
+ScoreReq.FeatReq ResourceConsumptionRuntime {
+    description = '''The logging framework shall minimize runtime resource consumption.'''
+    safety = ScoreReq.Asil.QM
+    derived_from = [
+        MwLogAssumedSystemRequirements.ASR_LoggingSupport@1,
+        MwLogAssumedSystemRequirements.ASR_LogAndTraceConsistentBehaviour@1,
+    ]
+    version = 1
+}
+
+ScoreReq.FeatReq ResourceConsumptionPerformance {
+    description = '''The logging framework shall have low impact on overall system performance.'''
+    safety = ScoreReq.Asil.QM
+    derived_from = [
+        MwLogAssumedSystemRequirements.ASR_LoggingSupport@1,
+        MwLogAssumedSystemRequirements.ASR_LogAndTraceConsistentBehaviour@1,
+    ]
+    version = 1
+}
+
+ScoreReq.FeatReq QosMessageHandling {
+    // NOTE: upstream author flagged this as potentially duplicating the message-loss
+    // detection/handling requirements above; kept as-is pending upstream clarification.
+    description = '''The logging framework shall provide QoS for handling overflows or dropping log
+    messages.'''
+    safety = ScoreReq.Asil.QM
+    derived_from = [MwLogAssumedSystemRequirements.ASR_LoggingSupport@1]
+    version = 1
+}
+
+ScoreReq.FeatReq CompatibilityDltProtocol {
+    description = '''The logging framework shall be DLT compatible. Additional Information: support for DLT message format, sending and receiving DLT messages, and integration with existing DLT tools and infrastructure.'''
+    safety = ScoreReq.Asil.QM
+    derived_from = [
+        MwLogAssumedSystemRequirements.ASR_LoggingSupport@1,
+        MwLogAssumedSystemRequirements.ASR_OverallGoalsEnableCooperation@1,
+    ]
+    version = 1
+}
+
+ScoreReq.FeatReq SecurityLogAccess {
+    description = '''The logging framework shall ensure that only authorized users can access log
+    files.'''
+    safety = ScoreReq.Asil.QM
+    derived_from = [
+        MwLogAssumedSystemRequirements.ASR_LoggingSupport@1,
+        MwLogAssumedSystemRequirements.ASR_SecureLogAndTrace@1,
+    ]
+    version = 1
+}
+
+ScoreReq.FeatReq AsilLevelSupport {
+    description = '''The logging framework shall support the ASIL level of the user function to ensure compliance with the safety requirements of the application. Additional Information: Freedom from interference must be guaranteed with regard to the calling components.'''
+    safety = ScoreReq.Asil.B
+    derived_from = [MwLogAssumedSystemRequirements.ASR_SafeLogAndTrace@1]
+    version = 1
+}
