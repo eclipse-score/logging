@@ -58,7 +58,7 @@ jobs:
 
       - name: Run component tests
         run: |
-          bazel test --lockfile_mode=error --config x86_64-linux \
+          bazel test --lockfile_mode=error --config score-linux-x86_64 \
             --test_tag_filters=integration \
             --test_output=errors \
             //score/test/component/...

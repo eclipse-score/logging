@@ -53,63 +53,6 @@ build --copt=-Wno-ignored-attributes
 # TODO: Remove once score_itf fixes strict-warning incompatibilities in dlt_daemon C code
 build --per_file_copt=external.*score_itf.*dlt_daemon.*@-Wno-missing-prototypes,-Wno-address,-Wno-stringop-truncation,-Wno-format,-Wno-format-nonliteral,-Wno-suggest-attribute=format,-Wno-discarded-qualifiers,-Wno-undef
 
-# Base QNX config (shared flags)
-common:qnx --credential_helper=*.qnx.com=%workspace%/scripts/internal/qnx_creds.py
-common:qnx --credential_helper_timeout="60s"
-common:qnx --sandbox_writable_path=/var/tmp
-
-# -------------------------------------------------------------------------------
-# Config dedicated to target platform CPU:arm64 and OS:QNX
-# -------------------------------------------------------------------------------
-build:arm64-qnx --config=qnx
-build:arm64-qnx --config=_common
-build:arm64-qnx --platforms=@score_bazel_platforms//:aarch64-qnx-sdp_8.0.0-posix
-build:arm64-qnx --extra_toolchains=@score_qcc_aarch64_toolchain//:aarch64-qnx-sdp_8.0.0
-build:arm64-qnx --extra_toolchains=@score_qnx_aarch64_ifs_toolchain//:ifs-aarch64-qnx-sdp_8.0.0
-build:arm64-qnx --extra_toolchains=@score_toolchains_rust//toolchains/ferrocene:ferrocene_aarch64_unknown_nto_qnx800
-
-# -------------------------------------------------------------------------------
-# Config dedicated to target platform CPU:x86_64 and OS:QNX
-# -------------------------------------------------------------------------------
-build:x86_64-qnx --config=qnx
-build:x86_64-qnx --config=_common
-build:x86_64-qnx --platforms=@score_bazel_platforms//:x86_64-qnx-sdp_8.0.0-posix
-build:x86_64-qnx --extra_toolchains=@score_qcc_x86_64_toolchain//:x86_64-qnx-sdp_8.0.0
-build:x86_64-qnx --extra_toolchains=@score_qnx_x86_64_ifs_toolchain//:ifs-x86_64-qnx-sdp_8.0.0
-build:x86_64-qnx --extra_toolchains=@score_toolchains_rust//toolchains/ferrocene:ferrocene_x86_64_pc_nto_qnx800
-# Integration tests require direct device access (KVM, TAP) — bypass linux-sandbox
-test:x86_64-qnx --strategy=TestRunner=local
-# All QEMU instances share one tap0/IP — tests must run one at a time
-test:x86_64-qnx --local_test_jobs=1
-
-# TODO arm64 when rust support is there
-
-# -------------------------------------------------------------------------------
-# Config dedicated to host platform CPU:x86_64 and OS:Linux
-# -------------------------------------------------------------------------------
-build:x86_64-linux --config=_common
-build:x86_64-linux --platforms=@score_bazel_platforms//:x86_64-linux-gcc_12.2.0-posix
-build:x86_64-linux --extra_toolchains=@score_gcc_x86_64_toolchain//:x86_64-linux-gcc_12.2.0
-build:x86_64-linux --extra_toolchains=@score_toolchains_rust//toolchains/ferrocene:ferrocene_x86_64_unknown_linux_gnu
-# rules_python 1.8.5 enables precompile by default. The custom GCC toolchain has no
-# Python runtime, causing analysis to crash. "force_disabled" (not "disabled") is needed
-# because pip packages set precompile=enabled at target level, which "disabled" won't override.
-build:x86_64-linux --@rules_python//python/config_settings:precompile=force_disabled
-
-# -------------------------------------------------------------------------------
-# Config dedicated to target platform CPU:aarch64 and OS:Linux
-# -------------------------------------------------------------------------------
-build:aarch64-linux --config=_common
-build:aarch64-linux --platforms=@score_bazel_platforms//:aarch64-linux-gcc_12.2.0-posix
-build:aarch64-linux --extra_toolchains=@score_gcc_aarch64_toolchain//:aarch64-linux-gcc_12.2.0
-build:aarch64-linux --extra_toolchains=@score_toolchains_rust//toolchains/ferrocene:ferrocene_aarch64_unknown_linux_gnu
-# rules_python 1.8.5 enables precompile by default. The custom GCC toolchain has no
-# Python runtime, causing analysis to crash. "force_disabled" (not "disabled") is needed
-# because pip packages set precompile=enabled at target level, which "disabled" won't override.
-build:aarch64-linux --@rules_python//python/config_settings:precompile=force_disabled
-
-
-
 # ==============================================================================
 # Dynamic analysis (sanitizers) for Linux host builds/tests
 # ==============================================================================
@@ -119,7 +62,7 @@ test:with_debug_symbols --cxxopt=-g1
 test:with_debug_symbols --strip=never
 
 # AddressSanitizer + UndefinedBehaviorSanitizer + LeakSanitizer (Combined)
-build:asan_ubsan_lsan --config=x86_64-linux
+build:asan_ubsan_lsan --config=score-linux-x86_64
 build:asan_ubsan_lsan --features=asan
 build:asan_ubsan_lsan --features=ubsan
 build:asan_ubsan_lsan --features=lsan
@@ -138,7 +81,7 @@ build:lsan  --config=asan_ubsan_lsan
 test:lsan   --test_tag_filters=-no-lsan
 
 # ThreadSanitizer (cannot be combined with ASan/LSan)
-build:tsan --config=x86_64-linux
+build:tsan --config=score-linux-x86_64
 build:tsan --features=tsan
 build:tsan --platform_suffix=tsan
 # GCC 12 promotes TSan limitation on atomic_thread_fence to -Werror=tsan.
@@ -158,6 +101,13 @@ test:clang-tidy --extra_toolchains=@llvm_toolchain//:cc-toolchain-x86_64-linux
 # libc++ include paths); clang then reports -stdlib as unused, which the
 # warnings_as_errors feature turns into an error. Analysis is unaffected.
 test:clang-tidy --copt=-Wno-unused-command-line-argument
+ 
+# Import toolchain bazelrc file
+build:_score_common --host_cxxopt=-Wno-error=redundant-decls
+build:score-linux-x86_64 --@rules_python//python/config_settings:precompile=force_disabled
+build:score-linux-aarch64 --@rules_python//python/config_settings:precompile=force_disabled
+
+try-import %workspace%/score.bazelrc/score_toolchain.bazelrc
 
 # Unified LLVM source-based coverage (C++ + Rust), see quality/coverage/ and
 # @score_coverage. Use: bazel coverage --config=llvm_cov //score/... --build_tests_only
