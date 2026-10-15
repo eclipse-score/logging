@@ -90,6 +90,8 @@ SyslogBackend -> Syslog : syslog(priority, "%.*s,%.*s: %.*s",\n  app_id, ctx_id,
 
 Syslog -> Syslog : glibc vsyslog(3)
 
+SyslogBackend -> SyslogBackend : ReleaseSlot(SlotHandle)
+
 TextRecorder <-- SyslogBackend
 deactivate SyslogBackend
 

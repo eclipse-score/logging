@@ -1,0 +1,59 @@
+' *******************************************************************************
+' Copyright (c) 2026 Contributors to the Eclipse Foundation
+'
+' See the NOTICE file(s) distributed with this work for additional
+' information regarding copyright ownership.
+'
+' This program and the accompanying materials are made available under the
+' terms of the Apache License Version 2.0 which is available at
+' https://www.apache.org/licenses/LICENSE-2.0
+'
+' SPDX-License-Identifier: Apache-2.0
+' *******************************************************************************
+
+@startuml slot_drainer_sequence_design
+
+title SlotDrainer::Flush called from FileOutputBackend::FlushSlot
+
+participant "FileOutputBackend" as FileOutputBackend
+participant "SlotDrainer" as SlotDrainer
+participant "CircularBuffer" as CircularBuffer
+participant "NonBlockingWriter" as NonBlockingWriter
+participant "IMessageBuilder" as IMessageBuilder
+participant "CircularAllocator" as CircularAllocator
+
+FileOutputBackend -> SlotDrainer : PushBack(slot)
+SlotDrainer -> CircularBuffer : push_back(slot)
+
+FileOutputBackend -> SlotDrainer : Flush()
+activate SlotDrainer
+
+loop until the circular buffer is empty, the writer would block\nor the limit of slots per flush is exceeded
+    group Flush the data of the current message
+        loop until all spans are written or the writer would block
+            SlotDrainer -> NonBlockingWriter : FlushIntoFile()
+            NonBlockingWriter --> SlotDrainer : kDone or kWouldBlock
+            SlotDrainer -> IMessageBuilder : GetNextSpan()
+            SlotDrainer -> NonBlockingWriter : SetSpan(span)
+        end
+    end
+
+    SlotDrainer -> CircularAllocator : ReleaseSlot(current slot)
+
+    group Load the next message
+        SlotDrainer -> CircularBuffer : empty(), front(), pop_front()
+        SlotDrainer -> CircularAllocator : GetUnderlyingBufferFor(slot)
+        SlotDrainer -> IMessageBuilder : SetNextMessage(LogRecord)
+    end
+end
+
+FileOutputBackend <-- SlotDrainer
+deactivate SlotDrainer
+
+note right of SlotDrainer
+Errors and "would block" are ignored by Flush(). The data stays
+in the NonBlockingWriter and the circular buffer and is written
+by the next call of Flush(), which is also done in ReserveSlot().
+end note
+
+@enduml
