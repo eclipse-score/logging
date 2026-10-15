@@ -13,8 +13,8 @@
 #include "score/mw/log/detail/file_recorder/file_recorder_factory.h"
 #include "score/mw/log/detail/empty_recorder.h"
 
-#include "score/os/mocklib/fcntl_mock.h"
 #include "score/mw/log/detail/file_recorder/file_recorder.h"
+#include "score/os/mocklib/fcntl_mock.h"
 
 #include "gtest/gtest.h"
 
@@ -76,7 +76,7 @@ TEST_F(FileRecorderFactoryConfigFixture, FileConfigurionShallCallFileCreationAnd
     const score::os::Fcntl::Open open_flags =
         score::os::Fcntl::Open::kWriteOnly | score::os::Fcntl::Open::kCreate | score::os::Fcntl::Open::kCloseOnExec;
     const score::os::Stat::Mode access_flags = score::os::Stat::Mode::kReadUser | score::os::Stat::Mode::kWriteUser |
-                                             score::os::Stat::Mode::kReadGroup | score::os::Stat::Mode::kReadOthers;
+                                               score::os::Stat::Mode::kReadGroup | score::os::Stat::Mode::kReadOthers;
 
     EXPECT_CALL(*fcntl_mock_raw_ptr, open(_, open_flags, access_flags)).Times(1).WillOnce(Return(file_descriptor));
 

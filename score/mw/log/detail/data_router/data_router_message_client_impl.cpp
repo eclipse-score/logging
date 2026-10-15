@@ -14,10 +14,10 @@
 #include "score/mw/log/detail/data_router/data_router_message_client_impl.h"
 
 #include "score/assert.hpp"
-#include "score/os/utils/signal.h"
 #include "score/mw/log/detail/data_router/message_passing_config.h"
 #include "score/mw/log/detail/error.h"
 #include "score/mw/log/detail/initialization_reporter.h"
+#include "score/os/utils/signal.h"
 
 #include <array>
 #include <thread>
