@@ -20,13 +20,13 @@
 
 #include "static_reflection_with_serialization/serialization/for_logging.h"
 
-#include "score/os/utils/high_resolution_steady_clock.h"
 #include "score/mw/log/configuration/nvconfig.h"
 #include "score/mw/log/detail/data_router/shared_memory/writer_factory.h"
 #include "score/mw/log/detail/logging_identifier.h"
 #include "score/mw/log/logging.h"
 #include "score/mw/log/configuration/configuration.h"
 #include "score/mw/log/detail/verbose_payload.h"
+#include "score/os/utils/high_resolution_steady_clock.h"
 
 namespace score
 {
