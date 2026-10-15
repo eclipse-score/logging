@@ -25,7 +25,9 @@ namespace logging
 namespace dltserver
 {
 
-PriorityBoost::PriorityBoost(const std::int32_t priority, const std::int32_t policy, score::os::Pthread& pthread) noexcept
+PriorityBoost::PriorityBoost(const std::int32_t priority,
+                             const std::int32_t policy,
+                             score::os::Pthread& pthread) noexcept
     : pthread_{pthread}, thread_{pthread.self()}, old_sched_params_{}, old_policy_{}, priority_boosted_{false}
 {
     const auto get_schedparam_result = pthread_.pthread_getschedparam(thread_, &old_policy_, &old_sched_params_);

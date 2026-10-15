@@ -17,11 +17,11 @@
 #include "daemon/dlt_log_server.h"
 #include "daemon/message_passing_server.h"
 #include "logparser/i_log_parser_factory.h"
-#include "score/os/pthread.h"
 #include "score/mw/log/configuration/nvconfig.h"
 #include "score/mw/log/logging.h"
 #include "score/datarouter/datarouter/data_router.h"
 #include "score/datarouter/src/persistency/i_persistent_dictionary.h"
+#include "score/os/pthread.h"
 #include "unix_domain/unix_domain_server.h"
 
 #include <atomic>

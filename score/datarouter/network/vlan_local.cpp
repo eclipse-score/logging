@@ -49,8 +49,8 @@ constexpr auto kVlanPrioOption = SO_PRIORITY;
 
 class VlanImpl final : public Vlan
 {
-    score::cpp::expected_blank<Error> SetVlanPriorityOfSocket(const std::uint8_t pcp_priority,
-                                                       const std::int32_t file_descriptor) noexcept override
+    score::cpp::expected_blank<score::os::Error> SetVlanPriorityOfSocket(const std::uint8_t pcp_priority,
+                                                                  const std::int32_t file_descriptor) noexcept override
     {
         return score::os::Socket::instance().setsockopt(
             file_descriptor, SOL_SOCKET, kVlanPrioOption, &pcp_priority, sizeof(pcp_priority));
