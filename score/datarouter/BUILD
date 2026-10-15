@@ -595,11 +595,6 @@ cc_library(
         "//score/mw/log",
         "@score_baselibs//score/language/futurecpp",
         "@score_baselibs//score/mw/log/configuration:nvconfig",
-        "@score_baselibs//score/os:socket",
-        "@score_baselibs//score/os:stat",
-        "@score_baselibs//score/os:stdio",
-        "@score_baselibs//score/os:unistd",
-        "@score_baselibs//score/os/utils:thread",
     ],
 )
 
@@ -623,11 +618,6 @@ cc_library(
             ":dltserver_common",
             "//score/mw/log",
             "@score_baselibs//score/mw/log/configuration:nvconfig",
-            "@score_baselibs//score/os:socket",
-            "@score_baselibs//score/os:stat",
-            "@score_baselibs//score/os:stdio",
-            "@score_baselibs//score/os:unistd",
-            "@score_baselibs//score/os/utils:thread",
         ] + dep,
     )
     for name, dep, test_only in [
@@ -851,8 +841,6 @@ cc_binary(
         ":datarouter_app",
         "//score/mw/log",
         "@score_baselibs//score/os:errno_logging",
-        "@score_baselibs//score/os:pthread",
-        "@score_baselibs//score/os/utils:path",
     ],
 )
 
@@ -1048,11 +1036,6 @@ cc_library(
         ":log_sender_mock",
         ":logparser_testing",
         ":configurator_commands",
-        "@score_baselibs//score/os:socket",
-        "@score_baselibs//score/os:stat",
-        "@score_baselibs//score/os:stdio",
-        "@score_baselibs//score/os/utils:path",
-        "@score_baselibs//score/os/utils:thread",
         "//score/mw/log",
         "@score_baselibs//score/mw/log/configuration:nvconfig",
         "//score/datarouter/dlt_filetransfer_trigger_lib:filetransfer_message_types",

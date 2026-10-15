@@ -24,7 +24,7 @@ namespace score
 namespace os
 {
 
-class Vlan : public ObjectSeam<Vlan>
+class Vlan : public score::os::ObjectSeam<Vlan>
 {
   public:
     /// \brief thread-safe singleton accessor
@@ -38,8 +38,9 @@ class Vlan : public ObjectSeam<Vlan>
     /// \brief Sets the IEEE 802.1Q PCP field for a given file descriptor to define the priority of the packets sent by
     /// this socket.
     /// \arg file_descriptor valid socket file handle
-    virtual score::cpp::expected_blank<Error> SetVlanPriorityOfSocket(const std::uint8_t pcp_priority,
-                                                               const std::int32_t file_descriptor) noexcept = 0;
+    virtual score::cpp::expected_blank<score::os::Error> SetVlanPriorityOfSocket(
+        const std::uint8_t pcp_priority,
+        const std::int32_t file_descriptor) noexcept = 0;
 
     virtual ~Vlan() = default;
 };

@@ -17,9 +17,9 @@
 #include "score/message_passing/mock/server_connection_mock.h"
 #include "score/message_passing/mock/server_factory_mock.h"
 #include "score/message_passing/mock/server_mock.h"
+#include "score/datarouter/daemon_communication/session_handle_mock.h"
 #include "score/os/mocklib/mock_pthread.h"
 #include "score/os/mocklib/unistdmock.h"
-#include "score/datarouter/daemon_communication/session_handle_mock.h"
 
 #include "score/optional.hpp"
 

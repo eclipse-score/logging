@@ -30,10 +30,10 @@ enum class LoggingErrorCode : score::result::ErrorCode
     kNoChannelsFound
 };
 
-class LoggingErrorDomain final : public result::ErrorDomain
+class LoggingErrorDomain final : public score::result::ErrorDomain
 {
   public:
-    std::string_view MessageFor(const result::ErrorCode& code) const noexcept override;
+    std::string_view MessageFor(const score::result::ErrorCode& code) const noexcept override;
 };
 
 /// @brief ADL overload to fulfill design requirements from lib/result

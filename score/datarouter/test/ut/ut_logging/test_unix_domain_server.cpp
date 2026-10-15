@@ -933,7 +933,8 @@ TEST_F(PthreadMockFixture, ServerIgnoresSetnameError)
 TEST(UnixDomainCommon, SetupSignalsFailurePath)
 {
     // Given we have our mock gives us the error path on all calls
-    std::unique_ptr<StrictMock<score::os::SignalMock>> signal_mock = std::make_unique<StrictMock<score::os::SignalMock>>();
+    std::unique_ptr<StrictMock<score::os::SignalMock>> signal_mock =
+        std::make_unique<StrictMock<score::os::SignalMock>>();
     auto error = score::os::Error::createUnspecifiedError();
 
     testing::InSequence seq;
