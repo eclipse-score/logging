@@ -13,107 +13,61 @@
 
 @startuml verbose_logging_sequence
 
+title Verbose log call with the DataRouterRecorder
+
 participant "App" as App
-participant "FreeFunctions" as FreeFunctions
-participant "LogStreamFactory" as LogStreamFactory
 participant "Runtime" as Runtime
 participant "LogStream" as LogStream
 participant "DataRouterRecorder" as DataRouterRecorder
-participant "DLTFormater" as DLTFormater
 participant "DataRouterBackend" as DataRouterBackend
-
-activate App
-
-App -> FreeFunctions : score::mw::log::Error()
-
-FreeFunctions -> LogStreamFactory : GetStream(LogLevel)
-
-activate LogStreamFactory
-
-LogStreamFactory -> Runtime : GetRecorder()
-Runtime -> DataRouterRecorder : creates
-LogStreamFactory <-- Runtime : Recorder
-
-LogStreamFactory -> LogStream : construct
-
-activate LogStream
-
-LogStream -> DataRouterRecorder : StartRecord(ctx, LogLevel)
-activate DataRouterRecorder
-
-DataRouterRecorder -> DataRouterBackend : ReserveSlot()
-activate DataRouterBackend
-DataRouterRecorder <-- DataRouterBackend : score::cpp::optional<SlotHandle>
-deactivate DataRouterBackend
-
-LogStream <-- DataRouterRecorder : score::cpp::optional<SlotHandle>
-deactivate DataRouterRecorder
-
-LogStreamFactory <-- LogStream : LogStream
-deactivate LogStream
-
-FreeFunctions <-- LogStreamFactory : LogStream
-deactivate LogStreamFactory
-
-App <-- FreeFunctions : LogStream
-
-App -> LogStream : << Some Data
-
-activate LogStream
-
-LogStream -> DataRouterRecorder : log(SlotHandle, Data)
-activate DataRouterRecorder
-
-DataRouterRecorder -> DataRouterBackend : GetStream(SlotHandle)
-activate DataRouterBackend
-DataRouterRecorder <-- DataRouterBackend : std::streambuf&
-deactivate DataRouterBackend
-
-DataRouterRecorder -> DLTFormater : Log(std::streambuf&, data)
-activate DLTFormater
-
-DLTFormater -> DLTFormater : write formated data\ninto stream
-
-DataRouterRecorder <-- DLTFormater
-deactivate DLTFormater
-
-LogStream <-- DataRouterRecorder
-deactivate DataRouterRecorder
-
-App <-- LogStream : LogStream
-deactivate LogStream
-
-App -> LogStream : Destruct
-
-activate LogStream
-
-LogStream -> DataRouterRecorder : StopRecord(SlotHandle)
-activate DataRouterRecorder
-
-DataRouterRecorder -> DataRouterBackend : FlushSlot(SlotHandle)
-activate DataRouterBackend
-
+participant "DLTFormat" as DLTFormat
 participant "TRACE" as TRACE
+participant "SharedMemoryWriter" as SharedMemoryWriter
 
-DataRouterBackend -> TRACE : TRACE(LogEntry)
+Runtime -> DataRouterRecorder : creates (RemoteDltRecorderFactory)
 
-DataRouterRecorder <-- DataRouterBackend
-deactivate DataRouterBackend
+App -> LogStream : construct (via log function)
 
+LogStream -> DataRouterRecorder : StartRecord(context_id, log_level)
+activate DataRouterRecorder
+DataRouterRecorder -> DataRouterRecorder : statistics update,\nIsLogEnabled(log_level, context_id)
+
+alt log level not enabled
+    LogStream <-- DataRouterRecorder : empty optional<SlotHandle>
+else log level enabled
+    DataRouterRecorder -> DataRouterBackend : ReserveSlot()
+    DataRouterRecorder <-- DataRouterBackend : optional<SlotHandle>
+    alt slot available
+        DataRouterRecorder -> DataRouterBackend : GetLogRecord(slot)
+        DataRouterRecorder -> DataRouterRecorder : clean record, set application id,\ncontext id and log level
+    else no slot available
+        DataRouterRecorder -> DataRouterRecorder : IncrementNoSlotAvailable()
+    end
+    LogStream <-- DataRouterRecorder : optional<SlotHandle>
+end
+deactivate DataRouterRecorder
+
+App -> LogStream : << data
+
+LogStream -> DataRouterRecorder : Log(slot, data)
+activate DataRouterRecorder
+DataRouterRecorder -> DataRouterBackend : GetLogRecord(slot)
+DataRouterRecorder -> DLTFormat : Log(VerbosePayload, data)
+note right of DLTFormat : The argument is added to the\nLogRecord. If it does not fit,\nIncrementMessageTooLong() is called.
 LogStream <-- DataRouterRecorder
 deactivate DataRouterRecorder
 
-App <-- LogStream
+App -> LogStream : destruct
 
-destroy LogStream
-
-deactivate App
-
-note right of TRACE #red
-	This part will be removed in future,
-	once we can directly stream into MrWriter
-	this will then remove any
-	dynamic memory allocation.
-end note
+LogStream -> DataRouterRecorder : StopRecord(slot)
+activate DataRouterRecorder
+DataRouterRecorder -> DataRouterBackend : FlushSlot(slot)
+activate DataRouterBackend
+DataRouterBackend -> TRACE : Trace<Level>(LogEntry)
+TRACE -> SharedMemoryWriter : AllocAndWrite(...)
+DataRouterBackend -> DataRouterBackend : ReleaseSlot
+deactivate DataRouterBackend
+LogStream <-- DataRouterRecorder
+deactivate DataRouterRecorder
 
 @enduml

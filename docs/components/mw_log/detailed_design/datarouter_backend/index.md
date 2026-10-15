@@ -13,6 +13,15 @@
 
 # Safe Datarouter Backend
 
+```{document} mw::log Datarouter Backend Detailed Design
+:id: doc__mw_log_datarouter_backend_design
+:status: draft
+:version: 1
+:safety: ASIL_B
+:security: YES
+:realizes: wp__sw_implementation
+```
+
 - [Safe Datarouter Backend](#safe-datarouter-backend)
   - [Introduction](#introduction)
   - [Inter-process communication](#inter-process-communication)
@@ -57,12 +66,14 @@ In the Datarouter backend the goal is to safely and efficiently transfer the log
 messages from the user process to the Datarouter process.
 
 The inter-process communication takes place via shared memory and the message
-passing library. This library only supports unidirectional message transport. As we need bidirectional
-communication over the side channel, we establish two independent unidirectional
-channels. On the highest level of abstraction we see the ASIL-B qualified client
-process on the one side and the datarouter process on the other
+passing library. The message passing connection of a client carries messages from
+the client to Datarouter and notifications from Datarouter to the client, so no
+separate channel in the opposite direction is needed. On the highest level of
+abstraction we see the ASIL-B qualified client process on the one side and the
+datarouter process on the other
 
-<img alt="INTER_PROCESS_COMMUNICATION" src="https://www.plantuml.com/plantuml/proxy?src=https://raw.githubusercontent.com/eclipse-score/logging/refs/heads/main/docs/components/mw_log/detailed_design/_assets/inter_process_communication.puml">.
+```{uml} ../_assets/inter_process_communication.puml
+```
 
 The logs are written by the client into shared memory and read-out by
 datarouter. Freedom of interference is ensured since the datarouter process has
@@ -73,28 +84,51 @@ safety-qualified [message passing library](https://github.com/eclipse-score/comm
 
 ## Class diagram
 
-<img alt="DATAROUTER_CLASS_DIAGRAM" src="https://www.plantuml.com/plantuml/proxy?src=https://raw.githubusercontent.com/eclipse-score/logging/refs/heads/main/docs/components/mw_log/detailed_design/_assets/datarouter_class_diagram.puml">
+```{uml} ../_assets/datarouter_class_diagram.puml
+```
 
 The class diagram above shows the relevant classes client-side and in
-Datarouter. Client-side the `DatarouterBackend` contains a circular allocator
+Datarouter. Client-side the `DataRouterBackend` contains a circular allocator
 for the preallocation of the verbose messages. When a new verbose message is
 created a slot is reserved first for the user in the circular allocator. The
 memory inside the slot is preallocated and lives in the process space of the
 client. When the user flushes the verbose message, the content of the slot is
 copied into the ring buffer that lives in shared memory through the `TRACE()`
-macro. The shared memory buffer is encapsulated by the `SharedMemoryWriter`
-class. It is owned by the `platform::Logger` as a Singleton. For non-verbose
+function template. The shared memory buffer is encapsulated by the
+`SharedMemoryWriter` class. It is owned by the `Logger` singleton. For non-verbose
 logging, or structured logging `mw::log` is not involved, but `TRACE()` is used
-directly. The `TRACE()` macro internally calls
-`SharedMemoryWriter::AllocateAndWrite()`, which locks a client-side only mutex
-and writes the input structure in serialized form into the ring-buffer. When
+directly. The `TRACE()` function internally calls
+`SharedMemoryWriter::AllocAndWrite()`, which is lock-free and wait-free and
+writes the input structure in serialized form into the ring-buffer. When
 Datarouter is reading from the ring buffer the data shall not be overwritten.
 The responsibility of the `DatarouterMessageClient` class is to synchronize the
 access to the ring buffer between Datarouter and the client.
 
+The `DataRouterRecorder` owns the `Backend` (here the `DataRouterBackend`), the
+`Configuration` and a `StatisticsReporter`:
+
+```{uml} ../_assets/mw_log_datarouter_recorder.puml
+```
+
+## Verbose logging sequence
+
+The sequence below shows a verbose log call from the creation of the `LogStream`
+to the flush of the slot into the shared memory.
+
+```{uml} ../_assets/verbose_logging_sequence.puml
+```
+
+The units of all sequence diagrams of the backend and their bindings are shown
+below. The interface names of this diagram follow the convention of the
+`architectural_design` validation (caller and callee) and are not code interfaces.
+
+```{uml} ../_assets/verbose_logging_static.puml
+```
+
 ## Activity diagrams
 
-<img alt="DATAROUTER_BACKEND_DATAROUTERBACKEND" src="https://www.plantuml.com/plantuml/proxy?src=https://raw.githubusercontent.com/eclipse-score/logging/refs/heads/main/docs/components/mw_log/detailed_design/_assets/datarouter_backend_datarouterbackend.puml">
+```{uml} ../_assets/datarouter_backend_datarouterbackend.puml
+```
 
 ## Lock-free Shared Memory Design
 
@@ -112,6 +146,12 @@ Datarouter shall be able to open this file read-only. The control structure
 contains fundamental information about the buffer sizes, and the atomic
 variables.
 
+The `WriterFactory` creates the shared memory file, maps it and constructs the
+`SharedData` and the `SharedMemoryWriter`:
+
+```{uml} ../_assets/write_factory_design.puml
+```
+
 The `SharedMemoryWriter` has two main responsibilities. First is to register
 data types using `TryRegisterType()` and secondly to push instances of those
 types using `AllocAndWrite()`. Both aspects use the `WaitFreeAlternatingWriter`
@@ -128,6 +168,11 @@ This area then contains two sub-segments:
 1. The header `mw::log::BufferEntryHeader` which contains a timestamp and type
    identification.
 2. Followed by the payload as written by the user.
+
+The flow of `AllocAndWrite()` including the drop counters is shown below:
+
+```{uml} ../_assets/shared_memory_writer_allocandwrite.puml
+```
 
 ## Lazy logging client
 
@@ -147,10 +192,10 @@ may send a connect message to Datarouter.
 ## Establishing a logging session
 
 Before the information exchange between Datarouter and the Logging client can
-begin, a session needs to be established. By that we mean the two side-channels
-for message passing need to be connected. The client needs to instantiate a
-`Sender` that connects with the `Receiver` of Datarouter. Datarouter needs to
-instantiate a `Sender` that connects to the `Receiver` of the client. In
+begin, a session needs to be established. By that we mean the message passing
+connection needs to be established. The client needs to create an
+`IClientConnection` that connects with the `IServer` of Datarouter. Datarouter
+uses the same connection to send notifications to the client. In
 addition, Datarouter has to open the shared memory file from the logging
 client.
 
@@ -167,20 +212,27 @@ Datarouter. This is only possible if Datarouter is already running and ready to
 receive. If a client exits before Datarouter has connected the resource must be
 cleaned up and the logs are lost.
 
-For each client, there shall be two files:
+For each client, there shall be one shared memory file `/tmp/logging.<appid>.<uid>.shmem`
+(deterministic identifier mode). The message passing connection of the client
+does not need a file of its own.
 
-1. The shared memory file of the client `/tmp/logging.<appid>.<uid>.shmem`.
-2. The receiver file of the client `/mw_com/logging.<appid>.<uid>`.
+The shared memory file shall be read-only for group and others
+(`comp_req__log__shm_file_permissions`). In dynamic identifier mode the owner can
+additionally write to the file (`0644`). In deterministic mode the file mode is
+`0444` and the client writes through the file descriptor it holds.
 
-The shared memory file shall be writable only for the UID of the client, and
-read-only for everything else.
+On startup, Datarouter creates its own server and attaches it to a file:
 
-On startup, Datarouter creates its own receiver and attaches it to a file:
+- `/logging.datarouter_recv` (on QNX below `/mw_com/message_passing/`)
 
-- `/mw_com/logging.datarouter_recv`
-
-After Datarouter creates its receiver the logging clients are unblocked and
+After Datarouter creates its server the logging clients are unblocked and
 establish the connection by sending the connect message.
+
+The client connects in a separate thread, because waiting for the connection is a
+blocking operation:
+
+```{uml} ../_assets/datarouter_message_client_impl_connecttodatarouter.puml
+```
 
 ## Avoiding shared memory leaks
 
@@ -213,15 +265,22 @@ readable without synchronization. Only after reading the remaining data from the
 ring buffer, should Datarouter unmap the shared memory page. Then the OS should
 free up the used resources.
 
-<img alt="MW_LOG_SHARED_MEMORY_READER" src="https://www.plantuml.com/plantuml/proxy?src=https://raw.githubusercontent.com/eclipse-score/logging/refs/heads/main/docs/components/mw_log/detailed_design/_assets/mw_log_shared_memory_reader.puml">
+```{uml} ../_assets/mw_log_shared_memory_reader.puml
+```
+
+The flow of `NotifyAcquisitionSetReader()` and `Read()`, including the detached
+mode, is shown below:
+
+```{uml} ../_assets/shared_memory_reader_read.puml
+```
 
 ## Limited impact of incoming messages in the logging client
 
 Consider a fault in Datarouter that leads to permanently repeated message
 sending to one of the logging clients in a hot loop. First of all, this would
 not directly impact the user threads of the clients but the logger thread in the
-client process. The logger thread is spawned by the thread pool (containing a
-single thread) in the `DatarouterMessagePassingClient` in `DatarouterBackend`.
+client process. The logger thread is the thread of the message passing client
+connection that delivers the notifications to the `DatarouterMessageClientImpl`.
 
 The implementation shall limit the impact of such a "denial-of-service"-like
 situation on the client threads. First, the lock-free implementation of the
@@ -229,10 +288,10 @@ shared memory buffers ensures that the logger cannot block the running operation
 of a client writing to the shared memory. It is always the reader i.e. the
 logger thread and Datarouter that on the writers to finish, and not vice-versa.
 
-Secondly, we also mitigate CPU starvation of the clients by limiting the maximum
-number of requests a logger thread may execute in a fixed time interval. This
-rate limitation is implemented with a fixed sleep period in the logger thread
-after each incoming request.
+Secondly, the message passing configuration (`MessagePassingConfig`) bounds the
+resources used for incoming messages: notifications are limited to one byte and
+one queued notification (`kMaxNotifySize`, `kMaxQueuedNotifies`). Notifications
+with an unexpected size or message id are ignored.
 
 ## Message exchange between Logging Clients and Datarouter
 
@@ -246,9 +305,9 @@ Client replies with a response to the request.
 
 There is only a single receiver in Datarouter for all clients. Each message
 from `mw::com::MessagePassing` includes a message id and a PID of the sender
-besides the Payload. We use the `ShortMessage` and `MediumMessage` type for all
-messages, which can currently hold a payload length of 8 Bytes and 16 Bytes,
-respectively. The PID is used as an identifier for the concrete logging client
+besides the Payload. The messages are serialized as the message id followed by
+the payload. The maximum message size is 17 bytes (1 byte id and 16 bytes
+payload), the maximum notification size is 1 byte (`MessagePassingConfig`). The PID is used as an identifier for the concrete logging client
 in Datarouter.
 
 ### Establish a new logging session
@@ -261,9 +320,9 @@ the logs of that application will be lost.
 
 #### Request from the client to Datarouter
 
-Message ID: `kConnectToClient`
+Message ID: `kConnect`
 
-Payload: `struct ConnectMessage`
+Payload: `struct ConnectMessageFromClient`
 
 This is the only message that shall be initiated by the client itself. The
 message shall contain the necessary information for Datarouter to find the
@@ -306,15 +365,13 @@ Payload: None
 #### Response from the Client to confirm acquire
 
 When the data is acquired on client side by a call to
-`AlternatingReader::Switch()`, the client confirms that by responding. The
-response contains the range in the ring buffer that is ready to be read as well
-as the updated type index. When a user traces a data type for the C++ fully
-qualified type name is put on the type stack in the `MwsrWriter`. This allows
-Datarouter to identify the payload in the ring buffer by index to the type
-stack.
+`SharedMemoryWriter::ReadAcquire()`, the client confirms that by responding. The
+response contains the identifier of the acquired buffer
+(`ReadAcquireResult::acquired_buffer`). When a user traces a data type, the C++
+fully qualified type name is registered by `SharedMemoryWriter::TryRegisterType()`
+and written to the ring buffer. This allows Datarouter to identify the payload in
+the ring buffer by the type identifier.
 
 Message ID: `kAcquireResponse`
-
-Message type: `MediumMessage`
 
 Payload: `struct ReadAcquireResult`
