@@ -14,6 +14,10 @@ package MwLogAssumedSystemRequirements
 
 import ScoreReq
 
+// Source: https://github.com/eclipse-score/score/blob/main/docs/requirements/stakeholder/index.rst
+// Copy kept until tooling is set up; helps to avoid drifts until then.
+
+// stkh_req__dev_experience__logging_support
 ScoreReq.AssumedSystemReq ASR_LoggingSupport {
     description = "The platform shall support Diagnostic Log and Trace (DLT) / Logcat format as well as logging of early startup events."
     safety = ScoreReq.Asil.QM
@@ -21,6 +25,7 @@ ScoreReq.AssumedSystemReq ASR_LoggingSupport {
     version = 1
 }
 
+// stkh_req__functional_req__safe_comput
 ScoreReq.AssumedSystemReq ASR_SafeLogAndTrace {
     description = '''The platform shall provide a Log and Trace infrastructure supporting the highest ASIL level, guaranteeing freedom from interference (FFI) with regard to the calling components.'''
     safety = ScoreReq.Asil.B
@@ -28,6 +33,7 @@ ScoreReq.AssumedSystemReq ASR_SafeLogAndTrace {
     version = 1
 }
 
+// stkh_req__dependability__security_features
 ScoreReq.AssumedSystemReq ASR_SecureLogAndTrace{
     description = "The information exchanged between applications and the Logging and Tracing components shall be protected against unauthorized access and manipulation. The platform shall provide mechanisms to ensure confidentiality, integrity, and authenticity of the exchanged information."
     safety = ScoreReq.Asil.QM
@@ -35,13 +41,7 @@ ScoreReq.AssumedSystemReq ASR_SecureLogAndTrace{
     version = 1
 }
 
-ScoreReq.AssumedSystemReq ASR_StablePublicApi {
-    description = "The platform shall provide a stable API for the logging middleware."
-    safety = ScoreReq.Asil.QM
-    rationale = "A stable API helps to ensure that applications can be developed and maintained over time without being affected by changes in the underlying platform."
-    version = 1
-}
-
+// stkh_req__dependability__error_reaction
 ScoreReq.AssumedSystemReq ASR_ErrorHandling {
     description = """(C++) exceptions shall not be used for error handling.
 The best way to deal with errors is to try to resolve those component internally. If not possible the caller of the function shall be notified of the error.
@@ -59,13 +59,7 @@ ScoreReq.AssumedSystemReq ASR_LogAndTraceConsistentBehaviour {
     version = 1
 }
 
-ScoreReq.AssumedSystemReq ASR_ProgrammingLanguagesForApplicationDevelopment {
-    description = "The platform shall support implementation of applications in the following programming languages up to the highest ASIL level as defined in automotive_safety: C++, Rust."
-    safety = ScoreReq.Asil.B
-    rationale = "There are several programming languages available for safety related application development. The platform shall support communication between applications implemented in these languages."
-    version = 1
-}
-
+// stkh_req__overall_goals__enable_cooperation
 ScoreReq.AssumedSystemReq ASR_OverallGoalsEnableCooperation {
     description = '''The SW-platform shall where possible be based on existing standards (e.g. network
     protocols).'''

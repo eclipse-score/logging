@@ -15,6 +15,10 @@ package MwLog
 import MwLogFeature
 import ScoreReq
 
+// Source: https://github.com/eclipse-score/logging/blob/main/docs/components/mw_log/requirements/requirements.rst
+// Copy kept until tooling is set up; helps to avoid drifts until then.
+
+// comp_req__log__avoid_signal_processing
 ScoreReq.CompReq AvoidSignalProcessing {
     description = '''The component shall not register any signal handler.'''
     safety = ScoreReq.Asil.B
@@ -22,6 +26,7 @@ ScoreReq.CompReq AvoidSignalProcessing {
     version = 1
 }
 
+// comp_req__log__file_descriptor_flags
 ScoreReq.CompReq FileDescriptorFlags {
     description = '''The component shall set the FD_CLOEXEC (or O_CLOEXEC) flag on all the file descriptors
     it owns.'''
@@ -30,6 +35,7 @@ ScoreReq.CompReq FileDescriptorFlags {
     version = 1
 }
 
+// comp_req__log__dlt_verbose_mode
 ScoreReq.CompReq DltVerboseMode {
     description = '''mw::log shall implement DLT verbose mode. Generation of messages shall be done in
     DLT-conform format, allowing messages to be sent by Datarouter without additional reprocessing.'''
@@ -38,6 +44,7 @@ ScoreReq.CompReq DltVerboseMode {
     version = 1
 }
 
+// comp_req__log__autosar_log_trace_spec
 ScoreReq.CompReq AutosarLogTraceSpec {
     description = '''mw::log shall implement "Specification of Log and Trace for Adaptive Platform". Release
     of specification used shall be in agreement with the rest of Adaptive AUTOSAR stack.'''
@@ -46,15 +53,7 @@ ScoreReq.CompReq AutosarLogTraceSpec {
     version = 1
 }
 
-ScoreReq.CompReq SendMessagesToDatarouter {
-    description = '''mw::log shall use logging library to send verbose messages to datarouter. Applications
-    shall use mw::log interface to log verbose mode messages. Internally mw::log shall be using logging
-    library.'''
-    safety = ScoreReq.Asil.QM
-    derived_from = [MwLogFeature.LogSourcesUserApp@1, MwLogFeature.LogSinksNetwork@1]
-    version = 1
-}
-
+// comp_req__log__inactive_logstream
 ScoreReq.CompReq InactiveLogStreamBehavior {
     description = '''mw::log library shall not perform any useful activity if log level of LogStream object is
     insufficient for given context. LogStream object shall not generate serialized messages if the severity of
@@ -64,6 +63,7 @@ ScoreReq.CompReq InactiveLogStreamBehavior {
     version = 1
 }
 
+// comp_req__log__shm_file_permissions
 ScoreReq.CompReq SharedMemoryFilePermissions {
     description = '''Logging shared-memory files shall have read-only posix file permission for group and
     others. The shared-memory file created by mw::log shall be read-only for group and others.'''
@@ -72,6 +72,7 @@ ScoreReq.CompReq SharedMemoryFilePermissions {
     version = 1
 }
 
+// comp_req__log__forward_to_system_logger
 ScoreReq.CompReq ForwardToSystemLogger {
     description = '''The system logger backend shall forward the logs to the native system logger mechanism.
     Under QNX, slogger2 shall be used.'''
@@ -80,6 +81,7 @@ ScoreReq.CompReq ForwardToSystemLogger {
     version = 1
 }
 
+// comp_req__log__system_backend_activation
 ScoreReq.CompReq SystemBackendActivation {
     description = '''The system logger backend shall be enabled if and only if the log mode contains
     "kSystem".'''
@@ -88,6 +90,7 @@ ScoreReq.CompReq SystemBackendActivation {
     version = 1
 }
 
+// comp_req__log__local_allocation_strategy
 ScoreReq.CompReq LocalAllocationStrategy {
     description = '''mw::log shall use local allocators to avoid using global heap. Global heap allocation
     (if any) shall be limited to the initialization phase of application lifecycle.'''
@@ -96,14 +99,16 @@ ScoreReq.CompReq LocalAllocationStrategy {
     version = 1
 }
 
-ScoreReq.CompReq NoEndlessLoops {
+// comp_req__log__no_endless_loops
+ScoreReq.CompReq BoundedLoopExecution {
     description = '''mw::log shall not contain unbound loops or loops with unchecked exit conditions.'''
     safety = ScoreReq.Asil.B
     derived_from = [MwLogFeature.AsilLevelSupport@1, MwLogFeature.ResourceConsumptionRuntime@1]
     version = 1
 }
 
-ScoreReq.CompReq AvoidLocks {
+// comp_req__log__avoid_locks
+ScoreReq.CompReq TimeBoundedLocking {
     description = '''mw::log shall be free of time-unbound locks and shall implement strategies to limit wait
     time. Time limit shall be defined based on requirements from functions on individual ECU. Mutual
     exclusion mechanisms shall include priority inversion protection.'''
@@ -112,14 +117,16 @@ ScoreReq.CompReq AvoidLocks {
     version = 1
 }
 
+// comp_req__log__cross_locking
 ScoreReq.CompReq CrossLockingPrevention {
     description = '''Cross-application and cross-thread dependencies shall be avoided. A thread logging in a
     loop shall not block other thread's execution.'''
     safety = ScoreReq.Asil.B
-    derived_from = [MwLogFeature.AsilLevelSupport@1, MwLogFeature.ErrorHandlingIsolation@1]
+    derived_from = [MwLogFeature.AsilLevelSupport@1, MwLogFeature.ResourceConsumptionRuntime@1]
     version = 1
 }
 
+// comp_req__log__index_size_checking
 ScoreReq.CompReq IndexAndSizeChecking {
     description = '''Indices in data structures and sizes of data accessed or copied shall be checked for
     plausibility to avoid high runtime utilization through long iterations or data corruption.'''
@@ -128,6 +135,7 @@ ScoreReq.CompReq IndexAndSizeChecking {
     version = 1
 }
 
+// comp_req__log__memory_bound_checking
 ScoreReq.CompReq MemoryBoundChecking {
     description = '''Memory boundaries shall be explicitly checked when writing to shared memory.'''
     safety = ScoreReq.Asil.B
