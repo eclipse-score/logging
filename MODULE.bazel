@@ -19,6 +19,12 @@ module(
 bazel_dep(name = "rules_python", version = "1.8.5")
 bazel_dep(name = "bazel_skylib", version = "1.9.0")
 bazel_dep(name = "rules_rust", version = "0.68.2-score")
+git_override(
+    module_name = "rules_rust",
+    commit = "2098bd56fa9282f78ab56f6a3118c24db3425f8c",  # FIXME: switch to the next -score release (contains eclipse-score/rules_rust#23)
+    remote = "https://github.com/eclipse-score/rules_rust.git",
+)
+
 bazel_dep(name = "rules_cc", version = "0.2.17")
 bazel_dep(name = "aspect_rules_lint", version = "2.5.0")
 
