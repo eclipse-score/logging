@@ -13,8 +13,8 @@
 #ifndef SCORE_DATAROUTER_NETWORK_VLAN_MOCK_H
 #define SCORE_DATAROUTER_NETWORK_VLAN_MOCK_H
 
-#include "score/os/errno.h"
 #include "score/network/vlan.h"
+#include "score/os/errno.h"
 
 #include <gmock/gmock.h>
 

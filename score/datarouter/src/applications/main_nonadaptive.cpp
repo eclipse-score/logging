@@ -17,8 +17,8 @@
 #include <atomic>
 
 #include "score/os/errno_logging.h"
-#include "score/os/utils/signal_impl.h"
 #include "score/mw/log/logging.h"
+#include "score/os/utils/signal_impl.h"
 
 #include <score/span.hpp>
 #include <datarouter_app.h>

@@ -25,7 +25,6 @@ cc_library(
     features = COMPILER_WARNING_FEATURES,
     visibility = ["@score_logging//score/datarouter:__subpackages__"],
     deps = [
-        "@score_baselibs//score/memory:string_literal",
         "@score_baselibs//score/result",
     ],
 )

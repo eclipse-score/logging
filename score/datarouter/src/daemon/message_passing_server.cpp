@@ -12,9 +12,9 @@
  ********************************************************************************/
 
 #include "daemon/message_passing_server.h"
+#include "score/mw/log/detail/data_router/message_passing_config.h"
 #include "score/os/pthread.h"
 #include "score/os/unistd.h"
-#include "score/mw/log/detail/data_router/message_passing_config.h"
 
 #include "score/memory.hpp"
 #include <score/jthread.hpp>
