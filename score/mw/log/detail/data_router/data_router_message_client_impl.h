@@ -18,12 +18,12 @@
 #include "score/jthread.hpp"
 #include "score/optional.hpp"
 #include "score/stop_token.hpp"
-#include "score/os/errno.h"
 #include "score/mw/log/detail/data_router/data_router_message_client.h"
 #include "score/mw/log/detail/data_router/data_router_message_client_backend.h"
 #include "score/mw/log/detail/data_router/data_router_message_client_identifiers.h"
 #include "score/mw/log/detail/data_router/data_router_message_client_utils.h"
 #include "score/mw/log/detail/data_router/data_router_messages.h"
+#include "score/os/errno.h"
 
 #include <condition_variable>
 #include <mutex>

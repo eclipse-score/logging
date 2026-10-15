@@ -357,9 +357,10 @@ TEST_F(WriterFactoryFixture, MakeSureThatOpenCallWillOnlyBeDoneWithCorrectOpenRe
     RecordProperty("lobster-tracing", "MwLog.SharedMemoryFilePermissions, MwLog.FileDescriptorFlags");
 
     WriterFactory writer(std::move(osal));
-    EXPECT_CALL(
-        *fcntl_mock_raw_ptr,
-        open(StrEq(kFileNameDynamic), score::os::Fcntl::Open::kCreate | score::os::Fcntl::Open::kReadWrite, kOpenModeFlags))
+    EXPECT_CALL(*fcntl_mock_raw_ptr,
+                open(StrEq(kFileNameDynamic),
+                     score::os::Fcntl::Open::kCreate | score::os::Fcntl::Open::kReadWrite,
+                     kOpenModeFlags))
         .Times(0);
     EXPECT_CALL(*fcntl_mock_raw_ptr, open(StrEq(kFileNameDynamic), kOpenReadFlagsDynamic, kOpenModeFlags)).Times(1);
 

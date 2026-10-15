@@ -31,6 +31,7 @@ cc_library(
         "@score_baselibs//score/mw/log:__subpackages__",
     ],
     deps = [
+        "//third_party/libslog2",
         "@score_baselibs//score/mw/log/detail:backend_interface",
         "@score_baselibs//score/mw/log/detail:circular_allocator",
         "@score_baselibs//score/mw/log/detail:initialization_reporter",

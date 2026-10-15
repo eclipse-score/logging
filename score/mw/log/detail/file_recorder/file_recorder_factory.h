@@ -13,11 +13,11 @@
 #ifndef SCORE_MW_LOG_DETAIL_FILE_RECORDER_FILE_RECORDER_FACTORY_H
 #define SCORE_MW_LOG_DETAIL_FILE_RECORDER_FILE_RECORDER_FACTORY_H
 
-#include "score/os/fcntl.h"
 #include "score/mw/log/detail/file_recorder/file_recorder.h"
 #include "score/mw/log/detail/error.h"
 #include "score/mw/log/detail/initialization_reporter.h"
 #include "score/mw/log/detail/log_recorder_factory.hpp"
+#include "score/os/fcntl.h"
 
 namespace score
 {
