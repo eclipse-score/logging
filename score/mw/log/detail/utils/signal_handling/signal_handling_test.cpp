@@ -75,7 +75,8 @@ TEST_F(SignalHandlingTest, PThreadBlockSigTerm_PthreadSigMaskFails_ReturnsError)
 {
     EXPECT_CALL(*signal_mock_, SigEmptySet(_)).WillOnce(Return(score::cpp::expected<std::int32_t, score::os::Error>{0}));
 
-    EXPECT_CALL(*signal_mock_, SigAddSet(_, SIGTERM)).WillOnce(Return(score::cpp::expected<std::int32_t, score::os::Error>{0}));
+    EXPECT_CALL(*signal_mock_, SigAddSet(_, SIGTERM))
+        .WillOnce(Return(score::cpp::expected<std::int32_t, score::os::Error>{0}));
 
     EXPECT_CALL(*signal_mock_, PthreadSigMask(SIG_BLOCK, _))
         .WillOnce(Return(score::cpp::make_unexpected(score::os::Error::createUnspecifiedError())));
@@ -96,7 +97,8 @@ TEST_F(SignalHandlingTest, PThreadBlockSigTerm_AllSucceed_ReturnsSuccess)
 
     EXPECT_CALL(*signal_mock_, SigEmptySet(_)).WillOnce(Return(score::cpp::expected<std::int32_t, score::os::Error>{0}));
 
-    EXPECT_CALL(*signal_mock_, SigAddSet(_, SIGTERM)).WillOnce(Return(score::cpp::expected<std::int32_t, score::os::Error>{0}));
+    EXPECT_CALL(*signal_mock_, SigAddSet(_, SIGTERM))
+        .WillOnce(Return(score::cpp::expected<std::int32_t, score::os::Error>{0}));
 
     EXPECT_CALL(*signal_mock_, PthreadSigMask(SIG_BLOCK, _))
         .WillOnce(Return(score::cpp::expected<std::int32_t, score::os::Error>{0}));
@@ -139,7 +141,8 @@ TEST_F(SignalHandlingTest, PThreadUnblockSigTerm_PthreadSigMaskFails_ReturnsErro
 {
     EXPECT_CALL(*signal_mock_, SigEmptySet(_)).WillOnce(Return(score::cpp::expected<std::int32_t, score::os::Error>{0}));
 
-    EXPECT_CALL(*signal_mock_, SigAddSet(_, SIGTERM)).WillOnce(Return(score::cpp::expected<std::int32_t, score::os::Error>{0}));
+    EXPECT_CALL(*signal_mock_, SigAddSet(_, SIGTERM))
+        .WillOnce(Return(score::cpp::expected<std::int32_t, score::os::Error>{0}));
 
     EXPECT_CALL(*signal_mock_, PthreadSigMask(SIG_UNBLOCK, _))
         .WillOnce(Return(score::cpp::make_unexpected(score::os::Error::createUnspecifiedError())));
@@ -152,7 +155,8 @@ TEST_F(SignalHandlingTest, PThreadUnblockSigTerm_AllSucceed_ReturnsSuccess)
 {
     EXPECT_CALL(*signal_mock_, SigEmptySet(_)).WillOnce(Return(score::cpp::expected<std::int32_t, score::os::Error>{0}));
 
-    EXPECT_CALL(*signal_mock_, SigAddSet(_, SIGTERM)).WillOnce(Return(score::cpp::expected<std::int32_t, score::os::Error>{0}));
+    EXPECT_CALL(*signal_mock_, SigAddSet(_, SIGTERM))
+        .WillOnce(Return(score::cpp::expected<std::int32_t, score::os::Error>{0}));
 
     EXPECT_CALL(*signal_mock_, PthreadSigMask(SIG_UNBLOCK, _))
         .WillOnce(Return(score::cpp::expected<std::int32_t, score::os::Error>{0}));

@@ -60,8 +60,10 @@ class ReaderFactoryFixture : public ::testing::Test
     }
 
     score::cpp::pmr::memory_resource* memory_resource = score::cpp::pmr::get_default_resource();
-    score::cpp::pmr::unique_ptr<score::os::MmanMock> mman_mock_pmr = score::cpp::pmr::make_unique<score::os::MmanMock>(memory_resource);
-    score::cpp::pmr::unique_ptr<score::os::StatMock> stat_mock_pmr = score::cpp::pmr::make_unique<score::os::StatMock>(memory_resource);
+    score::cpp::pmr::unique_ptr<score::os::MmanMock> mman_mock_pmr =
+        score::cpp::pmr::make_unique<score::os::MmanMock>(memory_resource);
+    score::cpp::pmr::unique_ptr<score::os::StatMock> stat_mock_pmr =
+        score::cpp::pmr::make_unique<score::os::StatMock>(memory_resource);
     score::os::MmanMock* mman_mock = mman_mock_pmr.get();
     score::os::StatMock* stat_mock = stat_mock_pmr.get();
     std::aligned_storage_t<kSharedSize, alignof(SharedData)> buffer;
