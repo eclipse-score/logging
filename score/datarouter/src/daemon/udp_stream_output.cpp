@@ -14,8 +14,8 @@
 #include "score/datarouter/include/daemon/udp_stream_output.h"
 
 #include "daemon/dltserver_common.h"
-#include "score/os/unistd.h"
 #include "score/datarouter/network/vlan.h"
+#include "score/os/unistd.h"
 
 #include <arpa/inet.h>
 #include <netinet/in.h>
@@ -169,7 +169,7 @@ score::logging::dltserver::UdpStreamOutput::UdpStreamOutput(UdpStreamOutput&& fr
 }
 
 score::cpp::expected_blank<score::os::Error> score::logging::dltserver::UdpStreamOutput::Bind(const char* src_addr,
-                                                                                   uint16_t src_port) noexcept
+                                                                                     uint16_t src_port) noexcept
 {
     struct sockaddr_in src{};
     src.sin_family = AF_INET;
@@ -224,7 +224,7 @@ score::cpp::expected<std::int32_t, score::os::Error> score::logging::dltserver::
 
 // Used to send single big message:
 score::cpp::expected<std::int64_t, score::os::Error> score::logging::dltserver::UdpStreamOutput::Send(const iovec* iovec_tab,
-                                                                                           const size_t size) noexcept
+                                                                                             const size_t size) noexcept
 {
     struct msghdr msg{};
     msg.msg_name = static_cast<void*>(&dst_);

@@ -13,10 +13,10 @@
 
 #include "filetransfer_stream.h"
 #include "dlt/dlt_headers.h"
+#include "score/mw/log/logging.h"
 #include "score/os/stat.h"
 #include "score/os/stdio_impl.h"
 #include "score/os/utils/thread.h"
-#include "score/mw/log/logging.h"
 
 #include <sys/stat.h>
 #include <cstring>
@@ -153,9 +153,9 @@ bool FileTransferStreamHandler::ReadFileHeaderInfo(const std::string& filename)
             // which can only happen on internal runtime failure (e.g., invalid time data).
             // However, since `localtime_r` is a C library function, it is not virtual and cannot be overridden
             // directly. The project uses `std::localtime_r` (from <ctime>) instead of the Time wrapper interface
-            // (score::os::Time). As a result, Google Mock cannot intercept the call, and this branch cannot be covered in
-            // tests. To cover it, a redesign would be needed to wrap all system time calls through mockable interfaces.
-            // LCOV_EXCL_START
+            // (score::os::Time). As a result, Google Mock cannot intercept the call, and this branch cannot be covered
+            // in tests. To cover it, a redesign would be needed to wrap all system time calls through mockable
+            // interfaces. LCOV_EXCL_START
             return std::string("");
             // LCOV_EXCL_STOP
         };

@@ -24,12 +24,12 @@
 #include "unix_domain/unix_domain_common.h"
 #include "unix_domain/unix_domain_server.h"
 
-#include "score/os/fcntl.h"
-#include "score/os/pthread.h"
-#include "score/os/unistd.h"
 #include "score/mw/log/configuration/nvconfig.h"
 #include "score/mw/log/configuration/nvconfigfactory.h"
 #include "score/concurrency/thread_pool.h"
+#include "score/os/fcntl.h"
+#include "score/os/pthread.h"
+#include "score/os/unistd.h"
 
 // Constants
 #include "data_router_cfg.h"
@@ -288,7 +288,8 @@ std::unique_ptr<MessagePassingServer::ISession> SocketServer::CreateMessagePassi
     // the C++ standard library. But these abstraction do not support exclusive access, which is why we created
     // this abstraction library.
     // NOLINTBEGIN(score-banned-function): See above.
-    auto maybe_fd = score::os::Fcntl::instance().open(shared_memory_file_name.c_str(), score::os::Fcntl::Open::kReadOnly);
+    auto maybe_fd =
+        score::os::Fcntl::instance().open(shared_memory_file_name.c_str(), score::os::Fcntl::Open::kReadOnly);
     // NOLINTEND(score-banned-function) it is among safety headers.
     if (!maybe_fd.has_value())
     {
