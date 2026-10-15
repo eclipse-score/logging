@@ -34,7 +34,7 @@ TEST(WaitFreeLinearWriter, EnsureAtomicRequirements)
     RecordProperty("ASIL", "B");
     RecordProperty("Description", "The used atomic data types shall be lock free");
     RecordProperty("TestingTechnique", "Requirements-based test");
-    RecordProperty("lobster-tracing", "MwLog.AvoidLocks, MwLog.CrossLockingPrevention");
+    RecordProperty("lobster-tracing", "MwLog.TimeBoundedLocking, MwLog.CrossLockingPrevention");
 
     score::mw::log::detail::LinearControlBlock control_block{};
     ASSERT_TRUE(control_block.acquired_index.is_lock_free());
@@ -54,7 +54,7 @@ TEST(WaitFreeLinearWriter, WriteBufferFullShouldReturnExpectedData)
     RecordProperty("ASIL", "B");
     RecordProperty("Description", "Returning the expected data if the write buffer is full.");
     RecordProperty("TestingTechnique", "Requirements-based test");
-    RecordProperty("lobster-tracing", "MwLog.NoEndlessLoops");
+    RecordProperty("lobster-tracing", "MwLog.BoundedLoopExecution");
 
     constexpr auto kBufferSize = 10U * 64U * 1024U;
     std::vector<score::mw::log::detail::Byte> buffer(kBufferSize);
