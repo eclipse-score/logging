@@ -35,6 +35,8 @@ score_coverage_scope(
         # is QNX-only and cannot be measured on the Linux host; on-target
         # coverage is tracked in eclipse-score/tooling#427.)
         "//score/mw/log/backend:custom",
+        # Linux syslog backend, not reachable through the facade.
+        "//score/mw/log/backend:syslog",
         # Rust bridge crate + its C++ init library
         "//score/mw/log/rust/score_log_bridge",
         "//score/mw/log/rust/score_log_bridge_cpp_init",
