@@ -1,0 +1,81 @@
+' *******************************************************************************
+' Copyright (c) 2026 Contributors to the Eclipse Foundation
+'
+' See the NOTICE file(s) distributed with this work for additional
+' information regarding copyright ownership.
+'
+' This program and the accompanying materials are made available under the
+' terms of the Apache License Version 2.0 which is available at
+' https://www.apache.org/licenses/LICENSE-2.0
+'
+' SPDX-License-Identifier: Apache-2.0
+' *******************************************************************************
+
+@startuml backend_registration
+
+skinparam classAttributeIconSize 0
+
+title Backend registration
+
+class "backend_table" as BackendTable <<header in score_baselibs>> {
+  + gBackendCreators: std::array<RecorderCreatorFn, 6>
+  + RegisterBackend(mode: LogMode, creator: RecorderCreatorFn): void
+  + IsBackendAvailable(mode: LogMode): bool
+  + CreateRecorderForMode(mode: LogMode, config: const Configuration&, memory_resource: memory_resource*): std::unique_ptr<Recorder>
+}
+
+class "mw::log::BackendRegistrant" as BackendRegistrant {
+  + BackendRegistrant(mode: LogMode, creator: RecorderCreatorFn)
+}
+
+class "file_registrant.cpp" as FileRegistrant <<registrant>> {
+  - CreateFileRecorder(config, memory_resource): std::unique_ptr<Recorder>
+  - kFileRegistrant: BackendRegistrant (LogMode::kFile)
+}
+
+class "remote_registrant.cpp" as RemoteRegistrant <<registrant>> {
+  - CreateRemoteRecorder(config, memory_resource): std::unique_ptr<Recorder>
+  - kRemoteRegistrant: BackendRegistrant (LogMode::kRemote)
+}
+
+class "syslog_registrant.cpp" as SyslogRegistrant <<registrant, Linux>> {
+  - CreateSyslogRecorder(config, memory_resource): std::unique_ptr<Recorder>
+  - kSyslogRegistrant: BackendRegistrant (LogMode::kSystem)
+}
+
+class "slog_registrant.cpp" as SlogRegistrant <<registrant, QNX>> {
+  - CreateSlogRecorder(config, memory_resource): std::unique_ptr<Recorder>
+  - kSlogRegistrant: BackendRegistrant (LogMode::kSystem)
+}
+
+class "custom_registrant.cpp" as CustomRegistrant <<registrant>> {
+  - CreateCustomRecorder(config, memory_resource): std::unique_ptr<Recorder>
+  - kCustomRegistrant: BackendRegistrant (LogMode::kCustom)
+}
+
+class "mw::log::detail::RegistryAwareRecorderFactory" as RegistryAwareRecorderFactory <<score_baselibs>> {
+  + CreateFromConfiguration(memory_resource): std::unique_ptr<Recorder>
+  + CreateRecorderFromLogMode(log_mode, config, memory_resource): std::unique_ptr<Recorder>
+  + CreateWithConsoleLoggingOnly(memory_resource): std::unique_ptr<Recorder>
+  + CreateStub(): std::unique_ptr<Recorder>
+}
+
+class "mw::log::detail::CompositeRecorder" as CompositeRecorder
+class "mw::log::detail::EmptyRecorder" as EmptyRecorder
+interface "mw::log::Recorder" as Recorder
+
+FileRegistrant ..> BackendRegistrant : static object
+RemoteRegistrant ..> BackendRegistrant : static object
+SyslogRegistrant ..> BackendRegistrant : static object
+SlogRegistrant ..> BackendRegistrant : static object
+CustomRegistrant ..> BackendRegistrant : static object
+
+BackendRegistrant ..> BackendTable : RegisterBackend() during\nstatic initialization
+
+RegistryAwareRecorderFactory ..> BackendTable : IsBackendAvailable()\nCreateRecorderForMode()
+RegistryAwareRecorderFactory ..> CompositeRecorder : creates for several modes
+RegistryAwareRecorderFactory ..> EmptyRecorder : creates if the mode is not registered
+CompositeRecorder .up.|> Recorder
+EmptyRecorder .up.|> Recorder
+
+@enduml

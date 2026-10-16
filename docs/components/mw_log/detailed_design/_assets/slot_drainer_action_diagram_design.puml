@@ -1,0 +1,55 @@
+' *******************************************************************************
+' Copyright (c) 2026 Contributors to the Eclipse Foundation
+'
+' See the NOTICE file(s) distributed with this work for additional
+' information regarding copyright ownership.
+'
+' This program and the accompanying materials are made available under the
+' terms of the Apache License Version 2.0 which is available at
+' https://www.apache.org/licenses/LICENSE-2.0
+'
+' SPDX-License-Identifier: Apache-2.0
+' *******************************************************************************
+
+@startuml slot_drainer_action_diagram_design
+
+skinparam ActivityBackgroundColor white
+skinparam ActivityBorderColor black
+skinparam ArrowColor black
+skinparam PartitionBackgroundColor orange
+skinparam PartitionBorderColor black
+
+title Slot disposal diagram
+
+start
+
+:FlushSlot call
+circular_buffer.push_back(SlotHandle);
+
+partition SlotDrainer #orange {
+  repeat
+    partition NonBlockingWriter #3c7a00 {
+      repeat
+        :write the current span (FlushIntoFile);
+        if (result?) then ([would block or error])
+          #orange:exit, the data stays pending;
+          detach
+        else ([span written])
+        endif
+        :get the next span from the message builder;
+      repeat while (next span available?) is (yes) not (no)
+    }
+
+    :release the slot to the allocator;
+    if (slots flushed in this call above the limit?) then ([limit exceeded])
+      #orange:exit;
+      detach
+    else ([within limit])
+    endif
+    :take the next slot from the circular buffer\nand set it as next message;
+  repeat while (circular buffer not empty?) is (yes) not (no)
+}
+
+stop
+
+@enduml

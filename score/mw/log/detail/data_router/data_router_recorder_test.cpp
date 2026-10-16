@@ -105,6 +105,7 @@ TEST_F(DataRouterRecorderFixtureWithLogLevelCheck, WillObtainSlotForSufficientLo
 
 TEST_F(DataRouterRecorderFixtureWithLogLevelCheck, WillObtainEmptySlotForInsufficentLogLevel)
 {
+    RecordProperty("PartiallyVerifies", "comp_req__log__inactive_logstream");
     RecordProperty("ASIL", "B");
     RecordProperty("Description", "Verifies the in-ability of returning a slot in case of inactive log level.");
     RecordProperty("TestType", "Interface test");

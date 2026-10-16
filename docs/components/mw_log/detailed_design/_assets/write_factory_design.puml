@@ -64,5 +64,5 @@ note top of WriterFactory : Creates and manages a shared memory ring buffer. All
 
 note bottom of Mman : Abstracts POSIX memory management. mmap() maps files into memory, munmap() releases it. All errors propagated to caller.
 
-SharedMemoryWriter --> SharedData : owns
+SharedMemoryWriter --> SharedData : references
 @enduml

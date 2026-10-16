@@ -1,0 +1,54 @@
+' *******************************************************************************
+' Copyright (c) 2026 Contributors to the Eclipse Foundation
+'
+' See the NOTICE file(s) distributed with this work for additional
+' information regarding copyright ownership.
+'
+' This program and the accompanying materials are made available under the
+' terms of the Apache License Version 2.0 which is available at
+' https://www.apache.org/licenses/LICENSE-2.0
+'
+' SPDX-License-Identifier: Apache-2.0
+' *******************************************************************************
+
+@startuml DatarouterMessageClientImpl_ConnectToDatarouter
+
+title DatarouterMessageClientImpl::Run and ConnectToDatarouter
+
+participant "DataRouterBackend" as DataRouterBackend
+participant "DatarouterMessageClientImpl" as DatarouterMessageClientImpl
+participant "MsgClientUtils" as MsgClientUtils
+participant "MessagePassingFactory" as MessagePassingFactory
+participant "IClientConnection" as IClientConnection
+
+DataRouterBackend -> DatarouterMessageClientImpl : Run()
+DatarouterMessageClientImpl -> DatarouterMessageClientImpl : start connect thread (jthread)
+
+group ConnectToDatarouter (in the connect thread)
+    DatarouterMessageClientImpl -> MsgClientUtils : block SIGTERM (BlockTermSignal)
+    DatarouterMessageClientImpl -> MsgClientUtils : set thread name
+    DatarouterMessageClientImpl -> MessagePassingFactory : CreateClient(protocol config, client config)
+    MessagePassingFactory --> DatarouterMessageClientImpl : sender
+
+    alt sender not created
+        DatarouterMessageClientImpl -> DatarouterMessageClientImpl : report error,\nRequestInternalShutdown()
+    else sender created
+        DatarouterMessageClientImpl -> IClientConnection : Start(state callback, notify callback)
+        DatarouterMessageClientImpl -> DatarouterMessageClientImpl : wait until sender state is kReady\nor stop is requested
+        alt stop requested
+            DatarouterMessageClientImpl -> DatarouterMessageClientImpl : RequestInternalShutdown()
+        else sender ready
+            DatarouterMessageClientImpl -> IClientConnection : Send(connect message)
+            alt send failed
+                DatarouterMessageClientImpl -> DatarouterMessageClientImpl : report error,\nRequestInternalShutdown()
+            end
+        end
+    end
+end
+
+note over DatarouterMessageClientImpl
+RequestInternalShutdown() unlinks the shared memory file
+and requests the stop of the client.
+end note
+
+@enduml

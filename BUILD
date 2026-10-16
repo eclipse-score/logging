@@ -12,6 +12,7 @@
 # *******************************************************************************
 load("@score_docs_as_code//:docs.bzl", "docs")
 load("@score_tooling//:defs.bzl", "copyright_checker", "setup_starpls")
+load("@score_tooling//bazel/rules/rules_score:rules_score.bzl", "architectural_design")
 load("@score_tooling//third_party/format:macros.bzl", "use_format_targets")
 
 setup_starpls(
@@ -54,4 +55,36 @@ docs(
         "@score_process_description//:needs_json",
     ],
     source_dir = "docs",
+)
+
+# Detailed design of the mw::log backend. The sources are part of the docs tree.
+architectural_design(
+    name = "mw_log_backend_architectural_design",
+    dynamic = [
+        "docs/components/mw_log/detailed_design/_assets/datarouter_backend_datarouterbackend.puml",
+        "docs/components/mw_log/detailed_design/_assets/datarouter_message_client_impl_connecttodatarouter.puml",
+        "docs/components/mw_log/detailed_design/_assets/shared_memory_reader_read.puml",
+        "docs/components/mw_log/detailed_design/_assets/shared_memory_writer_allocandwrite.puml",
+        "docs/components/mw_log/detailed_design/_assets/slot_drainer_sequence_design.puml",
+        "docs/components/mw_log/detailed_design/_assets/syslog_backend_sequence.puml",
+        "docs/components/mw_log/detailed_design/_assets/verbose_logging_sequence.puml",
+    ],
+    static = [
+        "docs/components/mw_log/detailed_design/_assets/datarouter_class_diagram.puml",
+        "docs/components/mw_log/detailed_design/_assets/backend_registration.puml",
+        "docs/components/mw_log/detailed_design/_assets/inter_process_communication.puml",
+        "docs/components/mw_log/detailed_design/_assets/mw_log_datarouter_recorder.puml",
+        "docs/components/mw_log/detailed_design/_assets/mw_log_file_backend.puml",
+        "docs/components/mw_log/detailed_design/_assets/mw_log_recorders.puml",
+        "docs/components/mw_log/detailed_design/_assets/mw_log_shared_memory_reader.puml",
+        "docs/components/mw_log/detailed_design/_assets/verbose_logging_static.puml",
+        "docs/components/mw_log/detailed_design/_assets/write_factory_design.puml",
+        "docs/components/mw_log/detailed_design/datarouter_backend/index.md",
+        "docs/components/mw_log/detailed_design/file_output_backend.md",
+        "docs/components/mw_log/detailed_design/slog_backend.md",
+        "docs/components/mw_log/detailed_design/backend_registration.md",
+        "docs/components/mw_log/detailed_design/syslog_backend.md",
+    ],
+    # score_tooling 2.x parses every .puml included by this target.
+    visibility = ["//visibility:public"],
 )

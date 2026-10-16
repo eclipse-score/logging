@@ -1,0 +1,205 @@
+' *******************************************************************************
+' Copyright (c) 2026 Contributors to the Eclipse Foundation
+'
+' See the NOTICE file(s) distributed with this work for additional
+' information regarding copyright ownership.
+'
+' This program and the accompanying materials are made available under the
+' terms of the Apache License Version 2.0 which is available at
+' https://www.apache.org/licenses/LICENSE-2.0
+'
+' SPDX-License-Identifier: Apache-2.0
+' *******************************************************************************
+
+' Unit diagram required by the architectural_design validation: every participant
+' of a sequence diagram is a unit here, and every connected pair of units calls
+' each other in a sequence diagram. The interface names (caller and callee) follow
+' the convention of the validator and are not code interfaces.
+
+@startuml component_diagram
+
+skinparam componentStyle rectangle
+left to right direction
+
+title Units and unit bindings of the sequence diagrams of the backend
+
+package "Backend: Logging" as backend_logging {
+    component "App" as App <<unit>>
+    component "FreeFunctions" as FreeFunctions <<unit>>
+    component "LogStreamFactory" as LogStreamFactory <<unit>>
+    component "Runtime" as Runtime <<unit>>
+    component "LogStream" as LogStream <<unit>>
+    component "DataRouterRecorder" as DataRouterRecorder <<unit>>
+    component "TextRecorder" as TextRecorder <<unit>>
+    component "SyslogBackend" as SyslogBackend <<unit>>
+    component "Syslog" as Syslog <<unit>>
+    component "DLTFormat" as DLTFormat <<unit>>
+    component "DataRouterBackend" as DataRouterBackend <<unit>>
+    component "TRACE" as TRACE <<unit>>
+    component "WriterFactory" as WriterFactory <<unit>>
+    component "Logger" as Logger <<unit>>
+    component "MessageClientFactory" as MessageClientFactory <<unit>>
+    component "MessageClient" as MessageClient <<unit>>
+    component "DatarouterMessageClientImpl" as DatarouterMessageClientImpl <<unit>>
+    component "MsgClientUtils" as MsgClientUtils <<unit>>
+    component "MessagePassingFactory" as MessagePassingFactory <<unit>>
+    component "IClientConnection" as IClientConnection <<unit>>
+    component "Datarouter" as Datarouter <<unit>>
+    component "SharedMemoryReader" as SharedMemoryReader <<unit>>
+    component "AlternatingReadOnlyReader" as AlternatingReadOnlyReader <<unit>>
+    component "LinearReader" as LinearReader <<unit>>
+    component "TypeRegistrationCallback" as TypeRegistrationCallback <<unit>>
+    component "NewRecordCallback" as NewRecordCallback <<unit>>
+    component "SharedMemoryWriter" as SharedMemoryWriter <<unit>>
+    component "WaitFreeAlternatingWriter" as WaitFreeAlternatingWriter <<unit>>
+    component "SharedData" as SharedData <<unit>>
+    component "FileOutputBackend" as FileOutputBackend <<unit>>
+    component "SlotDrainer" as SlotDrainer <<unit>>
+    component "CircularBuffer" as CircularBuffer <<unit>>
+    component "NonBlockingWriter" as NonBlockingWriter <<unit>>
+    component "IMessageBuilder" as IMessageBuilder <<unit>>
+    component "CircularAllocator" as CircularAllocator <<unit>>
+}
+
+interface "IAppFreeFunctions" as IAppFreeFunctions
+interface "IFreeFunctionsLogStreamFactory" as IFreeFunctionsLogStreamFactory
+interface "ILogStreamFactoryRuntime" as ILogStreamFactoryRuntime
+interface "ILogStreamFactoryLogStream" as ILogStreamFactoryLogStream
+interface "IAppLogStream" as IAppLogStream
+interface "ILogStreamDataRouterRecorder" as ILogStreamDataRouterRecorder
+interface "ILogStreamTextRecorder" as ILogStreamTextRecorder
+interface "IRuntimeDataRouterRecorder" as IRuntimeDataRouterRecorder
+interface "IRuntimeTextRecorder" as IRuntimeTextRecorder
+interface "ITextRecorderSyslogBackend" as ITextRecorderSyslogBackend
+interface "ISyslogBackendSyslog" as ISyslogBackendSyslog
+interface "IDataRouterRecorderDataRouterBackend" as IDataRouterRecorderDataRouterBackend
+interface "IDataRouterRecorderDLTFormat" as IDataRouterRecorderDLTFormat
+interface "IDataRouterBackendTRACE" as IDataRouterBackendTRACE
+interface "ITRACESharedMemoryWriter" as ITRACESharedMemoryWriter
+interface "IDataRouterBackendWriterFactory" as IDataRouterBackendWriterFactory
+interface "IDataRouterBackendLogger" as IDataRouterBackendLogger
+interface "IDataRouterBackendMessageClientFactory" as IDataRouterBackendMessageClientFactory
+interface "IDataRouterBackendMessageClient" as IDataRouterBackendMessageClient
+interface "IDataRouterBackendDatarouterMessageClientImpl" as IDataRouterBackendDatarouterMessageClientImpl
+interface "IDatarouterMessageClientImplMsgClientUtils" as IDatarouterMessageClientImplMsgClientUtils
+interface "IDatarouterMessageClientImplMessagePassingFactory" as IDatarouterMessageClientImplMessagePassingFactory
+interface "IDatarouterMessageClientImplIClientConnection" as IDatarouterMessageClientImplIClientConnection
+interface "IDatarouterSharedMemoryReader" as IDatarouterSharedMemoryReader
+interface "ISharedMemoryReaderAlternatingReadOnlyReader" as ISharedMemoryReaderAlternatingReadOnlyReader
+interface "ISharedMemoryReaderLinearReader" as ISharedMemoryReaderLinearReader
+interface "ISharedMemoryReaderTypeRegistrationCallback" as ISharedMemoryReaderTypeRegistrationCallback
+interface "ISharedMemoryReaderNewRecordCallback" as ISharedMemoryReaderNewRecordCallback
+interface "ISharedMemoryWriterWaitFreeAlternatingWriter" as ISharedMemoryWriterWaitFreeAlternatingWriter
+interface "ISharedMemoryWriterSharedData" as ISharedMemoryWriterSharedData
+interface "IFileOutputBackendSlotDrainer" as IFileOutputBackendSlotDrainer
+interface "ISlotDrainerCircularBuffer" as ISlotDrainerCircularBuffer
+interface "ISlotDrainerNonBlockingWriter" as ISlotDrainerNonBlockingWriter
+interface "ISlotDrainerIMessageBuilder" as ISlotDrainerIMessageBuilder
+interface "ISlotDrainerCircularAllocator" as ISlotDrainerCircularAllocator
+
+App -( IAppFreeFunctions
+FreeFunctions )- IAppFreeFunctions
+
+FreeFunctions -( IFreeFunctionsLogStreamFactory
+LogStreamFactory )- IFreeFunctionsLogStreamFactory
+
+LogStreamFactory -( ILogStreamFactoryRuntime
+Runtime )- ILogStreamFactoryRuntime
+
+LogStreamFactory -( ILogStreamFactoryLogStream
+LogStream )- ILogStreamFactoryLogStream
+
+App -( IAppLogStream
+LogStream )- IAppLogStream
+
+LogStream -( ILogStreamDataRouterRecorder
+DataRouterRecorder )- ILogStreamDataRouterRecorder
+
+LogStream -( ILogStreamTextRecorder
+TextRecorder )- ILogStreamTextRecorder
+
+Runtime -( IRuntimeDataRouterRecorder
+DataRouterRecorder )- IRuntimeDataRouterRecorder
+
+Runtime -( IRuntimeTextRecorder
+TextRecorder )- IRuntimeTextRecorder
+
+TextRecorder -( ITextRecorderSyslogBackend
+SyslogBackend )- ITextRecorderSyslogBackend
+
+SyslogBackend -( ISyslogBackendSyslog
+Syslog )- ISyslogBackendSyslog
+
+DataRouterRecorder -( IDataRouterRecorderDataRouterBackend
+DataRouterBackend )- IDataRouterRecorderDataRouterBackend
+
+DataRouterRecorder -( IDataRouterRecorderDLTFormat
+DLTFormat )- IDataRouterRecorderDLTFormat
+
+DataRouterBackend -( IDataRouterBackendTRACE
+TRACE )- IDataRouterBackendTRACE
+
+TRACE -( ITRACESharedMemoryWriter
+SharedMemoryWriter )- ITRACESharedMemoryWriter
+
+DataRouterBackend -( IDataRouterBackendWriterFactory
+WriterFactory )- IDataRouterBackendWriterFactory
+
+DataRouterBackend -( IDataRouterBackendLogger
+Logger )- IDataRouterBackendLogger
+
+DataRouterBackend -( IDataRouterBackendMessageClientFactory
+MessageClientFactory )- IDataRouterBackendMessageClientFactory
+
+DataRouterBackend -( IDataRouterBackendMessageClient
+MessageClient )- IDataRouterBackendMessageClient
+
+DataRouterBackend -( IDataRouterBackendDatarouterMessageClientImpl
+DatarouterMessageClientImpl )- IDataRouterBackendDatarouterMessageClientImpl
+
+DatarouterMessageClientImpl -( IDatarouterMessageClientImplMsgClientUtils
+MsgClientUtils )- IDatarouterMessageClientImplMsgClientUtils
+
+DatarouterMessageClientImpl -( IDatarouterMessageClientImplMessagePassingFactory
+MessagePassingFactory )- IDatarouterMessageClientImplMessagePassingFactory
+
+DatarouterMessageClientImpl -( IDatarouterMessageClientImplIClientConnection
+IClientConnection )- IDatarouterMessageClientImplIClientConnection
+
+Datarouter -( IDatarouterSharedMemoryReader
+SharedMemoryReader )- IDatarouterSharedMemoryReader
+
+SharedMemoryReader -( ISharedMemoryReaderAlternatingReadOnlyReader
+AlternatingReadOnlyReader )- ISharedMemoryReaderAlternatingReadOnlyReader
+
+SharedMemoryReader -( ISharedMemoryReaderLinearReader
+LinearReader )- ISharedMemoryReaderLinearReader
+
+SharedMemoryReader -( ISharedMemoryReaderTypeRegistrationCallback
+TypeRegistrationCallback )- ISharedMemoryReaderTypeRegistrationCallback
+
+SharedMemoryReader -( ISharedMemoryReaderNewRecordCallback
+NewRecordCallback )- ISharedMemoryReaderNewRecordCallback
+
+SharedMemoryWriter -( ISharedMemoryWriterWaitFreeAlternatingWriter
+WaitFreeAlternatingWriter )- ISharedMemoryWriterWaitFreeAlternatingWriter
+
+SharedMemoryWriter -( ISharedMemoryWriterSharedData
+SharedData )- ISharedMemoryWriterSharedData
+
+FileOutputBackend -( IFileOutputBackendSlotDrainer
+SlotDrainer )- IFileOutputBackendSlotDrainer
+
+SlotDrainer -( ISlotDrainerCircularBuffer
+CircularBuffer )- ISlotDrainerCircularBuffer
+
+SlotDrainer -( ISlotDrainerNonBlockingWriter
+NonBlockingWriter )- ISlotDrainerNonBlockingWriter
+
+SlotDrainer -( ISlotDrainerIMessageBuilder
+IMessageBuilder )- ISlotDrainerIMessageBuilder
+
+SlotDrainer -( ISlotDrainerCircularAllocator
+CircularAllocator )- ISlotDrainerCircularAllocator
+
+@enduml
