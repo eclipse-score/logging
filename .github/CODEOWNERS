@@ -1,13 +1,13 @@
 # default owners
-* @antonkri @pawelrutkaq @arsibo @rmaddikery
+* @antonkri @pawelrutkaq @arsibo @rmaddikery @hoppe-and-dreams
 
 # datarouter owners
-/score/datarouter @antonkri @4og @rmaddikery
+/score/datarouter @antonkri @4og @rmaddikery @hoppe-and-dreams
 
 # mw/log owners
-/score/mw/common_features.bzl @antonkri @4og @rmaddikery
+/score/mw/common_features.bzl @antonkri @4og @rmaddikery @hoppe-and-dreams
 
-/score/mw/log @antonkri @4og @rmaddikery
+/score/mw/log @antonkri @4og @rmaddikery @hoppe-and-dreams
 
 # mw/log rust mw_logger owners (more specific rule overrides general rule above)
 /score/mw/log/rust @pawelrutkaq @arkjedrz
