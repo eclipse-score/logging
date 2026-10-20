@@ -22,7 +22,6 @@ namespace logging
 {
 namespace config
 {
-static const std::string kSocketAddress{"datarouter_socket"};
 static constexpr const score::cpp::string_view kDltConfigClientName{"_dlt_config"};
 }  // namespace config
 }  // namespace logging
