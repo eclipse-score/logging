@@ -1,1 +1,0 @@
-../../../../score/mw/log/design/backend/syslog_backend.md
