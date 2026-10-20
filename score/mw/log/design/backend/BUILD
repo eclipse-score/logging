@@ -37,7 +37,6 @@ architectural_design(
         "file_output_backend.md",
         "mw_log_file_backend.puml",
         "mw_log_recorders.puml",
-        "syslog_backend.md",
     ],
     # score_tooling 2.x parses every .puml included by this target.
     visibility = ["//visibility:public"],
