@@ -16,7 +16,7 @@
 ' Interface
 interface "mw::log::Recorder" as Recorder {
   + StartRecord(ctx:std::string_view, log_level:LogLevel) : score::cpp::optional<SlotHandle>
-  + StopRecord(slot:SlotHandle&): void
+  + StopRecord(slot: const SlotHandle&): void
   + Log(slot: SlotHandle, data: T): void
   + IsLogEnabled(const LogLevel&, const std::string_view): bool
 }
@@ -60,8 +60,8 @@ class "mw::log::detail::CompositeRecorder" as CompositeRecorder {
   __
   + CompositeRecorder(std::vector<std::unique_ptr<Recorder>> recorders)
   + StartRecord(const std::string_view, const LogLevel): score::cpp::optional<SlotHandle>
-  + StopRecord(slot:SlotHandle&): void
-  + GetRecorders(): std::vector<std::unique_ptr<Recorder>>&
+  + StopRecord(const SlotHandle&): void
+  + GetRecorders(): const std::vector<std::unique_ptr<Recorder>>&
   + IsLogEnabled(const LogLevel&, const std::string_view): bool
   + Log(slot: SlotHandle, data: T): void
 }
@@ -85,9 +85,9 @@ class "mw::log::detail::SlogBackend" as SlogBackend {
   - buffer_: CircularAllocator<mw::log::detail::LogRecord>
   - slog_buffer_: slog2_buffer_t
   - slog_buffer_config_: slog2_buffer_set_config_t
-  - slog2_instance_: std::unique_ptr<score::os::qnx::Slog2>
+  - slog2_instance_: score::cpp::pmr::unique_ptr<score::os::qnx::Slog2>
   __
-  + SlogBackend(const std::size_t,\n  const LogRecord&,\n  const std::string_view,\n  std::unique_ptr<score::os::qnx::Slog2>)
+  + SlogBackend(const std::size_t,\n  const LogRecord&,\n  const std::string_view,\n  score::cpp::pmr::unique_ptr<score::os::qnx::Slog2>)
   + ReserveSlot(): score::cpp::optional<SlotHandle>
   + FlushSlot(const SlotHandle&): void
   + GetLogRecord(const SlotHandle&): LogRecord&
@@ -171,7 +171,6 @@ TextRecorder *-- DltArgumentCounter
 DataRouterRecorder *-- Backend
 
 ' Dependencies
-FileRecorder ..> TextFormat : Log
 FileRecorder ..> DLTFormat : uses
 TextRecorder ..> TextFormat : Log
 DataRouterRecorder ..> DLTFormat : uses
@@ -184,7 +183,7 @@ SyslogBackend *-- CircularAllocator
 SyslogBackend --> LogRecord : uses
 
 ' External dependencies
-FileRecorder ..> fcntl : open\nSetNonBlocking / fctrl call
-FileRecorder ..> Unistd : close
+FileOutputBackend ..> fcntl : set non-blocking and\nclose-on-exec flags
+FileOutputBackend ..> Unistd : write (via SlotDrainer)
 
 @enduml

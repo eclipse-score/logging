@@ -14,12 +14,18 @@
 @startuml mw_log_file_backend
 
 ' Classes
-class "mw::log::Recorder" as Recorder {
-  + StartRecord(ctx:std::string_view, ll:LogLevel): score::cpp::optional<SlotHandle>
-  + StopRecord(slot:SlotHandle&)
-  + Log(data: T): void
-  __
-  - backend:unique_ptr<mw::log::Backend>
+interface "mw::log::Recorder" as Recorder {
+  + StartRecord(context_id: std::string_view, log_level: LogLevel): score::cpp::optional<SlotHandle>
+  + StopRecord(slot: const SlotHandle&): void
+  + Log(slot: const SlotHandle&, data: T): void
+}
+
+class "mw::log::detail::FileRecorder" as FileRecorder {
+  - backend_: std::unique_ptr<mw::log::detail::Backend>
+}
+
+class "mw::log::detail::FileRecorderFactory" as FileRecorderFactory {
+  + CreateFileLoggingBackend(const Configuration&, memory_resource*): std::unique_ptr<Backend>
 }
 
 interface "mw::log::detail::Backend" as Backend {
@@ -29,17 +35,17 @@ interface "mw::log::detail::Backend" as Backend {
 }
 
 class "mw::log::detail::FileOutputBackend" as FileOutputBackend {
-  - buffer_allocator_: std::unique_ptr<CircularAllocator<LogRecord>>
+  - buffer_allocator_: std::shared_ptr<CircularAllocator<LogRecord>>
   - slot_drainer_:SlotDrainer
   __
-  + FileOutputBackend(std::unique_ptr<IMessageBuilder>,\n  const std::int32_t,\n  std::unique_ptr<CircularAllocator<LogRecord>>,\n  std::unique_ptr<score::os::Fcntl>)
+  + FileOutputBackend(std::unique_ptr<IMessageBuilder>,\n  const std::int32_t,\n  std::unique_ptr<CircularAllocator<LogRecord>>,\n  score::cpp::pmr::unique_ptr<score::os::Fcntl>,\n  score::cpp::pmr::unique_ptr<score::os::Unistd>)
   + ReserveSlot():score::cpp::optional<SlotHandle>
   + FlushSlot(const SlotHandle&):void
   + GetLogRecord(const SlotHandle&): LogRecord&
 }
 
 class "mw::log::detail::SlotDrainer" as SlotDrainer {
-  - allocator_: std::unique_ptr<CircularAllocator<LogRecord>>&
+  - allocator_: std::shared_ptr<CircularAllocator<LogRecord>>
   - message_builder_:std::unique_ptr<IMessageBuilder>
   - context_mutex_:std::mutex
   - circular_buffer_:score::cpp::circular_buffer<SlotHandle, kMaxCircularBufferSize>
@@ -47,7 +53,7 @@ class "mw::log::detail::SlotDrainer" as SlotDrainer {
   - non_blocking_writer_: NonBlockingWriter
   - limit_slots_in_one_cycle_: const std::size_t
   __
-  + SlotDrainer(std::unique_ptr<IMessageBuilder>,\n  std::unique_ptr<CircularAllocator<LogRecord>>&,\n  const std::int32_t,\n  const std::size_t,\n  std::unique_ptr<score::os::Unistd>)
+  + SlotDrainer(std::unique_ptr<IMessageBuilder>,\n  std::shared_ptr<CircularAllocator<LogRecord>>,\n  const std::int32_t,\n  score::cpp::pmr::unique_ptr<score::os::Unistd>,\n  const std::size_t = 32)
   + PushBack(const SlotHandle&):void
   + Flush():void
   __
@@ -58,17 +64,17 @@ class "mw::log::detail::SlotDrainer" as SlotDrainer {
 }
 
 class "mw::log::detail::NonBlockingWriter" as NonBlockingWriter {
-  - unistd_: std::unique_ptr<score::os::Unistd>
+  - unistd_: score::cpp::pmr::unique_ptr<score::os::Unistd>
   - file_handle_: std::int32_t
   - number_of_flushed_bytes_: uint64_t
   - buffer_: score::cpp::span<const std::uint8_t>
   - buffer_flushed_: Result
   - max_chunk_size_: std::size_t
   __
-  + NonBlockingWriter(const std::int32_t, std::size_t, std::unique_ptr<score::os::Unistd>)
+  + NonBlockingWriter(const std::int32_t, std::size_t, score::cpp::pmr::unique_ptr<score::os::Unistd>)
   + FlushIntoFile(): score::cpp::expected<Result, score::mw::log::detail::Error>
   + SetSpan(const score::cpp::span<const std::uint8_t>&): void
-  + GetMaxChunkSize(): std::size_t
+  {static} + GetMaxChunkSize(): std::size_t
   __
   - InternalFlush(const uint64_t): score::cpp::expected<ssize_t, score::os::Error>
 }
@@ -85,7 +91,7 @@ class "mw::log::detail::DltMessageBuilder" as DltMessageBuilder {
 }
 
 class "mw::log::detail::TextMessageBuilder" as TextMessageBuilder {
-  + TextMessageBuilder(app_id, ecu_id)
+  + TextMessageBuilder(ecu_id)
   + GetNextSpan() : score::cpp::optional<score::cpp::span<const std::uint8_t>>
   + SetNextMessage(log_record:LogRecord&): void
 }
@@ -114,10 +120,10 @@ class "mw::log::detail::LogRecord" as LogRecord #Orange {
   - verbosePayload_:VerbosePayload
   __
   LogRecord(const std::size_t)
-  getLogEntry(): LogEntry&
-  getLogEntry(): const LogEntry&
-  getVerbosePayload(): VerbosePayload&
-  getVerbosePayload(): const VerbosePayload&
+  GetLogEntry(): LogEntry&
+  GetLogEntry(): const LogEntry&
+  GetVerbosePayload(): VerbosePayload&
+  GetVerbosePayload(): const VerbosePayload&
 }
 
 class "VerbosePayload" as VerbosePayload {
@@ -126,7 +132,7 @@ class "VerbosePayload" as VerbosePayload {
 class "LoggingIdentifier" as LoggingIdentifier {
 }
 
-class "mw::log::detail::BackendLogMock" as BackendLogMock #Pink {
+class "mw::log::detail::BackendMock" as BackendMock #Pink {
   + ReserveSlot(): score::cpp::optional<SlotHandle>
   + FlushSlot(const SlotHandle&)
   + GetLogRecord(const SlotHandle&): LogRecord&
@@ -135,16 +141,18 @@ class "mw::log::detail::BackendLogMock" as BackendLogMock #Pink {
 class "OSAL::Unistd" as OsalUnistd1 {
 }
 
-class "OSAL::Unistd" as OsalUnistd2 {
-}
-
 class "OSAL::fcntl" as Fcntl {
 }
 
 ' Relationships
-Recorder *-- Backend
+Recorder <|.. FileRecorder
+FileRecorder *-- Backend
 Backend <|.. FileOutputBackend
-Backend <|.. BackendLogMock
+Backend <|.. BackendMock
+
+FileRecorderFactory ..> FileRecorder : creates
+FileRecorderFactory ..> FileOutputBackend : creates
+FileRecorderFactory ..> DltMessageBuilder : creates
 
 FileOutputBackend *-- SlotDrainer
 FileOutputBackend *-- CircularAllocator
@@ -173,8 +181,8 @@ DltMessageBuilder *-- VerbosePayload
 TextMessageBuilder *-- LoggingIdentifier
 TextMessageBuilder *-- VerbosePayload
 
-Recorder ..> Fcntl : open\nSetNonBlocking / fctrl call
-Recorder ..> OsalUnistd2 : close
+FileRecorderFactory ..> Fcntl : open
+FileOutputBackend ..> Fcntl : set non-blocking and\nclose-on-exec flags
 
 note right of NonBlockingWriter : Inject OSAL mock by constructor with default value
 note right of FileOutputBackend : Inject NonBlockingWriter, OSAL mock, configure buffer size
@@ -183,6 +191,6 @@ note top of CircularBuffer : Using score::cpp::circular_buffer, not tested
 note bottom of CircularBuffer : By design, dropped messages excluded as SlotAllocator size < CircularBuffer
 note right of LogRecord : Tested in data_router
 note bottom of FileOutputBackend : Test glue code, inject SlotDrainer with mocked OSAL
-note bottom of BackendLogMock : Mock implementation
+note bottom of BackendMock : Mock implementation
 
 @enduml
