@@ -16,13 +16,15 @@ Verification Report
 ===================
 
 
-.. document:: Logging Module Verification Report
-   :id: doc__logging_verification_report
+.. mod_ver_report:: Logging Module Verification Report
+   :id: mod_vrep__logging__report
    :post_template: module_verification_report
-   :status: draft
+   :status: valid
    :version: 1
    :safety: ASIL_B
    :security: NO
+   :verification_method: test_and_inspection
+   :belongs_to: mod__logging
    :realizes: wp__verification_module_ver_report
 
 .. toctree::
