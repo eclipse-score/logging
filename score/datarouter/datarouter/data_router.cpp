@@ -147,9 +147,6 @@ std::unique_ptr<DataRouter::SourceSession> DataRouter::NewSourceSessionImpl(
 
     std::lock_guard<std::mutex> lock(subscriber_mutex_);
 
-    // Insert is protected by subscriber_mutex_ held by caller (new_source_session_impl).
-    // This relies on the calling convention that SourceSession is only constructed
-    // from new_source_session_impl() which acquires the lock before construction.
     std::ignore = sources_.insert(source_session.get());
 
     // persistent subscribers
