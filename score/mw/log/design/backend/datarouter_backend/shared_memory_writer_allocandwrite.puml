@@ -15,22 +15,26 @@
 
 title SharedMemoryWriter::AllocAndWrite
 
+participant "TRACE" as TRACE
 participant "SharedMemoryWriter" as SharedMemoryWriter
+participant "WaitFreeAlternatingWriter" as WaitFreeAlternatingWriter
 participant "SharedData" as SharedData
-participant "DropCounters" as DropCounters
 
-alt payload size exceeds limit
-    SharedMemoryWriter -> DropCounters : Increment invalid-size drops
+TRACE -> SharedMemoryWriter : AllocAndWrite(timestamp, type_identifier,\npayload_size, write_callback)
+
+alt payload size exceeds GetMaxPayloadSize()
+    SharedMemoryWriter -> SharedData : number_of_drops_invalid_size++
 else payload size accepted
-    SharedMemoryWriter -> SharedData : Acquire data
-    alt data acquired
-        SharedMemoryWriter -> SharedData : Write header
-        SharedMemoryWriter -> SharedData : Access memory
-        SharedMemoryWriter -> SharedData : Write payload
-        SharedMemoryWriter -> SharedData : Release acquired data
-    else buffer full
-        SharedMemoryWriter -> DropCounters : Increment buffer-full drops
+    SharedMemoryWriter -> WaitFreeAlternatingWriter : Acquire(header size + payload size)
+    alt no space acquired
+        SharedMemoryWriter -> SharedData : number_of_drops_buffer_full++,\nsize_of_drops_buffer_full += size
+    else space acquired
+        SharedMemoryWriter -> SharedMemoryWriter : write BufferEntryHeader
+        SharedMemoryWriter -> TRACE : write_callback(payload span)
+        SharedMemoryWriter -> WaitFreeAlternatingWriter : Release(acquired data)
     end
 end
+
+note right of SharedMemoryWriter : Thread-safe, lock-free and wait-free.
 
 @enduml
