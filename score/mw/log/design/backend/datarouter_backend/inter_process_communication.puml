@@ -17,32 +17,26 @@ left to right direction
 skinparam linetype ortho
 
 class "Logging Client" as LoggingClient <<Process>>
-class "mw::log::DatarouterBackend" as Backend
-class "mw::com::Receiver" as ClientReceiver
-class "mw::com::Sender" as ClientSender
+class "mw::log::detail::DataRouterBackend" as Backend
+class "score::message_passing::IClientConnection" as ClientConnection
 class "Datarouter" as Datarouter <<Process>>
-class "mw::com::Sender" as DrSender
-class "mw::com::Receiver" as DrReceiver
+class "score::message_passing::IServer" as DrServer
 class "Shared Memory" as SharedMemory <<Shared Memory>>
 
 LoggingClient --> Backend
-Backend --> ClientReceiver
-Backend --> ClientSender
-Datarouter --> DrSender
-Datarouter --> DrReceiver
+Backend --> ClientConnection
+Datarouter --> DrServer
 
-LoggingClient --> SharedMemory : Creates and writes to\n/tmp/logging.<appid>.<uid>.shmem\nwith permissions 0644
+LoggingClient --> SharedMemory : Creates and writes to\n/tmp/logging.<appid>.<uid>.shmem\n(read-only for group and others)
 Datarouter --> SharedMemory : Read-only access
 
-ClientReceiver --> DrSender
-ClientSender --> DrReceiver
+ClientConnection --> DrServer : Messages from the client\n(kConnect, kAcquireResponse)
+DrServer --> ClientConnection : Notifications to the client\n(kAcquireRequest)
 
-note top of ClientReceiver : Instantiates side channel to receive messages from /mw_com/message_passing/logging.<app>.<uid>
+note top of ClientConnection : One connection per client. Sends messages and receives notifications through a notify callback.
 
-note top of DrSender : Creates one sender per client for requests to the client.
+note bottom of DrServer : Shared server for all clients at /logging.datarouter_recv (QNX: /mw_com/message_passing/logging.datarouter_recv).
 
-note bottom of ClientSender : Sends replies from the client to Datarouter.
-
-note bottom of DrReceiver : Shared receiver at /mw_com/message_passing/logging.datarouter_recv.
+note bottom of ClientConnection : Constraints: a message has at most 17 bytes, a notification 1 byte.\nInput from the Datarouter is untrusted, unexpected notifications are ignored.
 
 @enduml

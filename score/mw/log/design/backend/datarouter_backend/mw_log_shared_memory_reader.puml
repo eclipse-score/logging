@@ -15,19 +15,19 @@
 
 package "mw::log" {
   interface "ReaderFactory" as ReaderFactory {
-    + Create(const std::int32_t, const pid_t): score::cpp::optional<SharedMemoryReader>
-    + Default(): std::unique_ptr<ReaderFactory>
+    + Create(const std::int32_t, const pid_t): std::unique_ptr<ISharedMemoryReader>
+    + Default(score::cpp::pmr::memory_resource*): std::unique_ptr<ReaderFactory>
   }
 
   class "ReaderFactoryImpl" as ReaderFactoryImpl {
     - mman_: score::cpp::pmr::unique_ptr<score::os::Mman>
     - stat_: score::cpp::pmr::unique_ptr<score::os::Stat>
     __
-    + Create(const std::int32_t, const pid_t): score::cpp::optional<SharedMemoryReader>
+    + Create(const std::int32_t, const pid_t): std::unique_ptr<ISharedMemoryReader>
   }
 
   class "SharedMemoryReader" as SharedMemoryReader {
-    - shared_data_: SharedData&
+    - shared_data_: const SharedData&
     - unmap_callback_: UnmapCallback
     - linear_reader_: std::optional<LinearReader>
     - acquired_data_: std::optional<ReadAcquireResult>
@@ -39,16 +39,16 @@ package "mw::log" {
     - DetachWriter(): void
     - IsWriterDetached(): bool
     __
-    + SharedMemoryReader(const SharedData&, const score::cpp::span<Byte>,\n  const score::cpp::span<Byte>, UnmapCallback)
+    + SharedMemoryReader(const SharedData&, AlternatingReadOnlyReader, UnmapCallback)
     + Read(const TypeRegistrationCallback&, const NewRecordCallback&): std::optional<Length>
     + PeekNumberOfBytesAcquiredInBuffer(const std::uint32_t): std::optional<Length>
     + ReadDetached(const TypeRegistrationCallback&, const NewRecordCallback&): std::optional<Length>
     + GetNumberOfDropsWithBufferFull(): Length
     + GetSizeOfDropsWithBufferFull(): Length
     + GetNumberOfDropsWithInvalidSize(): Length
+    + GetNumberOfDropsWithTypeRegistrationFailed(): Length
     + GetRingBufferSizeBytes(): Length
-    + GetNumberOfAcquiredBytes(): Length
-    + IsBlockReleasedByWriters(): bool
+    + IsBlockReleasedByWriters(const std::uint32_t): bool
     + NotifyAcquisitionSetReader(const ReadAcquireResult&): std::optional<Length>
   }
 
@@ -60,7 +60,7 @@ package "mw::log" {
     - read_index_: Length
     __
     + LinearReader(const score::cpp::span<Byte>&)
-    + Read(): score::cpp::optional<score::cpp::span<Byte>>
+    + Read(): std::optional<score::cpp::span<Byte>>
   }
 
   class "score::os::Mman" as Mman {

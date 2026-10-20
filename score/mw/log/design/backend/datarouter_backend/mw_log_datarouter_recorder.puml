@@ -53,6 +53,9 @@ interface "IStatisticsReporter" as IStatisticsReporter {
 class "Configuration" as Configuration {
 }
 
+class "Backend" as Backend {
+}
+
 class "DataRouterBackend" as DataRouterBackend {
 }
 
@@ -66,7 +69,8 @@ class "mw::log::Runtime" as Runtime <<Singleton>> {
 Runtime --> DataRouterRecorder : is owned by
 DataRouterRecorder *-- StatisticsReporter
 DataRouterRecorder *-- Configuration
-DataRouterRecorder *-- DataRouterBackend
+DataRouterRecorder *-- Backend
+Backend <|.. DataRouterBackend
 StatisticsReporter ..|> IStatisticsReporter
 StatisticsReporter --> Recorder : uses
 
