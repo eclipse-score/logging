@@ -345,6 +345,7 @@ filegroup(
         "etc/persistent-logging.json",
     ],
     visibility = [
+        "//platform/aas/intc/lifecycle_state_machine/test:__subpackages__",
         "//platform/aas/tools/itf:__subpackages__",
         "//platform/aas/tools/sctf:__subpackages__",
         "//pqr/abc/abc-lmn/config/project/cpu/pas/datarouter:__pkg__",
