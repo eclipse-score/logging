@@ -43,6 +43,12 @@ bazel_dep(name = "platforms", version = "1.1.0")
 # S-CORE process rules
 bazel_dep(name = "score_bazel_platforms", version = "1.1.0")
 bazel_dep(name = "score_docs_as_code", version = "8.4.0")
+git_override(
+    module_name = "score_docs_as_code",
+    commit = "1f9452a270d238f7504c7a053b3886536234a650",
+    remote = "https://github.com/eclipse-score/docs-as-code.git",
+)
+
 bazel_dep(name = "score_tooling", version = "2.2.0")
 
 # LLVM source-based coverage pipeline (C++ + Rust): the qualified S-CORE
@@ -50,7 +56,7 @@ bazel_dep(name = "score_tooling", version = "2.2.0")
 bazel_dep(name = "score_coverage", version = "0.3.1", dev_dependency = True)
 
 bazel_dep(name = "score_rust_policies", version = "0.0.5")
-bazel_dep(name = "score_process_description", version = "2.2.0")
+bazel_dep(name = "score_process_description", version = "2.2.1")
 bazel_dep(name = "score_platform", version = "0.7.2")
 
 bazel_dep(name = "score_itf", version = "0.6.0", dev_dependency = True)
