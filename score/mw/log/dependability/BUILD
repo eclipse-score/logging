@@ -49,6 +49,7 @@ dependable_element(
         "//score/mw/log/requirements/feature_requirements",
         "//score/mw/log/requirements/assumed_system_requirements",
     ],
+    docs_prefix = "safety_reports/",
     target_compatible_with = ["@platforms//os:linux"],
     tests = [
         "//score/test/component/mw_log:test_mw_log",

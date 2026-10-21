@@ -10,6 +10,7 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 # *******************************************************************************
+load("@rules_python//sphinxdocs:sphinx_docs_library.bzl", "sphinx_docs_library")
 load("@score_docs_as_code//:docs.bzl", "docs")
 load("@score_tooling//:defs.bzl", "copyright_checker", "setup_starpls")
 load("@score_tooling//third_party/format:macros.bzl", "use_format_targets")
@@ -45,6 +46,21 @@ exports_files([
     "MODULE.bazel",
     ".clang-tidy",
 ])
+
+# The docs/ tree as a library, so //sphinx_site:sphinx_doc can render it together
+# with the generated dependable element documentation.
+sphinx_docs_library(
+    name = "logging_docs",
+    testonly = True,
+    srcs = glob(
+        ["docs/**"],
+        exclude = [
+            "docs/conf.py",
+            "docs/ubproject.toml",
+        ],
+    ),
+    visibility = ["//sphinx_site:__pkg__"],
+)
 
 # Creates all documentation targets:
 # - `:docs` for building documentation at build-time
