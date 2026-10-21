@@ -1,0 +1,129 @@
+' *******************************************************************************
+' Copyright (c) 2026 Contributors to the Eclipse Foundation
+'
+' See the NOTICE file(s) distributed with this work for additional
+' information regarding copyright ownership.
+'
+' This program and the accompanying materials are made available under the
+' terms of the Apache License Version 2.0 which is available at
+' https://www.apache.org/licenses/LICENSE-2.0
+'
+' SPDX-License-Identifier: Apache-2.0
+' *******************************************************************************
+
+' Unit diagram required by the architectural_design validation: every participant
+' of a sequence diagram is a unit here, and every connected pair of units calls
+' each other in a sequence diagram. The interface names (caller and callee) follow
+' the convention of the validator and are not code interfaces.
+
+@startuml component_diagram
+
+skinparam componentStyle rectangle
+left to right direction
+
+title Units and unit bindings of the sequence diagrams of the datarouter
+
+package "Client session and datarouter" as pkg_session {
+    component "User Threads (Client A)" as UTA <<unit>>
+    component "SharedMemoryWriter (Client A)" as SHMA <<unit>>
+    component "QnxDispatchEngine (Client A)" as AE <<unit>>
+    component "QnxDispatchEngine (Client X)" as XE <<unit>>
+    component "Server Engine" as SE <<unit>>
+    component "MessagePassingServer worker thread" as MW <<unit>>
+    component "Watchdog Timer" as WD <<unit>>
+    component "DLT output" as DLT <<unit>>
+    component "Client (connecting)" as MC <<unit>>
+    component "OnConnectRequest" as OC <<unit>>
+    component "disconnect_callback" as DC <<unit>>
+}
+
+package "Configuration session" as pkg_config {
+    component "DataRouterConfigurator App (outside this repository)" as DRConf <<unit>>
+    component "DiagnosticManager" as DiagM <<unit>>
+    component "DataRouterConfiguratorService" as DRConfService <<unit>>
+    component "UnixDomainClient" as UDC <<unit>>
+    component "UnixDomainServer" as UDS <<unit>>
+    component "UnixDomainSocket" as Socket <<unit>>
+    component "ConfigSession" as ConfigSession <<unit>>
+    component "DltLogServer" as DLTS <<unit>>
+    component "PersistentDictionary" as PD <<unit>>
+}
+
+interface "IUTAAE" as IUTAAE
+interface "IAESE" as IAESE
+interface "IMWSE" as IMWSE
+interface "IAESHMA" as IAESHMA
+interface "IMWSHMA" as IMWSHMA
+interface "IMWDLT" as IMWDLT
+interface "IMWWD" as IMWWD
+interface "IMCSE" as IMCSE
+interface "ISEOC" as ISEOC
+interface "ISEDC" as ISEDC
+interface "IDiagMDRConfService" as IDiagMDRConfService
+interface "IDRConfServiceUDC" as IDRConfServiceUDC
+interface "IUDCUDS" as IUDCUDS
+interface "IUDSSocket" as IUDSSocket
+interface "IUDSConfigSession" as IUDSConfigSession
+interface "IConfigSessionDLTS" as IConfigSessionDLTS
+interface "IDLTSPD" as IDLTSPD
+interface "IConfigSessionSocket" as IConfigSessionSocket
+interface "IDRConfServiceDRConf" as IDRConfServiceDRConf
+
+UTA -( IUTAAE
+AE )- IUTAAE
+
+AE -( IAESE
+SE )- IAESE
+
+MW -( IMWSE
+SE )- IMWSE
+
+AE -( IAESHMA
+SHMA )- IAESHMA
+
+MW -( IMWSHMA
+SHMA )- IMWSHMA
+
+MW -( IMWDLT
+DLT )- IMWDLT
+
+MW -( IMWWD
+WD )- IMWWD
+
+MC -( IMCSE
+SE )- IMCSE
+
+SE -( ISEOC
+OC )- ISEOC
+
+SE -( ISEDC
+DC )- ISEDC
+
+DiagM -( IDiagMDRConfService
+DRConfService )- IDiagMDRConfService
+
+DRConfService -( IDRConfServiceUDC
+UDC )- IDRConfServiceUDC
+
+UDC -( IUDCUDS
+UDS )- IUDCUDS
+
+UDS -( IUDSSocket
+Socket )- IUDSSocket
+
+UDS -( IUDSConfigSession
+ConfigSession )- IUDSConfigSession
+
+ConfigSession -( IConfigSessionDLTS
+DLTS )- IConfigSessionDLTS
+
+DLTS -( IDLTSPD
+PD )- IDLTSPD
+
+ConfigSession -( IConfigSessionSocket
+Socket )- IConfigSessionSocket
+
+DRConfService -( IDRConfServiceDRConf
+DRConf )- IDRConfServiceDRConf
+
+@enduml

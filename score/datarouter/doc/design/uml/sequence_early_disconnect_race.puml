@@ -19,7 +19,7 @@ skinparam sequenceMessageAlign center
 skinparam responseMessageBelowArrow true
 
 box "Client Process" #LightBlue
-    participant "Client" as C
+    participant "Client" as MC
 end box
 
 box "Datarouter Process" #LightGreen
@@ -30,7 +30,7 @@ end box
 
 == Client sends kConnect, then crashes ==
 
-C -> SE : kConnect(appid, uid, pid)
+MC -> SE : kConnect(appid, uid, pid)
 SE -> OC : MessageCallback → OnConnectRequest()
 
 note over OC
@@ -41,7 +41,7 @@ end note
 
 OC -> OC : Release mutex_\nCall factory_(pid, conn, ...)
 
-C -[#red]x C : **Client crashes / exits**
+MC -[#red]> MC : **Client crashes / exits**
 
 SE -> DC : disconnect_callback(pid)
 
