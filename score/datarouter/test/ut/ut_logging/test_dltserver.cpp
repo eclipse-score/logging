@@ -172,12 +172,22 @@ TEST_F(DltServerCreatedWithoutConfigFixture, IsOutputEnabledReflectsDltEnabled)
 }
 TEST_F(DltServerCreatedWithoutConfigFixture, QuotaEnforcementEnabledExpectFalse)
 {
+    RecordProperty("PartiallyVerifies", "comp_req__data_router__dlt_quota_bw_reduction");
+    RecordProperty("Description", "Check that the quota enforcement of the DLT server is off if it is not configured.");
+    RecordProperty("TestType", "requirements-based");
+    RecordProperty("DerivationTechnique", "requirements-analysis");
+
     DltLogServer dlt_server(s_config, read_callback.AsStdFunction(), write_callback.AsStdFunction(), true);
     EXPECT_FALSE(dlt_server.GetQuotaEnforcementEnabled());
 }
 
 TEST_F(DltServerCreatedWithoutConfigFixture, QuotaEnforcementEnabledExpectTrue)
 {
+    RecordProperty("PartiallyVerifies", "comp_req__data_router__dlt_quota_bw_reduction");
+    RecordProperty("Description", "Check that the DLT server takes over the configured quota enforcement.");
+    RecordProperty("TestType", "requirements-based");
+    RecordProperty("DerivationTechnique", "requirements-analysis");
+
     s_config.quota_enforcement_enabled = true;
     DltLogServer dlt_server(s_config, read_callback.AsStdFunction(), write_callback.AsStdFunction(), true);
     EXPECT_TRUE(dlt_server.GetQuotaEnforcementEnabled());

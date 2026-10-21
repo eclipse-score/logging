@@ -164,6 +164,11 @@ TEST_F(UdpStreamOutputFixture, SendMethodShallFailIfSendmmsgFailed)
 
 TEST_F(UdpStreamOutputFixture, SendMethodShallSucceedIfSendmmsgSucceeded)
 {
+    RecordProperty("PartiallyVerifies", "comp_req__data_router__dlt_server");
+    RecordProperty("Description", "Check that DLT messages are sent over the UDP socket output.");
+    RecordProperty("TestType", "requirements-based");
+    RecordProperty("DerivationTechnique", "requirements-analysis");
+
     // When mocking socket's sendmmsg to return error.
     EXPECT_CALL(*sock_mock_, sendmmsg(_, _, _, _))
         .Times(Exactly(1))

@@ -49,6 +49,13 @@ std::string PrepareLogChannelsPath(const std::string& file_name)
 
 TEST(SocketserverConfigTest, ReadCorrectLogChannelsNoErrorsExpected)
 {
+    RecordProperty("PartiallyVerifies",
+                   "comp_req__data_router__dlt_multiple_channels, comp_req__data_router__dlt_message_filtering");
+    RecordProperty("Description",
+                   "Check that channels, assignments, thresholds and the filtering state are read from the file.");
+    RecordProperty("TestType", "requirements-based");
+    RecordProperty("DerivationTechnique", "requirements-analysis");
+
     const auto result = ReadStaticDlt(PrepareLogChannelsPath("log-channels.json").c_str());
     EXPECT_TRUE(result.has_value());
     EXPECT_THAT(result.value().channels, SizeIs(3));
@@ -83,6 +90,11 @@ TEST(SocketserverConfigTest, JsonEmptyChannelsErrorExpected)
 
 TEST(SocketserverConfigTest, JsonFilteringEnabledExpectConfigFilterTrue)
 {
+    RecordProperty("PartiallyVerifies", "comp_req__data_router__dlt_message_filtering");
+    RecordProperty("Description", "Check that the filtering state is read from the channel configuration file.");
+    RecordProperty("TestType", "requirements-based");
+    RecordProperty("DerivationTechnique", "requirements-analysis");
+
     const auto result = ReadStaticDlt(PrepareLogChannelsPath("log-channels-filtering-enabled.json").c_str());
     EXPECT_TRUE(result.has_value());
     EXPECT_TRUE(result.value().filtering_enabled);
@@ -90,6 +102,12 @@ TEST(SocketserverConfigTest, JsonFilteringEnabledExpectConfigFilterTrue)
 
 TEST(SocketserverConfigTest, JsonQuotasEnabledExpectConfigFilterTrue)
 {
+    RecordProperty("PartiallyVerifies", "comp_req__data_router__dlt_bw_quota_config");
+    RecordProperty("Description",
+                   "Check that the overall and per-application bandwidth quotas are read from the file.");
+    RecordProperty("TestType", "requirements-based");
+    RecordProperty("DerivationTechnique", "requirements-analysis");
+
     const auto result = ReadStaticDlt(PrepareLogChannelsPath("log-channels-quotas.json").c_str());
     ASSERT_TRUE(result.has_value());
     EXPECT_EQ(result.value().throughput.overall_mbps, 100);
@@ -99,6 +117,12 @@ TEST(SocketserverConfigTest, JsonQuotasEnabledExpectConfigFilterTrue)
 
 TEST(SocketserverConfigTest, JsonQuotasEnabledActivated)
 {
+    RecordProperty("PartiallyVerifies", "comp_req__data_router__dlt_quota_bw_reduction");
+    RecordProperty("Description",
+                   "Check that the quota enforcement can be activated by the quota configuration attribute.");
+    RecordProperty("TestType", "requirements-based");
+    RecordProperty("DerivationTechnique", "requirements-analysis");
+
     const auto result = ReadStaticDlt(PrepareLogChannelsPath("log-channels-quotas-activated.json").c_str());
     ASSERT_TRUE(result.has_value());
     EXPECT_TRUE(result.value().quota_enforcement_enabled);
@@ -106,6 +130,12 @@ TEST(SocketserverConfigTest, JsonQuotasEnabledActivated)
 
 TEST(SocketserverConfigTest, JsonQuotasEnabledDeactivated)
 {
+    RecordProperty("PartiallyVerifies", "comp_req__data_router__dlt_quota_bw_reduction");
+    RecordProperty("Description",
+                   "Check that the quota enforcement can be deactivated by the quota configuration attribute.");
+    RecordProperty("TestType", "requirements-based");
+    RecordProperty("DerivationTechnique", "requirements-analysis");
+
     const auto result = ReadStaticDlt(PrepareLogChannelsPath("log-channels-quotas-deactivated.json").c_str());
     ASSERT_TRUE(result.has_value());
     EXPECT_FALSE(result.value().quota_enforcement_enabled);
