@@ -26,9 +26,7 @@ class StubFileTransferStreamHandler {
 }
 
 interface "StubFileTransferStreamHandler::IOutput" as StubIOutput {
-  + sendFTVerbose(score::cpp::span<const std::uint8_t>,
-    mw::log::LogLevel, dltid_t, dltid_t,
-    uint8_t, uint32_t): void
+  + sendFTVerbose(score::cpp::span<const std::uint8_t>, mw::log::LogLevel, dltid_t, dltid_t, uint8_t, uint32_t): void
 }
 
 class FileTransferStreamHandler {
@@ -57,29 +55,22 @@ class FileTransferStreamHandler {
 }
 
 interface "FileTransferStreamHandler::IOutput" as FileIOutput {
-  + sendFTVerbose(score::cpp::span<const std::uint8_t>,
-    mw::log::LogLevel, dltid_t, dltid_t,
-    uint8_t, uint32_t): void
+  + sendFTVerbose(score::cpp::span<const std::uint8_t>, mw::log::LogLevel, dltid_t, dltid_t, uint8_t, uint32_t): void
 }
 
 class "dltserver::Output (Mock)" as MockOutput {
   + ~Output()
-  + MOCK_METHOD(sendFTVerbose,
-    (score::cpp::span<const std::uint8_t>,
-     mw::log::LogLevel, dltid_t, dltid_t,
-     uint8_t, uint32_t), (override))
+  + sendFTVerbose(score::cpp::span<const std::uint8_t>, mw::log::LogLevel, dltid_t, dltid_t, uint8_t, uint32_t): void
 }
 
 class "dltserver::Output" as Output {
   + ~Output()
-  + sendFTVerbose(score::cpp::span<const std::uint8_t>,
-    mw::log::LogLevel, dltid_t, dltid_t,
-    uint8_t, uint32_t): void
+  + sendFTVerbose(score::cpp::span<const std::uint8_t>, mw::log::LogLevel, dltid_t, dltid_t, uint8_t, uint32_t): void
 }
 
 class "FileTransferHandlerFactory<DerivedFactory>" as Factory {
   + create(): std::unique_ptr<LogParser::TypeHandler>
-  # FileTransferHandlerFactory() = default
+  # FileTransferHandlerFactory()
 }
 
 class StubFileTransferHandlerFactory {
@@ -97,8 +88,7 @@ class FileTransferStreamHandlerFactory {
 }
 
 class DltLogServer {
-  + createFileTransferHandler():
-    std::unique_ptr<TypeHandler>
+  + createFileTransferHandler(): std::unique_ptr<TypeHandler>
 }
 
 class "score::logging::FileTransferEntry" as FileTransferEntry {
@@ -109,26 +99,18 @@ class "score::logging::FileTransferEntry" as FileTransferEntry {
 }
 
 interface "score::logging::IFileTransfer" as IFileTransfer {
-  + TransferFile(const std::string& file_name,
-    const bool delete_file): void
+  + TransferFile(const std::string& file_name, const bool delete_file): void
 }
 
 class "score::logging::FileTransfer" as FileTransfer {
   - appid_: std::string
   - ctxid_: std::string
   --
-  + FileTransfer(const std::string& appid,
-    const std::string& ctxid)
+  + FileTransfer(const std::string& appid, const std::string& ctxid)
   + TransferFile(const std::string&, bool): void
 }
 
-note bottom of StubFileTransferHandlerFactory
-#if defined(ENABLE_FILETRANSFER_FEATURE)
-  using HandlerType = FileTransferStreamHandlerFactory;
-#else
-  using HandlerType = StubFileTransferHandlerFactory;
-#endif
-end note
+note bottom of StubFileTransferHandlerFactory : HandlerType is FileTransferStreamHandlerFactory if ENABLE_FILETRANSFER_FEATURE is defined, otherwise StubFileTransferHandlerFactory
 
 TypeHandler <|.. StubFileTransferStreamHandler
 TypeHandler <|.. FileTransferStreamHandler

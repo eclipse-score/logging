@@ -133,6 +133,15 @@ Static Diagrams for Unit Interactions
 
 .. uml:: _assets/context-sw-units.puml
 
+The units that appear in the sequence diagrams and their bindings:
+
+.. uml:: _assets/datarouter_units.puml
+
+The diagrams are validated by the ``architectural_design`` target
+``//score/datarouter/doc/design:datarouter_architectural_design``. The interface
+names in the unit diagram follow the convention of the validator (``I<caller><callee>``)
+and are not interfaces of the code.
+
 Further static diagrams are part of :doc:`logging_architecture`.
 
 Dynamic Diagrams for Unit Interactions

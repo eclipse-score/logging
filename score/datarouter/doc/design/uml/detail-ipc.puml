@@ -28,10 +28,7 @@ node "DatarouterConf" {
 }
 
 queue "SourceBuffer: MWSR buffer" as RB1
-note top of RB1
-  Shared memory
-  allocated by Application
-end note
+note top of RB1 : Shared memory allocated by Application
 
 app -> msg_server : connect()
 config_client -> UnixDomainServer : connect()

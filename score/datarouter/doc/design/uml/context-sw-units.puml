@@ -16,7 +16,7 @@
 frame ApplicationProcess {
   node AdaptiveApplication {
     component ApplicationLogic
-    component "score::mw::log" {
+    component "score::mw::log" as mwlog {
       component log_entry
       component "logging_serializer" as serializer
       component logger {
@@ -42,7 +42,7 @@ frame ApplicationProcess {
 
     ConfigReader ..> LogConfig
 
-    ApplicationLogic --> "score::mw::log" : verbose
+    ApplicationLogic --> mwlog : verbose
     ApplicationLogic --> TRACE : non-verbose
   }
 

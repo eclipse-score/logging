@@ -16,8 +16,8 @@
 participant "DataRouterConfigurator App" as DRConf
 participant "DiagnosticManager" as DiagM
 participant "DataRouterConfiguratorService" as DRConfService
-participant "UnixDomainClient" as Client
-participant "UnixDomainServer" as Server
+participant "UnixDomainClient" as UDC
+participant "UnixDomainServer" as UDS
 participant "UnixDomainSocket" as Socket
 participant "ConfigSession" as ConfigSession
 participant "DltLogServer" as DLTS
@@ -39,16 +39,16 @@ note over DRConfService
   Initializes runtime environment for diagnostic jobs.
 end note
 
-DRConfService -> Client: send_dlt_config_command
+DRConfService -> UDC: send_dlt_config_command
 note over Client
   The server creates a ConfigSession to process
   client commands and maintains the session for communication.
 end note
 
-Client -> Server: send_dlt_config_command
-Server -> Socket: receive_dlt_config_command
-Socket -> Server: forward_dlt_config_command
-Server -> ConfigSession: process_dlt_config_command
+UDC -> UDS: send_dlt_config_command
+UDS -> Socket: receive_dlt_config_command
+Socket -> UDS: forward_dlt_config_command
+UDS -> ConfigSession: process_dlt_config_command
 
 ConfigSession -> DLTS: Process command
 note over DLTS
@@ -66,15 +66,15 @@ end note
 
 DLTS -> ConfigSession: Return diagnostic job response
 ConfigSession -> Socket: forward_diag_job_response
-Socket -> Server: forward_diag_job_response
-Server -> Client: diag_job_response
+Socket -> UDS: forward_diag_job_response
+UDS -> UDC: diag_job_response
 
-Client -> DRConfService: diag_job_response
+UDC -> DRConfService: diag_job_response
 DRConfService -> DRConf: diag_job_result
 
 deactivate DRConf
 deactivate DRConfService
-deactivate Server
+deactivate UDS
 deactivate Socket
 deactivate ConfigSession
 deactivate DLTS
