@@ -54,6 +54,6 @@ jobs:
       id-token: write
     with:
       # the bazel-target depends on your repo specific docs_targets configuration (e.g. "suffix")
-      bazel-target: "--lockfile_mode=error //:docs -- --github_user=${{ github.repository_owner }} --github_repo=${{ github.event.repository.name }}"
+      bazel-target: "--lockfile_mode=error //:docs -- --github_user=${{ github.repository_owner }} --github_repo=${{ github.event.repository.name }} && bazel run --lockfile_mode=error //:publish_dependable_element_reports"
       retention-days: 3
       tests-report-artifact: logging_cpp_coverage
