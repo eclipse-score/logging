@@ -10,6 +10,7 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 # *******************************************************************************
+load("@rules_python//python:defs.bzl", "py_binary")
 load("@score_docs_as_code//:docs.bzl", "docs")
 load("@score_tooling//:defs.bzl", "copyright_checker", "setup_starpls")
 load("@score_tooling//third_party/format:macros.bzl", "use_format_targets")
@@ -45,6 +46,14 @@ exports_files([
     "MODULE.bazel",
     ".clang-tidy",
 ])
+
+py_binary(
+    name = "publish_dependable_element_reports",
+    testonly = True,
+    srcs = ["scripts/publish_dependable_element_reports.py"],
+    data = ["//score/mw/log/dependability:dependable_element_mw_log_backend_doc"],
+    main = "scripts/publish_dependable_element_reports.py",
+)
 
 # Creates all documentation targets:
 # - `:docs` for building documentation at build-time
