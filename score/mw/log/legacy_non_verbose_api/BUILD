@@ -33,6 +33,7 @@ cc_library(
         "//platform/aas/tools/proxy_app:__subpackages__",
         "//score/mw/log:__subpackages__",
         "//third_party/ipnext_qnx/bsp_extensions/frameserver:__pkg__",
+        "@board_support//third_party/bsp/project/bsp_extensions/frameserver:__subpackages__",
         "@score_baselibs//score/mw/log:__subpackages__",
         "@score_logging//score/datarouter:__subpackages__",
     ],
