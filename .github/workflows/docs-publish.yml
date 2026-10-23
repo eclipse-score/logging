@@ -1,0 +1,30 @@
+# *******************************************************************************
+# Copyright (c) 2026 Contributors to the Eclipse Foundation
+#
+# See the NOTICE file(s) distributed with this work for additional
+# information regarding copyright ownership.
+#
+# This program and the accompanying materials are made available under the
+# terms of the Apache License Version 2.0 which is available at
+# https://www.apache.org/licenses/LICENSE-2.0
+#
+# SPDX-License-Identifier: Apache-2.0
+# *******************************************************************************
+
+name: Publish Docs
+
+on:
+  workflow_run:
+    workflows: ["Test and Build Docs"]
+    types: [completed]
+
+jobs:
+  docs-publish:
+    if: github.event.workflow_run.conclusion == 'success'
+    uses: eclipse-score/cicd-workflows/.github/workflows/docs-publish.yml@f77ed751fa587e3a1142b2d85320917e00c888ae # main (2026-10)
+    permissions:
+      actions: read
+      contents: write
+      id-token: write
+      pages: write
+      pull-requests: write
