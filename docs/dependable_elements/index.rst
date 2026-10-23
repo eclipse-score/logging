@@ -12,11 +12,9 @@
    # SPDX-License-Identifier: Apache-2.0
    # *******************************************************************************
 
-mw::log Backend Dependable Element Report
+Safety Report
 ===========================================
 
-The dependable-element report for the ``mw::log`` backend, including requirements,
-architecture, dependability analysis, and `LOBSTER <https://github.com/bmw-software-engineering/lobster>`_
-traceability.
+The work products for the ``mw::log`` backend dependable-element can be found in the report:
 
-`Open the mw::log Backend Dependable Element Report <dependable_element_mw_log_backend_doc/index.html>`_
+`mw::log Backend Dependable Element Report <mw_log_backend/index.html>`_
