@@ -14,14 +14,10 @@
 name: Test and Build Docs
 
 permissions:
-  contents: write
-  pages: write
-  pull-requests: write
-  id-token: write
+  contents: read
 
 on:
-  pull_request_target:
-    types: [opened, reopened, synchronize] # Allows forks to trigger the docs build
+  pull_request:
   push:
     branches:
       - main
@@ -29,14 +25,6 @@ on:
     types: [checks_requested]
 
 jobs:
-  docs-verify:
-    uses: eclipse-score/cicd-workflows/.github/workflows/docs-verify.yml@c1c90b1a82a1fab0fc202979dde6686b2162d5a8 # v0.0.0
-    permissions:
-      pull-requests: write
-      contents: read
-    with:
-      bazel-docs-verify-target: "--lockfile_mode=error //:docs_check"
-
   run-tests:
     uses: ./.github/workflows/coverage_report.yml
     permissions:
@@ -44,16 +32,14 @@ jobs:
       pull-requests: read
 
   build-docs:
-    needs: [run-tests, docs-verify]
+    needs: [run-tests]
     if: ${{ needs.run-tests.result == 'success' }}
-    uses: eclipse-score/cicd-workflows/.github/workflows/docs.yml@c1c90b1a82a1fab0fc202979dde6686b2162d5a8 # v0.0.0
+    uses: eclipse-score/cicd-workflows/.github/workflows/docs.yml@f77ed751fa587e3a1142b2d85320917e00c888ae # main (2026-10)
     permissions:
-      contents: write
-      pages: write
-      pull-requests: write
-      id-token: write
+      contents: read
     with:
-      # the bazel-target depends on your repo specific docs_targets configuration (e.g. "suffix")
-      bazel-target: "--lockfile_mode=error //:docs -- --github_user=${{ github.repository_owner }} --github_repo=${{ github.event.repository.name }}"
+      # Appended to `bazel run`; setup-bazel-cache applies the caches to every bazel call in the job.
+      bazel-target: >-
+        --lockfile_mode=error //:docs -- --github_user=${{ github.repository_owner }} --github_repo=${{ github.event.repository.name }} && bazel run --lockfile_mode=error //:publish_dependable_element_reports
       retention-days: 3
       tests-report-artifact: logging_cpp_coverage

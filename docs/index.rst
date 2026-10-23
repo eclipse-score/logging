@@ -80,6 +80,7 @@ The Components documentation provides detailed documentation for each individual
 
    components/datarouter/index.rst
    components/mw_log/index.rst
+   dependable_elements/index
 
 Quick Start
 -----------
