@@ -1,0 +1,16 @@
+{
+  "output": "docs/components/mw_log/detailed_design/dependencies.rst",
+  "title": "mw::log Backend Dependencies",
+  "document_id": "doc__mw_log_backend_dependencies",
+  "safety": "ASIL_B",
+  "security": "YES",
+  "component": "//score/mw/log/...",
+  "units": [
+    {"name": "File output backend", "scope": "//score/mw/log/detail/file_recorder/..."},
+    {"name": "Syslog backend", "scope": "//score/mw/log/detail/syslog/..."},
+    {"name": "Datarouter backend", "scope": "//score/mw/log/detail/data_router/..."},
+    {"name": "Slog backend (QNX)", "scope": "//score/mw/log/detail/slog/..."},
+    {"name": "Wait-free producer queue", "scope": "//score/mw/log/detail/wait_free_producer_queue/..."},
+    {"name": "Backend registration", "scope": "//score/mw/log/backend/..."}
+  ]
+}

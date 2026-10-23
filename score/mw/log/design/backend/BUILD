@@ -23,6 +23,7 @@ architectural_design(
         "datarouter_backend/shared_memory_reader_read.puml",
         "datarouter_backend/shared_memory_writer_allocandwrite.puml",
         "datarouter_backend/verbose_logging_sequence.puml",
+        "slot_drainer_sequence_design.puml",
         "syslog_backend_sequence.puml",
     ],
     static = [
@@ -36,7 +37,6 @@ architectural_design(
         "file_output_backend.md",
         "mw_log_file_backend.puml",
         "mw_log_recorders.puml",
-        "syslog_backend.md",
     ],
     # score_tooling 2.x parses every .puml included by this target.
     visibility = ["//visibility:public"],

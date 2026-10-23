@@ -22,10 +22,10 @@ package "datarouter_backend" {
   class DataRouterBackend {
     - buffer_: CircularAllocator<LogRecord>
     - message_client_: std::unique_ptr<DatarouterMessageClient>
-    + DataRouterBackend(number_of_slots: std::size_t, initial_slot_value: LogRecord&, message_client_factory: DatarouterMessageClientFactory&, config: Configuration&, writer_factory: WriterFactory)
+    + DataRouterBackend(number_of_slots: std::size_t, initial_slot_value: const LogRecord&, message_client_factory: DatarouterMessageClientFactory&, config: const Configuration&, writer_factory: WriterFactory)
     + ReserveSlot(): score::cpp::optional<SlotHandle>
-    + FlushSlot(slot: SlotHandle&): void
-    + GetLogRecord(slot: SlotHandle&): LogRecord&
+    + FlushSlot(slot: const SlotHandle&): void
+    + GetLogRecord(slot: const SlotHandle&): LogRecord&
   }
 
   interface DatarouterMessageClient {
@@ -46,19 +46,15 @@ package "datarouter_backend" {
     - stop_source_: score::cpp::stop_source
     - sender_state_: score::cpp::optional<IClientConnection::State>
     - sender_: score::cpp::pmr::unique_ptr<IClientConnection>
-    - receiver_: score::cpp::pmr::unique_ptr<IServer>
     - connect_thread_: score::cpp::jthread
-    + DatarouterMessageClientImpl(ids: MsgClientIdentifiers&, backend: MsgClientBackend, utils: MsgClientUtils, stop_source: score::cpp::stop_source)
+    + DatarouterMessageClientImpl(ids: const MsgClientIdentifiers&, backend: MsgClientBackend, utils: MsgClientUtils, stop_source: score::cpp::stop_source)
     + Run(): void
     + Shutdown(): void
-    + SetupReceiver(): void
     + CreateSender(): score::cpp::expected_blank<score::os::Error>
-    + StartReceiver(): bool
     + SendConnectMessage(): void
     + SetThreadName(): void
     + ConnectToDatarouter(): void
     + BlockTermSignal(): void
-    + GetReceiverIdentifier(): const std::string&
     + GetThisProcessPid(): const pid_t&
     + GetWriterFileName(): const std::string&
     + GetAppid(): const LoggingIdentifier&
@@ -93,7 +89,7 @@ package "datarouter_backend" {
   }
 
   interface DatarouterMessageClientFactory {
-    + CreateOnce(identifier: std::string&, mwsr_file_name: std::string&): std::unique_ptr<DatarouterMessageClient>
+    + CreateOnce(identifier: const std::string&, mwsr_file_name: const std::string&): std::unique_ptr<DatarouterMessageClient>
   }
 
   class DatarouterMessageClientFactoryImpl {
@@ -101,32 +97,32 @@ package "datarouter_backend" {
     - config_: const Configuration&
     - message_passing_factory_: std::unique_ptr<MessagePassingFactory>
     - msg_client_utils_: MsgClientUtils
-    + CreateOnce(identifier: std::string&, mwsr_file_name: std::string&): std::unique_ptr<DatarouterMessageClient>
+    + CreateOnce(identifier: const std::string&, mwsr_file_name: const std::string&): std::unique_ptr<DatarouterMessageClient>
   }
 
   interface MessagePassingFactory {
-    + CreateServer(protocol_config: ServiceProtocolConfig&, server_config: IServerFactory::ServerConfig&): std::unique_ptr<IServer>
-    + CreateClient(protocol_config: ServiceProtocolConfig&, client_config: IClientFactory::ClientConfig&): std::unique_ptr<IClientConnection>
+    + CreateServer(protocol_config: const ServiceProtocolConfig&, server_config: const IServerFactory::ServerConfig&): score::cpp::pmr::unique_ptr<IServer>
+    + CreateClient(protocol_config: const ServiceProtocolConfig&, client_config: const IClientFactory::ClientConfig&): score::cpp::pmr::unique_ptr<IClientConnection>
   }
 
   class MessagePassingFactoryImpl {
     - server_factory_: ServerFactory
     - client_factory_: ClientFactory
-    + CreateServer(protocol_config: ServiceProtocolConfig&, server_config: IServerFactory::ServerConfig&): std::unique_ptr<IServer>
-    + CreateClient(protocol_config: ServiceProtocolConfig&, client_config: IClientFactory::ClientConfig&): std::unique_ptr<IClientConnection>
+    + CreateServer(protocol_config: const ServiceProtocolConfig&, server_config: const IServerFactory::ServerConfig&): score::cpp::pmr::unique_ptr<IServer>
+    + CreateClient(protocol_config: const ServiceProtocolConfig&, client_config: const IClientFactory::ClientConfig&): score::cpp::pmr::unique_ptr<IClientConnection>
   }
 
   class DataRouterRecorder {
     - backend_: std::unique_ptr<Backend>
     - config_: Configuration
     - statistics_reporter_: StatisticsReporter
-    + StartRecord(context_id: std::string_view, log_level: LogLevel): score::cpp::optional<SlotHandle>
-    + StopRecord(slot: SlotHandle&): void
-    + IsLogEnabled(log_level: LogLevel&, context: std::string_view): bool
+    + StartRecord(context_id: const std::string_view, log_level: const LogLevel): score::cpp::optional<SlotHandle>
+    + StopRecord(slot: const SlotHandle&): void
+    + IsLogEnabled(log_level: const LogLevel&, context: const std::string_view): bool
   }
 
   class RemoteDltRecorderFactory {
-    + CreateConcreteLogRecorder(config: Configuration&, memory_resource: score::cpp::pmr::memory_resource*): std::unique_ptr<Recorder>
+    + CreateConcreteLogRecorder(config: const Configuration&, memory_resource: score::cpp::pmr::memory_resource*): std::unique_ptr<Recorder>
   }
 
   enum DatarouterMessageIdentifier {
@@ -140,10 +136,10 @@ package "datarouter_backend" {
     - uid_: uid_t
     - use_dynamic_identifier_: bool
     - random_part_: std::array<char, 6>
-    + SetAppId(appid: LoggingIdentifier&): void
+    + SetAppId(appid: const LoggingIdentifier&): void
     + SetUid(uid: uid_t): void
     + SetUseDynamicIdentifier(use_dynamic_identifier: bool): void
-    + SetRandomPart(random_part: std::array<char, 6>&): void
+    + SetRandomPart(random_part: const std::array<char, 6>&): void
     + GetAppId(): LoggingIdentifier
     + GetUid(): uid_t
     + GetUseDynamicIdentifier(): bool
@@ -174,10 +170,10 @@ package "shared_memory" {
   }
 
   interface ISharedMemoryReader {
-    + Read(type_registration_callback: TypeRegistrationCallback&, new_message_callback: NewRecordCallback&): std::optional<Length>
+    + Read(type_registration_callback: const TypeRegistrationCallback&, new_message_callback: const NewRecordCallback&): std::optional<Length>
     + PeekNumberOfBytesAcquiredInBuffer(acquired_buffer_count_id: std::uint32_t): std::optional<Length>
-    + ReadDetached(type_registration_callback: TypeRegistrationCallback&, new_message_callback: NewRecordCallback&): std::optional<Length>
-    + NotifyAcquisitionSetReader(acquire_result: ReadAcquireResult&): std::optional<Length>
+    + ReadDetached(type_registration_callback: const TypeRegistrationCallback&, new_message_callback: const NewRecordCallback&): std::optional<Length>
+    + NotifyAcquisitionSetReader(acquire_result: const ReadAcquireResult&): std::optional<Length>
     + GetNumberOfDropsWithBufferFull(): Length
     + GetNumberOfDropsWithInvalidSize(): Length
     + GetNumberOfDropsWithTypeRegistrationFailed(): Length
@@ -192,7 +188,7 @@ package "shared_memory" {
     - linear_reader_: std::optional<LinearReader>
     - acquired_data_: std::optional<ReadAcquireResult>
     - alternating_read_only_reader_: AlternatingReadOnlyReader
-    + SharedMemoryReader(shared_data: SharedData&, alternating_read_only_reader: AlternatingReadOnlyReader, unmap_callback: UnmapCallback)
+    + SharedMemoryReader(shared_data: const SharedData&, alternating_read_only_reader: AlternatingReadOnlyReader, unmap_callback: UnmapCallback)
     + Read(type_registration_callback, new_message_callback): std::optional<Length>
     + PeekNumberOfBytesAcquiredInBuffer(acquired_buffer_count_id): std::optional<Length>
     + ReadDetached(type_registration_callback, new_message_callback): std::optional<Length>
@@ -211,8 +207,9 @@ package "shared_memory" {
     - alternating_reader_: AlternatingReaderProxy
     - unmap_callback_: UnmapCallback
     - type_identifier_: std::atomic<TypeIdentifier>
-    + AllocAndWrite(data): void
-    + TryRegisterType(info: Typeinfo&): score::cpp::optional<TypeIdentifier>
+    + AllocAndWrite(timestamp: TimePoint, type_identifier: TypeIdentifier, payload_size: Length, write_callback: WriteCallback): void
+    + AllocAndWrite(write_callback: WriteCallback, type_identifier: TypeIdentifier, payload_size: Length): void
+    + TryRegisterType(info: const Typeinfo&): score::cpp::optional<TypeIdentifier>
     + ReadAcquire(): ReadAcquireResult
     + DetachWriter(): void
     + IncrementTypeRegistrationFailures(): void
@@ -224,8 +221,8 @@ package "shared_memory" {
   }
 
   class ReaderFactoryImpl {
-    - mman_: score::os::Mman
-    - stat_: score::os::Stat
+    - mman_: score::cpp::pmr::unique_ptr<score::os::Mman>
+    - stat_: score::cpp::pmr::unique_ptr<score::os::Stat>
     + Create(file_descriptor: std::int32_t, expected_pid: pid_t): std::unique_ptr<ISharedMemoryReader>
   }
 
@@ -245,11 +242,11 @@ package "shared_memory" {
   }
 
   class "WriterFactory::OsalInstances" as OsalInstances <<struct>> {
-    + fcntl_osal: score::os::Fcntl
-    + unistd: score::os::Unistd
-    + mman: score::os::Mman
-    + stat_osal: score::os::Stat
-    + stdlib: score::os::Stdlib
+    + fcntl_osal: score::cpp::pmr::unique_ptr<score::os::Fcntl>
+    + unistd: score::cpp::pmr::unique_ptr<score::os::Unistd>
+    + mman: score::cpp::pmr::unique_ptr<score::os::Mman>
+    + stat_osal: score::cpp::pmr::unique_ptr<score::os::Stat>
+    + stdlib: score::cpp::pmr::unique_ptr<score::os::Stdlib>
   }
 }
 
@@ -301,8 +298,7 @@ DatarouterMessageClientImpl *-- MsgClientIdentifiers
 DatarouterMessageClientImpl *-- MsgClientUtils
 DatarouterMessageClientImpl *-- MessagePassingFactory
 DatarouterMessageClientImpl --> SharedMemoryWriter : writes acquire/connect state
-DatarouterMessageClientImpl --> IClientConnection : sender
-DatarouterMessageClientImpl --> IServer : receiver
+DatarouterMessageClientImpl --> IClientConnection : sender (sends messages, receives notifications)
 DatarouterMessageClientImpl ..> MsgClientBackend : constructed from
 DatarouterMessageClientImpl ..> ConnectMessageFromClient : serializes
 DatarouterMessageClientImpl ..> DatarouterMessageIdentifier
@@ -324,11 +320,11 @@ WriterFactory ..> SharedMemoryWriter : creates
 ReaderFactory ..> ISharedMemoryReader : creates
 ReaderFactoryImpl ..> SharedMemoryReader : creates
 
-SharedMemoryReader *-- SharedData : views
-SharedMemoryWriter *-- SharedData : manages
+SharedMemoryReader --> SharedData : views (const reference)
+SharedMemoryWriter --> SharedData : manages (reference)
 
 note right of DataRouterRecorder : Multiple Log(...) overloads omitted for clarity
-note bottom of DatarouterMessageClientImpl : Owns sender/receiver lifecycle and background connect thread
+note bottom of DatarouterMessageClientImpl : Owns sender lifecycle and background connect thread
 note bottom of WriterFactory : Creates and maps shared memory file, returns SharedMemoryWriter
 
 @enduml
