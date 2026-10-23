@@ -196,7 +196,7 @@
 
 <li class="nav-item ">
   <a class="nav-link nav-internal" href="../dependable_elements/index.html">
-    mw::log Backend Dependable Element Report
+    Safety Report
   </a>
 </li>
 
@@ -352,7 +352,7 @@
 
 <li class="nav-item ">
   <a class="nav-link nav-internal" href="../dependable_elements/index.html">
-    mw::log Backend Dependable Element Report
+    Safety Report
   </a>
 </li>
 
@@ -538,15 +538,15 @@ html[data-theme="dark"] .score-testcase-result--disabled {
 </style>
 <section id="verification-report">
 <h1>Verification Report<a class="headerlink" href="#verification-report" title="Link to this heading">#</a></h1>
-<div class="need_container docutils container" id="SNCB-1069b52f">
-<div class="pst-scrollable-table-container"><table class="need needs_grid_complex needs_layout_score needs_style_none needs_type_document table" id="doc__logging_verification_report">
+<div class="need_container docutils container" id="SNCB-38566b05">
+<div class="pst-scrollable-table-container"><table class="need needs_grid_complex needs_layout_score needs_style_none needs_type_mod_ver_report table" id="mod_vrep__logging__report">
 <tbody>
 <tr class="head row-odd"><td class="head_left" colspan="2"><div class="needs_head_left line-block">
 <div class="line"><span><span class="needs_title"><span class="needs_data">Logging Module Verification Report</span></span></span></div>
 </div>
 </td>
 <td class="head_center" colspan="2"><div class="needs_head line-block">
-<div class="line"><span><span class="needs_status"><span class="needs_label">status: </span><span class="needs_data">draft</span></span></span></div>
+<div class="line"><span><span class="needs_status"><span class="needs_label">status: </span><span class="needs_data">valid</span></span></span></div>
 <div class="line"><span><span class="needs_security"><span class="needs_label">security: </span><span class="needs_data">NO</span></span></span></div>
 <div class="line"><span><span class="needs_safety"><span class="needs_label">safety: </span><span class="needs_data">ASIL_B</span></span></span></div>
 </div>
@@ -557,9 +557,11 @@ html[data-theme="dark"] .score-testcase-result--disabled {
 </td>
 </tr>
 <tr class="meta row-even"><td class="meta" colspan="3"><div class="needs_meta_left line-block">
-<div class="line"><span><span><div class="line"><span class="needs_version"><span class="needs_label">version: </span>1</span></div>
+<div class="line"><span><span><div class="line"><span class="needs_verification_method"><span class="needs_label">verification_method: </span><span class="needs_data">test_and_inspection</span></span></div>
+<div class="line"><span class="needs_version"><span class="needs_label">version: </span>1</span></div>
 </span></span></div>
 <div class="line"><span><div class="line">realizes: <span class="realizes"><span><a class="external_link reference external" href="https://eclipse-score.github.io/process_description//main/process_areas/verification/verification_workproducts.html#wp__verification_module_ver_report">wp__verification_module_ver_report</a></span></span></div>
+<div class="line">belongs to: <span class="belongs_to"><span><a class="reference internal" href="../module/index.html#mod__logging" title="mod_vrep__logging__report">mod__logging</a></span></span></div>
 </span></div>
 </div>
 </td>
@@ -568,11 +570,11 @@ html[data-theme="dark"] .score-testcase-result--disabled {
 <tr class="content row-odd"><td class="content" colspan="6"></td>
 </tr>
 <tr class="footer row-even"><td class="footer_left" colspan="2"><div class="needs_footer_left line-block">
-<div class="line"><span><span class="needs-id"><a class="reference internal" href="#doc__logging_verification_report" title="doc__logging_verification_report">doc__logging_verification_report</a></span></span></div>
+<div class="line"><span><span class="needs-id"><a class="reference internal" href="#mod_vrep__logging__report" title="mod_vrep__logging__report">mod_vrep__logging__report</a></span></span></div>
 </div>
 </td>
 <td class="footer" colspan="2"><div class="needs_footer line-block">
-<div class="line"><span><span class="needs_type_name"><span class="needs_data">Generic Document</span></span></span></div>
+<div class="line"><span><span class="needs_type_name"><span class="needs_data">Module Verification Report</span></span></span></div>
 </div>
 </td>
 <td class="footer_right" colspan="2"></td>
@@ -603,7 +605,66 @@ html[data-theme="dark"] .score-testcase-result--disabled {
 .wp-doc-table td .dataTables_wrapper .dataTables_filter,
 .wp-doc-table td .dataTables_wrapper .dataTables_info,
 .wp-doc-table td .dataTables_wrapper .dataTables_paginate { display: none; }
-</style><section id="components">
+
+/* Scales every chart to its column; together with the fixed three-column
+   raster this gives every chart the same size as in the platform report. */
+.score-pie-row img.score-report-pie {
+    width: 100%;
+    height: auto;
+}
+/* ``.sd-row`` is a flex container without a justification of its own, so
+   this centres the two pies in the three-column raster. */
+.score-pie-row { justify-content: center; }
+
+p.rubric.safety-class-heading {
+    display: inline-block; margin: 1.4em 0 0.5em 0;
+    padding: 0.15em 0.9em; border-radius: 1em;
+    font-size: 0.95em; font-weight: 600; color: #ffffff;
+}
+p.rubric.safety-class-heading.safety-asil-b { background: #1f4e79; }
+p.rubric.safety-class-heading.safety-qm { background: #6c757d; }
+
+/* Stands in for a whole pie row of a safety class without any Need. */
+.empty-pie {
+    padding: 0.2em 0.8em; margin-bottom: 0.5em;
+    border: 2px dashed #b0b0b0; border-radius: 6px;
+    color: #6c757d; font-style: italic;
+}
+
+.chart-legend { display: flex; flex-wrap: wrap; gap: 1.2em 2.5em; }
+.chart-legend-group {
+    display: flex; flex-direction: column; gap: 0.3em;
+    flex: 1 1 20em; font-size: 0.9em;
+}
+.chart-legend-head { font-weight: 600; }
+.chart-legend-dot {
+    display: inline-block; width: 0.8em; height: 0.8em;
+    margin-right: 0.5em; border-radius: 50%;
+    border: 1px solid rgba(0, 0, 0, 0.25);
+}
+</style><details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3 sd-fade-in" open="open">
+<summary class="sd-summary-title sd-card-header">
+<span class="sd-summary-text">Legend — status values and chart colours</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
+<div class="chart-legend">
+  <div class="chart-legend-group">
+    <span class="chart-legend-head">Status — ASIL B</span>
+    <span><span class="chart-legend-dot" style="background: #37a12d;"></span><code>valid_inspected</code> — agreed and formally inspected</span>
+    <span><span class="chart-legend-dot" style="background: #f5c518;"></span><code>valid</code> — agreed, formal inspection still outstanding</span>
+    <span><span class="chart-legend-dot" style="background: #ca2828;"></span><code>invalid</code> — not agreed; metamodel checks are skipped</span>
+  </div>
+  <div class="chart-legend-group">
+    <span class="chart-legend-head">Status — QM</span>
+    <span><span class="chart-legend-dot" style="background: #37a12d;"></span><code>valid</code> — agreed; QM needs are not formally inspected, so this is their final state (<code>valid_inspected</code> counts here too)</span>
+    <span><span class="chart-legend-dot" style="background: #ca2828;"></span><code>invalid</code> — not agreed; metamodel checks are skipped</span>
+  </div>
+  <div class="chart-legend-group">
+    <span class="chart-legend-head">Test coverage — both classes</span>
+    <span><span class="chart-legend-dot" style="background: #37a12d;"></span>fully covered — at least one test fully verifies the need</span>
+    <span><span class="chart-legend-dot" style="background: #f0a500;"></span>partially covered — only partially verifying tests</span>
+    <span><span class="chart-legend-dot" style="background: #ca2828;"></span>not covered — no verifying test at all</span>
+  </div>
+</div></div>
+</details><section id="components">
 <h2>Components<a class="headerlink" href="#components" title="Link to this heading">#</a></h2>
 <section id="component-overview">
 <h3>Component Overview<a class="headerlink" href="#component-overview" title="Link to this heading">#</a></h3>
@@ -623,13 +684,13 @@ html[data-theme="dark"] .score-testcase-result--disabled {
 </tr>
 </thead>
 <tbody>
-<tr class="need row-even"><td class="needs_id"><p><a class="reference internal" href="../components/datarouter/index.html#comp__datarouter">comp__datarouter</a></p></td>
-<td class="needs_safety"><p>QM</p></td>
+<tr class="need row-even"><td class="needs_id"><p><a class="reference internal" href="../components/mw_log/architecture/component_architecture.html#comp__mw_log_backend">comp__mw_log_backend</a></p></td>
+<td class="needs_safety"><p>ASIL_B</p></td>
 <td class="needs_security"><p>YES</p></td>
 <td class="needs_status"><p>valid</p></td>
 </tr>
-<tr class="need row-odd"><td class="needs_id"><p><a class="reference internal" href="../components/mw_log/architecture/component_architecture.html#comp__mw_log_backend">comp__mw_log_backend</a></p></td>
-<td class="needs_safety"><p>ASIL_B</p></td>
+<tr class="need row-odd"><td class="needs_id"><p><a class="reference internal" href="../components/datarouter/index.html#comp__datarouter">comp__datarouter</a></p></td>
+<td class="needs_safety"><p>QM</p></td>
 <td class="needs_security"><p>YES</p></td>
 <td class="needs_status"><p>valid</p></td>
 </tr>
@@ -642,30 +703,24 @@ html[data-theme="dark"] .score-testcase-result--disabled {
 <span id="comp-datarouter"></span><h3>Datarouter<a class="headerlink" href="#datarouter" title="Link to this heading">#</a></h3>
 <hr style="border-top: 2px solid #333333; margin: 0.5em 0 1.5em 0;"><section id="component-requirements-statistics">
 <h4>Component Requirements Statistics<a class="headerlink" href="#component-requirements-statistics" title="Link to this heading">#</a></h4>
+<p class="safety-class-heading safety-asil-b rubric">ASIL B — Requirements</p>
+<div class="empty-pie">no ASIL B requirements</div><p class="safety-class-heading safety-qm rubric">QM — Requirements</p>
 <div class="sd-container-fluid sd-sphinx-override sd-mb-4 docutils">
-<div class="sd-row sd-row-cols-1 sd-row-cols-xs-1 sd-row-cols-sm-2 sd-row-cols-md-2 sd-row-cols-lg-2 sd-g-3 sd-g-xs-3 sd-g-sm-3 sd-g-md-3 sd-g-lg-3 docutils">
+<div class="sd-row sd-row-cols-1 sd-row-cols-xs-1 sd-row-cols-sm-2 sd-row-cols-md-3 sd-row-cols-lg-3 sd-g-2 sd-g-xs-2 sd-g-sm-2 sd-g-md-2 sd-g-lg-2 score-pie-row docutils">
 <div class="sd-col sd-d-flex-column docutils">
-<img alt="Datarouter Requirements Status" id="needpie-verification_report/module_verification_report-0" src="../_images/need_pie_198f4.svg" />
+<img alt="Datarouter Requirements Status (QM): valid 6, invalid 0" class="score-report-pie" src="../_images/score_report_pie_7c5558cb85.svg" />
 </div>
 <div class="sd-col sd-d-flex-column docutils">
-<img alt="Datarouter Requirements Test Coverage" id="needpie-verification_report/module_verification_report-1" src="../_images/need_pie_44efa.svg" />
+<img alt="Datarouter Requirements Test Coverage (QM): fully covered 0, partially covered 5, not covered 1" class="score-report-pie" src="../_images/score_report_pie_1f79271cad.svg" />
 </div>
 </div>
 </div>
 </section>
 <section id="component-architecture-statistics">
 <h4>Component Architecture Statistics<a class="headerlink" href="#component-architecture-statistics" title="Link to this heading">#</a></h4>
-<div class="sd-container-fluid sd-sphinx-override sd-mb-4 docutils">
-<div class="sd-row sd-row-cols-1 sd-row-cols-xs-1 sd-row-cols-sm-2 sd-row-cols-md-2 sd-row-cols-lg-2 sd-g-3 sd-g-xs-3 sd-g-sm-3 sd-g-md-3 sd-g-lg-3 docutils">
-<div class="sd-col sd-d-flex-column docutils">
-<p class="needs_filter_warning" id="needpie-verification_report/module_verification_report-2">No needs passed the filters</p>
-</div>
-<div class="sd-col sd-d-flex-column docutils">
-<p class="needs_filter_warning" id="needpie-verification_report/module_verification_report-3">No needs passed the filters</p>
-</div>
-</div>
-</div>
-</section>
+<p class="safety-class-heading safety-asil-b rubric">ASIL B — Architecture Elements</p>
+<div class="empty-pie">no ASIL B architecture elements</div><p class="safety-class-heading safety-qm rubric">QM — Architecture Elements</p>
+<div class="empty-pie">no QM architecture elements</div></section>
 <section id="requirements-traceability">
 <h4>Requirements Traceability<a class="headerlink" href="#requirements-traceability" title="Link to this heading">#</a></h4>
 <p>The following table lists all requirements of this component together with their
@@ -691,41 +746,41 @@ verification status and the tests that (fully or partially) verify them:</p>
 </tr>
 </thead>
 <tbody>
-<tr class="need row-even"><td class="needs_id"><p><a class="reference internal" href="../components/datarouter/requirements/index.html#comp_req__data_router__dlt_bw_quota_config">comp_req__data_router__dlt_bw_quota_config</a></p></td>
-<td class="needs_title"><p>DLT Bandwidth Quota Configuration</p></td>
-<td class="needs_safety"><p>QM</p></td>
-<td class="needs_status"><p>valid</p></td>
-<td class="needs_testlink"><p><a class="reference external" href="https://github.com/Y-Vaishnavi/logging/blob/2dca2eeece7f73047881ab0ff9037fb32cd738aa/score/datarouter/test/ut/ut_logging/test_dltserver.cpp#L240">DltServerCreatedWithConfigFixture__GetQuotaCorrectAppNameExpectCorrectValue<span class="score-testcase-result score-testcase-result--passed"> (passed)</span></a></p></td>
-</tr>
-<tr class="need row-odd"><td class="needs_id"><p><a class="reference internal" href="../components/datarouter/requirements/index.html#comp_req__data_router__dlt_message_filtering">comp_req__data_router__dlt_message_filtering</a></p></td>
-<td class="needs_title"><p>DLT Message Filtering</p></td>
-<td class="needs_safety"><p>QM</p></td>
-<td class="needs_status"><p>valid</p></td>
-<td class="needs_testlink"><p><a class="reference external" href="https://github.com/Y-Vaishnavi/logging/blob/2dca2eeece7f73047881ab0ff9037fb32cd738aa/score/datarouter/test/ut/ut_logging/test_dltchannel.cpp#L457">DltChannelTest__WhenLogLevelExceedsThreshold_Verbose<span class="score-testcase-result score-testcase-result--passed"> (passed)</span></a><em>; </em><a class="reference external" href="https://github.com/Y-Vaishnavi/logging/blob/2dca2eeece7f73047881ab0ff9037fb32cd738aa/score/datarouter/test/ut/ut_logging/test_dltchannel.cpp#L484">DltChannelTest__WhenNonVerboseLogLevelExceedsThreshold<span class="score-testcase-result score-testcase-result--passed"> (passed)</span></a></p></td>
-</tr>
-<tr class="need row-even"><td class="needs_id"><p><a class="reference internal" href="../components/datarouter/requirements/index.html#comp_req__data_router__dlt_multiple_channels">comp_req__data_router__dlt_multiple_channels</a></p></td>
-<td class="needs_title"><p>DLT Multiple Channel Support</p></td>
-<td class="needs_safety"><p>QM</p></td>
-<td class="needs_status"><p>valid</p></td>
-<td class="needs_testlink"><p><a class="reference external" href="https://github.com/Y-Vaishnavi/logging/blob/2dca2eeece7f73047881ab0ff9037fb32cd738aa/score/datarouter/test/ut/ut_logging/test_dltchannel.cpp#L93">DltChannelTest__WhenCreatedDefault<span class="score-testcase-result score-testcase-result--passed"> (passed)</span></a></p></td>
-</tr>
-<tr class="need row-odd"><td class="needs_id"><p><a class="reference internal" href="../components/datarouter/requirements/index.html#comp_req__data_router__dlt_quota_bw_reduction">comp_req__data_router__dlt_quota_bw_reduction</a></p></td>
+<tr class="need row-even"><td class="needs_id"><p><a class="reference internal" href="../components/datarouter/requirements/index.html#comp_req__data_router__dlt_quota_bw_reduction">comp_req__data_router__dlt_quota_bw_reduction</a></p></td>
 <td class="needs_title"><p>DLT Quota Bandwidth Reduction</p></td>
 <td class="needs_safety"><p>QM</p></td>
 <td class="needs_status"><p>valid</p></td>
 <td class="needs_testlink"><p></p></td>
 </tr>
+<tr class="need row-odd"><td class="needs_id"><p><a class="reference internal" href="../components/datarouter/requirements/index.html#comp_req__data_router__dlt_multiple_channels">comp_req__data_router__dlt_multiple_channels</a></p></td>
+<td class="needs_title"><p>DLT Multiple Channel Support</p></td>
+<td class="needs_safety"><p>QM</p></td>
+<td class="needs_status"><p>valid</p></td>
+<td class="needs_testlink"><p><a class="reference external" href="https://github.com/Y-Vaishnavi/logging/blob/635d0545f7e960ba4365e4499f926699460d36da/score/datarouter/test/ut/ut_logging/test_dltchannel.cpp#L93">DltChannelTest__WhenCreatedDefault<span class="score-testcase-result score-testcase-result--passed"> (passed)</span></a></p></td>
+</tr>
+<tr class="need row-even"><td class="needs_id"><p><a class="reference internal" href="../components/datarouter/requirements/index.html#comp_req__data_router__dlt_verbose_messages">comp_req__data_router__dlt_verbose_messages</a></p></td>
+<td class="needs_title"><p>DLT Verbose Messages</p></td>
+<td class="needs_safety"><p>QM</p></td>
+<td class="needs_status"><p>valid</p></td>
+<td class="needs_testlink"><p><a class="reference external" href="https://github.com/Y-Vaishnavi/logging/blob/635d0545f7e960ba4365e4499f926699460d36da/score/datarouter/test/ut/ut_logging/test_dltchannel.cpp#L139">DltChannelTest__WhenSendingVerboseTwice<span class="score-testcase-result score-testcase-result--passed"> (passed)</span></a><em>; </em><a class="reference external" href="https://github.com/Y-Vaishnavi/logging/blob/635d0545f7e960ba4365e4499f926699460d36da/score/datarouter/test/ut/ut_logging/test_verbose_dlt.cpp#L33">DltVerboseHandlerTest__sendVerboseTest<span class="score-testcase-result score-testcase-result--passed"> (passed)</span></a></p></td>
+</tr>
+<tr class="need row-odd"><td class="needs_id"><p><a class="reference internal" href="../components/datarouter/requirements/index.html#comp_req__data_router__dlt_message_filtering">comp_req__data_router__dlt_message_filtering</a></p></td>
+<td class="needs_title"><p>DLT Message Filtering</p></td>
+<td class="needs_safety"><p>QM</p></td>
+<td class="needs_status"><p>valid</p></td>
+<td class="needs_testlink"><p><a class="reference external" href="https://github.com/Y-Vaishnavi/logging/blob/635d0545f7e960ba4365e4499f926699460d36da/score/datarouter/test/ut/ut_logging/test_dltchannel.cpp#L457">DltChannelTest__WhenLogLevelExceedsThreshold_Verbose<span class="score-testcase-result score-testcase-result--passed"> (passed)</span></a><em>; </em><a class="reference external" href="https://github.com/Y-Vaishnavi/logging/blob/635d0545f7e960ba4365e4499f926699460d36da/score/datarouter/test/ut/ut_logging/test_dltchannel.cpp#L484">DltChannelTest__WhenNonVerboseLogLevelExceedsThreshold<span class="score-testcase-result score-testcase-result--passed"> (passed)</span></a></p></td>
+</tr>
 <tr class="need row-even"><td class="needs_id"><p><a class="reference internal" href="../components/datarouter/requirements/index.html#comp_req__data_router__dlt_server">comp_req__data_router__dlt_server</a></p></td>
 <td class="needs_title"><p>Datarouter DLT Server</p></td>
 <td class="needs_safety"><p>QM</p></td>
 <td class="needs_status"><p>valid</p></td>
-<td class="needs_testlink"><p><a class="reference external" href="https://github.com/Y-Vaishnavi/logging/blob/2dca2eeece7f73047881ab0ff9037fb32cd738aa/score/datarouter/test/ut/ut_logging/test_dltserver.cpp#L150">DltServerCreatedWithoutConfigFixture__WhenCreatedDefault<span class="score-testcase-result score-testcase-result--passed"> (passed)</span></a></p></td>
+<td class="needs_testlink"><p><a class="reference external" href="https://github.com/Y-Vaishnavi/logging/blob/635d0545f7e960ba4365e4499f926699460d36da/score/datarouter/test/ut/ut_logging/test_dltserver.cpp#L150">DltServerCreatedWithoutConfigFixture__WhenCreatedDefault<span class="score-testcase-result score-testcase-result--passed"> (passed)</span></a></p></td>
 </tr>
-<tr class="need row-odd"><td class="needs_id"><p><a class="reference internal" href="../components/datarouter/requirements/index.html#comp_req__data_router__dlt_verbose_messages">comp_req__data_router__dlt_verbose_messages</a></p></td>
-<td class="needs_title"><p>DLT Verbose Messages</p></td>
+<tr class="need row-odd"><td class="needs_id"><p><a class="reference internal" href="../components/datarouter/requirements/index.html#comp_req__data_router__dlt_bw_quota_config">comp_req__data_router__dlt_bw_quota_config</a></p></td>
+<td class="needs_title"><p>DLT Bandwidth Quota Configuration</p></td>
 <td class="needs_safety"><p>QM</p></td>
 <td class="needs_status"><p>valid</p></td>
-<td class="needs_testlink"><p><a class="reference external" href="https://github.com/Y-Vaishnavi/logging/blob/2dca2eeece7f73047881ab0ff9037fb32cd738aa/score/datarouter/test/ut/ut_logging/test_dltchannel.cpp#L139">DltChannelTest__WhenSendingVerboseTwice<span class="score-testcase-result score-testcase-result--passed"> (passed)</span></a><em>; </em><a class="reference external" href="https://github.com/Y-Vaishnavi/logging/blob/2dca2eeece7f73047881ab0ff9037fb32cd738aa/score/datarouter/test/ut/ut_logging/test_verbose_dlt.cpp#L33">DltVerboseHandlerTest__sendVerboseTest<span class="score-testcase-result score-testcase-result--passed"> (passed)</span></a></p></td>
+<td class="needs_testlink"><p><a class="reference external" href="https://github.com/Y-Vaishnavi/logging/blob/635d0545f7e960ba4365e4499f926699460d36da/score/datarouter/test/ut/ut_logging/test_dltserver.cpp#L240">DltServerCreatedWithConfigFixture__GetQuotaCorrectAppNameExpectCorrectValue<span class="score-testcase-result score-testcase-result--passed"> (passed)</span></a></p></td>
 </tr>
 </tbody>
 </table>
@@ -827,30 +882,44 @@ this component. A dash (<code class="docutils literal notranslate"><span class="
 <span id="comp-mw-log-backend"></span><h3>mw::log Backend<a class="headerlink" href="#mw-log-backend" title="Link to this heading">#</a></h3>
 <hr style="border-top: 2px solid #333333; margin: 0.5em 0 1.5em 0;"><section id="id1">
 <h4>Component Requirements Statistics<a class="headerlink" href="#id1" title="Link to this heading">#</a></h4>
+<p class="safety-class-heading safety-asil-b rubric">ASIL B — Requirements</p>
 <div class="sd-container-fluid sd-sphinx-override sd-mb-4 docutils">
-<div class="sd-row sd-row-cols-1 sd-row-cols-xs-1 sd-row-cols-sm-2 sd-row-cols-md-2 sd-row-cols-lg-2 sd-g-3 sd-g-xs-3 sd-g-sm-3 sd-g-md-3 sd-g-lg-3 docutils">
+<div class="sd-row sd-row-cols-1 sd-row-cols-xs-1 sd-row-cols-sm-2 sd-row-cols-md-3 sd-row-cols-lg-3 sd-g-2 sd-g-xs-2 sd-g-sm-2 sd-g-md-2 sd-g-lg-2 score-pie-row docutils">
 <div class="sd-col sd-d-flex-column docutils">
-<img alt="mw::log Backend Requirements Status" id="needpie-verification_report/module_verification_report-4" src="../_images/need_pie_988fb.svg" />
+<img alt="mw::log Backend Requirements Status (ASIL B): valid_inspected 0, valid 9, invalid 0" class="score-report-pie" src="../_images/score_report_pie_85100bffcf.svg" />
 </div>
 <div class="sd-col sd-d-flex-column docutils">
-<img alt="mw::log Backend Requirements Test Coverage" id="needpie-verification_report/module_verification_report-5" src="../_images/need_pie_ce8e2.svg" />
+<img alt="mw::log Backend Requirements Test Coverage (ASIL B): fully covered 0, partially covered 9, not covered 0" class="score-report-pie" src="../_images/score_report_pie_6c75f299cf.svg" />
+</div>
+</div>
+</div>
+<p class="safety-class-heading safety-qm rubric">QM — Requirements</p>
+<div class="sd-container-fluid sd-sphinx-override sd-mb-4 docutils">
+<div class="sd-row sd-row-cols-1 sd-row-cols-xs-1 sd-row-cols-sm-2 sd-row-cols-md-3 sd-row-cols-lg-3 sd-g-2 sd-g-xs-2 sd-g-sm-2 sd-g-md-2 sd-g-lg-2 score-pie-row docutils">
+<div class="sd-col sd-d-flex-column docutils">
+<img alt="mw::log Backend Requirements Status (QM): valid 6, invalid 0" class="score-report-pie" src="../_images/score_report_pie_a75176f8e6.svg" />
+</div>
+<div class="sd-col sd-d-flex-column docutils">
+<img alt="mw::log Backend Requirements Test Coverage (QM): fully covered 0, partially covered 4, not covered 2" class="score-report-pie" src="../_images/score_report_pie_050673295b.svg" />
 </div>
 </div>
 </div>
 </section>
 <section id="id2">
 <h4>Component Architecture Statistics<a class="headerlink" href="#id2" title="Link to this heading">#</a></h4>
+<p class="safety-class-heading safety-asil-b rubric">ASIL B — Architecture Elements</p>
 <div class="sd-container-fluid sd-sphinx-override sd-mb-4 docutils">
-<div class="sd-row sd-row-cols-1 sd-row-cols-xs-1 sd-row-cols-sm-2 sd-row-cols-md-2 sd-row-cols-lg-2 sd-g-3 sd-g-xs-3 sd-g-sm-3 sd-g-md-3 sd-g-lg-3 docutils">
+<div class="sd-row sd-row-cols-1 sd-row-cols-xs-1 sd-row-cols-sm-2 sd-row-cols-md-3 sd-row-cols-lg-3 sd-g-2 sd-g-xs-2 sd-g-sm-2 sd-g-md-2 sd-g-lg-2 score-pie-row docutils">
 <div class="sd-col sd-d-flex-column docutils">
-<img alt="mw::log Backend Architecture Elements Status" id="needpie-verification_report/module_verification_report-6" src="../_images/need_pie_05369.svg" />
+<img alt="mw::log Backend Architecture Elements Status (ASIL B): valid_inspected 0, valid 1, invalid 0" class="score-report-pie" src="../_images/score_report_pie_bcc9c01966.svg" />
 </div>
 <div class="sd-col sd-d-flex-column docutils">
-<img alt="mw::log Backend Architecture Elements Test Coverage" id="needpie-verification_report/module_verification_report-7" src="../_images/need_pie_ebc9c.svg" />
+<img alt="mw::log Backend Architecture Elements Test Coverage (ASIL B): fully covered 0, partially covered 0, not covered 1" class="score-report-pie" src="../_images/score_report_pie_eec969ef52.svg" />
 </div>
 </div>
 </div>
-</section>
+<p class="safety-class-heading safety-qm rubric">QM — Architecture Elements</p>
+<div class="empty-pie">no QM architecture elements</div></section>
 <section id="id3">
 <h4>Requirements Traceability<a class="headerlink" href="#id3" title="Link to this heading">#</a></h4>
 <p>The following table lists all requirements of this component together with their
@@ -876,87 +945,63 @@ verification status and the tests that (fully or partially) verify them:</p>
 </tr>
 </thead>
 <tbody>
-<tr class="need row-even"><td class="needs_id"><p><a class="reference internal" href="../components/mw_log/requirements/requirements.html#comp_req__log__autosar_log_trace_spec">comp_req__log__autosar_log_trace_spec</a></p></td>
-<td class="needs_title"><p>AUTOSAR Log and Trace Specification</p></td>
-<td class="needs_safety"><p>QM</p></td>
+<tr class="need row-even"><td class="needs_id"><p><a class="reference internal" href="../components/mw_log/requirements/requirements.html#comp_req__log__shm_file_permissions">comp_req__log__shm_file_permissions</a></p></td>
+<td class="needs_title"><p>Shared Memory File Permissions</p></td>
+<td class="needs_safety"><p>ASIL_B</p></td>
 <td class="needs_status"><p>valid</p></td>
-<td class="needs_testlink"><p><a class="reference external" href="https://github.com/Y-Vaishnavi/logging/blob/2dca2eeece7f73047881ab0ff9037fb32cd738aa/score/mw/log/detail/file_recorder/dlt_message_builder_test.cpp#L65">DltMessageBuilderFixture__ShallDepleteAfterHeaderAndPayload<span class="score-testcase-result score-testcase-result--passed"> (passed)</span></a></p></td>
+<td class="needs_testlink"><p></p></td>
+</tr>
+<tr class="need row-odd"><td class="needs_id"><p><a class="reference internal" href="../components/mw_log/requirements/requirements.html#comp_req__log__avoid_signal_processing">comp_req__log__avoid_signal_processing</a></p></td>
+<td class="needs_title"><p>Avoid Signal Processing</p></td>
+<td class="needs_safety"><p>ASIL_B</p></td>
+<td class="needs_status"><p>valid</p></td>
+<td class="needs_testlink"><p><a class="reference external" href="https://github.com/Y-Vaishnavi/logging/blob/635d0545f7e960ba4365e4499f926699460d36da/score/mw/log/detail/utils/signal_handling/signal_handling_test.cpp#L87">SignalHandlingTest__PThreadBlockSigTerm_AllSucceed_ReturnsSuccess<span class="score-testcase-result score-testcase-result--passed"> (passed)</span></a></p></td>
+</tr>
+<tr class="need row-even"><td class="needs_id"><p><a class="reference internal" href="../components/mw_log/requirements/requirements.html#comp_req__log__local_allocation_strategy">comp_req__log__local_allocation_strategy</a></p></td>
+<td class="needs_title"><p>Local Allocation Strategy</p></td>
+<td class="needs_safety"><p>ASIL_B</p></td>
+<td class="needs_status"><p>valid</p></td>
+<td class="needs_testlink"><p><a class="reference external" href="https://github.com/Y-Vaishnavi/logging/blob/635d0545f7e960ba4365e4499f926699460d36da/score/mw/log/detail/data_router/remote_dlt_recorder_factory_test.cpp#L78">RecorderFactoryConfigFixture__RemoteConfiguredShallReturnDataRouterRecorder<span class="score-testcase-result score-testcase-result--passed"> (passed)</span></a><em>; </em><a class="reference external" href="https://github.com/Y-Vaishnavi/logging/blob/635d0545f7e960ba4365e4499f926699460d36da/score/mw/log/detail/file_recorder/file_recorder_test.cpp#L155">FileRecorderFixture__TooManyArgumentsWillYieldTruncatedLog<span class="score-testcase-result score-testcase-result--passed"> (passed)</span></a></p></td>
 </tr>
 <tr class="need row-odd"><td class="needs_id"><p><a class="reference internal" href="../components/mw_log/requirements/requirements.html#comp_req__log__avoid_locks">comp_req__log__avoid_locks</a></p></td>
 <td class="needs_title"><p>Avoid Locks</p></td>
 <td class="needs_safety"><p>ASIL_B</p></td>
 <td class="needs_status"><p>valid</p></td>
-<td class="needs_testlink"><p><a class="reference external" href="https://github.com/Y-Vaishnavi/logging/blob/2dca2eeece7f73047881ab0ff9037fb32cd738aa/score/mw/log/detail/data_router/shared_memory/common_test.cpp#L37">CommonTests__TypesShallBeLockFree<span class="score-testcase-result score-testcase-result--passed"> (passed)</span></a><em>; </em><a class="reference external" href="https://github.com/Y-Vaishnavi/logging/blob/2dca2eeece7f73047881ab0ff9037fb32cd738aa/score/mw/log/detail/wait_free_producer_queue/wait_free_linear_writer_test.cpp#L27">WaitFreeLinearWriter__EnsureAtomicRequirements<span class="score-testcase-result score-testcase-result--passed"> (passed)</span></a></p></td>
-</tr>
-<tr class="need row-even"><td class="needs_id"><p><a class="reference internal" href="../components/mw_log/requirements/requirements.html#comp_req__log__avoid_signal_processing">comp_req__log__avoid_signal_processing</a></p></td>
-<td class="needs_title"><p>Avoid Signal Processing</p></td>
-<td class="needs_safety"><p>ASIL_B</p></td>
-<td class="needs_status"><p>valid</p></td>
-<td class="needs_testlink"><p><a class="reference external" href="https://github.com/Y-Vaishnavi/logging/blob/2dca2eeece7f73047881ab0ff9037fb32cd738aa/score/mw/log/detail/utils/signal_handling/signal_handling_test.cpp#L87">SignalHandlingTest__PThreadBlockSigTerm_AllSucceed_ReturnsSuccess<span class="score-testcase-result score-testcase-result--passed"> (passed)</span></a></p></td>
-</tr>
-<tr class="need row-odd"><td class="needs_id"><p><a class="reference internal" href="../components/mw_log/requirements/requirements.html#comp_req__log__cross_locking">comp_req__log__cross_locking</a></p></td>
-<td class="needs_title"><p>Cross-Locking Prevention</p></td>
-<td class="needs_safety"><p>ASIL_B</p></td>
-<td class="needs_status"><p>valid</p></td>
-<td class="needs_testlink"><p><a class="reference external" href="https://github.com/Y-Vaishnavi/logging/blob/2dca2eeece7f73047881ab0ff9037fb32cd738aa/score/mw/log/detail/wait_free_producer_queue/wait_free_alternating_writer_test.cpp#L31">WaitFreeAlternatingWriterTests__EnsureAtomicRequirements<span class="score-testcase-result score-testcase-result--passed"> (passed)</span></a><em>; </em><a class="reference external" href="https://github.com/Y-Vaishnavi/logging/blob/2dca2eeece7f73047881ab0ff9037fb32cd738aa/score/mw/log/detail/wait_free_producer_queue/wait_free_linear_writer_test.cpp#L27">WaitFreeLinearWriter__EnsureAtomicRequirements<span class="score-testcase-result score-testcase-result--passed"> (passed)</span></a></p></td>
-</tr>
-<tr class="need row-even"><td class="needs_id"><p><a class="reference internal" href="../components/mw_log/requirements/requirements.html#comp_req__log__dlt_verbose_mode">comp_req__log__dlt_verbose_mode</a></p></td>
-<td class="needs_title"><p>DLT Verbose Mode</p></td>
-<td class="needs_safety"><p>QM</p></td>
-<td class="needs_status"><p>valid</p></td>
-<td class="needs_testlink"><p><a class="reference external" href="https://github.com/Y-Vaishnavi/logging/blob/2dca2eeece7f73047881ab0ff9037fb32cd738aa/score/mw/log/detail/data_router/data_router_backend_test.cpp#L332">DataRouterBackendFixture__LogLevelVerbose<span class="score-testcase-result score-testcase-result--passed"> (passed)</span></a></p></td>
-</tr>
-<tr class="need row-odd"><td class="needs_id"><p><a class="reference internal" href="../components/mw_log/requirements/requirements.html#comp_req__log__file_descriptor_flags">comp_req__log__file_descriptor_flags</a></p></td>
-<td class="needs_title"><p>File Descriptor Flags</p></td>
-<td class="needs_safety"><p>ASIL_B</p></td>
-<td class="needs_status"><p>valid</p></td>
-<td class="needs_testlink"><p><a class="reference external" href="https://github.com/Y-Vaishnavi/logging/blob/2dca2eeece7f73047881ab0ff9037fb32cd738aa/score/mw/log/detail/data_router/shared_memory/writer_factory_test.cpp#L210">WriterFactoryFixture__WhenTheFileExistsItShallBeUnlinked<span class="score-testcase-result score-testcase-result--passed"> (passed)</span></a><em>; </em><a class="reference external" href="https://github.com/Y-Vaishnavi/logging/blob/2dca2eeece7f73047881ab0ff9037fb32cd738aa/score/mw/log/detail/file_recorder/file_recorder_factory_test.cpp#L55">FileRecorderFactoryConfigFixture__FileConfigurionShallCallFileCreationAndReturnFileRecorder<span class="score-testcase-result score-testcase-result--passed"> (passed)</span></a></p></td>
-</tr>
-<tr class="need row-even"><td class="needs_id"><p><a class="reference internal" href="../components/mw_log/requirements/requirements.html#comp_req__log__forward_to_system_logger">comp_req__log__forward_to_system_logger</a></p></td>
-<td class="needs_title"><p>Forward to System Logger</p></td>
-<td class="needs_safety"><p>QM</p></td>
-<td class="needs_status"><p>valid</p></td>
-<td class="needs_testlink"><p><a class="reference external" href="https://github.com/Y-Vaishnavi/logging/blob/2dca2eeece7f73047881ab0ff9037fb32cd738aa/score/mw/log/detail/syslog/syslog_backend_test.cpp#L77">SyslogBackendFixture__SyslogOpenlog<span class="score-testcase-result score-testcase-result--passed"> (passed)</span></a></p></td>
-</tr>
-<tr class="need row-odd"><td class="needs_id"><p><a class="reference internal" href="../components/mw_log/requirements/requirements.html#comp_req__log__inactive_logstream">comp_req__log__inactive_logstream</a></p></td>
-<td class="needs_title"><p>Inactive LogStream Behavior</p></td>
-<td class="needs_safety"><p>QM</p></td>
-<td class="needs_status"><p>valid</p></td>
-<td class="needs_testlink"><p><a class="reference external" href="https://github.com/Y-Vaishnavi/logging/blob/2dca2eeece7f73047881ab0ff9037fb32cd738aa/score/mw/log/detail/data_router/data_router_recorder_test.cpp#L117">DataRouterRecorderFixtureWithLogLevelCheck__DisablesOrEnablesLogAccordingToLevel<span class="score-testcase-result score-testcase-result--passed"> (passed)</span></a></p></td>
-</tr>
-<tr class="need row-even"><td class="needs_id"><p><a class="reference internal" href="../components/mw_log/requirements/requirements.html#comp_req__log__index_size_checking">comp_req__log__index_size_checking</a></p></td>
-<td class="needs_title"><p>Index and Size Checking</p></td>
-<td class="needs_safety"><p>ASIL_B</p></td>
-<td class="needs_status"><p>valid</p></td>
-<td class="needs_testlink"><p><a class="reference external" href="https://github.com/Y-Vaishnavi/logging/blob/2dca2eeece7f73047881ab0ff9037fb32cd738aa/score/mw/log/detail/wait_free_producer_queue/linear_reader_test.cpp#L26">LinearReaderTests__LengthExceedingMaxThresholdShouldReturnEmpty<span class="score-testcase-result score-testcase-result--passed"> (passed)</span></a></p></td>
-</tr>
-<tr class="need row-odd"><td class="needs_id"><p><a class="reference internal" href="../components/mw_log/requirements/requirements.html#comp_req__log__local_allocation_strategy">comp_req__log__local_allocation_strategy</a></p></td>
-<td class="needs_title"><p>Local Allocation Strategy</p></td>
-<td class="needs_safety"><p>ASIL_B</p></td>
-<td class="needs_status"><p>valid</p></td>
-<td class="needs_testlink"><p><a class="reference external" href="https://github.com/Y-Vaishnavi/logging/blob/2dca2eeece7f73047881ab0ff9037fb32cd738aa/score/mw/log/detail/data_router/remote_dlt_recorder_factory_test.cpp#L78">RecorderFactoryConfigFixture__RemoteConfiguredShallReturnDataRouterRecorder<span class="score-testcase-result score-testcase-result--passed"> (passed)</span></a><em>; </em><a class="reference external" href="https://github.com/Y-Vaishnavi/logging/blob/2dca2eeece7f73047881ab0ff9037fb32cd738aa/score/mw/log/detail/file_recorder/file_recorder_test.cpp#L155">FileRecorderFixture__TooManyArgumentsWillYieldTruncatedLog<span class="score-testcase-result score-testcase-result--passed"> (passed)</span></a></p></td>
+<td class="needs_testlink"><p><a class="reference external" href="https://github.com/Y-Vaishnavi/logging/blob/635d0545f7e960ba4365e4499f926699460d36da/score/mw/log/detail/data_router/shared_memory/common_test.cpp#L37">CommonTests__TypesShallBeLockFree<span class="score-testcase-result score-testcase-result--passed"> (passed)</span></a><em>; </em><a class="reference external" href="https://github.com/Y-Vaishnavi/logging/blob/635d0545f7e960ba4365e4499f926699460d36da/score/mw/log/detail/wait_free_producer_queue/wait_free_linear_writer_test.cpp#L27">WaitFreeLinearWriter__EnsureAtomicRequirements<span class="score-testcase-result score-testcase-result--passed"> (passed)</span></a></p></td>
 </tr>
 <tr class="need row-even"><td class="needs_id"><p><a class="reference internal" href="../components/mw_log/requirements/requirements.html#comp_req__log__memory_bound_checking">comp_req__log__memory_bound_checking</a></p></td>
 <td class="needs_title"><p>Memory Bound Checking</p></td>
 <td class="needs_safety"><p>ASIL_B</p></td>
 <td class="needs_status"><p>valid</p></td>
-<td class="needs_testlink"><p><a class="reference external" href="https://github.com/Y-Vaishnavi/logging/blob/2dca2eeece7f73047881ab0ff9037fb32cd738aa/score/mw/log/detail/data_router/shared_memory/shared_memory_reader_test.cpp#L86">SharedMemoryReaderFixture__GetterShallReadSharedDataNumberOfDropsInvalidSize<span class="score-testcase-result score-testcase-result--passed"> (passed)</span></a></p></td>
+<td class="needs_testlink"><p><a class="reference external" href="https://github.com/Y-Vaishnavi/logging/blob/635d0545f7e960ba4365e4499f926699460d36da/score/mw/log/detail/data_router/shared_memory/shared_memory_reader_test.cpp#L86">SharedMemoryReaderFixture__GetterShallReadSharedDataNumberOfDropsInvalidSize<span class="score-testcase-result score-testcase-result--passed"> (passed)</span></a></p></td>
 </tr>
-<tr class="need row-odd"><td class="needs_id"><p><a class="reference internal" href="../components/mw_log/requirements/requirements.html#comp_req__log__no_endless_loops">comp_req__log__no_endless_loops</a></p></td>
+<tr class="need row-odd"><td class="needs_id"><p><a class="reference internal" href="../components/mw_log/requirements/requirements.html#comp_req__log__file_descriptor_flags">comp_req__log__file_descriptor_flags</a></p></td>
+<td class="needs_title"><p>File Descriptor Flags</p></td>
+<td class="needs_safety"><p>ASIL_B</p></td>
+<td class="needs_status"><p>valid</p></td>
+<td class="needs_testlink"><p><a class="reference external" href="https://github.com/Y-Vaishnavi/logging/blob/635d0545f7e960ba4365e4499f926699460d36da/score/mw/log/detail/data_router/shared_memory/writer_factory_test.cpp#L210">WriterFactoryFixture__WhenTheFileExistsItShallBeUnlinked<span class="score-testcase-result score-testcase-result--passed"> (passed)</span></a><em>; </em><a class="reference external" href="https://github.com/Y-Vaishnavi/logging/blob/635d0545f7e960ba4365e4499f926699460d36da/score/mw/log/detail/file_recorder/file_recorder_factory_test.cpp#L55">FileRecorderFactoryConfigFixture__FileConfigurionShallCallFileCreationAndReturnFileRecorder<span class="score-testcase-result score-testcase-result--passed"> (passed)</span></a></p></td>
+</tr>
+<tr class="need row-even"><td class="needs_id"><p><a class="reference internal" href="../components/mw_log/requirements/requirements.html#comp_req__log__index_size_checking">comp_req__log__index_size_checking</a></p></td>
+<td class="needs_title"><p>Index and Size Checking</p></td>
+<td class="needs_safety"><p>ASIL_B</p></td>
+<td class="needs_status"><p>valid</p></td>
+<td class="needs_testlink"><p><a class="reference external" href="https://github.com/Y-Vaishnavi/logging/blob/635d0545f7e960ba4365e4499f926699460d36da/score/mw/log/detail/wait_free_producer_queue/linear_reader_test.cpp#L26">LinearReaderTests__LengthExceedingMaxThresholdShouldReturnEmpty<span class="score-testcase-result score-testcase-result--passed"> (passed)</span></a></p></td>
+</tr>
+<tr class="need row-odd"><td class="needs_id"><p><a class="reference internal" href="../components/mw_log/requirements/requirements.html#comp_req__log__cross_locking">comp_req__log__cross_locking</a></p></td>
+<td class="needs_title"><p>Cross-Locking Prevention</p></td>
+<td class="needs_safety"><p>ASIL_B</p></td>
+<td class="needs_status"><p>valid</p></td>
+<td class="needs_testlink"><p><a class="reference external" href="https://github.com/Y-Vaishnavi/logging/blob/635d0545f7e960ba4365e4499f926699460d36da/score/mw/log/detail/wait_free_producer_queue/wait_free_alternating_writer_test.cpp#L31">WaitFreeAlternatingWriterTests__EnsureAtomicRequirements<span class="score-testcase-result score-testcase-result--passed"> (passed)</span></a><em>; </em><a class="reference external" href="https://github.com/Y-Vaishnavi/logging/blob/635d0545f7e960ba4365e4499f926699460d36da/score/mw/log/detail/wait_free_producer_queue/wait_free_linear_writer_test.cpp#L27">WaitFreeLinearWriter__EnsureAtomicRequirements<span class="score-testcase-result score-testcase-result--passed"> (passed)</span></a></p></td>
+</tr>
+<tr class="need row-even"><td class="needs_id"><p><a class="reference internal" href="../components/mw_log/requirements/requirements.html#comp_req__log__no_endless_loops">comp_req__log__no_endless_loops</a></p></td>
 <td class="needs_title"><p>No Endless Loops</p></td>
 <td class="needs_safety"><p>ASIL_B</p></td>
 <td class="needs_status"><p>valid</p></td>
-<td class="needs_testlink"><p><a class="reference external" href="https://github.com/Y-Vaishnavi/logging/blob/2dca2eeece7f73047881ab0ff9037fb32cd738aa/score/mw/log/detail/wait_free_producer_queue/wait_free_linear_writer_test.cpp#L45">WaitFreeLinearWriter__WriteBufferFullShouldReturnExpectedData<span class="score-testcase-result score-testcase-result--passed"> (passed)</span></a></p></td>
+<td class="needs_testlink"><p><a class="reference external" href="https://github.com/Y-Vaishnavi/logging/blob/635d0545f7e960ba4365e4499f926699460d36da/score/mw/log/detail/wait_free_producer_queue/wait_free_linear_writer_test.cpp#L45">WaitFreeLinearWriter__WriteBufferFullShouldReturnExpectedData<span class="score-testcase-result score-testcase-result--passed"> (passed)</span></a></p></td>
 </tr>
-<tr class="need row-even"><td class="needs_id"><p><a class="reference internal" href="../components/mw_log/requirements/requirements.html#comp_req__log__send_to_datarouter">comp_req__log__send_to_datarouter</a></p></td>
+<tr class="need row-odd"><td class="needs_id"><p><a class="reference internal" href="../components/mw_log/requirements/requirements.html#comp_req__log__send_to_datarouter">comp_req__log__send_to_datarouter</a></p></td>
 <td class="needs_title"><p>Send Messages to Datarouter</p></td>
 <td class="needs_safety"><p>QM</p></td>
-<td class="needs_status"><p>valid</p></td>
-<td class="needs_testlink"><p></p></td>
-</tr>
-<tr class="need row-odd"><td class="needs_id"><p><a class="reference internal" href="../components/mw_log/requirements/requirements.html#comp_req__log__shm_file_permissions">comp_req__log__shm_file_permissions</a></p></td>
-<td class="needs_title"><p>Shared Memory File Permissions</p></td>
-<td class="needs_safety"><p>ASIL_B</p></td>
 <td class="needs_status"><p>valid</p></td>
 <td class="needs_testlink"><p></p></td>
 </tr>
@@ -965,6 +1010,30 @@ verification status and the tests that (fully or partially) verify them:</p>
 <td class="needs_safety"><p>QM</p></td>
 <td class="needs_status"><p>valid</p></td>
 <td class="needs_testlink"><p></p></td>
+</tr>
+<tr class="need row-odd"><td class="needs_id"><p><a class="reference internal" href="../components/mw_log/requirements/requirements.html#comp_req__log__dlt_verbose_mode">comp_req__log__dlt_verbose_mode</a></p></td>
+<td class="needs_title"><p>DLT Verbose Mode</p></td>
+<td class="needs_safety"><p>QM</p></td>
+<td class="needs_status"><p>valid</p></td>
+<td class="needs_testlink"><p><a class="reference external" href="https://github.com/Y-Vaishnavi/logging/blob/635d0545f7e960ba4365e4499f926699460d36da/score/mw/log/detail/data_router/data_router_backend_test.cpp#L332">DataRouterBackendFixture__LogLevelVerbose<span class="score-testcase-result score-testcase-result--passed"> (passed)</span></a></p></td>
+</tr>
+<tr class="need row-even"><td class="needs_id"><p><a class="reference internal" href="../components/mw_log/requirements/requirements.html#comp_req__log__inactive_logstream">comp_req__log__inactive_logstream</a></p></td>
+<td class="needs_title"><p>Inactive LogStream Behavior</p></td>
+<td class="needs_safety"><p>QM</p></td>
+<td class="needs_status"><p>valid</p></td>
+<td class="needs_testlink"><p><a class="reference external" href="https://github.com/Y-Vaishnavi/logging/blob/635d0545f7e960ba4365e4499f926699460d36da/score/mw/log/detail/data_router/data_router_recorder_test.cpp#L117">DataRouterRecorderFixtureWithLogLevelCheck__DisablesOrEnablesLogAccordingToLevel<span class="score-testcase-result score-testcase-result--passed"> (passed)</span></a></p></td>
+</tr>
+<tr class="need row-odd"><td class="needs_id"><p><a class="reference internal" href="../components/mw_log/requirements/requirements.html#comp_req__log__autosar_log_trace_spec">comp_req__log__autosar_log_trace_spec</a></p></td>
+<td class="needs_title"><p>AUTOSAR Log and Trace Specification</p></td>
+<td class="needs_safety"><p>QM</p></td>
+<td class="needs_status"><p>valid</p></td>
+<td class="needs_testlink"><p><a class="reference external" href="https://github.com/Y-Vaishnavi/logging/blob/635d0545f7e960ba4365e4499f926699460d36da/score/mw/log/detail/file_recorder/dlt_message_builder_test.cpp#L65">DltMessageBuilderFixture__ShallDepleteAfterHeaderAndPayload<span class="score-testcase-result score-testcase-result--passed"> (passed)</span></a></p></td>
+</tr>
+<tr class="need row-even"><td class="needs_id"><p><a class="reference internal" href="../components/mw_log/requirements/requirements.html#comp_req__log__forward_to_system_logger">comp_req__log__forward_to_system_logger</a></p></td>
+<td class="needs_title"><p>Forward to System Logger</p></td>
+<td class="needs_safety"><p>QM</p></td>
+<td class="needs_status"><p>valid</p></td>
+<td class="needs_testlink"><p><a class="reference external" href="https://github.com/Y-Vaishnavi/logging/blob/635d0545f7e960ba4365e4499f926699460d36da/score/mw/log/detail/syslog/syslog_backend_test.cpp#L77">SyslogBackendFixture__SyslogOpenlog<span class="score-testcase-result score-testcase-result--passed"> (passed)</span></a></p></td>
 </tr>
 </tbody>
 </table>
