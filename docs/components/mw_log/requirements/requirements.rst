@@ -132,6 +132,37 @@ System Backend
    mw::log shall enable the system logger backend if and only if the log mode contains
    "kSystem".
 
+File Backend
+------------
+
+*File backend shall write the logs to the local file system.*
+
+.. comp_req:: Write to Local File
+   :id: comp_req__log__write_to_local_file
+   :version: 1
+   :reqtype: Functional
+   :security: NO
+   :safety: QM
+   :derived_from: feat_req__logging__log_sinks_local_fs
+   :status: valid
+   :satisfied_by: comp__mw_log_backend
+
+   mw::log shall write the logs to a file on the local file system when the file
+   backend is used.
+
+.. comp_req:: File Backend Activation
+   :id: comp_req__log__file_backend_activation
+   :version: 1
+   :reqtype: Functional
+   :security: NO
+   :safety: QM
+   :derived_from: feat_req__logging__log_sinks_local_fs, feat_req__logging__config_on_demand
+   :status: valid
+   :satisfied_by: comp__mw_log_backend
+
+   mw::log shall enable the file backend if and only if the log mode contains
+   "kFile".
+
 Non-Functional Requirements
 ---------------------------
 
@@ -195,7 +226,7 @@ Non-Functional Requirements
    :reqtype: Non-Functional
    :security: YES
    :safety: ASIL_B
-   :derived_from: feat_req__logging__asil_support
+   :derived_from: feat_req__logging__asil_support, feat_req__logging__error_handling_recoverable
    :status: valid
    :satisfied_by: comp__mw_log_backend
 
@@ -209,7 +240,7 @@ Non-Functional Requirements
    :reqtype: Non-Functional
    :security: YES
    :safety: ASIL_B
-   :derived_from: feat_req__logging__asil_support
+   :derived_from: feat_req__logging__asil_support, feat_req__logging__error_handling_recoverable
    :status: valid
    :satisfied_by: comp__mw_log_backend
 
