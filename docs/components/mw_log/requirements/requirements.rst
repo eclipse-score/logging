@@ -48,12 +48,13 @@ mw::log
    :status: valid
    :satisfied_by: comp__mw_log_backend
 
-   The component shall set the ``FD_CLOEXEC`` (or ``O_CLOEXEC``) flag on all the file
-   descriptors it owns.
+   mw::log shall ensure that file descriptors it owns are not inherited by
+   processes started by the application.
 
-   Note: This requirement can be satisfied in unit-test, by checking
-   ``int flags = fcntl(fd, F_GETFD); assert((flags != -1) && (flags & FD_CLOEXEC));`` for every
-   file descriptor owned by the component.
+   .. note::
+      This requirement can be satisfied in unit-test, by checking
+      ``int flags = fcntl(fd, F_GETFD); assert((flags != -1) && (flags & FD_CLOEXEC));`` for every
+      file descriptor owned by the component.
 
 .. comp_req:: DLT Verbose Mode
    :id: comp_req__log__dlt_verbose_mode

@@ -90,11 +90,9 @@ See also :need:`doc_concept__wp_inspections` for further information about revie
     * - REQ_02_05
       - Is the requirement description *independent from implementation* ?
       - This checkpoint should improve requirements definition in the sense that the "what" is described and not the "how" - the latter should be described in architecture/design derived from the requirement. But there can also be a good reason for this, for example we would require using a file format like JSON and even specify the formatting standard already on stakeholder requirement level because we want to be compatible. A finding in this checkpoint does not mean there is a safety problem in the requirement.
-      - No
-      - :need:`comp_req__log__send_to_datarouter` prescribes internal use of a logging library.
-        :need:`comp_req__log__file_descriptor_flags` and
-        :need:`comp_req__log__shm_file_permissions` detail the permissions of
-        particular resources which are implementation details.
+      - Yes
+      -
+      -
       - https://github.com/eclipse-score/logging/issues/345
     * - REQ_03_01
       - Is the *linkage to the parent requirement* correct?
