@@ -1,0 +1,951 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Feature Requirements &mdash; Dependable Element Mw Log Backend Doc 1.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=4ae1632d" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-data-viewer/jsonview.bundle.css?v=f6ef2277" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-needs/libs/html/datatables.min.css?v=4b4fd840" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-needs/common_css/needstable.css?v=5e1b6797" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-needs/common_css/need_links.css?v=2150a916" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-needs/common_css/need_core.css?v=f5b60a78" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-needs/common_css/need_style.css?v=92936fa5" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-needs/common_css/need_toggle.css?v=5c6620df" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-needs/modern.css?v=803738c0" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=8d563738"></script>
+      <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../_static/design-tabs.js?v=f930bc37"></script>
+      <script src="../_static/sphinx-data-viewer/jsonview.bundle.js?v=18cd53c5"></script>
+      <script src="../_static/sphinx-data-viewer/jsonview_loader.js?v=f7ff7e7d"></script>
+      <script src="../_static/sphinx-needs/libs/html/datatables.min.js?v=8a4aee21"></script>
+      <script src="../_static/sphinx-needs/libs/html/datatables_loader.js?v=a2cae175"></script>
+      <script src="../_static/sphinx-needs/libs/html/sphinx_needs_collapse.js?v=dca66431"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Component Requirements" href="component_requirements.html" />
+    <link rel="prev" title="L.O.B.S.T.E.R. Traceability Report" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            Dependable Element Mw Log Backend Doc
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../assumed_system.html">Assumed System</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../software_arch.html">Software Architectural Level</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../components.html">Components</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../traceability.html">Traceability</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="index.html">L.O.B.S.T.E.R. Traceability Report</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="index.html">Overview</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Feature Requirements</a></li>
+<li class="toctree-l3"><a class="reference internal" href="component_requirements.html">Component Requirements</a></li>
+<li class="toctree-l3"><a class="reference internal" href="failure_modes.html">Failure Modes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="control_measures.html">Control Measures</a></li>
+<li class="toctree-l3"><a class="reference internal" href="architecture.html">Architecture</a></li>
+<li class="toctree-l3"><a class="reference internal" href="unit_test.html">Unit Test</a></li>
+<li class="toctree-l3"><a class="reference internal" href="test_case_coverage.html">Test Case Coverage</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Dependable Element Mw Log Backend Doc</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../traceability.html">Traceability</a></li>
+          <li class="breadcrumb-item"><a href="index.html">L.O.B.S.T.E.R. Traceability Report</a></li>
+      <li class="breadcrumb-item active">Feature Requirements</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/traceability_report/feature_requirements.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="feature-requirements">
+<h1>Feature Requirements<a class="headerlink" href="#feature-requirements" title="Link to this heading"></a></h1>
+<p><strong>Coverage:</strong> 21.6% (11 of 51 items OK)</p>
+<details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3" id="lobster-item-3e119d3059694912c39f5b876fbd0e6e2c851861" open="open">
+<summary class="sd-summary-title sd-card-header sd-bg-danger sd-text-white">
+<span class="sd-summary-text">[MISSING] TRLC Assumedsystemreq MwLogAssumedSystemRequirements.ASR_LoggingSupport</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
+<blockquote class="pull-quote">
+<div><p class="sd-card-text">The platform shall support Diagnostic Log and Trace (DLT) / Logcat format as well as logging of early startup events.</p>
+</div></blockquote>
+<hr><p class="sd-card-text"><strong>Traces to:</strong></p>
+<div class="sd-card sd-sphinx-override sd-mb-3 sd-shadow-sm lobster-issue-card docutils">
+<div class="sd-card-body docutils">
+<ul class="simple">
+<li><p class="sd-card-text">missing reference to Component Requirements</p></li>
+</ul>
+</div>
+</div>
+<hr><p class="sd-card-text"><strong>Source:</strong> <a class="reference external" href="../../../../../../score/mw/log/requirements/assumed_system_requirements/assumed_system_requirements.trlc#L21">score/mw/log/requirements/assumed_system_requirements/assumed_system_requirements.trlc:21:27</a></p>
+</div>
+</details><details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3" id="lobster-item-479675ca42859bd4a9af20f83d6ed38daa073061" open="open">
+<summary class="sd-summary-title sd-card-header sd-bg-danger sd-text-white">
+<span class="sd-summary-text">[MISSING] TRLC Assumedsystemreq MwLogAssumedSystemRequirements.ASR_SafeLogAndTrace</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
+<blockquote class="pull-quote">
+<div><p class="sd-card-text">The platform shall provide a Log and Trace infrastructure supporting the highest ASIL level, guaranteeing freedom from interference (FFI) with regard to the calling components.</p>
+</div></blockquote>
+<hr><p class="sd-card-text"><strong>Traces to:</strong></p>
+<div class="sd-card sd-sphinx-override sd-mb-3 sd-shadow-sm lobster-issue-card docutils">
+<div class="sd-card-body docutils">
+<ul class="simple">
+<li><p class="sd-card-text">missing reference to Component Requirements</p></li>
+</ul>
+</div>
+</div>
+<hr><p class="sd-card-text"><strong>Source:</strong> <a class="reference external" href="../../../../../../score/mw/log/requirements/assumed_system_requirements/assumed_system_requirements.trlc#L29">score/mw/log/requirements/assumed_system_requirements/assumed_system_requirements.trlc:29:27</a></p>
+</div>
+</details><details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3" id="lobster-item-6abfc9f6c9b9584d0c76917c3a1faf75d3f1000a" open="open">
+<summary class="sd-summary-title sd-card-header sd-bg-danger sd-text-white">
+<span class="sd-summary-text">[MISSING] TRLC Assumedsystemreq MwLogAssumedSystemRequirements.ASR_SecureLogAndTrace</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
+<blockquote class="pull-quote">
+<div><p class="sd-card-text">The information exchanged between applications and the Logging and Tracing components shall be protected against unauthorized access and manipulation. The platform shall provide mechanisms to ensure confidentiality, integrity, and authenticity of the exchanged information.</p>
+</div></blockquote>
+<hr><p class="sd-card-text"><strong>Traces to:</strong></p>
+<div class="sd-card sd-sphinx-override sd-mb-3 sd-shadow-sm lobster-issue-card docutils">
+<div class="sd-card-body docutils">
+<ul class="simple">
+<li><p class="sd-card-text">missing reference to Component Requirements</p></li>
+</ul>
+</div>
+</div>
+<hr><p class="sd-card-text"><strong>Source:</strong> <a class="reference external" href="../../../../../../score/mw/log/requirements/assumed_system_requirements/assumed_system_requirements.trlc#L37">score/mw/log/requirements/assumed_system_requirements/assumed_system_requirements.trlc:37:27</a></p>
+</div>
+</details><details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3" id="lobster-item-4febb9a966e85f572203bb0f5915eb0bf4999546" open="open">
+<summary class="sd-summary-title sd-card-header sd-bg-danger sd-text-white">
+<span class="sd-summary-text">[MISSING] TRLC Assumedsystemreq MwLogAssumedSystemRequirements.ASR_ErrorHandling</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
+<blockquote class="pull-quote">
+<div><p class="sd-card-text">(C++) exceptions shall not be used for error handling.
+The best way to deal with errors is to try to resolve those component internally. If not possible the caller of the function shall be notified of the error.
+For (error) returns there is a specific library to be used in S-CORE, it is the score::Result library which is part of
+the Base Libraries feature.</p>
+</div></blockquote>
+<hr><p class="sd-card-text"><strong>Traces to:</strong></p>
+<div class="sd-card sd-sphinx-override sd-mb-3 sd-shadow-sm lobster-issue-card docutils">
+<div class="sd-card-body docutils">
+<ul class="simple">
+<li><p class="sd-card-text">missing reference to Component Requirements</p></li>
+</ul>
+</div>
+</div>
+<hr><p class="sd-card-text"><strong>Source:</strong> <a class="reference external" href="../../../../../../score/mw/log/requirements/assumed_system_requirements/assumed_system_requirements.trlc#L45">score/mw/log/requirements/assumed_system_requirements/assumed_system_requirements.trlc:45:27</a></p>
+</div>
+</details><details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3" id="lobster-item-fb5c5bcedf7c8a802c8f1737ccc21ea6b4c53645" open="open">
+<summary class="sd-summary-title sd-card-header sd-bg-danger sd-text-white">
+<span class="sd-summary-text">[MISSING] TRLC Assumedsystemreq MwLogAssumedSystemRequirements.ASR_LogAndTraceConsistentBehaviour</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
+<blockquote class="pull-quote">
+<div><p class="sd-card-text">All Log and Trace functionality used in the context of customer functionality shall provide consistent behaviour.</p>
+</div></blockquote>
+<hr><p class="sd-card-text"><strong>Traces to:</strong></p>
+<div class="sd-card sd-sphinx-override sd-mb-3 sd-shadow-sm lobster-issue-card docutils">
+<div class="sd-card-body docutils">
+<ul class="simple">
+<li><p class="sd-card-text">missing reference to Component Requirements</p></li>
+</ul>
+</div>
+</div>
+<hr><p class="sd-card-text"><strong>Source:</strong> <a class="reference external" href="../../../../../../score/mw/log/requirements/assumed_system_requirements/assumed_system_requirements.trlc#L55">score/mw/log/requirements/assumed_system_requirements/assumed_system_requirements.trlc:55:27</a></p>
+</div>
+</details><details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3" id="lobster-item-d3522f633f62d45b1f9d6d09aeb77f60b074abd4" open="open">
+<summary class="sd-summary-title sd-card-header sd-bg-danger sd-text-white">
+<span class="sd-summary-text">[MISSING] TRLC Assumedsystemreq MwLogAssumedSystemRequirements.ASR_OverallGoalsEnableCooperation</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
+<blockquote class="pull-quote">
+<div><p class="sd-card-text">The SW-platform shall where possible be based on existing standards (e.g. network
+protocols).</p>
+</div></blockquote>
+<hr><p class="sd-card-text"><strong>Traces to:</strong></p>
+<div class="sd-card sd-sphinx-override sd-mb-3 sd-shadow-sm lobster-issue-card docutils">
+<div class="sd-card-body docutils">
+<ul class="simple">
+<li><p class="sd-card-text">missing reference to Component Requirements</p></li>
+</ul>
+</div>
+</div>
+<hr><p class="sd-card-text"><strong>Source:</strong> <a class="reference external" href="../../../../../../score/mw/log/requirements/assumed_system_requirements/assumed_system_requirements.trlc#L63">score/mw/log/requirements/assumed_system_requirements/assumed_system_requirements.trlc:63:27</a></p>
+</div>
+</details><details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3" id="lobster-item-3ad526b3ca6bc3cad8006f7fe7f21453c13d13ae" open="open">
+<summary class="sd-summary-title sd-card-header sd-bg-danger sd-text-white">
+<span class="sd-summary-text">[MISSING] TRLC Featreq MwLogFeature.TimestampingLocal</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
+<blockquote class="pull-quote">
+<div><p class="sd-card-text">The logging framework shall support local timestamps for each log entry.</p>
+</div></blockquote>
+<hr><p class="sd-card-text"><strong>Traces to:</strong></p>
+<div class="sd-card sd-sphinx-override sd-mb-3 sd-shadow-sm lobster-issue-card docutils">
+<div class="sd-card-body docutils">
+<ul class="simple">
+<li><p class="sd-card-text">missing reference to Component Requirements</p></li>
+</ul>
+</div>
+</div>
+<hr><p class="sd-card-text"><strong>Source:</strong> <a class="reference external" href="../../../../../../score/mw/log/requirements/feature_requirements/feature_requirements.trlc#L22">score/mw/log/requirements/feature_requirements/feature_requirements.trlc:22:18</a></p>
+</div>
+</details><details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3" id="lobster-item-93c5495224828e744d310b8c560a29b7e08d3ce4" open="open">
+<summary class="sd-summary-title sd-card-header sd-bg-danger sd-text-white">
+<span class="sd-summary-text">[MISSING] TRLC Featreq MwLogFeature.TimestampingOriginal</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
+<blockquote class="pull-quote">
+<div><p class="sd-card-text">The logging framework shall support original timestamps for routed log entries.</p>
+</div></blockquote>
+<hr><p class="sd-card-text"><strong>Traces to:</strong></p>
+<div class="sd-card sd-sphinx-override sd-mb-3 sd-shadow-sm lobster-issue-card docutils">
+<div class="sd-card-body docutils">
+<ul class="simple">
+<li><p class="sd-card-text">missing reference to Component Requirements</p></li>
+</ul>
+</div>
+</div>
+<hr><p class="sd-card-text"><strong>Source:</strong> <a class="reference external" href="../../../../../../score/mw/log/requirements/feature_requirements/feature_requirements.trlc#L30">score/mw/log/requirements/feature_requirements/feature_requirements.trlc:30:18</a></p>
+</div>
+</details><details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3" id="lobster-item-49168ec192a867d2a2e43360c30229dc6fafbe98" open="open">
+<summary class="sd-summary-title sd-card-header sd-bg-danger sd-text-white">
+<span class="sd-summary-text">[MISSING] TRLC Featreq MwLogFeature.TimestampingSync</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
+<blockquote class="pull-quote">
+<div><p class="sd-card-text">The logging framework shall support timestamp synchronization for log entries
+coming from different logging nodes.</p>
+</div></blockquote>
+<hr><p class="sd-card-text"><strong>Traces to:</strong></p>
+<div class="sd-card sd-sphinx-override sd-mb-3 sd-shadow-sm lobster-issue-card docutils">
+<div class="sd-card-body docutils">
+<ul class="simple">
+<li><p class="sd-card-text">missing reference to Component Requirements</p></li>
+</ul>
+</div>
+</div>
+<hr><p class="sd-card-text"><strong>Source:</strong> <a class="reference external" href="../../../../../../score/mw/log/requirements/feature_requirements/feature_requirements.trlc#L38">score/mw/log/requirements/feature_requirements/feature_requirements.trlc:38:18</a></p>
+</div>
+</details><details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3" id="lobster-item-2ad440eab4e396c3b1c94edb4abf440212fed51b" open="open">
+<summary class="sd-summary-title sd-card-header sd-bg-danger sd-text-white">
+<span class="sd-summary-text">[MISSING] TRLC Featreq MwLogFeature.Prioritization</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
+<blockquote class="pull-quote">
+<div><p class="sd-card-text">The logging framework shall prioritize logs in case of resource conflicts to
+ensure critical logs are not lost.</p>
+</div></blockquote>
+<hr><p class="sd-card-text"><strong>Traces to:</strong></p>
+<div class="sd-card sd-sphinx-override sd-mb-3 sd-shadow-sm lobster-issue-card docutils">
+<div class="sd-card-body docutils">
+<ul class="simple">
+<li><p class="sd-card-text">missing reference to Component Requirements</p></li>
+</ul>
+</div>
+</div>
+<hr><p class="sd-card-text"><strong>Source:</strong> <a class="reference external" href="../../../../../../score/mw/log/requirements/feature_requirements/feature_requirements.trlc#L55">score/mw/log/requirements/feature_requirements/feature_requirements.trlc:55:18</a></p>
+</div>
+</details><details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3" id="lobster-item-546ba5ac42ac99b95e45e8ae1b71a632cc3ff581" open="open">
+<summary class="sd-summary-title sd-card-header sd-bg-danger sd-text-white">
+<span class="sd-summary-text">[MISSING] TRLC Featreq MwLogFeature.EntityIdentifier</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
+<blockquote class="pull-quote">
+<div><p class="sd-card-text">The logging framework shall support logging entity identifiers for each log
+entry.</p>
+</div></blockquote>
+<hr><p class="sd-card-text"><strong>Traces to:</strong></p>
+<div class="sd-card sd-sphinx-override sd-mb-3 sd-shadow-sm lobster-issue-card docutils">
+<div class="sd-card-body docutils">
+<ul class="simple">
+<li><p class="sd-card-text">missing reference to Component Requirements</p></li>
+</ul>
+</div>
+</div>
+<hr><p class="sd-card-text"><strong>Source:</strong> <a class="reference external" href="../../../../../../score/mw/log/requirements/feature_requirements/feature_requirements.trlc#L73">score/mw/log/requirements/feature_requirements/feature_requirements.trlc:73:18</a></p>
+</div>
+</details><details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3" id="lobster-item-bed01cecc0c0d02d23024374ee1a65212701a09a" open="open">
+<summary class="sd-summary-title sd-card-header sd-bg-danger sd-text-white">
+<span class="sd-summary-text">[MISSING] TRLC Featreq MwLogFeature.FilteringEntityId</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
+<blockquote class="pull-quote">
+<div><p class="sd-card-text">The logging framework shall support filtering by logging entity identifiers.</p>
+</div></blockquote>
+<hr><p class="sd-card-text"><strong>Traces to:</strong></p>
+<div class="sd-card sd-sphinx-override sd-mb-3 sd-shadow-sm lobster-issue-card docutils">
+<div class="sd-card-body docutils">
+<ul class="simple">
+<li><p class="sd-card-text">missing reference to Component Requirements</p></li>
+</ul>
+</div>
+</div>
+<hr><p class="sd-card-text"><strong>Source:</strong> <a class="reference external" href="../../../../../../score/mw/log/requirements/feature_requirements/feature_requirements.trlc#L90">score/mw/log/requirements/feature_requirements/feature_requirements.trlc:90:18</a></p>
+</div>
+</details><details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3" id="lobster-item-896a0c84a5fe3a0ffa5ffabf83f03038984c79f3" open="open">
+<summary class="sd-summary-title sd-card-header sd-bg-danger sd-text-white">
+<span class="sd-summary-text">[MISSING] TRLC Featreq MwLogFeature.MessageLossDetection</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
+<blockquote class="pull-quote">
+<div><p class="sd-card-text">The logging framework shall detect and report any message loss.</p>
+</div></blockquote>
+<hr><p class="sd-card-text"><strong>Traces to:</strong></p>
+<div class="sd-card sd-sphinx-override sd-mb-3 sd-shadow-sm lobster-issue-card docutils">
+<div class="sd-card-body docutils">
+<ul class="simple">
+<li><p class="sd-card-text">missing reference to Component Requirements</p></li>
+</ul>
+</div>
+</div>
+<hr><p class="sd-card-text"><strong>Source:</strong> <a class="reference external" href="../../../../../../score/mw/log/requirements/feature_requirements/feature_requirements.trlc#L98">score/mw/log/requirements/feature_requirements/feature_requirements.trlc:98:18</a></p>
+</div>
+</details><details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3" id="lobster-item-d7c95a2a1cbac1ffce2db5c31fe712e396df2f9b" open="open">
+<summary class="sd-summary-title sd-card-header sd-bg-danger sd-text-white">
+<span class="sd-summary-text">[MISSING] TRLC Featreq MwLogFeature.MessageLossHandling</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
+<blockquote class="pull-quote">
+<div><p class="sd-card-text">The logging framework shall provide mechanisms to handle message loss
+gracefully. Additional Information: e.g. buffering or prioritizing critical messages.</p>
+</div></blockquote>
+<hr><p class="sd-card-text"><strong>Traces to:</strong></p>
+<div class="sd-card sd-sphinx-override sd-mb-3 sd-shadow-sm lobster-issue-card docutils">
+<div class="sd-card-body docutils">
+<ul class="simple">
+<li><p class="sd-card-text">missing reference to Component Requirements</p></li>
+</ul>
+</div>
+</div>
+<hr><p class="sd-card-text"><strong>Source:</strong> <a class="reference external" href="../../../../../../score/mw/log/requirements/feature_requirements/feature_requirements.trlc#L106">score/mw/log/requirements/feature_requirements/feature_requirements.trlc:106:18</a></p>
+</div>
+</details><details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3" id="lobster-item-73df2baba998ff6a4b575d1dcea989f13adba714" open="open">
+<summary class="sd-summary-title sd-card-header sd-bg-danger sd-text-white">
+<span class="sd-summary-text">[MISSING] TRLC Featreq MwLogFeature.ContextLogLevelActivation</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
+<blockquote class="pull-quote">
+<div><p class="sd-card-text">The logging framework shall allow context-specific log level activation at
+runtime to enable fine-grained control over logging behavior.</p>
+</div></blockquote>
+<hr><p class="sd-card-text"><strong>Traces to:</strong></p>
+<div class="sd-card sd-sphinx-override sd-mb-3 sd-shadow-sm lobster-issue-card docutils">
+<div class="sd-card-body docutils">
+<ul class="simple">
+<li><p class="sd-card-text">missing reference to Component Requirements</p></li>
+</ul>
+</div>
+</div>
+<hr><p class="sd-card-text"><strong>Source:</strong> <a class="reference external" href="../../../../../../score/mw/log/requirements/feature_requirements/feature_requirements.trlc#L115">score/mw/log/requirements/feature_requirements/feature_requirements.trlc:115:18</a></p>
+</div>
+</details><details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3" id="lobster-item-3575c38585c677145a7077f44c77b6b05a5178ff" open="open">
+<summary class="sd-summary-title sd-card-header sd-bg-danger sd-text-white">
+<span class="sd-summary-text">[MISSING] TRLC Featreq MwLogFeature.LogSourcesUserApp</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
+<blockquote class="pull-quote">
+<div><p class="sd-card-text">The logging framework shall support user application as log source.</p>
+</div></blockquote>
+<hr><p class="sd-card-text"><strong>Traces to:</strong></p>
+<div class="sd-card sd-sphinx-override sd-mb-3 sd-shadow-sm lobster-issue-card docutils">
+<div class="sd-card-body docutils">
+<ul class="simple">
+<li><p class="sd-card-text">missing reference to Component Requirements</p></li>
+</ul>
+</div>
+</div>
+<hr><p class="sd-card-text"><strong>Source:</strong> <a class="reference external" href="../../../../../../score/mw/log/requirements/feature_requirements/feature_requirements.trlc#L124">score/mw/log/requirements/feature_requirements/feature_requirements.trlc:124:18</a></p>
+</div>
+</details><details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3" id="lobster-item-75afab8534e650b792dd01973b2e06133b01878e" open="open">
+<summary class="sd-summary-title sd-card-header sd-bg-danger sd-text-white">
+<span class="sd-summary-text">[MISSING] TRLC Featreq MwLogFeature.LogSourcesComponentPlatform</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
+<blockquote class="pull-quote">
+<div><p class="sd-card-text">The logging framework shall support component features and platform as log
+sources.</p>
+</div></blockquote>
+<hr><p class="sd-card-text"><strong>Traces to:</strong></p>
+<div class="sd-card sd-sphinx-override sd-mb-3 sd-shadow-sm lobster-issue-card docutils">
+<div class="sd-card-body docutils">
+<ul class="simple">
+<li><p class="sd-card-text">missing reference to Component Requirements</p></li>
+</ul>
+</div>
+</div>
+<hr><p class="sd-card-text"><strong>Source:</strong> <a class="reference external" href="../../../../../../score/mw/log/requirements/feature_requirements/feature_requirements.trlc#L132">score/mw/log/requirements/feature_requirements/feature_requirements.trlc:132:18</a></p>
+</div>
+</details><details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3" id="lobster-item-fc3ef24df4cbb101c31e972b5df3f6a58098759c" open="open">
+<summary class="sd-summary-title sd-card-header sd-bg-danger sd-text-white">
+<span class="sd-summary-text">[MISSING] TRLC Featreq MwLogFeature.LogSinksConsole</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
+<blockquote class="pull-quote">
+<div><p class="sd-card-text">The logging framework shall support console as a log sink.</p>
+</div></blockquote>
+<hr><p class="sd-card-text"><strong>Traces to:</strong></p>
+<div class="sd-card sd-sphinx-override sd-mb-3 sd-shadow-sm lobster-issue-card docutils">
+<div class="sd-card-body docutils">
+<ul class="simple">
+<li><p class="sd-card-text">missing reference to Component Requirements</p></li>
+</ul>
+</div>
+</div>
+<hr><p class="sd-card-text"><strong>Source:</strong> <a class="reference external" href="../../../../../../score/mw/log/requirements/feature_requirements/feature_requirements.trlc#L141">score/mw/log/requirements/feature_requirements/feature_requirements.trlc:141:18</a></p>
+</div>
+</details><details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3" id="lobster-item-934c37ba34c937b375502e7d7d07af4a8c9a723a" open="open">
+<summary class="sd-summary-title sd-card-header sd-bg-danger sd-text-white">
+<span class="sd-summary-text">[MISSING] TRLC Featreq MwLogFeature.LogSinksLocalFs</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
+<blockquote class="pull-quote">
+<div><p class="sd-card-text">The logging framework shall support local file system as log sink.</p>
+</div></blockquote>
+<hr><p class="sd-card-text"><strong>Traces to:</strong></p>
+<div class="sd-card sd-sphinx-override sd-mb-3 sd-shadow-sm lobster-issue-card docutils">
+<div class="sd-card-body docutils">
+<ul class="simple">
+<li><p class="sd-card-text">missing reference to Component Requirements</p></li>
+</ul>
+</div>
+</div>
+<hr><p class="sd-card-text"><strong>Source:</strong> <a class="reference external" href="../../../../../../score/mw/log/requirements/feature_requirements/feature_requirements.trlc#L149">score/mw/log/requirements/feature_requirements/feature_requirements.trlc:149:18</a></p>
+</div>
+</details><details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3" id="lobster-item-6682a03c6abbd3c86356588d9db371afb11de855" open="open">
+<summary class="sd-summary-title sd-card-header sd-bg-danger sd-text-white">
+<span class="sd-summary-text">[MISSING] TRLC Featreq MwLogFeature.LogSinksCloudDrive</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
+<blockquote class="pull-quote">
+<div><p class="sd-card-text">The logging framework shall support cloud-native drives via network as log
+sinks.</p>
+</div></blockquote>
+<hr><p class="sd-card-text"><strong>Traces to:</strong></p>
+<div class="sd-card sd-sphinx-override sd-mb-3 sd-shadow-sm lobster-issue-card docutils">
+<div class="sd-card-body docutils">
+<ul class="simple">
+<li><p class="sd-card-text">missing reference to Component Requirements</p></li>
+</ul>
+</div>
+</div>
+<hr><p class="sd-card-text"><strong>Source:</strong> <a class="reference external" href="../../../../../../score/mw/log/requirements/feature_requirements/feature_requirements.trlc#L157">score/mw/log/requirements/feature_requirements/feature_requirements.trlc:157:18</a></p>
+</div>
+</details><details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3" id="lobster-item-4c543ec8339cf438e4987f3604acde32ca15019a" open="open">
+<summary class="sd-summary-title sd-card-header sd-bg-danger sd-text-white">
+<span class="sd-summary-text">[MISSING] TRLC Featreq MwLogFeature.LogSinksNetwork</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
+<blockquote class="pull-quote">
+<div><p class="sd-card-text">The logging framework shall support network channels, including a second
+dedicated Ethernet channel, as log sinks.</p>
+</div></blockquote>
+<hr><p class="sd-card-text"><strong>Traces to:</strong></p>
+<div class="sd-card sd-sphinx-override sd-mb-3 sd-shadow-sm lobster-issue-card docutils">
+<div class="sd-card-body docutils">
+<ul class="simple">
+<li><p class="sd-card-text">missing reference to Component Requirements</p></li>
+</ul>
+</div>
+</div>
+<hr><p class="sd-card-text"><strong>Source:</strong> <a class="reference external" href="../../../../../../score/mw/log/requirements/feature_requirements/feature_requirements.trlc#L166">score/mw/log/requirements/feature_requirements/feature_requirements.trlc:166:18</a></p>
+</div>
+</details><details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3" id="lobster-item-143bf995e123805fa2e4e452f8e22cadb9adfd35" open="open">
+<summary class="sd-summary-title sd-card-header sd-bg-danger sd-text-white">
+<span class="sd-summary-text">[MISSING] TRLC Featreq MwLogFeature.LogSinksStdout</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
+<blockquote class="pull-quote">
+<div><p class="sd-card-text">The logging framework shall ensure logs appear on stdout when running unit
+tests.</p>
+</div></blockquote>
+<hr><p class="sd-card-text"><strong>Traces to:</strong></p>
+<div class="sd-card sd-sphinx-override sd-mb-3 sd-shadow-sm lobster-issue-card docutils">
+<div class="sd-card-body docutils">
+<ul class="simple">
+<li><p class="sd-card-text">missing reference to Component Requirements</p></li>
+</ul>
+</div>
+</div>
+<hr><p class="sd-card-text"><strong>Source:</strong> <a class="reference external" href="../../../../../../score/mw/log/requirements/feature_requirements/feature_requirements.trlc#L175">score/mw/log/requirements/feature_requirements/feature_requirements.trlc:175:18</a></p>
+</div>
+</details><details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3" id="lobster-item-c3bfff067c540b07d4de24192a93df72385fb760" open="open">
+<summary class="sd-summary-title sd-card-header sd-bg-danger sd-text-white">
+<span class="sd-summary-text">[MISSING] TRLC Featreq MwLogFeature.BootLogging</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
+<blockquote class="pull-quote">
+<div><p class="sd-card-text">The logging framework shall support logging of data to memory which survives a
+reboot cycle.</p>
+</div></blockquote>
+<hr><p class="sd-card-text"><strong>Traces to:</strong></p>
+<div class="sd-card sd-sphinx-override sd-mb-3 sd-shadow-sm lobster-issue-card docutils">
+<div class="sd-card-body docutils">
+<ul class="simple">
+<li><p class="sd-card-text">missing reference to Component Requirements</p></li>
+</ul>
+</div>
+</div>
+<hr><p class="sd-card-text"><strong>Source:</strong> <a class="reference external" href="../../../../../../score/mw/log/requirements/feature_requirements/feature_requirements.trlc#L184">score/mw/log/requirements/feature_requirements/feature_requirements.trlc:184:18</a></p>
+</div>
+</details><details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3" id="lobster-item-0d1c50b2b9cac17c7afca48c5513807ae8116bce" open="open">
+<summary class="sd-summary-title sd-card-header sd-bg-danger sd-text-white">
+<span class="sd-summary-text">[MISSING] TRLC Featreq MwLogFeature.ConfigLogLevel</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
+<blockquote class="pull-quote">
+<div><p class="sd-card-text">The logging framework shall support configuration of log levels.</p>
+</div></blockquote>
+<hr><p class="sd-card-text"><strong>Traces to:</strong></p>
+<div class="sd-card sd-sphinx-override sd-mb-3 sd-shadow-sm lobster-issue-card docutils">
+<div class="sd-card-body docutils">
+<ul class="simple">
+<li><p class="sd-card-text">missing reference to Component Requirements</p></li>
+</ul>
+</div>
+</div>
+<hr><p class="sd-card-text"><strong>Source:</strong> <a class="reference external" href="../../../../../../score/mw/log/requirements/feature_requirements/feature_requirements.trlc#L193">score/mw/log/requirements/feature_requirements/feature_requirements.trlc:193:18</a></p>
+</div>
+</details><details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3" id="lobster-item-1805c188fbb291092f262b4cae727c64eac99b6d" open="open">
+<summary class="sd-summary-title sd-card-header sd-bg-danger sd-text-white">
+<span class="sd-summary-text">[MISSING] TRLC Featreq MwLogFeature.SinkDevice</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
+<blockquote class="pull-quote">
+<div><p class="sd-card-text">The logging framework shall support configuration of the log storage device.</p>
+</div></blockquote>
+<hr><p class="sd-card-text"><strong>Traces to:</strong></p>
+<div class="sd-card sd-sphinx-override sd-mb-3 sd-shadow-sm lobster-issue-card docutils">
+<div class="sd-card-body docutils">
+<ul class="simple">
+<li><p class="sd-card-text">missing reference to Component Requirements</p></li>
+</ul>
+</div>
+</div>
+<hr><p class="sd-card-text"><strong>Source:</strong> <a class="reference external" href="../../../../../../score/mw/log/requirements/feature_requirements/feature_requirements.trlc#L201">score/mw/log/requirements/feature_requirements/feature_requirements.trlc:201:18</a></p>
+</div>
+</details><details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3" id="lobster-item-c6dd46a3f3d08409c67111ddbe06ac8e6577f92c" open="open">
+<summary class="sd-summary-title sd-card-header sd-bg-danger sd-text-white">
+<span class="sd-summary-text">[MISSING] TRLC Featreq MwLogFeature.SinkMultipleDevice</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
+<blockquote class="pull-quote">
+<div><p class="sd-card-text">The logging framework shall support multiple log storage devices.</p>
+</div></blockquote>
+<hr><p class="sd-card-text"><strong>Traces to:</strong></p>
+<div class="sd-card sd-sphinx-override sd-mb-3 sd-shadow-sm lobster-issue-card docutils">
+<div class="sd-card-body docutils">
+<ul class="simple">
+<li><p class="sd-card-text">missing reference to Component Requirements</p></li>
+</ul>
+</div>
+</div>
+<hr><p class="sd-card-text"><strong>Source:</strong> <a class="reference external" href="../../../../../../score/mw/log/requirements/feature_requirements/feature_requirements.trlc#L209">score/mw/log/requirements/feature_requirements/feature_requirements.trlc:209:18</a></p>
+</div>
+</details><details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3" id="lobster-item-9569b6e4258c7a88bc7a29acca80951327e048cf" open="open">
+<summary class="sd-summary-title sd-card-header sd-bg-danger sd-text-white">
+<span class="sd-summary-text">[MISSING] TRLC Featreq MwLogFeature.SinkStrategy</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
+<blockquote class="pull-quote">
+<div><p class="sd-card-text">The logging framework shall support configurable log storage strategy.</p>
+</div></blockquote>
+<hr><p class="sd-card-text"><strong>Traces to:</strong></p>
+<div class="sd-card sd-sphinx-override sd-mb-3 sd-shadow-sm lobster-issue-card docutils">
+<div class="sd-card-body docutils">
+<ul class="simple">
+<li><p class="sd-card-text">missing reference to Component Requirements</p></li>
+</ul>
+</div>
+</div>
+<hr><p class="sd-card-text"><strong>Source:</strong> <a class="reference external" href="../../../../../../score/mw/log/requirements/feature_requirements/feature_requirements.trlc#L217">score/mw/log/requirements/feature_requirements/feature_requirements.trlc:217:18</a></p>
+</div>
+</details><details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3" id="lobster-item-a2830940764a35e750c364e5da319b974669bee0" open="open">
+<summary class="sd-summary-title sd-card-header sd-bg-danger sd-text-white">
+<span class="sd-summary-text">[MISSING] TRLC Featreq MwLogFeature.ConfigBufferSize</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
+<blockquote class="pull-quote">
+<div><p class="sd-card-text">The logging framework shall allow configuration of internal buffer sizes.</p>
+</div></blockquote>
+<hr><p class="sd-card-text"><strong>Traces to:</strong></p>
+<div class="sd-card sd-sphinx-override sd-mb-3 sd-shadow-sm lobster-issue-card docutils">
+<div class="sd-card-body docutils">
+<ul class="simple">
+<li><p class="sd-card-text">missing reference to Component Requirements</p></li>
+</ul>
+</div>
+</div>
+<hr><p class="sd-card-text"><strong>Source:</strong> <a class="reference external" href="../../../../../../score/mw/log/requirements/feature_requirements/feature_requirements.trlc#L225">score/mw/log/requirements/feature_requirements/feature_requirements.trlc:225:18</a></p>
+</div>
+</details><details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3" id="lobster-item-dad3b4e6199c26371a3d083715357e2ce8f1bfd8" open="open">
+<summary class="sd-summary-title sd-card-header sd-bg-danger sd-text-white">
+<span class="sd-summary-text">[MISSING] TRLC Featreq MwLogFeature.ConfigStorageSize</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
+<blockquote class="pull-quote">
+<div><p class="sd-card-text">The logging framework shall allow configuration of storage size per log file.</p>
+</div></blockquote>
+<hr><p class="sd-card-text"><strong>Traces to:</strong></p>
+<div class="sd-card sd-sphinx-override sd-mb-3 sd-shadow-sm lobster-issue-card docutils">
+<div class="sd-card-body docutils">
+<ul class="simple">
+<li><p class="sd-card-text">missing reference to Component Requirements</p></li>
+</ul>
+</div>
+</div>
+<hr><p class="sd-card-text"><strong>Source:</strong> <a class="reference external" href="../../../../../../score/mw/log/requirements/feature_requirements/feature_requirements.trlc#L233">score/mw/log/requirements/feature_requirements/feature_requirements.trlc:233:18</a></p>
+</div>
+</details><details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3" id="lobster-item-57f2d49cf6004e6cd072f5911f686ec150e46363" open="open">
+<summary class="sd-summary-title sd-card-header sd-bg-danger sd-text-white">
+<span class="sd-summary-text">[MISSING] TRLC Featreq MwLogFeature.ConfigLogFilter</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
+<blockquote class="pull-quote">
+<div><p class="sd-card-text">The logging framework shall allow configuration of log filters.</p>
+</div></blockquote>
+<hr><p class="sd-card-text"><strong>Traces to:</strong></p>
+<div class="sd-card sd-sphinx-override sd-mb-3 sd-shadow-sm lobster-issue-card docutils">
+<div class="sd-card-body docutils">
+<ul class="simple">
+<li><p class="sd-card-text">missing reference to Component Requirements</p></li>
+</ul>
+</div>
+</div>
+<hr><p class="sd-card-text"><strong>Source:</strong> <a class="reference external" href="../../../../../../score/mw/log/requirements/feature_requirements/feature_requirements.trlc#L250">score/mw/log/requirements/feature_requirements/feature_requirements.trlc:250:18</a></p>
+</div>
+</details><details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3" id="lobster-item-b291f1f6dc84c9dff05f33d0b1e6f8b2cc0541fd" open="open">
+<summary class="sd-summary-title sd-card-header sd-bg-danger sd-text-white">
+<span class="sd-summary-text">[MISSING] TRLC Featreq MwLogFeature.ConfigEntityId</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
+<blockquote class="pull-quote">
+<div><p class="sd-card-text">The logging framework shall allow configuration of logging entity IDs.</p>
+</div></blockquote>
+<hr><p class="sd-card-text"><strong>Traces to:</strong></p>
+<div class="sd-card sd-sphinx-override sd-mb-3 sd-shadow-sm lobster-issue-card docutils">
+<div class="sd-card-body docutils">
+<ul class="simple">
+<li><p class="sd-card-text">missing reference to Component Requirements</p></li>
+</ul>
+</div>
+</div>
+<hr><p class="sd-card-text"><strong>Source:</strong> <a class="reference external" href="../../../../../../score/mw/log/requirements/feature_requirements/feature_requirements.trlc#L258">score/mw/log/requirements/feature_requirements/feature_requirements.trlc:258:18</a></p>
+</div>
+</details><details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3" id="lobster-item-de4ddfae3c09b5caab649715cea4e5daa951a76f" open="open">
+<summary class="sd-summary-title sd-card-header sd-bg-danger sd-text-white">
+<span class="sd-summary-text">[MISSING] TRLC Featreq MwLogFeature.ConfigFallback</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
+<blockquote class="pull-quote">
+<div><p class="sd-card-text">The logging framework shall provide fallback configurations, such as
+application-wide or system-wide defaults.</p>
+</div></blockquote>
+<hr><p class="sd-card-text"><strong>Traces to:</strong></p>
+<div class="sd-card sd-sphinx-override sd-mb-3 sd-shadow-sm lobster-issue-card docutils">
+<div class="sd-card-body docutils">
+<ul class="simple">
+<li><p class="sd-card-text">missing reference to Component Requirements</p></li>
+</ul>
+</div>
+</div>
+<hr><p class="sd-card-text"><strong>Source:</strong> <a class="reference external" href="../../../../../../score/mw/log/requirements/feature_requirements/feature_requirements.trlc#L275">score/mw/log/requirements/feature_requirements/feature_requirements.trlc:275:18</a></p>
+</div>
+</details><details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3" id="lobster-item-8c49f035cd7a1ee6bd45041c43580fb819d4e9cb" open="open">
+<summary class="sd-summary-title sd-card-header sd-bg-danger sd-text-white">
+<span class="sd-summary-text">[MISSING] TRLC Featreq MwLogFeature.ConfigCustomTypes</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
+<blockquote class="pull-quote">
+<div><p class="sd-card-text">The logging framework shall allow extensions for custom log types.</p>
+</div></blockquote>
+<hr><p class="sd-card-text"><strong>Traces to:</strong></p>
+<div class="sd-card sd-sphinx-override sd-mb-3 sd-shadow-sm lobster-issue-card docutils">
+<div class="sd-card-body docutils">
+<ul class="simple">
+<li><p class="sd-card-text">missing reference to Component Requirements</p></li>
+</ul>
+</div>
+</div>
+<hr><p class="sd-card-text"><strong>Source:</strong> <a class="reference external" href="../../../../../../score/mw/log/requirements/feature_requirements/feature_requirements.trlc#L284">score/mw/log/requirements/feature_requirements/feature_requirements.trlc:284:18</a></p>
+</div>
+</details><details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3" id="lobster-item-65d5478daf582e7a254d3b797287839dd9e90749" open="open">
+<summary class="sd-summary-title sd-card-header sd-bg-danger sd-text-white">
+<span class="sd-summary-text">[MISSING] TRLC Featreq MwLogFeature.ErrorHandlingRecoverable</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
+<blockquote class="pull-quote">
+<div><p class="sd-card-text">In case of recoverable error, the logging framework shall continue the current
+operations.</p>
+</div></blockquote>
+<hr><p class="sd-card-text"><strong>Traces to:</strong></p>
+<div class="sd-card sd-sphinx-override sd-mb-3 sd-shadow-sm lobster-issue-card docutils">
+<div class="sd-card-body docutils">
+<ul class="simple">
+<li><p class="sd-card-text">missing reference to Component Requirements</p></li>
+</ul>
+</div>
+</div>
+<hr><p class="sd-card-text"><strong>Source:</strong> <a class="reference external" href="../../../../../../score/mw/log/requirements/feature_requirements/feature_requirements.trlc#L292">score/mw/log/requirements/feature_requirements/feature_requirements.trlc:292:18</a></p>
+</div>
+</details><details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3" id="lobster-item-8cbd662a672f8dee68e34ac53c8ead5d83ddd819" open="open">
+<summary class="sd-summary-title sd-card-header sd-bg-danger sd-text-white">
+<span class="sd-summary-text">[MISSING] TRLC Featreq MwLogFeature.ErrorHandlingNonRecoverable</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
+<blockquote class="pull-quote">
+<div><p class="sd-card-text">In case of non-recoverable error, the logging framework shall deactivate
+silently and set an error state reported on shutdown.</p>
+</div></blockquote>
+<hr><p class="sd-card-text"><strong>Traces to:</strong></p>
+<div class="sd-card sd-sphinx-override sd-mb-3 sd-shadow-sm lobster-issue-card docutils">
+<div class="sd-card-body docutils">
+<ul class="simple">
+<li><p class="sd-card-text">missing reference to Component Requirements</p></li>
+</ul>
+</div>
+</div>
+<hr><p class="sd-card-text"><strong>Source:</strong> <a class="reference external" href="../../../../../../score/mw/log/requirements/feature_requirements/feature_requirements.trlc#L304">score/mw/log/requirements/feature_requirements/feature_requirements.trlc:304:18</a></p>
+</div>
+</details><details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3" id="lobster-item-787fb213f37e54283302cae7cac90f3be2aa8e66" open="open">
+<summary class="sd-summary-title sd-card-header sd-bg-danger sd-text-white">
+<span class="sd-summary-text">[MISSING] TRLC Featreq MwLogFeature.CompatibilitySupportedOs</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
+<blockquote class="pull-quote">
+<div><p class="sd-card-text">The logging framework shall support QNX and Linux operating systems
+(encapsulated via OSAL).</p>
+</div></blockquote>
+<hr><p class="sd-card-text"><strong>Traces to:</strong></p>
+<div class="sd-card sd-sphinx-override sd-mb-3 sd-shadow-sm lobster-issue-card docutils">
+<div class="sd-card-body docutils">
+<ul class="simple">
+<li><p class="sd-card-text">missing reference to Component Requirements</p></li>
+</ul>
+</div>
+</div>
+<hr><p class="sd-card-text"><strong>Source:</strong> <a class="reference external" href="../../../../../../score/mw/log/requirements/feature_requirements/feature_requirements.trlc#L328">score/mw/log/requirements/feature_requirements/feature_requirements.trlc:328:18</a></p>
+</div>
+</details><details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3" id="lobster-item-6deb7031728ba0507a0ecd7c617c8124ab672c63" open="open">
+<summary class="sd-summary-title sd-card-header sd-bg-danger sd-text-white">
+<span class="sd-summary-text">[MISSING] TRLC Featreq MwLogFeature.CompatibilitySupportedLanguages</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
+<blockquote class="pull-quote">
+<div><p class="sd-card-text">The logging framework shall support C++ and Rust programming languages.</p>
+</div></blockquote>
+<hr><p class="sd-card-text"><strong>Traces to:</strong></p>
+<div class="sd-card sd-sphinx-override sd-mb-3 sd-shadow-sm lobster-issue-card docutils">
+<div class="sd-card-body docutils">
+<ul class="simple">
+<li><p class="sd-card-text">missing reference to Component Requirements</p></li>
+</ul>
+</div>
+</div>
+<hr><p class="sd-card-text"><strong>Source:</strong> <a class="reference external" href="../../../../../../score/mw/log/requirements/feature_requirements/feature_requirements.trlc#L337">score/mw/log/requirements/feature_requirements/feature_requirements.trlc:337:18</a></p>
+</div>
+</details><details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3" id="lobster-item-f0083c53d8c9b4cc578a199c94e10cf2503e396c" open="open">
+<summary class="sd-summary-title sd-card-header sd-bg-danger sd-text-white">
+<span class="sd-summary-text">[MISSING] TRLC Featreq MwLogFeature.ResourceConsumptionStorage</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
+<blockquote class="pull-quote">
+<div><p class="sd-card-text">The logging framework shall minimize storage resource consumption.</p>
+</div></blockquote>
+<hr><p class="sd-card-text"><strong>Traces to:</strong></p>
+<div class="sd-card sd-sphinx-override sd-mb-3 sd-shadow-sm lobster-issue-card docutils">
+<div class="sd-card-body docutils">
+<ul class="simple">
+<li><p class="sd-card-text">missing reference to Component Requirements</p></li>
+</ul>
+</div>
+</div>
+<hr><p class="sd-card-text"><strong>Source:</strong> <a class="reference external" href="../../../../../../score/mw/log/requirements/feature_requirements/feature_requirements.trlc#L345">score/mw/log/requirements/feature_requirements/feature_requirements.trlc:345:18</a></p>
+</div>
+</details><details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3" id="lobster-item-032c7839d9f3664d26d143af2f251cffc697c00f" open="open">
+<summary class="sd-summary-title sd-card-header sd-bg-danger sd-text-white">
+<span class="sd-summary-text">[MISSING] TRLC Featreq MwLogFeature.ResourceConsumptionCommChannel</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
+<blockquote class="pull-quote">
+<div><p class="sd-card-text">The logging framework shall minimize communication channel resource
+consumption.</p>
+</div></blockquote>
+<hr><p class="sd-card-text"><strong>Traces to:</strong></p>
+<div class="sd-card sd-sphinx-override sd-mb-3 sd-shadow-sm lobster-issue-card docutils">
+<div class="sd-card-body docutils">
+<ul class="simple">
+<li><p class="sd-card-text">missing reference to Component Requirements</p></li>
+</ul>
+</div>
+</div>
+<hr><p class="sd-card-text"><strong>Source:</strong> <a class="reference external" href="../../../../../../score/mw/log/requirements/feature_requirements/feature_requirements.trlc#L353">score/mw/log/requirements/feature_requirements/feature_requirements.trlc:353:18</a></p>
+</div>
+</details><details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3" id="lobster-item-b3c34c72a135368b5e803cf12e44772fa310dd5f" open="open">
+<summary class="sd-summary-title sd-card-header sd-bg-danger sd-text-white">
+<span class="sd-summary-text">[MISSING] TRLC Featreq MwLogFeature.QosMessageHandling</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
+<blockquote class="pull-quote">
+<div><p class="sd-card-text">The logging framework shall provide QoS for handling overflows or dropping log
+messages.</p>
+</div></blockquote>
+<hr><p class="sd-card-text"><strong>Traces to:</strong></p>
+<div class="sd-card sd-sphinx-override sd-mb-3 sd-shadow-sm lobster-issue-card docutils">
+<div class="sd-card-body docutils">
+<ul class="simple">
+<li><p class="sd-card-text">missing reference to Component Requirements</p></li>
+</ul>
+</div>
+</div>
+<hr><p class="sd-card-text"><strong>Source:</strong> <a class="reference external" href="../../../../../../score/mw/log/requirements/feature_requirements/feature_requirements.trlc#L384">score/mw/log/requirements/feature_requirements/feature_requirements.trlc:384:18</a></p>
+</div>
+</details><details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3" id="lobster-item-e2bd9b58ae62d2d6f94923330143eb1299e37a61">
+<summary class="sd-summary-title sd-card-header sd-bg-success sd-text-white">
+<span class="sd-summary-text">[OK] TRLC Featreq MwLogFeature.SeverityLevels</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
+<blockquote class="pull-quote">
+<div><p class="sd-card-text">The logging framework shall support a log level for each log entry.</p>
+</div></blockquote>
+<hr><p class="sd-card-text"><strong>Traces to:</strong></p>
+<ul class="simple">
+<li><p class="sd-card-text"><a class="reference internal" href="component_requirements.html#lobster-item-983a22b6905837b1aaa6899ad9c655553f115a0f"><span class="std std-ref">MwLog.AutosarLogTraceSpec</span></a></p></li>
+</ul>
+<hr><p class="sd-card-text"><strong>Source:</strong> <a class="reference external" href="../../../../../../score/mw/log/requirements/feature_requirements/feature_requirements.trlc#L47">score/mw/log/requirements/feature_requirements/feature_requirements.trlc:47:18</a></p>
+</div>
+</details><details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3" id="lobster-item-aa650183c72ea63efb42dab07ffd3b2932544558">
+<summary class="sd-summary-title sd-card-header sd-bg-success sd-text-white">
+<span class="sd-summary-text">[OK] TRLC Featreq MwLogFeature.EarlyStartupLogging</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
+<blockquote class="pull-quote">
+<div><p class="sd-card-text">The logging framework shall support logging of early startup events to capture
+critical initialization information.</p>
+</div></blockquote>
+<hr><p class="sd-card-text"><strong>Traces to:</strong></p>
+<ul class="simple">
+<li><p class="sd-card-text"><a class="reference internal" href="component_requirements.html#lobster-item-1e19ff64dfdcb7d355592f7cf299e240907b27dc"><span class="std std-ref">MwLog.ForwardToSystemLogger</span></a></p></li>
+</ul>
+<hr><p class="sd-card-text"><strong>Source:</strong> <a class="reference external" href="../../../../../../score/mw/log/requirements/feature_requirements/feature_requirements.trlc#L64">score/mw/log/requirements/feature_requirements/feature_requirements.trlc:64:18</a></p>
+</div>
+</details><details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3" id="lobster-item-df8e2dbb357e00fcb7e43674549208a3228fbd74">
+<summary class="sd-summary-title sd-card-header sd-bg-success sd-text-white">
+<span class="sd-summary-text">[OK] TRLC Featreq MwLogFeature.FilteringLogLevels</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
+<blockquote class="pull-quote">
+<div><p class="sd-card-text">The logging framework shall support filtering by log levels.</p>
+</div></blockquote>
+<hr><p class="sd-card-text"><strong>Traces to:</strong></p>
+<ul class="simple">
+<li><p class="sd-card-text"><a class="reference internal" href="component_requirements.html#lobster-item-a4a883d0188ce9e31168d4aae9f9683f2bde6439"><span class="std std-ref">MwLog.InactiveLogStreamBehavior</span></a></p></li>
+</ul>
+<hr><p class="sd-card-text"><strong>Source:</strong> <a class="reference external" href="../../../../../../score/mw/log/requirements/feature_requirements/feature_requirements.trlc#L82">score/mw/log/requirements/feature_requirements/feature_requirements.trlc:82:18</a></p>
+</div>
+</details><details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3" id="lobster-item-cd219caba97d69d808bc31fc6d91a9f0a04e7fd0">
+<summary class="sd-summary-title sd-card-header sd-bg-success sd-text-white">
+<span class="sd-summary-text">[OK] TRLC Featreq MwLogFeature.ConfigPermissions</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
+<blockquote class="pull-quote">
+<div><p class="sd-card-text">The logging framework shall allow configuration of permission settings for log
+access.</p>
+</div></blockquote>
+<hr><p class="sd-card-text"><strong>Traces to:</strong></p>
+<ul class="simple">
+<li><p class="sd-card-text"><a class="reference internal" href="component_requirements.html#lobster-item-4bfac174996a064d970b79537a8ab4821e4c3f13"><span class="std std-ref">MwLog.SharedMemoryFilePermissions</span></a></p></li>
+</ul>
+<hr><p class="sd-card-text"><strong>Source:</strong> <a class="reference external" href="../../../../../../score/mw/log/requirements/feature_requirements/feature_requirements.trlc#L241">score/mw/log/requirements/feature_requirements/feature_requirements.trlc:241:18</a></p>
+</div>
+</details><details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3" id="lobster-item-a88495ae75cb1097e64d4fa98fc5bdae61c695df">
+<summary class="sd-summary-title sd-card-header sd-bg-success sd-text-white">
+<span class="sd-summary-text">[OK] TRLC Featreq MwLogFeature.ConfigOnDemand</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
+<blockquote class="pull-quote">
+<div><p class="sd-card-text">The logging framework shall support on-demand functionality, such as enabling
+or disabling log storage.</p>
+</div></blockquote>
+<hr><p class="sd-card-text"><strong>Traces to:</strong></p>
+<ul class="simple">
+<li><p class="sd-card-text"><a class="reference internal" href="component_requirements.html#lobster-item-c9cd5482c0049b64d91b1f53bf505fbdca20a050"><span class="std std-ref">MwLog.SystemBackendActivation</span></a></p></li>
+</ul>
+<hr><p class="sd-card-text"><strong>Source:</strong> <a class="reference external" href="../../../../../../score/mw/log/requirements/feature_requirements/feature_requirements.trlc#L266">score/mw/log/requirements/feature_requirements/feature_requirements.trlc:266:18</a></p>
+</div>
+</details><details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3" id="lobster-item-af5e35a7e653dde51a44b84c6f6cd6dd8da4eaf7">
+<summary class="sd-summary-title sd-card-header sd-bg-success sd-text-white">
+<span class="sd-summary-text">[OK] TRLC Featreq MwLogFeature.ErrorHandlingIsolation</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
+<blockquote class="pull-quote">
+<div><p class="sd-card-text">The logging framework shall ensure that user applications are not affected by
+logging framework errors.</p>
+</div></blockquote>
+<hr><p class="sd-card-text"><strong>Traces to:</strong></p>
+<ul class="simple">
+<li><p class="sd-card-text"><a class="reference internal" href="component_requirements.html#lobster-item-f8e3900e83768564b6a528579eeb57dca7fdb099"><span class="std std-ref">MwLog.AvoidSignalProcessing</span></a></p></li>
+</ul>
+<hr><p class="sd-card-text"><strong>Source:</strong> <a class="reference external" href="../../../../../../score/mw/log/requirements/feature_requirements/feature_requirements.trlc#L316">score/mw/log/requirements/feature_requirements/feature_requirements.trlc:316:18</a></p>
+</div>
+</details><details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3" id="lobster-item-34aa173989a94b49318d1914c06c658c94ee5b70">
+<summary class="sd-summary-title sd-card-header sd-bg-success sd-text-white">
+<span class="sd-summary-text">[OK] TRLC Featreq MwLogFeature.ResourceConsumptionRuntime</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
+<blockquote class="pull-quote">
+<div><p class="sd-card-text">The logging framework shall minimize runtime resource consumption.</p>
+</div></blockquote>
+<hr><p class="sd-card-text"><strong>Traces to:</strong></p>
+<ul class="simple">
+<li><p class="sd-card-text"><a class="reference internal" href="component_requirements.html#lobster-item-973e6c32f0a9ea6df9ced35cd5df3667f3d80b12"><span class="std std-ref">MwLog.LocalAllocationStrategy</span></a></p></li>
+<li><p class="sd-card-text"><a class="reference internal" href="component_requirements.html#lobster-item-ab77c02cb03c98149347622ca992c919b1a2c030"><span class="std std-ref">MwLog.BoundedLoopExecution</span></a></p></li>
+<li><p class="sd-card-text"><a class="reference internal" href="component_requirements.html#lobster-item-532a3ea19ff52d3c56fcdfce276b0af8af68564e"><span class="std std-ref">MwLog.CrossLockingPrevention</span></a></p></li>
+</ul>
+<hr><p class="sd-card-text"><strong>Source:</strong> <a class="reference external" href="../../../../../../score/mw/log/requirements/feature_requirements/feature_requirements.trlc#L362">score/mw/log/requirements/feature_requirements/feature_requirements.trlc:362:18</a></p>
+</div>
+</details><details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3" id="lobster-item-5d1abbac86069bc5ca0568adc4d21c45065c4fde">
+<summary class="sd-summary-title sd-card-header sd-bg-success sd-text-white">
+<span class="sd-summary-text">[OK] TRLC Featreq MwLogFeature.ResourceConsumptionPerformance</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
+<blockquote class="pull-quote">
+<div><p class="sd-card-text">The logging framework shall have low impact on overall system performance.</p>
+</div></blockquote>
+<hr><p class="sd-card-text"><strong>Traces to:</strong></p>
+<ul class="simple">
+<li><p class="sd-card-text"><a class="reference internal" href="component_requirements.html#lobster-item-a4a883d0188ce9e31168d4aae9f9683f2bde6439"><span class="std std-ref">MwLog.InactiveLogStreamBehavior</span></a></p></li>
+<li><p class="sd-card-text"><a class="reference internal" href="component_requirements.html#lobster-item-4b371bc3ac6ae56c17e7d7a4b9c3d6c0f30fe81c"><span class="std std-ref">MwLog.TimeBoundedLocking</span></a></p></li>
+</ul>
+<hr><p class="sd-card-text"><strong>Source:</strong> <a class="reference external" href="../../../../../../score/mw/log/requirements/feature_requirements/feature_requirements.trlc#L373">score/mw/log/requirements/feature_requirements/feature_requirements.trlc:373:18</a></p>
+</div>
+</details><details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3" id="lobster-item-66cc23446562700dc9e1bb0cef92ef83ec9e47c9">
+<summary class="sd-summary-title sd-card-header sd-bg-success sd-text-white">
+<span class="sd-summary-text">[OK] TRLC Featreq MwLogFeature.CompatibilityDltProtocol</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
+<blockquote class="pull-quote">
+<div><p class="sd-card-text">The logging framework shall be DLT compatible. Additional Information: support for DLT message format, sending and receiving DLT messages, and integration with existing DLT tools and infrastructure.</p>
+</div></blockquote>
+<hr><p class="sd-card-text"><strong>Traces to:</strong></p>
+<ul class="simple">
+<li><p class="sd-card-text"><a class="reference internal" href="component_requirements.html#lobster-item-3379e95a99d683504eb27583c0669e3532730a40"><span class="std std-ref">MwLog.DltVerboseMode</span></a></p></li>
+<li><p class="sd-card-text"><a class="reference internal" href="component_requirements.html#lobster-item-983a22b6905837b1aaa6899ad9c655553f115a0f"><span class="std std-ref">MwLog.AutosarLogTraceSpec</span></a></p></li>
+</ul>
+<hr><p class="sd-card-text"><strong>Source:</strong> <a class="reference external" href="../../../../../../score/mw/log/requirements/feature_requirements/feature_requirements.trlc#L395">score/mw/log/requirements/feature_requirements/feature_requirements.trlc:395:18</a></p>
+</div>
+</details><details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3" id="lobster-item-a2e2d961f89736ae3d745201a43355d64501822e">
+<summary class="sd-summary-title sd-card-header sd-bg-success sd-text-white">
+<span class="sd-summary-text">[OK] TRLC Featreq MwLogFeature.SecurityLogAccess</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
+<blockquote class="pull-quote">
+<div><p class="sd-card-text">The logging framework shall ensure that only authorized users can access log
+files.</p>
+</div></blockquote>
+<hr><p class="sd-card-text"><strong>Traces to:</strong></p>
+<ul class="simple">
+<li><p class="sd-card-text"><a class="reference internal" href="component_requirements.html#lobster-item-023e236205af00574969ad5a522d1fa561ed204d"><span class="std std-ref">MwLog.FileDescriptorFlags</span></a></p></li>
+<li><p class="sd-card-text"><a class="reference internal" href="component_requirements.html#lobster-item-4bfac174996a064d970b79537a8ab4821e4c3f13"><span class="std std-ref">MwLog.SharedMemoryFilePermissions</span></a></p></li>
+</ul>
+<hr><p class="sd-card-text"><strong>Source:</strong> <a class="reference external" href="../../../../../../score/mw/log/requirements/feature_requirements/feature_requirements.trlc#L406">score/mw/log/requirements/feature_requirements/feature_requirements.trlc:406:18</a></p>
+</div>
+</details><details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3" id="lobster-item-ef6a394608be4aa475fd1a5391cc3add822ddbb3">
+<summary class="sd-summary-title sd-card-header sd-bg-success sd-text-white">
+<span class="sd-summary-text">[OK] TRLC Featreq MwLogFeature.AsilLevelSupport</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
+<blockquote class="pull-quote">
+<div><p class="sd-card-text">The logging framework shall support the ASIL level of the user function to ensure compliance with the safety requirements of the application. Additional Information: Freedom from interference must be guaranteed with regard to the calling components.</p>
+</div></blockquote>
+<hr><p class="sd-card-text"><strong>Traces to:</strong></p>
+<ul class="simple">
+<li><p class="sd-card-text"><a class="reference internal" href="component_requirements.html#lobster-item-f8e3900e83768564b6a528579eeb57dca7fdb099"><span class="std std-ref">MwLog.AvoidSignalProcessing</span></a></p></li>
+<li><p class="sd-card-text"><a class="reference internal" href="component_requirements.html#lobster-item-973e6c32f0a9ea6df9ced35cd5df3667f3d80b12"><span class="std std-ref">MwLog.LocalAllocationStrategy</span></a></p></li>
+<li><p class="sd-card-text"><a class="reference internal" href="component_requirements.html#lobster-item-ab77c02cb03c98149347622ca992c919b1a2c030"><span class="std std-ref">MwLog.BoundedLoopExecution</span></a></p></li>
+<li><p class="sd-card-text"><a class="reference internal" href="component_requirements.html#lobster-item-4b371bc3ac6ae56c17e7d7a4b9c3d6c0f30fe81c"><span class="std std-ref">MwLog.TimeBoundedLocking</span></a></p></li>
+<li><p class="sd-card-text"><a class="reference internal" href="component_requirements.html#lobster-item-532a3ea19ff52d3c56fcdfce276b0af8af68564e"><span class="std std-ref">MwLog.CrossLockingPrevention</span></a></p></li>
+<li><p class="sd-card-text"><a class="reference internal" href="component_requirements.html#lobster-item-325e97c01897aac1a8c60fc78a4851ba4853bcbe"><span class="std std-ref">MwLog.IndexAndSizeChecking</span></a></p></li>
+<li><p class="sd-card-text"><a class="reference internal" href="component_requirements.html#lobster-item-2418b8704dc0807bdc2ab9fca05cd33fb4e81ad3"><span class="std std-ref">MwLog.MemoryBoundChecking</span></a></p></li>
+</ul>
+<hr><p class="sd-card-text"><strong>Source:</strong> <a class="reference external" href="../../../../../../score/mw/log/requirements/feature_requirements/feature_requirements.trlc#L418">score/mw/log/requirements/feature_requirements/feature_requirements.trlc:418:18</a></p>
+</div>
+</details></section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="L.O.B.S.T.E.R. Traceability Report" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="component_requirements.html" class="btn btn-neutral float-right" title="Component Requirements" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright .</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
