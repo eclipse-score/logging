@@ -72,11 +72,9 @@ See also :need:`doc_concept__wp_inspections` for further information about revie
     * - REQ_02_02
       - Is the requirement description *unambiguous* ?
       - Especially search for "weak words" like "about", "etc.", "relevant" and others (see the internet documentation on this). This check shall be supported by tooling.
-      - No
-      - Following are too vague:
-        :need:`comp_req__log__inactive_logstream` uses the vague wording "useful activity", second sentence tries to clarify but maybe the first should be removed.
-        :need:`comp_req__log__avoid_locks`
-      - https://github.com/eclipse-score/logging/issues/345
+      - Yes
+      -
+      -
     * - REQ_02_02
       - Is the requirement description *atomic* ?
       - A good way to think about this is to consider if the requirement may be tested by one (positive) test case or needs more of these. The requirement formulation template should also avoid being non-atomic already. Note that there are cases where also non-atomic requirements are the better ones, for example if those are better understandable.
