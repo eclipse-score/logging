@@ -66,9 +66,9 @@ See also :need:`doc_concept__wp_inspections` for further information about revie
     * - REQ_02_01
       - Is the requirement description *comprehensible* ?
       - If you think the requirement is hard to understand, comment here.
-      - No
-      - :need:`comp_req__log__send_to_datarouter` uses "logging library" which doesn't make sense
-      - https://github.com/eclipse-score/logging/issues/345
+      - Yes
+      -
+      -
     * - REQ_02_02
       - Is the requirement description *unambiguous* ?
       - Especially search for "weak words" like "about", "etc.", "relevant" and others (see the internet documentation on this). This check shall be supported by tooling.
