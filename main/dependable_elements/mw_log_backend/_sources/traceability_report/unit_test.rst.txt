@@ -1,0 +1,6469 @@
+Unit Test
+=========
+
+**Coverage:** 6.0% (13 of 215 items OK)
+
+.. _lobster-item-38181aa0f6ccfb59f6c255617af8f959d1aca3a7:
+
+.. dropdown:: [MISSING] GoogleTest Test DataRouterBackendFixture:AppIDSetCorrectly
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      :Asil: B
+      :Description: Verifies setting the app id.
+      :Testtype: Interface test
+      :Derivationtechnique: Generation and analysis of equivalence classes
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/data\_router/data\_router\_backend\_test.cpp:257 <../../../../../../score/mw/log/detail/data_router/data_router_backend_test.cpp#L257>`__
+
+.. _lobster-item-a276ec2a7ecb7cd5f2520ed7169f8c93ea03cd0e:
+
+.. dropdown:: [MISSING] GoogleTest Test DataRouterBackendFixture:ToSmallAppIdSetCorrectlyWithZeroPadding
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      :Asil: B
+      :Description: Verifies setting the app id with zero padding.
+      :Testtype: Interface test
+      :Derivationtechnique: Generation and analysis of equivalence classes
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/data\_router/data\_router\_backend\_test.cpp:270 <../../../../../../score/mw/log/detail/data_router/data_router_backend_test.cpp#L270>`__
+
+.. _lobster-item-da4f5e665e6a861d71b7081944c57a7764fff991:
+
+.. dropdown:: [MISSING] GoogleTest Test DataRouterBackendFixture:ContextIdSetCorrectly
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      :Asil: B
+      :Description: Verifies setting the context id.
+      :Testtype: Interface test
+      :Derivationtechnique: Generation and analysis of equivalence classes
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/data\_router/data\_router\_backend\_test.cpp:283 <../../../../../../score/mw/log/detail/data_router/data_router_backend_test.cpp#L283>`__
+
+.. _lobster-item-f57377991318ff665c812572cb215075491ef514:
+
+.. dropdown:: [MISSING] GoogleTest Test DataRouterBackendFixture:ToSmallCtxSetCorrectlyWithZeroPadding
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      :Asil: B
+      :Description: Verifies setting the context id with zero padding.
+      :Testtype: Interface test
+      :Derivationtechnique: Generation and analysis of equivalence classes
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/data\_router/data\_router\_backend\_test.cpp:296 <../../../../../../score/mw/log/detail/data_router/data_router_backend_test.cpp#L296>`__
+
+.. _lobster-item-b62708c050e7709515b5d07ca0018c2d3b9c3c1e:
+
+.. dropdown:: [MISSING] GoogleTest Test LogLevelSetCorrectly/DataRouterBackendFixture:LogLevelSetCorrectly/0
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      :Asil: B
+      :Description: DatarouterBackend is internally using the same API as for structured logging. Check that the API is used correctly and the log level is propagated.
+      :Testtype: Interface test
+      :Derivationtechnique: Generation and analysis of equivalence classes
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/data\_router/data\_router\_backend\_test.cpp:309 <../../../../../../score/mw/log/detail/data_router/data_router_backend_test.cpp#L309>`__
+
+.. _lobster-item-33c444a920ece674a20a7bc3581c9890dcd14bda:
+
+.. dropdown:: [MISSING] GoogleTest Test LogLevelSetCorrectly/DataRouterBackendFixture:LogLevelSetCorrectly/1
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      :Asil: B
+      :Description: DatarouterBackend is internally using the same API as for structured logging. Check that the API is used correctly and the log level is propagated.
+      :Testtype: Interface test
+      :Derivationtechnique: Generation and analysis of equivalence classes
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/data\_router/data\_router\_backend\_test.cpp:309 <../../../../../../score/mw/log/detail/data_router/data_router_backend_test.cpp#L309>`__
+
+.. _lobster-item-9cdb591593dae565afbb43a357add0c736ff9a10:
+
+.. dropdown:: [MISSING] GoogleTest Test LogLevelSetCorrectly/DataRouterBackendFixture:LogLevelSetCorrectly/2
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      :Asil: B
+      :Description: DatarouterBackend is internally using the same API as for structured logging. Check that the API is used correctly and the log level is propagated.
+      :Testtype: Interface test
+      :Derivationtechnique: Generation and analysis of equivalence classes
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/data\_router/data\_router\_backend\_test.cpp:309 <../../../../../../score/mw/log/detail/data_router/data_router_backend_test.cpp#L309>`__
+
+.. _lobster-item-7e47481fe3c7e200a2980afbdca9cb14d376be74:
+
+.. dropdown:: [MISSING] GoogleTest Test LogLevelSetCorrectly/DataRouterBackendFixture:LogLevelSetCorrectly/3
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      :Asil: B
+      :Description: DatarouterBackend is internally using the same API as for structured logging. Check that the API is used correctly and the log level is propagated.
+      :Testtype: Interface test
+      :Derivationtechnique: Generation and analysis of equivalence classes
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/data\_router/data\_router\_backend\_test.cpp:309 <../../../../../../score/mw/log/detail/data_router/data_router_backend_test.cpp#L309>`__
+
+.. _lobster-item-9b8577e2194f3203eaaafec9a26e60923876a81b:
+
+.. dropdown:: [MISSING] GoogleTest Test LogLevelSetCorrectly/DataRouterBackendFixture:LogLevelSetCorrectly/4
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      :Asil: B
+      :Description: DatarouterBackend is internally using the same API as for structured logging. Check that the API is used correctly and the log level is propagated.
+      :Testtype: Interface test
+      :Derivationtechnique: Generation and analysis of equivalence classes
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/data\_router/data\_router\_backend\_test.cpp:309 <../../../../../../score/mw/log/detail/data_router/data_router_backend_test.cpp#L309>`__
+
+.. _lobster-item-e9985452aa49085278195c3bc4040821e1cbe96e:
+
+.. dropdown:: [MISSING] GoogleTest Test LogLevelSetCorrectly/DataRouterBackendFixture:LogLevelSetCorrectly/5
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      :Asil: B
+      :Description: DatarouterBackend is internally using the same API as for structured logging. Check that the API is used correctly and the log level is propagated.
+      :Testtype: Interface test
+      :Derivationtechnique: Generation and analysis of equivalence classes
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/data\_router/data\_router\_backend\_test.cpp:309 <../../../../../../score/mw/log/detail/data_router/data_router_backend_test.cpp#L309>`__
+
+.. _lobster-item-a6a86470496df9c1e46e0d694f9df99cfe9f89b0:
+
+.. dropdown:: [MISSING] GoogleTest Test DataRouterBackendFixture:LogLevelDebug
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      :Parentrequirement: SCR-1633144
+      :Asil: B
+      :Description: Verify the ability of logging debug message.
+      :Testingtechnique: Requirements-based test
+      :Derivationtechnique: Analysis of requirements
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/data\_router/data\_router\_backend\_test.cpp:347 <../../../../../../score/mw/log/detail/data_router/data_router_backend_test.cpp#L347>`__
+
+.. _lobster-item-70fa79537159e3825781da6a44631bf69adfec77:
+
+.. dropdown:: [MISSING] GoogleTest Test DataRouterBackendFixture:LogLevelInfo
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      :Parentrequirement: SCR-1633144
+      :Asil: B
+      :Description: Verify the ability of logging info message.
+      :Testingtechnique: Requirements-based test
+      :Derivationtechnique: Analysis of requirements
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/data\_router/data\_router\_backend\_test.cpp:358 <../../../../../../score/mw/log/detail/data_router/data_router_backend_test.cpp#L358>`__
+
+.. _lobster-item-29412f733382aad2ee4386c84b896b505c3ae1ca:
+
+.. dropdown:: [MISSING] GoogleTest Test DataRouterBackendFixture:LogLevelWarning
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      :Parentrequirement: SCR-1633144
+      :Asil: B
+      :Description: Verify the ability of logging warning message.
+      :Testingtechnique: Requirements-based test
+      :Derivationtechnique: Analysis of requirements
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/data\_router/data\_router\_backend\_test.cpp:369 <../../../../../../score/mw/log/detail/data_router/data_router_backend_test.cpp#L369>`__
+
+.. _lobster-item-6f5c921f6df6161f5f07ac933249a58c50cb7d78:
+
+.. dropdown:: [MISSING] GoogleTest Test DataRouterBackendFixture:LogLevelError
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      :Parentrequirement: SCR-1633144
+      :Asil: B
+      :Description: Verify the ability of logging error message.
+      :Testingtechnique: Requirements-based test
+      :Derivationtechnique: Analysis of requirements
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/data\_router/data\_router\_backend\_test.cpp:380 <../../../../../../score/mw/log/detail/data_router/data_router_backend_test.cpp#L380>`__
+
+.. _lobster-item-70eede510907e9f59c75df0225ec50c866bf8afb:
+
+.. dropdown:: [MISSING] GoogleTest Test DataRouterBackendFixture:LogLevelFatal
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      :Parentrequirement: SCR-1633144
+      :Asil: B
+      :Description: Verify the ability of logging fatal message.
+      :Testingtechnique: Requirements-based test
+      :Derivationtechnique: Analysis of requirements
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/data\_router/data\_router\_backend\_test.cpp:391 <../../../../../../score/mw/log/detail/data_router/data_router_backend_test.cpp#L391>`__
+
+.. _lobster-item-a3056068e627189171bcd7f3b2ac01f008115a86:
+
+.. dropdown:: [MISSING] GoogleTest Test DataRouterBackendFixture:LogLevelOff
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      :Parentrequirement: SCR-1633144
+      :Asil: B
+      :Description: Verify the ability of disabling the logging.
+      :Testingtechnique: Requirements-based test
+      :Derivationtechnique: Analysis of requirements
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/data\_router/data\_router\_backend\_test.cpp:402 <../../../../../../score/mw/log/detail/data_router/data_router_backend_test.cpp#L402>`__
+
+.. _lobster-item-daf7b09f0ddb282a0fb5967434a6386c2df04491:
+
+.. dropdown:: [MISSING] GoogleTest Test DataRouterBackendFixture:NumberOfArgsSetCorrectly
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      :Asil: B
+      :Description: Verifies setting the number of arguments correctly.
+      :Testtype: Interface test
+      :Derivationtechnique: Generation and analysis of equivalence classes
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/data\_router/data\_router\_backend\_test.cpp:413 <../../../../../../score/mw/log/detail/data_router/data_router_backend_test.cpp#L413>`__
+
+.. _lobster-item-d2b82704627e46947d0be096c067ff2c4922b6f1:
+
+.. dropdown:: [MISSING] GoogleTest Test DataRouterBackendFixture:PayloadSetCorrectly
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      :Asil: B
+      :Description: Verifies setting the payload correctly.
+      :Testtype: Interface test
+      :Derivationtechnique: Generation and analysis of equivalence classes
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/data\_router/data\_router\_backend\_test.cpp:425 <../../../../../../score/mw/log/detail/data_router/data_router_backend_test.cpp#L425>`__
+
+.. _lobster-item-8a0e84dece7813d2f9a0106a7d3146bb434b3fa1:
+
+.. dropdown:: [MISSING] GoogleTest Test DataRouterBackendTests:CheckSizeValid
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      :Asil: B
+      :Description: Verifies the in-ability of reserving more slots above the maximum slot size limit.
+      :Testtype: Interface test
+      :Derivationtechnique: Analysis of boundary values
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/data\_router/data\_router\_backend\_test.cpp:440 <../../../../../../score/mw/log/detail/data_router/data_router_backend_test.cpp#L440>`__
+
+.. _lobster-item-52a60917e7f53ec47d8738bf9766b5727bf1c439:
+
+.. dropdown:: [MISSING] GoogleTest Test DataRouterBackendTests:WhenAllPossibleSlotsUsedFailToAllocateMore
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      :Asil: B
+      :Description: Verifies the in-ability of reserving more slots above the maximum slot size limit.
+      :Testtype: Interface test
+      :Derivationtechnique: Analysis of boundary values
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/data\_router/data\_router\_backend\_test.cpp:467 <../../../../../../score/mw/log/detail/data_router/data_router_backend_test.cpp#L467>`__
+
+.. _lobster-item-f1d913b8490506777b8fee7daadde35ae6d204b0:
+
+.. dropdown:: [MISSING] GoogleTest Test DataRouterBackendFixture:WhenSafeIpcIsTrueMessageClientIsCreated
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      :Asil: B
+      :Description: Verifies the ability of creating message client instance.
+      :Testtype: Interface test
+      :Derivationtechnique: Generation and analysis of equivalence classes
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/data\_router/data\_router\_backend\_test.cpp:496 <../../../../../../score/mw/log/detail/data_router/data_router_backend_test.cpp#L496>`__
+
+.. _lobster-item-25dcc6e1a33006358b8329adf12e6b77a92b052a:
+
+.. dropdown:: [MISSING] GoogleTest Test DataRouterBackendFixture:WhenIdentifierIsNotDynamicUidShallBeUsed
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      :Asil: B
+      :Description: Verifies the construction of data router backend without dynamic identifier.
+      :Testtype: Interface test
+      :Derivationtechnique: Generation and analysis of equivalence classes
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/data\_router/data\_router\_backend\_test.cpp:518 <../../../../../../score/mw/log/detail/data_router/data_router_backend_test.cpp#L518>`__
+
+.. _lobster-item-878765d36bf7caa5d7280114b8a35b238aab2417:
+
+.. dropdown:: [MISSING] GoogleTest Test DataRouterBackendFixture:ConstructWithDynamicIdentifier
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      :Asil: B
+      :Description: Verifies the construction of data router backend with dynamic identifier.
+      :Testtype: Interface test
+      :Derivationtechnique: Generation and analysis of equivalence classes
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/data\_router/data\_router\_backend\_test.cpp:540 <../../../../../../score/mw/log/detail/data_router/data_router_backend_test.cpp#L540>`__
+
+.. _lobster-item-988a0050e54a5c76d2f574574f60745620268f00:
+
+.. dropdown:: [MISSING] GoogleTest Test DataRouterBackendFixture:ConstructWithDynamicIdentifierAndChmodSuccess
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/data\_router/data\_router\_backend\_test.cpp:565 <../../../../../../score/mw/log/detail/data_router/data_router_backend_test.cpp#L565>`__
+
+.. _lobster-item-e70bed9e4bdff76f61738c922680236e73837641:
+
+.. dropdown:: [MISSING] GoogleTest Test DataRouterBackendFixture:DataRouterBackEndConstructedWithEmptyIdentifierWhenMkstempFail
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      :Asil: B
+      :Description: Verifies the construction of data router backend when providing empty identifier.
+      :Testtype: Interface test
+      :Derivationtechnique: Generation and analysis of equivalence classes
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/data\_router/data\_router\_backend\_test.cpp:585 <../../../../../../score/mw/log/detail/data_router/data_router_backend_test.cpp#L585>`__
+
+.. _lobster-item-36b1e3b1a61652bce621df7eea7ef17f7c534fa1:
+
+.. dropdown:: [MISSING] GoogleTest Test DatarouterMessageClientFactoryFixture:CreateOnceShouldReturnClientWithExpectedValues
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      :Asil: B
+      :Description: Verifies the ability to instantiate a client.
+      :Testtype: Interface test
+      :Derivationtechnique: Generation and analysis of equivalence classes
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/data\_router/data\_router\_message\_client\_factory\_test.cpp:101 <../../../../../../score/mw/log/detail/data_router/data_router_message_client_factory_test.cpp#L101>`__
+
+.. _lobster-item-8fc0440d725c509a9e627210e38e4abfe3d94c73:
+
+.. dropdown:: [MISSING] GoogleTest Test DatarouterMessageClientFactoryFixture:CallingCreateMoreThanOnceShallAbort
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      :Asil: B
+      :Description: Verifies the ability of instantiating a client only once.
+      :Testtype: Interface test
+      :Derivationtechnique: Generation and analysis of equivalence classes
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/data\_router/data\_router\_message\_client\_factory\_test.cpp:118 <../../../../../../score/mw/log/detail/data_router/data_router_message_client_factory_test.cpp#L118>`__
+
+.. _lobster-item-29745fbb6d6a6fe9eeab77d1310180dfdc702976:
+
+.. dropdown:: [MISSING] GoogleTest Test DatarouterMessageClientIdentifiersFixture:TestDataRouterMessageIDsGetters
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/data\_router/data\_router\_message\_client\_identifiers\_test.cpp:31 <../../../../../../score/mw/log/detail/data_router/data_router_message_client_identifiers_test.cpp#L31>`__
+
+.. _lobster-item-dc9af14b06f787d318f3b75eeb8bd5d050ce0954:
+
+.. dropdown:: [MISSING] GoogleTest Test DatarouterMessageClientIdentifiersTest:HandlesEmptyReceiverIdentifier
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/data\_router/data\_router\_message\_client\_identifiers\_test.cpp:44 <../../../../../../score/mw/log/detail/data_router/data_router_message_client_identifiers_test.cpp#L44>`__
+
+.. _lobster-item-45d568bde43cd9608c43782bee3e4578fd8edaad:
+
+.. dropdown:: [MISSING] GoogleTest Test DatarouterMessageClientIdentifiersTest:HandlesZeroPid
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/data\_router/data\_router\_message\_client\_identifiers\_test.cpp:51 <../../../../../../score/mw/log/detail/data_router/data_router_message_client_identifiers_test.cpp#L51>`__
+
+.. _lobster-item-ccd0ec3af9830735265f2048bf6467d1a3df5183:
+
+.. dropdown:: [MISSING] GoogleTest Test DatarouterMessageClientIdentifiersTest:HandlesMaxUidValues
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/data\_router/data\_router\_message\_client\_identifiers\_test.cpp:58 <../../../../../../score/mw/log/detail/data_router/data_router_message_client_identifiers_test.cpp#L58>`__
+
+.. _lobster-item-218e6e31db4ad502d5da548d315ab6c3857def08:
+
+.. dropdown:: [MISSING] GoogleTest Test DatarouterMessageClientIdentifiersTest:HandlesEmptyAppId
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/data\_router/data\_router\_message\_client\_identifiers\_test.cpp:68 <../../../../../../score/mw/log/detail/data_router/data_router_message_client_identifiers_test.cpp#L68>`__
+
+.. _lobster-item-76338654e52bc6eb239588f37aa3063052f55243:
+
+.. dropdown:: [MISSING] GoogleTest Test DatarouterMessageClientMockTest:ShutdownIsInvoked
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/data\_router/data\_router\_message\_client\_test.cpp:52 <../../../../../../score/mw/log/detail/data_router/data_router_message_client_test.cpp#L52>`__
+
+.. _lobster-item-9e788287f4941532bb0a35fc0ee981e992e22265:
+
+.. dropdown:: [MISSING] GoogleTest Test DatarouterMessageClientFixture:CreateSenderShouldCreateSenderWithExpectedValues
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      :Asil: B
+      :Description: Verifies creating the sender works properly.
+      :Testtype: Interface test
+      :Derivationtechnique: Generation and analysis of equivalence classes
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/data\_router/data\_router\_message\_client\_test.cpp:376 <../../../../../../score/mw/log/detail/data_router/data_router_message_client_test.cpp#L376>`__
+
+.. _lobster-item-ab78083940ec687c707b2a8f6f4e7b5e641358c2:
+
+.. dropdown:: [MISSING] GoogleTest Test DatarouterMessageClientFixture:SendConnectMessageShouldSendExpectedPayload
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      :Asil: B
+      :Description: Verifies that 'SendConnectMessage' API will send the expected payload.
+      :Testtype: Interface test
+      :Derivationtechnique: Generation and analysis of equivalence classes
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/data\_router/data\_router\_message\_client\_test.cpp:389 <../../../../../../score/mw/log/detail/data_router/data_router_message_client_test.cpp#L389>`__
+
+.. _lobster-item-2d41674d8664e29bb8980d2fff7fda172beef3ae:
+
+.. dropdown:: [MISSING] GoogleTest Test DynamicDataRouterIdentifiersFalseFixture:SendConnectMessageDynamicDataRouterIdentifiersFalseShouldSendExpectedPayload
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      :Asil: B
+      :Description: Verifies that 'SendConnectMessage' API will send the expected payload.
+      :Testtype: Interface test
+      :Derivationtechnique: Generation and analysis of equivalence classes
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/data\_router/data\_router\_message\_client\_test.cpp:408 <../../../../../../score/mw/log/detail/data_router/data_router_message_client_test.cpp#L408>`__
+
+.. _lobster-item-f8527882104e2e62da53c3acb15cfcba89444d56:
+
+.. dropdown:: [MISSING] GoogleTest Test MwsrFileNameEmptyFixture:SendConnectMessageMwsrFileNameEmptyShouldSendExpectedPayload
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      :Asil: B
+      :Description: Verifies that 'SendConnectMessage' API will send the expected payload.
+      :Testtype: Interface test
+      :Derivationtechnique: Generation and analysis of equivalence classes
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/data\_router/data\_router\_message\_client\_test.cpp:428 <../../../../../../score/mw/log/detail/data_router/data_router_message_client_test.cpp#L428>`__
+
+.. _lobster-item-d3f75c8c58b92fb6948fba31c12b828506430cdd:
+
+.. dropdown:: [MISSING] GoogleTest Test DatarouterMessageClientFixture:ConnectToDatarouterShouldSendConnectMessage
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      :Asil: B
+      :Description: Verifies the ability of sending connect message when connecting to datarouter.
+      :Testtype: Interface test
+      :Derivationtechnique: Generation and analysis of equivalence classes
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/data\_router/data\_router\_message\_client\_test.cpp:447 <../../../../../../score/mw/log/detail/data_router/data_router_message_client_test.cpp#L447>`__
+
+.. _lobster-item-40cdf200954df0ee594eed0d6146d45fad6bfdd8:
+
+.. dropdown:: [MISSING] GoogleTest Test DatarouterMessageClientFixture:AcquireNotifyShouldSendExpectedAcquireResponse
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      :Asil: B
+      :Description: Verifies that an acquire request delivered via NotifyCallback sends the expected acquire response.
+      :Testtype: Interface test
+      :Derivationtechnique: Generation and analysis of equivalence classes
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/data\_router/data\_router\_message\_client\_test.cpp:475 <../../../../../../score/mw/log/detail/data_router/data_router_message_client_test.cpp#L475>`__
+
+.. _lobster-item-ab7f0f7c1af1e571f832dc3dd5a25e1ea4d6780e:
+
+.. dropdown:: [MISSING] GoogleTest Test DatarouterMessageClientFixture:InvalidNotifyShouldNotSendAcquireResponse
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      :Asil: B
+      :Description: Verifies that invalid NotifyCallback payloads are ignored.
+      :Testtype: Interface test
+      :Derivationtechnique: Generation and analysis of equivalence classes
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/data\_router/data\_router\_message\_client\_test.cpp:500 <../../../../../../score/mw/log/detail/data_router/data_router_message_client_test.cpp#L500>`__
+
+.. _lobster-item-d9872d9bf9ce1b771f1a5b1ebc8b4898988e2593:
+
+.. dropdown:: [MISSING] GoogleTest Test DatarouterMessageClientFixture:SecondAcquireNotifyShouldNotUnlinkMwsrWriter
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      :Asil: B
+      :Description: Verifies that the second acquire notify should not unlink the mwsr writer file.
+      :Testtype: Interface test
+      :Derivationtechnique: Generation and analysis of equivalence classes
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/data\_router/data\_router\_message\_client\_test.cpp:532 <../../../../../../score/mw/log/detail/data_router/data_router_message_client_test.cpp#L532>`__
+
+.. _lobster-item-c4b217c37611f1370001069af32c9a371a7f06a5:
+
+.. dropdown:: [MISSING] GoogleTest Test DatarouterMessageClientFixture:ClientShouldShutdownAfterFailingToSendMessage
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      :Asil: B
+      :Description: Verifies that the client should shutting down after failing to send message.
+      :Testtype: Interface test
+      :Derivationtechnique: Generation and analysis of equivalence classes
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/data\_router/data\_router\_message\_client\_test.cpp:557 <../../../../../../score/mw/log/detail/data_router/data_router_message_client_test.cpp#L557>`__
+
+.. _lobster-item-e14111c64a3998ff521279654d166761a98b1985:
+
+.. dropdown:: [MISSING] GoogleTest Test DatarouterMessageClientFixture:RunShouldSetupAndConnect
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      :Asil: B
+      :Description: Verifies that 'Run' API should setup the client and connect properly
+      :Testtype: Interface test
+      :Derivationtechnique: Generation and analysis of equivalence classes
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/data\_router/data\_router\_message\_client\_test.cpp:587 <../../../../../../score/mw/log/detail/data_router/data_router_message_client_test.cpp#L587>`__
+
+.. _lobster-item-21dc0a83ee9d3757509a05c8ad5598078db5db14:
+
+.. dropdown:: [MISSING] GoogleTest Test DatarouterMessageClientFixture:RunShallNotBeCalledMoreThanOnce
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      :Asil: B
+      :Description: Verifies the in-ability of calling 'Run' API twice.
+      :Testtype: Interface test
+      :Derivationtechnique: Generation and analysis of equivalence classes
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/data\_router/data\_router\_message\_client\_test.cpp:614 <../../../../../../score/mw/log/detail/data_router/data_router_message_client_test.cpp#L614>`__
+
+.. _lobster-item-d2209bc033939bd53bd7b6a9f36c3eacf6585208:
+
+.. dropdown:: [MISSING] GoogleTest Test DatarouterMessageClientFixture:SetThreadNameShouldSetLoggerThreadName
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      :Asil: B
+      :Description: Verifies that sets the thread name shall sets the logger thread name
+      :Testtype: Interface test
+      :Derivationtechnique: Generation and analysis of equivalence classes
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/data\_router/data\_router\_message\_client\_test.cpp:641 <../../../../../../score/mw/log/detail/data_router/data_router_message_client_test.cpp#L641>`__
+
+.. _lobster-item-29a8aa5b43f8737e0777a008a7239a48baef5df5:
+
+.. dropdown:: [MISSING] GoogleTest Test DatarouterMessageClientFixture:FailedSetThreadNameShouldBeHandledGracefully
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      :Asil: B
+      :Description: Verifies the ability of failing gracefully in case of in-ability of setting thread name.
+      :Testtype: Interface test
+      :Derivationtechnique: Generation and analysis of equivalence classes
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/data\_router/data\_router\_message\_client\_test.cpp:654 <../../../../../../score/mw/log/detail/data_router/data_router_message_client_test.cpp#L654>`__
+
+.. _lobster-item-2bf270a16179d89da4d7ecc8a1406824fb814e27:
+
+.. dropdown:: [MISSING] GoogleTest Test DatarouterMessageClientFixture:FailedToChownOwnMsrWriterFileForDataRouter
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      :Asil: B
+      :Description: Verifies the ability of handling the failure of owning the msr file writer.
+      :Testtype: Interface test
+      :Derivationtechnique: Generation and analysis of equivalence classes
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/data\_router/data\_router\_message\_client\_test.cpp:668 <../../../../../../score/mw/log/detail/data_router/data_router_message_client_test.cpp#L668>`__
+
+.. _lobster-item-7796f689c5eab517cc69d2f72b649ce219c5ae4f:
+
+.. dropdown:: [MISSING] GoogleTest Test DatarouterMessageClientFixture:GivenExitRequestDuringConnectionShouldNotSendConnectMessage
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      :Asil: B
+      :Description: Verifies that exit request during the connection shall not be able to send connect message.
+      :Testtype: Interface test
+      :Derivationtechnique: Generation and analysis of equivalence classes
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/data\_router/data\_router\_message\_client\_test.cpp:692 <../../../../../../score/mw/log/detail/data_router/data_router_message_client_test.cpp#L692>`__
+
+.. _lobster-item-4fbd6358ccbb62ec87dcd85b14d25526bdfbd11d:
+
+.. dropdown:: [MISSING] GoogleTest Test DatarouterMessageClientFixture:FailedToEmptySignalSet
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      :Asil: B
+      :Description: Verifies the case of in-ability of emptying a signal set.
+      :Testtype: Interface test
+      :Derivationtechnique: Generation and analysis of equivalence classes
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/data\_router/data\_router\_message\_client\_test.cpp:712 <../../../../../../score/mw/log/detail/data_router/data_router_message_client_test.cpp#L712>`__
+
+.. _lobster-item-d40e437ab17c52d5b966d861929e485161505354:
+
+.. dropdown:: [MISSING] GoogleTest Test DatarouterMessageClientFixture:ConnectToDatarouterShouldReportErrorAndShutdownWhenCreateSenderFails
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      :Asil: B
+      :Description: Verifies ConnectToDatarouter reports an error and shuts down when CreateSender fails.
+      :Testtype: Interface test
+      :Derivationtechnique: Error guessing based on knowledge or experience
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/data\_router/data\_router\_message\_client\_test.cpp:739 <../../../../../../score/mw/log/detail/data_router/data_router_message_client_test.cpp#L739>`__
+
+.. _lobster-item-c6a9cbe8283b70c714b5f8939c348f44cc043833:
+
+.. dropdown:: [MISSING] GoogleTest Test DatarouterMessageClientFixture:CreateSenderFailsWhenFactoryReturnsNullptr
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      :Asil: B
+      :Description: Verifies CreateSender reports an error and returns unexpected when the factory returns nullptr.
+      :Testtype: Interface test
+      :Derivationtechnique: Error guessing based on knowledge or experience
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/data\_router/data\_router\_message\_client\_test.cpp:767 <../../../../../../score/mw/log/detail/data_router/data_router_message_client_test.cpp#L767>`__
+
+.. _lobster-item-7883e837199562ffc7fcf5a7269983297ee467e1:
+
+.. dropdown:: [MISSING] GoogleTest Test DatarouterMessageClientFixture:StateCallbackKStoppedShouldTriggerInternalShutdown
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      :Asil: QM
+      :Description: Verifies dataRouter termination triggers internal shutdown on client side
+      :Testtype: Verification of the control flow and data flow
+      :Derivationtechnique: Error guessing based on knowledge or experience
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/data\_router/data\_router\_message\_client\_test.cpp:790 <../../../../../../score/mw/log/detail/data_router/data_router_message_client_test.cpp#L790>`__
+
+.. _lobster-item-cbf0ef604154ff657d03587dd7a3ee0f1eefea89:
+
+.. dropdown:: [MISSING] GoogleTest Test DataRouterMessagesTests:EqualOperatorShouldReturnTrueForEqualConnectMessageFromClientInstances
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      :Asil: B
+      :Description: Checks the equal operator of ConnectMessageFromClient for equaly ConenctMessageFromClients instances.
+      :Testtype: Interface test
+      :Derivationtechnique: Generation and analysis of equivalence classes
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/data\_router/data\_router\_messages\_test.cpp:39 <../../../../../../score/mw/log/detail/data_router/data_router_messages_test.cpp#L39>`__
+
+.. _lobster-item-aebe2ffa724f90dff638d1a7899c40d757e48fa2:
+
+.. dropdown:: [MISSING] GoogleTest Test DataRouterMessagesTests:EqualOperatorShouldReturnFalseForDifferentAppids
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      :Asil: B
+      :Description: Checks the equal operator of ConnectMessageFromClient for unequal App ids.
+      :Testtype: Interface test
+      :Derivationtechnique: Generation and analysis of equivalence classes
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/data\_router/data\_router\_messages\_test.cpp:53 <../../../../../../score/mw/log/detail/data_router/data_router_messages_test.cpp#L53>`__
+
+.. _lobster-item-49328c9b07b9674a059b6542b54f4e5a13c5fa2e:
+
+.. dropdown:: [MISSING] GoogleTest Test DataRouterMessagesTests:EqualOperatorShouldReturnFalseForDifferentUids
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      :Asil: B
+      :Description: Checks the equal operator of ConnectMessageFromClient for unequal uids.
+      :Testtype: Interface test
+      :Derivationtechnique: Generation and analysis of equivalence classes
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/data\_router/data\_router\_messages\_test.cpp:65 <../../../../../../score/mw/log/detail/data_router/data_router_messages_test.cpp#L65>`__
+
+.. _lobster-item-0949a9909cff99386adfe070d0cec19df092be18:
+
+.. dropdown:: [MISSING] GoogleTest Test DataRouterMessagesTests:EqualOperatorShouldReturnFalseForDifferentDynamicDatarouterIdentifiers
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      :Asil: B
+      :Description: Checks the equal operator of ConnectMessageFromClient for unequal dynamic identifiers.
+      :Testtype: Interface test
+      :Derivationtechnique: Generation and analysis of equivalence classes
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/data\_router/data\_router\_messages\_test.cpp:77 <../../../../../../score/mw/log/detail/data_router/data_router_messages_test.cpp#L77>`__
+
+.. _lobster-item-1da13c088ae5fccb27510b81ee610c131eb57120:
+
+.. dropdown:: [MISSING] GoogleTest Test DataRouterMessagesTests:EqualOperatorShouldReturnFalseForDifferentRandomPart
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      :Asil: B
+      :Description: Checks the equal operator of ConnectMessageFromClient for unequal random parts.
+      :Testtype: Interface test
+      :Derivationtechnique: Generation and analysis of equivalence classes
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/data\_router/data\_router\_messages\_test.cpp:90 <../../../../../../score/mw/log/detail/data_router/data_router_messages_test.cpp#L90>`__
+
+.. _lobster-item-8e715af489ee5997d8f51eb3bd30f3863044cc27:
+
+.. dropdown:: [MISSING] GoogleTest Test DataRouterMessagesTests:GetGUIShouldReturnCorrectValue
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      :Asil: B
+      :Description: Checks GetUid function of ConnectMessageFromClient return correct value.
+      :Testtype: Interface test
+      :Derivationtechnique: Generation and analysis of equivalence classes
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/data\_router/data\_router\_messages\_test.cpp:102 <../../../../../../score/mw/log/detail/data_router/data_router_messages_test.cpp#L102>`__
+
+.. _lobster-item-8be0b60bef14a51a9d49bc54761f4fd0a7b0d9c1:
+
+.. dropdown:: [MISSING] GoogleTest Test DataRouterMessagesTests:GetUseDynamicIdentifierShouldReturnCorrectValue
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      :Asil: B
+      :Description: Checks GetUseDynamicIdentifier function of ConnectMessageFromClient return correct value.
+      :Testtype: Interface test
+      :Derivationtechnique: Generation and analysis of equivalence classes
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/data\_router/data\_router\_messages\_test.cpp:118 <../../../../../../score/mw/log/detail/data_router/data_router_messages_test.cpp#L118>`__
+
+.. _lobster-item-8a1711a93f20b7dd374f0f3fb520ca04d27013ec:
+
+.. dropdown:: [MISSING] GoogleTest Test DataRouterMessagesTests:GetAppIdDynamicIdentifierShouldReturnCorrectValue
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      :Asil: B
+      :Description: Checks GetAppId function of ConnectMessageFromClient return correct value.
+      :Testtype: Interface test
+      :Derivationtechnique: Generation and analysis of equivalence classes
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/data\_router/data\_router\_messages\_test.cpp:135 <../../../../../../score/mw/log/detail/data_router/data_router_messages_test.cpp#L135>`__
+
+.. _lobster-item-f1df887590b7bdcdaea87e09f37ba594a86f1c68:
+
+.. dropdown:: [MISSING] GoogleTest Test DataRouterRecorderFixtureWithDepletedBackend:WillReturnEmptySlot
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      :Asil: B
+      :Description: Verifies the in-ability of reserving a slot with depleted backend.
+      :Testtype: Interface test
+      :Derivationtechnique: Generation and analysis of equivalence classes
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/data\_router/data\_router\_recorder\_test.cpp:61 <../../../../../../score/mw/log/detail/data_router/data_router_recorder_test.cpp#L61>`__
+
+.. _lobster-item-30fa3548dcee9e839c27f1f37114b7b6ccc5e505:
+
+.. dropdown:: [MISSING] GoogleTest Test DataRouterRecorderFixtureWithLogLevelCheck:WillObtainSlotForSufficientLogLevel
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      :Asil: B
+      :Description: Verifies the ability of reserving a slot with proper context ID.
+      :Testtype: Interface test
+      :Derivationtechnique: Generation and analysis of equivalence classes
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/data\_router/data\_router\_recorder\_test.cpp:95 <../../../../../../score/mw/log/detail/data_router/data_router_recorder_test.cpp#L95>`__
+
+.. _lobster-item-089dbddafb447027aadc02fa3f9ceade1f9c0449:
+
+.. dropdown:: [MISSING] GoogleTest Test DataRouterRecorderFixtureWithLogLevelCheck:WillObtainEmptySlotForInsufficentLogLevel
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      :Asil: B
+      :Description: Verifies the in-ability of returning a slot in case of inactive log level.
+      :Testtype: Interface test
+      :Derivationtechnique: Generation and analysis of equivalence classes
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/data\_router/data\_router\_recorder\_test.cpp:106 <../../../../../../score/mw/log/detail/data_router/data_router_recorder_test.cpp#L106>`__
+
+.. _lobster-item-324e94b5905a346a088179dad5a84501bb228a5b:
+
+.. dropdown:: [MISSING] GoogleTest Test DataRouterRecorderFixture:TooManyArgumentsWillYieldTruncatedLog
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      :Asil: B
+      :Derivationtechnique: Generation and analysis of equivalence classes
+      :Description: Verifies that too many arguments shall lead to a truncated log.
+      :Testtype: Interface test
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/data\_router/data\_router\_recorder\_test.cpp:165 <../../../../../../score/mw/log/detail/data_router/data_router_recorder_test.cpp#L165>`__
+
+.. _lobster-item-781ecd4f5d5b935066a2cefd62e995b60b51a7ce:
+
+.. dropdown:: [MISSING] GoogleTest Test DataRouterRecorderFixture:TooLargeSinglePayloadWillYieldTruncatedLog
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      :Asil: B
+      :Description: Verifies that a too large single payload shall lead to truncate the log.
+      :Testtype: Interface test
+      :Derivationtechnique: Generation and analysis of equivalence classes
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/data\_router/data\_router\_recorder\_test.cpp:184 <../../../../../../score/mw/log/detail/data_router/data_router_recorder_test.cpp#L184>`__
+
+.. _lobster-item-e8908887877c80662100ee2bff3625b0cae57154:
+
+.. dropdown:: [MISSING] GoogleTest Test DataRouterRecorderFixture:LogBool
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      :Asil: B
+      :Description: Verifies the ability of recording boolean datatype log.
+      :Testtype: Interface test
+      :Derivationtechnique: Generation and analysis of equivalence classes
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/data\_router/data\_router\_recorder\_test.cpp:201 <../../../../../../score/mw/log/detail/data_router/data_router_recorder_test.cpp#L201>`__
+
+.. _lobster-item-91795bc4fe158cdb96c5616da6a81a27e70d1607:
+
+.. dropdown:: [MISSING] GoogleTest Test DataRouterRecorderFixture:LogUint8\_t
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      :Asil: B
+      :Description: Verifies the ability of recording uint8-based log.
+      :Testtype: Interface test
+      :Derivationtechnique: Generation and analysis of equivalence classes
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/data\_router/data\_router\_recorder\_test.cpp:211 <../../../../../../score/mw/log/detail/data_router/data_router_recorder_test.cpp#L211>`__
+
+.. _lobster-item-e402f503839957262472210d367b54f093d183f6:
+
+.. dropdown:: [MISSING] GoogleTest Test DataRouterRecorderFixture:LogInt8\_t
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      :Asil: B
+      :Description: Verifies the ability of recording int8-based log.
+      :Testtype: Interface test
+      :Derivationtechnique: Generation and analysis of equivalence classes
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/data\_router/data\_router\_recorder\_test.cpp:221 <../../../../../../score/mw/log/detail/data_router/data_router_recorder_test.cpp#L221>`__
+
+.. _lobster-item-2fd57cb1f6e56a44a666027b7b297b85787d3b89:
+
+.. dropdown:: [MISSING] GoogleTest Test DataRouterRecorderFixture:LogUint16\_t
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      :Asil: B
+      :Description: Verifies the ability of recording uint16-based log.
+      :Testtype: Interface test
+      :Derivationtechnique: Generation and analysis of equivalence classes
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/data\_router/data\_router\_recorder\_test.cpp:231 <../../../../../../score/mw/log/detail/data_router/data_router_recorder_test.cpp#L231>`__
+
+.. _lobster-item-9bdf208cb00768ae8762222e79cbefe3f18e4932:
+
+.. dropdown:: [MISSING] GoogleTest Test DataRouterRecorderFixture:LogInt16\_t
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      :Asil: B
+      :Description: Verifies the ability of recording int16-based log.
+      :Testtype: Interface test
+      :Derivationtechnique: Generation and analysis of equivalence classes
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/data\_router/data\_router\_recorder\_test.cpp:241 <../../../../../../score/mw/log/detail/data_router/data_router_recorder_test.cpp#L241>`__
+
+.. _lobster-item-e4409a0ef45ba69db7bd15fe304363bb318ab5c2:
+
+.. dropdown:: [MISSING] GoogleTest Test DataRouterRecorderFixture:LogUint32\_t
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      :Asil: B
+      :Description: Verifies the ability of recording uint32-based log.
+      :Testtype: Interface test
+      :Derivationtechnique: Generation and analysis of equivalence classes
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/data\_router/data\_router\_recorder\_test.cpp:251 <../../../../../../score/mw/log/detail/data_router/data_router_recorder_test.cpp#L251>`__
+
+.. _lobster-item-176a31d3ee84f00f8cfbe6a3ebde77c77e9adf84:
+
+.. dropdown:: [MISSING] GoogleTest Test DataRouterRecorderFixture:LogInt32\_t
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      :Asil: B
+      :Description: Verifies the ability of recording int32-based log.
+      :Testtype: Interface test
+      :Derivationtechnique: Generation and analysis of equivalence classes
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/data\_router/data\_router\_recorder\_test.cpp:261 <../../../../../../score/mw/log/detail/data_router/data_router_recorder_test.cpp#L261>`__
+
+.. _lobster-item-507aef5336be2ad2018dcea93dc137e4a444eef1:
+
+.. dropdown:: [MISSING] GoogleTest Test DataRouterRecorderFixture:LogUint64\_t
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      :Asil: B
+      :Description: Verifies the ability of recording uint64-based log.
+      :Testtype: Interface test
+      :Derivationtechnique: Generation and analysis of equivalence classes
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/data\_router/data\_router\_recorder\_test.cpp:271 <../../../../../../score/mw/log/detail/data_router/data_router_recorder_test.cpp#L271>`__
+
+.. _lobster-item-2a7c02a05ffdff7930363ae6938c2fb8bca9c245:
+
+.. dropdown:: [MISSING] GoogleTest Test DataRouterRecorderFixture:LogInt64\_t
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      :Asil: B
+      :Description: Verifies the ability of recording int64-based log.
+      :Testtype: Interface test
+      :Derivationtechnique: Generation and analysis of equivalence classes
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/data\_router/data\_router\_recorder\_test.cpp:281 <../../../../../../score/mw/log/detail/data_router/data_router_recorder_test.cpp#L281>`__
+
+.. _lobster-item-232067c3fcd81e8876ad92288ea1535a54634d25:
+
+.. dropdown:: [MISSING] GoogleTest Test DataRouterRecorderFixture:LogFloat
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      :Asil: B
+      :Description: Verifies the ability of recording float datatype log.
+      :Testtype: Interface test
+      :Derivationtechnique: Generation and analysis of equivalence classes
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/data\_router/data\_router\_recorder\_test.cpp:291 <../../../../../../score/mw/log/detail/data_router/data_router_recorder_test.cpp#L291>`__
+
+.. _lobster-item-dba1ec92c3408f9513eec6c27623daa4e8a69676:
+
+.. dropdown:: [MISSING] GoogleTest Test DataRouterRecorderFixture:LogDouble
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      :Asil: B
+      :Description: Verifies the ability of recording double datatype log.
+      :Testtype: Interface test
+      :Derivationtechnique: Generation and analysis of equivalence classes
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/data\_router/data\_router\_recorder\_test.cpp:301 <../../../../../../score/mw/log/detail/data_router/data_router_recorder_test.cpp#L301>`__
+
+.. _lobster-item-5bc151eb05fdb091e0761087a21b9e8cbf621ae6:
+
+.. dropdown:: [MISSING] GoogleTest Test DataRouterRecorderFixture:LogStringView
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      :Asil: B
+      :Description: Verifies the ability of recording stringview datatype log.
+      :Testtype: Interface test
+      :Derivationtechnique: Generation and analysis of equivalence classes
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/data\_router/data\_router\_recorder\_test.cpp:311 <../../../../../../score/mw/log/detail/data_router/data_router_recorder_test.cpp#L311>`__
+
+.. _lobster-item-b846473bc891b74da309950b5e0c3592e8a5f8d1:
+
+.. dropdown:: [MISSING] GoogleTest Test DataRouterRecorderFixture:Log\_LogHex8
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      :Asil: B
+      :Description: Verifies the ability of recording hex8-based log.
+      :Testtype: Interface test
+      :Derivationtechnique: Generation and analysis of equivalence classes
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/data\_router/data\_router\_recorder\_test.cpp:321 <../../../../../../score/mw/log/detail/data_router/data_router_recorder_test.cpp#L321>`__
+
+.. _lobster-item-adc2f79923c03685a5df092e9e94982d93ec44f3:
+
+.. dropdown:: [MISSING] GoogleTest Test DataRouterRecorderFixture:Log\_LogHex16
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      :Asil: B
+      :Description: Verifies the ability of recording hex16-based log.
+      :Testtype: Interface test
+      :Derivationtechnique: Generation and analysis of equivalence classes
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/data\_router/data\_router\_recorder\_test.cpp:331 <../../../../../../score/mw/log/detail/data_router/data_router_recorder_test.cpp#L331>`__
+
+.. _lobster-item-fb17ce409512aaf73ba665bb8f57a6521bbf9df0:
+
+.. dropdown:: [MISSING] GoogleTest Test DataRouterRecorderFixture:Log\_LogHex32
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      :Asil: B
+      :Description: Verifies the ability of recording hex32-based log.
+      :Testtype: Interface test
+      :Derivationtechnique: Generation and analysis of equivalence classes
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/data\_router/data\_router\_recorder\_test.cpp:341 <../../../../../../score/mw/log/detail/data_router/data_router_recorder_test.cpp#L341>`__
+
+.. _lobster-item-ee9da7c5b7ecbb6ed223cd7b2bfa3a0d2b60b85a:
+
+.. dropdown:: [MISSING] GoogleTest Test DataRouterRecorderFixture:Log\_LogHex64
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      :Asil: B
+      :Description: Verifies the ability of recording hex64-based log.
+      :Testtype: Interface test
+      :Derivationtechnique: Generation and analysis of equivalence classes
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/data\_router/data\_router\_recorder\_test.cpp:351 <../../../../../../score/mw/log/detail/data_router/data_router_recorder_test.cpp#L351>`__
+
+.. _lobster-item-64a6069d17b8cdf8ec0ed1a214c6b505a6e5f949:
+
+.. dropdown:: [MISSING] GoogleTest Test DataRouterRecorderFixture:Log\_LogBin8
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      :Asil: B
+      :Description: Verifies the ability of recording binary8-based log.
+      :Testtype: Interface test
+      :Derivationtechnique: Generation and analysis of equivalence classes
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/data\_router/data\_router\_recorder\_test.cpp:361 <../../../../../../score/mw/log/detail/data_router/data_router_recorder_test.cpp#L361>`__
+
+.. _lobster-item-9664979b01490391b42be9e6f4e29ee7b3de7adf:
+
+.. dropdown:: [MISSING] GoogleTest Test DataRouterRecorderFixture:Log\_LogBin16
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      :Asil: B
+      :Description: Verifies the ability of recording binary16-based log.
+      :Testtype: Interface test
+      :Derivationtechnique: Generation and analysis of equivalence classes
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/data\_router/data\_router\_recorder\_test.cpp:371 <../../../../../../score/mw/log/detail/data_router/data_router_recorder_test.cpp#L371>`__
+
+.. _lobster-item-157e9c50cd62e4b85ac170e55c3deccffa155b1f:
+
+.. dropdown:: [MISSING] GoogleTest Test DataRouterRecorderFixture:Log\_LogBin32
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      :Asil: B
+      :Description: Verifies the ability of recording binary32-based log.
+      :Testtype: Interface test
+      :Derivationtechnique: Generation and analysis of equivalence classes
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/data\_router/data\_router\_recorder\_test.cpp:381 <../../../../../../score/mw/log/detail/data_router/data_router_recorder_test.cpp#L381>`__
+
+.. _lobster-item-9133ac32b011afe800d8baa73de637073f75a096:
+
+.. dropdown:: [MISSING] GoogleTest Test DataRouterRecorderFixture:Log\_LogBin64
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      :Asil: B
+      :Description: Verifies the ability of recording binary64-based log.
+      :Testtype: Interface test
+      :Derivationtechnique: Generation and analysis of equivalence classes
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/data\_router/data\_router\_recorder\_test.cpp:391 <../../../../../../score/mw/log/detail/data_router/data_router_recorder_test.cpp#L391>`__
+
+.. _lobster-item-2a4f64787ceeaa0a0fae2604716cdb438b234b18:
+
+.. dropdown:: [MISSING] GoogleTest Test DataRouterRecorderFixture:Log\_LogRawBuffer
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      :Asil: B
+      :Description: Verifies the ability of recording raw buffer log.
+      :Testtype: Interface test
+      :Derivationtechnique: Generation and analysis of equivalence classes
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/data\_router/data\_router\_recorder\_test.cpp:401 <../../../../../../score/mw/log/detail/data_router/data_router_recorder_test.cpp#L401>`__
+
+.. _lobster-item-335703435ad8e1c5b361e8d2c0dbb6f1493979f9:
+
+.. dropdown:: [MISSING] GoogleTest Test DataRouterRecorderFixture:Log\_LogSlog2Message
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      :Asil: B
+      :Description: Verifies the ability of recording LogSlog2Message.
+      :Testtype: Interface test
+      :Derivationtechnique: Generation and analysis of equivalence classes
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/data\_router/data\_router\_recorder\_test.cpp:411 <../../../../../../score/mw/log/detail/data_router/data_router_recorder_test.cpp#L411>`__
+
+.. _lobster-item-221723c445ecfcc5bba9bed287838e41d0f4e4bb:
+
+.. dropdown:: [MISSING] GoogleTest Test DataRouterRecorderTests:DatarouterRecorderShouldClearSlotOnStart
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      :Requirement: SCR-1633236
+      :Asil: B
+      :Description: Recorder should clean slots before reuse.
+      :Testingtechnique: Requirements-based test
+      :Derivationtechnique: Analysis of requirements
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/data\_router/data\_router\_recorder\_test.cpp:421 <../../../../../../score/mw/log/detail/data_router/data_router_recorder_test.cpp#L421>`__
+
+.. _lobster-item-33d5a69dca84898b80c2d9a436653a9fc629367d:
+
+.. dropdown:: [MISSING] GoogleTest Test MessagePassingFactoryTests:CreateReceiverShouldReturnValue
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      :Asil: B
+      :Description: Verifies the ability of creating message passing receiver.
+      :Testtype: Interface test
+      :Derivationtechnique: Generation and analysis of equivalence classes
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/data\_router/message\_passing\_factory\_test.cpp:32 <../../../../../../score/mw/log/detail/data_router/message_passing_factory_test.cpp#L32>`__
+
+.. _lobster-item-e4e6ffcea31da80ea6a711eb3a1520ae38f807c8:
+
+.. dropdown:: [MISSING] GoogleTest Test MessagePassingFactoryTests:CreateSenderShouldReturnValue
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      :Asil: B
+      :Description: Verifies the ability of creating message passing sender.
+      :Testtype: Interface test
+      :Derivationtechnique: Generation and analysis of equivalence classes
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/data\_router/message\_passing\_factory\_test.cpp:49 <../../../../../../score/mw/log/detail/data_router/message_passing_factory_test.cpp#L49>`__
+
+.. _lobster-item-85181243f666977106a4bb7667646e91aff9a7f7:
+
+.. dropdown:: [MISSING] GoogleTest Test RecorderFactoryConfigFixture:RemoteConfiguredShallReturnDataRouterRecorder
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      :Partiallyverifies: comp_req__log__local_allocation_strategy
+      :Description: RecorderFactory can create DataRouterRecorder if remote is configured.
+      :Testtype: requirements-based
+      :Derivationtechnique: requirements-analysis
+      :Requirement: SCR-861534
+      :Asil: B
+      :Testingtechnique: Requirements-based test
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/data\_router/remote\_dlt\_recorder\_factory\_test.cpp:78 <../../../../../../score/mw/log/detail/data_router/remote_dlt_recorder_factory_test.cpp#L78>`__
+
+.. _lobster-item-3ec9026aa0344c204d766f083d617d79915b7122:
+
+.. dropdown:: [MISSING] GoogleTest Test RecorderFactoryConfigFixture:MultipleLogModesShallReturnCompositeRecorder
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      :Requirement: SCR-861534
+      :Asil: B
+      :Description: RecorderFactory shall create CompositeRecorder in case of multiple log mode is configured.
+      :Testingtechnique: Requirements-based test
+      :Derivationtechnique: Analysis of requirements
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/data\_router/remote\_dlt\_recorder\_factory\_test.cpp:104 <../../../../../../score/mw/log/detail/data_router/remote_dlt_recorder_factory_test.cpp#L104>`__
+
+.. _lobster-item-0d17c1907719302196d1f4cf3472016f8bf51cae:
+
+.. dropdown:: [MISSING] GoogleTest Test CommonTests:TypesShallBeTriviallyCopyable
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      :Asil: B
+      :Description: Verifies the copyable ability of some structs.
+      :Testtype: Interface test
+      :Derivationtechnique: Generation and analysis of equivalence classes
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/data\_router/shared\_memory/common\_test.cpp:25 <../../../../../../score/mw/log/detail/data_router/shared_memory/common_test.cpp#L25>`__
+
+.. _lobster-item-00b36acb68937821db1a1ef5b767c9d157bf2efa:
+
+.. dropdown:: [MISSING] GoogleTest Test CommonTests:GetExpectedNextAcquiredBlockId
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/data\_router/shared\_memory/common\_test.cpp:56 <../../../../../../score/mw/log/detail/data_router/shared_memory/common_test.cpp#L56>`__
+
+.. _lobster-item-704e81653222376047529a6099a168bba6f755a8:
+
+.. dropdown:: [MISSING] GoogleTest Test ReaderFactoryFixture:FailingCallToFstatShallResultInEmptyOptional
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      :Asil: B
+      :Description: Reader creation shall fail in case of failing invocation of fstat.
+      :Testtype: Interface test
+      :Derivationtechnique: Generation and analysis of equivalence classes
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/data\_router/shared\_memory/reader\_factory\_test.cpp:72 <../../../../../../score/mw/log/detail/data_router/shared_memory/reader_factory_test.cpp#L72>`__
+
+.. _lobster-item-46b711406762d34cb038eb72e968e005c3ca71bd:
+
+.. dropdown:: [MISSING] GoogleTest Test ReaderFactoryFixture:FstatInvalidReturnShallResultInEmptyOptional
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      :Asil: B
+      :Description: Reader creation shall fail in case of invalid return value from fstat invocation.
+      :Testtype: Interface test
+      :Derivationtechnique: Generation and analysis of equivalence classes
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/data\_router/shared\_memory/reader\_factory\_test.cpp:89 <../../../../../../score/mw/log/detail/data_router/shared_memory/reader_factory_test.cpp#L89>`__
+
+.. _lobster-item-79884ea95dec61a2887a6d7802fcb5a0fe155dbc:
+
+.. dropdown:: [MISSING] GoogleTest Test ReaderFactoryFixture:FstatReturningSizeTooSmallShallResultInEmptyOptional
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      :Asil: B
+      :Description: Reader creation shall fail in case of returning too small size from fstat invocation.
+      :Testtype: Interface test
+      :Derivationtechnique: Generation and analysis of equivalence classes
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/data\_router/shared\_memory/reader\_factory\_test.cpp:110 <../../../../../../score/mw/log/detail/data_router/shared_memory/reader_factory_test.cpp#L110>`__
+
+.. _lobster-item-9dd07b50f84325ee54aa3c53f51c77586f46e65f:
+
+.. dropdown:: [MISSING] GoogleTest Test ReaderFactoryFixture:MmapFailingShallResultInEmptyOptional
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      :Asil: B
+      :Description: Reader creation shall fail in case of failing invocation of mmap.
+      :Testtype: Interface test
+      :Derivationtechnique: Generation and analysis of equivalence classes
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/data\_router/shared\_memory/reader\_factory\_test.cpp:133 <../../../../../../score/mw/log/detail/data_router/shared_memory/reader_factory_test.cpp#L133>`__
+
+.. _lobster-item-11f162ddb917833139a6f32a080fd801e556c0e4:
+
+.. dropdown:: [MISSING] GoogleTest Test ReaderFactoryFixture:SharedDataMemberPointingOutOfBoundsShallResultInEmptyOptional
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      :Parentrequirement: SCR-861827
+      :Asil: B
+      :Description: Reader creation shall fail in case the shared data member is pointing out of bounds.
+      :Testingtechnique: Requirements-based test
+      :Derivationtechnique: Analysis of requirements
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/data\_router/shared\_memory/reader\_factory\_test.cpp:160 <../../../../../../score/mw/log/detail/data_router/shared_memory/reader_factory_test.cpp#L160>`__
+
+.. _lobster-item-12aa454a30122e740653c3e87d90c63bb3d128ab:
+
+.. dropdown:: [MISSING] GoogleTest Test ReaderFactoryFixture:UnexpectedPidShallResultInEmptyOptional
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      :Asil: B
+      :Description: Reader creation shall fail in case of using unexpected pid.
+      :Testtype: Interface test
+      :Derivationtechnique: Generation and analysis of equivalence classes
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/data\_router/shared\_memory/reader\_factory\_test.cpp:193 <../../../../../../score/mw/log/detail/data_router/shared_memory/reader_factory_test.cpp#L193>`__
+
+.. _lobster-item-eb065588b86fb42c8003a39fff8c6e2c44f824d5:
+
+.. dropdown:: [MISSING] GoogleTest Test ReaderFactoryFixture:ProperSetupShallResultValidReader
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      :Asil: B
+      :Description: Testing the creation of the reader correctly.
+      :Testtype: Interface test
+      :Derivationtechnique: Generation and analysis of equivalence classes
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/data\_router/shared\_memory/reader\_factory\_test.cpp:224 <../../../../../../score/mw/log/detail/data_router/shared_memory/reader_factory_test.cpp#L224>`__
+
+.. _lobster-item-e1993553ce9598646f0940029d72dfd1f78baddc:
+
+.. dropdown:: [MISSING] GoogleTest Test ReaderFactoryFixture:UnmapFailureShallResultValidReader
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      :Asil: B
+      :Description: Verifies returning a vaild reader in case of unmap failure.
+      :Testtype: Interface test
+      :Derivationtechnique: Generation and analysis of equivalence classes
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/data\_router/shared\_memory/reader\_factory\_test.cpp:256 <../../../../../../score/mw/log/detail/data_router/shared_memory/reader_factory_test.cpp#L256>`__
+
+.. _lobster-item-e7cc5cbf395051296ef5a2bda9c4b19f34c3c4cf:
+
+.. dropdown:: [MISSING] GoogleTest Test ReaderFactoryTests:DefaultShallCreateReaderFactoryImpl
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      :Asil: B
+      :Description: Verifies that the default reader factory shall create a reader factory implementation instance.
+      :Testtype: Interface test
+      :Derivationtechnique: Generation and analysis of equivalence classes
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/data\_router/shared\_memory/reader\_factory\_test.cpp:286 <../../../../../../score/mw/log/detail/data_router/shared_memory/reader_factory_test.cpp#L286>`__
+
+.. _lobster-item-49718e0e87de5377ef9f1fab17bb26aad2027b1e:
+
+.. dropdown:: [MISSING] GoogleTest Test ReaderFactoryTests:NullPtrResourceShallNotCreateReaderFactoryImpl
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      :Asil: B
+      :Description: Verifies that the null ptr resource shall not create a reader factory implementation instance.
+      :Testtype: Interface test
+      :Derivationtechnique: Generation and analysis of equivalence classes
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/data\_router/shared\_memory/reader\_factory\_test.cpp:299 <../../../../../../score/mw/log/detail/data_router/shared_memory/reader_factory_test.cpp#L299>`__
+
+.. _lobster-item-355d9fa03e469e79dd8566c00351738099f9b5e9:
+
+.. dropdown:: [MISSING] GoogleTest Test SharedMemoryReaderFixture:GetterShallReadSharedDataNumberOfDropsInvalidSize
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      :Partiallyverifies: comp_req__log__memory_bound_checking
+      :Description: Verifies the ability of getting the number of drops invalid size value properly.
+      :Testtype: requirements-based
+      :Derivationtechnique: requirements-analysis
+      :Parentrequirement: SCR-861827, SCR-12206795
+      :Asil: B
+      :Testingtechnique: Requirements-based test
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/data\_router/shared\_memory/shared\_memory\_reader\_test.cpp:86 <../../../../../../score/mw/log/detail/data_router/shared_memory/shared_memory_reader_test.cpp#L86>`__
+
+.. _lobster-item-83f68ed10657e190154b354d41205e08a694ab17:
+
+.. dropdown:: [MISSING] GoogleTest Test SharedMemoryReaderFixture:GetterShallReadSharedDataNumberOfDropsBufferFull
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      :Parentrequirement: SCR-861827, SCR-12206795
+      :Asil: B
+      :Description: Verifies the ability of getting the number of drops buffer full value properly.
+      :Testingtechnique: Requirements-based test
+      :Derivationtechnique: Analysis of requirements
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/data\_router/shared\_memory/shared\_memory\_reader\_test.cpp:105 <../../../../../../score/mw/log/detail/data_router/shared_memory/shared_memory_reader_test.cpp#L105>`__
+
+.. _lobster-item-906c40bd28716a08de6df7dc6a77ecddce8efd5d:
+
+.. dropdown:: [MISSING] GoogleTest Test SharedMemoryReaderFixture:GetterShallReadSharedDataSizeOfDropsBufferFull
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      :Parentrequirement: SCR-861827, SCR-12206795
+      :Asil: B
+      :Description: Verifies the ability of getting the size of drops buffer full value properly.
+      :Testingtechnique: Requirements-based test
+      :Derivationtechnique: Analysis of requirements
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/data\_router/shared\_memory/shared\_memory\_reader\_test.cpp:119 <../../../../../../score/mw/log/detail/data_router/shared_memory/shared_memory_reader_test.cpp#L119>`__
+
+.. _lobster-item-fb714c65e8bd2020abb336b4d0fc654cf45f904b:
+
+.. dropdown:: [MISSING] GoogleTest Test SharedMemoryReaderFixture:RingBufferSizeShallReturnValueBasedOnControlBlock
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      :Parentrequirement: SCR-861827, SCR-12206795
+      :Asil: B
+      :Description: Verifies the ability of getting ring buffer size bytes value properly.
+      :Testingtechnique: Requirements-based test
+      :Derivationtechnique: Analysis of requirements
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/data\_router/shared\_memory/shared\_memory\_reader\_test.cpp:133 <../../../../../../score/mw/log/detail/data_router/shared_memory/shared_memory_reader_test.cpp#L133>`__
+
+.. _lobster-item-69236bb4db9950d19f6fd6ae342f3dbcd285821d:
+
+.. dropdown:: [MISSING] GoogleTest Test SharedMemoryReaderFixture:GetterShallReadSharedDataNumberOfDropsWithTypeRegistrationFailed
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/data\_router/shared\_memory/shared\_memory\_reader\_test.cpp:144 <../../../../../../score/mw/log/detail/data_router/shared_memory/shared_memory_reader_test.cpp#L144>`__
+
+.. _lobster-item-e909c22bf2a8b1d2b75ab78726dfb09e6abd82dc:
+
+.. dropdown:: [MISSING] GoogleTest Test SharedMemoryReaderFixture:UnmapCallbackShallBeCalledWhenDestructing
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      :Parentrequirement: SCR-861827, SCR-12206795
+      :Asil: B
+      :Description: Verifies that the Unmap callback will get called when destructing the shared memory reader instance.
+      :Testingtechnique: Requirements-based test
+      :Derivationtechnique: Analysis of requirements
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/data\_router/shared\_memory/shared\_memory\_reader\_test.cpp:153 <../../../../../../score/mw/log/detail/data_router/shared_memory/shared_memory_reader_test.cpp#L153>`__
+
+.. _lobster-item-9a44e6bbb70883194366bc8af77b484f90b67168:
+
+.. dropdown:: [MISSING] GoogleTest Test SharedMemoryReaderFixture:UnmapCallbackShallNotBeCalledWhenMoving
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      :Parentrequirement: SCR-861827, SCR-12206795
+      :Asil: B
+      :Description: Verifies that the Unmap callback will not get called in case of moving the shared memory reader to another instance.
+      :Testingtechnique: Requirements-based test
+      :Derivationtechnique: Analysis of requirements
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/data\_router/shared\_memory/shared\_memory\_reader\_test.cpp:178 <../../../../../../score/mw/log/detail/data_router/shared_memory/shared_memory_reader_test.cpp#L178>`__
+
+.. _lobster-item-92bc4f51d920dbb50f11f9824b27362a130968d6:
+
+.. dropdown:: [MISSING] GoogleTest Test SharedMemoryReaderFixture:ReaderNotNotifiedShallNotPerformReads
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      :Parentrequirement: SCR-861827, SCR-12206795
+      :Asil: B
+      :Description: Verifies the in-ability of doing read in case of missing Notifying acquisition first.
+      :Testingtechnique: Requirements-based test
+      :Derivationtechnique: Analysis of requirements
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/data\_router/shared\_memory/shared\_memory\_reader\_test.cpp:207 <../../../../../../score/mw/log/detail/data_router/shared_memory/shared_memory_reader_test.cpp#L207>`__
+
+.. _lobster-item-e832770cdb4a6c667abf85947e2d74dc3fd5953a:
+
+.. dropdown:: [MISSING] GoogleTest Test SharedMemoryReaderFixture:ReadDetached
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      :Parentrequirement: SCR-861827, SCR-12206795
+      :Asil: B
+      :Description: Verifies the in-ability of doing read in case of missing Notifying acquisition first.
+      :Testingtechnique: Requirements-based test
+      :Derivationtechnique: Analysis of requirements
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/data\_router/shared\_memory/shared\_memory\_reader\_test.cpp:244 <../../../../../../score/mw/log/detail/data_router/shared_memory/shared_memory_reader_test.cpp#L244>`__
+
+.. _lobster-item-37e54b8299637313cb1a18dcc1fc34d8b2b60a76:
+
+.. dropdown:: [MISSING] GoogleTest Test SharedMemoryReaderFixture:ReaderNotifiedShallReturnNulloptWhenNotReleasedByWriters
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      :Parentrequirement: SCR-861827, SCR-12206795
+      :Asil: B
+      :Description: Verifies the in-ability of doing read in case of missing Notifying acquisition first.
+      :Testingtechnique: Requirements-based test
+      :Derivationtechnique: Analysis of requirements
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/data\_router/shared\_memory/shared\_memory\_reader\_test.cpp:277 <../../../../../../score/mw/log/detail/data_router/shared_memory/shared_memory_reader_test.cpp#L277>`__
+
+.. _lobster-item-6cd2a7c053f398626473574fa3efb5ab1faf0232:
+
+.. dropdown:: [MISSING] GoogleTest Test SharedMemoryReaderFixture:ReaderNotifiedShallAcquireData
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      :Parentrequirement: SCR-861827, SCR-12206795
+      :Asil: B
+      :Description: Verifies the ability of doing read when Notifying acquisition first.
+      :Testingtechnique: Requirements-based test
+      :Derivationtechnique: Analysis of requirements
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/data\_router/shared\_memory/shared\_memory\_reader\_test.cpp:307 <../../../../../../score/mw/log/detail/data_router/shared_memory/shared_memory_reader_test.cpp#L307>`__
+
+.. _lobster-item-413278ecd712cc32d0e9f53e2a4225df03dfb392:
+
+.. dropdown:: [MISSING] GoogleTest Test SharedMemoryReaderFixture:WriterAcquireShallAllowDataToBeWritten
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      :Parentrequirement: SCR-861827, SCR-12206795
+      :Asil: B
+      :Description: Verifies the ability of writing data when allocate for writing.
+      :Testingtechnique: Requirements-based test
+      :Derivationtechnique: Analysis of requirements
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/data\_router/shared\_memory/shared\_memory\_reader\_test.cpp:371 <../../../../../../score/mw/log/detail/data_router/shared_memory/shared_memory_reader_test.cpp#L371>`__
+
+.. _lobster-item-f4c891be0402eaea552bda53739092e2f816c64f:
+
+.. dropdown:: [MISSING] GoogleTest Test SharedMemoryReaderFixture:CorruptedHeaderSizeTooSmallShallIgnoreEntry
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      :Parentrequirement: SCR-861827, SCR-12206795
+      :Asil: B
+      :Description: Verifies ignoring the entry in case of using corrupted header.
+      :Testingtechnique: Requirements-based test
+      :Derivationtechnique: Analysis of requirements
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/data\_router/shared\_memory/shared\_memory\_reader\_test.cpp:435 <../../../../../../score/mw/log/detail/data_router/shared_memory/shared_memory_reader_test.cpp#L435>`__
+
+.. _lobster-item-ad03d7faad3f192eed4a7ef38fe5f616cd7d3b0f:
+
+.. dropdown:: [MISSING] GoogleTest Test SharedMemoryReaderFixture:CorruptedRegistrationHeaderSizeTooSmallShallIgnoreEntry
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      :Parentrequirement: SCR-861827, SCR-12206795
+      :Asil: B
+      :Description: Verifies ignoring the entry in case of using corrupted registration header.
+      :Testingtechnique: Requirements-based test
+      :Derivationtechnique: Analysis of requirements
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/data\_router/shared\_memory/shared\_memory\_reader\_test.cpp:486 <../../../../../../score/mw/log/detail/data_router/shared_memory/shared_memory_reader_test.cpp#L486>`__
+
+.. _lobster-item-68f2a566b5dce68b8340bbc3a354dd866155d55c:
+
+.. dropdown:: [MISSING] GoogleTest Test SharedMemoryReaderFixture:WriterDetachedShallAllowDataToBeReadWithoutSwitching
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      :Parentrequirement: SCR-861827, SCR-12206795
+      :Asil: B
+      :Description: Verifies the ability of read the data without switching in case of detached the writer.
+      :Testingtechnique: Requirements-based test
+      :Derivationtechnique: Analysis of requirements
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/data\_router/shared\_memory/shared\_memory\_reader\_test.cpp:551 <../../../../../../score/mw/log/detail/data_router/shared_memory/shared_memory_reader_test.cpp#L551>`__
+
+.. _lobster-item-6319552f212df5e54ea0fa6d3c7a6b7835468196:
+
+.. dropdown:: [MISSING] GoogleTest Test SharedMemoryWriterFixture:OversizedTypeRegisterShallReturnEmpty
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      :Requirement: SCR-1633921,SCR-861534,SCR-1016719
+      :Asil: B
+      :Description: If a type info returns an oversized length the type registration shall fail.
+      :Testingtechnique: Requirements-based test
+      :Derivationtechnique: Analysis of requirements
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/data\_router/shared\_memory/shared\_memory\_writer\_test.cpp:115 <../../../../../../score/mw/log/detail/data_router/shared_memory/shared_memory_writer_test.cpp#L115>`__
+
+.. _lobster-item-b25832f2f8cdaa3d740965eccb9709835137eb4d:
+
+.. dropdown:: [MISSING] GoogleTest Test SharedMemoryWriterFixture:BasicRegisterShallReturnValue
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      :Requirement: SCR-1633921
+      :Asil: B
+      :Description: For a valid type the type registration shall succeed.
+      :Testingtechnique: Requirements-based test
+      :Derivationtechnique: Analysis of requirements
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/data\_router/shared\_memory/shared\_memory\_writer\_test.cpp:127 <../../../../../../score/mw/log/detail/data_router/shared_memory/shared_memory_writer_test.cpp#L127>`__
+
+.. _lobster-item-8d0b598fcf5c1efe75aa79fa926b276432af763a:
+
+.. dropdown:: [MISSING] GoogleTest Test SharedMemoryWriterFixture:RegistrationInSequenceShallYieldUniqueTypes
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      :Requirement: SCR-1633921
+      :Asil: B
+      :Description: For two valid types the type registration shall return unique identifiers.
+      :Testingtechnique: Requirements-based test
+      :Derivationtechnique: Analysis of requirements
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/data\_router/shared\_memory/shared\_memory\_writer\_test.cpp:139 <../../../../../../score/mw/log/detail/data_router/shared_memory/shared_memory_writer_test.cpp#L139>`__
+
+.. _lobster-item-5b0fefc5546e3bfc68301b425e551e5205c0e611:
+
+.. dropdown:: [MISSING] GoogleTest Test SharedMemoryWriterFixture:ShallHandleOverflowAndNotFail
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      :Requirement: SCR-1633921,SCR-861534,SCR-1016719
+      :Asil: B
+      :Description: If more types than supported are registered, the registration shall fail.
+      :Testingtechnique: Requirements-based test
+      :Derivationtechnique: Analysis of requirements
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/data\_router/shared\_memory/shared\_memory\_writer\_test.cpp:153 <../../../../../../score/mw/log/detail/data_router/shared_memory/shared_memory_writer_test.cpp#L153>`__
+
+.. _lobster-item-b5a8a19b9593887f81e4f1184e6fe4c7fb609942:
+
+.. dropdown:: [MISSING] GoogleTest Test SharedMemoryWriterFixture:SingleWriteReadShallBeReadPresentingTheSameValues
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      :Requirement: SCR-1633921,SCR-861534,SCR-1016719
+      :Asil: B
+      :Description: Reading shall return the same type and message as written.
+      :Testingtechnique: Requirements-based test
+      :Derivationtechnique: Analysis of requirements
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/data\_router/shared\_memory/shared\_memory\_writer\_test.cpp:170 <../../../../../../score/mw/log/detail/data_router/shared_memory/shared_memory_writer_test.cpp#L170>`__
+
+.. _lobster-item-f8ee2f438669b6c1479296ca7acc2aa8b9c9cf95:
+
+.. dropdown:: [MISSING] GoogleTest Test OversizedRequests/SharedMemoryWriterOversizedRequestsFixture:WriteWithTooBigRequestShallBeRejected/0
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      :Requirement: SCR-861534,SCR-1016719
+      :Asil: B
+      :Description: Out of bounds data shall be dropped.
+      :Testingtechnique: Requirements-based test
+      :Derivationtechnique: Analysis of requirements
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/data\_router/shared\_memory/shared\_memory\_writer\_test.cpp:206 <../../../../../../score/mw/log/detail/data_router/shared_memory/shared_memory_writer_test.cpp#L206>`__
+
+.. _lobster-item-8a93484981ebc702200107733915525f325ca3fe:
+
+.. dropdown:: [MISSING] GoogleTest Test OversizedRequests/SharedMemoryWriterOversizedRequestsFixture:WriteWithTooBigRequestShallBeRejected/1
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      :Requirement: SCR-861534,SCR-1016719
+      :Asil: B
+      :Description: Out of bounds data shall be dropped.
+      :Testingtechnique: Requirements-based test
+      :Derivationtechnique: Analysis of requirements
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/data\_router/shared\_memory/shared\_memory\_writer\_test.cpp:206 <../../../../../../score/mw/log/detail/data_router/shared_memory/shared_memory_writer_test.cpp#L206>`__
+
+.. _lobster-item-cbc1c1f07afced65bad93a7465458fee97943607:
+
+.. dropdown:: [MISSING] GoogleTest Test SharedMemoryWriterFixture:MultipleConcurentRegistrationShallBeValidInCount
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      :Requirement: SCR-861534,SCR-1016719,SCR-861550
+      :Asil: B
+      :Description: Ensures that multiple concurrent type registrations shall be performed without causing memory corruption or race conditions.
+      :Testingtechnique: Requirements-based test
+      :Derivationtechnique: Analysis of requirements
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/data\_router/shared\_memory/shared\_memory\_writer\_test.cpp:241 <../../../../../../score/mw/log/detail/data_router/shared_memory/shared_memory_writer_test.cpp#L241>`__
+
+.. _lobster-item-ca4428e68a2062e0a7ac33ffa74efc0502400e00:
+
+.. dropdown:: [MISSING] GoogleTest Test SharedMemoryWriterFixture:MultipleConcurrentWritesShallAllBeReceivedValidInCountAndValue
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      :Requirement: SCR-861550
+      :Asil: B
+      :Description: Ensures that SharedMemoryWriter shall be capable of performing multiple concurrent write operations and count the total number of write operations successfully, while correctly verifying that all write operations have been successfully recorded with the correct data.
+      :Testingtechnique: Requirements-based test
+      :Derivationtechnique: Analysis of requirements
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/data\_router/shared\_memory/shared\_memory\_writer\_test.cpp:287 <../../../../../../score/mw/log/detail/data_router/shared_memory/shared_memory_writer_test.cpp#L287>`__
+
+.. _lobster-item-0c00acb1311e2a321d2ace28d4c6bd0d27a5e8a4:
+
+.. dropdown:: [MISSING] GoogleTest Test WriterFactory:MissingOsalShallResultInEmptyOptional
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      :Parentrequirement: SCR-1016729
+      :Asil: B
+      :Description: Verifies the in-ability of creating shared memory writer in case of missing all osal parameters.
+      :Testingtechnique: Requirements-based test
+      :Derivationtechnique: Analysis of requirements
+      :Priority: 3
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/data\_router/shared\_memory/writer\_factory\_test.cpp:118 <../../../../../../score/mw/log/detail/data_router/shared_memory/writer_factory_test.cpp#L118>`__
+
+.. _lobster-item-f115fd5ecd293722606768f7362dc9799f65ea23:
+
+.. dropdown:: [MISSING] GoogleTest Test WriterFactory:MissingOsalUnistdAndOsalMmanShallResultInEmptyOptional
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      :Parentrequirement: SCR-1016729
+      :Asil: B
+      :Description: Verify that create writers returns empty in case of missing OSAL parameters for unistd and mman
+      :Testingtechnique: Requirements-based test
+      :Derivationtechnique: Analysis of requirements
+      :Priority: 3
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/data\_router/shared\_memory/writer\_factory\_test.cpp:135 <../../../../../../score/mw/log/detail/data_router/shared_memory/writer_factory_test.cpp#L135>`__
+
+.. _lobster-item-ad1dce9433d29609bd0323e335554634fdd8d816:
+
+.. dropdown:: [MISSING] GoogleTest Test WriterFactory:MissingOsalMmanShallResultInEmptyOptional
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      :Parentrequirement: SCR-1016729
+      :Asil: B
+      :Description: Verify that create writer returns empty in case of missing OSAL parameter for mman
+      :Testingtechnique: Requirements-based test
+      :Derivationtechnique: Analysis of requirements
+      :Priority: 3
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/data\_router/shared\_memory/writer\_factory\_test.cpp:153 <../../../../../../score/mw/log/detail/data_router/shared_memory/writer_factory_test.cpp#L153>`__
+
+.. _lobster-item-3a8643503d913ca63a6238d7437654a4bace1fd8:
+
+.. dropdown:: [MISSING] GoogleTest Test WriterFactory:MissingStatOsalShallResultInEmptyOptional
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      :Parentrequirement: SCR-1016729
+      :Asil: B
+      :Description: Verify that create writer returns empty in case of missing OSAL parameter for mman
+      :Testingtechnique: Requirements-based test
+      :Derivationtechnique: Analysis of requirements
+      :Priority: 3
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/data\_router/shared\_memory/writer\_factory\_test.cpp:171 <../../../../../../score/mw/log/detail/data_router/shared_memory/writer_factory_test.cpp#L171>`__
+
+.. _lobster-item-590fccd5c84f424c5fbceab12122a66c744af51f:
+
+.. dropdown:: [MISSING] GoogleTest Test WriterFactory:MissingStdlibShallResultInEmptyOptional
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      :Parentrequirement: SCR-1016729
+      :Asil: B
+      :Description: Verify that create writer returns empty in case of missing OSAL parameter for mman
+      :Testingtechnique: Requirements-based test
+      :Derivationtechnique: Analysis of requirements
+      :Priority: 3
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/data\_router/shared\_memory/writer\_factory\_test.cpp:190 <../../../../../../score/mw/log/detail/data_router/shared_memory/writer_factory_test.cpp#L190>`__
+
+.. _lobster-item-1c3eb4ebc88caf080db2d497bf110209265d2bc9:
+
+.. dropdown:: [MISSING] GoogleTest Test WriterFactoryFixture:WhenTheFileExistsItShallBeUnlinked
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      :Partiallyverifies: comp_req__log__file_descriptor_flags
+      :Description: Verifies the ability of unlink the exist file. The component shall set the FD_CLOEXEC (or O_CLOEXEC) flag on all the file descriptor it owns
+      :Testtype: requirements-based
+      :Derivationtechnique: requirements-analysis
+      :Parentrequirement: SCR-1016729, SCR-26319707
+      :Asil: B
+      :Testingtechnique: Requirements-based test
+      :Priority: 3
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/data\_router/shared\_memory/writer\_factory\_test.cpp:210 <../../../../../../score/mw/log/detail/data_router/shared_memory/writer_factory_test.cpp#L210>`__
+
+.. _lobster-item-6fd3d658e6af82a7e372ab466d2afc2776f1a888:
+
+.. dropdown:: [MISSING] GoogleTest Test WriterFactoryFixture:WhenTheFileExistsAndCannotBeUnlinkedItShallContinueWithExecution
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      :Parentrequirement: SCR-1016729, SCR-26319707
+      :Asil: B
+      :Description: Verifies the ability of continue the execution in case of in-ability of unlink an exist file. The component shall set the FD_CLOEXEC (or O_CLOEXEC) flag on all the file descriptor it owns
+      :Testingtechnique: Requirements-based test
+      :Derivationtechnique: Analysis of requirements
+      :Priority: 3
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/data\_router/shared\_memory/writer\_factory\_test.cpp:246 <../../../../../../score/mw/log/detail/data_router/shared_memory/writer_factory_test.cpp#L246>`__
+
+.. _lobster-item-c5fd55dd9060ae0cf21b8bd814e8f2d8fdd901d8:
+
+.. dropdown:: [MISSING] GoogleTest Test WriterFactoryFixture:InDynamicFileExistanceShallNotBeChecked
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      :Parentrequirement: SCR-1016729
+      :Asil: B
+      :Description: Verifies that we should not check a dynamic file creation.
+      :Testingtechnique: Requirements-based test
+      :Derivationtechnique: Analysis of requirements
+      :Priority: 3
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/data\_router/shared\_memory/writer\_factory\_test.cpp:277 <../../../../../../score/mw/log/detail/data_router/shared_memory/writer_factory_test.cpp#L277>`__
+
+.. _lobster-item-b3cd1b08cd5a56f8efcd44928e13fd87443ce904:
+
+.. dropdown:: [MISSING] GoogleTest Test WriterFactoryFixture:FailureToOpenFileShallResultInEmptyOptionalResult
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      :Parentrequirement: SCR-1016729
+      :Asil: B
+      :Description: Verifies the in-ability of creating the writer in case of failing to open a file.
+      :Testingtechnique: Requirements-based test
+      :Derivationtechnique: Analysis of requirements
+      :Priority: 3
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/data\_router/shared\_memory/writer\_factory\_test.cpp:297 <../../../../../../score/mw/log/detail/data_router/shared_memory/writer_factory_test.cpp#L297>`__
+
+.. _lobster-item-276ae66eda57776944ef0a96a987e952b743065f:
+
+.. dropdown:: [MISSING] GoogleTest Test WriterFactoryFixture:FailureToTruncateFileShallResultInEmptyOptionalResult
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      :Parentrequirement: SCR-1016729
+      :Asil: B
+      :Description: Verifies the in-ability of creating the writer in case of failing to truncate a file.
+      :Testingtechnique: Requirements-based test
+      :Derivationtechnique: Analysis of requirements
+      :Priority: 3
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/data\_router/shared\_memory/writer\_factory\_test.cpp:318 <../../../../../../score/mw/log/detail/data_router/shared_memory/writer_factory_test.cpp#L318>`__
+
+.. _lobster-item-9be476f4c699611b47a28e773cd299c90e4791cf:
+
+.. dropdown:: [MISSING] GoogleTest Test WriterFactoryFixture:FailureToMapFileShallResultInEmptyOptionalResult
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      :Parentrequirement: SCR-1016729
+      :Asil: B
+      :Description: Verifies the in-ability of creating the writer in case of failing to map a file.
+      :Testingtechnique: Requirements-based test
+      :Derivationtechnique: Analysis of requirements
+      :Priority: 3
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/data\_router/shared\_memory/writer\_factory\_test.cpp:369 <../../../../../../score/mw/log/detail/data_router/shared_memory/writer_factory_test.cpp#L369>`__
+
+.. _lobster-item-bbbb8b614ddb65b687ed6b64cf4fb190a3dd3001:
+
+.. dropdown:: [MISSING] GoogleTest Test WriterFactoryFixture:WhenAllMocksReturnValidShallResultValidOptionalResult
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      :Parentrequirement: SCR-1016729
+      :Asil: B
+      :Description: Verifies the ability of creating the writer in case of all osal parameters are valid.
+      :Testingtechnique: Requirements-based test
+      :Derivationtechnique: Analysis of requirements
+      :Priority: 3
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/data\_router/shared\_memory/writer\_factory\_test.cpp:403 <../../../../../../score/mw/log/detail/data_router/shared_memory/writer_factory_test.cpp#L403>`__
+
+.. _lobster-item-b7a5b9ff46be155ad23f363128b555174aa1385b:
+
+.. dropdown:: [MISSING] GoogleTest Test WriterFactoryFixture:WhenMmapIsValidAndUnmmapIsFailingItShallPrintCerrMessage
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      :Parentrequirement: SCR-1016729
+      :Asil: B
+      :Description: Should fail in case of mmap succeeded and munmap failed.
+      :Testingtechnique: Requirements-based test
+      :Derivationtechnique: Analysis of requirements
+      :Priority: 3
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/data\_router/shared\_memory/writer\_factory\_test.cpp:438 <../../../../../../score/mw/log/detail/data_router/shared_memory/writer_factory_test.cpp#L438>`__
+
+.. _lobster-item-f6df120a8aea38684bfb47239157059682059f9a:
+
+.. dropdown:: [MISSING] GoogleTest Test WriterFactoryFixture:MmapReturnsNullptrValueShallCallUnmapAndReturnEmpty
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      :Parentrequirement: SCR-1016729
+      :Asil: B
+      :Description: Verifies that when Mmap calling returns nullptr it will lead invoking to munmap with returning empty.
+      :Testingtechnique: Requirements-based test
+      :Derivationtechnique: Analysis of requirements
+      :Priority: 3
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/data\_router/shared\_memory/writer\_factory\_test.cpp:473 <../../../../../../score/mw/log/detail/data_router/shared_memory/writer_factory_test.cpp#L473>`__
+
+.. _lobster-item-854cfc67e6fb0b7a3687a26cf559f88e98a5b92d:
+
+.. dropdown:: [MISSING] GoogleTest Test WriterFactoryFixture:MmapReturingImproperAlignedMemoryShallCallUnmapAndReturnEmpty
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      :Parentrequirement: SCR-1016729
+      :Asil: B
+      :Description: Verifies that when Mmap calling returns improper aligned memory it will lead invoking to munmap with returning empty.
+      :Testingtechnique: Requirements-based test
+      :Derivationtechnique: Analysis of requirements
+      :Priority: 3
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/data\_router/shared\_memory/writer\_factory\_test.cpp:521 <../../../../../../score/mw/log/detail/data_router/shared_memory/writer_factory_test.cpp#L521>`__
+
+.. _lobster-item-a11b472d91c74f2a1f17de4dc14dde0abfc5305a:
+
+.. dropdown:: [MISSING] GoogleTest Test WriterFactoryFixture:UnexpectedBufferSizeWithOverflowShallMakeCerrOutput
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/data\_router/shared\_memory/writer\_factory\_test.cpp:559 <../../../../../../score/mw/log/detail/data_router/shared_memory/writer_factory_test.cpp#L559>`__
+
+.. _lobster-item-7e1584158f41177fc2f4363414c7e7cfa8295111:
+
+.. dropdown:: [MISSING] GoogleTest Test DltMessageBuilderFixture:StorageHeaderShallHaveSpecificElements
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      :Parentrequirement: SCR-1633236
+      :Autosarrequirement: PRS_Dlt_00405
+      :Asil: B
+      :Description: Verifies Dlt Storage Header format.
+      :Testingtechnique: Requirements-based test
+      :Derivationtechnique: Analysis of requirements
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/file\_recorder/dlt\_message\_builder\_test.cpp:88 <../../../../../../score/mw/log/detail/file_recorder/dlt_message_builder_test.cpp#L88>`__
+
+.. _lobster-item-18296e558f6da427ec562b44940bb3675b5c7c79:
+
+.. dropdown:: [MISSING] GoogleTest Test DltMessageBuilderFixture:HeaderShallHaveSpecificElements
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      :Parentrequirement: SCR-1633236
+      :Autosarrequirement: PRS_Dlt_00458, PRS_Dlt_00319, PRS_Dlt_00094
+      :Asil: B
+      :Description: Verifies Dlt Header format.
+      :Testingtechnique: Requirements-based test
+      :Derivationtechnique: Analysis of requirements
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/file\_recorder/dlt\_message\_builder\_test.cpp:109 <../../../../../../score/mw/log/detail/file_recorder/dlt_message_builder_test.cpp#L109>`__
+
+.. _lobster-item-bfe625676414507d5083565c3a384b3cfc37efb0:
+
+.. dropdown:: [MISSING] GoogleTest Test DltMessageBuilderFixture:ExtendedHeaderShallHaveSpecificElements
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      :Parentrequirement: SCR-1633236
+      :Autosarrequirement: PRS_Dlt_00617
+      :Asil: B
+      :Description: Verifies Dlt Extended Header format.
+      :Testingtechnique: Requirements-based test
+      :Derivationtechnique: Analysis of requirements
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/file\_recorder/dlt\_message\_builder\_test.cpp:132 <../../../../../../score/mw/log/detail/file_recorder/dlt_message_builder_test.cpp#L132>`__
+
+.. _lobster-item-2403895736403a22a39b4fc684406f84d5f3aaa3:
+
+.. dropdown:: [MISSING] GoogleTest Test DltMessageBuilderFixture:PayloadShallHaveSetText
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      :Parentrequirement: SCR-1633236
+      :Autosarrequirement: PRS_Dlt_00459
+      :Asil: B
+      :Description: Verifies Dlt message format.
+      :Testingtechnique: Requirements-based test
+      :Derivationtechnique: Analysis of requirements
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/file\_recorder/dlt\_message\_builder\_test.cpp:154 <../../../../../../score/mw/log/detail/file_recorder/dlt_message_builder_test.cpp#L154>`__
+
+.. _lobster-item-2acffba07291584b681aca8216a015491bd743c3:
+
+.. dropdown:: [MISSING] GoogleTest Test DltMessageBuilderFunctionTest:TestDisableDltExtendedHeader
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      :Parentrequirement: SCR-1633236
+      :Autosarrequirement: PRS_Dlt_00459
+      :Asil: B
+      :Description: Verifies DLT standard header types without the exteded header enabled.
+      :Testingtechnique: Requirements-based test
+      :Derivationtechnique: Analysis of requirements
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/file\_recorder/dlt\_message\_builder\_test.cpp:172 <../../../../../../score/mw/log/detail/file_recorder/dlt_message_builder_test.cpp#L172>`__
+
+.. _lobster-item-f34a2a3ec1e3e05398270082e02681a9e5abe830:
+
+.. dropdown:: [MISSING] GoogleTest Test FileRecorderFactoryConfigFixture:CreateFileLoggingBackendFalied
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/file\_recorder/file\_recorder\_factory\_test.cpp:89 <../../../../../../score/mw/log/detail/file_recorder/file_recorder_factory_test.cpp#L89>`__
+
+.. _lobster-item-72280df03cf9e90aa45fd8ebe75799f78e1a6d90:
+
+.. dropdown:: [MISSING] GoogleTest Test FileRecorderFixtureWithLogLevelCheck:WillObtainSlotForSufficientLogLevel
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      :Requirement: SCR-1633236
+      :Asil: B
+      :Description: Verifies that recorder shall returns sufficient slots if it started recording successfully.
+      :Testingtechnique: Requirements-based test
+      :Derivationtechnique: Analysis of requirements
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/file\_recorder/file\_recorder\_test.cpp:67 <../../../../../../score/mw/log/detail/file_recorder/file_recorder_test.cpp#L67>`__
+
+.. _lobster-item-e599694d8e21fa6f673951b92ddabc498098b572:
+
+.. dropdown:: [MISSING] GoogleTest Test FileRecorderFixtureWithLogLevelCheck:WillObtainEmptySlotForInsufficentLogLevel
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      :Requirement: SCR-1633236, SCR-2592577
+      :Asil: B
+      :Description: Verifies that recorder can not get slots in case of InActive LogLevel.
+      :Testingtechnique: Requirements-based test
+      :Derivationtechnique: Analysis of requirements
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/file\_recorder/file\_recorder\_test.cpp:80 <../../../../../../score/mw/log/detail/file_recorder/file_recorder_test.cpp#L80>`__
+
+.. _lobster-item-bef6b672e04cecee8ee44aefb74675ace8ee3a30:
+
+.. dropdown:: [MISSING] GoogleTest Test FileRecorderFixtureWithLogLevelCheck:DisablesOrEnablesLogAccordingToLevel
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      :Requirement: SCR-1633236, SCR-2592577
+      :Asil: B
+      :Description: Verifies the ability of enabling or disabling specific log level
+      :Testingtechnique: Requirements-based test
+      :Derivationtechnique: Analysis of requirements
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/file\_recorder/file\_recorder\_test.cpp:92 <../../../../../../score/mw/log/detail/file_recorder/file_recorder_test.cpp#L92>`__
+
+.. _lobster-item-b5b89c65ca0afbcece6b12b11b207570dc9e619c:
+
+.. dropdown:: [MISSING] GoogleTest Test FileRecorderFixtureWithLogLevelCheck:WillObtainEmptySlotsWhenNoSlotsReserved
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      :Requirement: SCR-1633236
+      :Asil: B
+      :Description: Recorder shall returns zero slots if no slots were reserved.
+      :Testingtechnique: Requirements-based test
+      :Derivationtechnique: Analysis of requirements
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/file\_recorder/file\_recorder\_test.cpp:104 <../../../../../../score/mw/log/detail/file_recorder/file_recorder_test.cpp#L104>`__
+
+.. _lobster-item-af84e6f39849e8fd094b9a20296caf33f264341d:
+
+.. dropdown:: [MISSING] GoogleTest Test FileRecorderFixture:TooLargeSinglePayloadWillYieldTruncatedLog
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      :Requirement: SCR-861534, SCR-1016719
+      :Asil: B
+      :Description: The log will be truncated in case of too large single payload.
+      :Testingtechnique: Requirements-based test
+      :Derivationtechnique: Analysis of requirements
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/file\_recorder/file\_recorder\_test.cpp:181 <../../../../../../score/mw/log/detail/file_recorder/file_recorder_test.cpp#L181>`__
+
+.. _lobster-item-aff041f1b84925337ce83ece1c3a7dca23c4380e:
+
+.. dropdown:: [MISSING] GoogleTest Test FileRecorderFixture:LogUint8
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      :Requirement: SCR-861534, SCR-1633236
+      :Asil: B
+      :Description: FileRecorder can log uint8_t.
+      :Testingtechnique: Requirements-based test
+      :Derivationtechnique: Analysis of requirements
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/file\_recorder/file\_recorder\_test.cpp:199 <../../../../../../score/mw/log/detail/file_recorder/file_recorder_test.cpp#L199>`__
+
+.. _lobster-item-51c82d30cadd3fe7a23df5bde33c890d5c117ac9:
+
+.. dropdown:: [MISSING] GoogleTest Test FileRecorderFixture:LogBool
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      :Requirement: SCR-861534, SCR-1633236
+      :Asil: B
+      :Description: FileRecorder can log boolean.
+      :Testingtechnique: Requirements-based test
+      :Derivationtechnique: Analysis of requirements
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/file\_recorder/file\_recorder\_test.cpp:210 <../../../../../../score/mw/log/detail/file_recorder/file_recorder_test.cpp#L210>`__
+
+.. _lobster-item-2ac501b4203d0317fd89c874eb42d0b19b82962c:
+
+.. dropdown:: [MISSING] GoogleTest Test FileRecorderFixture:LogInt8
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      :Requirement: SCR-861534, SCR-1633236
+      :Asil: B
+      :Description: FileRecorder can log int8_t.
+      :Testingtechnique: Requirements-based test
+      :Derivationtechnique: Analysis of requirements
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/file\_recorder/file\_recorder\_test.cpp:220 <../../../../../../score/mw/log/detail/file_recorder/file_recorder_test.cpp#L220>`__
+
+.. _lobster-item-19cacf89c541dba1b23a7c71ed01b9feb4b2915a:
+
+.. dropdown:: [MISSING] GoogleTest Test FileRecorderFixture:LogUint16
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      :Requirement: SCR-861534, SCR-1633236
+      :Asil: B
+      :Description: FileRecorder can log uint16_t.
+      :Testingtechnique: Requirements-based test
+      :Derivationtechnique: Analysis of requirements
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/file\_recorder/file\_recorder\_test.cpp:232 <../../../../../../score/mw/log/detail/file_recorder/file_recorder_test.cpp#L232>`__
+
+.. _lobster-item-f7c8521efb20e132ed710b2a1e986c17ceaa3dca:
+
+.. dropdown:: [MISSING] GoogleTest Test FileRecorderFixture:LogInt16
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      :Requirement: SCR-861534, SCR-1633236
+      :Asil: B
+      :Description: FileRecorder can log int16_t
+      :Testingtechnique: Requirements-based test.
+      :Derivationtechnique: Analysis of requirements
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/file\_recorder/file\_recorder\_test.cpp:243 <../../../../../../score/mw/log/detail/file_recorder/file_recorder_test.cpp#L243>`__
+
+.. _lobster-item-98ea690738bde9733a814b6c7014dfdd26523883:
+
+.. dropdown:: [MISSING] GoogleTest Test FileRecorderFixture:LogUint32
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      :Requirement: SCR-861534, SCR-1633236
+      :Asil: B
+      :Description: FileRecorder can log uint32_t.
+      :Testingtechnique: Requirements-based test
+      :Derivationtechnique: Analysis of requirements
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/file\_recorder/file\_recorder\_test.cpp:254 <../../../../../../score/mw/log/detail/file_recorder/file_recorder_test.cpp#L254>`__
+
+.. _lobster-item-c324b683b4d30a81016d2b65c71280d3aaf57d91:
+
+.. dropdown:: [MISSING] GoogleTest Test FileRecorderFixture:LogInt32
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      :Requirement: SCR-861534, SCR-1633236
+      :Asil: B
+      :Description: FileRecorder can log int32_t.
+      :Testingtechnique: Requirements-based test
+      :Derivationtechnique: Analysis of requirements
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/file\_recorder/file\_recorder\_test.cpp:265 <../../../../../../score/mw/log/detail/file_recorder/file_recorder_test.cpp#L265>`__
+
+.. _lobster-item-109612bc5f9c9e3a6cb3c69bc4fb3146ffd3c151:
+
+.. dropdown:: [MISSING] GoogleTest Test FileRecorderFixture:LogUint64
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      :Requirement: SCR-861534, SCR-1633236
+      :Asil: B
+      :Description: FileRecorder can log uint64_t.
+      :Testingtechnique: Requirements-based test
+      :Derivationtechnique: Analysis of requirements
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/file\_recorder/file\_recorder\_test.cpp:276 <../../../../../../score/mw/log/detail/file_recorder/file_recorder_test.cpp#L276>`__
+
+.. _lobster-item-a068a93e9894a89a8413cfe55f469c2487283525:
+
+.. dropdown:: [MISSING] GoogleTest Test FileRecorderFixture:LogInt64
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      :Requirement: SCR-861534, SCR-1633236
+      :Asil: B
+      :Description: FileRecorder can log int64_t.
+      :Testingtechnique: Requirements-based test
+      :Derivationtechnique: Analysis of requirements
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/file\_recorder/file\_recorder\_test.cpp:287 <../../../../../../score/mw/log/detail/file_recorder/file_recorder_test.cpp#L287>`__
+
+.. _lobster-item-561ed1529a949f9c3f35104846d39bebf7245a4c:
+
+.. dropdown:: [MISSING] GoogleTest Test FileRecorderFixture:LogFloat
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      :Requirement: SCR-861534, SCR-1633236
+      :Asil: B
+      :Description: FileRecorder can log float.
+      :Testingtechnique: Requirements-based test
+      :Derivationtechnique: Analysis of requirements
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/file\_recorder/file\_recorder\_test.cpp:298 <../../../../../../score/mw/log/detail/file_recorder/file_recorder_test.cpp#L298>`__
+
+.. _lobster-item-e013f4a88d800fb3760672d999ce82b7f4a71990:
+
+.. dropdown:: [MISSING] GoogleTest Test FileRecorderFixture:LogDouble
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      :Requirement: SCR-861534, SCR-1633236
+      :Asil: B
+      :Description: FileRecorder can log double.
+      :Testingtechnique: Requirements-based test
+      :Derivationtechnique: Analysis of requirements
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/file\_recorder/file\_recorder\_test.cpp:309 <../../../../../../score/mw/log/detail/file_recorder/file_recorder_test.cpp#L309>`__
+
+.. _lobster-item-a7603846b4421e95070db93e5960f4daa0f25eb9:
+
+.. dropdown:: [MISSING] GoogleTest Test FileRecorderFixture:LogStringView
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      :Requirement: SCR-861534, SCR-1633236
+      :Asil: B
+      :Description: FileRecorder can log string view.
+      :Testingtechnique: Requirements-based test
+      :Derivationtechnique: Analysis of requirements
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/file\_recorder/file\_recorder\_test.cpp:320 <../../../../../../score/mw/log/detail/file_recorder/file_recorder_test.cpp#L320>`__
+
+.. _lobster-item-8b41a2e98b81e56b6cb833b226cc75d60ce24430:
+
+.. dropdown:: [MISSING] GoogleTest Test FileRecorderFixture:LogHex8
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      :Requirement: SCR-861534, SCR-1633236
+      :Asil: B
+      :Description: FileRecorder can log 8-bit values in hex representation.
+      :Testingtechnique: Requirements-based test
+      :Derivationtechnique: Analysis of requirements
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/file\_recorder/file\_recorder\_test.cpp:331 <../../../../../../score/mw/log/detail/file_recorder/file_recorder_test.cpp#L331>`__
+
+.. _lobster-item-74e52299cf88ed2db091dc5eb3e7ae5c464cf7a4:
+
+.. dropdown:: [MISSING] GoogleTest Test FileRecorderFixture:LogHex16
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      :Requirement: SCR-861534, SCR-1633236
+      :Asil: B
+      :Description: FileRecorder can log 16-bit values in hex representation.
+      :Testingtechnique: Requirements-based test
+      :Derivationtechnique: Analysis of requirements
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/file\_recorder/file\_recorder\_test.cpp:342 <../../../../../../score/mw/log/detail/file_recorder/file_recorder_test.cpp#L342>`__
+
+.. _lobster-item-340d8262ff9f48373014250538a17387e0ae4f7f:
+
+.. dropdown:: [MISSING] GoogleTest Test FileRecorderFixture:LogHex32
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      :Requirement: SCR-861534, SCR-1633236
+      :Asil: B
+      :Description: FileRecorder can log 32-bit values in hex representation.
+      :Testingtechnique: Requirements-based test
+      :Derivationtechnique: Analysis of requirements
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/file\_recorder/file\_recorder\_test.cpp:353 <../../../../../../score/mw/log/detail/file_recorder/file_recorder_test.cpp#L353>`__
+
+.. _lobster-item-bc4946f045c3d09a78e2c6d34560778c6f0c3dc7:
+
+.. dropdown:: [MISSING] GoogleTest Test FileRecorderFixture:LogHex64
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      :Requirement: SCR-861534, SCR-1633236
+      :Asil: B
+      :Description: FileRecorder can log 64-bit values in hex representation.
+      :Testingtechnique: Requirements-based test
+      :Derivationtechnique: Analysis of requirements
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/file\_recorder/file\_recorder\_test.cpp:364 <../../../../../../score/mw/log/detail/file_recorder/file_recorder_test.cpp#L364>`__
+
+.. _lobster-item-55265178ca30847a31a270dfeb840d4db97a1c28:
+
+.. dropdown:: [MISSING] GoogleTest Test FileRecorderFixture:LogBin8
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      :Requirement: SCR-861534, SCR-1633236
+      :Asil: B
+      :Description: FileRecorder can log 8-bit values in bin representation.
+      :Testingtechnique: Requirements-based test
+      :Derivationtechnique: Analysis of requirements
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/file\_recorder/file\_recorder\_test.cpp:375 <../../../../../../score/mw/log/detail/file_recorder/file_recorder_test.cpp#L375>`__
+
+.. _lobster-item-7026c3e7adb5583e2574774f6cc66574ace1a54b:
+
+.. dropdown:: [MISSING] GoogleTest Test FileRecorderFixture:LogBin16
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      :Requirement: SCR-861534, SCR-1633236
+      :Asil: B
+      :Description: FileRecorder can log 16-bit values in bin representation.
+      :Testingtechnique: Requirements-based test
+      :Derivationtechnique: Analysis of requirements
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/file\_recorder/file\_recorder\_test.cpp:386 <../../../../../../score/mw/log/detail/file_recorder/file_recorder_test.cpp#L386>`__
+
+.. _lobster-item-c6c9e3f16a571d6d56b159aeaf2bcd5e5e45620d:
+
+.. dropdown:: [MISSING] GoogleTest Test FileRecorderFixture:LogBin32
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      :Requirement: SCR-861534, SCR-1633236
+      :Asil: B
+      :Description: FileRecorder can log 32-bit values in bin representation.
+      :Testingtechnique: Requirements-based test
+      :Derivationtechnique: Analysis of requirements
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/file\_recorder/file\_recorder\_test.cpp:397 <../../../../../../score/mw/log/detail/file_recorder/file_recorder_test.cpp#L397>`__
+
+.. _lobster-item-d6d07f3f73b8be1cd4c6a2f0817ca3e76bda398a:
+
+.. dropdown:: [MISSING] GoogleTest Test FileRecorderFixture:LogBin64
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      :Requirement: SCR-861534, SCR-1633236
+      :Asil: B
+      :Description: FileRecorder can log 64-bit values in bin representation.
+      :Testingtechnique: Requirements-based test
+      :Derivationtechnique: Analysis of requirements
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/file\_recorder/file\_recorder\_test.cpp:408 <../../../../../../score/mw/log/detail/file_recorder/file_recorder_test.cpp#L408>`__
+
+.. _lobster-item-37c9490102893ba1d09ca606fd9a38a9d67d5d7e:
+
+.. dropdown:: [MISSING] GoogleTest Test FileRecorderFixture:LogRawBuffer
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      :Requirement: SCR-861534, SCR-1633236
+      :Asil: B
+      :Description: FileRecorder can log raw buffer.
+      :Testingtechnique: Requirements-based test
+      :Derivationtechnique: Analysis of requirements
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/file\_recorder/file\_recorder\_test.cpp:419 <../../../../../../score/mw/log/detail/file_recorder/file_recorder_test.cpp#L419>`__
+
+.. _lobster-item-52a1cb3ddf5f8f6f00897440ebfcb9ce88998b0c:
+
+.. dropdown:: [MISSING] GoogleTest Test FileRecorderFixture:LogSlog2Message
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      :Asil: B
+      :Description: FileRecorder can log LogSlog2Message.
+      :Testingtechnique: Requirements-based test
+      :Derivationtechnique: Analysis of requirements
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/file\_recorder/file\_recorder\_test.cpp:429 <../../../../../../score/mw/log/detail/file_recorder/file_recorder_test.cpp#L429>`__
+
+.. _lobster-item-d76c12515cafc4bbdbde4bf5615e17dbc61c9663:
+
+.. dropdown:: [MISSING] GoogleTest Test FileRecorderTests:FileRecorderShouldClearSlotOnStart
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      :Requirement: SCR-1633236
+      :Asil: B
+      :Description: Recorder should clean slots before reuse.
+      :Testingtechnique: Requirements-based test
+      :Derivationtechnique: Analysis of requirements
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/file\_recorder/file\_recorder\_test.cpp:438 <../../../../../../score/mw/log/detail/file_recorder/file_recorder_test.cpp#L438>`__
+
+.. _lobster-item-7703ca8781b9e81bcd254b3ecd61fd9730ec1ea2:
+
+.. dropdown:: [MISSING] GoogleTest Test SignalHandlingTest:PThreadBlockSigTerm\_SigEmptySetFails\_ReturnsError
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/utils/signal\_handling/signal\_handling\_test.cpp:49 <../../../../../../score/mw/log/detail/utils/signal_handling/signal_handling_test.cpp#L49>`__
+
+.. _lobster-item-0c4f808456b78779f8ad9450c0d039fa3a37e7f7:
+
+.. dropdown:: [MISSING] GoogleTest Test SignalHandlingTest:PThreadBlockSigTerm\_SigAddSetFails\_ReturnsError
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/utils/signal\_handling/signal\_handling\_test.cpp:61 <../../../../../../score/mw/log/detail/utils/signal_handling/signal_handling_test.cpp#L61>`__
+
+.. _lobster-item-cebec850227f2776ae9aee35f66521cc1ae595e0:
+
+.. dropdown:: [MISSING] GoogleTest Test SignalHandlingTest:PThreadBlockSigTerm\_PthreadSigMaskFails\_ReturnsError
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/utils/signal\_handling/signal\_handling\_test.cpp:74 <../../../../../../score/mw/log/detail/utils/signal_handling/signal_handling_test.cpp#L74>`__
+
+.. _lobster-item-3ae17a073857e1e5390e0511311ed4a2522c7864:
+
+.. dropdown:: [MISSING] GoogleTest Test SignalHandlingTest:PThreadUnblockSigTerm\_SigEmptySetFails\_ReturnsError
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/utils/signal\_handling/signal\_handling\_test.cpp:113 <../../../../../../score/mw/log/detail/utils/signal_handling/signal_handling_test.cpp#L113>`__
+
+.. _lobster-item-915cb776809f38dfee60bd4a49cb4b01cf9f2ce2:
+
+.. dropdown:: [MISSING] GoogleTest Test SignalHandlingTest:PThreadUnblockSigTerm\_SigAddSetFails\_ReturnsError
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/utils/signal\_handling/signal\_handling\_test.cpp:125 <../../../../../../score/mw/log/detail/utils/signal_handling/signal_handling_test.cpp#L125>`__
+
+.. _lobster-item-389a21f43dbbf30fd5abbc6e098a76384fededa3:
+
+.. dropdown:: [MISSING] GoogleTest Test SignalHandlingTest:PThreadUnblockSigTerm\_PthreadSigMaskFails\_ReturnsError
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/utils/signal\_handling/signal\_handling\_test.cpp:138 <../../../../../../score/mw/log/detail/utils/signal_handling/signal_handling_test.cpp#L138>`__
+
+.. _lobster-item-1b6712f90333e60c35bdf4242218a63e6bc9602b:
+
+.. dropdown:: [MISSING] GoogleTest Test SignalHandlingTest:PThreadUnblockSigTerm\_AllSucceed\_ReturnsSuccess
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/utils/signal\_handling/signal\_handling\_test.cpp:151 <../../../../../../score/mw/log/detail/utils/signal_handling/signal_handling_test.cpp#L151>`__
+
+.. _lobster-item-7a755daf0433b3bb7bc65a6cc2bd6af0e7ffab53:
+
+.. dropdown:: [MISSING] GoogleTest Test AlternatingControlBlockTest:GettingOppositeBlockShallSucceed
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      :Requirement: SCR-1016719
+      :Asil: B
+      :Description: The helper function shall check if the length and offset are valid
+      :Testingtechnique: Requirements-based test
+      :Derivationtechnique: Analysis of requirements
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/wait\_free\_producer\_queue/alternating\_control\_block\_test.cpp:32 <../../../../../../score/mw/log/detail/wait_free_producer_queue/alternating_control_block_test.cpp#L32>`__
+
+.. _lobster-item-bcff9e3d2308e9123608aab25c85778ac67ac8c5:
+
+.. dropdown:: [MISSING] GoogleTest Test AlternatingControlBlockTest:GettingBlockEvenAndOddBasedOnCoutnerValue
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      :Requirement: SCR-1016719
+      :Asil: B
+      :Description: The helper function shall check if the length and offset are valid
+      :Testingtechnique: Requirements-based test
+      :Derivationtechnique: Analysis of requirements
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/wait\_free\_producer\_queue/alternating\_control\_block\_test.cpp:46 <../../../../../../score/mw/log/detail/wait_free_producer_queue/alternating_control_block_test.cpp#L46>`__
+
+.. _lobster-item-27ba920364c7f138503859fff33fc11481c2b91d:
+
+.. dropdown:: [MISSING] GoogleTest Test AlternatingControlBlockTest:GettingReferenceBlock
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      :Requirement: SCR-1016719
+      :Asil: B
+      :Description: The helper function shall check if the length and offset are valid
+      :Testingtechnique: Requirements-based test
+      :Derivationtechnique: Analysis of requirements
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/wait\_free\_producer\_queue/alternating\_control\_block\_test.cpp:61 <../../../../../../score/mw/log/detail/wait_free_producer_queue/alternating_control_block_test.cpp#L61>`__
+
+.. _lobster-item-7140e94c1851b1766a08712c59840248219ee36b:
+
+.. dropdown:: [MISSING] GoogleTest Test AlternatingControlBlockTest:GettingReferenceConstBlock
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      :Requirement: SCR-1016719
+      :Asil: B
+      :Description: The helper function shall check if the length and offset are valid
+      :Testingtechnique: Requirements-based test
+      :Derivationtechnique: Analysis of requirements
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/wait\_free\_producer\_queue/alternating\_control\_block\_test.cpp:76 <../../../../../../score/mw/log/detail/wait_free_producer_queue/alternating_control_block_test.cpp#L76>`__
+
+.. _lobster-item-dfcfba0883d7783fc68a99a6568f77a685436c38:
+
+.. dropdown:: [MISSING] GoogleTest Test AlternatingControlBlockTest:GetOppositeLinearControlBlockShallReturnkBlockEvenAsDefaultValue
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      :Derivationtechnique: Analysis of boundary values
+      :Testingtechnique: Interface tests
+      :Verifies: ::score::mw::log::detail::GetOppositeLinearControlBlock()
+      :Asil: B
+      :Description: Verifies the ability of returning the default value in case of passing unknown value to GetOppositeLinearControlBlock.
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/wait\_free\_producer\_queue/alternating\_control\_block\_test.cpp:91 <../../../../../../score/mw/log/detail/wait_free_producer_queue/alternating_control_block_test.cpp#L91>`__
+
+.. _lobster-item-30a9806a89eeb0382c86fddf0c822bb2705e9480:
+
+.. dropdown:: [MISSING] GoogleTest Test LinearControlBlock:LengthExceedingMaxThresholdShouldReturnTruncated
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      :Requirement: SCR-1016719
+      :Asil: B
+      :Description: The helper function shall check if the length and offset are valid
+      :Testingtechnique: Requirements-based test
+      :Derivationtechnique: Analysis of requirements
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/wait\_free\_producer\_queue/linear\_control\_block\_test.cpp:37 <../../../../../../score/mw/log/detail/wait_free_producer_queue/linear_control_block_test.cpp#L37>`__
+
+.. _lobster-item-dca4cb3cc6e1a5fd0d3a8bf0255f41a885d86a43:
+
+.. dropdown:: [MISSING] GoogleTest Test LinearControlBlockTests:BytesShallNotFitInRemainingCCapacityIfOffsetBiggerThanTheBufferSize
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      :Requirement: SCR-1016719
+      :Asil: B
+      :Description: Verify that the bytes can't fit in the remaining capacity in case the offset is bigger than the buffer size.
+      :Testingtechnique: Requirements-based test
+      :Derivationtechnique: Analysis of requirements
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/wait\_free\_producer\_queue/linear\_control\_block\_test.cpp:56 <../../../../../../score/mw/log/detail/wait_free_producer_queue/linear_control_block_test.cpp#L56>`__
+
+.. _lobster-item-ad0d69dc97c8d44accfe949801bd86e2bd53b1de:
+
+.. dropdown:: [MISSING] GoogleTest Test WaitFreeAlternatingWriterTests:WriteBufferFullShouldReturnExpectedData
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      :Requirement: SCR-861578,SCR-1016724,SCR-861550
+      :Asil: B
+      :Description: Producing and consuming of logging data shall work concurrently and without cross-thread locks.
+      :Testingtechnique: Requirements-based test
+      :Derivationtechnique: Analysis of requirements
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/wait\_free\_producer\_queue/wait\_free\_alternating\_writer\_test.cpp:48 <../../../../../../score/mw/log/detail/wait_free_producer_queue/wait_free_alternating_writer_test.cpp#L48>`__
+
+.. _lobster-item-ad713e776bc4c1b7a78c758cdbebeb5a0f372217:
+
+.. dropdown:: [MISSING] GoogleTest Test AlternatingReaderTest:EnsureSafeSwitchingToReadDataBuffer
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      :Requirement: SCR-861578,SCR-1016724,SCR-861550
+      :Asil: B
+      :Description: Verify the ability to safely switch in case of un-equally index for written_index and acquired_index.
+      :Testingtechnique: Requirements-based test
+      :Derivationtechnique: Analysis of requirements
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/wait\_free\_producer\_queue/wait\_free\_alternating\_writer\_test.cpp:147 <../../../../../../score/mw/log/detail/wait_free_producer_queue/wait_free_alternating_writer_test.cpp#L147>`__
+
+.. _lobster-item-1d6ed78a2d3277cf52b68b16f0c0551c09344818:
+
+.. dropdown:: [MISSING] GoogleTest Test AlternatingReaderTest:EnsureSwitchingIncrementsInternalCounter
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      :Requirement: SCR-861578,SCR-1016724,SCR-861550
+      :Asil: B
+      :Description: Verify the ability to safely switch in case of un-equally index for written_index and acquired_index.
+      :Testingtechnique: Requirements-based test
+      :Derivationtechnique: Analysis of requirements
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/wait\_free\_producer\_queue/wait\_free\_alternating\_writer\_test.cpp:186 <../../../../../../score/mw/log/detail/wait_free_producer_queue/wait_free_alternating_writer_test.cpp#L186>`__
+
+.. _lobster-item-0f0ab33eba148e051e3f1980a1e6083e87a16465:
+
+.. dropdown:: [MISSING] GoogleTest Test AlternatingReaderTest:EnsureToNotAcquireAnyBlockAndReturnNullInCaseTheSwitchingHappenedMoreThanOnce
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      :Requirement: SCR-861578,SCR-1016724,SCR-861550
+      :Asil: B
+      :Description: Verify the ability to not acquiring a block in case of the switch has happened more than once.
+      :Testingtechnique: Requirements-based test
+      :Derivationtechnique: Analysis of requirements
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/wait\_free\_producer\_queue/wait\_free\_alternating\_writer\_test.cpp:209 <../../../../../../score/mw/log/detail/wait_free_producer_queue/wait_free_alternating_writer_test.cpp#L209>`__
+
+.. _lobster-item-01d352791981b33a3bf3093d7c5298b4fbae7312:
+
+.. dropdown:: [MISSING] GoogleTest Test WaitFreeLinearWriter:WriterBigDataTest
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      :Requirement: SCR-861578, SCR-1016724, SCR-1016719
+      :Asil: B
+      :Description: Verifies the ability of writing big data.
+      :Testingtechnique: Requirements-based test
+      :Derivationtechnique: Analysis of requirements
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/wait\_free\_producer\_queue/wait\_free\_linear\_writer\_test.cpp:123 <../../../../../../score/mw/log/detail/wait_free_producer_queue/wait_free_linear_writer_test.cpp#L123>`__
+
+.. _lobster-item-3c854f1d14f62b99e3b79a07baa6a9b69e37fd55:
+
+.. dropdown:: [MISSING] GoogleTest Test WaitFreeLinearWriter:TooManyConcurrentWriterShouldReturnEmpty
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      :Requirement: SCR-861578, SCR-1016724, SCR-1016719
+      :Asil: B
+      :Description: Shall return empty in case of too many concurrent writers.
+      :Testingtechnique: Requirements-based test
+      :Derivationtechnique: Analysis of requirements
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/wait\_free\_producer\_queue/wait\_free\_linear\_writer\_test.cpp:197 <../../../../../../score/mw/log/detail/wait_free_producer_queue/wait_free_linear_writer_test.cpp#L197>`__
+
+.. _lobster-item-2e0582573476d9a6d7adde6b69bdad40576ccdf4:
+
+.. dropdown:: [MISSING] GoogleTest Test WaitFreeLinearWriter:BufferSizeExceededUpperLimitShouldReturnEmpty
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      :Requirement: SCR-1016719
+      :Asil: B
+      :Description: Acquire shall fail if buffer size exceeded upper limit.
+      :Testingtechnique: Requirements-based test
+      :Derivationtechnique: Analysis of requirements
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/wait\_free\_producer\_queue/wait\_free\_linear\_writer\_test.cpp:237 <../../../../../../score/mw/log/detail/wait_free_producer_queue/wait_free_linear_writer_test.cpp#L237>`__
+
+.. _lobster-item-61d7d4076fa5a791c1bf4c5bf3a551b116f1a5bc:
+
+.. dropdown:: [MISSING] GoogleTest Test WaitFreeLinearWriter:FailedAcquireShouldTerminateBuffer
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      :Requirement: SCR-1016719, SCR-861550
+      :Asil: B
+      :Description: If the linear buffer is full, acquire shall fail. In case of failed acquisition, the writer shall at least write the length if sufficient space is available.
+      :Testingtechnique: Requirements-based test
+      :Derivationtechnique: Analysis of requirements
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/wait\_free\_producer\_queue/wait\_free\_linear\_writer\_test.cpp:256 <../../../../../../score/mw/log/detail/wait_free_producer_queue/wait_free_linear_writer_test.cpp#L256>`__
+
+.. _lobster-item-171118cf5880d569fa9965c61d106fe81aa55b2a:
+
+.. dropdown:: [MISSING] GoogleTest Test WaitFreeLinearWriter:FailedAcquireWithNoFreeSpaceShouldNotTerminateBuffer
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      :Requirement: SCR-1016719, SCR-861550
+      :Asil: B
+      :Description: If the linear buffer is full, acquire shall fail. In a failed acquisition case, the writer should not write the length if there is no sufficient space left.
+      :Testingtechnique: Requirements-based test
+      :Derivationtechnique: Analysis of requirements
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/wait\_free\_producer\_queue/wait\_free\_linear\_writer\_test.cpp:306 <../../../../../../score/mw/log/detail/wait_free_producer_queue/wait_free_linear_writer_test.cpp#L306>`__
+
+.. _lobster-item-1eeda00329e0bf0e3eae02f240424c3aa9be12d8:
+
+.. dropdown:: [MISSING] GoogleTest Test WaitFreeLinearWriter:AcquireMoreThanMaximumShouldFail
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      :Requirement: SCR-1016719
+      :Asil: B
+      :Description: Acquiring more than the supported threshold shall fail.
+      :Testingtechnique: Requirements-based test
+      :Derivationtechnique: Analysis of requirements
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing up reference
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/wait\_free\_producer\_queue/wait\_free\_linear\_writer\_test.cpp:356 <../../../../../../score/mw/log/detail/wait_free_producer_queue/wait_free_linear_writer_test.cpp#L356>`__
+
+.. _lobster-item-cfe908fd84198a355e10ec2722bd19fbe7ebff4c:
+
+.. dropdown:: [OK] GoogleTest Test DataRouterBackendFixture:LogLevelVerbose
+   :class-title: sd-bg-success sd-text-white
+
+   .. pull-quote::
+
+      :Partiallyverifies: comp_req__log__dlt_verbose_mode
+      :Description: Verify the ability of logging verbose message.
+      :Testtype: requirements-based
+      :Derivationtechnique: requirements-analysis
+      :Parentrequirement: SCR-1633144
+      :Asil: B
+      :Testingtechnique: Requirements-based test
+
+   .. raw:: html
+
+      <hr>
+
+   **Traces to:**
+
+   * :ref:`MwLog.DltVerboseMode <lobster-item-74ac57c0bf5aa1d72e064f61c325c2614e32cbd4>`
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   * :ref:`MwLog.DltVerboseMode <lobster-item-3379e95a99d683504eb27583c0669e3532730a40>`
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/data\_router/data\_router\_backend\_test.cpp:332 <../../../../../../score/mw/log/detail/data_router/data_router_backend_test.cpp#L332>`__
+
+.. _lobster-item-a8ad8335e061849ec0f9feb74abb2a6cae7ce650:
+
+.. dropdown:: [OK] GoogleTest Test DataRouterRecorderFixtureWithLogLevelCheck:DisablesOrEnablesLogAccordingToLevel
+   :class-title: sd-bg-success sd-text-white
+
+   .. pull-quote::
+
+      :Partiallyverifies: comp_req__log__inactive_logstream
+      :Asil: B
+      :Description: Verifies the ability of checking the log availability using 'IsLogEnabled' API.
+      :Testtype: requirements-based
+      :Derivationtechnique: requirements-analysis
+
+   .. raw:: html
+
+      <hr>
+
+   **Traces to:**
+
+   * :ref:`MwLog.InactiveLogStreamBehavior <lobster-item-4a8507ec9e8943effd1c838137b7898fe33f29eb>`
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   * :ref:`MwLog.InactiveLogStreamBehavior <lobster-item-a4a883d0188ce9e31168d4aae9f9683f2bde6439>`
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/data\_router/data\_router\_recorder\_test.cpp:117 <../../../../../../score/mw/log/detail/data_router/data_router_recorder_test.cpp#L117>`__
+
+.. _lobster-item-497f3637ba9e73c1269bd7ec774c1d88eea7aabb:
+
+.. dropdown:: [OK] GoogleTest Test CommonTests:TypesShallBeLockFree
+   :class-title: sd-bg-success sd-text-white
+
+   .. pull-quote::
+
+      :Partiallyverifies: comp_req__log__avoid_locks
+      :Description: Checks data lock-free.
+      :Testtype: requirements-based
+      :Derivationtechnique: requirements-analysis
+      :Parentrequirement: SCR-861578
+      :Asil: B
+      :Testingtechnique: Requirements-based test
+
+   .. raw:: html
+
+      <hr>
+
+   **Traces to:**
+
+   * :ref:`MwLog.TimeBoundedLocking <lobster-item-a9e4429453bad068ab1a28d9606125cd89fc305d>`
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   * :ref:`MwLog.TimeBoundedLocking <lobster-item-4b371bc3ac6ae56c17e7d7a4b9c3d6c0f30fe81c>`
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/data\_router/shared\_memory/common\_test.cpp:37 <../../../../../../score/mw/log/detail/data_router/shared_memory/common_test.cpp#L37>`__
+
+.. _lobster-item-239d122654e8b342bcdcebc4fc520e358985eccf:
+
+.. dropdown:: [OK] GoogleTest Test WriterFactoryFixture:MakeSureThatOpenCallWillOnlyBeDoneWithCorrectOpenReadFlags
+   :class-title: sd-bg-success sd-text-white
+
+   .. pull-quote::
+
+      :Parentrequirement: SCR-1016729
+      :Asil: B
+      :Partiallyverifies: comp_req__log__shm_file_permissions, comp_req__log__file_descriptor_flags
+      :Description: Logging shared-memory files shall have read-only posix file permission for group and others
+      :Testingtechnique: Requirements-based test
+      :Derivationtechnique: Analysis of requirements
+      :Priority: 3
+
+   .. raw:: html
+
+      <hr>
+
+   **Traces to:**
+
+   * :ref:`MwLog.FileDescriptorFlags <lobster-item-c9b1d871162e55c501411c378e063679bd229c58>`
+   * :ref:`MwLog.SharedMemoryFilePermissions <lobster-item-60b4f61fcee0b4035bbd22173e993fb25938fbc8>`
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   * :ref:`MwLog.FileDescriptorFlags <lobster-item-023e236205af00574969ad5a522d1fa561ed204d>`
+   * :ref:`MwLog.SharedMemoryFilePermissions <lobster-item-4bfac174996a064d970b79537a8ab4821e4c3f13>`
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/data\_router/shared\_memory/writer\_factory\_test.cpp:347 <../../../../../../score/mw/log/detail/data_router/shared_memory/writer_factory_test.cpp#L347>`__
+
+.. _lobster-item-1b528e66b62fc00c9d51817fde888988bbbb9522:
+
+.. dropdown:: [OK] GoogleTest Test DltMessageBuilderFixture:ShallDepleteAfterHeaderAndPayload
+   :class-title: sd-bg-success sd-text-white
+
+   .. pull-quote::
+
+      :Partiallyverifies: comp_req__log__autosar_log_trace_spec
+      :Description: Verifies Dlt will deplete after header and payload.
+      :Testtype: requirements-based
+      :Derivationtechnique: requirements-analysis
+      :Parentrequirement: SCR-1633236
+      :Autosarrequirement: PRS_Dlt_00405
+      :Asil: B
+      :Testingtechnique: Requirements-based test
+
+   .. raw:: html
+
+      <hr>
+
+   **Traces to:**
+
+   * :ref:`MwLog.AutosarLogTraceSpec <lobster-item-e1a18727225f81a896f6db7310c7a50c6242d5c7>`
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   * :ref:`MwLog.AutosarLogTraceSpec <lobster-item-983a22b6905837b1aaa6899ad9c655553f115a0f>`
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/file\_recorder/dlt\_message\_builder\_test.cpp:65 <../../../../../../score/mw/log/detail/file_recorder/dlt_message_builder_test.cpp#L65>`__
+
+.. _lobster-item-90a46a45f9853034ad5bc6fddfa2e952d1978cd7:
+
+.. dropdown:: [OK] GoogleTest Test FileRecorderFactoryConfigFixture:FileConfigurionShallCallFileCreationAndReturnFileRecorder
+   :class-title: sd-bg-success sd-text-white
+
+   .. pull-quote::
+
+      :Partiallyverifies: comp_req__log__file_descriptor_flags
+      :Description: RecorderFactory can create FileRecorder and fileCreation will be called if file is configured. The component shall set the FD_CLOEXEC (or O_CLOEXEC) flag on all the file descriptor it owns
+      :Testtype: requirements-based
+      :Derivationtechnique: requirements-analysis
+      :Requirement: SCR-861534, SCR-26319707
+      :Asil: B
+      :Testingtechnique: Requirements-based test
+
+   .. raw:: html
+
+      <hr>
+
+   **Traces to:**
+
+   * :ref:`MwLog.FileDescriptorFlags <lobster-item-c9b1d871162e55c501411c378e063679bd229c58>`
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   * :ref:`MwLog.FileDescriptorFlags <lobster-item-023e236205af00574969ad5a522d1fa561ed204d>`
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/file\_recorder/file\_recorder\_factory\_test.cpp:55 <../../../../../../score/mw/log/detail/file_recorder/file_recorder_factory_test.cpp#L55>`__
+
+.. _lobster-item-b640b8e0dbd0a9d7a3af7f3e8ca503ecbbe17fc6:
+
+.. dropdown:: [OK] GoogleTest Test FileRecorderFixture:TooManyArgumentsWillYieldTruncatedLog
+   :class-title: sd-bg-success sd-text-white
+
+   .. pull-quote::
+
+      :Partiallyverifies: comp_req__log__local_allocation_strategy
+      :Description: The log will be truncated in case of too many arguments.
+      :Testtype: requirements-based
+      :Derivationtechnique: boundary-values
+      :Requirement: SCR-861534, SCR-1016719
+      :Asil: B
+      :Testingtechnique: Requirements-based test
+
+   .. raw:: html
+
+      <hr>
+
+   **Traces to:**
+
+   * :ref:`MwLog.LocalAllocationStrategy <lobster-item-62a40ad5774c5f40fd02c2dec1c40a8ed2ea5741>`
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   * :ref:`MwLog.LocalAllocationStrategy <lobster-item-973e6c32f0a9ea6df9ced35cd5df3667f3d80b12>`
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/file\_recorder/file\_recorder\_test.cpp:155 <../../../../../../score/mw/log/detail/file_recorder/file_recorder_test.cpp#L155>`__
+
+.. _lobster-item-a5b04b7ebfec7e883c834693fdcf79a02a00779c:
+
+.. dropdown:: [OK] GoogleTest Test SignalHandlingTest:PThreadBlockSigTerm\_AllSucceed\_ReturnsSuccess
+   :class-title: sd-bg-success sd-text-white
+
+   .. pull-quote::
+
+      :Partiallyverifies: comp_req__log__avoid_signal_processing
+      :Description: Check that the logging implementation blocks SIGTERM via the signal mask instead of registering a signal handler.
+      :Testtype: requirements-based
+      :Derivationtechnique: requirements-analysis
+
+   .. raw:: html
+
+      <hr>
+
+   **Traces to:**
+
+   * :ref:`MwLog.AvoidSignalProcessing <lobster-item-ced2c57302fcc50249701e4b4b3b94b9078b8480>`
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   * :ref:`MwLog.AvoidSignalProcessing <lobster-item-f8e3900e83768564b6a528579eeb57dca7fdb099>`
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/utils/signal\_handling/signal\_handling\_test.cpp:87 <../../../../../../score/mw/log/detail/utils/signal_handling/signal_handling_test.cpp#L87>`__
+
+.. _lobster-item-50be8f9ea8ae1476499df2085112e23862a85dbf:
+
+.. dropdown:: [OK] GoogleTest Test LinearReaderTests:LengthExceedingMaxThresholdShouldReturnEmpty
+   :class-title: sd-bg-success sd-text-white
+
+   .. pull-quote::
+
+      :Partiallyverifies: comp_req__log__index_size_checking
+      :Description: Check that the reader rejects a length exceeding the maximum threshold instead of accessing out of bounds.
+      :Testtype: requirements-based
+      :Derivationtechnique: boundary-values
+      :Requirement: SCR-1016719
+      :Asil: B
+
+   .. raw:: html
+
+      <hr>
+
+   **Traces to:**
+
+   * :ref:`MwLog.IndexAndSizeChecking <lobster-item-062613c155c75a6edf2c437e374db55f3a85db1e>`
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   * :ref:`MwLog.IndexAndSizeChecking <lobster-item-325e97c01897aac1a8c60fc78a4851ba4853bcbe>`
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/wait\_free\_producer\_queue/linear\_reader\_test.cpp:26 <../../../../../../score/mw/log/detail/wait_free_producer_queue/linear_reader_test.cpp#L26>`__
+
+.. _lobster-item-406b3806da32adb8ab3238ef8fe591c5ac8bed33:
+
+.. dropdown:: [OK] GoogleTest Test WaitFreeAlternatingWriterTests:EnsureAtomicRequirements
+   :class-title: sd-bg-success sd-text-white
+
+   .. pull-quote::
+
+      :Partiallyverifies: comp_req__log__cross_locking
+      :Description: The used atomic data types shall be lock free
+      :Testtype: requirements-based
+      :Derivationtechnique: requirements-analysis
+      :Requirement: SCR-861578,SCR-1016724,SCR-861550
+      :Asil: B
+      :Testingtechnique: Requirements-based test
+
+   .. raw:: html
+
+      <hr>
+
+   **Traces to:**
+
+   * :ref:`MwLog.CrossLockingPrevention <lobster-item-f215ef9092c9d584be4a7ee548eadcf134530de5>`
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   * :ref:`MwLog.CrossLockingPrevention <lobster-item-532a3ea19ff52d3c56fcdfce276b0af8af68564e>`
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/wait\_free\_producer\_queue/wait\_free\_alternating\_writer\_test.cpp:31 <../../../../../../score/mw/log/detail/wait_free_producer_queue/wait_free_alternating_writer_test.cpp#L31>`__
+
+.. _lobster-item-806fbe70fe9d62984527a7b08b067f2376879dbb:
+
+.. dropdown:: [OK] GoogleTest Test WaitFreeLinearWriter:EnsureAtomicRequirements
+   :class-title: sd-bg-success sd-text-white
+
+   .. pull-quote::
+
+      :Partiallyverifies: comp_req__log__avoid_locks, comp_req__log__cross_locking
+      :Description: The used atomic data types shall be lock free
+      :Testtype: requirements-based
+      :Derivationtechnique: requirements-analysis
+      :Requirement: SCR-861578, SCR-1016724
+      :Asil: B
+      :Testingtechnique: Requirements-based test
+
+   .. raw:: html
+
+      <hr>
+
+   **Traces to:**
+
+   * :ref:`MwLog.CrossLockingPrevention <lobster-item-f215ef9092c9d584be4a7ee548eadcf134530de5>`
+   * :ref:`MwLog.TimeBoundedLocking <lobster-item-a9e4429453bad068ab1a28d9606125cd89fc305d>`
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   * :ref:`MwLog.CrossLockingPrevention <lobster-item-532a3ea19ff52d3c56fcdfce276b0af8af68564e>`
+   * :ref:`MwLog.TimeBoundedLocking <lobster-item-4b371bc3ac6ae56c17e7d7a4b9c3d6c0f30fe81c>`
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/wait\_free\_producer\_queue/wait\_free\_linear\_writer\_test.cpp:27 <../../../../../../score/mw/log/detail/wait_free_producer_queue/wait_free_linear_writer_test.cpp#L27>`__
+
+.. _lobster-item-3cd2764d8e3cb57bd83b61273da11fda3dba7625:
+
+.. dropdown:: [OK] GoogleTest Test WaitFreeLinearWriter:WriteBufferFullShouldReturnExpectedData
+   :class-title: sd-bg-success sd-text-white
+
+   .. pull-quote::
+
+      :Partiallyverifies: comp_req__log__no_endless_loops
+      :Description: Returning the expected data if the write buffer is full.
+      :Testtype: requirements-based
+      :Derivationtechnique: boundary-values
+      :Requirement: SCR-861578, SCR-1016724, SCR-1016719, SCR-861550
+      :Asil: B
+      :Testingtechnique: Requirements-based test
+
+   .. raw:: html
+
+      <hr>
+
+   **Traces to:**
+
+   * :ref:`MwLog.BoundedLoopExecution <lobster-item-cc737508749b155b7d6fdc596797776bb73d6faa>`
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   * :ref:`MwLog.BoundedLoopExecution <lobster-item-ab77c02cb03c98149347622ca992c919b1a2c030>`
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/wait\_free\_producer\_queue/wait\_free\_linear\_writer\_test.cpp:45 <../../../../../../score/mw/log/detail/wait_free_producer_queue/wait_free_linear_writer_test.cpp#L45>`__
+
+.. _lobster-item-e8e0858324efa43d746992341b8a524ac676c05b:
+
+.. dropdown:: [OK] GoogleTest Test WaitFreeLinearWriter:BufferSizeExceededShouldReturnEmpty
+   :class-title: sd-bg-success sd-text-white
+
+   .. pull-quote::
+
+      :Requirement: SCR-861578, SCR-1016724, SCR-1016719
+      :Asil: B
+      :Partiallyverifies: comp_req__log__memory_bound_checking
+      :Description: Shall return empty if buffer size exceeded.
+      :Testingtechnique: Requirements-based test
+      :Derivationtechnique: Analysis of requirements
+
+   .. raw:: html
+
+      <hr>
+
+   **Traces to:**
+
+   * :ref:`MwLog.MemoryBoundChecking <lobster-item-7bbc2daa27e2b8c15461436bdd4925a2797ba925>`
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   * :ref:`MwLog.MemoryBoundChecking <lobster-item-2418b8704dc0807bdc2ab9fca05cd33fb4e81ad3>`
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/detail/wait\_free\_producer\_queue/wait\_free\_linear\_writer\_test.cpp:216 <../../../../../../score/mw/log/detail/wait_free_producer_queue/wait_free_linear_writer_test.cpp#L216>`__
+
