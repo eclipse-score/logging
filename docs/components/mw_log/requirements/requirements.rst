@@ -82,20 +82,6 @@ mw::log
    mw::log shall implement "Specification of Log and Trace for Adaptive Platform". Release of
    specification used shall be in agreement with the rest of Adaptive AUTOSAR stack.
 
-.. comp_req:: Inactive LogStream Behavior
-   :id: comp_req__log__inactive_logstream
-   :version: 1
-   :reqtype: Functional
-   :security: NO
-   :safety: QM
-   :derived_from: feat_req__logging__filtering_log_levels, feat_req__logging__resource_performance
-   :status: valid
-   :satisfied_by: comp__mw_log_backend
-
-   mw::log library shall not perform any useful activity if log level of LogStream object is
-   insufficient for given context. LogStream object shall not generate serialized messages if
-   the severity of the message does not allow it to be sent.
-
 .. comp_req:: Shared Memory File Permissions
    :id: comp_req__log__shm_file_permissions
    :version: 1
@@ -185,9 +171,22 @@ Non-Functional Requirements
    :status: valid
    :satisfied_by: comp__mw_log_backend
 
-   mw::log shall be free of time-unbound locks and shall implement strategies to limit wait
-   time. Time limit shall be defined based on requirements from functions on individual ECU.
-   Mutual exclusion mechanisms shall include priority inversion protection.
+   mw::log shall acquire locks only with a bounded configurable wait time.
+   If the wait time is exceeded, mw::log shall abort the acquisition and drop
+   the affected log message instead of continuing to wait.
+
+.. comp_req:: Priority Inversion Protection
+   :id: comp_req__log__priority_inversion_protection
+   :version: 1
+   :reqtype: Non-Functional
+   :security: YES
+   :safety: ASIL_B
+   :derived_from: feat_req__logging__asil_support, feat_req__logging__resource_performance
+   :status: valid
+   :satisfied_by: comp__mw_log_backend
+
+   mw::log shall protect all mutual exclusion mechanisms against priority
+   inversion by using priority inheritance or priority ceiling.
 
 .. comp_req:: Cross-Locking Prevention
    :id: comp_req__log__cross_locking
