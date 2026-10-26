@@ -93,7 +93,6 @@ See also :need:`doc_concept__wp_inspections` for further information about revie
       - Yes
       -
       -
-      - https://github.com/eclipse-score/logging/issues/345
     * - REQ_03_01
       - Is the *linkage to the parent requirement* correct?
       - Linkage to correct levels and ASIL attributes is checked automatically, but it needs checking if the child requirement implements (at least) a part of the parent requirement.
@@ -115,12 +114,20 @@ See also :need:`doc_concept__wp_inspections` for further information about revie
     * - REQ_05_01
       - Do the software requirements consider *timing constraints*?
       - This checkpoint encourages to think about timing constraints even if those are not explicitly mentioned in the parent requirement. If the reviewer of a requirement already knows or suspects that the code execution will be consuming a lot of time, one should think of the expectation of a "user".
-      - Yes 
-      - Some timing mentioned in :need:`comp_req__log__avoid_locks`.
+      - Yes
+      - The non-functional requirements bound the time mw::log can take from the
+        caller: :need:`comp_req__log__avoid_locks` limits lock wait time,
+        :need:`comp_req__log__no_endless_loops` limits loop iterations,
+        :need:`comp_req__log__cross_locking` prevents blocking other threads and
+        :need:`comp_req__log__priority_inversion_protection` limits priority
+        inversion delays.
       -
     * - REQ_06_01
       - Does the requirement consider *external interfaces*?
-      - The SW platform's external interfaces (to the user) are defined in the Feature Architecture, so the Feature and Component Requirements should determine the input data use and setting of output data for these interfaces. Are all output values defined?
+      - The SW platform's external interfaces (to the user) are defined in the
+        Feature Architecture, so the Feature and Component Requirements should
+        determine the input data use and setting of output data for these
+        interfaces. Are all output values defined?
       - Yes
       -
       -
@@ -139,11 +146,9 @@ See also :need:`doc_concept__wp_inspections` for further information about revie
     * - REQ_08_01
       - Is the requirement *verifiable*?
       - If at the time of the inspection already tests are created for the requirement, the answer is yes. This can be checked via traces, but also :need:`gd_req__req_attr_test_covered` shows this. In case the requirement is not sufficiently traced to test cases already, a test expert is invited to the inspection to give their opinion whether the requirement is formulated in a way that supports test development and the available test infrastructure is sufficient to perform the test.
-      - No
-      - :need:`comp_req__log__inactive_logstream` the wording being vague means
-        that it's not clear what code shall pass here with a manual review.
-        :need:`comp_req__log__no_endless_loops` also might be hard to review.
-      - https://github.com/eclipse-score/logging/issues/345
+      - Yes
+      -
+      -
     * - REQ_08_02
       - Is the requirement verifiable by design or code review in case it is not feasibly testable?
       - In very rare cases a requirement may not be verifiable by test cases, for example a specific non-functional requirement. In this case a requirement analysis verifies the requirement by design/code review. If such a requirement is in scope of this inspection, please check this here and link to the respective review record. A test expert is invited to the inspection to confirm their opinion that the requirement is not testable.
