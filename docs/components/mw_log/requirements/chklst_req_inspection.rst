@@ -75,7 +75,7 @@ See also :need:`doc_concept__wp_inspections` for further information about revie
       - Yes
       -
       -
-    * - REQ_02_02
+    * - REQ_02_03
       - Is the requirement description *atomic* ?
       - A good way to think about this is to consider if the requirement may be tested by one (positive) test case or needs more of these. The requirement formulation template should also avoid being non-atomic already. Note that there are cases where also non-atomic requirements are the better ones, for example if those are better understandable.
       - Yes
@@ -101,9 +101,6 @@ See also :need:`doc_concept__wp_inspections` for further information about revie
         :need:`feat_req__logging__log_sinks_console`, but forwarding to the
         native system logger is not clearly the same as supporting console as a
         log sink.
-        :need:`comp_req__log__shm_file_permissions` parent seems to talk about
-        file logs, while the component requirement this is talking about shared
-        memory files.
       - https://github.com/eclipse-score/logging/issues/345
     * - REQ_04_01
       - Is the requirement *internally and externally consistent*?
@@ -117,7 +114,6 @@ See also :need:`doc_concept__wp_inspections` for further information about revie
       - Yes
       - The non-functional requirements bound the time mw::log can take from the
         caller: :need:`comp_req__log__avoid_locks` limits lock wait time,
-        :need:`comp_req__log__no_endless_loops` limits loop iterations,
         :need:`comp_req__log__cross_locking` prevents blocking other threads and
         :need:`comp_req__log__priority_inversion_protection` limits priority
         inversion delays.
@@ -152,22 +148,16 @@ See also :need:`doc_concept__wp_inspections` for further information about revie
     * - REQ_08_02
       - Is the requirement verifiable by design or code review in case it is not feasibly testable?
       - In very rare cases a requirement may not be verifiable by test cases, for example a specific non-functional requirement. In this case a requirement analysis verifies the requirement by design/code review. If such a requirement is in scope of this inspection, please check this here and link to the respective review record. A test expert is invited to the inspection to confirm their opinion that the requirement is not testable.
-      - No
-      - Review-based verification may be needed for
-        :need:`comp_req__log__avoid_signal_processing`,
-        :need:`comp_req__log__no_endless_loops`,
-        :need:`comp_req__log__avoid_locks`,
-        :need:`comp_req__log__cross_locking`.
-      - https://github.com/eclipse-score/logging/issues/345
+      - n/a
+      - All requirements in scope are verifiable by test, so none relies on
+        verification by design or code review.
+      -
     * - REQ_09_01
       - Do the requirements that define a safety mechanism specify the error reaction leading to a safe state?
       - Alternatively to the safe state there could also be "repair" mechanisms. Also do not forget to consider REQ_05_01 for these.
-      - No
-      - :need:`comp_req__log__index_size_checking` and
-        :need:`comp_req__log__memory_bound_checking` define checks for
-        safety-relevant data handling, but they do not specify the error
-        reaction when a check fails.
-      - https://github.com/eclipse-score/logging/issues/345
+      - Yes
+      -
+      -
     * - REQ_10_01
       - Is the requirement description *complete* ?
       - For every requirement in the inspection, follow to its parent (feature) requirement(s) and then check if this/these are fulfilled completely by its/their linked children (component requirements, including those which are not in scope of the inspection).
