@@ -136,7 +136,7 @@ System Backend
 Non-Functional Requirements
 ---------------------------
 
-.. comp_req:: Local Allocation Strategy
+.. comp_req:: Heap Allocation Only During Initialization
    :id: comp_req__log__local_allocation_strategy
    :version: 1
    :reqtype: Non-Functional
@@ -146,8 +146,9 @@ Non-Functional Requirements
    :status: valid
    :satisfied_by: comp__mw_log_backend
 
-   mw::log shall use local allocators to avoid using global heap. Global heap allocation (if
-   any) shall be limited to initialization phase of application lifecycle.
+   mw::log shall allocate heap memory only during the initialization phase of
+   the application lifecycle, and shall therefore satisfy any memory needs after
+   that phase from pre-allocated, bounded memory resources.
 
 .. comp_req:: No Endless Loops
    :id: comp_req__log__no_endless_loops
@@ -159,7 +160,8 @@ Non-Functional Requirements
    :status: valid
    :satisfied_by: comp__mw_log_backend
 
-   mw::log shall not contain unbound loops or loops with unchecked exit conditions.
+   mw::log shall limit every loop to a statically determinable maximum number of
+   iterations.
 
 .. comp_req:: Avoid Locks
    :id: comp_req__log__avoid_locks
