@@ -78,12 +78,9 @@ See also :need:`doc_concept__wp_inspections` for further information about revie
     * - REQ_02_02
       - Is the requirement description *atomic* ?
       - A good way to think about this is to consider if the requirement may be tested by one (positive) test case or needs more of these. The requirement formulation template should also avoid being non-atomic already. Note that there are cases where also non-atomic requirements are the better ones, for example if those are better understandable.
-      - No
-      - :need:`comp_req__log__send_to_datarouter` specifies the interaction for 3 elements,
-        :need:`comp_req__log__local_allocation_strategy` 2 requirements,
-        :need:`comp_req__log__avoid_locks` contain multiple requirements,
-        :need:`comp_req__log__send_to_datarouter` 2 or 3 requirements.
-      - https://github.com/eclipse-score/logging/issues/345
+      - Yes
+      -
+      -
     * - REQ_02_04
       - Is the requirement description *feasible* ?
       - If at the time of the inspection the requirement has already some implementation, the answer is yes. This can be checked via traces, but also :need:`gd_req__req_attr_impl` shows this. In case the requirement has no implementation at the time of inspection (i.e. not implemented at least as "proof-of-concept"), a development expert should be invited to the Pull-Request review to explicitly check this item.
