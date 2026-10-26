@@ -49,7 +49,7 @@ Datarouter Services
    :status: valid
    :satisfied_by: comp__datarouter
 
-   DLT server shall support multiple log channels as specified in AUTOSAR Diagnostic, Log and
+   Datarouter shall support multiple log channels in its DLT server as specified in AUTOSAR Diagnostic, Log and
    Trace Protocol Specification. The following parameters shall be configurable statically via
    a deployment-specific configuration file
    (``<data_router binary location>/./etc/log-channels.json``): Number and names of channels,
@@ -66,7 +66,7 @@ Datarouter Services
    :status: valid
    :satisfied_by: comp__datarouter
 
-   DLT server shall support filtering of messages within each channel. The filter shall be
+   Datarouter shall support filtering of DLT messages within each channel. The filter shall be
    parametrized with application ID, context ID, log level threshold. Initial filter set shall
    be part of channel configuration file, located in the following path:
    ``<data_router binary location>/../etc/log-channels.json``.
@@ -81,8 +81,8 @@ Datarouter Services
    :status: valid
    :satisfied_by: comp__datarouter
 
-   DLT server shall provide support for verbose DLT messages. Messages sent from mw::log
-   library shall be sent via DLT using verbose mode.
+   Datarouter shall support verbose DLT messages. Datarouter shall send messages received from
+   the mw::log library via DLT using verbose mode.
 
 DLT Quotas
 ----------
@@ -97,7 +97,7 @@ DLT Quotas
    :status: valid
    :satisfied_by: comp__datarouter
 
-   The component shall have the DLT bandwidth quota configuration in the file located at
+   Datarouter shall have the DLT bandwidth quota configuration in the file located at
    ``./etc/log-channels.json`` relative to the application specific location ``/opt/``.
 
 .. comp_req:: DLT Quota Bandwidth Reduction
@@ -110,7 +110,7 @@ DLT Quotas
    :status: valid
    :satisfied_by: comp__datarouter
 
-   It shall be possible to configure the action to drop DLT messages when a quota is exceeded.
+   Datarouter shall allow users to configure the action to drop DLT messages when a quota is exceeded.
 
    Note: The configuration shall be provided as an attribute as part of the DLT quota
    configuration file (:need:`comp_req__data_router__dlt_bw_quota_config`).

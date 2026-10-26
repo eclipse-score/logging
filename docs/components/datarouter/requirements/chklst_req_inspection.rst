@@ -61,12 +61,9 @@ See also :need:`doc_concept__wp_inspections` for further information about revie
     * - REQ_01_01
       - Is the requirement formulation template used?
       - see :need:`gd_temp__req_formulation`, this includes the use of "shall".
-      - No
-      - :need:`comp_req__data_router__dlt_quota_bw_reduction` not following schema.
-        :need:`comp_req__data_router__dlt_multiple_channels` first word should be Datarouter.
-        :need:`comp_req__data_router__dlt_message_filtering`
-        :need:`comp_req__data_router__dlt_verbose_messages`
-      - https://github.com/eclipse-score/logging/issues/344
+      - Yes
+      - All requirements use "Datarouter shall ..." formulation.
+      -
     * - REQ_02_01
       - Is the requirement description *comprehensible* ?
       - If you think the requirement is hard to understand, comment here.
