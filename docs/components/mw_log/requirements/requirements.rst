@@ -82,20 +82,6 @@ mw::log
    mw::log shall implement "Specification of Log and Trace for Adaptive Platform". Release of
    specification used shall be in agreement with the rest of Adaptive AUTOSAR stack.
 
-.. comp_req:: Send Messages to Datarouter
-   :id: comp_req__log__send_to_datarouter
-   :version: 1
-   :reqtype: Functional
-   :security: NO
-   :safety: QM
-   :derived_from: feat_req__logging__log_sources_user_app, feat_req__logging__log_sinks_network
-   :status: valid
-   :satisfied_by: comp__mw_log_backend
-
-   mw::log shall use logging library to send verbose messages to datarouter. Applications shall
-   use mw::log interface to log verbose mode messages. Internally mw::log shall be using logging
-   library.
-
 .. comp_req:: Inactive LogStream Behavior
    :id: comp_req__log__inactive_logstream
    :version: 1
