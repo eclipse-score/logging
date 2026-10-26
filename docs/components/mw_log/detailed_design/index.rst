@@ -188,6 +188,16 @@ the diagrams. The interface documentation is part of the headers.
    datarouter_backend/index
 
 
+Unit Test
+---------
+
+The unit test documentation for the ``mw::log`` backend can be found here:
+
+.. toctree::
+
+   unit_test
+
+
 Inspection Checklist
 ====================
 

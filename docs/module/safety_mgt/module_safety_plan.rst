@@ -173,7 +173,7 @@ Component Logging Backend Work products List
         * - :need:`wp__verification_sw_unit_test`
           - :need:`gd_guidl__verification_guide`
           - :ndf:`copy('status', need_id='gd_guidl__verification_guide')`
-          - <Link to WP>
+          - :need:`doc__mw_log_backend_unit_test`
 
         * - :need:`wp__sw_implementation_inspection`
           - :need:`gd_chklst__impl_inspection_checklist`
