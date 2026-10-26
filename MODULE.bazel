@@ -23,7 +23,7 @@ git_override(
 )
 
 bazel_dep(name = "rules_cc", version = "0.2.17")
-bazel_dep(name = "aspect_rules_lint", version = "2.5.0")
+bazel_dep(name = "aspect_rules_lint", version = "2.5.0", dev_dependency = True)
 
 bazel_dep(name = "score_cpp_policies", version = "0.0.0", dev_dependency = True)
 git_override(
@@ -34,7 +34,7 @@ git_override(
 
 bazel_dep(name = "toolchains_llvm", version = "1.8.0", dev_dependency = True)
 
-bazel_dep(name = "buildifier_prebuilt", version = "8.5.1")
+bazel_dep(name = "buildifier_prebuilt", version = "8.5.1", dev_dependency = True)
 bazel_dep(name = "platforms", version = "1.1.0")
 
 # S-CORE process rules
