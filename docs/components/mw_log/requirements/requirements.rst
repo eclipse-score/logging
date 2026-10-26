@@ -36,7 +36,7 @@ mw::log
    :status: valid
    :satisfied_by: comp__mw_log_backend
 
-   The component shall not register any signal handler.
+   mw::log shall not register any signal handler.
 
 .. comp_req:: File Descriptor Flags
    :id: comp_req__log__file_descriptor_flags
@@ -120,10 +120,11 @@ mw::log
    :status: valid
    :satisfied_by: comp__mw_log_backend
 
-   Logging shared-memory files shall have read-only posix file permission for group and others.
-   The shared-memory file created by mw::log shall be read-only for group and others.
+   mw::log shall ensure that the shared-memory files it creates are not writable
+   by group and others.
 
-   Note: mw::log creates a shared memory file for each app.
+   .. note::
+      mw::log creates a shared memory file for each app.
 
 System Backend
 --------------
@@ -140,8 +141,11 @@ System Backend
    :status: valid
    :satisfied_by: comp__mw_log_backend
 
-   The system logger backend shall forward the logs to the native system logger mechanism.
+   mw::log shall forward the logs to the native system logger mechanism when the system
+   logger backend is used.
 
+   .. note::
+      mw::log shall use slogger2 on QNX and syslog(3) on Linux.
    Note: slogger2 shall be used for QNX. syslog(3) shall be used for Linux.
 
 .. comp_req:: System Backend Activation
@@ -154,7 +158,8 @@ System Backend
    :status: valid
    :satisfied_by: comp__mw_log_backend
 
-   The system logger backend shall be enabled if and only if the log mode contains "kSystem".
+   mw::log shall enable the system logger backend if and only if the log mode contains
+   "kSystem".
 
 Non-Functional Requirements
 ---------------------------
@@ -208,8 +213,8 @@ Non-Functional Requirements
    :status: valid
    :satisfied_by: comp__mw_log_backend
 
-   Cross-application and cross-thread dependencies shall be avoided. A thread logging in a loop
-   shall not block other thread's execution.
+   mw::log shall not block the execution of any thread, in the same or another
+   application, because another thread is logging repeatedly.
 
 .. comp_req:: Index and Size Checking
    :id: comp_req__log__index_size_checking
@@ -221,8 +226,9 @@ Non-Functional Requirements
    :status: valid
    :satisfied_by: comp__mw_log_backend
 
-   Indices in data structures and sizes of data accessed or copied shall be checked for
-   plausibility to avoid high runtime utilization through long iterations or data corruption.
+   mw::log shall check indices in data structures and sizes of data accessed or copied for
+   plausibility, to avoid high runtime utilization through long iterations or data corruption.
+   If a check fails, mw::log shall discard the affected log message without performing the access.
 
 .. comp_req:: Memory Bound Checking
    :id: comp_req__log__memory_bound_checking
@@ -234,4 +240,5 @@ Non-Functional Requirements
    :status: valid
    :satisfied_by: comp__mw_log_backend
 
-   Memory boundaries shall be explicitly checked when writing to shared memory.
+   mw::log shall check memory boundaries before writing to shared memory.
+   If a check fails, mw::log shall discard the affected log message without performing the write.
