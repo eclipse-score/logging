@@ -66,9 +66,8 @@ mw::log
    :status: valid
    :satisfied_by: comp__mw_log_backend
 
-   mw::log shall implement DLT verbose mode. Generation of messages shall be done in
-   DLT-conform format, allowing messages to be sent by Datarouter without additional
-   reprocessing.
+   mw::log shall generate log messages in DLT verbose mode format, so that Datarouter
+   can send them without additional reprocessing.
 
 .. comp_req:: AUTOSAR Log and Trace Specification
    :id: comp_req__log__autosar_log_trace_spec
@@ -89,7 +88,7 @@ mw::log
    :reqtype: Functional
    :security: YES
    :safety: ASIL_B
-   :derived_from: feat_req__logging__security_log_access, feat_req__logging__config_permissions
+   :derived_from: feat_req__logging__asil_support
    :status: valid
    :satisfied_by: comp__mw_log_backend
 
@@ -119,7 +118,6 @@ System Backend
 
    .. note::
       mw::log shall use slogger2 on QNX and syslog(3) on Linux.
-   Note: slogger2 shall be used for QNX. syslog(3) shall be used for Linux.
 
 .. comp_req:: System Backend Activation
    :id: comp_req__log__system_backend_activation
@@ -150,19 +148,6 @@ Non-Functional Requirements
    mw::log shall allocate heap memory only during the initialization phase of
    the application lifecycle, and shall therefore satisfy any memory needs after
    that phase from pre-allocated, bounded memory resources.
-
-.. comp_req:: No Endless Loops
-   :id: comp_req__log__no_endless_loops
-   :version: 1
-   :reqtype: Non-Functional
-   :security: YES
-   :safety: ASIL_B
-   :derived_from: feat_req__logging__asil_support, feat_req__logging__resource_performance
-   :status: valid
-   :satisfied_by: comp__mw_log_backend
-
-   mw::log shall limit every loop to a statically determinable maximum number of
-   iterations.
 
 .. comp_req:: Avoid Locks
    :id: comp_req__log__avoid_locks
