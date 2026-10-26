@@ -161,24 +161,10 @@ See also :need:`doc_concept__wp_inspections` for further information about revie
     * - REQ_10_01
       - Is the requirement description *complete* ?
       - For every requirement in the inspection, follow to its parent (feature) requirement(s) and then check if this/these are fulfilled completely by its/their linked children (component requirements, including those which are not in scope of the inspection).
-      - No
-      - The following feature requirements have no links
-        :need:`feat_req__logging__log_sinks_local_fs`
-        :need:`feat_req__logging__boot_logging`
-        :need:`feat_req__logging__error_handling_recoverable`
-      - https://github.com/eclipse-score/logging/issues/345
-    * - EXTRA
-      - **Other Findings** Platform coding guidlines as component requirements
-      - The following look more like platform coding guidlines, and not component requirements.
-      - No
-      - :need:`comp_req__log__cross_locking`,
-        :need:`comp_req__log__local_allocation_strategy`,
-        :need:`comp_req__log__index_size_checking`,
-        :need:`comp_req__log__memory_bound_checking`,
-        :need:`feat_req__logging__compat_os`,
-        :need:`feat_req__logging__compat_languages`,
-        :need:`feat_req__logging__resource_storage` - ok if it's not already defined as platform req.
-      - https://github.com/eclipse-score/logging/issues/345
+      - Yes
+      -
+      -
+
 
 .. attention::
     The above checklist entries must be filled according to your component requirements in scope.
