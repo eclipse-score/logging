@@ -79,13 +79,9 @@ See also :need:`doc_concept__wp_inspections` for further information about revie
     * - REQ_02_03
       - Is the requirement description *atomic* ?
       - A good way to think about this is to consider if the requirement may be tested by one (positive) test case or needs more of these. The requirement formulation template should also avoid being non-atomic already. Note that there are cases where also non-atomic requirements are the better ones, for example if those are better understandable.
-      - No
-      - :need:`comp_req__data_router__dlt_multiple_channels` config files should be another requirement.
-        :need:`comp_req__data_router__dlt_message_filtering` also has this.
-        Maybe a central requirement to specify that all parameters shall be
-        configurable with console or config. e.g. comp_req__log__cfg_precedence on the front end.
-        :need:`comp_req__data_router__dlt_server` shall be split for the UDP part and link to only :need:`feat_req__logging__log_sinks_network`.
-      - https://github.com/eclipse-score/logging/issues/344
+      - Yes
+      -
+      -
     * - REQ_02_04
       - Is the requirement description *feasible* ?
       - If at the time of the inspection the requirement has already some implementation, the answer is yes. This can be checked via traces, but also :need:`gd_req__req_attr_impl` shows this. In case the requirement has no implementation at the time of inspection (i.e. not implemented at least as "proof-of-concept"), a development expert should be invited to the Pull-Request review to explicitly check this item.
