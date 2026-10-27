@@ -67,14 +67,9 @@ See also :need:`doc_concept__wp_inspections` for further information about revie
     * - REQ_02_01
       - Is the requirement description *comprehensible* ?
       - If you think the requirement is hard to understand, comment here.
-      - No
-      - :need:`comp_req__data_router__dlt_server` shall implement the UDP multicast transport of a Dlt server.
-        :need:`comp_req__data_router__dlt_multiple_channels` define in glossary multi-channel.
-        :need:`comp_req__data_router__dlt_message_filtering` shall allow for filtering messages
-        per channel based on application ID,
-        context ID, log level threshold.
-        :need:`comp_req__data_router__dlt_verbose_messages` The verbose mode of the original message shall be unmodified.
-      - https://github.com/eclipse-score/logging/issues/344
+      - Yes
+      -
+      -
     * - REQ_02_02
       - Is the requirement description *unambiguous* ?
       - Especially search for "weak words" like "about", "etc.", "relevant" and others (see the internet documentation on this). This check shall be supported by tooling.
