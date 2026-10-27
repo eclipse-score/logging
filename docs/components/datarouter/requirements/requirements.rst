@@ -36,8 +36,8 @@ Datarouter Services
    :status: valid
    :satisfied_by: comp__datarouter
 
-   Datarouter shall implement DLT server component. Datarouter provides the functionality to
-   send messages using DLT protocol over UDP multicast transport.
+   Datarouter shall implement the UDP multicast transport of a DLT server, sending
+   messages using the DLT packet format.
 
 .. comp_req:: DLT Multiple Channel Support
    :id: comp_req__data_router__dlt_multiple_channels
@@ -49,14 +49,10 @@ Datarouter Services
    :status: valid
    :satisfied_by: comp__datarouter
 
-   Datarouter shall support multiple log channels in its DLT server as specified
-   in AUTOSAR Diagnostic, Log and Trace Protocol Specification.
-
-   :status: valid
-   :satisfied_by: comp__datarouter
-
-   Datarouter shall support multiple log channels in its DLT server as specified in AUTOSAR Diagnostic, Log and
-   Trace Protocol Specification. The following parameters shall be configurable statically via
+   Datarouter shall support multiple log channels in its DLT server, each with its own
+   destination and filter settings, as specified in AUTOSAR Diagnostic, Log and Trace
+   Protocol Specification.
+   The following parameters shall be configurable statically via
    the deployment-specific configuration file
    (:need:`comp_req__data_router__config_file`): Number and names of channels,
    Network configuration for channel output, Log level threshold per channel, Log channel
