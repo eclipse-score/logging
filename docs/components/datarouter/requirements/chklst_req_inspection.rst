@@ -17,7 +17,7 @@
   :id: doc__datarouter_req_inspection
   :status: draft
   :version: 1
-  :safety: ASIL_B
+  :safety: QM
   :security: YES
   :realizes: wp__requirements_inspect
 
@@ -151,10 +151,9 @@ See also :need:`doc_concept__wp_inspections` for further information about revie
     * - REQ_10_01
       - Is the requirement description *complete* ?
       - For every requirement in the inspection, follow to its parent (feature) requirement(s) and then check if this/these are fulfilled completely by its/their linked children (component requirements, including those which are not in scope of the inspection).
-      - No
-      - :need:`comp_req__data_router__dlt_verbose_messages` might need a feature requirement.
-        :need:`comp_req__data_router__dlt_bw_quota_config` should also map to :need:`feat_req__logging__message_loss_handling` & :need:`feat_req__logging__qos_message_handling`.
-      - https://github.com/eclipse-score/logging/issues/344
+      - Yes
+      -
+      -
 
 .. attention::
     The above checklist entries must be filled according to your component requirements in scope.

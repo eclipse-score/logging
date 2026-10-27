@@ -130,7 +130,7 @@ DLT Quotas
    :reqtype: Functional
    :security: NO
    :safety: QM
-   :derived_from: feat_req__logging__config_buffer_size, feat_req__logging__resource_comm_channel
+   :derived_from: feat_req__logging__config_buffer_size, feat_req__logging__resource_comm_channel, feat_req__logging__message_loss_handling, feat_req__logging__qos_message_handling
    :status: valid
    :satisfied_by: comp__datarouter
 
