@@ -79,7 +79,7 @@ See also :need:`doc_concept__wp_inspections` for further information about revie
       - Is the requirement description *unambiguous* ?
       - Especially search for "weak words" like "about", "etc.", "relevant" and others (see the internet documentation on this). This check shall be supported by tooling.
       - Yes
-      - 
+      -
       -
     * - REQ_02_03
       - Is the requirement description *atomic* ?
@@ -112,9 +112,9 @@ See also :need:`doc_concept__wp_inspections` for further information about revie
     * - REQ_04_01
       - Is the requirement *internally and externally consistent*?
       - Does the requirement contradict other requirements within the same or higher levels? One may restrict the search to the feature for component requirements, for features to other features using same components. Is the description of the requirement consistent with all its attributes (if not already part of another check, e.g. does the title fit?).
-      - No
-      - :need:`comp_req__data_router__dlt_multiple_channels` :need:`comp_req__data_router__dlt_message_filtering` :need:`comp_req__data_router__dlt_bw_quota_config` location is unclear. Define a central location.
-      - https://github.com/eclipse-score/logging/issues/344
+      - Yes
+      -
+      -
     * - REQ_05_01
       - Do the software requirements consider *timing constraints*?
       - This checkpoint encourages to think about timing constraints even if those are not explicitly mentioned in the parent requirement. If the reviewer of a requirement already knows or suspects that the code execution will be consuming a lot of time, one should think of the expectation of a "user".

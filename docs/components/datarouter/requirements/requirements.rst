@@ -45,14 +45,20 @@ Datarouter Services
    :reqtype: Functional
    :security: NO
    :safety: QM
-   :derived_from: feat_req__logging__compat_dlt, feat_req__logging__config_log_filter, feat_req__logging__config_entity_id
+   :derived_from: feat_req__logging__compat_dlt
+   :status: valid
+   :satisfied_by: comp__datarouter
+
+   Datarouter shall support multiple log channels in its DLT server as specified
+   in AUTOSAR Diagnostic, Log and Trace Protocol Specification.
+
    :status: valid
    :satisfied_by: comp__datarouter
 
    Datarouter shall support multiple log channels in its DLT server as specified in AUTOSAR Diagnostic, Log and
    Trace Protocol Specification. The following parameters shall be configurable statically via
-   a deployment-specific configuration file
-   (``<data_router binary location>/./etc/log-channels.json``): Number and names of channels,
+   the deployment-specific configuration file
+   (:need:`comp_req__data_router__config_file`): Number and names of channels,
    Network configuration for channel output, Log level threshold per channel, Log channel
    assignments per application/context.
 
@@ -68,8 +74,8 @@ Datarouter Services
 
    Datarouter shall support filtering of DLT messages within each channel. The filter shall be
    parametrized with application ID, context ID, log level threshold. Initial filter set shall
-   be part of channel configuration file, located in the following path:
-   ``<data_router binary location>/../etc/log-channels.json``.
+   be part of the deployment-specific configuration file
+   (:need:`comp_req__data_router__config_file`).
 
 .. comp_req:: DLT Verbose Messages
    :id: comp_req__data_router__dlt_verbose_messages
@@ -97,8 +103,8 @@ DLT Quotas
    :status: valid
    :satisfied_by: comp__datarouter
 
-   Datarouter shall have the DLT bandwidth quota configuration in the file located at
-   ``./etc/log-channels.json`` relative to the application specific location ``/opt/``.
+   Datarouter shall have the DLT bandwidth quota configuration in the deployment-specific
+   configuration file (:need:`comp_req__data_router__config_file`).
 
 .. comp_req:: DLT Quota Bandwidth Reduction
    :id: comp_req__data_router__dlt_quota_bw_reduction
