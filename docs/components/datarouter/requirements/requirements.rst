@@ -32,12 +32,23 @@ Datarouter Services
    :reqtype: Functional
    :security: NO
    :safety: QM
-   :derived_from: feat_req__logging__compat_dlt, feat_req__logging__log_sinks_network
+   :derived_from: feat_req__logging__compat_dlt
    :status: valid
    :satisfied_by: comp__datarouter
 
-   Datarouter shall implement the UDP multicast transport of a DLT server, sending
-   messages using the DLT packet format.
+   Datarouter shall implement a DLT server, sending messages in the DLT packet format.
+
+.. comp_req:: DLT Server UDP Multicast Transport
+   :id: comp_req__data_router__dlt_udp_multicast
+   :version: 1
+   :reqtype: Functional
+   :security: NO
+   :safety: QM
+   :derived_from: feat_req__logging__log_sinks_network
+   :status: valid
+   :satisfied_by: comp__datarouter
+
+   Datarouter shall transmit the DLT messages of its DLT server over UDP multicast.
 
 .. comp_req:: DLT Multiple Channel Support
    :id: comp_req__data_router__dlt_multiple_channels
@@ -52,11 +63,35 @@ Datarouter Services
    Datarouter shall support multiple log channels in its DLT server, each with its own
    destination and filter settings, as specified in AUTOSAR Diagnostic, Log and Trace
    Protocol Specification.
-   The following parameters shall be configurable statically via
-   the deployment-specific configuration file
-   (:need:`comp_req__data_router__config_file`): Number and names of channels,
-   Network configuration for channel output, Log level threshold per channel, Log channel
-   assignments per application/context.
+
+.. comp_req:: Datarouter Configuration File
+   :id: comp_req__data_router__config_file
+   :version: 1
+   :reqtype: Functional
+   :security: NO
+   :safety: QM
+   :derived_from: feat_req__logging__config_log_filter
+   :status: valid
+   :satisfied_by: comp__datarouter
+
+   Datarouter shall be able to read a deployment-specific configuration file located at
+   ``<data_router binary location>/../etc/log-channels.json``.
+
+.. comp_req:: DLT Channel Configuration
+   :id: comp_req__data_router__dlt_channel_config
+   :version: 1
+   :reqtype: Functional
+   :security: NO
+   :safety: QM
+   :derived_from: feat_req__logging__config_log_filter, feat_req__logging__config_entity_id
+   :status: valid
+   :satisfied_by: comp__datarouter
+
+   The following parameters of the DLT log channels
+   (:need:`comp_req__data_router__dlt_multiple_channels`) shall be configurable statically via
+   the deployment-specific configuration file (:need:`comp_req__data_router__config_file`):
+   Number and names of channels, Network configuration for channel output, Log level
+   threshold per channel, Log channel assignments per application/context.
 
 .. comp_req:: DLT Message Filtering
    :id: comp_req__data_router__dlt_message_filtering
