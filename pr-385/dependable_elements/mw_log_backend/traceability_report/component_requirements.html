@@ -1,0 +1,431 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Component Requirements &mdash; Dependable Element Mw Log Backend Doc 1.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=4ae1632d" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-data-viewer/jsonview.bundle.css?v=f6ef2277" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-needs/libs/html/datatables.min.css?v=4b4fd840" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-needs/common_css/need_toggle.css?v=5c6620df" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-needs/common_css/need_links.css?v=2150a916" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-needs/common_css/needstable.css?v=5e1b6797" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-needs/common_css/need_style.css?v=92936fa5" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-needs/common_css/need_core.css?v=f5b60a78" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-needs/modern.css?v=803738c0" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=8d563738"></script>
+      <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../_static/design-tabs.js?v=f930bc37"></script>
+      <script src="../_static/sphinx-data-viewer/jsonview.bundle.js?v=18cd53c5"></script>
+      <script src="../_static/sphinx-data-viewer/jsonview_loader.js?v=f7ff7e7d"></script>
+      <script src="../_static/sphinx-needs/libs/html/datatables.min.js?v=8a4aee21"></script>
+      <script src="../_static/sphinx-needs/libs/html/datatables_loader.js?v=a2cae175"></script>
+      <script src="../_static/sphinx-needs/libs/html/sphinx_needs_collapse.js?v=dca66431"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Failure Modes" href="failure_modes.html" />
+    <link rel="prev" title="Feature Requirements" href="feature_requirements.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            Dependable Element Mw Log Backend Doc
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../assumed_system.html">Assumed System</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../software_arch.html">Software Architectural Level</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../components.html">Components</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../traceability.html">Traceability</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="index.html">L.O.B.S.T.E.R. Traceability Report</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="index.html">Overview</a></li>
+<li class="toctree-l3"><a class="reference internal" href="feature_requirements.html">Feature Requirements</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Component Requirements</a></li>
+<li class="toctree-l3"><a class="reference internal" href="failure_modes.html">Failure Modes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="control_measures.html">Control Measures</a></li>
+<li class="toctree-l3"><a class="reference internal" href="architecture.html">Architecture</a></li>
+<li class="toctree-l3"><a class="reference internal" href="unit_test.html">Unit Test</a></li>
+<li class="toctree-l3"><a class="reference internal" href="test_case_coverage.html">Test Case Coverage</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Dependable Element Mw Log Backend Doc</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../traceability.html">Traceability</a></li>
+          <li class="breadcrumb-item"><a href="index.html">L.O.B.S.T.E.R. Traceability Report</a></li>
+      <li class="breadcrumb-item active">Component Requirements</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/traceability_report/component_requirements.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="component-requirements">
+<h1>Component Requirements<a class="headerlink" href="#component-requirements" title="Link to this heading"></a></h1>
+<p><strong>Coverage:</strong> 85.7% (12 of 14 items OK)</p>
+<details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3" id="lobster-item-1e19ff64dfdcb7d355592f7cf299e240907b27dc" open="open">
+<summary class="sd-summary-title sd-card-header sd-bg-warning">
+<span class="sd-summary-text">[PARTIAL] TRLC Compreq MwLog.ForwardToSystemLogger</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
+<blockquote class="pull-quote">
+<div><p class="sd-card-text">The system logger backend shall forward the logs to the native system logger mechanism.
+Under QNX, slogger2 shall be used.</p>
+</div></blockquote>
+<hr><p class="sd-card-text"><strong>Traces to:</strong></p>
+<ul class="simple">
+<li><p class="sd-card-text"><a class="reference internal" href="architecture.html#lobster-item-7bfe7ca94ee8257f6da5326b842b99c0c42a6273"><span class="std std-ref">//score/mw/log/dependability:component_mw_log_backend</span></a></p></li>
+</ul>
+<div class="sd-card sd-sphinx-override sd-mb-3 sd-shadow-sm lobster-issue-card docutils">
+<div class="sd-card-body docutils">
+<ul class="simple">
+<li><p class="sd-card-text">missing reference to Unit Test</p></li>
+<li><p class="sd-card-text">missing reference to Test Case Coverage</p></li>
+</ul>
+</div>
+</div>
+<hr><p class="sd-card-text"><strong>Derived from:</strong></p>
+<ul class="simple">
+<li><p class="sd-card-text"><a class="reference internal" href="feature_requirements.html#lobster-item-aa650183c72ea63efb42dab07ffd3b2932544558"><span class="std std-ref">MwLogFeature.EarlyStartupLogging</span></a></p></li>
+</ul>
+<hr><p class="sd-card-text"><strong>Source:</strong> <a class="reference external" href="../../../../../../score/mw/log/requirements/component_requirements/component_requirements.trlc#L76">score/mw/log/requirements/component_requirements/component_requirements.trlc:76:18</a></p>
+</div>
+</details><details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3" id="lobster-item-c9cd5482c0049b64d91b1f53bf505fbdca20a050" open="open">
+<summary class="sd-summary-title sd-card-header sd-bg-warning">
+<span class="sd-summary-text">[PARTIAL] TRLC Compreq MwLog.SystemBackendActivation</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
+<blockquote class="pull-quote">
+<div><p class="sd-card-text">The system logger backend shall be enabled if and only if the log mode contains
+“kSystem”.</p>
+</div></blockquote>
+<hr><p class="sd-card-text"><strong>Traces to:</strong></p>
+<ul class="simple">
+<li><p class="sd-card-text"><a class="reference internal" href="architecture.html#lobster-item-7bfe7ca94ee8257f6da5326b842b99c0c42a6273"><span class="std std-ref">//score/mw/log/dependability:component_mw_log_backend</span></a></p></li>
+</ul>
+<div class="sd-card sd-sphinx-override sd-mb-3 sd-shadow-sm lobster-issue-card docutils">
+<div class="sd-card-body docutils">
+<ul class="simple">
+<li><p class="sd-card-text">missing reference to Unit Test</p></li>
+<li><p class="sd-card-text">missing reference to Test Case Coverage</p></li>
+</ul>
+</div>
+</div>
+<hr><p class="sd-card-text"><strong>Derived from:</strong></p>
+<ul class="simple">
+<li><p class="sd-card-text"><a class="reference internal" href="feature_requirements.html#lobster-item-a88495ae75cb1097e64d4fa98fc5bdae61c695df"><span class="std std-ref">MwLogFeature.ConfigOnDemand</span></a></p></li>
+</ul>
+<hr><p class="sd-card-text"><strong>Source:</strong> <a class="reference external" href="../../../../../../score/mw/log/requirements/component_requirements/component_requirements.trlc#L85">score/mw/log/requirements/component_requirements/component_requirements.trlc:85:18</a></p>
+</div>
+</details><details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3" id="lobster-item-f8e3900e83768564b6a528579eeb57dca7fdb099">
+<summary class="sd-summary-title sd-card-header sd-bg-success sd-text-white">
+<span class="sd-summary-text">[OK] TRLC Compreq MwLog.AvoidSignalProcessing</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
+<blockquote class="pull-quote">
+<div><p class="sd-card-text">The component shall not register any signal handler.</p>
+</div></blockquote>
+<hr><p class="sd-card-text"><strong>Traces to:</strong></p>
+<ul class="simple">
+<li><p class="sd-card-text"><a class="reference internal" href="unit_test.html#lobster-item-a5b04b7ebfec7e883c834693fdcf79a02a00779c"><span class="std std-ref">SignalHandlingTest:PThreadBlockSigTerm_AllSucceed_ReturnsSuccess</span></a></p></li>
+<li><p class="sd-card-text"><a class="reference internal" href="test_case_coverage.html#lobster-item-ced2c57302fcc50249701e4b4b3b94b9078b8480"><span class="std std-ref">MwLog.AvoidSignalProcessing</span></a></p></li>
+<li><p class="sd-card-text"><a class="reference internal" href="architecture.html#lobster-item-7bfe7ca94ee8257f6da5326b842b99c0c42a6273"><span class="std std-ref">//score/mw/log/dependability:component_mw_log_backend</span></a></p></li>
+</ul>
+<hr><p class="sd-card-text"><strong>Derived from:</strong></p>
+<ul class="simple">
+<li><p class="sd-card-text"><a class="reference internal" href="feature_requirements.html#lobster-item-ef6a394608be4aa475fd1a5391cc3add822ddbb3"><span class="std std-ref">MwLogFeature.AsilLevelSupport</span></a></p></li>
+<li><p class="sd-card-text"><a class="reference internal" href="feature_requirements.html#lobster-item-af5e35a7e653dde51a44b84c6f6cd6dd8da4eaf7"><span class="std std-ref">MwLogFeature.ErrorHandlingIsolation</span></a></p></li>
+</ul>
+<hr><p class="sd-card-text"><strong>Source:</strong> <a class="reference external" href="../../../../../../score/mw/log/requirements/component_requirements/component_requirements.trlc#L22">score/mw/log/requirements/component_requirements/component_requirements.trlc:22:18</a></p>
+</div>
+</details><details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3" id="lobster-item-023e236205af00574969ad5a522d1fa561ed204d">
+<summary class="sd-summary-title sd-card-header sd-bg-success sd-text-white">
+<span class="sd-summary-text">[OK] TRLC Compreq MwLog.FileDescriptorFlags</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
+<blockquote class="pull-quote">
+<div><p class="sd-card-text">The component shall set the FD_CLOEXEC (or O_CLOEXEC) flag on all the file descriptors
+it owns.</p>
+</div></blockquote>
+<hr><p class="sd-card-text"><strong>Traces to:</strong></p>
+<ul class="simple">
+<li><p class="sd-card-text"><a class="reference internal" href="unit_test.html#lobster-item-239d122654e8b342bcdcebc4fc520e358985eccf"><span class="std std-ref">WriterFactoryFixture:MakeSureThatOpenCallWillOnlyBeDoneWithCorrectOpenReadFlags</span></a></p></li>
+<li><p class="sd-card-text"><a class="reference internal" href="unit_test.html#lobster-item-90a46a45f9853034ad5bc6fddfa2e952d1978cd7"><span class="std std-ref">FileRecorderFactoryConfigFixture:FileConfigurionShallCallFileCreationAndReturnFileRecorder</span></a></p></li>
+<li><p class="sd-card-text"><a class="reference internal" href="test_case_coverage.html#lobster-item-c9b1d871162e55c501411c378e063679bd229c58"><span class="std std-ref">MwLog.FileDescriptorFlags</span></a></p></li>
+<li><p class="sd-card-text"><a class="reference internal" href="architecture.html#lobster-item-7bfe7ca94ee8257f6da5326b842b99c0c42a6273"><span class="std std-ref">//score/mw/log/dependability:component_mw_log_backend</span></a></p></li>
+</ul>
+<hr><p class="sd-card-text"><strong>Derived from:</strong></p>
+<ul class="simple">
+<li><p class="sd-card-text"><a class="reference internal" href="feature_requirements.html#lobster-item-a2e2d961f89736ae3d745201a43355d64501822e"><span class="std std-ref">MwLogFeature.SecurityLogAccess</span></a></p></li>
+</ul>
+<hr><p class="sd-card-text"><strong>Source:</strong> <a class="reference external" href="../../../../../../score/mw/log/requirements/component_requirements/component_requirements.trlc#L30">score/mw/log/requirements/component_requirements/component_requirements.trlc:30:18</a></p>
+</div>
+</details><details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3" id="lobster-item-3379e95a99d683504eb27583c0669e3532730a40">
+<summary class="sd-summary-title sd-card-header sd-bg-success sd-text-white">
+<span class="sd-summary-text">[OK] TRLC Compreq MwLog.DltVerboseMode</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
+<blockquote class="pull-quote">
+<div><p class="sd-card-text">mw::log shall implement DLT verbose mode. Generation of messages shall be done in
+DLT-conform format, allowing messages to be sent by Datarouter without additional reprocessing.</p>
+</div></blockquote>
+<hr><p class="sd-card-text"><strong>Traces to:</strong></p>
+<ul class="simple">
+<li><p class="sd-card-text"><a class="reference internal" href="unit_test.html#lobster-item-cfe908fd84198a355e10ec2722bd19fbe7ebff4c"><span class="std std-ref">DataRouterBackendFixture:LogLevelVerbose</span></a></p></li>
+<li><p class="sd-card-text"><a class="reference internal" href="test_case_coverage.html#lobster-item-74ac57c0bf5aa1d72e064f61c325c2614e32cbd4"><span class="std std-ref">MwLog.DltVerboseMode</span></a></p></li>
+<li><p class="sd-card-text"><a class="reference internal" href="architecture.html#lobster-item-7bfe7ca94ee8257f6da5326b842b99c0c42a6273"><span class="std std-ref">//score/mw/log/dependability:component_mw_log_backend</span></a></p></li>
+</ul>
+<hr><p class="sd-card-text"><strong>Derived from:</strong></p>
+<ul class="simple">
+<li><p class="sd-card-text"><a class="reference internal" href="feature_requirements.html#lobster-item-66cc23446562700dc9e1bb0cef92ef83ec9e47c9"><span class="std std-ref">MwLogFeature.CompatibilityDltProtocol</span></a></p></li>
+</ul>
+<hr><p class="sd-card-text"><strong>Source:</strong> <a class="reference external" href="../../../../../../score/mw/log/requirements/component_requirements/component_requirements.trlc#L39">score/mw/log/requirements/component_requirements/component_requirements.trlc:39:18</a></p>
+</div>
+</details><details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3" id="lobster-item-983a22b6905837b1aaa6899ad9c655553f115a0f">
+<summary class="sd-summary-title sd-card-header sd-bg-success sd-text-white">
+<span class="sd-summary-text">[OK] TRLC Compreq MwLog.AutosarLogTraceSpec</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
+<blockquote class="pull-quote">
+<div><p class="sd-card-text">mw::log shall implement “Specification of Log and Trace for Adaptive Platform”. Release
+of specification used shall be in agreement with the rest of Adaptive AUTOSAR stack.</p>
+</div></blockquote>
+<hr><p class="sd-card-text"><strong>Traces to:</strong></p>
+<ul class="simple">
+<li><p class="sd-card-text"><a class="reference internal" href="unit_test.html#lobster-item-1b528e66b62fc00c9d51817fde888988bbbb9522"><span class="std std-ref">DltMessageBuilderFixture:ShallDepleteAfterHeaderAndPayload</span></a></p></li>
+<li><p class="sd-card-text"><a class="reference internal" href="test_case_coverage.html#lobster-item-e1a18727225f81a896f6db7310c7a50c6242d5c7"><span class="std std-ref">MwLog.AutosarLogTraceSpec</span></a></p></li>
+<li><p class="sd-card-text"><a class="reference internal" href="architecture.html#lobster-item-7bfe7ca94ee8257f6da5326b842b99c0c42a6273"><span class="std std-ref">//score/mw/log/dependability:component_mw_log_backend</span></a></p></li>
+</ul>
+<hr><p class="sd-card-text"><strong>Derived from:</strong></p>
+<ul class="simple">
+<li><p class="sd-card-text"><a class="reference internal" href="feature_requirements.html#lobster-item-e2bd9b58ae62d2d6f94923330143eb1299e37a61"><span class="std std-ref">MwLogFeature.SeverityLevels</span></a></p></li>
+<li><p class="sd-card-text"><a class="reference internal" href="feature_requirements.html#lobster-item-66cc23446562700dc9e1bb0cef92ef83ec9e47c9"><span class="std std-ref">MwLogFeature.CompatibilityDltProtocol</span></a></p></li>
+</ul>
+<hr><p class="sd-card-text"><strong>Source:</strong> <a class="reference external" href="../../../../../../score/mw/log/requirements/component_requirements/component_requirements.trlc#L48">score/mw/log/requirements/component_requirements/component_requirements.trlc:48:18</a></p>
+</div>
+</details><details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3" id="lobster-item-a4a883d0188ce9e31168d4aae9f9683f2bde6439">
+<summary class="sd-summary-title sd-card-header sd-bg-success sd-text-white">
+<span class="sd-summary-text">[OK] TRLC Compreq MwLog.InactiveLogStreamBehavior</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
+<blockquote class="pull-quote">
+<div><p class="sd-card-text">mw::log library shall not perform any useful activity if log level of LogStream object is
+insufficient for given context. LogStream object shall not generate serialized messages if the severity of
+the message does not allow it to be sent.</p>
+</div></blockquote>
+<hr><p class="sd-card-text"><strong>Traces to:</strong></p>
+<ul class="simple">
+<li><p class="sd-card-text"><a class="reference internal" href="unit_test.html#lobster-item-a8ad8335e061849ec0f9feb74abb2a6cae7ce650"><span class="std std-ref">DataRouterRecorderFixtureWithLogLevelCheck:DisablesOrEnablesLogAccordingToLevel</span></a></p></li>
+<li><p class="sd-card-text"><a class="reference internal" href="test_case_coverage.html#lobster-item-4a8507ec9e8943effd1c838137b7898fe33f29eb"><span class="std std-ref">MwLog.InactiveLogStreamBehavior</span></a></p></li>
+<li><p class="sd-card-text"><a class="reference internal" href="architecture.html#lobster-item-7bfe7ca94ee8257f6da5326b842b99c0c42a6273"><span class="std std-ref">//score/mw/log/dependability:component_mw_log_backend</span></a></p></li>
+</ul>
+<hr><p class="sd-card-text"><strong>Derived from:</strong></p>
+<ul class="simple">
+<li><p class="sd-card-text"><a class="reference internal" href="feature_requirements.html#lobster-item-5d1abbac86069bc5ca0568adc4d21c45065c4fde"><span class="std std-ref">MwLogFeature.ResourceConsumptionPerformance</span></a></p></li>
+<li><p class="sd-card-text"><a class="reference internal" href="feature_requirements.html#lobster-item-df8e2dbb357e00fcb7e43674549208a3228fbd74"><span class="std std-ref">MwLogFeature.FilteringLogLevels</span></a></p></li>
+</ul>
+<hr><p class="sd-card-text"><strong>Source:</strong> <a class="reference external" href="../../../../../../score/mw/log/requirements/component_requirements/component_requirements.trlc#L57">score/mw/log/requirements/component_requirements/component_requirements.trlc:57:18</a></p>
+</div>
+</details><details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3" id="lobster-item-4bfac174996a064d970b79537a8ab4821e4c3f13">
+<summary class="sd-summary-title sd-card-header sd-bg-success sd-text-white">
+<span class="sd-summary-text">[OK] TRLC Compreq MwLog.SharedMemoryFilePermissions</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
+<blockquote class="pull-quote">
+<div><p class="sd-card-text">Logging shared-memory files shall have read-only posix file permission for group and
+others. The shared-memory file created by mw::log shall be read-only for group and others.</p>
+</div></blockquote>
+<hr><p class="sd-card-text"><strong>Traces to:</strong></p>
+<ul class="simple">
+<li><p class="sd-card-text"><a class="reference internal" href="unit_test.html#lobster-item-239d122654e8b342bcdcebc4fc520e358985eccf"><span class="std std-ref">WriterFactoryFixture:MakeSureThatOpenCallWillOnlyBeDoneWithCorrectOpenReadFlags</span></a></p></li>
+<li><p class="sd-card-text"><a class="reference internal" href="test_case_coverage.html#lobster-item-60b4f61fcee0b4035bbd22173e993fb25938fbc8"><span class="std std-ref">MwLog.SharedMemoryFilePermissions</span></a></p></li>
+<li><p class="sd-card-text"><a class="reference internal" href="architecture.html#lobster-item-7bfe7ca94ee8257f6da5326b842b99c0c42a6273"><span class="std std-ref">//score/mw/log/dependability:component_mw_log_backend</span></a></p></li>
+</ul>
+<hr><p class="sd-card-text"><strong>Derived from:</strong></p>
+<ul class="simple">
+<li><p class="sd-card-text"><a class="reference internal" href="feature_requirements.html#lobster-item-cd219caba97d69d808bc31fc6d91a9f0a04e7fd0"><span class="std std-ref">MwLogFeature.ConfigPermissions</span></a></p></li>
+<li><p class="sd-card-text"><a class="reference internal" href="feature_requirements.html#lobster-item-a2e2d961f89736ae3d745201a43355d64501822e"><span class="std std-ref">MwLogFeature.SecurityLogAccess</span></a></p></li>
+</ul>
+<hr><p class="sd-card-text"><strong>Source:</strong> <a class="reference external" href="../../../../../../score/mw/log/requirements/component_requirements/component_requirements.trlc#L67">score/mw/log/requirements/component_requirements/component_requirements.trlc:67:18</a></p>
+</div>
+</details><details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3" id="lobster-item-973e6c32f0a9ea6df9ced35cd5df3667f3d80b12">
+<summary class="sd-summary-title sd-card-header sd-bg-success sd-text-white">
+<span class="sd-summary-text">[OK] TRLC Compreq MwLog.LocalAllocationStrategy</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
+<blockquote class="pull-quote">
+<div><p class="sd-card-text">mw::log shall use local allocators to avoid using global heap. Global heap allocation
+(if any) shall be limited to the initialization phase of application lifecycle.</p>
+</div></blockquote>
+<hr><p class="sd-card-text"><strong>Traces to:</strong></p>
+<ul class="simple">
+<li><p class="sd-card-text"><a class="reference internal" href="unit_test.html#lobster-item-b640b8e0dbd0a9d7a3af7f3e8ca503ecbbe17fc6"><span class="std std-ref">FileRecorderFixture:TooManyArgumentsWillYieldTruncatedLog</span></a></p></li>
+<li><p class="sd-card-text"><a class="reference internal" href="test_case_coverage.html#lobster-item-62a40ad5774c5f40fd02c2dec1c40a8ed2ea5741"><span class="std std-ref">MwLog.LocalAllocationStrategy</span></a></p></li>
+<li><p class="sd-card-text"><a class="reference internal" href="architecture.html#lobster-item-7bfe7ca94ee8257f6da5326b842b99c0c42a6273"><span class="std std-ref">//score/mw/log/dependability:component_mw_log_backend</span></a></p></li>
+</ul>
+<hr><p class="sd-card-text"><strong>Derived from:</strong></p>
+<ul class="simple">
+<li><p class="sd-card-text"><a class="reference internal" href="feature_requirements.html#lobster-item-ef6a394608be4aa475fd1a5391cc3add822ddbb3"><span class="std std-ref">MwLogFeature.AsilLevelSupport</span></a></p></li>
+<li><p class="sd-card-text"><a class="reference internal" href="feature_requirements.html#lobster-item-34aa173989a94b49318d1914c06c658c94ee5b70"><span class="std std-ref">MwLogFeature.ResourceConsumptionRuntime</span></a></p></li>
+</ul>
+<hr><p class="sd-card-text"><strong>Source:</strong> <a class="reference external" href="../../../../../../score/mw/log/requirements/component_requirements/component_requirements.trlc#L94">score/mw/log/requirements/component_requirements/component_requirements.trlc:94:18</a></p>
+</div>
+</details><details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3" id="lobster-item-ab77c02cb03c98149347622ca992c919b1a2c030">
+<summary class="sd-summary-title sd-card-header sd-bg-success sd-text-white">
+<span class="sd-summary-text">[OK] TRLC Compreq MwLog.BoundedLoopExecution</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
+<blockquote class="pull-quote">
+<div><p class="sd-card-text">mw::log shall not contain unbound loops or loops with unchecked exit conditions.</p>
+</div></blockquote>
+<hr><p class="sd-card-text"><strong>Traces to:</strong></p>
+<ul class="simple">
+<li><p class="sd-card-text"><a class="reference internal" href="unit_test.html#lobster-item-3cd2764d8e3cb57bd83b61273da11fda3dba7625"><span class="std std-ref">WaitFreeLinearWriter:WriteBufferFullShouldReturnExpectedData</span></a></p></li>
+<li><p class="sd-card-text"><a class="reference internal" href="test_case_coverage.html#lobster-item-cc737508749b155b7d6fdc596797776bb73d6faa"><span class="std std-ref">MwLog.BoundedLoopExecution</span></a></p></li>
+<li><p class="sd-card-text"><a class="reference internal" href="architecture.html#lobster-item-7bfe7ca94ee8257f6da5326b842b99c0c42a6273"><span class="std std-ref">//score/mw/log/dependability:component_mw_log_backend</span></a></p></li>
+</ul>
+<hr><p class="sd-card-text"><strong>Derived from:</strong></p>
+<ul class="simple">
+<li><p class="sd-card-text"><a class="reference internal" href="feature_requirements.html#lobster-item-34aa173989a94b49318d1914c06c658c94ee5b70"><span class="std std-ref">MwLogFeature.ResourceConsumptionRuntime</span></a></p></li>
+<li><p class="sd-card-text"><a class="reference internal" href="feature_requirements.html#lobster-item-ef6a394608be4aa475fd1a5391cc3add822ddbb3"><span class="std std-ref">MwLogFeature.AsilLevelSupport</span></a></p></li>
+</ul>
+<hr><p class="sd-card-text"><strong>Source:</strong> <a class="reference external" href="../../../../../../score/mw/log/requirements/component_requirements/component_requirements.trlc#L103">score/mw/log/requirements/component_requirements/component_requirements.trlc:103:18</a></p>
+</div>
+</details><details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3" id="lobster-item-4b371bc3ac6ae56c17e7d7a4b9c3d6c0f30fe81c">
+<summary class="sd-summary-title sd-card-header sd-bg-success sd-text-white">
+<span class="sd-summary-text">[OK] TRLC Compreq MwLog.TimeBoundedLocking</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
+<blockquote class="pull-quote">
+<div><p class="sd-card-text">mw::log shall be free of time-unbound locks and shall implement strategies to limit wait
+time. Time limit shall be defined based on requirements from functions on individual ECU. Mutual
+exclusion mechanisms shall include priority inversion protection.</p>
+</div></blockquote>
+<hr><p class="sd-card-text"><strong>Traces to:</strong></p>
+<ul class="simple">
+<li><p class="sd-card-text"><a class="reference internal" href="unit_test.html#lobster-item-806fbe70fe9d62984527a7b08b067f2376879dbb"><span class="std std-ref">WaitFreeLinearWriter:EnsureAtomicRequirements</span></a></p></li>
+<li><p class="sd-card-text"><a class="reference internal" href="unit_test.html#lobster-item-497f3637ba9e73c1269bd7ec774c1d88eea7aabb"><span class="std std-ref">CommonTests:TypesShallBeLockFree</span></a></p></li>
+<li><p class="sd-card-text"><a class="reference internal" href="test_case_coverage.html#lobster-item-a9e4429453bad068ab1a28d9606125cd89fc305d"><span class="std std-ref">MwLog.TimeBoundedLocking</span></a></p></li>
+<li><p class="sd-card-text"><a class="reference internal" href="architecture.html#lobster-item-7bfe7ca94ee8257f6da5326b842b99c0c42a6273"><span class="std std-ref">//score/mw/log/dependability:component_mw_log_backend</span></a></p></li>
+</ul>
+<hr><p class="sd-card-text"><strong>Derived from:</strong></p>
+<ul class="simple">
+<li><p class="sd-card-text"><a class="reference internal" href="feature_requirements.html#lobster-item-5d1abbac86069bc5ca0568adc4d21c45065c4fde"><span class="std std-ref">MwLogFeature.ResourceConsumptionPerformance</span></a></p></li>
+<li><p class="sd-card-text"><a class="reference internal" href="feature_requirements.html#lobster-item-ef6a394608be4aa475fd1a5391cc3add822ddbb3"><span class="std std-ref">MwLogFeature.AsilLevelSupport</span></a></p></li>
+</ul>
+<hr><p class="sd-card-text"><strong>Source:</strong> <a class="reference external" href="../../../../../../score/mw/log/requirements/component_requirements/component_requirements.trlc#L111">score/mw/log/requirements/component_requirements/component_requirements.trlc:111:18</a></p>
+</div>
+</details><details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3" id="lobster-item-532a3ea19ff52d3c56fcdfce276b0af8af68564e">
+<summary class="sd-summary-title sd-card-header sd-bg-success sd-text-white">
+<span class="sd-summary-text">[OK] TRLC Compreq MwLog.CrossLockingPrevention</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
+<blockquote class="pull-quote">
+<div><p class="sd-card-text">Cross-application and cross-thread dependencies shall be avoided. A thread logging in a
+loop shall not block other thread’s execution.</p>
+</div></blockquote>
+<hr><p class="sd-card-text"><strong>Traces to:</strong></p>
+<ul class="simple">
+<li><p class="sd-card-text"><a class="reference internal" href="unit_test.html#lobster-item-406b3806da32adb8ab3238ef8fe591c5ac8bed33"><span class="std std-ref">WaitFreeAlternatingWriterTests:EnsureAtomicRequirements</span></a></p></li>
+<li><p class="sd-card-text"><a class="reference internal" href="unit_test.html#lobster-item-806fbe70fe9d62984527a7b08b067f2376879dbb"><span class="std std-ref">WaitFreeLinearWriter:EnsureAtomicRequirements</span></a></p></li>
+<li><p class="sd-card-text"><a class="reference internal" href="test_case_coverage.html#lobster-item-f215ef9092c9d584be4a7ee548eadcf134530de5"><span class="std std-ref">MwLog.CrossLockingPrevention</span></a></p></li>
+<li><p class="sd-card-text"><a class="reference internal" href="architecture.html#lobster-item-7bfe7ca94ee8257f6da5326b842b99c0c42a6273"><span class="std std-ref">//score/mw/log/dependability:component_mw_log_backend</span></a></p></li>
+</ul>
+<hr><p class="sd-card-text"><strong>Derived from:</strong></p>
+<ul class="simple">
+<li><p class="sd-card-text"><a class="reference internal" href="feature_requirements.html#lobster-item-34aa173989a94b49318d1914c06c658c94ee5b70"><span class="std std-ref">MwLogFeature.ResourceConsumptionRuntime</span></a></p></li>
+<li><p class="sd-card-text"><a class="reference internal" href="feature_requirements.html#lobster-item-ef6a394608be4aa475fd1a5391cc3add822ddbb3"><span class="std std-ref">MwLogFeature.AsilLevelSupport</span></a></p></li>
+</ul>
+<hr><p class="sd-card-text"><strong>Source:</strong> <a class="reference external" href="../../../../../../score/mw/log/requirements/component_requirements/component_requirements.trlc#L121">score/mw/log/requirements/component_requirements/component_requirements.trlc:121:18</a></p>
+</div>
+</details><details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3" id="lobster-item-325e97c01897aac1a8c60fc78a4851ba4853bcbe">
+<summary class="sd-summary-title sd-card-header sd-bg-success sd-text-white">
+<span class="sd-summary-text">[OK] TRLC Compreq MwLog.IndexAndSizeChecking</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
+<blockquote class="pull-quote">
+<div><p class="sd-card-text">Indices in data structures and sizes of data accessed or copied shall be checked for
+plausibility to avoid high runtime utilization through long iterations or data corruption.</p>
+</div></blockquote>
+<hr><p class="sd-card-text"><strong>Traces to:</strong></p>
+<ul class="simple">
+<li><p class="sd-card-text"><a class="reference internal" href="unit_test.html#lobster-item-50be8f9ea8ae1476499df2085112e23862a85dbf"><span class="std std-ref">LinearReaderTests:LengthExceedingMaxThresholdShouldReturnEmpty</span></a></p></li>
+<li><p class="sd-card-text"><a class="reference internal" href="test_case_coverage.html#lobster-item-062613c155c75a6edf2c437e374db55f3a85db1e"><span class="std std-ref">MwLog.IndexAndSizeChecking</span></a></p></li>
+<li><p class="sd-card-text"><a class="reference internal" href="architecture.html#lobster-item-7bfe7ca94ee8257f6da5326b842b99c0c42a6273"><span class="std std-ref">//score/mw/log/dependability:component_mw_log_backend</span></a></p></li>
+</ul>
+<hr><p class="sd-card-text"><strong>Derived from:</strong></p>
+<ul class="simple">
+<li><p class="sd-card-text"><a class="reference internal" href="feature_requirements.html#lobster-item-ef6a394608be4aa475fd1a5391cc3add822ddbb3"><span class="std std-ref">MwLogFeature.AsilLevelSupport</span></a></p></li>
+</ul>
+<hr><p class="sd-card-text"><strong>Source:</strong> <a class="reference external" href="../../../../../../score/mw/log/requirements/component_requirements/component_requirements.trlc#L130">score/mw/log/requirements/component_requirements/component_requirements.trlc:130:18</a></p>
+</div>
+</details><details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3" id="lobster-item-2418b8704dc0807bdc2ab9fca05cd33fb4e81ad3">
+<summary class="sd-summary-title sd-card-header sd-bg-success sd-text-white">
+<span class="sd-summary-text">[OK] TRLC Compreq MwLog.MemoryBoundChecking</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
+<blockquote class="pull-quote">
+<div><p class="sd-card-text">Memory boundaries shall be explicitly checked when writing to shared memory.</p>
+</div></blockquote>
+<hr><p class="sd-card-text"><strong>Traces to:</strong></p>
+<ul class="simple">
+<li><p class="sd-card-text"><a class="reference internal" href="unit_test.html#lobster-item-e8e0858324efa43d746992341b8a524ac676c05b"><span class="std std-ref">WaitFreeLinearWriter:BufferSizeExceededShouldReturnEmpty</span></a></p></li>
+<li><p class="sd-card-text"><a class="reference internal" href="test_case_coverage.html#lobster-item-7bbc2daa27e2b8c15461436bdd4925a2797ba925"><span class="std std-ref">MwLog.MemoryBoundChecking</span></a></p></li>
+<li><p class="sd-card-text"><a class="reference internal" href="architecture.html#lobster-item-7bfe7ca94ee8257f6da5326b842b99c0c42a6273"><span class="std std-ref">//score/mw/log/dependability:component_mw_log_backend</span></a></p></li>
+</ul>
+<hr><p class="sd-card-text"><strong>Derived from:</strong></p>
+<ul class="simple">
+<li><p class="sd-card-text"><a class="reference internal" href="feature_requirements.html#lobster-item-ef6a394608be4aa475fd1a5391cc3add822ddbb3"><span class="std std-ref">MwLogFeature.AsilLevelSupport</span></a></p></li>
+</ul>
+<hr><p class="sd-card-text"><strong>Source:</strong> <a class="reference external" href="../../../../../../score/mw/log/requirements/component_requirements/component_requirements.trlc#L139">score/mw/log/requirements/component_requirements/component_requirements.trlc:139:18</a></p>
+</div>
+</details></section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="feature_requirements.html" class="btn btn-neutral float-left" title="Feature Requirements" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="failure_modes.html" class="btn btn-neutral float-right" title="Failure Modes" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright .</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

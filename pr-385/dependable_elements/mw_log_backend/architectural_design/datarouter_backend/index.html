@@ -1,0 +1,473 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Safe Datarouter Backend &mdash; Dependable Element Mw Log Backend Doc 1.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=4ae1632d" />
+      <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/sphinx-data-viewer/jsonview.bundle.css?v=f6ef2277" />
+      <link rel="stylesheet" type="text/css" href="../../_static/sphinx-needs/libs/html/datatables.min.css?v=4b4fd840" />
+      <link rel="stylesheet" type="text/css" href="../../_static/sphinx-needs/common_css/need_toggle.css?v=5c6620df" />
+      <link rel="stylesheet" type="text/css" href="../../_static/sphinx-needs/common_css/need_links.css?v=2150a916" />
+      <link rel="stylesheet" type="text/css" href="../../_static/sphinx-needs/common_css/needstable.css?v=5e1b6797" />
+      <link rel="stylesheet" type="text/css" href="../../_static/sphinx-needs/common_css/need_style.css?v=92936fa5" />
+      <link rel="stylesheet" type="text/css" href="../../_static/sphinx-needs/common_css/need_core.css?v=f5b60a78" />
+      <link rel="stylesheet" type="text/css" href="../../_static/sphinx-needs/modern.css?v=803738c0" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=8d563738"></script>
+      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../_static/design-tabs.js?v=f930bc37"></script>
+      <script src="../../_static/sphinx-data-viewer/jsonview.bundle.js?v=18cd53c5"></script>
+      <script src="../../_static/sphinx-data-viewer/jsonview_loader.js?v=f7ff7e7d"></script>
+      <script src="../../_static/sphinx-needs/libs/html/datatables.min.js?v=8a4aee21"></script>
+      <script src="../../_static/sphinx-needs/libs/html/datatables_loader.js?v=a2cae175"></script>
+      <script src="../../_static/sphinx-needs/libs/html/sphinx_needs_collapse.js?v=dca66431"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="FileOutputBackend" href="../file_output_backend.html" />
+    <link rel="prev" title="Requirements" href="../../feature_requirements/feature_requirements/feature_requirements.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            Dependable Element Mw Log Backend Doc
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../assumed_system.html">Assumed System</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../software_arch.html">Software Architectural Level</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../../feature_requirements/feature_requirements/feature_requirements.html">Requirements</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Safe Datarouter Backend</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#introduction">Introduction</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#inter-process-communication">Inter-process communication</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#class-diagram">Class diagram</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#activity-diagrams">Activity diagrams</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#lock-free-shared-memory-design">Lock-free Shared Memory Design</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#lazy-logging-client">Lazy logging client</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#establishing-a-logging-session">Establishing a logging session</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#avoiding-shared-memory-leaks">Avoiding shared memory leaks</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#post-mortem-logging">Post-mortem logging</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#limited-impact-of-incoming-messages-in-the-logging-client">Limited impact of incoming messages in the logging client</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#message-exchange-between-logging-clients-and-datarouter">Message exchange between Logging Clients and Datarouter</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#establish-a-new-logging-session">Establish a new logging session</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#acquire-data-to-read-on-the-ring-buffer">Acquire data to read on the ring buffer</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../file_output_backend.html">FileOutputBackend</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../syslog_backend.html">SyslogBackend</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../mw_log_backend_architectural_design/datarouter_class_diagram.html">Datarouter Class Diagram</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../mw_log_backend_architectural_design/inter_process_communication.html">Inter Process Communication</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../mw_log_backend_architectural_design/mw_log_datarouter_recorder.html">Mw Log Datarouter Recorder</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../mw_log_backend_architectural_design/mw_log_shared_memory_reader.html">Mw Log Shared Memory Reader</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../mw_log_backend_architectural_design/verbose_logging_static.html">Verbose Logging Static</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../mw_log_backend_architectural_design/write_factory_design.html">Write Factory Design</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../mw_log_backend_architectural_design/mw_log_file_backend.html">Mw Log File Backend</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../mw_log_backend_architectural_design/mw_log_recorders.html">Mw Log Recorders</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../mw_log_backend_architectural_design/datarouter_backend_datarouterbackend.html">Datarouter Backend Datarouterbackend</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../mw_log_backend_architectural_design/datarouter_message_client_impl_connecttodatarouter.html">Datarouter Message Client Impl Connecttodatarouter</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../mw_log_backend_architectural_design/shared_memory_reader_read.html">Shared Memory Reader Read</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../mw_log_backend_architectural_design/shared_memory_writer_allocandwrite.html">Shared Memory Writer Allocandwrite</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../mw_log_backend_architectural_design/verbose_logging_sequence.html">Verbose Logging Sequence</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../mw_log_backend_architectural_design/syslog_backend_sequence.html">Syslog Backend Sequence</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../dependability_analysis/fmea.html">mw_log_backend_fmea</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../components.html">Components</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../traceability.html">Traceability</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Dependable Element Mw Log Backend Doc</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../software_arch.html">Software Architectural Level</a></li>
+      <li class="breadcrumb-item active">Safe Datarouter Backend</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/architectural_design/datarouter_backend/index.md.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <!-- ----------------------------------------------------------------------------
+  Copyright (c) 2026 Contributors to the Eclipse Foundation
+
+  See the NOTICE file(s) distributed with this work for additional
+  information regarding copyright ownership.
+
+  This program and the accompanying materials are made available under the
+  terms of the Apache License Version 2.0 which is available at
+  https://www.apache.org/licenses/LICENSE-2.0
+
+  SPDX-License-Identifier: Apache-2.0
+----------------------------------------------------------------------------- -->
+<section id="safe-datarouter-backend">
+<h1>Safe Datarouter Backend<a class="headerlink" href="#safe-datarouter-backend" title="Link to this heading"></a></h1>
+<ul class="simple">
+<li><p><a class="reference internal" href="#safe-datarouter-backend"><span class="xref myst">Safe Datarouter Backend</span></a></p>
+<ul>
+<li><p><a class="reference internal" href="#introduction"><span class="xref myst">Introduction</span></a></p></li>
+<li><p><a class="reference internal" href="#inter-process-communication"><span class="xref myst">Inter-process communication</span></a></p></li>
+<li><p><a class="reference internal" href="#class-diagram"><span class="xref myst">Class diagram</span></a></p></li>
+<li><p><a class="reference internal" href="#activity-diagrams"><span class="xref myst">Activity diagrams</span></a></p></li>
+<li><p><a class="reference internal" href="#lock-free-shared-memory-design"><span class="xref myst">Lock-free Shared Memory Design</span></a></p></li>
+<li><p><a class="reference internal" href="#lazy-logging-client"><span class="xref myst">Lazy logging client</span></a></p></li>
+<li><p><a class="reference internal" href="#establishing-a-logging-session"><span class="xref myst">Establishing a logging session</span></a></p></li>
+<li><p><a class="reference internal" href="#avoiding-shared-memory-leaks"><span class="xref myst">Avoiding shared memory leaks</span></a></p></li>
+<li><p><a class="reference internal" href="#post-mortem-logging"><span class="xref myst">Post-mortem logging</span></a></p></li>
+<li><p><a class="reference internal" href="#limited-impact-of-incoming-messages-in-the-logging-client"><span class="xref myst">Limited impact of incoming messages in the logging client</span></a></p></li>
+<li><p><a class="reference internal" href="#message-exchange-between-logging-clients-and-datarouter"><span class="xref myst">Message exchange between Logging Clients and Datarouter</span></a></p>
+<ul>
+<li><p><a class="reference internal" href="#establish-a-new-logging-session"><span class="xref myst">Establish a new logging session</span></a></p>
+<ul>
+<li><p><a class="reference internal" href="#request-from-the-client-to-datarouter"><span class="xref myst">Request from the client to Datarouter</span></a></p></li>
+</ul>
+</li>
+<li><p><a class="reference internal" href="#acquire-data-to-read-on-the-ring-buffer"><span class="xref myst">Acquire data to read on the ring buffer</span></a></p>
+<ul>
+<li><p><a class="reference internal" href="#request-from-datarouter-to-acquire"><span class="xref myst">Request from Datarouter to acquire</span></a></p></li>
+<li><p><a class="reference internal" href="#response-from-the-client-to-confirm-acquire"><span class="xref myst">Response from the Client to confirm acquire</span></a></p></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<section id="introduction">
+<h2>Introduction<a class="headerlink" href="#introduction" title="Link to this heading"></a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">mw::log</span></code> implementation development goal is to reach ASIL qualification and
+to ensure freedom of interference of logging with customer functions. The
+logging mode <code class="docutils literal notranslate"><span class="pre">kRemote</span></code> in <code class="docutils literal notranslate"><span class="pre">mw::log</span></code> transports the logs from the client process
+to Ethernet via the Datarouter process. The design goals for the communication
+are as follows:</p>
+<ol class="arabic simple">
+<li><p>Lock-free and wait-free: Logging calls from the client context shall not
+block. The client context shall not wait on other log calls from client
+context, neither on the internal logging thread.</p></li>
+<li><p>Deterministic memory management: Dynamic memory allocations are only allowed
+during the initialization phase. The implementation shall preallocate all
+necessary memory upon the first invocation of the logging API.</p></li>
+<li><p>Protection of safety-qualified logging client processes from non-qualified
+Datarouter process. The logging library shall validate and treat inputs from
+Datarouter as untrusted.</p></li>
+</ol>
+</section>
+<section id="inter-process-communication">
+<h2>Inter-process communication<a class="headerlink" href="#inter-process-communication" title="Link to this heading"></a></h2>
+<p>In the Datarouter backend the goal is to safely and efficiently transfer the log
+messages from the user process to the Datarouter process.</p>
+<p>The inter-process communication takes place via shared memory and the message
+passing library. This library only supports unidirectional message transport. As we need bidirectional
+communication over the side channel, we establish two independent unidirectional
+channels. On the highest level of abstraction we see the ASIL-B qualified client
+process on the one side and the datarouter process on the other</p>
+<p><img alt="INTER_PROCESS_COMMUNICATION" src="https://www.plantuml.com/plantuml/proxy?src=https://raw.githubusercontent.com/eclipse-score/logging/refs/heads/main/score/mw/log/design/backend/datarouter_backend/inter_process_communication.puml">.</p>
+<p>The logs are written by the client into shared memory and read-out by
+datarouter. Freedom of interference is ensured since the datarouter process has
+read-only access to the shared-memory. In order to reuse the logging buffers in
+shared-memory the client may overwrite them after datarouter has acknowledged it
+has successfully read them. This acknowledgement is sent via the
+safety-qualified <a class="reference external" href="https://github.com/eclipse-score/communication/blob/main/score/message_passing/dependability/software_architectural_design/client-server.md">message passing library</a>.</p>
+</section>
+<section id="class-diagram">
+<h2>Class diagram<a class="headerlink" href="#class-diagram" title="Link to this heading"></a></h2>
+<img alt="DATAROUTER_CLASS_DIAGRAM" src="https://www.plantuml.com/plantuml/proxy?src=https://raw.githubusercontent.com/eclipse-score/logging/refs/heads/main/score/mw/log/design/backend/datarouter_backend/datarouter_class_diagram.puml">
+<p>The class diagram above shows the relevant classes client-side and in
+Datarouter. Client-side the <code class="docutils literal notranslate"><span class="pre">DatarouterBackend</span></code> contains a circular allocator
+for the preallocation of the verbose messages. When a new verbose message is
+created a slot is reserved first for the user in the circular allocator. The
+memory inside the slot is preallocated and lives in the process space of the
+client. When the user flushes the verbose message, the content of the slot is
+copied into the ring buffer that lives in shared memory through the <code class="docutils literal notranslate"><span class="pre">TRACE()</span></code>
+macro. The shared memory buffer is encapsulated by the <code class="docutils literal notranslate"><span class="pre">SharedMemoryWriter</span></code>
+class. It is owned by the <code class="docutils literal notranslate"><span class="pre">platform::Logger</span></code> as a Singleton. For non-verbose
+logging, or structured logging <code class="docutils literal notranslate"><span class="pre">mw::log</span></code> is not involved, but <code class="docutils literal notranslate"><span class="pre">TRACE()</span></code> is used
+directly. The <code class="docutils literal notranslate"><span class="pre">TRACE()</span></code> macro internally calls
+<code class="docutils literal notranslate"><span class="pre">SharedMemoryWriter::AllocateAndWrite()</span></code>, which locks a client-side only mutex
+and writes the input structure in serialized form into the ring-buffer. When
+Datarouter is reading from the ring buffer the data shall not be overwritten.
+The responsibility of the <code class="docutils literal notranslate"><span class="pre">DatarouterMessageClient</span></code> class is to synchronize the
+access to the ring buffer between Datarouter and the client.</p>
+</section>
+<section id="activity-diagrams">
+<h2>Activity diagrams<a class="headerlink" href="#activity-diagrams" title="Link to this heading"></a></h2>
+<img alt="DATAROUTER_BACKEND_DATAROUTERBACKEND" src="https://www.plantuml.com/plantuml/proxy?src=https://raw.githubusercontent.com/eclipse-score/logging/refs/heads/main/score/mw/log/design/backend/datarouter_backend/datarouter_backend_datarouterbackend.puml">
+</section>
+<section id="lock-free-shared-memory-design">
+<h2>Lock-free Shared Memory Design<a class="headerlink" href="#lock-free-shared-memory-design" title="Link to this heading"></a></h2>
+<p>The log messages from apps are transferred to Datarouter through shared memory.
+For lock- and wait-free data exchange we use the <code class="docutils literal notranslate"><span class="pre">WaitFreeAlternatingWriter</span></code> as
+documented <a class="reference external" href="https://github.com/eclipse-score/logging/blob/main/score/mw/log/detail/wait_free_producer_queue/README.md">here</a> as part of the <code class="docutils literal notranslate"><span class="pre">SharedMemoryWriter</span></code> class.
+The data in shared memory is layed out in
+consecutive and contiguous segments:</p>
+<ol class="arabic simple">
+<li><p>Control structure <code class="docutils literal notranslate"><span class="pre">mw::log::detail::SharedData</span></code> at offset = 0.</p></li>
+<li><p>Linear buffer one.</p></li>
+<li><p>Linear buffer two.</p></li>
+</ol>
+<p>Datarouter shall be able to open this file read-only. The control structure
+contains fundamental information about the buffer sizes, and the atomic
+variables.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">SharedMemoryWriter</span></code> has two main responsibilities. First is to register
+data types using <code class="docutils literal notranslate"><span class="pre">TryRegisterType()</span></code> and secondly to push instances of those
+types using <code class="docutils literal notranslate"><span class="pre">AllocAndWrite()</span></code>. Both aspects use the <code class="docutils literal notranslate"><span class="pre">WaitFreeAlternatingWriter</span></code>
+to ensure lock-free writing of data.</p>
+<p>Before a data type can be used it needs to be successfully registered. In the
+registration, the <code class="docutils literal notranslate"><span class="pre">SharedMemoryWriter</span></code> send the fully qualified type name and a
+corresponding numeric type identifier.</p>
+<p>This identifier is then used by <code class="docutils literal notranslate"><span class="pre">AllocAndWrite()</span></code>. For each call, the method
+tries to acquire one contiguous area of memory on the current linear buffer.
+This area then contains two sub-segments:</p>
+<ol class="arabic simple">
+<li><p>The header <code class="docutils literal notranslate"><span class="pre">mw::log::BufferEntryHeader</span></code> which contains a timestamp and type
+identification.</p></li>
+<li><p>Followed by the payload as written by the user.</p></li>
+</ol>
+</section>
+<section id="lazy-logging-client">
+<h2>Lazy logging client<a class="headerlink" href="#lazy-logging-client" title="Link to this heading"></a></h2>
+<p>The logging client shall remain in the passive role in the message exchange with
+Datarouter, i.e., it should react and respond to messages from Datarouter. The
+reason for that is that we restrict the client to only a single thread for
+logging to save resources. In addition, there shall be no messages sent from a
+user context in the client. By user context we mean an public API call to
+logging of any user thread that is not the logging thread. Sending a message
+with the <code class="docutils literal notranslate"><span class="pre">mw::com</span></code> <code class="docutils literal notranslate"><span class="pre">Sender</span></code> results in a context switch to the receiver (i.e.
+Datarouter). This operation could block for an undefined period of time. This
+would violate our requirements and design goals of not blocking the user of
+logging. Hence we only allow message sending in the logging thread in the client
+process. The only exception is during the initialization phase. Here, the client
+may send a connect message to Datarouter.</p>
+</section>
+<section id="establishing-a-logging-session">
+<h2>Establishing a logging session<a class="headerlink" href="#establishing-a-logging-session" title="Link to this heading"></a></h2>
+<p>Before the information exchange between Datarouter and the Logging client can
+begin, a session needs to be established. By that we mean the two side-channels
+for message passing need to be connected. The client needs to instantiate a
+<code class="docutils literal notranslate"><span class="pre">Sender</span></code> that connects with the <code class="docutils literal notranslate"><span class="pre">Receiver</span></code> of Datarouter. Datarouter needs to
+instantiate a <code class="docutils literal notranslate"><span class="pre">Sender</span></code> that connects to the <code class="docutils literal notranslate"><span class="pre">Receiver</span></code> of the client. In
+addition, Datarouter has to open the shared memory file from the logging
+client.</p>
+<p>We need to support logging with all possible startup orders of the processes:</p>
+<ol class="arabic simple">
+<li><p>A logging client starts after Datarouter started.</p></li>
+<li><p>A logging client started before Datarouter starts.</p></li>
+</ol>
+<p>When a client starts, it creates a ring buffer in a shared-memory page and maps
+it to a file. From that point on, the user is able to write logs in the
+shared-memory ring buffer even in early startup phase. In the initialization
+phase of the logger library, a connect message is attempted to be sent to
+Datarouter. This is only possible if Datarouter is already running and ready to
+receive. If a client exits before Datarouter has connected the resource must be
+cleaned up and the logs are lost.</p>
+<p>For each client, there shall be two files:</p>
+<ol class="arabic simple">
+<li><p>The shared memory file of the client <code class="docutils literal notranslate"><span class="pre">/tmp/logging.&lt;appid&gt;.&lt;uid&gt;.shmem</span></code>.</p></li>
+<li><p>The receiver file of the client <code class="docutils literal notranslate"><span class="pre">/mw_com/logging.&lt;appid&gt;.&lt;uid&gt;</span></code>.</p></li>
+</ol>
+<p>The shared memory file shall be writable only for the UID of the client, and
+read-only for everything else.</p>
+<p>On startup, Datarouter creates its own receiver and attaches it to a file:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">/mw_com/logging.datarouter_recv</span></code></p></li>
+</ul>
+<p>After Datarouter creates its receiver the logging clients are unblocked and
+establish the connection by sending the connect message.</p>
+</section>
+<section id="avoiding-shared-memory-leaks">
+<h2>Avoiding shared memory leaks<a class="headerlink" href="#avoiding-shared-memory-leaks" title="Link to this heading"></a></h2>
+<p>The logging library should ensure the shared memory resources are freed when no
+longer needed to avoid leaks. Logging clients may exit and restart multiple
+times. The shared memory file that contains the ring buffer read by datarouter
+can only be cleaned by the client and not by Datarouter due the restrictive
+permissions. Hence, the logging client shall unlink the shared memory file when
+it receives the first message from Datarouter. At this point it is ensured that
+Datarouter has already opened the file and is able to consume it. This way the
+resource is cleaned up as soon as all processes have closed the file.</p>
+<p>In addition, files created by the logging client shall be unlinked on exit. Due
+to this design decision leaks should be avoided, but if an app exits before
+Datarouter can establish the connection the logs are lost. If, however, the
+client crashes before being able to unlink the file, the resources cannot be
+freed. After a crash the app may be restarted. Thus, on startup, the client
+shall check for shared memory instances of previous runs and unlink them as well
+to fix the leak.</p>
+</section>
+<section id="post-mortem-logging">
+<h2>Post-mortem logging<a class="headerlink" href="#post-mortem-logging" title="Link to this heading"></a></h2>
+<p>Datarouter should completely retrieve the all the logs of an application even
+after that app exited. The only condition, as explained in the previous section,
+is that Datarouter already established a connection to the app. Datarouter
+should detect that an app is terminated if sending a message to that app fails.
+At this point, Datarouter should switch the <code class="docutils literal notranslate"><span class="pre">SharedMemoryReader</span></code> to detached
+mode. In detached mode, the reader assumes all data remains unchanged and thus
+readable without synchronization. Only after reading the remaining data from the
+ring buffer, should Datarouter unmap the shared memory page. Then the OS should
+free up the used resources.</p>
+<img alt="MW_LOG_SHARED_MEMORY_READER" src="https://www.plantuml.com/plantuml/proxy?src=https://raw.githubusercontent.com/eclipse-score/logging/refs/heads/main/score/mw/log/design/backend/datarouter_backend/mw_log_shared_memory_reader.puml">
+</section>
+<section id="limited-impact-of-incoming-messages-in-the-logging-client">
+<h2>Limited impact of incoming messages in the logging client<a class="headerlink" href="#limited-impact-of-incoming-messages-in-the-logging-client" title="Link to this heading"></a></h2>
+<p>Consider a fault in Datarouter that leads to permanently repeated message
+sending to one of the logging clients in a hot loop. First of all, this would
+not directly impact the user threads of the clients but the logger thread in the
+client process. The logger thread is spawned by the thread pool (containing a
+single thread) in the <code class="docutils literal notranslate"><span class="pre">DatarouterMessagePassingClient</span></code> in <code class="docutils literal notranslate"><span class="pre">DatarouterBackend</span></code>.</p>
+<p>The implementation shall limit the impact of such a “denial-of-service”-like
+situation on the client threads. First, the lock-free implementation of the
+shared memory buffers ensures that the logger cannot block the running operation
+of a client writing to the shared memory. It is always the reader i.e. the
+logger thread and Datarouter that on the writers to finish, and not vice-versa.</p>
+<p>Secondly, we also mitigate CPU starvation of the clients by limiting the maximum
+number of requests a logger thread may execute in a fixed time interval. This
+rate limitation is implemented with a fixed sleep period in the logger thread
+after each incoming request.</p>
+</section>
+<section id="message-exchange-between-logging-clients-and-datarouter">
+<h2>Message exchange between Logging Clients and Datarouter<a class="headerlink" href="#message-exchange-between-logging-clients-and-datarouter" title="Link to this heading"></a></h2>
+<p>The side channel in logging is needed to synchronize the access to the data in
+shared memory between the client and Datarouter.</p>
+<p>Datarouter periodically scans for new clients and initiates the message
+exchange. In the message exchange between Datarouter and the Clients,
+Datarouter always takes the active role. Datarouter sends a request and the
+Client replies with a response to the request.</p>
+<p>There is only a single receiver in Datarouter for all clients. Each message
+from <code class="docutils literal notranslate"><span class="pre">mw::com::MessagePassing</span></code> includes a message id and a PID of the sender
+besides the Payload. We use the <code class="docutils literal notranslate"><span class="pre">ShortMessage</span></code> and <code class="docutils literal notranslate"><span class="pre">MediumMessage</span></code> type for all
+messages, which can currently hold a payload length of 8 Bytes and 16 Bytes,
+respectively. The PID is used as an identifier for the concrete logging client
+in Datarouter.</p>
+<section id="establish-a-new-logging-session">
+<h3>Establish a new logging session<a class="headerlink" href="#establish-a-new-logging-session" title="Link to this heading"></a></h3>
+<p>When a logging client starts, it sends a connect message to Datarouter. This is
+only possible if Datarouter is already running. If Datarouter is not yet running
+sending the message will block until Datarouter becomes ready to receive
+messages. If the application shuts down before receiving the connect message,
+the logs of that application will be lost.</p>
+<section id="request-from-the-client-to-datarouter">
+<h4>Request from the client to Datarouter<a class="headerlink" href="#request-from-the-client-to-datarouter" title="Link to this heading"></a></h4>
+<p>Message ID: <code class="docutils literal notranslate"><span class="pre">kConnectToClient</span></code></p>
+<p>Payload: <code class="docutils literal notranslate"><span class="pre">struct</span> <span class="pre">ConnectMessage</span></code></p>
+<p>This is the only message that shall be initiated by the client itself. The
+message shall contain the necessary information for Datarouter to find the
+shared memory file location of the client and establish the corresponding
+message passing channel.</p>
+<p>There are two modes that a client could use:</p>
+<ol class="arabic simple">
+<li><p>Deterministic identifier mode that is is used in production.</p></li>
+<li><p>Dynamic identifier mode that is used only for testing purposes.</p></li>
+</ol>
+<p>In deterministic mode the client is identified using its DLT app id and user id.
+By system design, each process shall have an unique uid so that there should be
+no collisions.</p>
+<p>Dynamic mode is provided for testing purposes where we cannot ensure a unique
+app id and user id. Instead it uses a random unique 6 character long identifier
+that is obtained using <code class="docutils literal notranslate"><span class="pre">mkstemp()</span></code>. Enabling this mode in production is
+prevented by secpol enforcement as the message passing channel path is fixed by
+secpol policy.</p>
+</section>
+</section>
+<section id="acquire-data-to-read-on-the-ring-buffer">
+<h3>Acquire data to read on the ring buffer<a class="headerlink" href="#acquire-data-to-read-on-the-ring-buffer" title="Link to this heading"></a></h3>
+<p>In a dynamic periodic interval, Datarouter request to acquire the current data in the
+ring buffer from a client. This allows to synchronize reading the ring buffer in
+shared memory and prevents that the client modifies that data during reading.
+Each acquire request corresponds to toggling the linear buffer for reading and
+writing. The interval depends on the condition of non-zero number of bytes written
+into the buffer. Datarouter sends request to Acquire the buffer only if the write
+buffer is not empty or every 10th constant interval check finished with the
+decision not to request the switching. Every 10th request is executed in a
+keepalive manner to check the communication link.</p>
+<section id="request-from-datarouter-to-acquire">
+<h4>Request from Datarouter to acquire<a class="headerlink" href="#request-from-datarouter-to-acquire" title="Link to this heading"></a></h4>
+<p>Message ID: <code class="docutils literal notranslate"><span class="pre">kAcquireRequest</span></code></p>
+<p>Payload: None</p>
+</section>
+<section id="response-from-the-client-to-confirm-acquire">
+<h4>Response from the Client to confirm acquire<a class="headerlink" href="#response-from-the-client-to-confirm-acquire" title="Link to this heading"></a></h4>
+<p>When the data is acquired on client side by a call to
+<code class="docutils literal notranslate"><span class="pre">AlternatingReader::Switch()</span></code>, the client confirms that by responding. The
+response contains the range in the ring buffer that is ready to be read as well
+as the updated type index. When a user traces a data type for the C++ fully
+qualified type name is put on the type stack in the <code class="docutils literal notranslate"><span class="pre">MwsrWriter</span></code>. This allows
+Datarouter to identify the payload in the ring buffer by index to the type
+stack.</p>
+<p>Message ID: <code class="docutils literal notranslate"><span class="pre">kAcquireResponse</span></code></p>
+<p>Message type: <code class="docutils literal notranslate"><span class="pre">MediumMessage</span></code></p>
+<p>Payload: <code class="docutils literal notranslate"><span class="pre">struct</span> <span class="pre">ReadAcquireResult</span></code></p>
+</section>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../../feature_requirements/feature_requirements/feature_requirements.html" class="btn btn-neutral float-left" title="Requirements" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../file_output_backend.html" class="btn btn-neutral float-right" title="FileOutputBackend" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright .</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
