@@ -96,7 +96,7 @@ The diagrams show the constraints per building block.
        initialization phase (:need:`comp_req__log__local_allocation_strategy`)
      - ``mw_log_file_backend.puml`` in :doc:`file_output_backend`
    * - Slot handling
-     - Bounded loops (:need:`comp_req__log__no_endless_loops`)
+     - Bounded loops
      - ``mw_log_file_backend.puml`` in :doc:`file_output_backend`
    * - File output backend
      - Not for production use, it uses a mutex in ``SlotDrainer``
