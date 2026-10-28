@@ -60,9 +60,9 @@ See also :need:`doc_concept__wp_inspections` for further information about revie
     * - REQ_01_01
       - Is the requirement formulation template used?
       - see :need:`gd_temp__req_formulation`, this includes the use of "shall".
-      - Yes
-      -
-      -
+      - No
+      - :need:`comp_req__log__cross_locking` needs to be fixed.
+      - https://github.com/eclipse-score/logging/issues/345
     * - REQ_02_01
       - Is the requirement description *comprehensible* ?
       - If you think the requirement is hard to understand, comment here.
@@ -78,9 +78,9 @@ See also :need:`doc_concept__wp_inspections` for further information about revie
     * - REQ_02_03
       - Is the requirement description *atomic* ?
       - A good way to think about this is to consider if the requirement may be tested by one (positive) test case or needs more of these. The requirement formulation template should also avoid being non-atomic already. Note that there are cases where also non-atomic requirements are the better ones, for example if those are better understandable.
-      - Yes
-      -
-      -
+      - No
+      - :need:`comp_req__log__avoid_locks` is non atomic
+      - https://github.com/eclipse-score/logging/issues/345
     * - REQ_02_04
       - Is the requirement description *feasible* ?
       - If at the time of the inspection the requirement has already some implementation, the answer is yes. This can be checked via traces, but also :need:`gd_req__req_attr_impl` shows this. In case the requirement has no implementation at the time of inspection (i.e. not implemented at least as "proof-of-concept"), a development expert should be invited to the Pull-Request review to explicitly check this item.
@@ -114,9 +114,7 @@ See also :need:`doc_concept__wp_inspections` for further information about revie
       - Yes
       - The non-functional requirements bound the time mw::log can take from the
         caller: :need:`comp_req__log__avoid_locks` limits lock wait time,
-        :need:`comp_req__log__cross_locking` prevents blocking other threads and
-        :need:`comp_req__log__priority_inversion_protection` limits priority
-        inversion delays.
+        :need:`comp_req__log__cross_locking` prevents blocking other threads.
       -
     * - REQ_06_01
       - Does the requirement consider *external interfaces*?
