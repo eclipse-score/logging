@@ -95,7 +95,7 @@ See also :need:`doc_concept__wp_inspections` for further information about revie
      - Are all external libraries used by the component specified in the detailed design?
      - Check the automated dependency analysis.
        Also make sure ASIL rated units also only use ASIL rated libraries.
-     - no
+     - yes
      - Dependency and FFI metadata are maintained in Bazel. The direct
        dependencies outside of ``//score/mw/log`` are listed with::
 
@@ -105,15 +105,17 @@ See also :need:`doc_concept__wp_inspections` for further information about revie
 
          bazel query 'let l = kind(".*_library", //score/mw/log/...) except attr(testonly, 1, //score/mw/log/...) in (labels(deps, $l) except //score/mw/log/...) except attr(tags, FFI, labels(deps, $l))' --keep_going --output=label
 
-       Dependency/configuration findings remain:
+       Dependency/configuration findings:
 
-       - Remove unused ``//score/concurrency:thread_pool`` dependency, if confirmed
-         unused for all affected configurations.
-       - Correct the unresolved ``//score/mw/log/detail/dlt_trace``
-         dependency in the ``shm_dma_enabled`` configuration.
-       - Migrate uses of the deprecated ``high_resolution_steady_clock``
-         target to the supported replacement after compatibility review.
-     - To be added
+       - The unused ``//score/concurrency:thread_pool`` dependency was removed
+         from ``data_router_backend``.
+       - ``//score/mw/log/detail/dlt_trace`` is not defined in this repository,
+         so the ``shm_dma_enabled`` configuration does not build here.
+         Accepted as deviation.
+       - The ``high_resolution_steady_clock`` target is deprecated and its
+         replacement is not available in the open source dependencies.
+         Accepted as deviation.
+     -
    * - IMPL_02_01
      - Are the static and dynamic code analysis reports verified for violations?
      - All violations in ASIL related code must be justified. This includes the checks of coding guidelines.
@@ -125,65 +127,58 @@ See also :need:`doc_concept__wp_inspections` for further information about revie
 
        - Resolve or justify coverage gaps see: `#318 <https://github.com/eclipse-score/logging/issues/318>`_
        - Integrate and verify the required CodeQL analysis see: `#336 <https://github.com/eclipse-score/logging/issues/336>`_
+
+       Accepted deviations:
+
        - 39 of 118 suppressions have no justification and use AUTOSAR C++14 ids.
+         New tooling will be set up soon.
        - Memcheck (valgrind 3.22.0) is not part of CI. No errors and no definite leaks in the unit tests found in manual runs.
      -
        - Coverage: `#318 <https://github.com/eclipse-score/logging/issues/318>`_.
        - CodeQL `#336 <https://github.com/eclipse-score/logging/issues/336>`_.
-       - Missing suppressions justification: To be added.
-       - Missing Memcheck CI job: To be added.
    * - IMPL_02_02
      - Do manual checks, that are derived from the coding guideline, find no safety critical error?
      - Check this for the programming language used (e.g. C++ <link_to_checks_list>, Rust <link_to_checks_list>)
      - no
-     - The manual MISRA C++:2023 checks are not done yet.
+     - The manual MISRA C++:2023 checks are not done yet. Accepted as deviation,
+       new tooling will be set up soon.
 
        Following issues found in `C++ guideline <https://eclipse-score.github.io/score/main/contribute/development/cpp/coding_guidelines.html>`_:
 
        - The coding guideline asks to avoid the prefix ``I`` for interfaces and to
-         append ``Impl`` to implementations. Decide whether ``ISharedMemoryReader`` / ``IMessageBuilder``
-         naming is an accepted coding-guideline deviation.
-     - To be added
+         append ``Impl`` to implementations. The ``ISharedMemoryReader`` / ``IMessageBuilder``
+         naming is accepted as coding-guideline deviation.
+     -
    * - IMPL_03_01
      - Do the UID of the interface in component documentation match the implemented interface names of the unit?
      - Compare interface UIDs (which contains the interface name) in component architecture/detailed design documentation
        with public interfaces in source code (e.g. API headers, traits, public types/functions).
-     - no
+     - yes
      - The mapping of the architecture interfaces to the source code interfaces is
-       shown in the diagrams listed in the detailed design.
+       given in the detailed design (section "Interface to code mapping").
 
-       Following issues found:
+       Findings and resolutions:
 
-       - The names of the source code interfaces differ from the architecture
-         interface UIDs, the mapping is only given in the diagrams of the
-         detailed design.
-         Examples:
-
-         - ``logic_arc_int__log_cpp__logging`` is implemented by
-           ``mw::log::Recorder``, which is defined in ``score_baselibs``
-           (``score/mw/log/recorder.h``). The name has no relation to the UID.
-         - ``logic_arc_int__logging__shm`` is realized by four names:
-           ``SharedMemoryWriter``, ``ISharedMemoryReader``, ``SharedData`` and
-           ``BufferEntryHeader``. No single name matches the UID.
-         - ``logic_arc_int__logging__session_ctrl_channel`` is realized by
-           ``DatarouterMessageClient`` and the messages in
-           ``data_router_messages.h``. "Session control channel" does not
-           appear in the code.
-         - The internal interface ``mw::log::detail::Backend`` has no
-           architecture UID.
-
-         Action: decide whether to adapt the UIDs in the architecture, to
-         rename the interfaces in the code, or to accept the mapping in the
-         detailed design as a documented deviation. ``ISharedMemoryReader`` is
-         also affected by the ``I`` prefix finding in IMPL_02_02.
-     - To be added
+       - The UIDs ``logic_arc_int__logging__shm`` and
+         ``logic_arc_int__logging__session_ctrl_channel`` were renamed to
+         ``logic_arc_int__logging__shared_memory`` and
+         ``logic_arc_int__logging__datarouter_msg_client`` to match the
+         code (``SharedMemoryWriter`` / ``ISharedMemoryReader`` and
+         ``DatarouterMessageClient``).
+       - ``logic_arc_int__log_cpp__logging`` is defined in the feature architecture
+         of the ``score`` repository and implemented by ``mw::log::Recorder``
+         (``score_baselibs``). The name differs from the UID. Accepted as deviation,
+         the mapping is documented in the detailed design.
+       - The internal interface ``mw::log::detail::Backend`` has no
+         architecture UID. Accepted, as it is not an interface of the component.
+     -
    * - IMPL_03_02
      - Are detailed design and source code consistent and is the respective traceability established ?
      - Check if available static and dynamic design diagrams and the textual descriptions match the code
        (e.g. naming of interfaces, units, functions/operations/messages, data types).
        Check if the folder/file names of the units and its source code matches the intended functionality.
        For example if a unit is named "communication" it should not contain code for "data processing".
-     - no
+     - yes
      - Backend designs were reconciled with their implementations.
        The slog backend and the syslog backend have no design document, their
        implementation is self-explanatory (see IMPL_01_01). The design of the
@@ -191,13 +186,12 @@ See also :need:`doc_concept__wp_inspections` for further information about revie
        The design of the wait-free producer queue (``detail/wait_free_producer_queue/README.md``, ``design/*.puml``)
        is not part of this detailed design and was not compared with the code.
 
-       Following issues found:
+       Following issues were found and fixed:
 
-       - The README example uses ``AlternatingReader``, which does not exist (the
+       - The README example used ``AlternatingReader``, which does not exist (the
          classes are ``AlternatingReadOnlyReader`` and
-         ``AlternatingReaderProxy``). Its diagram links are relative to the
-         repository root and do not resolve in the documentation. Action: correct
-         the names, move the design under ``score/mw/log/design/backend`` and
-         link it by symbolic links like the other units, and
-         compare the diagrams with the code.
-     - To be added
+         ``AlternatingReaderProxy``). The example and the same name in
+         ``datarouter_backend/index`` were corrected.
+       - The README diagram links were relative to the repository root and did
+         not resolve. They are now relative to the README.
+     -

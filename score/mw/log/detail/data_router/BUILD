@@ -68,7 +68,6 @@ cc_library(
         "//score/mw/log/detail/utils/signal_handling",
         "//score/mw/log/legacy_non_verbose_api",
         "@score_baselibs//score/concurrency",
-        "@score_baselibs//score/concurrency:thread_pool",
         "@score_baselibs//score/language/futurecpp",
         "@score_baselibs//score/mw/log:recorder",
         "@score_baselibs//score/mw/log/configuration",
