@@ -115,8 +115,8 @@ External Dependencies
 ---------------------
 
 External dependencies and their relationships are defined in the Bazel BUILD
-targets. The dependency analysis and its findings are part of the checklist item
-IMPL_01_04 in :doc:`chklst_impl_inspection`.
+targets. The direct dependencies of each unit, their ``FFI`` tag and the external
+repositories used transitively are listed in :doc:`dependencies`.
 
 Rationale Behind Decomposition into Units
 -----------------------------------------
