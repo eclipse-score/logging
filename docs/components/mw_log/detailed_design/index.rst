@@ -175,9 +175,9 @@ the diagrams. The interface documentation is part of the headers.
    * - Architecture interface
      - Diagram
    * - :need:`logic_arc_int__log_cpp__logging`
-     - ``mw::log::Recorder`` (``score/mw/log/recorder.h`` in ``score_baselibs``).
+     - ``mw_log_recorders.puml`` in `Static Diagrams for Unit Interactions`_.
+       The interface is realized by ``mw::log::Recorder`` (``score/mw/log/recorder.h`` in ``score_baselibs``).
        The UID is defined in the feature architecture of the ``score`` repository.
-     - ``mw_log_recorders.puml`` in `Static Diagrams for Unit Interactions`_
    * - :need:`logic_arc_int__logging__shared_memory`
      - ``datarouter_class_diagram.puml`` in :doc:`datarouter_backend/index`
 

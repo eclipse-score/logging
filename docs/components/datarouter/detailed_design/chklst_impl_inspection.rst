@@ -203,9 +203,9 @@ The parts of :doc:`logging_architecture` about ``mw::log`` are context and were 
        Following issues found:
 
        - The names in the code do not match the UIDs, the mapping exists only in
-         the detailed design. Examples: :need:`logic_arc_int__logging__shm` is
+         the detailed design. Examples: :need:`logic_arc_int__logging__shared_memory` is
          implemented by ``ISharedMemoryReader`` (``score/mw/log``),
-         :need:`logic_arc_int__logging__session_ctrl_channel` by
+         :need:`logic_arc_int__logging__datarouter_msg_client` by
          ``MessagePassingServer``, ``ISession`` and ``ISessionHandle``.
        - The DLT output (UDP multicast) and the configuration socket
          (``UnixDomainServer``) have no UID in the architecture.

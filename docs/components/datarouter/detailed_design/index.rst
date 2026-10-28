@@ -180,11 +180,11 @@ part of the headers.
    * - Architecture interface
      - Source code interface
      - Realizing units
-   * - :need:`logic_arc_int__logging__shm`
+   * - :need:`logic_arc_int__logging__shared_memory`
      - ``ISharedMemoryReader`` (``score_logging`` ``score/mw/log``), used by
        ``SourceSession``
      - Data router core
-   * - :need:`logic_arc_int__logging__session_ctrl_channel`
+   * - :need:`logic_arc_int__logging__datarouter_msg_client`
      - ``MessagePassingServer`` with ``MessagePassingServer::ISession`` and
        ``ISessionHandle``, messages in ``data_router_messages.h``
      - Message passing server, data router core
