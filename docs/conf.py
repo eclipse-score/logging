@@ -16,6 +16,27 @@
 # For the full list of built-in configuration values, see the documentation:
 # https://www.sphinx-doc.org/en/master/usage/configuration.html
 
+import os
+import subprocess
+import sys
+from pathlib import Path
+
+if os.environ.get("ACTION") in {"incremental", "live_preview", "linkcheck", "check"}:
+    repository_root = Path(__file__).resolve().parents[1]
+    dependency_report_configs = sorted(
+        (repository_root / "scripts/dependency_reports").glob(
+            "dependency_report_*.json"
+        )
+    )
+    subprocess.run(
+        [
+            sys.executable,
+            str(repository_root / "scripts/generate_dependency_report.py"),
+            *map(str, dependency_report_configs),
+        ],
+        cwd=repository_root,
+        check=True,
+    )
 
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information

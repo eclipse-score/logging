@@ -1,0 +1,47 @@
+{
+  "output": "docs/components/datarouter/detailed_design/dependencies.rst",
+  "title": "Datarouter Dependencies",
+  "document_id": "doc__datarouter_dependencies",
+  "safety": "QM",
+  "security": "NO",
+  "realizes": "wp__sw_implementation[version==1]",
+  "component": "//score/datarouter/...",
+  "units": [
+    {
+      "name": "Data router core",
+      "scope": "//score/datarouter:datarouter_lib + //score/datarouter:datarouter_types"
+    },
+    {
+      "name": "Message passing server",
+      "scope": "//score/datarouter:message_passing_server + //score/datarouter/daemon_communication:daemon_session_handle_interface"
+    },
+    {
+      "name": "Log parser and DLT handlers",
+      "scope": "//score/datarouter:logparser + //score/datarouter:logparser_interface + //score/datarouter:logparser_factory_interface + //score/datarouter:log_entry_deserialization + //score/datarouter:libstructdatasource + //score/datarouter/src/dlt/nonverbose_dlt_impl:nonverbose_dlt_handler + //score/datarouter/src/dlt/nonverbose_dlt_stub:nonverbose_dlt_handler_stub"
+    },
+    {
+      "name": "DLT server and channels",
+      "scope": "//score/datarouter:dltserver + //score/datarouter:dltserver_common + //score/datarouter:dlt_log_channel_lib + //score/datarouter:logchannel_utility + //score/datarouter:log_sender + //score/datarouter:udp_stream_output + //score/datarouter:udp_send_interface + //score/datarouter:dltprotocol + //score/datarouter/network:vlan + //score/datarouter/network:vlan_local"
+    },
+    {
+      "name": "Configuration",
+      "scope": "//score/datarouter:socketserver_config_lib + //score/datarouter:socketserver_config_helpers + //score/datarouter:persistentlogconfig + //score/datarouter:datarouter_options + //score/datarouter:datarouter_feature_config + //score/datarouter:libdrconfighdrs + //score/datarouter:configurator_commands + //score/datarouter/src/configuration/dynamic_config/..."
+    },
+    {
+      "name": "Unix domain server and client",
+      "scope": "//score/datarouter:unixdomain_client + //score/datarouter:unixdomain_common + //score/datarouter:unixdomain_server"
+    },
+    {
+      "name": "File transfer",
+      "scope": "//score/datarouter/src/file_transfer/... + //score/datarouter/dlt_filetransfer_trigger_lib/..."
+    },
+    {
+      "name": "Persistent dictionary (stub)",
+      "scope": "//score/datarouter/src/persistency/..."
+    },
+    {
+      "name": "Application and main",
+      "scope": "//score/datarouter:datarouter_app + //score/datarouter:datarouter_socketserver + //score/datarouter/error/..."
+    }
+  ]
+}

@@ -78,10 +78,20 @@ py_test(
     deps = ["@rules_python//python/runfiles"],
 )
 
+py_test(
+    name = "generate_dependency_report_test",
+    srcs = [
+        "scripts/generate_dependency_report.py",
+        "scripts/generate_dependency_report_test.py",
+    ],
+    main = "scripts/generate_dependency_report_test.py",
+)
+
 # Creates all documentation targets:
 # - `:docs` for building documentation at build-time
 docs(
-    data = [
+    data = glob(["scripts/dependency_reports/dependency_report_*.json"]) + [
+        "scripts/generate_dependency_report.py",
         "@score_platform//:needs_json",
         "@score_process_description//:needs_json",
     ],

@@ -204,4 +204,5 @@ part of the headers.
 
    logging_architecture
    shm_apis
+   dependencies
    chklst_impl_inspection
