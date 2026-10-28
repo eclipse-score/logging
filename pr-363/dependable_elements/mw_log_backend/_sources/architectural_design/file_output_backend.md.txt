@@ -68,9 +68,6 @@ by means of `NonBlockingWriter` iterates over all spans of each message.
 A flush first continues to write the pending data of the current message, then
 releases its slot and loads the next message.
 
-```{uml} _assets/slot_drainer_sequence_design.puml
-```
-
 Flush procedure exits whenever all available data is written to the file, the
 writing procedure would block i.e. write operation reports that number of bytes
 written is less then requested, or the number of slots processed in one cycle

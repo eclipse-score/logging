@@ -74,7 +74,7 @@
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
     <link rel="next" title="Requirements" href="../requirements/index.html" />
-    <link rel="prev" title="mw::log Backend Dependencies" href="dependencies.html" />
+    <link rel="prev" title="Safe Datarouter Backend" href="datarouter_backend/index.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="0.1" />
@@ -438,7 +438,6 @@
 <li class="toctree-l1 current active has-children"><a class="reference internal" href="index.html">mw::log Backend Detailed Design</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="file_output_backend.html">FileOutputBackend</a></li>
 <li class="toctree-l2"><a class="reference internal" href="datarouter_backend/index.html">Safe Datarouter Backend</a></li>
-<li class="toctree-l2"><a class="reference internal" href="dependencies.html">mw::log Backend Dependencies</a></li>
 <li class="toctree-l2 current active"><a class="current reference internal" href="#">Implementation Inspection Checklist</a></li>
 </ul>
 </details></li>
@@ -509,7 +508,7 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <div class="need_container docutils container" id="SNCB-fbc23b36">
+  <div class="need_container docutils container" id="SNCB-c1cb5276">
 <div class="pst-scrollable-table-container"><table class="need needs_grid_complex needs_layout_score needs_style_none needs_type_document table" id="doc__mw_log_backend_impl_inspection">
 <tbody>
 <tr class="head row-odd"><td class="head_left" colspan="2"><div class="needs_head_left line-block">
@@ -636,8 +635,15 @@ implementation, including bounded work and message-size limits.</p></td>
 <td><p>Check the automated dependency analysis.
 Also make sure ASIL rated units also only use ASIL rated libraries.</p></td>
 <td><p>no</p></td>
-<td><p>Dependency and FFI metadata are maintained in Bazel. The generated
-<a class="reference internal" href="dependencies.html"><span class="doc">mw::log Backend Dependencies</span></a> page lists the dependencies of each unit.</p>
+<td><p>Dependency and FFI metadata are maintained in Bazel. The direct
+dependencies outside of <code class="docutils literal notranslate"><span class="pre">//score/mw/log</span></code> are listed with:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">bazel</span> <span class="n">query</span> <span class="s1">&#39;let l = kind(&quot;.*_library&quot;, //score/mw/log/...) except attr(testonly, 1, //score/mw/log/...) in labels(deps, $l) except //score/mw/log/...&#39;</span> <span class="o">--</span><span class="n">keep_going</span> <span class="o">--</span><span class="n">output</span><span class="o">=</span><span class="n">label_kind</span>
+</pre></div>
+</div>
+<p>Those without the <code class="docutils literal notranslate"><span class="pre">FFI</span></code> tag are listed with:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">bazel</span> <span class="n">query</span> <span class="s1">&#39;let l = kind(&quot;.*_library&quot;, //score/mw/log/...) except attr(testonly, 1, //score/mw/log/...) in (labels(deps, $l) except //score/mw/log/...) except attr(tags, FFI, labels(deps, $l))&#39;</span> <span class="o">--</span><span class="n">keep_going</span> <span class="o">--</span><span class="n">output</span><span class="o">=</span><span class="n">label</span>
+</pre></div>
+</div>
 <p>Dependency/configuration findings remain:</p>
 <ul class="simple">
 <li><p>Remove unused <code class="docutils literal notranslate"><span class="pre">//score/concurrency:thread_pool</span></code> dependency, if confirmed
@@ -692,11 +698,12 @@ naming is an accepted coding-guideline deviation.</p></li>
 with public interfaces in source code (e.g. API headers, traits, public types/functions).</p></td>
 <td><p>no</p></td>
 <td><p>The mapping of the architecture interfaces to the source code interfaces is
-given in the detailed design.</p>
+shown in the diagrams listed in the detailed design.</p>
 <p>Following issues found:</p>
 <ul>
 <li><p>The names of the source code interfaces differ from the architecture
-interface UIDs, the mapping is only given in the detailed design.
+interface UIDs, the mapping is only given in the diagrams of the
+detailed design.
 Examples:</p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">logic_arc_int__log_cpp__logging</span></code> is implemented by
@@ -764,12 +771,12 @@ compare the diagrams with the code.</p></li>
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="dependencies.html"
+       href="datarouter_backend/index.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">mw::log Backend Dependencies</p>
+        <p class="prev-next-title">Safe Datarouter Backend</p>
       </div>
     </a>
     <a class="right-next"

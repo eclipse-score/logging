@@ -34,6 +34,5 @@ Software Architectural Level
    architectural_design/mw_log_backend_architectural_design/shared_memory_reader_read
    architectural_design/mw_log_backend_architectural_design/shared_memory_writer_allocandwrite
    architectural_design/mw_log_backend_architectural_design/verbose_logging_sequence
-   architectural_design/mw_log_backend_architectural_design/slot_drainer_sequence_design
    architectural_design/mw_log_backend_architectural_design/syslog_backend_sequence
    dependability_analysis/fmea

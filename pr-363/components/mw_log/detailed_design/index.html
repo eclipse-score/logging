@@ -438,7 +438,6 @@
 <li class="toctree-l1 current active has-children"><a class="current reference internal" href="#">mw::log Backend Detailed Design</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2"><a class="reference internal" href="file_output_backend.html">FileOutputBackend</a></li>
 <li class="toctree-l2"><a class="reference internal" href="datarouter_backend/index.html">Safe Datarouter Backend</a></li>
-<li class="toctree-l2"><a class="reference internal" href="dependencies.html">mw::log Backend Dependencies</a></li>
 <li class="toctree-l2"><a class="reference internal" href="chklst_impl_inspection.html">Implementation Inspection Checklist</a></li>
 </ul>
 </details></li>
@@ -508,7 +507,7 @@
                   
   <section id="mw-log-backend-detailed-design">
 <h1>mw::log Backend Detailed Design<a class="headerlink" href="#mw-log-backend-detailed-design" title="Link to this heading">#</a></h1>
-<div class="need_container docutils container" id="SNCB-b617c7e2">
+<div class="need_container docutils container" id="SNCB-2c728dca">
 <div class="pst-scrollable-table-container"><table class="need needs_grid_complex needs_layout_score needs_style_none needs_type_document table" id="doc__mw_log_backend_detailed_design">
 <tbody>
 <tr class="head row-odd"><td class="head_left" colspan="2"><div class="needs_head_left line-block">
@@ -591,7 +590,7 @@ abstractions</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">mw_log_file_backend.puml</span></code> in <a class="reference internal" href="file_output_backend.html"><span class="doc">FileOutputBackend</span></a></p></td>
 </tr>
 <tr class="row-odd"><td><p>A logging call does not block (<a class="reference internal" href="../requirements/requirements.html#comp_req__log__avoid_locks" title="comp_req__log__avoid_locks"><em class="xref need">Avoid Locks (comp_req__log__avoid_locks)</em></a>)</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">slot_drainer_sequence_design.puml</span></code> in <a class="reference internal" href="file_output_backend.html"><span class="doc">FileOutputBackend</span></a></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">mw_log_file_backend.puml</span></code> in <a class="reference internal" href="file_output_backend.html"><span class="doc">FileOutputBackend</span></a></p></td>
 </tr>
 <tr class="row-even"><td><p>Unit tests without real OS resources</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">mw_log_file_backend.puml</span></code> in <a class="reference internal" href="file_output_backend.html"><span class="doc">FileOutputBackend</span></a> and
@@ -639,7 +638,7 @@ initialization phase (<a class="reference internal" href="../requirements/requir
 </tr>
 <tr class="row-odd"><td><p>Slot handling</p></td>
 <td><p>Bounded loops (<a class="reference internal" href="../requirements/requirements.html#comp_req__log__no_endless_loops" title="comp_req__log__no_endless_loops"><em class="xref need">No Endless Loops (comp_req__log__no_endless_loops)</em></a>)</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">slot_drainer_sequence_design.puml</span></code> in <a class="reference internal" href="file_output_backend.html"><span class="doc">FileOutputBackend</span></a></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">mw_log_file_backend.puml</span></code> in <a class="reference internal" href="file_output_backend.html"><span class="doc">FileOutputBackend</span></a></p></td>
 </tr>
 <tr class="row-even"><td><p>File output backend</p></td>
 <td><p>Not for production use, it uses a mutex in <code class="docutils literal notranslate"><span class="pre">SlotDrainer</span></code></p></td>
@@ -674,10 +673,8 @@ untrusted</p></td>
 targets.
 FFI classifications are maintained using Bazel target metadata,
 including the <code class="docutils literal notranslate"><span class="pre">FFI</span></code> tag.
-The direct dependencies of each unit, their <code class="docutils literal notranslate"><span class="pre">FFI</span></code> tag and the external
-repositories used transitively are listed in <a class="reference internal" href="dependencies.html"><span class="doc">mw::log Backend Dependencies</span></a>. The page is
-generated from the Bazel dependency graph by
-<code class="docutils literal notranslate"><span class="pre">scripts/generate_dependency_report.py</span></code>.</p>
+The dependency tree used for implementation inspection and
+safety analysis is generated from the Bazel dependency graph.</p>
 </section>
 <section id="rationale-behind-decomposition-into-units">
 <h3>Rationale Behind Decomposition into Units<a class="headerlink" href="#rationale-behind-decomposition-into-units" title="Link to this heading">#</a></h3>
@@ -709,108 +706,37 @@ under <a class="reference internal" href="#units-within-the-component">Units wit
 belongs to this component through its location. Attributes, behavior and the
 interfaces of a unit are documented in the source code (public headers). Paths are
 relative to <code class="docutils literal notranslate"><span class="pre">score/mw/log</span></code> of this repository unless noted otherwise.</p>
-<div class="pst-scrollable-table-container"><table class="table">
-<colgroup>
-<col style="width: 20.0%" />
-<col style="width: 45.0%" />
-<col style="width: 35.0%" />
-</colgroup>
-<thead>
-<tr class="row-odd"><th class="head"><p>Unit</p></th>
-<th class="head"><p>Classes and source code</p></th>
-<th class="head"><p>Design</p></th>
-</tr>
-</thead>
-<tbody>
-<tr class="row-even"><td><p>File output backend</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">FileRecorder</span></code>, <code class="docutils literal notranslate"><span class="pre">FileRecorderFactory</span></code>, <code class="docutils literal notranslate"><span class="pre">DltMessageBuilder</span></code> in
-<code class="docutils literal notranslate"><span class="pre">detail/file_recorder</span></code>;
-<code class="docutils literal notranslate"><span class="pre">FileOutputBackend</span></code>, <code class="docutils literal notranslate"><span class="pre">SlotDrainer</span></code>, <code class="docutils literal notranslate"><span class="pre">NonBlockingWriter</span></code>,
-<code class="docutils literal notranslate"><span class="pre">IMessageBuilder</span></code> in <code class="docutils literal notranslate"><span class="pre">score_baselibs</span></code> <code class="docutils literal notranslate"><span class="pre">score/mw/log/detail/text_recorder</span></code></p></td>
-<td><p><a class="reference internal" href="file_output_backend.html"><span class="doc">FileOutputBackend</span></a></p></td>
-</tr>
-<tr class="row-odd"><td><p>Syslog backend</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">SyslogBackend</span></code>, <code class="docutils literal notranslate"><span class="pre">SyslogRecorderFactory</span></code> in <code class="docutils literal notranslate"><span class="pre">detail/syslog</span></code></p></td>
-<td><p>Source code (simple unit, no separate design document), sequence
-diagram in <a class="reference internal" href="#dynamic-diagrams-for-unit-interactions">Dynamic Diagrams for Unit Interactions</a></p></td>
-</tr>
-<tr class="row-even"><td><p>Datarouter backend</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">DataRouterBackend</span></code>, <code class="docutils literal notranslate"><span class="pre">DataRouterRecorder</span></code>, <code class="docutils literal notranslate"><span class="pre">DatarouterMessageClient</span></code>,
-<code class="docutils literal notranslate"><span class="pre">DatarouterMessageClientImpl</span></code> and factories in <code class="docutils literal notranslate"><span class="pre">detail/data_router</span></code>;
-<code class="docutils literal notranslate"><span class="pre">SharedMemoryWriter</span></code>, <code class="docutils literal notranslate"><span class="pre">SharedMemoryReader</span></code>, <code class="docutils literal notranslate"><span class="pre">SharedData</span></code>,
-<code class="docutils literal notranslate"><span class="pre">BufferEntryHeader</span></code> in <code class="docutils literal notranslate"><span class="pre">detail/data_router/shared_memory</span></code></p></td>
-<td><p><a class="reference internal" href="datarouter_backend/index.html"><span class="doc">Safe Datarouter Backend</span></a></p></td>
-</tr>
-<tr class="row-odd"><td><p>Slog backend (QNX)</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">SlogBackend</span></code>, <code class="docutils literal notranslate"><span class="pre">SlogRecorderFactory</span></code> in <code class="docutils literal notranslate"><span class="pre">detail/slog</span></code></p></td>
-<td><p>Source code (simple unit, no separate design document)</p></td>
-</tr>
-<tr class="row-even"><td><p>Wait-free producer queue</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">detail/wait_free_producer_queue</span></code></p></td>
-<td><p>README in the unit directory</p></td>
-</tr>
-<tr class="row-odd"><td><p>Backend registration</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">backend/*_registrant.cpp</span></code></p></td>
-<td><p>Design in <code class="docutils literal notranslate"><span class="pre">score_baselibs</span></code> (<code class="docutils literal notranslate"><span class="pre">score/mw/log/design</span></code>,
-<code class="docutils literal notranslate"><span class="pre">backend_registration_sequence_diagram.puml</span></code> and
-<code class="docutils literal notranslate"><span class="pre">backend_registration_component_diagram.puml</span></code>), no design document
-in this repository</p></td>
-</tr>
-</tbody>
-</table>
-</div>
 <section id="interfaces-of-the-component">
 <h3>Interfaces of the Component<a class="headerlink" href="#interfaces-of-the-component" title="Link to this heading">#</a></h3>
-<p>The interfaces of the component architecture are realized by the following
-source code interfaces. The interface documentation is part of the headers.</p>
+<p>The architecture interfaces are realized by the source code interfaces shown in
+the diagrams. The interface documentation is part of the headers.</p>
 <div class="pst-scrollable-table-container"><table class="table">
 <colgroup>
-<col style="width: 30.0%" />
-<col style="width: 35.0%" />
-<col style="width: 35.0%" />
+<col style="width: 40.0%" />
+<col style="width: 60.0%" />
 </colgroup>
 <thead>
 <tr class="row-odd"><th class="head"><p>Architecture interface</p></th>
-<th class="head"><p>Source code interface</p></th>
-<th class="head"><p>Realizing units</p></th>
+<th class="head"><p>Diagram</p></th>
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p><a class="external_link reference external" href="https://eclipse-score.github.io/score/main/features/log_and_trace/logging/architecture/index.html#logic_arc_int__log_cpp__logging">logic_arc_int__log_cpp__logging</a>
-(operation <code class="docutils literal notranslate"><span class="pre">logic_arc_int_op__logging__log</span></code>)</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">mw::log::Recorder</span></code> (<code class="docutils literal notranslate"><span class="pre">score_baselibs</span></code> <code class="docutils literal notranslate"><span class="pre">score/mw/log/recorder.h</span></code>)</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">DataRouterRecorder</span></code>, <code class="docutils literal notranslate"><span class="pre">FileRecorder</span></code>; <code class="docutils literal notranslate"><span class="pre">TextRecorder</span></code> with
-<code class="docutils literal notranslate"><span class="pre">SyslogBackend</span></code> or <code class="docutils literal notranslate"><span class="pre">SlogBackend</span></code></p></td>
+<tr class="row-even"><td><p><a class="external_link reference external" href="https://eclipse-score.github.io/score/main/features/log_and_trace/logging/architecture/index.html#logic_arc_int__log_cpp__logging">logic_arc_int__log_cpp__logging</a></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">mw_log_recorders.puml</span></code> in <a class="reference internal" href="#static-diagrams-for-unit-interactions">Static Diagrams for Unit Interactions</a></p></td>
 </tr>
 <tr class="row-odd"><td><p><a class="reference internal" href="../architecture/component_architecture.html#logic_arc_int__logging__shm" title="logic_arc_int__logging__shm"><em class="xref need">Log Record Shared-Memory (logic_arc_int__logging__shm)</em></a></p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">SharedMemoryWriter</span></code> (writer side), <code class="docutils literal notranslate"><span class="pre">ISharedMemoryReader</span></code> (reader side),
-data layout <code class="docutils literal notranslate"><span class="pre">SharedData</span></code> and <code class="docutils literal notranslate"><span class="pre">BufferEntryHeader</span></code></p></td>
-<td><p>Datarouter backend</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">datarouter_class_diagram.puml</span></code> in <a class="reference internal" href="datarouter_backend/index.html"><span class="doc">Safe Datarouter Backend</span></a></p></td>
 </tr>
 <tr class="row-even"><td><p><a class="reference internal" href="../architecture/component_architecture.html#logic_arc_int__logging__session_ctrl_channel" title="logic_arc_int__logging__session_ctrl_channel"><em class="xref need">Control Channel (logic_arc_int__logging__session_ctrl_channel)</em></a></p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">DatarouterMessageClient</span></code> and the messages in <code class="docutils literal notranslate"><span class="pre">data_router_messages.h</span></code></p></td>
-<td><p>Datarouter backend</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">datarouter_class_diagram.puml</span></code> in <a class="reference internal" href="datarouter_backend/index.html"><span class="doc">Safe Datarouter Backend</span></a></p></td>
 </tr>
 </tbody>
 </table>
 </div>
-<p>The internal interface <code class="docutils literal notranslate"><span class="pre">mw::log::detail::Backend</span></code> (<code class="docutils literal notranslate"><span class="pre">ReserveSlot()</span></code>,
-<code class="docutils literal notranslate"><span class="pre">FlushSlot()</span></code>, <code class="docutils literal notranslate"><span class="pre">GetLogRecord()</span></code>) is implemented by <code class="docutils literal notranslate"><span class="pre">FileOutputBackend</span></code>,
-<code class="docutils literal notranslate"><span class="pre">SyslogBackend</span></code>, <code class="docutils literal notranslate"><span class="pre">SlogBackend</span></code> and <code class="docutils literal notranslate"><span class="pre">DataRouterBackend</span></code>.</p>
-<p>Boundaries, use and extension of an interface are documented in its header:</p>
-<ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">detail/data_router/shared_memory/i_shared_memory_reader.h</span></code> and
-<code class="docutils literal notranslate"><span class="pre">detail/data_router/shared_memory/shared_memory_writer.h</span></code></p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">detail/data_router/data_router_message_client.h</span></code> and
-<code class="docutils literal notranslate"><span class="pre">detail/data_router/data_router_messages.h</span></code></p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">score_baselibs</span></code>: <code class="docutils literal notranslate"><span class="pre">score/mw/log/recorder.h</span></code>,
-<code class="docutils literal notranslate"><span class="pre">score/mw/log/detail/backend.h</span></code> and <code class="docutils literal notranslate"><span class="pre">score/mw/log/backend_table.h</span></code></p></li>
-</ul>
 <div class="toctree-wrapper compound">
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="file_output_backend.html">FileOutputBackend</a></li>
 <li class="toctree-l1"><a class="reference internal" href="datarouter_backend/index.html">Safe Datarouter Backend</a></li>
-<li class="toctree-l1"><a class="reference internal" href="dependencies.html">mw::log Backend Dependencies</a></li>
 </ul>
 </div>
 </section>
