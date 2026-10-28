@@ -53,3 +53,31 @@ score_coverage_reporter(
     llvm_cxxfilt = "@llvm_toolchain_coverage_llvm//:bin/llvm-cxxfilt",
     llvm_profdata = "@llvm_toolchain_coverage//:llvm-profdata",
 )
+
+# QNX on-target coverage (C++ only; the gcov backend cannot measure Rust).
+# Follows the run's platform so the QNX-only slog backend resolves.
+score_coverage_scope(
+    name = "coverage_scope_qnx",
+    testonly = True,
+    platform = "@score_bazel_platforms//:x86_64-qnx-sdp_8.0.0-posix",
+    # Manual: a wildcard build on a Linux host has no QNX toolchains registered.
+    tags = ["manual"],
+    visibility = ["//visibility:private"],
+    deps = [
+        "//score/datarouter",
+        "//score/mw/log",
+        "//score/mw/log/backend:custom",
+        "//score/mw/log/backend:slog",
+    ],
+)
+
+# QCC is GCC-based, so the counters are gcov's. Selected by --config=qnx_cov.
+score_coverage_reporter(
+    name = "gcov_reporter_wrapper",
+    testonly = True,
+    backend = "gcov",
+    coverage_scope = ":coverage_scope_qnx",
+    gcov = "@score_qcc_x86_64_toolchain_pkg//:gcov",
+    # Manual: needs the QNX SDP package, which requires QNX credentials.
+    tags = ["manual"],
+)
