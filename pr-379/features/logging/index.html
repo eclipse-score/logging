@@ -512,7 +512,7 @@ and how <code class="docutils literal notranslate"><span class="pre">datarouter<
 <p>Adding or integrating a backend (file, slog, remote/DLT, or a custom recorder) means implementing the
 Recorder interface and registering it in the static <code class="docutils literal notranslate"><span class="pre">backend_table</span></code>; the existing C ABI seam is not used
 for static composition, and runtime plugin loading is experimental and not supported for production use.
-The <a class="reference internal" href="architecture/index.html"><span class="doc">Logging Architecture</span></a> and <a class="reference internal" href="../../components/mw_log/detailed_design/index.html"><span class="doc">Detailed Design</span></a> sections document this
+The <a class="reference internal" href="architecture/index.html"><span class="doc">Logging Architecture</span></a> and <a class="reference internal" href="../../components/mw_log/detailed_design/index.html"><span class="doc">mw::log Backend Detailed Design</span></a> sections document this
 contract in detail, while the <a class="reference internal" href="../../components/mw_log/requirements/index.html"><span class="doc">Requirements</span></a> and the safety analyses below
 capture the safety and security constraints that any backend implementation must respect.</p>
 <div class="toctree-wrapper compound">

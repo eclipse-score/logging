@@ -434,7 +434,7 @@
      aria-label="Section Navigation">
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
   <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../requirements/index.html">Datarouter Component Requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../requirements/index.html">Requirements</a></li>
 <li class="toctree-l1 current active has-children"><a class="reference internal" href="index.html">Detailed Design</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="logging_architecture.html">Logging: architecture and SW design</a></li>
 <li class="toctree-l2"><a class="reference internal" href="shm_apis.html">Remote Logging implementation details</a></li>
@@ -504,7 +504,7 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <div class="need_container docutils container" id="SNCB-06ae31d3">
+  <div class="need_container docutils container" id="SNCB-bf761bb4">
 <div class="pst-scrollable-table-container"><table class="need needs_grid_complex needs_layout_score needs_style_none needs_type_document table" id="doc__datarouter_impl_inspection">
 <tbody>
 <tr class="head row-odd"><td class="head_left" colspan="2"><div class="needs_head_left line-block">
@@ -573,7 +573,7 @@ See also <a class="external_link reference external" href="https://eclipse-score
 <p>Scope: this checklist covers the Datarouter daemon (<a class="reference internal" href="../index.html#comp__datarouter" title="comp__datarouter"><em class="xref need">Datarouter (comp__datarouter)</em></a>, <code class="docutils literal notranslate"><span class="pre">score/datarouter</span></code>).
 The parts of <a class="reference internal" href="logging_architecture.html"><span class="doc">Logging: architecture and SW design</span></a> about <code class="docutils literal notranslate"><span class="pre">mw::log</span></code> are context and were not compared with the code.</p>
 <div class="pst-scrollable-table-container"><table class="table" id="id9">
-<caption><span class="caption-number">Table 9 </span><span class="caption-text">Implementation Checklist</span><a class="headerlink" href="#id9" title="Link to this table">#</a></caption>
+<caption><span class="caption-number">Table 10 </span><span class="caption-text">Implementation Checklist</span><a class="headerlink" href="#id9" title="Link to this table">#</a></caption>
 <colgroup>
 <col style="width: 7.9%" />
 <col style="width: 19.8%" />
@@ -615,7 +615,7 @@ to existing tests.</p>
 <p>Following issues need to be addressed:</p>
 <ul class="simple">
 <li><p>Nothing tests that messages are dropped when a source exceeds its quota
-(<a class="reference internal" href="../requirements/index.html#comp_req__data_router__dlt_quota_bw_reduction" title="comp_req__data_router__dlt_quota_bw_reduction"><em class="xref need">DLT Quota Bandwidth Reduction (comp_req__data_router__dlt_quota_bw_reduction)</em></a>).
+(<a class="reference internal" href="../requirements/requirements.html#comp_req__data_router__dlt_quota_bw_reduction" title="comp_req__data_router__dlt_quota_bw_reduction"><em class="xref need">DLT Quota Bandwidth Reduction (comp_req__data_router__dlt_quota_bw_reduction)</em></a>).
 <code class="docutils literal notranslate"><span class="pre">DataRouter::SourceSession</span></code> has no unit test.</p></li>
 <li><p>Close remaining requirement-to-test traceability gaps: <a class="reference external" href="https://github.com/eclipse-score/logging/issues/319">#319</a></p></li>
 </ul>

@@ -74,7 +74,7 @@
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
     <link rel="next" title="Logging: architecture and SW design" href="logging_architecture.html" />
-    <link rel="prev" title="Datarouter Component Requirements" href="../requirements/index.html" />
+    <link rel="prev" title="Requirement Inspection Checklist" href="../requirements/chklst_req_inspection.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="0.1" />
@@ -434,7 +434,7 @@
      aria-label="Section Navigation">
   <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
   <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="../requirements/index.html">Datarouter Component Requirements</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../requirements/index.html">Requirements</a></li>
 <li class="toctree-l1 current active has-children"><a class="current reference internal" href="#">Detailed Design</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2"><a class="reference internal" href="logging_architecture.html">Logging: architecture and SW design</a></li>
 <li class="toctree-l2"><a class="reference internal" href="shm_apis.html">Remote Logging implementation details</a></li>
@@ -503,7 +503,7 @@
                   
   <section id="detailed-design">
 <h1>Detailed Design<a class="headerlink" href="#detailed-design" title="Link to this heading">#</a></h1>
-<div class="need_container docutils container" id="SNCB-1e334900">
+<div class="need_container docutils container" id="SNCB-b080f17e">
 <div class="pst-scrollable-table-container"><table class="need needs_grid_complex needs_layout_score needs_style_none needs_type_document table" id="doc__datarouter_detailed_design">
 <tbody>
 <tr class="head row-odd"><td class="head_left" colspan="2"><div class="needs_head_left line-block">
@@ -591,7 +591,7 @@ reads the shared memory of the clients</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">dlt_message_filtering_backend.puml</span></code> in <a class="reference internal" href="logging_architecture.html"><span class="doc">Logging: architecture and SW design</span></a></p></td>
 </tr>
 <tr class="row-odd"><td><p>Bandwidth quota per source
-(<a class="reference internal" href="../requirements/index.html#comp_req__data_router__dlt_quota_bw_reduction" title="comp_req__data_router__dlt_quota_bw_reduction"><em class="xref need">DLT Quota Bandwidth Reduction (comp_req__data_router__dlt_quota_bw_reduction)</em></a>)</p></td>
+(<a class="reference internal" href="../requirements/requirements.html#comp_req__data_router__dlt_quota_bw_reduction" title="comp_req__data_router__dlt_quota_bw_reduction"><em class="xref need">DLT Quota Bandwidth Reduction (comp_req__data_router__dlt_quota_bw_reduction)</em></a>)</p></td>
 <td><p>No diagram shows the quota, see IMPL_01_03 in
 <a class="reference internal" href="chklst_impl_inspection.html"><span class="doc">Implementation Inspection Checklist</span></a></p></td>
 </tr>
@@ -601,7 +601,7 @@ reads the shared memory of the clients</p></td>
 <a class="reference internal" href="#static-diagrams-for-unit-interactions">Static Diagrams for Unit Interactions</a></p></td>
 </tr>
 <tr class="row-odd"><td><p>Deployment-specific configuration without a rebuild
-(<a class="reference internal" href="../requirements/index.html#comp_req__data_router__dlt_multiple_channels" title="comp_req__data_router__dlt_multiple_channels"><em class="xref need">DLT Multiple Channel Support (comp_req__data_router__dlt_multiple_channels)</em></a>)</p></td>
+(<a class="reference internal" href="../requirements/requirements.html#comp_req__data_router__dlt_multiple_channels" title="comp_req__data_router__dlt_multiple_channels"><em class="xref need">DLT Multiple Channel Support (comp_req__data_router__dlt_multiple_channels)</em></a>)</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">dlt_message_filtering_backend.puml</span></code> in <a class="reference internal" href="logging_architecture.html"><span class="doc">Logging: architecture and SW design</span></a> and
 <code class="docutils literal notranslate"><span class="pre">seq_kvs_threads_sequence_diagram.puml</span></code> in
 <a class="reference internal" href="#dynamic-diagrams-for-unit-interactions">Dynamic Diagrams for Unit Interactions</a></p></td>
@@ -616,7 +616,7 @@ reads the shared memory of the clients</p></td>
 </section>
 <section id="design-constraints">
 <h3>Design Constraints<a class="headerlink" href="#design-constraints" title="Link to this heading">#</a></h3>
-<p>All requirements of the component apply, see <a class="reference internal" href="../requirements/index.html#doc__data_router_requirements" title="doc__data_router_requirements"><em class="xref need">Datarouter Component Requir... (doc__data_router_requirements)</em></a>.
+<p>All requirements of the component apply, see <a class="reference internal" href="../requirements/requirements.html#doc__data_router_requirements" title="doc__data_router_requirements"><em class="xref need">Datarouter Component Requir... (doc__data_router_requirements)</em></a>.
 The diagrams show the constraints per building block.</p>
 <div class="pst-scrollable-table-container"><table class="table">
 <colgroup>
@@ -632,7 +632,7 @@ The diagrams show the constraints per building block.</p>
 </thead>
 <tbody>
 <tr class="row-even"><td><p>DLT output</p></td>
-<td><p>UDP multicast only (<a class="reference internal" href="../requirements/index.html#comp_req__data_router__dlt_server" title="comp_req__data_router__dlt_server"><em class="xref need">Datarouter DLT Server (comp_req__data_router__dlt_server)</em></a>)</p></td>
+<td><p>UDP multicast only (<a class="reference internal" href="../requirements/requirements.html#comp_req__data_router__dlt_server" title="comp_req__data_router__dlt_server"><em class="xref need">Datarouter DLT Server (comp_req__data_router__dlt_server)</em></a>)</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">context-highlevel.puml</span></code> in <a class="reference internal" href="logging_architecture.html"><span class="doc">Logging: architecture and SW design</span></a></p></td>
 </tr>
 <tr class="row-odd"><td><p>Configuration</p></td>
@@ -732,7 +732,7 @@ part of the headers.</p>
 <code class="docutils literal notranslate"><span class="pre">ISessionHandle</span></code>, messages in <code class="docutils literal notranslate"><span class="pre">data_router_messages.h</span></code></p></td>
 <td><p>Message passing server, data router core</p></td>
 </tr>
-<tr class="row-even"><td><p>DLT over UDP multicast (<a class="reference internal" href="../requirements/index.html#comp_req__data_router__dlt_server" title="comp_req__data_router__dlt_server"><em class="xref need">Datarouter DLT Server (comp_req__data_router__dlt_server)</em></a>)</p></td>
+<tr class="row-even"><td><p>DLT over UDP multicast (<a class="reference internal" href="../requirements/requirements.html#comp_req__data_router__dlt_server" title="comp_req__data_router__dlt_server"><em class="xref need">Datarouter DLT Server (comp_req__data_router__dlt_server)</em></a>)</p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">UdpStreamOutput</span></code>, <code class="docutils literal notranslate"><span class="pre">DltLogChannel</span></code></p></td>
 <td><p>DLT server and channels</p></td>
 </tr>
@@ -769,12 +769,12 @@ part of the headers.</p>
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="../requirements/index.html"
+       href="../requirements/chklst_req_inspection.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Datarouter Component Requirements</p>
+        <p class="prev-next-title">Requirement Inspection Checklist</p>
       </div>
     </a>
     <a class="right-next"

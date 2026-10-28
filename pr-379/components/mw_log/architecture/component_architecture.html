@@ -73,7 +73,7 @@
     <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
-    <link rel="next" title="Detailed Design" href="../detailed_design/index.html" />
+    <link rel="next" title="mw::log Backend Detailed Design" href="../detailed_design/index.html" />
     <link rel="prev" title="Component Architecture" href="index.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
@@ -438,7 +438,7 @@
 <li class="toctree-l2 current active"><a class="current reference internal" href="#">Component Architecture</a></li>
 </ul>
 </details></li>
-<li class="toctree-l1"><a class="reference internal" href="../detailed_design/index.html">Detailed Design</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../detailed_design/index.html">mw::log Backend Detailed Design</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../requirements/index.html">Requirements</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../safety_analysis/dfa.html">DFA (Dependent Failure Analysis)</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../safety_analysis/fmea.html">FMEA (Failure Modes and Effects Analysis)</a></li>
@@ -508,7 +508,7 @@
                   
   <section id="component-architecture">
 <span id="id1"></span><h1>Component Architecture<a class="headerlink" href="#component-architecture" title="Link to this heading">#</a></h1>
-<div class="need_container docutils container" id="SNCB-1926f29d">
+<div class="need_container docutils container" id="SNCB-8e9d193b">
 <div class="pst-scrollable-table-container"><table class="need needs_grid_complex needs_layout_score needs_style_none needs_type_document table" id="doc__mw_log_backend_architecture">
 <tbody>
 <tr class="head row-odd"><td class="head_left" colspan="2"><div class="needs_head_left line-block">
@@ -574,7 +574,7 @@
 <p>The components are designed to cover the expectations from the feature architecture
 (i.e. if already exists a definition it should be taken over and enriched).</p>
 <p>A component can optional also consist of lower level components to further structure the architecture. The component and its static views can also optionally use interfaces provided by other components.</p>
-<div class="need_container docutils container" id="SNCB-845ca20d">
+<div class="need_container docutils container" id="SNCB-55eb3115">
 <div class="pst-scrollable-table-container"><table class="need needs_grid_complex needs_layout_score needs_style_none needs_type_comp table" id="comp__mw_log_backend">
 <tbody>
 <tr class="head row-odd"><td class="head_left" colspan="2"><div class="needs_head_left line-block">
@@ -621,7 +621,7 @@
 </table>
 </div>
 </div>
-<div class="need_container docutils container" id="SNCB-aaba4297">
+<div class="need_container docutils container" id="SNCB-c866d21c">
 <div class="pst-scrollable-table-container"><table class="need needs_grid_complex needs_layout_score needs_style_none needs_type_comp_arc_sta table" id="comp_arc_sta__log__sv">
 <tbody>
 <tr class="head row-odd"><td class="head_left" colspan="2"><div class="needs_head_left line-block">
@@ -674,7 +674,7 @@
 </section>
 <section id="interfaces">
 <h2>Interfaces<a class="headerlink" href="#interfaces" title="Link to this heading">#</a></h2>
-<div class="need_container docutils container" id="SNCB-6ed4feb9">
+<div class="need_container docutils container" id="SNCB-57c731ad">
 <div class="pst-scrollable-table-container"><table class="need needs_grid_complex needs_layout_score needs_style_none needs_type_logic_arc_int table" id="logic_arc_int__logging__shm">
 <tbody>
 <tr class="head row-odd"><td class="head_left" colspan="2"><div class="needs_head_left line-block">
@@ -721,7 +721,7 @@ see <a class="reference internal" href="#logic_arc_int__logging__session_ctrl_ch
 </table>
 </div>
 </div>
-<div class="need_container docutils container" id="SNCB-47469198">
+<div class="need_container docutils container" id="SNCB-7df641d3">
 <div class="pst-scrollable-table-container"><table class="need needs_grid_complex needs_layout_score needs_style_none needs_type_logic_arc_int table" id="logic_arc_int__logging__session_ctrl_channel">
 <tbody>
 <tr class="head row-odd"><td class="head_left" colspan="2"><div class="needs_head_left line-block">
@@ -799,7 +799,7 @@ send buffer-acquire requests back to the recorder. Carries no log record payload
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Detailed Design</p>
+        <p class="prev-next-title">mw::log Backend Detailed Design</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
