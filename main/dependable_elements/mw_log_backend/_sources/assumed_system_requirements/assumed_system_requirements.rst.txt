@@ -1,5 +1,5 @@
-Requirements
-============
+Assumed System Requirements
+===========================
 .. requirement:definition:: MwLogAssumedSystemRequirements.ASR_LoggingSupport
 
    The platform shall support Diagnostic Log and Trace (DLT) / Logcat format as well as logging of early startup events.

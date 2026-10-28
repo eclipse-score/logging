@@ -1,5 +1,5 @@
-Requirements
-============
+Component Requirements
+======================
 .. requirement:definition:: MwLog.AvoidSignalProcessing
 
    The component shall not register any signal handler.
