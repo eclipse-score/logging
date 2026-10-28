@@ -1,0 +1,15 @@
+{
+  "output": "docs/components/mw_log/detailed_design/frontend_dependencies.rst",
+  "title": "mw::log Frontend Dependencies",
+  "document_id": "doc__mw_log_frontend_dependencies",
+  "safety": "ASIL_B",
+  "security": "YES",
+  "component": "@score_baselibs//score/mw/log/...",
+  "units": [
+    {"name": "Logging API", "scope": "@score_baselibs//score/mw/log:all"},
+    {"name": "Recorder framework", "scope": "@score_baselibs//score/mw/log/detail:all"},
+    {"name": "Text and console recorder", "scope": "@score_baselibs//score/mw/log/detail/text_recorder/..."},
+    {"name": "Configuration", "scope": "@score_baselibs//score/mw/log/configuration/..."},
+    {"name": "Utilities", "scope": "@score_baselibs//score/mw/log/detail/utils/... + @score_baselibs//score/mw/log/detail/wait_free_stack/..."}
+  ]
+}
