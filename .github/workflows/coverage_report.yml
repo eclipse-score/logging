@@ -20,7 +20,7 @@ jobs:
     name: coverage approval gate
     if: github.event_name == 'pull_request_target' || github.event_name == 'pull_request'
     environment: workflow-approval
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     permissions:
       contents: read
       pull-requests: read
@@ -31,12 +31,12 @@ jobs:
   coverage-report:
     if: ${{ !cancelled() }}
     needs: approval
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     permissions:
       contents: read
     steps:
       - name: Checkout Repository
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       - name: Setup Bazel
         uses: bazel-contrib/setup-bazel@0.15.0
