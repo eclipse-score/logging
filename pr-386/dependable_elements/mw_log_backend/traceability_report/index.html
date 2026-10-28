@@ -1,0 +1,473 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>L.O.B.S.T.E.R. Traceability Report &mdash; Dependable Element Mw Log Backend Doc 1.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=4ae1632d" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-data-viewer/jsonview.bundle.css?v=f6ef2277" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-needs/libs/html/datatables.min.css?v=4b4fd840" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-needs/common_css/need_toggle.css?v=5c6620df" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-needs/common_css/need_links.css?v=2150a916" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-needs/common_css/needstable.css?v=5e1b6797" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-needs/common_css/need_style.css?v=92936fa5" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-needs/common_css/need_core.css?v=f5b60a78" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-needs/modern.css?v=803738c0" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=8d563738"></script>
+      <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../_static/design-tabs.js?v=f930bc37"></script>
+      <script src="../_static/sphinx-data-viewer/jsonview.bundle.js?v=18cd53c5"></script>
+      <script src="../_static/sphinx-data-viewer/jsonview_loader.js?v=f7ff7e7d"></script>
+      <script src="../_static/sphinx-needs/libs/html/datatables.min.js?v=8a4aee21"></script>
+      <script src="../_static/sphinx-needs/libs/html/datatables_loader.js?v=a2cae175"></script>
+      <script src="../_static/sphinx-needs/libs/html/sphinx_needs_collapse.js?v=dca66431"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Feature Requirements" href="feature_requirements.html" />
+    <link rel="prev" title="Traceability" href="../traceability.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            Dependable Element Mw Log Backend Doc
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../assumed_system.html">Assumed System</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../software_arch.html">Software Architectural Level</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../components.html">Components</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../traceability.html">Traceability</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">L.O.B.S.T.E.R. Traceability Report</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Overview</a></li>
+<li class="toctree-l3"><a class="reference internal" href="feature_requirements.html">Feature Requirements</a></li>
+<li class="toctree-l3"><a class="reference internal" href="component_requirements.html">Component Requirements</a></li>
+<li class="toctree-l3"><a class="reference internal" href="failure_modes.html">Failure Modes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="control_measures.html">Control Measures</a></li>
+<li class="toctree-l3"><a class="reference internal" href="architecture.html">Architecture</a></li>
+<li class="toctree-l3"><a class="reference internal" href="unit_test.html">Unit Test</a></li>
+<li class="toctree-l3"><a class="reference internal" href="test_case_coverage.html">Test Case Coverage</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Dependable Element Mw Log Backend Doc</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../traceability.html">Traceability</a></li>
+      <li class="breadcrumb-item active">L.O.B.S.T.E.R. Traceability Report</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/traceability_report/index.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="l-o-b-s-t-e-r-traceability-report">
+<h1>L.O.B.S.T.E.R. Traceability Report<a class="headerlink" href="#l-o-b-s-t-e-r-traceability-report" title="Link to this heading"></a></h1>
+<div class="line-block">
+<div class="line">Generated: 2026-10-28 09:19 UTC</div>
+<div class="line">LOBSTER Version: 1.0.6</div>
+</div>
+<p class="rubric">Tracing Policy</p>
+<div class="graphviz"><object data="../_images/graphviz-2830f0a9fd8b7cdd71320dd592ad090a3cbf3913.svg" type="image/svg+xml" class="graphviz">
+<p class="warning">digraph tracing_policy {
+   rankdir=TB;
+   node [shape=box, style=filled, fontname=&quot;Helvetica&quot;, margin=&quot;0.3,0.1&quot;];
+   edge [arrowhead=open];
+
+   &quot;Feature Requirements&quot; [fillcolor=&quot;#2196F3&quot;, fontcolor=&quot;white&quot;];
+   &quot;Component Requirements&quot; [fillcolor=&quot;#2196F3&quot;, fontcolor=&quot;white&quot;];
+   &quot;Unit Test&quot; [fillcolor=&quot;#FF9800&quot;, fontcolor=&quot;white&quot;];
+   &quot;Test Case Coverage&quot; [fillcolor=&quot;#FF9800&quot;, fontcolor=&quot;white&quot;];
+   &quot;Architecture&quot; [fillcolor=&quot;#4CAF50&quot;, fontcolor=&quot;white&quot;];
+   &quot;Failure Modes&quot; [fillcolor=&quot;#2196F3&quot;, fontcolor=&quot;white&quot;];
+   &quot;Control Measures&quot; [fillcolor=&quot;#2196F3&quot;, fontcolor=&quot;white&quot;];
+   &quot;Component Requirements&quot; -&gt; &quot;Feature Requirements&quot;;
+   &quot;Unit Test&quot; -&gt; &quot;Component Requirements&quot;;
+   &quot;Test Case Coverage&quot; -&gt; &quot;Component Requirements&quot;;
+   &quot;Architecture&quot; -&gt; &quot;Component Requirements&quot;;
+}</p></object></div>
+<p class="rubric">Coverage Summary</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 43.8%" />
+<col style="width: 18.8%" />
+<col style="width: 18.8%" />
+<col style="width: 18.8%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Category</p></th>
+<th class="head"><p>Coverage</p></th>
+<th class="head"><p>OK Items</p></th>
+<th class="head"><p>Total Items</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><a class="reference internal" href="feature_requirements.html"><span class="doc">Feature Requirements</span></a></p></td>
+<td><p>21.6%</p></td>
+<td><p>11</p></td>
+<td><p>51</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="component_requirements.html"><span class="doc">Component Requirements</span></a></p></td>
+<td><p>85.7%</p></td>
+<td><p>12</p></td>
+<td><p>14</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="unit_test.html"><span class="doc">Unit Test</span></a></p></td>
+<td><p>6.0%</p></td>
+<td><p>13</p></td>
+<td><p>215</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="test_case_coverage.html"><span class="doc">Test Case Coverage</span></a></p></td>
+<td><p>100.0%</p></td>
+<td><p>12</p></td>
+<td><p>12</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="architecture.html"><span class="doc">Architecture</span></a></p></td>
+<td><p>100.0%</p></td>
+<td><p>1</p></td>
+<td><p>1</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="failure_modes.html"><span class="doc">Failure Modes</span></a></p></td>
+<td><p>0.0%</p></td>
+<td><p>0</p></td>
+<td><p>1</p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="control_measures.html"><span class="doc">Control Measures</span></a></p></td>
+<td><p>100.0%</p></td>
+<td><p>1</p></td>
+<td><p>1</p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Issues</p>
+<ul class="simple">
+<li><p>[MISSING — unknown target: req DataRouterBackend, SharedMemoryWriter, SharedMemoryReader] <a class="reference internal" href="failure_modes.html#lobster-item-922f6d38c2f6888efe6490565491e6049b597a0a"><span class="std std-ref">MwLogBackend.LogMessageLossOrCorruption</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-38181aa0f6ccfb59f6c255617af8f959d1aca3a7"><span class="std std-ref">DataRouterBackendFixture:AppIDSetCorrectly</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-a276ec2a7ecb7cd5f2520ed7169f8c93ea03cd0e"><span class="std std-ref">DataRouterBackendFixture:ToSmallAppIdSetCorrectlyWithZeroPadding</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-da4f5e665e6a861d71b7081944c57a7764fff991"><span class="std std-ref">DataRouterBackendFixture:ContextIdSetCorrectly</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-f57377991318ff665c812572cb215075491ef514"><span class="std std-ref">DataRouterBackendFixture:ToSmallCtxSetCorrectlyWithZeroPadding</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-b62708c050e7709515b5d07ca0018c2d3b9c3c1e"><span class="std std-ref">LogLevelSetCorrectly/DataRouterBackendFixture:LogLevelSetCorrectly/0</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-33c444a920ece674a20a7bc3581c9890dcd14bda"><span class="std std-ref">LogLevelSetCorrectly/DataRouterBackendFixture:LogLevelSetCorrectly/1</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-9cdb591593dae565afbb43a357add0c736ff9a10"><span class="std std-ref">LogLevelSetCorrectly/DataRouterBackendFixture:LogLevelSetCorrectly/2</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-7e47481fe3c7e200a2980afbdca9cb14d376be74"><span class="std std-ref">LogLevelSetCorrectly/DataRouterBackendFixture:LogLevelSetCorrectly/3</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-9b8577e2194f3203eaaafec9a26e60923876a81b"><span class="std std-ref">LogLevelSetCorrectly/DataRouterBackendFixture:LogLevelSetCorrectly/4</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-e9985452aa49085278195c3bc4040821e1cbe96e"><span class="std std-ref">LogLevelSetCorrectly/DataRouterBackendFixture:LogLevelSetCorrectly/5</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-a6a86470496df9c1e46e0d694f9df99cfe9f89b0"><span class="std std-ref">DataRouterBackendFixture:LogLevelDebug</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-70fa79537159e3825781da6a44631bf69adfec77"><span class="std std-ref">DataRouterBackendFixture:LogLevelInfo</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-29412f733382aad2ee4386c84b896b505c3ae1ca"><span class="std std-ref">DataRouterBackendFixture:LogLevelWarning</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-6f5c921f6df6161f5f07ac933249a58c50cb7d78"><span class="std std-ref">DataRouterBackendFixture:LogLevelError</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-70eede510907e9f59c75df0225ec50c866bf8afb"><span class="std std-ref">DataRouterBackendFixture:LogLevelFatal</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-a3056068e627189171bcd7f3b2ac01f008115a86"><span class="std std-ref">DataRouterBackendFixture:LogLevelOff</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-daf7b09f0ddb282a0fb5967434a6386c2df04491"><span class="std std-ref">DataRouterBackendFixture:NumberOfArgsSetCorrectly</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-d2b82704627e46947d0be096c067ff2c4922b6f1"><span class="std std-ref">DataRouterBackendFixture:PayloadSetCorrectly</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-8a0e84dece7813d2f9a0106a7d3146bb434b3fa1"><span class="std std-ref">DataRouterBackendTests:CheckSizeValid</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-52a60917e7f53ec47d8738bf9766b5727bf1c439"><span class="std std-ref">DataRouterBackendTests:WhenAllPossibleSlotsUsedFailToAllocateMore</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-f1d913b8490506777b8fee7daadde35ae6d204b0"><span class="std std-ref">DataRouterBackendFixture:WhenSafeIpcIsTrueMessageClientIsCreated</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-25dcc6e1a33006358b8329adf12e6b77a92b052a"><span class="std std-ref">DataRouterBackendFixture:WhenIdentifierIsNotDynamicUidShallBeUsed</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-878765d36bf7caa5d7280114b8a35b238aab2417"><span class="std std-ref">DataRouterBackendFixture:ConstructWithDynamicIdentifier</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-988a0050e54a5c76d2f574574f60745620268f00"><span class="std std-ref">DataRouterBackendFixture:ConstructWithDynamicIdentifierAndChmodSuccess</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-e70bed9e4bdff76f61738c922680236e73837641"><span class="std std-ref">DataRouterBackendFixture:DataRouterBackEndConstructedWithEmptyIdentifierWhenMkstempFail</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-36b1e3b1a61652bce621df7eea7ef17f7c534fa1"><span class="std std-ref">DatarouterMessageClientFactoryFixture:CreateOnceShouldReturnClientWithExpectedValues</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-8fc0440d725c509a9e627210e38e4abfe3d94c73"><span class="std std-ref">DatarouterMessageClientFactoryFixture:CallingCreateMoreThanOnceShallAbort</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-29745fbb6d6a6fe9eeab77d1310180dfdc702976"><span class="std std-ref">DatarouterMessageClientIdentifiersFixture:TestDataRouterMessageIDsGetters</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-dc9af14b06f787d318f3b75eeb8bd5d050ce0954"><span class="std std-ref">DatarouterMessageClientIdentifiersTest:HandlesEmptyReceiverIdentifier</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-45d568bde43cd9608c43782bee3e4578fd8edaad"><span class="std std-ref">DatarouterMessageClientIdentifiersTest:HandlesZeroPid</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-ccd0ec3af9830735265f2048bf6467d1a3df5183"><span class="std std-ref">DatarouterMessageClientIdentifiersTest:HandlesMaxUidValues</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-218e6e31db4ad502d5da548d315ab6c3857def08"><span class="std std-ref">DatarouterMessageClientIdentifiersTest:HandlesEmptyAppId</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-76338654e52bc6eb239588f37aa3063052f55243"><span class="std std-ref">DatarouterMessageClientMockTest:ShutdownIsInvoked</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-9e788287f4941532bb0a35fc0ee981e992e22265"><span class="std std-ref">DatarouterMessageClientFixture:CreateSenderShouldCreateSenderWithExpectedValues</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-ab78083940ec687c707b2a8f6f4e7b5e641358c2"><span class="std std-ref">DatarouterMessageClientFixture:SendConnectMessageShouldSendExpectedPayload</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-2d41674d8664e29bb8980d2fff7fda172beef3ae"><span class="std std-ref">DynamicDataRouterIdentifiersFalseFixture:SendConnectMessageDynamicDataRouterIdentifiersFalseShouldSendExpectedPayload</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-f8527882104e2e62da53c3acb15cfcba89444d56"><span class="std std-ref">MwsrFileNameEmptyFixture:SendConnectMessageMwsrFileNameEmptyShouldSendExpectedPayload</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-d3f75c8c58b92fb6948fba31c12b828506430cdd"><span class="std std-ref">DatarouterMessageClientFixture:ConnectToDatarouterShouldSendConnectMessage</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-40cdf200954df0ee594eed0d6146d45fad6bfdd8"><span class="std std-ref">DatarouterMessageClientFixture:AcquireNotifyShouldSendExpectedAcquireResponse</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-ab7f0f7c1af1e571f832dc3dd5a25e1ea4d6780e"><span class="std std-ref">DatarouterMessageClientFixture:InvalidNotifyShouldNotSendAcquireResponse</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-d9872d9bf9ce1b771f1a5b1ebc8b4898988e2593"><span class="std std-ref">DatarouterMessageClientFixture:SecondAcquireNotifyShouldNotUnlinkMwsrWriter</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-c4b217c37611f1370001069af32c9a371a7f06a5"><span class="std std-ref">DatarouterMessageClientFixture:ClientShouldShutdownAfterFailingToSendMessage</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-e14111c64a3998ff521279654d166761a98b1985"><span class="std std-ref">DatarouterMessageClientFixture:RunShouldSetupAndConnect</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-21dc0a83ee9d3757509a05c8ad5598078db5db14"><span class="std std-ref">DatarouterMessageClientFixture:RunShallNotBeCalledMoreThanOnce</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-d2209bc033939bd53bd7b6a9f36c3eacf6585208"><span class="std std-ref">DatarouterMessageClientFixture:SetThreadNameShouldSetLoggerThreadName</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-29a8aa5b43f8737e0777a008a7239a48baef5df5"><span class="std std-ref">DatarouterMessageClientFixture:FailedSetThreadNameShouldBeHandledGracefully</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-2bf270a16179d89da4d7ecc8a1406824fb814e27"><span class="std std-ref">DatarouterMessageClientFixture:FailedToChownOwnMsrWriterFileForDataRouter</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-7796f689c5eab517cc69d2f72b649ce219c5ae4f"><span class="std std-ref">DatarouterMessageClientFixture:GivenExitRequestDuringConnectionShouldNotSendConnectMessage</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-4fbd6358ccbb62ec87dcd85b14d25526bdfbd11d"><span class="std std-ref">DatarouterMessageClientFixture:FailedToEmptySignalSet</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-d40e437ab17c52d5b966d861929e485161505354"><span class="std std-ref">DatarouterMessageClientFixture:ConnectToDatarouterShouldReportErrorAndShutdownWhenCreateSenderFails</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-c6a9cbe8283b70c714b5f8939c348f44cc043833"><span class="std std-ref">DatarouterMessageClientFixture:CreateSenderFailsWhenFactoryReturnsNullptr</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-7883e837199562ffc7fcf5a7269983297ee467e1"><span class="std std-ref">DatarouterMessageClientFixture:StateCallbackKStoppedShouldTriggerInternalShutdown</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-cbf0ef604154ff657d03587dd7a3ee0f1eefea89"><span class="std std-ref">DataRouterMessagesTests:EqualOperatorShouldReturnTrueForEqualConnectMessageFromClientInstances</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-aebe2ffa724f90dff638d1a7899c40d757e48fa2"><span class="std std-ref">DataRouterMessagesTests:EqualOperatorShouldReturnFalseForDifferentAppids</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-49328c9b07b9674a059b6542b54f4e5a13c5fa2e"><span class="std std-ref">DataRouterMessagesTests:EqualOperatorShouldReturnFalseForDifferentUids</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-0949a9909cff99386adfe070d0cec19df092be18"><span class="std std-ref">DataRouterMessagesTests:EqualOperatorShouldReturnFalseForDifferentDynamicDatarouterIdentifiers</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-1da13c088ae5fccb27510b81ee610c131eb57120"><span class="std std-ref">DataRouterMessagesTests:EqualOperatorShouldReturnFalseForDifferentRandomPart</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-8e715af489ee5997d8f51eb3bd30f3863044cc27"><span class="std std-ref">DataRouterMessagesTests:GetGUIShouldReturnCorrectValue</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-8be0b60bef14a51a9d49bc54761f4fd0a7b0d9c1"><span class="std std-ref">DataRouterMessagesTests:GetUseDynamicIdentifierShouldReturnCorrectValue</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-8a1711a93f20b7dd374f0f3fb520ca04d27013ec"><span class="std std-ref">DataRouterMessagesTests:GetAppIdDynamicIdentifierShouldReturnCorrectValue</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-f1df887590b7bdcdaea87e09f37ba594a86f1c68"><span class="std std-ref">DataRouterRecorderFixtureWithDepletedBackend:WillReturnEmptySlot</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-30fa3548dcee9e839c27f1f37114b7b6ccc5e505"><span class="std std-ref">DataRouterRecorderFixtureWithLogLevelCheck:WillObtainSlotForSufficientLogLevel</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-089dbddafb447027aadc02fa3f9ceade1f9c0449"><span class="std std-ref">DataRouterRecorderFixtureWithLogLevelCheck:WillObtainEmptySlotForInsufficentLogLevel</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-324e94b5905a346a088179dad5a84501bb228a5b"><span class="std std-ref">DataRouterRecorderFixture:TooManyArgumentsWillYieldTruncatedLog</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-781ecd4f5d5b935066a2cefd62e995b60b51a7ce"><span class="std std-ref">DataRouterRecorderFixture:TooLargeSinglePayloadWillYieldTruncatedLog</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-e8908887877c80662100ee2bff3625b0cae57154"><span class="std std-ref">DataRouterRecorderFixture:LogBool</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-91795bc4fe158cdb96c5616da6a81a27e70d1607"><span class="std std-ref">DataRouterRecorderFixture:LogUint8_t</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-e402f503839957262472210d367b54f093d183f6"><span class="std std-ref">DataRouterRecorderFixture:LogInt8_t</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-2fd57cb1f6e56a44a666027b7b297b85787d3b89"><span class="std std-ref">DataRouterRecorderFixture:LogUint16_t</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-9bdf208cb00768ae8762222e79cbefe3f18e4932"><span class="std std-ref">DataRouterRecorderFixture:LogInt16_t</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-e4409a0ef45ba69db7bd15fe304363bb318ab5c2"><span class="std std-ref">DataRouterRecorderFixture:LogUint32_t</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-176a31d3ee84f00f8cfbe6a3ebde77c77e9adf84"><span class="std std-ref">DataRouterRecorderFixture:LogInt32_t</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-507aef5336be2ad2018dcea93dc137e4a444eef1"><span class="std std-ref">DataRouterRecorderFixture:LogUint64_t</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-2a7c02a05ffdff7930363ae6938c2fb8bca9c245"><span class="std std-ref">DataRouterRecorderFixture:LogInt64_t</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-232067c3fcd81e8876ad92288ea1535a54634d25"><span class="std std-ref">DataRouterRecorderFixture:LogFloat</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-dba1ec92c3408f9513eec6c27623daa4e8a69676"><span class="std std-ref">DataRouterRecorderFixture:LogDouble</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-5bc151eb05fdb091e0761087a21b9e8cbf621ae6"><span class="std std-ref">DataRouterRecorderFixture:LogStringView</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-b846473bc891b74da309950b5e0c3592e8a5f8d1"><span class="std std-ref">DataRouterRecorderFixture:Log_LogHex8</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-adc2f79923c03685a5df092e9e94982d93ec44f3"><span class="std std-ref">DataRouterRecorderFixture:Log_LogHex16</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-fb17ce409512aaf73ba665bb8f57a6521bbf9df0"><span class="std std-ref">DataRouterRecorderFixture:Log_LogHex32</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-ee9da7c5b7ecbb6ed223cd7b2bfa3a0d2b60b85a"><span class="std std-ref">DataRouterRecorderFixture:Log_LogHex64</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-64a6069d17b8cdf8ec0ed1a214c6b505a6e5f949"><span class="std std-ref">DataRouterRecorderFixture:Log_LogBin8</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-9664979b01490391b42be9e6f4e29ee7b3de7adf"><span class="std std-ref">DataRouterRecorderFixture:Log_LogBin16</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-157e9c50cd62e4b85ac170e55c3deccffa155b1f"><span class="std std-ref">DataRouterRecorderFixture:Log_LogBin32</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-9133ac32b011afe800d8baa73de637073f75a096"><span class="std std-ref">DataRouterRecorderFixture:Log_LogBin64</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-2a4f64787ceeaa0a0fae2604716cdb438b234b18"><span class="std std-ref">DataRouterRecorderFixture:Log_LogRawBuffer</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-335703435ad8e1c5b361e8d2c0dbb6f1493979f9"><span class="std std-ref">DataRouterRecorderFixture:Log_LogSlog2Message</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-221723c445ecfcc5bba9bed287838e41d0f4e4bb"><span class="std std-ref">DataRouterRecorderTests:DatarouterRecorderShouldClearSlotOnStart</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-33d5a69dca84898b80c2d9a436653a9fc629367d"><span class="std std-ref">MessagePassingFactoryTests:CreateReceiverShouldReturnValue</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-e4e6ffcea31da80ea6a711eb3a1520ae38f807c8"><span class="std std-ref">MessagePassingFactoryTests:CreateSenderShouldReturnValue</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-85181243f666977106a4bb7667646e91aff9a7f7"><span class="std std-ref">RecorderFactoryConfigFixture:RemoteConfiguredShallReturnDataRouterRecorder</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-3ec9026aa0344c204d766f083d617d79915b7122"><span class="std std-ref">RecorderFactoryConfigFixture:MultipleLogModesShallReturnCompositeRecorder</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-0d17c1907719302196d1f4cf3472016f8bf51cae"><span class="std std-ref">CommonTests:TypesShallBeTriviallyCopyable</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-00b36acb68937821db1a1ef5b767c9d157bf2efa"><span class="std std-ref">CommonTests:GetExpectedNextAcquiredBlockId</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-704e81653222376047529a6099a168bba6f755a8"><span class="std std-ref">ReaderFactoryFixture:FailingCallToFstatShallResultInEmptyOptional</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-46b711406762d34cb038eb72e968e005c3ca71bd"><span class="std std-ref">ReaderFactoryFixture:FstatInvalidReturnShallResultInEmptyOptional</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-79884ea95dec61a2887a6d7802fcb5a0fe155dbc"><span class="std std-ref">ReaderFactoryFixture:FstatReturningSizeTooSmallShallResultInEmptyOptional</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-9dd07b50f84325ee54aa3c53f51c77586f46e65f"><span class="std std-ref">ReaderFactoryFixture:MmapFailingShallResultInEmptyOptional</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-11f162ddb917833139a6f32a080fd801e556c0e4"><span class="std std-ref">ReaderFactoryFixture:SharedDataMemberPointingOutOfBoundsShallResultInEmptyOptional</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-12aa454a30122e740653c3e87d90c63bb3d128ab"><span class="std std-ref">ReaderFactoryFixture:UnexpectedPidShallResultInEmptyOptional</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-eb065588b86fb42c8003a39fff8c6e2c44f824d5"><span class="std std-ref">ReaderFactoryFixture:ProperSetupShallResultValidReader</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-e1993553ce9598646f0940029d72dfd1f78baddc"><span class="std std-ref">ReaderFactoryFixture:UnmapFailureShallResultValidReader</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-e7cc5cbf395051296ef5a2bda9c4b19f34c3c4cf"><span class="std std-ref">ReaderFactoryTests:DefaultShallCreateReaderFactoryImpl</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-49718e0e87de5377ef9f1fab17bb26aad2027b1e"><span class="std std-ref">ReaderFactoryTests:NullPtrResourceShallNotCreateReaderFactoryImpl</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-355d9fa03e469e79dd8566c00351738099f9b5e9"><span class="std std-ref">SharedMemoryReaderFixture:GetterShallReadSharedDataNumberOfDropsInvalidSize</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-83f68ed10657e190154b354d41205e08a694ab17"><span class="std std-ref">SharedMemoryReaderFixture:GetterShallReadSharedDataNumberOfDropsBufferFull</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-906c40bd28716a08de6df7dc6a77ecddce8efd5d"><span class="std std-ref">SharedMemoryReaderFixture:GetterShallReadSharedDataSizeOfDropsBufferFull</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-fb714c65e8bd2020abb336b4d0fc654cf45f904b"><span class="std std-ref">SharedMemoryReaderFixture:RingBufferSizeShallReturnValueBasedOnControlBlock</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-69236bb4db9950d19f6fd6ae342f3dbcd285821d"><span class="std std-ref">SharedMemoryReaderFixture:GetterShallReadSharedDataNumberOfDropsWithTypeRegistrationFailed</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-e909c22bf2a8b1d2b75ab78726dfb09e6abd82dc"><span class="std std-ref">SharedMemoryReaderFixture:UnmapCallbackShallBeCalledWhenDestructing</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-9a44e6bbb70883194366bc8af77b484f90b67168"><span class="std std-ref">SharedMemoryReaderFixture:UnmapCallbackShallNotBeCalledWhenMoving</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-92bc4f51d920dbb50f11f9824b27362a130968d6"><span class="std std-ref">SharedMemoryReaderFixture:ReaderNotNotifiedShallNotPerformReads</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-e832770cdb4a6c667abf85947e2d74dc3fd5953a"><span class="std std-ref">SharedMemoryReaderFixture:ReadDetached</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-37e54b8299637313cb1a18dcc1fc34d8b2b60a76"><span class="std std-ref">SharedMemoryReaderFixture:ReaderNotifiedShallReturnNulloptWhenNotReleasedByWriters</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-6cd2a7c053f398626473574fa3efb5ab1faf0232"><span class="std std-ref">SharedMemoryReaderFixture:ReaderNotifiedShallAcquireData</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-413278ecd712cc32d0e9f53e2a4225df03dfb392"><span class="std std-ref">SharedMemoryReaderFixture:WriterAcquireShallAllowDataToBeWritten</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-f4c891be0402eaea552bda53739092e2f816c64f"><span class="std std-ref">SharedMemoryReaderFixture:CorruptedHeaderSizeTooSmallShallIgnoreEntry</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-ad03d7faad3f192eed4a7ef38fe5f616cd7d3b0f"><span class="std std-ref">SharedMemoryReaderFixture:CorruptedRegistrationHeaderSizeTooSmallShallIgnoreEntry</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-68f2a566b5dce68b8340bbc3a354dd866155d55c"><span class="std std-ref">SharedMemoryReaderFixture:WriterDetachedShallAllowDataToBeReadWithoutSwitching</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-6319552f212df5e54ea0fa6d3c7a6b7835468196"><span class="std std-ref">SharedMemoryWriterFixture:OversizedTypeRegisterShallReturnEmpty</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-b25832f2f8cdaa3d740965eccb9709835137eb4d"><span class="std std-ref">SharedMemoryWriterFixture:BasicRegisterShallReturnValue</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-8d0b598fcf5c1efe75aa79fa926b276432af763a"><span class="std std-ref">SharedMemoryWriterFixture:RegistrationInSequenceShallYieldUniqueTypes</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-5b0fefc5546e3bfc68301b425e551e5205c0e611"><span class="std std-ref">SharedMemoryWriterFixture:ShallHandleOverflowAndNotFail</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-b5a8a19b9593887f81e4f1184e6fe4c7fb609942"><span class="std std-ref">SharedMemoryWriterFixture:SingleWriteReadShallBeReadPresentingTheSameValues</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-f8ee2f438669b6c1479296ca7acc2aa8b9c9cf95"><span class="std std-ref">OversizedRequests/SharedMemoryWriterOversizedRequestsFixture:WriteWithTooBigRequestShallBeRejected/0</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-8a93484981ebc702200107733915525f325ca3fe"><span class="std std-ref">OversizedRequests/SharedMemoryWriterOversizedRequestsFixture:WriteWithTooBigRequestShallBeRejected/1</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-cbc1c1f07afced65bad93a7465458fee97943607"><span class="std std-ref">SharedMemoryWriterFixture:MultipleConcurentRegistrationShallBeValidInCount</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-ca4428e68a2062e0a7ac33ffa74efc0502400e00"><span class="std std-ref">SharedMemoryWriterFixture:MultipleConcurrentWritesShallAllBeReceivedValidInCountAndValue</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-0c00acb1311e2a321d2ace28d4c6bd0d27a5e8a4"><span class="std std-ref">WriterFactory:MissingOsalShallResultInEmptyOptional</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-f115fd5ecd293722606768f7362dc9799f65ea23"><span class="std std-ref">WriterFactory:MissingOsalUnistdAndOsalMmanShallResultInEmptyOptional</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-ad1dce9433d29609bd0323e335554634fdd8d816"><span class="std std-ref">WriterFactory:MissingOsalMmanShallResultInEmptyOptional</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-3a8643503d913ca63a6238d7437654a4bace1fd8"><span class="std std-ref">WriterFactory:MissingStatOsalShallResultInEmptyOptional</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-590fccd5c84f424c5fbceab12122a66c744af51f"><span class="std std-ref">WriterFactory:MissingStdlibShallResultInEmptyOptional</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-1c3eb4ebc88caf080db2d497bf110209265d2bc9"><span class="std std-ref">WriterFactoryFixture:WhenTheFileExistsItShallBeUnlinked</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-6fd3d658e6af82a7e372ab466d2afc2776f1a888"><span class="std std-ref">WriterFactoryFixture:WhenTheFileExistsAndCannotBeUnlinkedItShallContinueWithExecution</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-c5fd55dd9060ae0cf21b8bd814e8f2d8fdd901d8"><span class="std std-ref">WriterFactoryFixture:InDynamicFileExistanceShallNotBeChecked</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-b3cd1b08cd5a56f8efcd44928e13fd87443ce904"><span class="std std-ref">WriterFactoryFixture:FailureToOpenFileShallResultInEmptyOptionalResult</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-276ae66eda57776944ef0a96a987e952b743065f"><span class="std std-ref">WriterFactoryFixture:FailureToTruncateFileShallResultInEmptyOptionalResult</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-9be476f4c699611b47a28e773cd299c90e4791cf"><span class="std std-ref">WriterFactoryFixture:FailureToMapFileShallResultInEmptyOptionalResult</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-bbbb8b614ddb65b687ed6b64cf4fb190a3dd3001"><span class="std std-ref">WriterFactoryFixture:WhenAllMocksReturnValidShallResultValidOptionalResult</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-b7a5b9ff46be155ad23f363128b555174aa1385b"><span class="std std-ref">WriterFactoryFixture:WhenMmapIsValidAndUnmmapIsFailingItShallPrintCerrMessage</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-f6df120a8aea38684bfb47239157059682059f9a"><span class="std std-ref">WriterFactoryFixture:MmapReturnsNullptrValueShallCallUnmapAndReturnEmpty</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-854cfc67e6fb0b7a3687a26cf559f88e98a5b92d"><span class="std std-ref">WriterFactoryFixture:MmapReturingImproperAlignedMemoryShallCallUnmapAndReturnEmpty</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-a11b472d91c74f2a1f17de4dc14dde0abfc5305a"><span class="std std-ref">WriterFactoryFixture:UnexpectedBufferSizeWithOverflowShallMakeCerrOutput</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-7e1584158f41177fc2f4363414c7e7cfa8295111"><span class="std std-ref">DltMessageBuilderFixture:StorageHeaderShallHaveSpecificElements</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-18296e558f6da427ec562b44940bb3675b5c7c79"><span class="std std-ref">DltMessageBuilderFixture:HeaderShallHaveSpecificElements</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-bfe625676414507d5083565c3a384b3cfc37efb0"><span class="std std-ref">DltMessageBuilderFixture:ExtendedHeaderShallHaveSpecificElements</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-2403895736403a22a39b4fc684406f84d5f3aaa3"><span class="std std-ref">DltMessageBuilderFixture:PayloadShallHaveSetText</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-2acffba07291584b681aca8216a015491bd743c3"><span class="std std-ref">DltMessageBuilderFunctionTest:TestDisableDltExtendedHeader</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-f34a2a3ec1e3e05398270082e02681a9e5abe830"><span class="std std-ref">FileRecorderFactoryConfigFixture:CreateFileLoggingBackendFalied</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-72280df03cf9e90aa45fd8ebe75799f78e1a6d90"><span class="std std-ref">FileRecorderFixtureWithLogLevelCheck:WillObtainSlotForSufficientLogLevel</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-e599694d8e21fa6f673951b92ddabc498098b572"><span class="std std-ref">FileRecorderFixtureWithLogLevelCheck:WillObtainEmptySlotForInsufficentLogLevel</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-bef6b672e04cecee8ee44aefb74675ace8ee3a30"><span class="std std-ref">FileRecorderFixtureWithLogLevelCheck:DisablesOrEnablesLogAccordingToLevel</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-b5b89c65ca0afbcece6b12b11b207570dc9e619c"><span class="std std-ref">FileRecorderFixtureWithLogLevelCheck:WillObtainEmptySlotsWhenNoSlotsReserved</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-af84e6f39849e8fd094b9a20296caf33f264341d"><span class="std std-ref">FileRecorderFixture:TooLargeSinglePayloadWillYieldTruncatedLog</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-aff041f1b84925337ce83ece1c3a7dca23c4380e"><span class="std std-ref">FileRecorderFixture:LogUint8</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-51c82d30cadd3fe7a23df5bde33c890d5c117ac9"><span class="std std-ref">FileRecorderFixture:LogBool</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-2ac501b4203d0317fd89c874eb42d0b19b82962c"><span class="std std-ref">FileRecorderFixture:LogInt8</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-19cacf89c541dba1b23a7c71ed01b9feb4b2915a"><span class="std std-ref">FileRecorderFixture:LogUint16</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-f7c8521efb20e132ed710b2a1e986c17ceaa3dca"><span class="std std-ref">FileRecorderFixture:LogInt16</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-98ea690738bde9733a814b6c7014dfdd26523883"><span class="std std-ref">FileRecorderFixture:LogUint32</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-c324b683b4d30a81016d2b65c71280d3aaf57d91"><span class="std std-ref">FileRecorderFixture:LogInt32</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-109612bc5f9c9e3a6cb3c69bc4fb3146ffd3c151"><span class="std std-ref">FileRecorderFixture:LogUint64</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-a068a93e9894a89a8413cfe55f469c2487283525"><span class="std std-ref">FileRecorderFixture:LogInt64</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-561ed1529a949f9c3f35104846d39bebf7245a4c"><span class="std std-ref">FileRecorderFixture:LogFloat</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-e013f4a88d800fb3760672d999ce82b7f4a71990"><span class="std std-ref">FileRecorderFixture:LogDouble</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-a7603846b4421e95070db93e5960f4daa0f25eb9"><span class="std std-ref">FileRecorderFixture:LogStringView</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-8b41a2e98b81e56b6cb833b226cc75d60ce24430"><span class="std std-ref">FileRecorderFixture:LogHex8</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-74e52299cf88ed2db091dc5eb3e7ae5c464cf7a4"><span class="std std-ref">FileRecorderFixture:LogHex16</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-340d8262ff9f48373014250538a17387e0ae4f7f"><span class="std std-ref">FileRecorderFixture:LogHex32</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-bc4946f045c3d09a78e2c6d34560778c6f0c3dc7"><span class="std std-ref">FileRecorderFixture:LogHex64</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-55265178ca30847a31a270dfeb840d4db97a1c28"><span class="std std-ref">FileRecorderFixture:LogBin8</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-7026c3e7adb5583e2574774f6cc66574ace1a54b"><span class="std std-ref">FileRecorderFixture:LogBin16</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-c6c9e3f16a571d6d56b159aeaf2bcd5e5e45620d"><span class="std std-ref">FileRecorderFixture:LogBin32</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-d6d07f3f73b8be1cd4c6a2f0817ca3e76bda398a"><span class="std std-ref">FileRecorderFixture:LogBin64</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-37c9490102893ba1d09ca606fd9a38a9d67d5d7e"><span class="std std-ref">FileRecorderFixture:LogRawBuffer</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-52a1cb3ddf5f8f6f00897440ebfcb9ce88998b0c"><span class="std std-ref">FileRecorderFixture:LogSlog2Message</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-d76c12515cafc4bbdbde4bf5615e17dbc61c9663"><span class="std std-ref">FileRecorderTests:FileRecorderShouldClearSlotOnStart</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-7703ca8781b9e81bcd254b3ecd61fd9730ec1ea2"><span class="std std-ref">SignalHandlingTest:PThreadBlockSigTerm_SigEmptySetFails_ReturnsError</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-0c4f808456b78779f8ad9450c0d039fa3a37e7f7"><span class="std std-ref">SignalHandlingTest:PThreadBlockSigTerm_SigAddSetFails_ReturnsError</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-cebec850227f2776ae9aee35f66521cc1ae595e0"><span class="std std-ref">SignalHandlingTest:PThreadBlockSigTerm_PthreadSigMaskFails_ReturnsError</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-3ae17a073857e1e5390e0511311ed4a2522c7864"><span class="std std-ref">SignalHandlingTest:PThreadUnblockSigTerm_SigEmptySetFails_ReturnsError</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-915cb776809f38dfee60bd4a49cb4b01cf9f2ce2"><span class="std std-ref">SignalHandlingTest:PThreadUnblockSigTerm_SigAddSetFails_ReturnsError</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-389a21f43dbbf30fd5abbc6e098a76384fededa3"><span class="std std-ref">SignalHandlingTest:PThreadUnblockSigTerm_PthreadSigMaskFails_ReturnsError</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-1b6712f90333e60c35bdf4242218a63e6bc9602b"><span class="std std-ref">SignalHandlingTest:PThreadUnblockSigTerm_AllSucceed_ReturnsSuccess</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-7a755daf0433b3bb7bc65a6cc2bd6af0e7ffab53"><span class="std std-ref">AlternatingControlBlockTest:GettingOppositeBlockShallSucceed</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-bcff9e3d2308e9123608aab25c85778ac67ac8c5"><span class="std std-ref">AlternatingControlBlockTest:GettingBlockEvenAndOddBasedOnCoutnerValue</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-27ba920364c7f138503859fff33fc11481c2b91d"><span class="std std-ref">AlternatingControlBlockTest:GettingReferenceBlock</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-7140e94c1851b1766a08712c59840248219ee36b"><span class="std std-ref">AlternatingControlBlockTest:GettingReferenceConstBlock</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-dfcfba0883d7783fc68a99a6568f77a685436c38"><span class="std std-ref">AlternatingControlBlockTest:GetOppositeLinearControlBlockShallReturnkBlockEvenAsDefaultValue</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-30a9806a89eeb0382c86fddf0c822bb2705e9480"><span class="std std-ref">LinearControlBlock:LengthExceedingMaxThresholdShouldReturnTruncated</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-dca4cb3cc6e1a5fd0d3a8bf0255f41a885d86a43"><span class="std std-ref">LinearControlBlockTests:BytesShallNotFitInRemainingCCapacityIfOffsetBiggerThanTheBufferSize</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-ad0d69dc97c8d44accfe949801bd86e2bd53b1de"><span class="std std-ref">WaitFreeAlternatingWriterTests:WriteBufferFullShouldReturnExpectedData</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-ad713e776bc4c1b7a78c758cdbebeb5a0f372217"><span class="std std-ref">AlternatingReaderTest:EnsureSafeSwitchingToReadDataBuffer</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-1d6ed78a2d3277cf52b68b16f0c0551c09344818"><span class="std std-ref">AlternatingReaderTest:EnsureSwitchingIncrementsInternalCounter</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-0f0ab33eba148e051e3f1980a1e6083e87a16465"><span class="std std-ref">AlternatingReaderTest:EnsureToNotAcquireAnyBlockAndReturnNullInCaseTheSwitchingHappenedMoreThanOnce</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-01d352791981b33a3bf3093d7c5298b4fbae7312"><span class="std std-ref">WaitFreeLinearWriter:WriterBigDataTest</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-3c854f1d14f62b99e3b79a07baa6a9b69e37fd55"><span class="std std-ref">WaitFreeLinearWriter:TooManyConcurrentWriterShouldReturnEmpty</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-2e0582573476d9a6d7adde6b69bdad40576ccdf4"><span class="std std-ref">WaitFreeLinearWriter:BufferSizeExceededUpperLimitShouldReturnEmpty</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-61d7d4076fa5a791c1bf4c5bf3a551b116f1a5bc"><span class="std std-ref">WaitFreeLinearWriter:FailedAcquireShouldTerminateBuffer</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-171118cf5880d569fa9965c61d106fe81aa55b2a"><span class="std std-ref">WaitFreeLinearWriter:FailedAcquireWithNoFreeSpaceShouldNotTerminateBuffer</span></a></p></li>
+<li><p>[MISSING — no upward trace] <a class="reference internal" href="unit_test.html#lobster-item-1eeda00329e0bf0e3eae02f240424c3aa9be12d8"><span class="std std-ref">WaitFreeLinearWriter:AcquireMoreThanMaximumShouldFail</span></a></p></li>
+<li><p>[MISSING — no trace to: Component Requirements] <a class="reference internal" href="feature_requirements.html#lobster-item-3e119d3059694912c39f5b876fbd0e6e2c851861"><span class="std std-ref">MwLogAssumedSystemRequirements.ASR_LoggingSupport</span></a></p></li>
+<li><p>[MISSING — no trace to: Component Requirements] <a class="reference internal" href="feature_requirements.html#lobster-item-479675ca42859bd4a9af20f83d6ed38daa073061"><span class="std std-ref">MwLogAssumedSystemRequirements.ASR_SafeLogAndTrace</span></a></p></li>
+<li><p>[MISSING — no trace to: Component Requirements] <a class="reference internal" href="feature_requirements.html#lobster-item-6abfc9f6c9b9584d0c76917c3a1faf75d3f1000a"><span class="std std-ref">MwLogAssumedSystemRequirements.ASR_SecureLogAndTrace</span></a></p></li>
+<li><p>[MISSING — no trace to: Component Requirements] <a class="reference internal" href="feature_requirements.html#lobster-item-4febb9a966e85f572203bb0f5915eb0bf4999546"><span class="std std-ref">MwLogAssumedSystemRequirements.ASR_ErrorHandling</span></a></p></li>
+<li><p>[MISSING — no trace to: Component Requirements] <a class="reference internal" href="feature_requirements.html#lobster-item-fb5c5bcedf7c8a802c8f1737ccc21ea6b4c53645"><span class="std std-ref">MwLogAssumedSystemRequirements.ASR_LogAndTraceConsistentBehaviour</span></a></p></li>
+<li><p>[MISSING — no trace to: Component Requirements] <a class="reference internal" href="feature_requirements.html#lobster-item-d3522f633f62d45b1f9d6d09aeb77f60b074abd4"><span class="std std-ref">MwLogAssumedSystemRequirements.ASR_OverallGoalsEnableCooperation</span></a></p></li>
+<li><p>[PARTIAL — no trace to: Unit Test] <a class="reference internal" href="component_requirements.html#lobster-item-1e19ff64dfdcb7d355592f7cf299e240907b27dc"><span class="std std-ref">MwLog.ForwardToSystemLogger</span></a></p></li>
+<li><p>[PARTIAL — no trace to: Test Case Coverage] <a class="reference internal" href="component_requirements.html#lobster-item-1e19ff64dfdcb7d355592f7cf299e240907b27dc"><span class="std std-ref">MwLog.ForwardToSystemLogger</span></a></p></li>
+<li><p>[PARTIAL — no trace to: Unit Test] <a class="reference internal" href="component_requirements.html#lobster-item-c9cd5482c0049b64d91b1f53bf505fbdca20a050"><span class="std std-ref">MwLog.SystemBackendActivation</span></a></p></li>
+<li><p>[PARTIAL — no trace to: Test Case Coverage] <a class="reference internal" href="component_requirements.html#lobster-item-c9cd5482c0049b64d91b1f53bf505fbdca20a050"><span class="std std-ref">MwLog.SystemBackendActivation</span></a></p></li>
+<li><p>[MISSING — no trace to: Component Requirements] <a class="reference internal" href="feature_requirements.html#lobster-item-3ad526b3ca6bc3cad8006f7fe7f21453c13d13ae"><span class="std std-ref">MwLogFeature.TimestampingLocal</span></a></p></li>
+<li><p>[MISSING — no trace to: Component Requirements] <a class="reference internal" href="feature_requirements.html#lobster-item-93c5495224828e744d310b8c560a29b7e08d3ce4"><span class="std std-ref">MwLogFeature.TimestampingOriginal</span></a></p></li>
+<li><p>[MISSING — no trace to: Component Requirements] <a class="reference internal" href="feature_requirements.html#lobster-item-49168ec192a867d2a2e43360c30229dc6fafbe98"><span class="std std-ref">MwLogFeature.TimestampingSync</span></a></p></li>
+<li><p>[MISSING — no trace to: Component Requirements] <a class="reference internal" href="feature_requirements.html#lobster-item-2ad440eab4e396c3b1c94edb4abf440212fed51b"><span class="std std-ref">MwLogFeature.Prioritization</span></a></p></li>
+<li><p>[MISSING — no trace to: Component Requirements] <a class="reference internal" href="feature_requirements.html#lobster-item-546ba5ac42ac99b95e45e8ae1b71a632cc3ff581"><span class="std std-ref">MwLogFeature.EntityIdentifier</span></a></p></li>
+<li><p>[MISSING — no trace to: Component Requirements] <a class="reference internal" href="feature_requirements.html#lobster-item-bed01cecc0c0d02d23024374ee1a65212701a09a"><span class="std std-ref">MwLogFeature.FilteringEntityId</span></a></p></li>
+<li><p>[MISSING — no trace to: Component Requirements] <a class="reference internal" href="feature_requirements.html#lobster-item-896a0c84a5fe3a0ffa5ffabf83f03038984c79f3"><span class="std std-ref">MwLogFeature.MessageLossDetection</span></a></p></li>
+<li><p>[MISSING — no trace to: Component Requirements] <a class="reference internal" href="feature_requirements.html#lobster-item-d7c95a2a1cbac1ffce2db5c31fe712e396df2f9b"><span class="std std-ref">MwLogFeature.MessageLossHandling</span></a></p></li>
+<li><p>[MISSING — no trace to: Component Requirements] <a class="reference internal" href="feature_requirements.html#lobster-item-73df2baba998ff6a4b575d1dcea989f13adba714"><span class="std std-ref">MwLogFeature.ContextLogLevelActivation</span></a></p></li>
+<li><p>[MISSING — no trace to: Component Requirements] <a class="reference internal" href="feature_requirements.html#lobster-item-3575c38585c677145a7077f44c77b6b05a5178ff"><span class="std std-ref">MwLogFeature.LogSourcesUserApp</span></a></p></li>
+<li><p>[MISSING — no trace to: Component Requirements] <a class="reference internal" href="feature_requirements.html#lobster-item-75afab8534e650b792dd01973b2e06133b01878e"><span class="std std-ref">MwLogFeature.LogSourcesComponentPlatform</span></a></p></li>
+<li><p>[MISSING — no trace to: Component Requirements] <a class="reference internal" href="feature_requirements.html#lobster-item-fc3ef24df4cbb101c31e972b5df3f6a58098759c"><span class="std std-ref">MwLogFeature.LogSinksConsole</span></a></p></li>
+<li><p>[MISSING — no trace to: Component Requirements] <a class="reference internal" href="feature_requirements.html#lobster-item-934c37ba34c937b375502e7d7d07af4a8c9a723a"><span class="std std-ref">MwLogFeature.LogSinksLocalFs</span></a></p></li>
+<li><p>[MISSING — no trace to: Component Requirements] <a class="reference internal" href="feature_requirements.html#lobster-item-6682a03c6abbd3c86356588d9db371afb11de855"><span class="std std-ref">MwLogFeature.LogSinksCloudDrive</span></a></p></li>
+<li><p>[MISSING — no trace to: Component Requirements] <a class="reference internal" href="feature_requirements.html#lobster-item-4c543ec8339cf438e4987f3604acde32ca15019a"><span class="std std-ref">MwLogFeature.LogSinksNetwork</span></a></p></li>
+<li><p>[MISSING — no trace to: Component Requirements] <a class="reference internal" href="feature_requirements.html#lobster-item-143bf995e123805fa2e4e452f8e22cadb9adfd35"><span class="std std-ref">MwLogFeature.LogSinksStdout</span></a></p></li>
+<li><p>[MISSING — no trace to: Component Requirements] <a class="reference internal" href="feature_requirements.html#lobster-item-c3bfff067c540b07d4de24192a93df72385fb760"><span class="std std-ref">MwLogFeature.BootLogging</span></a></p></li>
+<li><p>[MISSING — no trace to: Component Requirements] <a class="reference internal" href="feature_requirements.html#lobster-item-0d1c50b2b9cac17c7afca48c5513807ae8116bce"><span class="std std-ref">MwLogFeature.ConfigLogLevel</span></a></p></li>
+<li><p>[MISSING — no trace to: Component Requirements] <a class="reference internal" href="feature_requirements.html#lobster-item-1805c188fbb291092f262b4cae727c64eac99b6d"><span class="std std-ref">MwLogFeature.SinkDevice</span></a></p></li>
+<li><p>[MISSING — no trace to: Component Requirements] <a class="reference internal" href="feature_requirements.html#lobster-item-c6dd46a3f3d08409c67111ddbe06ac8e6577f92c"><span class="std std-ref">MwLogFeature.SinkMultipleDevice</span></a></p></li>
+<li><p>[MISSING — no trace to: Component Requirements] <a class="reference internal" href="feature_requirements.html#lobster-item-9569b6e4258c7a88bc7a29acca80951327e048cf"><span class="std std-ref">MwLogFeature.SinkStrategy</span></a></p></li>
+<li><p>[MISSING — no trace to: Component Requirements] <a class="reference internal" href="feature_requirements.html#lobster-item-a2830940764a35e750c364e5da319b974669bee0"><span class="std std-ref">MwLogFeature.ConfigBufferSize</span></a></p></li>
+<li><p>[MISSING — no trace to: Component Requirements] <a class="reference internal" href="feature_requirements.html#lobster-item-dad3b4e6199c26371a3d083715357e2ce8f1bfd8"><span class="std std-ref">MwLogFeature.ConfigStorageSize</span></a></p></li>
+<li><p>[MISSING — no trace to: Component Requirements] <a class="reference internal" href="feature_requirements.html#lobster-item-57f2d49cf6004e6cd072f5911f686ec150e46363"><span class="std std-ref">MwLogFeature.ConfigLogFilter</span></a></p></li>
+<li><p>[MISSING — no trace to: Component Requirements] <a class="reference internal" href="feature_requirements.html#lobster-item-b291f1f6dc84c9dff05f33d0b1e6f8b2cc0541fd"><span class="std std-ref">MwLogFeature.ConfigEntityId</span></a></p></li>
+<li><p>[MISSING — no trace to: Component Requirements] <a class="reference internal" href="feature_requirements.html#lobster-item-de4ddfae3c09b5caab649715cea4e5daa951a76f"><span class="std std-ref">MwLogFeature.ConfigFallback</span></a></p></li>
+<li><p>[MISSING — no trace to: Component Requirements] <a class="reference internal" href="feature_requirements.html#lobster-item-8c49f035cd7a1ee6bd45041c43580fb819d4e9cb"><span class="std std-ref">MwLogFeature.ConfigCustomTypes</span></a></p></li>
+<li><p>[MISSING — no trace to: Component Requirements] <a class="reference internal" href="feature_requirements.html#lobster-item-65d5478daf582e7a254d3b797287839dd9e90749"><span class="std std-ref">MwLogFeature.ErrorHandlingRecoverable</span></a></p></li>
+<li><p>[MISSING — no trace to: Component Requirements] <a class="reference internal" href="feature_requirements.html#lobster-item-8cbd662a672f8dee68e34ac53c8ead5d83ddd819"><span class="std std-ref">MwLogFeature.ErrorHandlingNonRecoverable</span></a></p></li>
+<li><p>[MISSING — no trace to: Component Requirements] <a class="reference internal" href="feature_requirements.html#lobster-item-787fb213f37e54283302cae7cac90f3be2aa8e66"><span class="std std-ref">MwLogFeature.CompatibilitySupportedOs</span></a></p></li>
+<li><p>[MISSING — no trace to: Component Requirements] <a class="reference internal" href="feature_requirements.html#lobster-item-6deb7031728ba0507a0ecd7c617c8124ab672c63"><span class="std std-ref">MwLogFeature.CompatibilitySupportedLanguages</span></a></p></li>
+<li><p>[MISSING — no trace to: Component Requirements] <a class="reference internal" href="feature_requirements.html#lobster-item-f0083c53d8c9b4cc578a199c94e10cf2503e396c"><span class="std std-ref">MwLogFeature.ResourceConsumptionStorage</span></a></p></li>
+<li><p>[MISSING — no trace to: Component Requirements] <a class="reference internal" href="feature_requirements.html#lobster-item-032c7839d9f3664d26d143af2f251cffc697c00f"><span class="std std-ref">MwLogFeature.ResourceConsumptionCommChannel</span></a></p></li>
+<li><p>[MISSING — no trace to: Component Requirements] <a class="reference internal" href="feature_requirements.html#lobster-item-b3c34c72a135368b5e803cf12e44772fa310dd5f"><span class="std std-ref">MwLogFeature.QosMessageHandling</span></a></p></li>
+</ul>
+<div class="toctree-wrapper compound">
+</div>
+<div class="toctree-wrapper compound">
+</div>
+<div class="toctree-wrapper compound">
+</div>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../traceability.html" class="btn btn-neutral float-left" title="Traceability" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="feature_requirements.html" class="btn btn-neutral float-right" title="Feature Requirements" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright .</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

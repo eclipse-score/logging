@@ -1,0 +1,203 @@
+Requirements
+============
+.. requirement:definition:: MwLogFeature.TimestampingLocal
+
+   The logging framework shall support local timestamps for each log entry.
+
+.. requirement:definition:: MwLogFeature.TimestampingOriginal
+
+   The logging framework shall support original timestamps for routed log entries.
+
+.. requirement:definition:: MwLogFeature.TimestampingSync
+
+   The logging framework shall support timestamp synchronization for log entries
+   coming from different logging nodes.
+
+.. requirement:definition:: MwLogFeature.SeverityLevels
+
+   The logging framework shall support a log level for each log entry.
+
+.. requirement:definition:: MwLogFeature.Prioritization
+
+   The logging framework shall prioritize logs in case of resource conflicts to
+   ensure critical logs are not lost.
+
+.. requirement:definition:: MwLogFeature.EarlyStartupLogging
+
+   The logging framework shall support logging of early startup events to capture
+   critical initialization information.
+
+.. requirement:definition:: MwLogFeature.EntityIdentifier
+
+   The logging framework shall support logging entity identifiers for each log
+   entry.
+
+.. requirement:definition:: MwLogFeature.FilteringLogLevels
+
+   The logging framework shall support filtering by log levels.
+
+.. requirement:definition:: MwLogFeature.FilteringEntityId
+
+   The logging framework shall support filtering by logging entity identifiers.
+
+.. requirement:definition:: MwLogFeature.MessageLossDetection
+
+   The logging framework shall detect and report any message loss.
+
+.. requirement:definition:: MwLogFeature.MessageLossHandling
+
+   The logging framework shall provide mechanisms to handle message loss
+   gracefully. Additional Information: e.g. buffering or prioritizing critical messages.
+
+.. requirement:definition:: MwLogFeature.ContextLogLevelActivation
+
+   The logging framework shall allow context-specific log level activation at
+   runtime to enable fine-grained control over logging behavior.
+
+.. requirement:definition:: MwLogFeature.LogSourcesUserApp
+
+   The logging framework shall support user application as log source.
+
+.. requirement:definition:: MwLogFeature.LogSourcesComponentPlatform
+
+   The logging framework shall support component features and platform as log
+   sources.
+
+.. requirement:definition:: MwLogFeature.LogSinksConsole
+
+   The logging framework shall support console as a log sink.
+
+.. requirement:definition:: MwLogFeature.LogSinksLocalFs
+
+   The logging framework shall support local file system as log sink.
+
+.. requirement:definition:: MwLogFeature.LogSinksCloudDrive
+
+   The logging framework shall support cloud-native drives via network as log
+   sinks.
+
+.. requirement:definition:: MwLogFeature.LogSinksNetwork
+
+   The logging framework shall support network channels, including a second
+   dedicated Ethernet channel, as log sinks.
+
+.. requirement:definition:: MwLogFeature.LogSinksStdout
+
+   The logging framework shall ensure logs appear on stdout when running unit
+   tests.
+
+.. requirement:definition:: MwLogFeature.BootLogging
+
+   The logging framework shall support logging of data to memory which survives a
+   reboot cycle.
+
+.. requirement:definition:: MwLogFeature.ConfigLogLevel
+
+   The logging framework shall support configuration of log levels.
+
+.. requirement:definition:: MwLogFeature.SinkDevice
+
+   The logging framework shall support configuration of the log storage device.
+
+.. requirement:definition:: MwLogFeature.SinkMultipleDevice
+
+   The logging framework shall support multiple log storage devices.
+
+.. requirement:definition:: MwLogFeature.SinkStrategy
+
+   The logging framework shall support configurable log storage strategy.
+
+.. requirement:definition:: MwLogFeature.ConfigBufferSize
+
+   The logging framework shall allow configuration of internal buffer sizes.
+
+.. requirement:definition:: MwLogFeature.ConfigStorageSize
+
+   The logging framework shall allow configuration of storage size per log file.
+
+.. requirement:definition:: MwLogFeature.ConfigPermissions
+
+   The logging framework shall allow configuration of permission settings for log
+   access.
+
+.. requirement:definition:: MwLogFeature.ConfigLogFilter
+
+   The logging framework shall allow configuration of log filters.
+
+.. requirement:definition:: MwLogFeature.ConfigEntityId
+
+   The logging framework shall allow configuration of logging entity IDs.
+
+.. requirement:definition:: MwLogFeature.ConfigOnDemand
+
+   The logging framework shall support on-demand functionality, such as enabling
+   or disabling log storage.
+
+.. requirement:definition:: MwLogFeature.ConfigFallback
+
+   The logging framework shall provide fallback configurations, such as
+   application-wide or system-wide defaults.
+
+.. requirement:definition:: MwLogFeature.ConfigCustomTypes
+
+   The logging framework shall allow extensions for custom log types.
+
+.. requirement:definition:: MwLogFeature.ErrorHandlingRecoverable
+
+   In case of recoverable error, the logging framework shall continue the current
+   operations.
+
+.. requirement:definition:: MwLogFeature.ErrorHandlingNonRecoverable
+
+   In case of non-recoverable error, the logging framework shall deactivate
+   silently and set an error state reported on shutdown.
+
+.. requirement:definition:: MwLogFeature.ErrorHandlingIsolation
+
+   The logging framework shall ensure that user applications are not affected by
+   logging framework errors.
+
+.. requirement:definition:: MwLogFeature.CompatibilitySupportedOs
+
+   The logging framework shall support QNX and Linux operating systems
+   (encapsulated via OSAL).
+
+.. requirement:definition:: MwLogFeature.CompatibilitySupportedLanguages
+
+   The logging framework shall support C++ and Rust programming languages.
+
+.. requirement:definition:: MwLogFeature.ResourceConsumptionStorage
+
+   The logging framework shall minimize storage resource consumption.
+
+.. requirement:definition:: MwLogFeature.ResourceConsumptionCommChannel
+
+   The logging framework shall minimize communication channel resource
+   consumption.
+
+.. requirement:definition:: MwLogFeature.ResourceConsumptionRuntime
+
+   The logging framework shall minimize runtime resource consumption.
+
+.. requirement:definition:: MwLogFeature.ResourceConsumptionPerformance
+
+   The logging framework shall have low impact on overall system performance.
+
+.. requirement:definition:: MwLogFeature.QosMessageHandling
+
+   The logging framework shall provide QoS for handling overflows or dropping log
+   messages.
+
+.. requirement:definition:: MwLogFeature.CompatibilityDltProtocol
+
+   The logging framework shall be DLT compatible. Additional Information: support for DLT message format, sending and receiving DLT messages, and integration with existing DLT tools and infrastructure.
+
+.. requirement:definition:: MwLogFeature.SecurityLogAccess
+
+   The logging framework shall ensure that only authorized users can access log
+   files.
+
+.. requirement:definition:: MwLogFeature.AsilLevelSupport
+
+   The logging framework shall support the ASIL level of the user function to ensure compliance with the safety requirements of the application. Additional Information: Freedom from interference must be guaranteed with regard to the calling components.
+
