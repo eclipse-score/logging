@@ -252,6 +252,28 @@ cc_test(
 )
 
 cc_test(
+    name = "datarouterUT",
+    srcs = [
+        "test_datarouter.cpp",
+    ],
+    features = FEAT_COMPILER_WARNINGS_AS_ERRORS,
+    tags = ["unit"],
+    deps = [
+        "//score/datarouter/daemon_communication:mock",
+        "//score/mw/log/detail/data_router/shared_memory:reader_factory_mock",
+        "//score/mw/log/detail/data_router/shared_memory:shared_memory_reader_mock",
+        "//score/mw/log/detail/data_router/shared_memory:writer",
+        "@googletest//:gtest_main",
+        "@score_baselibs//score/mw/log/configuration:nvconfig_mock",
+        "@score_baselibs//score/mw/log/configuration:nvconfigfactory",
+        "@score_baselibs//score/os/mocklib:unistd_mock",
+        "@score_logging//score/datarouter:datarouter_testing",
+        "@score_logging//score/datarouter:logparser_factory_mock",
+        "@score_logging//score/datarouter:logparser_mock",
+    ],
+)
+
+cc_test(
     name = "persistentLogConfigUT",
     srcs = [
         "test_persistentlog_config.cpp",
