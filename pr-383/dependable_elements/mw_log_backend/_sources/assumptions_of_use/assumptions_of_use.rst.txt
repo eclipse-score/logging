@@ -1,5 +1,5 @@
-Requirements
-============
+Assumptions of Use
+==================
 .. requirement:definition:: AouRequirements.aou_req__log__private_or_undocumented_apis
 
    Undocumented or private API from ``mw::log`` shall not be used. The public API of ``mw::log`` is contained in the ``mw::log`` namespace and is annotated with the documentation tag ``\\public``. Everything else is considered part of the private API and shall not be used. Entities from any implementation ``details`` namespace shall not be used. In the following example, the ``TextRecorder`` class is part of a detail namespace and shall not be used directly. It may be used indirectly but only though public API: .. code:: cpp namespace mw::log { namespace details { class TextRecorder : public Recorder // Private undocumented API SHALL NOT be used. { // ... }; } // namespace detail / \\public */ LogStream LogInfo(); // Public API is OK to be used by Safety-Related Application Software. } // namespace mw::log
