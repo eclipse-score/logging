@@ -64,6 +64,7 @@ cc_library(
     visibility = [
         "//score/datarouter/test/benchmark:__pkg__",
         "//score/datarouter/test/ut/ut_internal:__pkg__",
+        "//score/datarouter/test/ut/ut_logging:__pkg__",
         "//score/mw/log/detail/data_router:__subpackages__",
         "//score/mw/log/legacy_non_verbose_api:__subpackages__",
     ],
