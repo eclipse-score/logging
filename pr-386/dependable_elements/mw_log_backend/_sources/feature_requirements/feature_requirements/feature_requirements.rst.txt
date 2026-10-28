@@ -1,5 +1,5 @@
-Requirements
-============
+Feature Requirements
+====================
 .. requirement:definition:: MwLogFeature.TimestampingLocal
 
    The logging framework shall support local timestamps for each log entry.
