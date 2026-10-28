@@ -119,15 +119,8 @@ The parts of :doc:`logging_architecture` about ``mw::log`` are context and were 
      - Check the automated dependency analysis.
        Also make sure ASIL rated units also only use ASIL rated libraries.
      - no
-     - Dependency and FFI metadata are maintained in Bazel. The direct
-       dependencies outside of ``//score/datarouter`` are listed with::
-
-         bazel query 'let l = kind(".*_library", //score/datarouter/...) except attr(testonly, 1, //score/datarouter/...) in labels(deps, $l) except //score/datarouter/...' --keep_going --output=label_kind
-
-       Those without the ``FFI`` tag are listed with::
-
-         bazel query 'let l = kind(".*_library", //score/datarouter/...) except attr(testonly, 1, //score/datarouter/...) in (labels(deps, $l) except //score/datarouter/...) except attr(tags, FFI, labels(deps, $l))' --keep_going --output=label
-
+     - Dependency and FFI metadata are maintained in Bazel. The generated
+       :doc:`dependencies` page lists the dependencies of each unit.
        The Datarouter is QM, the rule "ASIL units only use ASIL-rated
        libraries" does not apply to it.
 
