@@ -52,6 +52,11 @@ _build/
 ubproject.toml
 # end docs-as-code build artifacts
 
+# Generated dependency reports
+/docs/components/datarouter/detailed_design/dependencies.rst
+/docs/components/mw_log/detailed_design/backend_dependencies.rst
+/docs/components/mw_log/detailed_design/frontend_dependencies.rst
+
 # Vale - editorial style guide
 .vale.ini
 styles/
