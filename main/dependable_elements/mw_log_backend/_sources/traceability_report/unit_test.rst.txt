@@ -1050,6 +1050,7 @@ Unit Test
 
    .. pull-quote::
 
+      :Partiallyverifies: comp_req__log__send_to_datarouter
       :Asil: B
       :Description: Verifies the ability of sending connect message when connecting to datarouter.
       :Testtype: Interface test
@@ -1080,6 +1081,7 @@ Unit Test
 
    .. pull-quote::
 
+      :Partiallyverifies: comp_req__log__send_to_datarouter
       :Asil: B
       :Description: Verifies that an acquire request delivered via NotifyCallback sends the expected acquire response.
       :Testtype: Interface test
@@ -1100,7 +1102,7 @@ Unit Test
 
       <hr>
 
-   **Source:** `score/mw/log/detail/data\_router/data\_router\_message\_client\_test.cpp:475 <../../../../../../score/mw/log/detail/data_router/data_router_message_client_test.cpp#L475>`__
+   **Source:** `score/mw/log/detail/data\_router/data\_router\_message\_client\_test.cpp:476 <../../../../../../score/mw/log/detail/data_router/data_router_message_client_test.cpp#L476>`__
 
 .. _lobster-item-ab7f0f7c1af1e571f832dc3dd5a25e1ea4d6780e:
 
@@ -1130,7 +1132,7 @@ Unit Test
 
       <hr>
 
-   **Source:** `score/mw/log/detail/data\_router/data\_router\_message\_client\_test.cpp:500 <../../../../../../score/mw/log/detail/data_router/data_router_message_client_test.cpp#L500>`__
+   **Source:** `score/mw/log/detail/data\_router/data\_router\_message\_client\_test.cpp:502 <../../../../../../score/mw/log/detail/data_router/data_router_message_client_test.cpp#L502>`__
 
 .. _lobster-item-d9872d9bf9ce1b771f1a5b1ebc8b4898988e2593:
 
@@ -1160,7 +1162,7 @@ Unit Test
 
       <hr>
 
-   **Source:** `score/mw/log/detail/data\_router/data\_router\_message\_client\_test.cpp:532 <../../../../../../score/mw/log/detail/data_router/data_router_message_client_test.cpp#L532>`__
+   **Source:** `score/mw/log/detail/data\_router/data\_router\_message\_client\_test.cpp:534 <../../../../../../score/mw/log/detail/data_router/data_router_message_client_test.cpp#L534>`__
 
 .. _lobster-item-c4b217c37611f1370001069af32c9a371a7f06a5:
 
@@ -1190,7 +1192,7 @@ Unit Test
 
       <hr>
 
-   **Source:** `score/mw/log/detail/data\_router/data\_router\_message\_client\_test.cpp:557 <../../../../../../score/mw/log/detail/data_router/data_router_message_client_test.cpp#L557>`__
+   **Source:** `score/mw/log/detail/data\_router/data\_router\_message\_client\_test.cpp:559 <../../../../../../score/mw/log/detail/data_router/data_router_message_client_test.cpp#L559>`__
 
 .. _lobster-item-e14111c64a3998ff521279654d166761a98b1985:
 
@@ -1220,7 +1222,7 @@ Unit Test
 
       <hr>
 
-   **Source:** `score/mw/log/detail/data\_router/data\_router\_message\_client\_test.cpp:587 <../../../../../../score/mw/log/detail/data_router/data_router_message_client_test.cpp#L587>`__
+   **Source:** `score/mw/log/detail/data\_router/data\_router\_message\_client\_test.cpp:589 <../../../../../../score/mw/log/detail/data_router/data_router_message_client_test.cpp#L589>`__
 
 .. _lobster-item-21dc0a83ee9d3757509a05c8ad5598078db5db14:
 
@@ -1250,7 +1252,7 @@ Unit Test
 
       <hr>
 
-   **Source:** `score/mw/log/detail/data\_router/data\_router\_message\_client\_test.cpp:614 <../../../../../../score/mw/log/detail/data_router/data_router_message_client_test.cpp#L614>`__
+   **Source:** `score/mw/log/detail/data\_router/data\_router\_message\_client\_test.cpp:616 <../../../../../../score/mw/log/detail/data_router/data_router_message_client_test.cpp#L616>`__
 
 .. _lobster-item-d2209bc033939bd53bd7b6a9f36c3eacf6585208:
 
@@ -1280,7 +1282,7 @@ Unit Test
 
       <hr>
 
-   **Source:** `score/mw/log/detail/data\_router/data\_router\_message\_client\_test.cpp:641 <../../../../../../score/mw/log/detail/data_router/data_router_message_client_test.cpp#L641>`__
+   **Source:** `score/mw/log/detail/data\_router/data\_router\_message\_client\_test.cpp:643 <../../../../../../score/mw/log/detail/data_router/data_router_message_client_test.cpp#L643>`__
 
 .. _lobster-item-29a8aa5b43f8737e0777a008a7239a48baef5df5:
 
@@ -1310,7 +1312,7 @@ Unit Test
 
       <hr>
 
-   **Source:** `score/mw/log/detail/data\_router/data\_router\_message\_client\_test.cpp:654 <../../../../../../score/mw/log/detail/data_router/data_router_message_client_test.cpp#L654>`__
+   **Source:** `score/mw/log/detail/data\_router/data\_router\_message\_client\_test.cpp:656 <../../../../../../score/mw/log/detail/data_router/data_router_message_client_test.cpp#L656>`__
 
 .. _lobster-item-2bf270a16179d89da4d7ecc8a1406824fb814e27:
 
@@ -1340,7 +1342,7 @@ Unit Test
 
       <hr>
 
-   **Source:** `score/mw/log/detail/data\_router/data\_router\_message\_client\_test.cpp:668 <../../../../../../score/mw/log/detail/data_router/data_router_message_client_test.cpp#L668>`__
+   **Source:** `score/mw/log/detail/data\_router/data\_router\_message\_client\_test.cpp:670 <../../../../../../score/mw/log/detail/data_router/data_router_message_client_test.cpp#L670>`__
 
 .. _lobster-item-7796f689c5eab517cc69d2f72b649ce219c5ae4f:
 
@@ -1370,7 +1372,7 @@ Unit Test
 
       <hr>
 
-   **Source:** `score/mw/log/detail/data\_router/data\_router\_message\_client\_test.cpp:692 <../../../../../../score/mw/log/detail/data_router/data_router_message_client_test.cpp#L692>`__
+   **Source:** `score/mw/log/detail/data\_router/data\_router\_message\_client\_test.cpp:694 <../../../../../../score/mw/log/detail/data_router/data_router_message_client_test.cpp#L694>`__
 
 .. _lobster-item-4fbd6358ccbb62ec87dcd85b14d25526bdfbd11d:
 
@@ -1400,7 +1402,7 @@ Unit Test
 
       <hr>
 
-   **Source:** `score/mw/log/detail/data\_router/data\_router\_message\_client\_test.cpp:712 <../../../../../../score/mw/log/detail/data_router/data_router_message_client_test.cpp#L712>`__
+   **Source:** `score/mw/log/detail/data\_router/data\_router\_message\_client\_test.cpp:714 <../../../../../../score/mw/log/detail/data_router/data_router_message_client_test.cpp#L714>`__
 
 .. _lobster-item-d40e437ab17c52d5b966d861929e485161505354:
 
@@ -1430,7 +1432,7 @@ Unit Test
 
       <hr>
 
-   **Source:** `score/mw/log/detail/data\_router/data\_router\_message\_client\_test.cpp:739 <../../../../../../score/mw/log/detail/data_router/data_router_message_client_test.cpp#L739>`__
+   **Source:** `score/mw/log/detail/data\_router/data\_router\_message\_client\_test.cpp:741 <../../../../../../score/mw/log/detail/data_router/data_router_message_client_test.cpp#L741>`__
 
 .. _lobster-item-c6a9cbe8283b70c714b5f8939c348f44cc043833:
 
@@ -1460,7 +1462,7 @@ Unit Test
 
       <hr>
 
-   **Source:** `score/mw/log/detail/data\_router/data\_router\_message\_client\_test.cpp:767 <../../../../../../score/mw/log/detail/data_router/data_router_message_client_test.cpp#L767>`__
+   **Source:** `score/mw/log/detail/data\_router/data\_router\_message\_client\_test.cpp:769 <../../../../../../score/mw/log/detail/data_router/data_router_message_client_test.cpp#L769>`__
 
 .. _lobster-item-7883e837199562ffc7fcf5a7269983297ee467e1:
 
@@ -1490,7 +1492,7 @@ Unit Test
 
       <hr>
 
-   **Source:** `score/mw/log/detail/data\_router/data\_router\_message\_client\_test.cpp:790 <../../../../../../score/mw/log/detail/data_router/data_router_message_client_test.cpp#L790>`__
+   **Source:** `score/mw/log/detail/data\_router/data\_router\_message\_client\_test.cpp:792 <../../../../../../score/mw/log/detail/data_router/data_router_message_client_test.cpp#L792>`__
 
 .. _lobster-item-cbf0ef604154ff657d03587dd7a3ee0f1eefea89:
 
@@ -1800,6 +1802,7 @@ Unit Test
 
    .. pull-quote::
 
+      :Partiallyverifies: comp_req__log__inactive_logstream
       :Asil: B
       :Description: Verifies the in-ability of returning a slot in case of inactive log level.
       :Testtype: Interface test
@@ -1850,7 +1853,7 @@ Unit Test
 
       <hr>
 
-   **Source:** `score/mw/log/detail/data\_router/data\_router\_recorder\_test.cpp:165 <../../../../../../score/mw/log/detail/data_router/data_router_recorder_test.cpp#L165>`__
+   **Source:** `score/mw/log/detail/data\_router/data\_router\_recorder\_test.cpp:166 <../../../../../../score/mw/log/detail/data_router/data_router_recorder_test.cpp#L166>`__
 
 .. _lobster-item-781ecd4f5d5b935066a2cefd62e995b60b51a7ce:
 
@@ -1880,7 +1883,7 @@ Unit Test
 
       <hr>
 
-   **Source:** `score/mw/log/detail/data\_router/data\_router\_recorder\_test.cpp:184 <../../../../../../score/mw/log/detail/data_router/data_router_recorder_test.cpp#L184>`__
+   **Source:** `score/mw/log/detail/data\_router/data\_router\_recorder\_test.cpp:185 <../../../../../../score/mw/log/detail/data_router/data_router_recorder_test.cpp#L185>`__
 
 .. _lobster-item-e8908887877c80662100ee2bff3625b0cae57154:
 
@@ -1910,7 +1913,7 @@ Unit Test
 
       <hr>
 
-   **Source:** `score/mw/log/detail/data\_router/data\_router\_recorder\_test.cpp:201 <../../../../../../score/mw/log/detail/data_router/data_router_recorder_test.cpp#L201>`__
+   **Source:** `score/mw/log/detail/data\_router/data\_router\_recorder\_test.cpp:202 <../../../../../../score/mw/log/detail/data_router/data_router_recorder_test.cpp#L202>`__
 
 .. _lobster-item-91795bc4fe158cdb96c5616da6a81a27e70d1607:
 
@@ -1940,7 +1943,7 @@ Unit Test
 
       <hr>
 
-   **Source:** `score/mw/log/detail/data\_router/data\_router\_recorder\_test.cpp:211 <../../../../../../score/mw/log/detail/data_router/data_router_recorder_test.cpp#L211>`__
+   **Source:** `score/mw/log/detail/data\_router/data\_router\_recorder\_test.cpp:212 <../../../../../../score/mw/log/detail/data_router/data_router_recorder_test.cpp#L212>`__
 
 .. _lobster-item-e402f503839957262472210d367b54f093d183f6:
 
@@ -1970,7 +1973,7 @@ Unit Test
 
       <hr>
 
-   **Source:** `score/mw/log/detail/data\_router/data\_router\_recorder\_test.cpp:221 <../../../../../../score/mw/log/detail/data_router/data_router_recorder_test.cpp#L221>`__
+   **Source:** `score/mw/log/detail/data\_router/data\_router\_recorder\_test.cpp:222 <../../../../../../score/mw/log/detail/data_router/data_router_recorder_test.cpp#L222>`__
 
 .. _lobster-item-2fd57cb1f6e56a44a666027b7b297b85787d3b89:
 
@@ -2000,7 +2003,7 @@ Unit Test
 
       <hr>
 
-   **Source:** `score/mw/log/detail/data\_router/data\_router\_recorder\_test.cpp:231 <../../../../../../score/mw/log/detail/data_router/data_router_recorder_test.cpp#L231>`__
+   **Source:** `score/mw/log/detail/data\_router/data\_router\_recorder\_test.cpp:232 <../../../../../../score/mw/log/detail/data_router/data_router_recorder_test.cpp#L232>`__
 
 .. _lobster-item-9bdf208cb00768ae8762222e79cbefe3f18e4932:
 
@@ -2030,7 +2033,7 @@ Unit Test
 
       <hr>
 
-   **Source:** `score/mw/log/detail/data\_router/data\_router\_recorder\_test.cpp:241 <../../../../../../score/mw/log/detail/data_router/data_router_recorder_test.cpp#L241>`__
+   **Source:** `score/mw/log/detail/data\_router/data\_router\_recorder\_test.cpp:242 <../../../../../../score/mw/log/detail/data_router/data_router_recorder_test.cpp#L242>`__
 
 .. _lobster-item-e4409a0ef45ba69db7bd15fe304363bb318ab5c2:
 
@@ -2060,7 +2063,7 @@ Unit Test
 
       <hr>
 
-   **Source:** `score/mw/log/detail/data\_router/data\_router\_recorder\_test.cpp:251 <../../../../../../score/mw/log/detail/data_router/data_router_recorder_test.cpp#L251>`__
+   **Source:** `score/mw/log/detail/data\_router/data\_router\_recorder\_test.cpp:252 <../../../../../../score/mw/log/detail/data_router/data_router_recorder_test.cpp#L252>`__
 
 .. _lobster-item-176a31d3ee84f00f8cfbe6a3ebde77c77e9adf84:
 
@@ -2090,7 +2093,7 @@ Unit Test
 
       <hr>
 
-   **Source:** `score/mw/log/detail/data\_router/data\_router\_recorder\_test.cpp:261 <../../../../../../score/mw/log/detail/data_router/data_router_recorder_test.cpp#L261>`__
+   **Source:** `score/mw/log/detail/data\_router/data\_router\_recorder\_test.cpp:262 <../../../../../../score/mw/log/detail/data_router/data_router_recorder_test.cpp#L262>`__
 
 .. _lobster-item-507aef5336be2ad2018dcea93dc137e4a444eef1:
 
@@ -2120,7 +2123,7 @@ Unit Test
 
       <hr>
 
-   **Source:** `score/mw/log/detail/data\_router/data\_router\_recorder\_test.cpp:271 <../../../../../../score/mw/log/detail/data_router/data_router_recorder_test.cpp#L271>`__
+   **Source:** `score/mw/log/detail/data\_router/data\_router\_recorder\_test.cpp:272 <../../../../../../score/mw/log/detail/data_router/data_router_recorder_test.cpp#L272>`__
 
 .. _lobster-item-2a7c02a05ffdff7930363ae6938c2fb8bca9c245:
 
@@ -2150,7 +2153,7 @@ Unit Test
 
       <hr>
 
-   **Source:** `score/mw/log/detail/data\_router/data\_router\_recorder\_test.cpp:281 <../../../../../../score/mw/log/detail/data_router/data_router_recorder_test.cpp#L281>`__
+   **Source:** `score/mw/log/detail/data\_router/data\_router\_recorder\_test.cpp:282 <../../../../../../score/mw/log/detail/data_router/data_router_recorder_test.cpp#L282>`__
 
 .. _lobster-item-232067c3fcd81e8876ad92288ea1535a54634d25:
 
@@ -2180,7 +2183,7 @@ Unit Test
 
       <hr>
 
-   **Source:** `score/mw/log/detail/data\_router/data\_router\_recorder\_test.cpp:291 <../../../../../../score/mw/log/detail/data_router/data_router_recorder_test.cpp#L291>`__
+   **Source:** `score/mw/log/detail/data\_router/data\_router\_recorder\_test.cpp:292 <../../../../../../score/mw/log/detail/data_router/data_router_recorder_test.cpp#L292>`__
 
 .. _lobster-item-dba1ec92c3408f9513eec6c27623daa4e8a69676:
 
@@ -2210,7 +2213,7 @@ Unit Test
 
       <hr>
 
-   **Source:** `score/mw/log/detail/data\_router/data\_router\_recorder\_test.cpp:301 <../../../../../../score/mw/log/detail/data_router/data_router_recorder_test.cpp#L301>`__
+   **Source:** `score/mw/log/detail/data\_router/data\_router\_recorder\_test.cpp:302 <../../../../../../score/mw/log/detail/data_router/data_router_recorder_test.cpp#L302>`__
 
 .. _lobster-item-5bc151eb05fdb091e0761087a21b9e8cbf621ae6:
 
@@ -2240,7 +2243,7 @@ Unit Test
 
       <hr>
 
-   **Source:** `score/mw/log/detail/data\_router/data\_router\_recorder\_test.cpp:311 <../../../../../../score/mw/log/detail/data_router/data_router_recorder_test.cpp#L311>`__
+   **Source:** `score/mw/log/detail/data\_router/data\_router\_recorder\_test.cpp:312 <../../../../../../score/mw/log/detail/data_router/data_router_recorder_test.cpp#L312>`__
 
 .. _lobster-item-b846473bc891b74da309950b5e0c3592e8a5f8d1:
 
@@ -2270,7 +2273,7 @@ Unit Test
 
       <hr>
 
-   **Source:** `score/mw/log/detail/data\_router/data\_router\_recorder\_test.cpp:321 <../../../../../../score/mw/log/detail/data_router/data_router_recorder_test.cpp#L321>`__
+   **Source:** `score/mw/log/detail/data\_router/data\_router\_recorder\_test.cpp:322 <../../../../../../score/mw/log/detail/data_router/data_router_recorder_test.cpp#L322>`__
 
 .. _lobster-item-adc2f79923c03685a5df092e9e94982d93ec44f3:
 
@@ -2300,7 +2303,7 @@ Unit Test
 
       <hr>
 
-   **Source:** `score/mw/log/detail/data\_router/data\_router\_recorder\_test.cpp:331 <../../../../../../score/mw/log/detail/data_router/data_router_recorder_test.cpp#L331>`__
+   **Source:** `score/mw/log/detail/data\_router/data\_router\_recorder\_test.cpp:332 <../../../../../../score/mw/log/detail/data_router/data_router_recorder_test.cpp#L332>`__
 
 .. _lobster-item-fb17ce409512aaf73ba665bb8f57a6521bbf9df0:
 
@@ -2330,7 +2333,7 @@ Unit Test
 
       <hr>
 
-   **Source:** `score/mw/log/detail/data\_router/data\_router\_recorder\_test.cpp:341 <../../../../../../score/mw/log/detail/data_router/data_router_recorder_test.cpp#L341>`__
+   **Source:** `score/mw/log/detail/data\_router/data\_router\_recorder\_test.cpp:342 <../../../../../../score/mw/log/detail/data_router/data_router_recorder_test.cpp#L342>`__
 
 .. _lobster-item-ee9da7c5b7ecbb6ed223cd7b2bfa3a0d2b60b85a:
 
@@ -2360,7 +2363,7 @@ Unit Test
 
       <hr>
 
-   **Source:** `score/mw/log/detail/data\_router/data\_router\_recorder\_test.cpp:351 <../../../../../../score/mw/log/detail/data_router/data_router_recorder_test.cpp#L351>`__
+   **Source:** `score/mw/log/detail/data\_router/data\_router\_recorder\_test.cpp:352 <../../../../../../score/mw/log/detail/data_router/data_router_recorder_test.cpp#L352>`__
 
 .. _lobster-item-64a6069d17b8cdf8ec0ed1a214c6b505a6e5f949:
 
@@ -2390,7 +2393,7 @@ Unit Test
 
       <hr>
 
-   **Source:** `score/mw/log/detail/data\_router/data\_router\_recorder\_test.cpp:361 <../../../../../../score/mw/log/detail/data_router/data_router_recorder_test.cpp#L361>`__
+   **Source:** `score/mw/log/detail/data\_router/data\_router\_recorder\_test.cpp:362 <../../../../../../score/mw/log/detail/data_router/data_router_recorder_test.cpp#L362>`__
 
 .. _lobster-item-9664979b01490391b42be9e6f4e29ee7b3de7adf:
 
@@ -2420,7 +2423,7 @@ Unit Test
 
       <hr>
 
-   **Source:** `score/mw/log/detail/data\_router/data\_router\_recorder\_test.cpp:371 <../../../../../../score/mw/log/detail/data_router/data_router_recorder_test.cpp#L371>`__
+   **Source:** `score/mw/log/detail/data\_router/data\_router\_recorder\_test.cpp:372 <../../../../../../score/mw/log/detail/data_router/data_router_recorder_test.cpp#L372>`__
 
 .. _lobster-item-157e9c50cd62e4b85ac170e55c3deccffa155b1f:
 
@@ -2450,7 +2453,7 @@ Unit Test
 
       <hr>
 
-   **Source:** `score/mw/log/detail/data\_router/data\_router\_recorder\_test.cpp:381 <../../../../../../score/mw/log/detail/data_router/data_router_recorder_test.cpp#L381>`__
+   **Source:** `score/mw/log/detail/data\_router/data\_router\_recorder\_test.cpp:382 <../../../../../../score/mw/log/detail/data_router/data_router_recorder_test.cpp#L382>`__
 
 .. _lobster-item-9133ac32b011afe800d8baa73de637073f75a096:
 
@@ -2480,7 +2483,7 @@ Unit Test
 
       <hr>
 
-   **Source:** `score/mw/log/detail/data\_router/data\_router\_recorder\_test.cpp:391 <../../../../../../score/mw/log/detail/data_router/data_router_recorder_test.cpp#L391>`__
+   **Source:** `score/mw/log/detail/data\_router/data\_router\_recorder\_test.cpp:392 <../../../../../../score/mw/log/detail/data_router/data_router_recorder_test.cpp#L392>`__
 
 .. _lobster-item-2a4f64787ceeaa0a0fae2604716cdb438b234b18:
 
@@ -2510,7 +2513,7 @@ Unit Test
 
       <hr>
 
-   **Source:** `score/mw/log/detail/data\_router/data\_router\_recorder\_test.cpp:401 <../../../../../../score/mw/log/detail/data_router/data_router_recorder_test.cpp#L401>`__
+   **Source:** `score/mw/log/detail/data\_router/data\_router\_recorder\_test.cpp:402 <../../../../../../score/mw/log/detail/data_router/data_router_recorder_test.cpp#L402>`__
 
 .. _lobster-item-335703435ad8e1c5b361e8d2c0dbb6f1493979f9:
 
@@ -2540,7 +2543,7 @@ Unit Test
 
       <hr>
 
-   **Source:** `score/mw/log/detail/data\_router/data\_router\_recorder\_test.cpp:411 <../../../../../../score/mw/log/detail/data_router/data_router_recorder_test.cpp#L411>`__
+   **Source:** `score/mw/log/detail/data\_router/data\_router\_recorder\_test.cpp:412 <../../../../../../score/mw/log/detail/data_router/data_router_recorder_test.cpp#L412>`__
 
 .. _lobster-item-221723c445ecfcc5bba9bed287838e41d0f4e4bb:
 
@@ -2571,7 +2574,7 @@ Unit Test
 
       <hr>
 
-   **Source:** `score/mw/log/detail/data\_router/data\_router\_recorder\_test.cpp:421 <../../../../../../score/mw/log/detail/data_router/data_router_recorder_test.cpp#L421>`__
+   **Source:** `score/mw/log/detail/data\_router/data\_router\_recorder\_test.cpp:422 <../../../../../../score/mw/log/detail/data_router/data_router_recorder_test.cpp#L422>`__
 
 .. _lobster-item-33d5a69dca84898b80c2d9a436653a9fc629367d:
 
@@ -5995,7 +5998,7 @@ Unit Test
 
    .. pull-quote::
 
-      :Partiallyverifies: comp_req__log__dlt_verbose_mode
+      :Partiallyverifies: comp_req__log__dlt_verbose_mode, comp_req__log__send_to_datarouter
       :Description: Verify the ability of logging verbose message.
       :Testtype: requirements-based
       :Derivationtechnique: requirements-analysis
@@ -6058,7 +6061,7 @@ Unit Test
 
       <hr>
 
-   **Source:** `score/mw/log/detail/data\_router/data\_router\_recorder\_test.cpp:117 <../../../../../../score/mw/log/detail/data_router/data_router_recorder_test.cpp#L117>`__
+   **Source:** `score/mw/log/detail/data\_router/data\_router\_recorder\_test.cpp:118 <../../../../../../score/mw/log/detail/data_router/data_router_recorder_test.cpp#L118>`__
 
 .. _lobster-item-497f3637ba9e73c1269bd7ec774c1d88eea7aabb:
 
