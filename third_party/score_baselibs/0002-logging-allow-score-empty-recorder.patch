@@ -1,0 +1,26 @@
+--- a/score/mw/log/detail/BUILD
++++ b/score/mw/log/detail/BUILD
+@@ -215,19 +215,19 @@
+ cc_library(
+     name = "empty_recorder",
+     srcs = [
+         "empty_recorder.cpp",
+     ],
+     hdrs = [
+         "empty_recorder.h",
+     ],
+     features = COMPILER_WARNING_FEATURES,
+     tags = ["FFI"],
+     visibility = [
+-        "@score_baselibs//score/mw/log:__subpackages__",
++        "//visibility:public",
+     ],
+     deps = [
+         ":log_data_types",
+         ":log_entry",
+         ":logging_identifier",
+         ":types_and_errors",
+         "@score_baselibs//score/language/futurecpp",
+         "@score_baselibs//score/mw/log:recorder",
+     ],
+ )
