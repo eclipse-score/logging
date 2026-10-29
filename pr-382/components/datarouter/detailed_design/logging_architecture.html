@@ -438,6 +438,7 @@
 <li class="toctree-l1 current active has-children"><a class="reference internal" href="index.html">Detailed Design</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
 <li class="toctree-l2 current active"><a class="current reference internal" href="#">Logging: architecture and SW design</a></li>
 <li class="toctree-l2"><a class="reference internal" href="shm_apis.html">Remote Logging implementation details</a></li>
+<li class="toctree-l2"><a class="reference internal" href="chklst_impl_inspection.html">Implementation Inspection Checklist</a></li>
 </ul>
 </details></li>
 </ul>
@@ -579,8 +580,9 @@ Diagnostic Log and Trace is the application-level network protocol to exchange d
 </section>
 <section id="context">
 <h2>Context<a class="headerlink" href="#context" title="Link to this heading">#</a></h2>
-<p>The diagram below illustrates the logging framework context:
-<img alt="CONTEXT_ECU" src="https://www.plantuml.com/plantuml/proxy?src=https://raw.githubusercontent.com/eclipse-score/logging/refs/heads/main/score/datarouter/doc/design/uml/context-ecu.puml"></p>
+<p>The diagram below illustrates the logging framework context:</p>
+<p class="plantuml">
+<object data="../../../_images/plantuml-920323ef9902575fbf9127a263dd2ca0a0b90715.svg" type="image/svg+xml" style="width:588px;height:566px;background:#FFFFFF;"></object></p>
 <p>Applications write log data through logging interfaces.</p>
 <p>The logging framework transmits data to the following sinks:</p>
 <ul class="simple">
@@ -593,7 +595,8 @@ Diagnostic Log and Trace is the application-level network protocol to exchange d
 <h2>Solution strategy<a class="headerlink" href="#solution-strategy" title="Link to this heading">#</a></h2>
 <section id="process-structure">
 <h3>Process structure<a class="headerlink" href="#process-structure" title="Link to this heading">#</a></h3>
-<img alt="CONTEXT_HIGHLEVEL" src="https://www.plantuml.com/plantuml/proxy?src=https://raw.githubusercontent.com/eclipse-score/logging/refs/heads/main/score/datarouter/doc/design/uml/context-highlevel.puml">
+<p class="plantuml">
+<object data="../../../_images/plantuml-32695f12eb9b98e4bda5d2a70f7f0209bb2f007f.svg" type="image/svg+xml" style="width:1055px;height:581px;background:#FFFFFF;"></object></p>
 <p>The logging framework implements multiple components to meet system goals:</p>
 <ul class="simple">
 <li><p>Application-side frontend library <code class="docutils literal notranslate"><span class="pre">mw::log</span></code></p></li>
@@ -643,7 +646,13 @@ Diagnostic Log and Trace is the application-level network protocol to exchange d
 <section id="building-block-view">
 <h2>Building block view<a class="headerlink" href="#building-block-view" title="Link to this heading">#</a></h2>
 <p>The diagram below illustrates the high-level class structure of the datarouter component.</p>
-<img alt="PACKAGE_DATAROUTER" src="https://www.plantuml.com/plantuml/proxy?src=https://raw.githubusercontent.com/eclipse-score/logging/refs/heads/main/score/datarouter/doc/design/uml/package-datarouter.puml">
+<p class="plantuml">
+<object data="../../../_images/plantuml-8f15151b2d63a5b994f0aa18de3a9d37e7c103b2.svg" type="image/svg+xml" style="width:2014px;height:540px;background:#FFFFFF;"></object></p>
+<p>The next diagram shows the software units of the datarouter, the shared memory and the two IPC paths: the message passing channel to the clients and, if the build flag <code class="docutils literal notranslate"><span class="pre">enable_dynamic_configuration</span></code> is set, the Unix domain server for configuration clients.</p>
+<p class="plantuml">
+<object data="../../../_images/plantuml-a644a6a4ed569c571406ae740ed9273ede9d5ea8.svg" type="image/svg+xml" style="width:1020px;height:1380px;background:#FFFFFF;"></object></p>
+<p class="plantuml">
+<object data="../../../_images/plantuml-6eda9ca5773e332508b5e0628c88971ba4d9172c.svg" type="image/svg+xml" style="width:1131px;height:362px;background:#FFFFFF;"></object></p>
 </section>
 <section id="runtime-view">
 <h2>Runtime view<a class="headerlink" href="#runtime-view" title="Link to this heading">#</a></h2>
@@ -651,13 +660,15 @@ Diagnostic Log and Trace is the application-level network protocol to exchange d
 <section id="initialization">
 <h3>Initialization<a class="headerlink" href="#initialization" title="Link to this heading">#</a></h3>
 <p>Initialization stage 1 executes when the first log request occurs. This may occur in global object constructors before the <code class="docutils literal notranslate"><span class="pre">main()</span></code> function executes, causing implicit initialization that creates necessary singletons automatically.
-The activity diagram below depicts the first-run process:
-<img alt="SEQ_TRACE" src="https://www.plantuml.com/plantuml/proxy?src=https://raw.githubusercontent.com/eclipse-score/logging/refs/heads/main/score/datarouter/doc/design/uml/seq-trace.puml"></p>
+The activity diagram below depicts the first-run process:</p>
+<p class="plantuml">
+<object data="../../../_images/plantuml-ee620e23765a36743080bc71c8ec8eaa910de871.svg" type="image/svg+xml" style="width:1134px;height:679px;background:#FFFFFF;"></object></p>
 </section>
 <section id="mw-log-implementation">
 <h3>mw::log implementation<a class="headerlink" href="#mw-log-implementation" title="Link to this heading">#</a></h3>
-<p>The <code class="docutils literal notranslate"><span class="pre">mw::log</span></code> implementation creates log records and commits them atomically to shared memory on flush.
-<img alt="DLT_MESSAGE_FILTERING_FRONTEND" src="https://www.plantuml.com/plantuml/proxy?src=https://raw.githubusercontent.com/eclipse-score/logging/refs/heads/main/score/datarouter/doc/design/uml/dlt_message_filtering_frontend.puml"></p>
+<p>The <code class="docutils literal notranslate"><span class="pre">mw::log</span></code> implementation creates log records and commits them atomically to shared memory on flush.</p>
+<p class="plantuml">
+<object data="../../../_images/plantuml-31d83cb139247d73f07af254e8c7eba5a72bdffd.svg" type="image/svg+xml" style="width:1273px;height:995px;background:#FFFFFF;"></object></p>
 </section>
 <section id="ring-buffer-and-linear-allocator-buffer">
 <h3>Ring buffer and linear allocator buffer<a class="headerlink" href="#ring-buffer-and-linear-allocator-buffer" title="Link to this heading">#</a></h3>
@@ -668,15 +679,24 @@ Shared memory IPC provides optimal speed and flexibility for this implementation
 <h3>Datarouter-Client Session<a class="headerlink" href="#datarouter-client-session" title="Link to this heading">#</a></h3>
 <p>The Datarouter-Client Session uses <a class="reference external" href="https://github.com/eclipse-score/communication/tree/main/score/message_passing">message_passing</a> IPC for the initial connection, buffer acquire requests, notifications, and disconnections. The <code class="docutils literal notranslate"><span class="pre">DataRouterRecorder</span></code> sets up the session when it is created and closes it when it is destroyed. In between, the datarouter keeps one <code class="docutils literal notranslate"><span class="pre">IServerConnection</span></code> handle per client and drives the log acquisition from the server side.</p>
 <p>The main idea is to keep clients independent, so that one non-responsive client should not stall the datarouter. This matters because the datarouter serves all clients from a single thread, one after another on each periodic tick, so a single blocking call would hold up every other client. To avoid this, the datarouter asks for buffers (to read) using non-blocking QNX pulses (<code class="docutils literal notranslate"><span class="pre">IServerConnection::Notify()</span></code>), which return right away and never wait on the client. So if a client is slow or stuck, its pulse simply stays unanswered while the healthy clients keep getting served. See below for the full flow.</p>
-<img alt="CLIENT_SESSION_INTERACTION_SEQUENCE" src="https://www.plantuml.com/plantuml/proxy?src=https://raw.githubusercontent.com/eclipse-score/logging/refs/heads/main/score/datarouter/doc/design/uml/client_session_interaction_sequence.puml">
+<p class="plantuml">
+<object data="../../../_images/plantuml-395b0ee7aadd21e52d555cf5f118ec68ee9b859f.svg" type="image/svg+xml" style="width:1749px;height:2905px;background:#FFFFFF;"></object></p>
 <p>However, with such a design there are risks of stale sessions. A small per-session watchdog limits how long the datarouter waits for an acquire response. If a client keeps missing its deadline, the watchdog cleans up the stale session, but first it does a best-effort read of the client’s last buffer so no logs are lost unnecessarily. See below.</p>
-<img alt="ACTIVITY_WATCHDOG_SESSION_LIFECYCLE" src="https://www.plantuml.com/plantuml/proxy?src=https://raw.githubusercontent.com/eclipse-score/logging/refs/heads/main/score/datarouter/doc/design/uml/activity_watchdog_session_lifecycle.puml">
+<p class="plantuml">
+<object data="../../../_images/plantuml-494c466ccbc3911cc0787766240998f99a8f3b11.svg" type="image/svg+xml" style="width:826px;height:921px;background:#FFFFFF;"></object></p>
 <p>The setup also handles an early-disconnect race, wherein if a client crashes while the datarouter is still building its session, the connect and disconnect paths work together to throw away the half-built session instead of keeping a dangling connection pointer. The client can then reconnect cleanly afterwards. See below.</p>
-<img alt="SEQUENCE_EARLY_DISCONNECT_RACE" src="https://www.plantuml.com/plantuml/proxy?src=https://raw.githubusercontent.com/eclipse-score/logging/refs/heads/main/score/datarouter/doc/design/uml/sequence_early_disconnect_race.puml">
+<p class="plantuml">
+<object data="../../../_images/plantuml-77f8b02655ef3346bec99e4a977b4752cf33d40f.svg" type="image/svg+xml" style="width:1009px;height:1323px;background:#FFFFFF;"></object></p>
 </section>
 <section id="datarouter">
 <h3>datarouter<a class="headerlink" href="#datarouter" title="Link to this heading">#</a></h3>
-<img alt="DLT_MESSAGE_FILTERING_BACKEND" src="https://www.plantuml.com/plantuml/proxy?src=https://raw.githubusercontent.com/eclipse-score/logging/refs/heads/main/score/datarouter/doc/design/uml/dlt_message_filtering_backend.puml">
+<p class="plantuml">
+<object data="../../../_images/plantuml-68aecf13d03d7a5390887b4ac0e96c832edf2540.svg" type="image/svg+xml" style="width:989px;height:909px;background:#FFFFFF;"></object></p>
+</section>
+<section id="file-transfer">
+<h3>File transfer<a class="headerlink" href="#file-transfer" title="Link to this heading">#</a></h3>
+<p class="plantuml">
+<object data="../../../_images/plantuml-b3af71b58c6a03bf433fc8baa7af51156c8bd0d5.svg" type="image/svg+xml" style="width:2182px;height:1654px;background:#FFFFFF;"></object></p>
 </section>
 <section id="application-side-library-configuration">
 <h3>Application-side library configuration<a class="headerlink" href="#application-side-library-configuration" title="Link to this heading">#</a></h3>
@@ -757,6 +777,7 @@ Shared memory IPC provides optimal speed and flexibility for this implementation
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ring-buffer-and-linear-allocator-buffer">Ring buffer and linear allocator buffer</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#datarouter-client-session">Datarouter-Client Session</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#datarouter">datarouter</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#file-transfer">File transfer</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#application-side-library-configuration">Application-side library configuration</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#datarouter-configuration">datarouter configuration</a></li>
 </ul>

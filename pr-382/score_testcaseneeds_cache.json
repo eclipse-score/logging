@@ -364,6 +364,20 @@
     "FullyVerifies": null
   },
   {
+    "name": "SyslogRegistrantTest__SyslogBackendIsRegisteredAfterStaticInitialization",
+    "file": "score/mw/log/backend/syslog_registrant_test.cpp",
+    "line": "28",
+    "result": "passed",
+    "repo_name": "local_repo",
+    "hash": "",
+    "url": "",
+    "TestType": "requirements-based",
+    "DerivationTechnique": "requirements-analysis",
+    "result_text": "",
+    "PartiallyVerifies": "comp_req__log__system_backend_activation",
+    "FullyVerifies": null
+  },
+  {
     "name": "RemoteRegistrantTest__RemoteBackendIsRegisteredAfterStaticInitialization",
     "file": "score/mw/log/backend/remote_registrant_enabled_test.cpp",
     "line": "28",
@@ -1648,7 +1662,7 @@
     "TestType": "requirements-based",
     "DerivationTechnique": "requirements-analysis",
     "result_text": "",
-    "PartiallyVerifies": "comp_req__log__dlt_verbose_mode",
+    "PartiallyVerifies": "comp_req__log__dlt_verbose_mode, comp_req__log__send_to_datarouter",
     "FullyVerifies": null
   },
   {
@@ -2012,13 +2026,13 @@
     "TestType": "Interface test",
     "DerivationTechnique": "Generation and analysis of equivalence classes",
     "result_text": "",
-    "PartiallyVerifies": null,
+    "PartiallyVerifies": "comp_req__log__send_to_datarouter",
     "FullyVerifies": null
   },
   {
     "name": "DatarouterMessageClientFixture__AcquireNotifyShouldSendExpectedAcquireResponse",
     "file": "score/mw/log/detail/data_router/data_router_message_client_test.cpp",
-    "line": "475",
+    "line": "476",
     "result": "passed",
     "repo_name": "local_repo",
     "hash": "",
@@ -2026,13 +2040,13 @@
     "TestType": "Interface test",
     "DerivationTechnique": "Generation and analysis of equivalence classes",
     "result_text": "",
-    "PartiallyVerifies": null,
+    "PartiallyVerifies": "comp_req__log__send_to_datarouter",
     "FullyVerifies": null
   },
   {
     "name": "DatarouterMessageClientFixture__InvalidNotifyShouldNotSendAcquireResponse",
     "file": "score/mw/log/detail/data_router/data_router_message_client_test.cpp",
-    "line": "500",
+    "line": "502",
     "result": "passed",
     "repo_name": "local_repo",
     "hash": "",
@@ -2046,7 +2060,7 @@
   {
     "name": "DatarouterMessageClientFixture__SecondAcquireNotifyShouldNotUnlinkMwsrWriter",
     "file": "score/mw/log/detail/data_router/data_router_message_client_test.cpp",
-    "line": "532",
+    "line": "534",
     "result": "passed",
     "repo_name": "local_repo",
     "hash": "",
@@ -2060,7 +2074,7 @@
   {
     "name": "DatarouterMessageClientFixture__ClientShouldShutdownAfterFailingToSendMessage",
     "file": "score/mw/log/detail/data_router/data_router_message_client_test.cpp",
-    "line": "557",
+    "line": "559",
     "result": "passed",
     "repo_name": "local_repo",
     "hash": "",
@@ -2074,7 +2088,7 @@
   {
     "name": "DatarouterMessageClientFixture__RunShouldSetupAndConnect",
     "file": "score/mw/log/detail/data_router/data_router_message_client_test.cpp",
-    "line": "587",
+    "line": "589",
     "result": "passed",
     "repo_name": "local_repo",
     "hash": "",
@@ -2088,7 +2102,7 @@
   {
     "name": "DatarouterMessageClientFixture__RunShallNotBeCalledMoreThanOnce",
     "file": "score/mw/log/detail/data_router/data_router_message_client_test.cpp",
-    "line": "614",
+    "line": "616",
     "result": "passed",
     "repo_name": "local_repo",
     "hash": "",
@@ -2102,7 +2116,7 @@
   {
     "name": "DatarouterMessageClientFixture__SetThreadNameShouldSetLoggerThreadName",
     "file": "score/mw/log/detail/data_router/data_router_message_client_test.cpp",
-    "line": "641",
+    "line": "643",
     "result": "passed",
     "repo_name": "local_repo",
     "hash": "",
@@ -2116,7 +2130,7 @@
   {
     "name": "DatarouterMessageClientFixture__FailedSetThreadNameShouldBeHandledGracefully",
     "file": "score/mw/log/detail/data_router/data_router_message_client_test.cpp",
-    "line": "654",
+    "line": "656",
     "result": "passed",
     "repo_name": "local_repo",
     "hash": "",
@@ -2130,7 +2144,7 @@
   {
     "name": "DatarouterMessageClientFixture__FailedToChownOwnMsrWriterFileForDataRouter",
     "file": "score/mw/log/detail/data_router/data_router_message_client_test.cpp",
-    "line": "668",
+    "line": "670",
     "result": "passed",
     "repo_name": "local_repo",
     "hash": "",
@@ -2144,7 +2158,7 @@
   {
     "name": "DatarouterMessageClientFixture__GivenExitRequestDuringConnectionShouldNotSendConnectMessage",
     "file": "score/mw/log/detail/data_router/data_router_message_client_test.cpp",
-    "line": "692",
+    "line": "694",
     "result": "passed",
     "repo_name": "local_repo",
     "hash": "",
@@ -2158,7 +2172,7 @@
   {
     "name": "DatarouterMessageClientFixture__FailedToEmptySignalSet",
     "file": "score/mw/log/detail/data_router/data_router_message_client_test.cpp",
-    "line": "712",
+    "line": "714",
     "result": "passed",
     "repo_name": "local_repo",
     "hash": "",
@@ -2172,7 +2186,7 @@
   {
     "name": "DatarouterMessageClientFixture__ConnectToDatarouterShouldReportErrorAndShutdownWhenCreateSenderFails",
     "file": "score/mw/log/detail/data_router/data_router_message_client_test.cpp",
-    "line": "739",
+    "line": "741",
     "result": "passed",
     "repo_name": "local_repo",
     "hash": "",
@@ -2186,7 +2200,7 @@
   {
     "name": "DatarouterMessageClientFixture__CreateSenderFailsWhenFactoryReturnsNullptr",
     "file": "score/mw/log/detail/data_router/data_router_message_client_test.cpp",
-    "line": "767",
+    "line": "769",
     "result": "passed",
     "repo_name": "local_repo",
     "hash": "",
@@ -2200,7 +2214,7 @@
   {
     "name": "DatarouterMessageClientFixture__StateCallbackKStoppedShouldTriggerInternalShutdown",
     "file": "score/mw/log/detail/data_router/data_router_message_client_test.cpp",
-    "line": "790",
+    "line": "792",
     "result": "passed",
     "repo_name": "local_repo",
     "hash": "",
@@ -2390,13 +2404,13 @@
     "TestType": "Interface test",
     "DerivationTechnique": "Generation and analysis of equivalence classes",
     "result_text": "",
-    "PartiallyVerifies": null,
+    "PartiallyVerifies": "comp_req__log__inactive_logstream",
     "FullyVerifies": null
   },
   {
     "name": "DataRouterRecorderFixtureWithLogLevelCheck__DisablesOrEnablesLogAccordingToLevel",
     "file": "score/mw/log/detail/data_router/data_router_recorder_test.cpp",
-    "line": "117",
+    "line": "118",
     "result": "passed",
     "repo_name": "local_repo",
     "hash": "",
@@ -2410,7 +2424,7 @@
   {
     "name": "DataRouterRecorderFixture__TooManyArgumentsWillYieldTruncatedLog",
     "file": "score/mw/log/detail/data_router/data_router_recorder_test.cpp",
-    "line": "165",
+    "line": "166",
     "result": "passed",
     "repo_name": "local_repo",
     "hash": "",
@@ -2424,7 +2438,7 @@
   {
     "name": "DataRouterRecorderFixture__TooLargeSinglePayloadWillYieldTruncatedLog",
     "file": "score/mw/log/detail/data_router/data_router_recorder_test.cpp",
-    "line": "184",
+    "line": "185",
     "result": "passed",
     "repo_name": "local_repo",
     "hash": "",
@@ -2438,7 +2452,7 @@
   {
     "name": "DataRouterRecorderFixture__LogBool",
     "file": "score/mw/log/detail/data_router/data_router_recorder_test.cpp",
-    "line": "201",
+    "line": "202",
     "result": "passed",
     "repo_name": "local_repo",
     "hash": "",
@@ -2452,7 +2466,7 @@
   {
     "name": "DataRouterRecorderFixture__LogUint8_t",
     "file": "score/mw/log/detail/data_router/data_router_recorder_test.cpp",
-    "line": "211",
+    "line": "212",
     "result": "passed",
     "repo_name": "local_repo",
     "hash": "",
@@ -2466,7 +2480,7 @@
   {
     "name": "DataRouterRecorderFixture__LogInt8_t",
     "file": "score/mw/log/detail/data_router/data_router_recorder_test.cpp",
-    "line": "221",
+    "line": "222",
     "result": "passed",
     "repo_name": "local_repo",
     "hash": "",
@@ -2480,7 +2494,7 @@
   {
     "name": "DataRouterRecorderFixture__LogUint16_t",
     "file": "score/mw/log/detail/data_router/data_router_recorder_test.cpp",
-    "line": "231",
+    "line": "232",
     "result": "passed",
     "repo_name": "local_repo",
     "hash": "",
@@ -2494,7 +2508,7 @@
   {
     "name": "DataRouterRecorderFixture__LogInt16_t",
     "file": "score/mw/log/detail/data_router/data_router_recorder_test.cpp",
-    "line": "241",
+    "line": "242",
     "result": "passed",
     "repo_name": "local_repo",
     "hash": "",
@@ -2508,7 +2522,7 @@
   {
     "name": "DataRouterRecorderFixture__LogUint32_t",
     "file": "score/mw/log/detail/data_router/data_router_recorder_test.cpp",
-    "line": "251",
+    "line": "252",
     "result": "passed",
     "repo_name": "local_repo",
     "hash": "",
@@ -2522,7 +2536,7 @@
   {
     "name": "DataRouterRecorderFixture__LogInt32_t",
     "file": "score/mw/log/detail/data_router/data_router_recorder_test.cpp",
-    "line": "261",
+    "line": "262",
     "result": "passed",
     "repo_name": "local_repo",
     "hash": "",
@@ -2536,7 +2550,7 @@
   {
     "name": "DataRouterRecorderFixture__LogUint64_t",
     "file": "score/mw/log/detail/data_router/data_router_recorder_test.cpp",
-    "line": "271",
+    "line": "272",
     "result": "passed",
     "repo_name": "local_repo",
     "hash": "",
@@ -2550,7 +2564,7 @@
   {
     "name": "DataRouterRecorderFixture__LogInt64_t",
     "file": "score/mw/log/detail/data_router/data_router_recorder_test.cpp",
-    "line": "281",
+    "line": "282",
     "result": "passed",
     "repo_name": "local_repo",
     "hash": "",
@@ -2564,7 +2578,7 @@
   {
     "name": "DataRouterRecorderFixture__LogFloat",
     "file": "score/mw/log/detail/data_router/data_router_recorder_test.cpp",
-    "line": "291",
+    "line": "292",
     "result": "passed",
     "repo_name": "local_repo",
     "hash": "",
@@ -2578,7 +2592,7 @@
   {
     "name": "DataRouterRecorderFixture__LogDouble",
     "file": "score/mw/log/detail/data_router/data_router_recorder_test.cpp",
-    "line": "301",
+    "line": "302",
     "result": "passed",
     "repo_name": "local_repo",
     "hash": "",
@@ -2592,7 +2606,7 @@
   {
     "name": "DataRouterRecorderFixture__LogStringView",
     "file": "score/mw/log/detail/data_router/data_router_recorder_test.cpp",
-    "line": "311",
+    "line": "312",
     "result": "passed",
     "repo_name": "local_repo",
     "hash": "",
@@ -2606,7 +2620,7 @@
   {
     "name": "DataRouterRecorderFixture__Log_LogHex8",
     "file": "score/mw/log/detail/data_router/data_router_recorder_test.cpp",
-    "line": "321",
+    "line": "322",
     "result": "passed",
     "repo_name": "local_repo",
     "hash": "",
@@ -2620,7 +2634,7 @@
   {
     "name": "DataRouterRecorderFixture__Log_LogHex16",
     "file": "score/mw/log/detail/data_router/data_router_recorder_test.cpp",
-    "line": "331",
+    "line": "332",
     "result": "passed",
     "repo_name": "local_repo",
     "hash": "",
@@ -2634,7 +2648,7 @@
   {
     "name": "DataRouterRecorderFixture__Log_LogHex32",
     "file": "score/mw/log/detail/data_router/data_router_recorder_test.cpp",
-    "line": "341",
+    "line": "342",
     "result": "passed",
     "repo_name": "local_repo",
     "hash": "",
@@ -2648,7 +2662,7 @@
   {
     "name": "DataRouterRecorderFixture__Log_LogHex64",
     "file": "score/mw/log/detail/data_router/data_router_recorder_test.cpp",
-    "line": "351",
+    "line": "352",
     "result": "passed",
     "repo_name": "local_repo",
     "hash": "",
@@ -2662,7 +2676,7 @@
   {
     "name": "DataRouterRecorderFixture__Log_LogBin8",
     "file": "score/mw/log/detail/data_router/data_router_recorder_test.cpp",
-    "line": "361",
+    "line": "362",
     "result": "passed",
     "repo_name": "local_repo",
     "hash": "",
@@ -2676,7 +2690,7 @@
   {
     "name": "DataRouterRecorderFixture__Log_LogBin16",
     "file": "score/mw/log/detail/data_router/data_router_recorder_test.cpp",
-    "line": "371",
+    "line": "372",
     "result": "passed",
     "repo_name": "local_repo",
     "hash": "",
@@ -2690,7 +2704,7 @@
   {
     "name": "DataRouterRecorderFixture__Log_LogBin32",
     "file": "score/mw/log/detail/data_router/data_router_recorder_test.cpp",
-    "line": "381",
+    "line": "382",
     "result": "passed",
     "repo_name": "local_repo",
     "hash": "",
@@ -2704,7 +2718,7 @@
   {
     "name": "DataRouterRecorderFixture__Log_LogBin64",
     "file": "score/mw/log/detail/data_router/data_router_recorder_test.cpp",
-    "line": "391",
+    "line": "392",
     "result": "passed",
     "repo_name": "local_repo",
     "hash": "",
@@ -2718,7 +2732,7 @@
   {
     "name": "DataRouterRecorderFixture__Log_LogRawBuffer",
     "file": "score/mw/log/detail/data_router/data_router_recorder_test.cpp",
-    "line": "401",
+    "line": "402",
     "result": "passed",
     "repo_name": "local_repo",
     "hash": "",
@@ -2732,7 +2746,7 @@
   {
     "name": "DataRouterRecorderFixture__Log_LogSlog2Message",
     "file": "score/mw/log/detail/data_router/data_router_recorder_test.cpp",
-    "line": "411",
+    "line": "412",
     "result": "passed",
     "repo_name": "local_repo",
     "hash": "",
@@ -2746,7 +2760,7 @@
   {
     "name": "DataRouterRecorderTests__DatarouterRecorderShouldClearSlotOnStart",
     "file": "score/mw/log/detail/data_router/data_router_recorder_test.cpp",
-    "line": "421",
+    "line": "422",
     "result": "passed",
     "repo_name": "local_repo",
     "hash": "",
@@ -6136,19 +6150,19 @@
     "file": "score/datarouter/test/ut/ut_logging/test_udp_stream_output.cpp",
     "line": "165",
     "result": "passed",
-    "repo_name": null,
-    "hash": null,
-    "url": null,
-    "TestType": null,
-    "DerivationTechnique": null,
+    "repo_name": "local_repo",
+    "hash": "",
+    "url": "",
+    "TestType": "requirements-based",
+    "DerivationTechnique": "requirements-analysis",
     "result_text": "",
-    "PartiallyVerifies": null,
+    "PartiallyVerifies": "comp_req__data_router__dlt_server",
     "FullyVerifies": null
   },
   {
     "name": "UdpStreamOutputFixture__SendMethodShallSucceedIfSendmmsgSucceededWithMmsg_spanNotEmpty",
     "file": "score/datarouter/test/ut/ut_logging/test_udp_stream_output.cpp",
-    "line": "190",
+    "line": "195",
     "result": "passed",
     "repo_name": null,
     "hash": null,
@@ -6162,7 +6176,7 @@
   {
     "name": "UdpStreamOutputFixture__SendMethodShallSucceedIfSendmsgSucceeded",
     "file": "score/datarouter/test/ut/ut_logging/test_udp_stream_output.cpp",
-    "line": "215",
+    "line": "220",
     "result": "passed",
     "repo_name": null,
     "hash": null,
@@ -6176,7 +6190,7 @@
   {
     "name": "UdpStreamOutputFixture__SendMethodShallFailIfSendmsgFailed",
     "file": "score/datarouter/test/ut/ut_logging/test_udp_stream_output.cpp",
-    "line": "235",
+    "line": "240",
     "result": "passed",
     "repo_name": null,
     "hash": null,
@@ -6192,19 +6206,19 @@
     "file": "score/datarouter/test/ut/ut_logging/test_socketserver_config.cpp",
     "line": "50",
     "result": "passed",
-    "repo_name": null,
-    "hash": null,
-    "url": null,
-    "TestType": null,
-    "DerivationTechnique": null,
+    "repo_name": "local_repo",
+    "hash": "",
+    "url": "",
+    "TestType": "requirements-based",
+    "DerivationTechnique": "requirements-analysis",
     "result_text": "",
-    "PartiallyVerifies": null,
+    "PartiallyVerifies": "comp_req__data_router__dlt_multiple_channels, comp_req__data_router__dlt_message_filtering",
     "FullyVerifies": null
   },
   {
     "name": "SocketserverConfigTest__ReadNonExistingPathErrorExpected",
     "file": "score/datarouter/test/ut/ut_logging/test_socketserver_config.cpp",
-    "line": "60",
+    "line": "67",
     "result": "passed",
     "repo_name": null,
     "hash": null,
@@ -6218,7 +6232,7 @@
   {
     "name": "SocketserverConfigTest__ReadEmptyLogChannelErrorExpected",
     "file": "score/datarouter/test/ut/ut_logging/test_socketserver_config.cpp",
-    "line": "66",
+    "line": "73",
     "result": "passed",
     "repo_name": null,
     "hash": null,
@@ -6232,7 +6246,7 @@
   {
     "name": "SocketserverConfigTest__JsonWithoutChannelsErrorExpected",
     "file": "score/datarouter/test/ut/ut_logging/test_socketserver_config.cpp",
-    "line": "72",
+    "line": "79",
     "result": "passed",
     "repo_name": null,
     "hash": null,
@@ -6246,7 +6260,7 @@
   {
     "name": "SocketserverConfigTest__JsonEmptyChannelsErrorExpected",
     "file": "score/datarouter/test/ut/ut_logging/test_socketserver_config.cpp",
-    "line": "78",
+    "line": "85",
     "result": "passed",
     "repo_name": null,
     "hash": null,
@@ -6260,63 +6274,63 @@
   {
     "name": "SocketserverConfigTest__JsonFilteringEnabledExpectConfigFilterTrue",
     "file": "score/datarouter/test/ut/ut_logging/test_socketserver_config.cpp",
-    "line": "84",
+    "line": "91",
     "result": "passed",
-    "repo_name": null,
-    "hash": null,
-    "url": null,
-    "TestType": null,
-    "DerivationTechnique": null,
+    "repo_name": "local_repo",
+    "hash": "",
+    "url": "",
+    "TestType": "requirements-based",
+    "DerivationTechnique": "requirements-analysis",
     "result_text": "",
-    "PartiallyVerifies": null,
+    "PartiallyVerifies": "comp_req__data_router__dlt_message_filtering",
     "FullyVerifies": null
   },
   {
     "name": "SocketserverConfigTest__JsonQuotasEnabledExpectConfigFilterTrue",
     "file": "score/datarouter/test/ut/ut_logging/test_socketserver_config.cpp",
-    "line": "91",
+    "line": "103",
     "result": "passed",
-    "repo_name": null,
-    "hash": null,
-    "url": null,
-    "TestType": null,
-    "DerivationTechnique": null,
+    "repo_name": "local_repo",
+    "hash": "",
+    "url": "",
+    "TestType": "requirements-based",
+    "DerivationTechnique": "requirements-analysis",
     "result_text": "",
-    "PartiallyVerifies": null,
+    "PartiallyVerifies": "comp_req__data_router__dlt_bw_quota_config",
     "FullyVerifies": null
   },
   {
     "name": "SocketserverConfigTest__JsonQuotasEnabledActivated",
     "file": "score/datarouter/test/ut/ut_logging/test_socketserver_config.cpp",
-    "line": "100",
+    "line": "118",
     "result": "passed",
-    "repo_name": null,
-    "hash": null,
-    "url": null,
-    "TestType": null,
-    "DerivationTechnique": null,
+    "repo_name": "local_repo",
+    "hash": "",
+    "url": "",
+    "TestType": "requirements-based",
+    "DerivationTechnique": "requirements-analysis",
     "result_text": "",
-    "PartiallyVerifies": null,
+    "PartiallyVerifies": "comp_req__data_router__dlt_quota_bw_reduction",
     "FullyVerifies": null
   },
   {
     "name": "SocketserverConfigTest__JsonQuotasEnabledDeactivated",
     "file": "score/datarouter/test/ut/ut_logging/test_socketserver_config.cpp",
-    "line": "107",
+    "line": "131",
     "result": "passed",
-    "repo_name": null,
-    "hash": null,
-    "url": null,
-    "TestType": null,
-    "DerivationTechnique": null,
+    "repo_name": "local_repo",
+    "hash": "",
+    "url": "",
+    "TestType": "requirements-based",
+    "DerivationTechnique": "requirements-analysis",
     "result_text": "",
-    "PartiallyVerifies": null,
+    "PartiallyVerifies": "comp_req__data_router__dlt_quota_bw_reduction",
     "FullyVerifies": null
   },
   {
     "name": "SocketserverConfigTest__JsonOldFormatErrorExpected",
     "file": "score/datarouter/test/ut/ut_logging/test_socketserver_config.cpp",
-    "line": "114",
+    "line": "144",
     "result": "passed",
     "repo_name": null,
     "hash": null,
@@ -6330,7 +6344,7 @@
   {
     "name": "SocketserverConfigTest__PersistentDictionaryEmptyJsonErrorExpected",
     "file": "score/datarouter/test/ut/ut_logging/test_socketserver_config.cpp",
-    "line": "122",
+    "line": "152",
     "result": "passed",
     "repo_name": null,
     "hash": null,
@@ -6344,7 +6358,7 @@
   {
     "name": "SocketserverConfigTest__PersistentDictionaryCorrectJsonNoErrorsExpected",
     "file": "score/datarouter/test/ut/ut_logging/test_socketserver_config.cpp",
-    "line": "130",
+    "line": "160",
     "result": "passed",
     "repo_name": null,
     "hash": null,
@@ -6358,7 +6372,7 @@
   {
     "name": "SocketserverConfigTest__PersistentDictionaryEmptyChannelsErrorExpected",
     "file": "score/datarouter/test/ut/ut_logging/test_socketserver_config.cpp",
-    "line": "151",
+    "line": "181",
     "result": "passed",
     "repo_name": null,
     "hash": null,
@@ -6372,7 +6386,7 @@
   {
     "name": "SocketserverConfigTest__PersistentDictionaryNoFilteringEnabledExpectTrueByDefault",
     "file": "score/datarouter/test/ut/ut_logging/test_socketserver_config.cpp",
-    "line": "165",
+    "line": "195",
     "result": "passed",
     "repo_name": null,
     "hash": null,
@@ -6386,7 +6400,7 @@
   {
     "name": "SocketserverConfigTest__WriteDltEnabledCallSetBoolExpected",
     "file": "score/datarouter/test/ut/ut_logging/test_socketserver_config.cpp",
-    "line": "185",
+    "line": "215",
     "result": "passed",
     "repo_name": null,
     "hash": null,
@@ -6400,7 +6414,7 @@
   {
     "name": "SocketserverConfigTest__ReadDltEnabledTrueResultExpected",
     "file": "score/datarouter/test/ut/ut_logging/test_socketserver_config.cpp",
-    "line": "194",
+    "line": "224",
     "result": "passed",
     "repo_name": null,
     "hash": null,
@@ -6414,7 +6428,7 @@
   {
     "name": "SocketserverConfigTest__WriteDltFilledPersistentConfigNoErrorExpected",
     "file": "score/datarouter/test/ut/ut_logging/test_socketserver_config.cpp",
-    "line": "204",
+    "line": "234",
     "result": "passed",
     "repo_name": null,
     "hash": null,
@@ -6428,7 +6442,7 @@
   {
     "name": "SocketserverConfigTest__DefaultThresholdValuePresentTakeIt",
     "file": "score/datarouter/test/ut/ut_logging/test_socketserver_config.cpp",
-    "line": "225",
+    "line": "255",
     "result": "passed",
     "repo_name": null,
     "hash": null,
@@ -6442,7 +6456,7 @@
   {
     "name": "SocketserverConfigTest__DefaultThresoldValuePresentTakeIt",
     "file": "score/datarouter/test/ut/ut_logging/test_socketserver_config.cpp",
-    "line": "233",
+    "line": "263",
     "result": "passed",
     "repo_name": null,
     "hash": null,
@@ -6456,7 +6470,7 @@
   {
     "name": "SocketserverConfigTest__BothValuesPresentTakeDefaultThreshold",
     "file": "score/datarouter/test/ut/ut_logging/test_socketserver_config.cpp",
-    "line": "241",
+    "line": "271",
     "result": "passed",
     "repo_name": null,
     "hash": null,
@@ -6470,7 +6484,7 @@
   {
     "name": "SocketserverConfigTest__NoValuesSetkVerboseAsDefault",
     "file": "score/datarouter/test/ut/ut_logging/test_socketserver_config.cpp",
-    "line": "249",
+    "line": "279",
     "result": "passed",
     "repo_name": null,
     "hash": null,
@@ -6484,7 +6498,7 @@
   {
     "name": "SocketserverConfigTest__GetStringCallExpected",
     "file": "score/datarouter/test/ut/ut_logging/test_socketserver_config.cpp",
-    "line": "257",
+    "line": "287",
     "result": "passed",
     "repo_name": null,
     "hash": null,
@@ -6498,7 +6512,7 @@
   {
     "name": "SocketserverConfigTest__GetBoolCallExpected",
     "file": "score/datarouter/test/ut/ut_logging/test_socketserver_config.cpp",
-    "line": "265",
+    "line": "295",
     "result": "passed",
     "repo_name": null,
     "hash": null,
@@ -7536,33 +7550,33 @@
     "file": "score/datarouter/test/ut/ut_logging/test_dltserver.cpp",
     "line": "173",
     "result": "passed",
-    "repo_name": null,
-    "hash": null,
-    "url": null,
-    "TestType": null,
-    "DerivationTechnique": null,
+    "repo_name": "local_repo",
+    "hash": "",
+    "url": "",
+    "TestType": "requirements-based",
+    "DerivationTechnique": "requirements-analysis",
     "result_text": "",
-    "PartiallyVerifies": null,
+    "PartiallyVerifies": "comp_req__data_router__dlt_quota_bw_reduction",
     "FullyVerifies": null
   },
   {
     "name": "DltServerCreatedWithoutConfigFixture__QuotaEnforcementEnabledExpectTrue",
     "file": "score/datarouter/test/ut/ut_logging/test_dltserver.cpp",
-    "line": "179",
+    "line": "184",
     "result": "passed",
-    "repo_name": null,
-    "hash": null,
-    "url": null,
-    "TestType": null,
-    "DerivationTechnique": null,
+    "repo_name": "local_repo",
+    "hash": "",
+    "url": "",
+    "TestType": "requirements-based",
+    "DerivationTechnique": "requirements-analysis",
     "result_text": "",
-    "PartiallyVerifies": null,
+    "PartiallyVerifies": "comp_req__data_router__dlt_quota_bw_reduction",
     "FullyVerifies": null
   },
   {
     "name": "DltServerCreatedWithoutConfigFixture__SendFTVerboseAppIdNoCoreChannelExpectSendCallOnce",
     "file": "score/datarouter/test/ut/ut_logging/test_dltserver.cpp",
-    "line": "1009",
+    "line": "1019",
     "result": "passed",
     "repo_name": null,
     "hash": null,
@@ -7576,7 +7590,7 @@
   {
     "name": "DltServerCreatedWithoutConfigFixture__SetDltOutputEnableToTrueExpectIsOutputEnabledTrue",
     "file": "score/datarouter/test/ut/ut_logging/test_dltserver.cpp",
-    "line": "1024",
+    "line": "1034",
     "result": "passed",
     "repo_name": null,
     "hash": null,
@@ -7590,7 +7604,7 @@
   {
     "name": "DltServerCreatedWithoutConfigFixture__ConcurrentEnableSameValueNoCallbackFired",
     "file": "score/datarouter/test/ut/ut_logging/test_dltserver.cpp",
-    "line": "1272",
+    "line": "1282",
     "result": "passed",
     "repo_name": null,
     "hash": null,
@@ -7604,7 +7618,7 @@
   {
     "name": "DltServerCreatedWithoutConfigFixture__ConcurrentDisableSameValueCallbackFiredOnce",
     "file": "score/datarouter/test/ut/ut_logging/test_dltserver.cpp",
-    "line": "1298",
+    "line": "1308",
     "result": "passed",
     "repo_name": null,
     "hash": null,
@@ -7618,7 +7632,7 @@
   {
     "name": "DltServerCreatedWithoutConfigFixture__ConcurrentOppositeValuesCallbackCountOneOrTwo",
     "file": "score/datarouter/test/ut/ut_logging/test_dltserver.cpp",
-    "line": "1324",
+    "line": "1334",
     "result": "passed",
     "repo_name": null,
     "hash": null,
@@ -7632,7 +7646,7 @@
   {
     "name": "DltServerCreatedWithoutConfigFixture__ConcurrentToggleStormFlagRemainsConsistent",
     "file": "score/datarouter/test/ut/ut_logging/test_dltserver.cpp",
-    "line": "1355",
+    "line": "1365",
     "result": "passed",
     "repo_name": null,
     "hash": null,
@@ -7646,7 +7660,7 @@
   {
     "name": "DltServerCreatedWithoutConfigFixture__CallbackReceivesCorrectBooleanValuePerTransition",
     "file": "score/datarouter/test/ut/ut_logging/test_dltserver.cpp",
-    "line": "1394",
+    "line": "1404",
     "result": "passed",
     "repo_name": null,
     "hash": null,
@@ -7660,7 +7674,7 @@
   {
     "name": "DltServerCreatedWithoutConfigFixture__ConcurrentReaderSeesOnlyValidBooleanValues",
     "file": "score/datarouter/test/ut/ut_logging/test_dltserver.cpp",
-    "line": "1419",
+    "line": "1429",
     "result": "passed",
     "repo_name": null,
     "hash": null,
@@ -7674,7 +7688,7 @@
   {
     "name": "DltServerCreatedWithConfigFixture__FlushChannelsExpectNoThrowException",
     "file": "score/datarouter/test/ut/ut_logging/test_dltserver.cpp",
-    "line": "231",
+    "line": "241",
     "result": "passed",
     "repo_name": null,
     "hash": null,
@@ -7688,7 +7702,7 @@
   {
     "name": "DltServerCreatedWithConfigFixture__GetQuotaCorrectAppNameExpectCorrectValue",
     "file": "score/datarouter/test/ut/ut_logging/test_dltserver.cpp",
-    "line": "240",
+    "line": "250",
     "result": "passed",
     "repo_name": "local_repo",
     "hash": "",
@@ -7702,7 +7716,7 @@
   {
     "name": "DltServerCreatedWithConfigFixture__GetQuotaCorrectWrongAppNameExpectDefaultValue",
     "file": "score/datarouter/test/ut/ut_logging/test_dltserver.cpp",
-    "line": "256",
+    "line": "266",
     "result": "passed",
     "repo_name": null,
     "hash": null,
@@ -7716,7 +7730,7 @@
   {
     "name": "DltServerCreatedWithConfigFixture__SetTraceStateCommandExpectReadCallback",
     "file": "score/datarouter/test/ut/ut_logging/test_dltserver.cpp",
-    "line": "327",
+    "line": "337",
     "result": "passed",
     "repo_name": null,
     "hash": null,
@@ -7730,7 +7744,7 @@
   {
     "name": "DltServerCreatedWithConfigFixture__SetDefaultTraceStateCommandExpectReadCallback",
     "file": "score/datarouter/test/ut/ut_logging/test_dltserver.cpp",
-    "line": "343",
+    "line": "353",
     "result": "passed",
     "repo_name": null,
     "hash": null,
@@ -7744,7 +7758,7 @@
   {
     "name": "DltServerCreatedWithConfigFixture__SetLogChannelAssignmentWrongCommandExpectReadCallback",
     "file": "score/datarouter/test/ut/ut_logging/test_dltserver.cpp",
-    "line": "359",
+    "line": "369",
     "result": "passed",
     "repo_name": null,
     "hash": null,
@@ -7758,7 +7772,7 @@
   {
     "name": "DltServerCreatedWithConfigFixture__SetLogChannelAssignmentCommandNoChannelsExpectReadCallback",
     "file": "score/datarouter/test/ut/ut_logging/test_dltserver.cpp",
-    "line": "375",
+    "line": "385",
     "result": "passed",
     "repo_name": null,
     "hash": null,
@@ -7772,7 +7786,7 @@
   {
     "name": "DltServerCreatedWithConfigFixture__SetLogChannelAssignmentCommandFoundChannelAssignmentFoundExpectReadCallback",
     "file": "score/datarouter/test/ut/ut_logging/test_dltserver.cpp",
-    "line": "394",
+    "line": "404",
     "result": "passed",
     "repo_name": null,
     "hash": null,
@@ -7786,7 +7800,7 @@
   {
     "name": "DltServerCreatedWithConfigFixture__SetLogChannelAssignmentCommandFoundChannelAssignmentFoundRemoveExpectReadCallback",
     "file": "score/datarouter/test/ut/ut_logging/test_dltserver.cpp",
-    "line": "414",
+    "line": "424",
     "result": "passed",
     "repo_name": null,
     "hash": null,
@@ -7800,7 +7814,7 @@
   {
     "name": "DltServerCreatedWithConfigFixture__SetLogChannelAssignmentCommandFoundChannelAssignmentNotFoundAddExpectReadCallback",
     "file": "score/datarouter/test/ut/ut_logging/test_dltserver.cpp",
-    "line": "482",
+    "line": "492",
     "result": "passed",
     "repo_name": null,
     "hash": null,
@@ -7814,7 +7828,7 @@
   {
     "name": "DltServerCreatedWithConfigFixture__SetLogChannelAssignmentWrongChannel",
     "file": "score/datarouter/test/ut/ut_logging/test_dltserver.cpp",
-    "line": "501",
+    "line": "511",
     "result": "passed",
     "repo_name": null,
     "hash": null,
@@ -7828,7 +7842,7 @@
   {
     "name": "DltServerCreatedWithConfigFixture__SetLogChannelAssignmentBehaviorRemovesChannel",
     "file": "score/datarouter/test/ut/ut_logging/test_dltserver.cpp",
-    "line": "514",
+    "line": "524",
     "result": "passed",
     "repo_name": null,
     "hash": null,
@@ -7842,7 +7856,7 @@
   {
     "name": "DltServerCreatedWithConfigFixture__SetDltOutputEnableCommandCallbackEnabledExpectCallbackCall",
     "file": "score/datarouter/test/ut/ut_logging/test_dltserver.cpp",
-    "line": "548",
+    "line": "558",
     "result": "passed",
     "repo_name": null,
     "hash": null,
@@ -7856,7 +7870,7 @@
   {
     "name": "DltServerCreatedWithConfigFixture__SetDltOutputEnableCommandWrongSizeExpectError",
     "file": "score/datarouter/test/ut/ut_logging/test_dltserver.cpp",
-    "line": "571",
+    "line": "581",
     "result": "passed",
     "repo_name": null,
     "hash": null,
@@ -7870,7 +7884,7 @@
   {
     "name": "DltServerCreatedWithConfigFixture__SetDefaultLogLevelCommandExpectReadCallback",
     "file": "score/datarouter/test/ut/ut_logging/test_dltserver.cpp",
-    "line": "588",
+    "line": "598",
     "result": "passed",
     "repo_name": null,
     "hash": null,
@@ -7884,7 +7898,7 @@
   {
     "name": "DltServerCreatedWithConfigFixture__SetDefaultLogLevelCommandReadLevelErrorExpectReadCallback",
     "file": "score/datarouter/test/ut/ut_logging/test_dltserver.cpp",
-    "line": "606",
+    "line": "616",
     "result": "passed",
     "repo_name": null,
     "hash": null,
@@ -7898,7 +7912,7 @@
   {
     "name": "DltServerCreatedWithConfigFixture__SetDefaultLogLevelBehaviorAffectsNewContexts",
     "file": "score/datarouter/test/ut/ut_logging/test_dltserver.cpp",
-    "line": "624",
+    "line": "634",
     "result": "passed",
     "repo_name": null,
     "hash": null,
@@ -7912,7 +7926,7 @@
   {
     "name": "DltServerCreatedWithConfigFixture__SetMessagingFilteringStateCommandExpectReadCallback",
     "file": "score/datarouter/test/ut/ut_logging/test_dltserver.cpp",
-    "line": "656",
+    "line": "666",
     "result": "passed",
     "repo_name": null,
     "hash": null,
@@ -7926,7 +7940,7 @@
   {
     "name": "DltServerCreatedWithConfigFixture__SetMessagingFilteringStateBehaviorBypassesThresholds",
     "file": "score/datarouter/test/ut/ut_logging/test_dltserver.cpp",
-    "line": "674",
+    "line": "684",
     "result": "passed",
     "repo_name": null,
     "hash": null,
@@ -7940,7 +7954,7 @@
   {
     "name": "DltServerCreatedWithConfigFixture__SetLogChannelThresholdWrongCommandExpectReadCallback",
     "file": "score/datarouter/test/ut/ut_logging/test_dltserver.cpp",
-    "line": "716",
+    "line": "726",
     "result": "passed",
     "repo_name": null,
     "hash": null,
@@ -7954,7 +7968,7 @@
   {
     "name": "DltServerCreatedWithConfigFixture__SetLogChannelThresholdChannelNotFoundCommandExpectReadCallback",
     "file": "score/datarouter/test/ut/ut_logging/test_dltserver.cpp",
-    "line": "732",
+    "line": "742",
     "result": "passed",
     "repo_name": null,
     "hash": null,
@@ -7968,7 +7982,7 @@
   {
     "name": "DltServerCreatedWithConfigFixture__SetLogChannelThresholdChannelFoundCommandExpectReadCallback",
     "file": "score/datarouter/test/ut/ut_logging/test_dltserver.cpp",
-    "line": "750",
+    "line": "760",
     "result": "passed",
     "repo_name": null,
     "hash": null,
@@ -7982,7 +7996,7 @@
   {
     "name": "DltServerCreatedWithConfigFixture__SetLogChannelThresholdBehaviorFiltersLowerLevels",
     "file": "score/datarouter/test/ut/ut_logging/test_dltserver.cpp",
-    "line": "768",
+    "line": "778",
     "result": "passed",
     "repo_name": null,
     "hash": null,
@@ -7996,7 +8010,7 @@
   {
     "name": "DltServerCreatedWithConfigFixture__SetLogLevelBehaviorIncreaseThresholdAllowsVerbose",
     "file": "score/datarouter/test/ut/ut_logging/test_dltserver.cpp",
-    "line": "793",
+    "line": "803",
     "result": "passed",
     "repo_name": null,
     "hash": null,
@@ -8010,7 +8024,7 @@
   {
     "name": "DltServerCreatedWithConfigFixture__SetLogLevelBehaviorResetToDefaultBlocksVerboseAgain",
     "file": "score/datarouter/test/ut/ut_logging/test_dltserver.cpp",
-    "line": "824",
+    "line": "834",
     "result": "passed",
     "repo_name": null,
     "hash": null,
@@ -8024,7 +8038,7 @@
   {
     "name": "DltServerCreatedWithConfigFixture__SendNonVerboseFilteringDisabledExpectSendCallOnce",
     "file": "score/datarouter/test/ut/ut_logging/test_dltserver.cpp",
-    "line": "891",
+    "line": "901",
     "result": "passed",
     "repo_name": null,
     "hash": null,
@@ -8038,7 +8052,7 @@
   {
     "name": "DltServerCreatedWithConfigFixture__SendNonVerboseNoAppIdAcceptedByFilteringNotAssignedToChannelExpectSendCallOnce",
     "file": "score/datarouter/test/ut/ut_logging/test_dltserver.cpp",
-    "line": "906",
+    "line": "916",
     "result": "passed",
     "repo_name": null,
     "hash": null,
@@ -8052,7 +8066,7 @@
   {
     "name": "DltServerCreatedWithConfigFixture__SendNonVerboseAppIdAcceptedByFilteringExpectSendCallTwice",
     "file": "score/datarouter/test/ut/ut_logging/test_dltserver.cpp",
-    "line": "918",
+    "line": "928",
     "result": "passed",
     "repo_name": null,
     "hash": null,
@@ -8066,7 +8080,7 @@
   {
     "name": "DltServerCreatedWithConfigFixture__SendVerboseNoAppIdAcceptedByFilteringNotAssignedToChannelExpectSendCallOnce",
     "file": "score/datarouter/test/ut/ut_logging/test_dltserver.cpp",
-    "line": "935",
+    "line": "945",
     "result": "passed",
     "repo_name": null,
     "hash": null,
@@ -8080,7 +8094,7 @@
   {
     "name": "DltServerCreatedWithConfigFixture__SendVerboseAppIdAcceptedByFilteringExpectSendCallTwice",
     "file": "score/datarouter/test/ut/ut_logging/test_dltserver.cpp",
-    "line": "947",
+    "line": "957",
     "result": "passed",
     "repo_name": null,
     "hash": null,
@@ -8094,7 +8108,7 @@
   {
     "name": "DltServerCreatedWithConfigFixture__SendVerboseAppIdNotExpectedLogLevelExpectSendNoCall",
     "file": "score/datarouter/test/ut/ut_logging/test_dltserver.cpp",
-    "line": "964",
+    "line": "974",
     "result": "passed",
     "repo_name": null,
     "hash": null,
@@ -8108,7 +8122,7 @@
   {
     "name": "DltServerCreatedWithConfigFixture__SendFVerboseNoAppIdWithCoreChannelExpectSendCallOnce",
     "file": "score/datarouter/test/ut/ut_logging/test_dltserver.cpp",
-    "line": "982",
+    "line": "992",
     "result": "passed",
     "repo_name": null,
     "hash": null,
@@ -8122,7 +8136,7 @@
   {
     "name": "DltServerCreatedWithConfigFixture__SendFVerboseAppIdWithCoreChannelExpectSendCallOnce",
     "file": "score/datarouter/test/ut/ut_logging/test_dltserver.cpp",
-    "line": "996",
+    "line": "1006",
     "result": "passed",
     "repo_name": null,
     "hash": null,
@@ -8136,7 +8150,7 @@
   {
     "name": "DltServerCreatedWithConfigFixture__SetLogChannelThresholdChannelMissingDirectCallReturnsError",
     "file": "score/datarouter/test/ut/ut_logging/test_dltserver.cpp",
-    "line": "1036",
+    "line": "1046",
     "result": "passed",
     "repo_name": null,
     "hash": null,
@@ -8150,7 +8164,7 @@
   {
     "name": "DltServerCreatedWithConfigFixture__MakeConfigCommandHandlerReturnsValidFunction",
     "file": "score/datarouter/test/ut/ut_logging/test_dltserver.cpp",
-    "line": "1051",
+    "line": "1061",
     "result": "passed",
     "repo_name": null,
     "hash": null,
@@ -8164,7 +8178,7 @@
   {
     "name": "DltServerCreatedWithConfigFixture__MakeConfigCommandHandlerWithInvalidCommand",
     "file": "score/datarouter/test/ut/ut_logging/test_dltserver.cpp",
-    "line": "1078",
+    "line": "1088",
     "result": "passed",
     "repo_name": null,
     "hash": null,
@@ -8178,7 +8192,7 @@
   {
     "name": "DltServerCreatedWithConfigFixture__ResetToDefaultDirectCallReloadsChannels",
     "file": "score/datarouter/test/ut/ut_logging/test_dltserver.cpp",
-    "line": "1105",
+    "line": "1115",
     "result": "passed",
     "repo_name": null,
     "hash": null,
@@ -8192,7 +8206,7 @@
   {
     "name": "DltServerCreatedWithConfigFixture__ReadLogChannelNamesDirectCall",
     "file": "score/datarouter/test/ut/ut_logging/test_dltserver.cpp",
-    "line": "1122",
+    "line": "1132",
     "result": "passed",
     "repo_name": null,
     "hash": null,
@@ -8206,7 +8220,7 @@
   {
     "name": "DltServerCreatedWithConfigFixture__StoreDltConfigDirectCall",
     "file": "score/datarouter/test/ut/ut_logging/test_dltserver.cpp",
-    "line": "1138",
+    "line": "1148",
     "result": "passed",
     "repo_name": null,
     "hash": null,
@@ -8220,7 +8234,7 @@
   {
     "name": "DltServerCreatedWithConfigFixture__SetDltOutputEnableDirectCall",
     "file": "score/datarouter/test/ut/ut_logging/test_dltserver.cpp",
-    "line": "1155",
+    "line": "1165",
     "result": "passed",
     "repo_name": null,
     "hash": null,
@@ -8234,7 +8248,7 @@
   {
     "name": "DltServerCreatedWithConfigFixture__SetDltOutputEnableBehaviorBlocksAllSends",
     "file": "score/datarouter/test/ut/ut_logging/test_dltserver.cpp",
-    "line": "1177",
+    "line": "1187",
     "result": "passed",
     "repo_name": null,
     "hash": null,
@@ -8248,7 +8262,7 @@
   {
     "name": "DltServerCreatedWithConfigFixture__ResetToDefaultBehaviorRestoresInitialThresholds",
     "file": "score/datarouter/test/ut/ut_logging/test_dltserver.cpp",
-    "line": "1210",
+    "line": "1220",
     "result": "passed",
     "repo_name": null,
     "hash": null,
@@ -8262,7 +8276,7 @@
   {
     "name": "DltServerCreatedWithConfigFixture__ReadLogChannelNamesDirectCallContainsExpectedChannels",
     "file": "score/datarouter/test/ut/ut_logging/test_dltserver.cpp",
-    "line": "1251",
+    "line": "1261",
     "result": "passed",
     "repo_name": null,
     "hash": null,
@@ -8276,7 +8290,7 @@
   {
     "name": "ResetToDefaultTest__ResetToDefaultCommandEmptyChannelsNoReadCallback",
     "file": "score/datarouter/test/ut/ut_logging/test_dltserver.cpp",
-    "line": "266",
+    "line": "276",
     "result": "passed",
     "repo_name": null,
     "hash": null,
@@ -8290,7 +8304,7 @@
   {
     "name": "ResetToDefaultTest__ResetToDefaultCommandChannelsSizeTooBigNoReadCallback",
     "file": "score/datarouter/test/ut/ut_logging/test_dltserver.cpp",
-    "line": "293",
+    "line": "303",
     "result": "passed",
     "repo_name": null,
     "hash": null,
@@ -8304,7 +8318,7 @@
   {
     "name": "DltServerWrongChannelsTest__SetLogChannelAssignmentCommandFoundChannelAssignmentFoundRemoveFailedExpectReadCallback",
     "file": "score/datarouter/test/ut/ut_logging/test_dltserver.cpp",
-    "line": "434",
+    "line": "444",
     "result": "passed",
     "repo_name": null,
     "hash": null,
@@ -8318,7 +8332,7 @@
   {
     "name": "DltServerTest__ExtractIdValidInputDataExpectValidResult",
     "file": "score/datarouter/test/ut/ut_logging/test_dltserver.cpp",
-    "line": "856",
+    "line": "866",
     "result": "passed",
     "repo_name": null,
     "hash": null,
@@ -8332,7 +8346,7 @@
   {
     "name": "DltServerTest__ExtractIdNonValidInputDataExpectNonValidResult",
     "file": "score/datarouter/test/ut/ut_logging/test_dltserver.cpp",
-    "line": "867",
+    "line": "877",
     "result": "passed",
     "repo_name": null,
     "hash": null,
@@ -8346,7 +8360,7 @@
   {
     "name": "DltServerTest__AppendIdValidInputDataExpectValidResult",
     "file": "score/datarouter/test/ut/ut_logging/test_dltserver.cpp",
-    "line": "878",
+    "line": "888",
     "result": "passed",
     "repo_name": null,
     "hash": null,
