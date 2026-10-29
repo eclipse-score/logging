@@ -101,10 +101,7 @@ cc_test(
     features = [
         "aborts_upon_exception",
     ],
-    tags = [
-        "manual",
-        "unit",
-    ],
+    tags = ["unit"],
     target_compatible_with = ["@platforms//os:qnx"],
     deps = [
         "@googletest//:gtest",
