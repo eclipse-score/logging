@@ -1,0 +1,165 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Architecture &mdash; Dependable Element Mw Log Backend Doc 1.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../_static/graphviz.css?v=4ae1632d" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-data-viewer/jsonview.bundle.css?v=f6ef2277" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-needs/libs/html/datatables.min.css?v=4b4fd840" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-needs/common_css/need_toggle.css?v=5c6620df" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-needs/common_css/need_links.css?v=2150a916" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-needs/common_css/needstable.css?v=5e1b6797" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-needs/common_css/need_style.css?v=92936fa5" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-needs/common_css/need_core.css?v=f5b60a78" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-needs/modern.css?v=803738c0" />
+
+  
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=8d563738"></script>
+      <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../_static/design-tabs.js?v=f930bc37"></script>
+      <script src="../_static/sphinx-data-viewer/jsonview.bundle.js?v=18cd53c5"></script>
+      <script src="../_static/sphinx-data-viewer/jsonview_loader.js?v=f7ff7e7d"></script>
+      <script src="../_static/sphinx-needs/libs/html/datatables.min.js?v=8a4aee21"></script>
+      <script src="../_static/sphinx-needs/libs/html/datatables_loader.js?v=a2cae175"></script>
+      <script src="../_static/sphinx-needs/libs/html/sphinx_needs_collapse.js?v=dca66431"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Unit Test" href="unit_test.html" />
+    <link rel="prev" title="Control Measures" href="control_measures.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            Dependable Element Mw Log Backend Doc
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../assumed_system.html">Assumed System</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../software_arch.html">Software Architectural Level</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../components.html">Components</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../traceability.html">Traceability</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="index.html">L.O.B.S.T.E.R. Traceability Report</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="index.html">Overview</a></li>
+<li class="toctree-l3"><a class="reference internal" href="feature_requirements.html">Feature Requirements</a></li>
+<li class="toctree-l3"><a class="reference internal" href="component_requirements.html">Component Requirements</a></li>
+<li class="toctree-l3"><a class="reference internal" href="failure_modes.html">Failure Modes</a></li>
+<li class="toctree-l3"><a class="reference internal" href="control_measures.html">Control Measures</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Architecture</a></li>
+<li class="toctree-l3"><a class="reference internal" href="unit_test.html">Unit Test</a></li>
+<li class="toctree-l3"><a class="reference internal" href="test_case_coverage.html">Test Case Coverage</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">Dependable Element Mw Log Backend Doc</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../traceability.html">Traceability</a></li>
+          <li class="breadcrumb-item"><a href="index.html">L.O.B.S.T.E.R. Traceability Report</a></li>
+      <li class="breadcrumb-item active">Architecture</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/traceability_report/architecture.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="architecture">
+<h1>Architecture<a class="headerlink" href="#architecture" title="Link to this heading"></a></h1>
+<p><strong>Coverage:</strong> 100.0% (1 of 1 items OK)</p>
+<details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3" id="lobster-item-7bfe7ca94ee8257f6da5326b842b99c0c42a6273">
+<summary class="sd-summary-title sd-card-header sd-bg-success sd-text-white">
+<span class="sd-summary-text">[OK] Bazel Architecture //score/mw/log/dependability:component_mw_log_backend</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
+<p class="sd-card-text"><strong>Derived from:</strong></p>
+<ul class="simple">
+<li><p class="sd-card-text"><a class="reference internal" href="component_requirements.html#lobster-item-4b371bc3ac6ae56c17e7d7a4b9c3d6c0f30fe81c"><span class="std std-ref">MwLog.TimeBoundedLocking</span></a></p></li>
+<li><p class="sd-card-text"><a class="reference internal" href="component_requirements.html#lobster-item-c9cd5482c0049b64d91b1f53bf505fbdca20a050"><span class="std std-ref">MwLog.SystemBackendActivation</span></a></p></li>
+<li><p class="sd-card-text"><a class="reference internal" href="component_requirements.html#lobster-item-4bfac174996a064d970b79537a8ab4821e4c3f13"><span class="std std-ref">MwLog.SharedMemoryFilePermissions</span></a></p></li>
+<li><p class="sd-card-text"><a class="reference internal" href="component_requirements.html#lobster-item-2418b8704dc0807bdc2ab9fca05cd33fb4e81ad3"><span class="std std-ref">MwLog.MemoryBoundChecking</span></a></p></li>
+<li><p class="sd-card-text"><a class="reference internal" href="component_requirements.html#lobster-item-973e6c32f0a9ea6df9ced35cd5df3667f3d80b12"><span class="std std-ref">MwLog.LocalAllocationStrategy</span></a></p></li>
+<li><p class="sd-card-text"><a class="reference internal" href="component_requirements.html#lobster-item-325e97c01897aac1a8c60fc78a4851ba4853bcbe"><span class="std std-ref">MwLog.IndexAndSizeChecking</span></a></p></li>
+<li><p class="sd-card-text"><a class="reference internal" href="component_requirements.html#lobster-item-a4a883d0188ce9e31168d4aae9f9683f2bde6439"><span class="std std-ref">MwLog.InactiveLogStreamBehavior</span></a></p></li>
+<li><p class="sd-card-text"><a class="reference internal" href="component_requirements.html#lobster-item-1e19ff64dfdcb7d355592f7cf299e240907b27dc"><span class="std std-ref">MwLog.ForwardToSystemLogger</span></a></p></li>
+<li><p class="sd-card-text"><a class="reference internal" href="component_requirements.html#lobster-item-023e236205af00574969ad5a522d1fa561ed204d"><span class="std std-ref">MwLog.FileDescriptorFlags</span></a></p></li>
+<li><p class="sd-card-text"><a class="reference internal" href="component_requirements.html#lobster-item-3379e95a99d683504eb27583c0669e3532730a40"><span class="std std-ref">MwLog.DltVerboseMode</span></a></p></li>
+<li><p class="sd-card-text"><a class="reference internal" href="component_requirements.html#lobster-item-532a3ea19ff52d3c56fcdfce276b0af8af68564e"><span class="std std-ref">MwLog.CrossLockingPrevention</span></a></p></li>
+<li><p class="sd-card-text"><a class="reference internal" href="component_requirements.html#lobster-item-ab77c02cb03c98149347622ca992c919b1a2c030"><span class="std std-ref">MwLog.BoundedLoopExecution</span></a></p></li>
+<li><p class="sd-card-text"><a class="reference internal" href="component_requirements.html#lobster-item-f8e3900e83768564b6a528579eeb57dca7fdb099"><span class="std std-ref">MwLog.AvoidSignalProcessing</span></a></p></li>
+<li><p class="sd-card-text"><a class="reference internal" href="component_requirements.html#lobster-item-983a22b6905837b1aaa6899ad9c655553f115a0f"><span class="std std-ref">MwLog.AutosarLogTraceSpec</span></a></p></li>
+</ul>
+<hr><p class="sd-card-text"><strong>Source:</strong> <a class="reference external" href="../../../../../../score/mw/log/dependability/BUILD#L1">score/mw/log/dependability/BUILD:1</a></p>
+</div>
+</details></section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="control_measures.html" class="btn btn-neutral float-left" title="Control Measures" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="unit_test.html" class="btn btn-neutral float-right" title="Unit Test" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright .</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
