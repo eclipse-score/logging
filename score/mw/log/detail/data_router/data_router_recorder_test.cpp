@@ -105,7 +105,7 @@ TEST_F(DataRouterRecorderFixtureWithLogLevelCheck, WillObtainSlotForSufficientLo
 
 TEST_F(DataRouterRecorderFixtureWithLogLevelCheck, WillObtainEmptySlotForInsufficentLogLevel)
 {
-    RecordProperty("PartiallyVerifies", "comp_req__log__inactive_logstream");
+    RecordProperty("PartiallyVerifies", "comp_req__data_router__dlt_message_filtering");
     RecordProperty("ASIL", "B");
     RecordProperty("Description", "Verifies the in-ability of returning a slot in case of inactive log level.");
     RecordProperty("TestType", "Interface test");
@@ -117,7 +117,7 @@ TEST_F(DataRouterRecorderFixtureWithLogLevelCheck, WillObtainEmptySlotForInsuffi
 
 TEST_F(DataRouterRecorderFixtureWithLogLevelCheck, DisablesOrEnablesLogAccordingToLevel)
 {
-    RecordProperty("PartiallyVerifies", "comp_req__log__inactive_logstream");
+    RecordProperty("PartiallyVerifies", "comp_req__data_router__dlt_message_filtering");
     RecordProperty("ASIL", "B");
     RecordProperty("Description", "Verifies the ability of checking the log availability using 'IsLogEnabled' API.");
     RecordProperty("TestType", "requirements-based");
