@@ -1,0 +1,30 @@
+Assumed System Requirements
+===========================
+.. requirement:definition:: MwLogAssumedSystemRequirements.ASR_LoggingSupport
+
+   The platform shall support Diagnostic Log and Trace (DLT) / Logcat format as well as logging of early startup events.
+
+.. requirement:definition:: MwLogAssumedSystemRequirements.ASR_SafeLogAndTrace
+
+   The platform shall provide a Log and Trace infrastructure supporting the highest ASIL level, guaranteeing freedom from interference (FFI) with regard to the calling components.
+
+.. requirement:definition:: MwLogAssumedSystemRequirements.ASR_SecureLogAndTrace
+
+   The information exchanged between applications and the Logging and Tracing components shall be protected against unauthorized access and manipulation. The platform shall provide mechanisms to ensure confidentiality, integrity, and authenticity of the exchanged information.
+
+.. requirement:definition:: MwLogAssumedSystemRequirements.ASR_ErrorHandling
+
+   (C++) exceptions shall not be used for error handling.
+   The best way to deal with errors is to try to resolve those component internally. If not possible the caller of the function shall be notified of the error.
+   For (error) returns there is a specific library to be used in S-CORE, it is the score::Result library which is part of
+   the Base Libraries feature.
+
+.. requirement:definition:: MwLogAssumedSystemRequirements.ASR_LogAndTraceConsistentBehaviour
+
+   All Log and Trace functionality used in the context of customer functionality shall provide consistent behaviour.
+
+.. requirement:definition:: MwLogAssumedSystemRequirements.ASR_OverallGoalsEnableCooperation
+
+   The SW-platform shall where possible be based on existing standards (e.g. network
+   protocols).
+
