@@ -1,0 +1,425 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Feature Requirements &mdash; Dependable Element Mw Log Backend Doc 1.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/graphviz.css?v=4ae1632d" />
+      <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
+      <link rel="stylesheet" type="text/css" href="../../_static/sphinx-data-viewer/jsonview.bundle.css?v=f6ef2277" />
+      <link rel="stylesheet" type="text/css" href="../../_static/sphinx-needs/libs/html/datatables.min.css?v=4b4fd840" />
+      <link rel="stylesheet" type="text/css" href="../../_static/sphinx-needs/common_css/need_toggle.css?v=5c6620df" />
+      <link rel="stylesheet" type="text/css" href="../../_static/sphinx-needs/common_css/need_links.css?v=2150a916" />
+      <link rel="stylesheet" type="text/css" href="../../_static/sphinx-needs/common_css/needstable.css?v=5e1b6797" />
+      <link rel="stylesheet" type="text/css" href="../../_static/sphinx-needs/common_css/need_style.css?v=92936fa5" />
+      <link rel="stylesheet" type="text/css" href="../../_static/sphinx-needs/common_css/need_core.css?v=f5b60a78" />
+      <link rel="stylesheet" type="text/css" href="../../_static/sphinx-needs/modern.css?v=803738c0" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=8d563738"></script>
+      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+      <script src="../../_static/design-tabs.js?v=f930bc37"></script>
+      <script src="../../_static/sphinx-data-viewer/jsonview.bundle.js?v=18cd53c5"></script>
+      <script src="../../_static/sphinx-data-viewer/jsonview_loader.js?v=f7ff7e7d"></script>
+      <script src="../../_static/sphinx-needs/libs/html/datatables.min.js?v=8a4aee21"></script>
+      <script src="../../_static/sphinx-needs/libs/html/datatables_loader.js?v=a2cae175"></script>
+      <script src="../../_static/sphinx-needs/libs/html/sphinx_needs_collapse.js?v=dca66431"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Safe Datarouter Backend" href="../../architectural_design/datarouter_backend/index.html" />
+    <link rel="prev" title="Software Architectural Level" href="../../software_arch.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            Dependable Element Mw Log Backend Doc
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../assumed_system.html">Assumed System</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../software_arch.html">Software Architectural Level</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Feature Requirements</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../software_arch.html#static-design">Static Design</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../software_arch.html#dynamic-design">Dynamic Design</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../../software_arch.html#dependability-analysis">Dependability Analysis</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../components.html">Components</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../traceability.html">Traceability</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">Dependable Element Mw Log Backend Doc</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../software_arch.html">Software Architectural Level</a></li>
+      <li class="breadcrumb-item active">Feature Requirements</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/feature_requirements/feature_requirements/feature_requirements.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="feature-requirements">
+<h1>Feature Requirements<a class="headerlink" href="#feature-requirements" title="Link to this heading"></a></h1>
+<dl class="requirement definition">
+<dt class="sig sig-object requirement" id="requirement-MwLogFeature.TimestampingLocal">
+<span class="sig-name descname"><span class="pre">MwLogFeature.TimestampingLocal</span></span><a class="headerlink" href="#requirement-MwLogFeature.TimestampingLocal" title="Link to this definition"></a></dt>
+<dd><p>The logging framework shall support local timestamps for each log entry.</p>
+</dd></dl>
+
+<dl class="requirement definition">
+<dt class="sig sig-object requirement" id="requirement-MwLogFeature.TimestampingOriginal">
+<span class="sig-name descname"><span class="pre">MwLogFeature.TimestampingOriginal</span></span><a class="headerlink" href="#requirement-MwLogFeature.TimestampingOriginal" title="Link to this definition"></a></dt>
+<dd><p>The logging framework shall support original timestamps for routed log entries.</p>
+</dd></dl>
+
+<dl class="requirement definition">
+<dt class="sig sig-object requirement" id="requirement-MwLogFeature.TimestampingSync">
+<span class="sig-name descname"><span class="pre">MwLogFeature.TimestampingSync</span></span><a class="headerlink" href="#requirement-MwLogFeature.TimestampingSync" title="Link to this definition"></a></dt>
+<dd><p>The logging framework shall support timestamp synchronization for log entries
+coming from different logging nodes.</p>
+</dd></dl>
+
+<dl class="requirement definition">
+<dt class="sig sig-object requirement" id="requirement-MwLogFeature.SeverityLevels">
+<span class="sig-name descname"><span class="pre">MwLogFeature.SeverityLevels</span></span><a class="headerlink" href="#requirement-MwLogFeature.SeverityLevels" title="Link to this definition"></a></dt>
+<dd><p>The logging framework shall support a log level for each log entry.</p>
+</dd></dl>
+
+<dl class="requirement definition">
+<dt class="sig sig-object requirement" id="requirement-MwLogFeature.Prioritization">
+<span class="sig-name descname"><span class="pre">MwLogFeature.Prioritization</span></span><a class="headerlink" href="#requirement-MwLogFeature.Prioritization" title="Link to this definition"></a></dt>
+<dd><p>The logging framework shall prioritize logs in case of resource conflicts to
+ensure critical logs are not lost.</p>
+</dd></dl>
+
+<dl class="requirement definition">
+<dt class="sig sig-object requirement" id="requirement-MwLogFeature.EarlyStartupLogging">
+<span class="sig-name descname"><span class="pre">MwLogFeature.EarlyStartupLogging</span></span><a class="headerlink" href="#requirement-MwLogFeature.EarlyStartupLogging" title="Link to this definition"></a></dt>
+<dd><p>The logging framework shall support logging of early startup events to capture
+critical initialization information.</p>
+</dd></dl>
+
+<dl class="requirement definition">
+<dt class="sig sig-object requirement" id="requirement-MwLogFeature.EntityIdentifier">
+<span class="sig-name descname"><span class="pre">MwLogFeature.EntityIdentifier</span></span><a class="headerlink" href="#requirement-MwLogFeature.EntityIdentifier" title="Link to this definition"></a></dt>
+<dd><p>The logging framework shall support logging entity identifiers for each log
+entry.</p>
+</dd></dl>
+
+<dl class="requirement definition">
+<dt class="sig sig-object requirement" id="requirement-MwLogFeature.FilteringLogLevels">
+<span class="sig-name descname"><span class="pre">MwLogFeature.FilteringLogLevels</span></span><a class="headerlink" href="#requirement-MwLogFeature.FilteringLogLevels" title="Link to this definition"></a></dt>
+<dd><p>The logging framework shall support filtering by log levels.</p>
+</dd></dl>
+
+<dl class="requirement definition">
+<dt class="sig sig-object requirement" id="requirement-MwLogFeature.FilteringEntityId">
+<span class="sig-name descname"><span class="pre">MwLogFeature.FilteringEntityId</span></span><a class="headerlink" href="#requirement-MwLogFeature.FilteringEntityId" title="Link to this definition"></a></dt>
+<dd><p>The logging framework shall support filtering by logging entity identifiers.</p>
+</dd></dl>
+
+<dl class="requirement definition">
+<dt class="sig sig-object requirement" id="requirement-MwLogFeature.MessageLossDetection">
+<span class="sig-name descname"><span class="pre">MwLogFeature.MessageLossDetection</span></span><a class="headerlink" href="#requirement-MwLogFeature.MessageLossDetection" title="Link to this definition"></a></dt>
+<dd><p>The logging framework shall detect and report any message loss.</p>
+</dd></dl>
+
+<dl class="requirement definition">
+<dt class="sig sig-object requirement" id="requirement-MwLogFeature.MessageLossHandling">
+<span class="sig-name descname"><span class="pre">MwLogFeature.MessageLossHandling</span></span><a class="headerlink" href="#requirement-MwLogFeature.MessageLossHandling" title="Link to this definition"></a></dt>
+<dd><p>The logging framework shall provide mechanisms to handle message loss
+gracefully. Additional Information: e.g. buffering or prioritizing critical messages.</p>
+</dd></dl>
+
+<dl class="requirement definition">
+<dt class="sig sig-object requirement" id="requirement-MwLogFeature.ContextLogLevelActivation">
+<span class="sig-name descname"><span class="pre">MwLogFeature.ContextLogLevelActivation</span></span><a class="headerlink" href="#requirement-MwLogFeature.ContextLogLevelActivation" title="Link to this definition"></a></dt>
+<dd><p>The logging framework shall allow context-specific log level activation at
+runtime to enable fine-grained control over logging behavior.</p>
+</dd></dl>
+
+<dl class="requirement definition">
+<dt class="sig sig-object requirement" id="requirement-MwLogFeature.LogSourcesUserApp">
+<span class="sig-name descname"><span class="pre">MwLogFeature.LogSourcesUserApp</span></span><a class="headerlink" href="#requirement-MwLogFeature.LogSourcesUserApp" title="Link to this definition"></a></dt>
+<dd><p>The logging framework shall support user application as log source.</p>
+</dd></dl>
+
+<dl class="requirement definition">
+<dt class="sig sig-object requirement" id="requirement-MwLogFeature.LogSourcesComponentPlatform">
+<span class="sig-name descname"><span class="pre">MwLogFeature.LogSourcesComponentPlatform</span></span><a class="headerlink" href="#requirement-MwLogFeature.LogSourcesComponentPlatform" title="Link to this definition"></a></dt>
+<dd><p>The logging framework shall support component features and platform as log
+sources.</p>
+</dd></dl>
+
+<dl class="requirement definition">
+<dt class="sig sig-object requirement" id="requirement-MwLogFeature.LogSinksConsole">
+<span class="sig-name descname"><span class="pre">MwLogFeature.LogSinksConsole</span></span><a class="headerlink" href="#requirement-MwLogFeature.LogSinksConsole" title="Link to this definition"></a></dt>
+<dd><p>The logging framework shall support console as a log sink.</p>
+</dd></dl>
+
+<dl class="requirement definition">
+<dt class="sig sig-object requirement" id="requirement-MwLogFeature.LogSinksLocalFs">
+<span class="sig-name descname"><span class="pre">MwLogFeature.LogSinksLocalFs</span></span><a class="headerlink" href="#requirement-MwLogFeature.LogSinksLocalFs" title="Link to this definition"></a></dt>
+<dd><p>The logging framework shall support local file system as log sink.</p>
+</dd></dl>
+
+<dl class="requirement definition">
+<dt class="sig sig-object requirement" id="requirement-MwLogFeature.LogSinksCloudDrive">
+<span class="sig-name descname"><span class="pre">MwLogFeature.LogSinksCloudDrive</span></span><a class="headerlink" href="#requirement-MwLogFeature.LogSinksCloudDrive" title="Link to this definition"></a></dt>
+<dd><p>The logging framework shall support cloud-native drives via network as log
+sinks.</p>
+</dd></dl>
+
+<dl class="requirement definition">
+<dt class="sig sig-object requirement" id="requirement-MwLogFeature.LogSinksNetwork">
+<span class="sig-name descname"><span class="pre">MwLogFeature.LogSinksNetwork</span></span><a class="headerlink" href="#requirement-MwLogFeature.LogSinksNetwork" title="Link to this definition"></a></dt>
+<dd><p>The logging framework shall support network channels, including a second
+dedicated Ethernet channel, as log sinks.</p>
+</dd></dl>
+
+<dl class="requirement definition">
+<dt class="sig sig-object requirement" id="requirement-MwLogFeature.LogSinksStdout">
+<span class="sig-name descname"><span class="pre">MwLogFeature.LogSinksStdout</span></span><a class="headerlink" href="#requirement-MwLogFeature.LogSinksStdout" title="Link to this definition"></a></dt>
+<dd><p>The logging framework shall ensure logs appear on stdout when running unit
+tests.</p>
+</dd></dl>
+
+<dl class="requirement definition">
+<dt class="sig sig-object requirement" id="requirement-MwLogFeature.BootLogging">
+<span class="sig-name descname"><span class="pre">MwLogFeature.BootLogging</span></span><a class="headerlink" href="#requirement-MwLogFeature.BootLogging" title="Link to this definition"></a></dt>
+<dd><p>The logging framework shall support logging of data to memory which survives a
+reboot cycle.</p>
+</dd></dl>
+
+<dl class="requirement definition">
+<dt class="sig sig-object requirement" id="requirement-MwLogFeature.ConfigLogLevel">
+<span class="sig-name descname"><span class="pre">MwLogFeature.ConfigLogLevel</span></span><a class="headerlink" href="#requirement-MwLogFeature.ConfigLogLevel" title="Link to this definition"></a></dt>
+<dd><p>The logging framework shall support configuration of log levels.</p>
+</dd></dl>
+
+<dl class="requirement definition">
+<dt class="sig sig-object requirement" id="requirement-MwLogFeature.SinkDevice">
+<span class="sig-name descname"><span class="pre">MwLogFeature.SinkDevice</span></span><a class="headerlink" href="#requirement-MwLogFeature.SinkDevice" title="Link to this definition"></a></dt>
+<dd><p>The logging framework shall support configuration of the log storage device.</p>
+</dd></dl>
+
+<dl class="requirement definition">
+<dt class="sig sig-object requirement" id="requirement-MwLogFeature.SinkMultipleDevice">
+<span class="sig-name descname"><span class="pre">MwLogFeature.SinkMultipleDevice</span></span><a class="headerlink" href="#requirement-MwLogFeature.SinkMultipleDevice" title="Link to this definition"></a></dt>
+<dd><p>The logging framework shall support multiple log storage devices.</p>
+</dd></dl>
+
+<dl class="requirement definition">
+<dt class="sig sig-object requirement" id="requirement-MwLogFeature.SinkStrategy">
+<span class="sig-name descname"><span class="pre">MwLogFeature.SinkStrategy</span></span><a class="headerlink" href="#requirement-MwLogFeature.SinkStrategy" title="Link to this definition"></a></dt>
+<dd><p>The logging framework shall support configurable log storage strategy.</p>
+</dd></dl>
+
+<dl class="requirement definition">
+<dt class="sig sig-object requirement" id="requirement-MwLogFeature.ConfigBufferSize">
+<span class="sig-name descname"><span class="pre">MwLogFeature.ConfigBufferSize</span></span><a class="headerlink" href="#requirement-MwLogFeature.ConfigBufferSize" title="Link to this definition"></a></dt>
+<dd><p>The logging framework shall allow configuration of internal buffer sizes.</p>
+</dd></dl>
+
+<dl class="requirement definition">
+<dt class="sig sig-object requirement" id="requirement-MwLogFeature.ConfigStorageSize">
+<span class="sig-name descname"><span class="pre">MwLogFeature.ConfigStorageSize</span></span><a class="headerlink" href="#requirement-MwLogFeature.ConfigStorageSize" title="Link to this definition"></a></dt>
+<dd><p>The logging framework shall allow configuration of storage size per log file.</p>
+</dd></dl>
+
+<dl class="requirement definition">
+<dt class="sig sig-object requirement" id="requirement-MwLogFeature.ConfigPermissions">
+<span class="sig-name descname"><span class="pre">MwLogFeature.ConfigPermissions</span></span><a class="headerlink" href="#requirement-MwLogFeature.ConfigPermissions" title="Link to this definition"></a></dt>
+<dd><p>The logging framework shall allow configuration of permission settings for log
+access.</p>
+</dd></dl>
+
+<dl class="requirement definition">
+<dt class="sig sig-object requirement" id="requirement-MwLogFeature.ConfigLogFilter">
+<span class="sig-name descname"><span class="pre">MwLogFeature.ConfigLogFilter</span></span><a class="headerlink" href="#requirement-MwLogFeature.ConfigLogFilter" title="Link to this definition"></a></dt>
+<dd><p>The logging framework shall allow configuration of log filters.</p>
+</dd></dl>
+
+<dl class="requirement definition">
+<dt class="sig sig-object requirement" id="requirement-MwLogFeature.ConfigEntityId">
+<span class="sig-name descname"><span class="pre">MwLogFeature.ConfigEntityId</span></span><a class="headerlink" href="#requirement-MwLogFeature.ConfigEntityId" title="Link to this definition"></a></dt>
+<dd><p>The logging framework shall allow configuration of logging entity IDs.</p>
+</dd></dl>
+
+<dl class="requirement definition">
+<dt class="sig sig-object requirement" id="requirement-MwLogFeature.ConfigOnDemand">
+<span class="sig-name descname"><span class="pre">MwLogFeature.ConfigOnDemand</span></span><a class="headerlink" href="#requirement-MwLogFeature.ConfigOnDemand" title="Link to this definition"></a></dt>
+<dd><p>The logging framework shall support on-demand functionality, such as enabling
+or disabling log storage.</p>
+</dd></dl>
+
+<dl class="requirement definition">
+<dt class="sig sig-object requirement" id="requirement-MwLogFeature.ConfigFallback">
+<span class="sig-name descname"><span class="pre">MwLogFeature.ConfigFallback</span></span><a class="headerlink" href="#requirement-MwLogFeature.ConfigFallback" title="Link to this definition"></a></dt>
+<dd><p>The logging framework shall provide fallback configurations, such as
+application-wide or system-wide defaults.</p>
+</dd></dl>
+
+<dl class="requirement definition">
+<dt class="sig sig-object requirement" id="requirement-MwLogFeature.ConfigCustomTypes">
+<span class="sig-name descname"><span class="pre">MwLogFeature.ConfigCustomTypes</span></span><a class="headerlink" href="#requirement-MwLogFeature.ConfigCustomTypes" title="Link to this definition"></a></dt>
+<dd><p>The logging framework shall allow extensions for custom log types.</p>
+</dd></dl>
+
+<dl class="requirement definition">
+<dt class="sig sig-object requirement" id="requirement-MwLogFeature.ErrorHandlingRecoverable">
+<span class="sig-name descname"><span class="pre">MwLogFeature.ErrorHandlingRecoverable</span></span><a class="headerlink" href="#requirement-MwLogFeature.ErrorHandlingRecoverable" title="Link to this definition"></a></dt>
+<dd><p>In case of recoverable error, the logging framework shall continue the current
+operations.</p>
+</dd></dl>
+
+<dl class="requirement definition">
+<dt class="sig sig-object requirement" id="requirement-MwLogFeature.ErrorHandlingNonRecoverable">
+<span class="sig-name descname"><span class="pre">MwLogFeature.ErrorHandlingNonRecoverable</span></span><a class="headerlink" href="#requirement-MwLogFeature.ErrorHandlingNonRecoverable" title="Link to this definition"></a></dt>
+<dd><p>In case of non-recoverable error, the logging framework shall deactivate
+silently and set an error state reported on shutdown.</p>
+</dd></dl>
+
+<dl class="requirement definition">
+<dt class="sig sig-object requirement" id="requirement-MwLogFeature.ErrorHandlingIsolation">
+<span class="sig-name descname"><span class="pre">MwLogFeature.ErrorHandlingIsolation</span></span><a class="headerlink" href="#requirement-MwLogFeature.ErrorHandlingIsolation" title="Link to this definition"></a></dt>
+<dd><p>The logging framework shall ensure that user applications are not affected by
+logging framework errors.</p>
+</dd></dl>
+
+<dl class="requirement definition">
+<dt class="sig sig-object requirement" id="requirement-MwLogFeature.CompatibilitySupportedOs">
+<span class="sig-name descname"><span class="pre">MwLogFeature.CompatibilitySupportedOs</span></span><a class="headerlink" href="#requirement-MwLogFeature.CompatibilitySupportedOs" title="Link to this definition"></a></dt>
+<dd><p>The logging framework shall support QNX and Linux operating systems
+(encapsulated via OSAL).</p>
+</dd></dl>
+
+<dl class="requirement definition">
+<dt class="sig sig-object requirement" id="requirement-MwLogFeature.CompatibilitySupportedLanguages">
+<span class="sig-name descname"><span class="pre">MwLogFeature.CompatibilitySupportedLanguages</span></span><a class="headerlink" href="#requirement-MwLogFeature.CompatibilitySupportedLanguages" title="Link to this definition"></a></dt>
+<dd><p>The logging framework shall support C++ and Rust programming languages.</p>
+</dd></dl>
+
+<dl class="requirement definition">
+<dt class="sig sig-object requirement" id="requirement-MwLogFeature.ResourceConsumptionStorage">
+<span class="sig-name descname"><span class="pre">MwLogFeature.ResourceConsumptionStorage</span></span><a class="headerlink" href="#requirement-MwLogFeature.ResourceConsumptionStorage" title="Link to this definition"></a></dt>
+<dd><p>The logging framework shall minimize storage resource consumption.</p>
+</dd></dl>
+
+<dl class="requirement definition">
+<dt class="sig sig-object requirement" id="requirement-MwLogFeature.ResourceConsumptionCommChannel">
+<span class="sig-name descname"><span class="pre">MwLogFeature.ResourceConsumptionCommChannel</span></span><a class="headerlink" href="#requirement-MwLogFeature.ResourceConsumptionCommChannel" title="Link to this definition"></a></dt>
+<dd><p>The logging framework shall minimize communication channel resource
+consumption.</p>
+</dd></dl>
+
+<dl class="requirement definition">
+<dt class="sig sig-object requirement" id="requirement-MwLogFeature.ResourceConsumptionRuntime">
+<span class="sig-name descname"><span class="pre">MwLogFeature.ResourceConsumptionRuntime</span></span><a class="headerlink" href="#requirement-MwLogFeature.ResourceConsumptionRuntime" title="Link to this definition"></a></dt>
+<dd><p>The logging framework shall minimize runtime resource consumption.</p>
+</dd></dl>
+
+<dl class="requirement definition">
+<dt class="sig sig-object requirement" id="requirement-MwLogFeature.ResourceConsumptionPerformance">
+<span class="sig-name descname"><span class="pre">MwLogFeature.ResourceConsumptionPerformance</span></span><a class="headerlink" href="#requirement-MwLogFeature.ResourceConsumptionPerformance" title="Link to this definition"></a></dt>
+<dd><p>The logging framework shall have low impact on overall system performance.</p>
+</dd></dl>
+
+<dl class="requirement definition">
+<dt class="sig sig-object requirement" id="requirement-MwLogFeature.QosMessageHandling">
+<span class="sig-name descname"><span class="pre">MwLogFeature.QosMessageHandling</span></span><a class="headerlink" href="#requirement-MwLogFeature.QosMessageHandling" title="Link to this definition"></a></dt>
+<dd><p>The logging framework shall provide QoS for handling overflows or dropping log
+messages.</p>
+</dd></dl>
+
+<dl class="requirement definition">
+<dt class="sig sig-object requirement" id="requirement-MwLogFeature.CompatibilityDltProtocol">
+<span class="sig-name descname"><span class="pre">MwLogFeature.CompatibilityDltProtocol</span></span><a class="headerlink" href="#requirement-MwLogFeature.CompatibilityDltProtocol" title="Link to this definition"></a></dt>
+<dd><p>The logging framework shall be DLT compatible. Additional Information: support for DLT message format, sending and receiving DLT messages, and integration with existing DLT tools and infrastructure.</p>
+</dd></dl>
+
+<dl class="requirement definition">
+<dt class="sig sig-object requirement" id="requirement-MwLogFeature.SecurityLogAccess">
+<span class="sig-name descname"><span class="pre">MwLogFeature.SecurityLogAccess</span></span><a class="headerlink" href="#requirement-MwLogFeature.SecurityLogAccess" title="Link to this definition"></a></dt>
+<dd><p>The logging framework shall ensure that only authorized users can access log
+files.</p>
+</dd></dl>
+
+<dl class="requirement definition">
+<dt class="sig sig-object requirement" id="requirement-MwLogFeature.AsilLevelSupport">
+<span class="sig-name descname"><span class="pre">MwLogFeature.AsilLevelSupport</span></span><a class="headerlink" href="#requirement-MwLogFeature.AsilLevelSupport" title="Link to this definition"></a></dt>
+<dd><p>The logging framework shall support the ASIL level of the user function to ensure compliance with the safety requirements of the application. Additional Information: Freedom from interference must be guaranteed with regard to the calling components.</p>
+</dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../../software_arch.html" class="btn btn-neutral float-left" title="Software Architectural Level" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../../architectural_design/datarouter_backend/index.html" class="btn btn-neutral float-right" title="Safe Datarouter Backend" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright .</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
