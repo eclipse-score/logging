@@ -36,6 +36,22 @@ TEST(SlogRegistrantTest, SlogBackendIsRegisteredAfterStaticInitialization)
     EXPECT_TRUE(IsBackendAvailable(LogMode::kSystem));
 }
 
+TEST(SlogRegistrantTest, SlogBackendCreatorReturnsNonNullRecorder)
+{
+    RecordProperty("Description",
+                   "The registered slog backend creator shall return a non-null Recorder given valid configuration.");
+    RecordProperty("TestType", "Interface test");
+    RecordProperty("DerivationTechnique", "Analysis of functional dependencies");
+
+    ASSERT_TRUE(IsBackendAvailable(LogMode::kSystem));
+
+    Configuration config;
+
+    auto recorder = CreateRecorderForMode(LogMode::kSystem, config, score::cpp::pmr::get_default_resource());
+
+    EXPECT_NE(recorder, nullptr);
+}
+
 }  // namespace
 }  // namespace detail
 }  // namespace log
