@@ -131,8 +131,8 @@ Component Requirements
 
    **Traces to:**
 
-   * :ref:`WriterFactoryFixture:MakeSureThatOpenCallWillOnlyBeDoneWithCorrectOpenReadFlags <lobster-item-239d122654e8b342bcdcebc4fc520e358985eccf>`
    * :ref:`FileRecorderFactoryConfigFixture:FileConfigurionShallCallFileCreationAndReturnFileRecorder <lobster-item-90a46a45f9853034ad5bc6fddfa2e952d1978cd7>`
+   * :ref:`WriterFactoryFixture:MakeSureThatOpenCallWillOnlyBeDoneWithCorrectOpenReadFlags <lobster-item-239d122654e8b342bcdcebc4fc520e358985eccf>`
    * :ref:`MwLog.FileDescriptorFlags <lobster-item-c9b1d871162e55c501411c378e063679bd229c58>`
    * :ref:`//score/mw/log/dependability:component\_mw\_log\_backend <lobster-item-7bfe7ca94ee8257f6da5326b842b99c0c42a6273>`
 
