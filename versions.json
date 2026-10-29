@@ -246,5 +246,9 @@
   {
     "version": "pr-383",
     "url": "https://eclipse-score.github.io/logging/pr-383/"
+  },
+  {
+    "version": "pr-390",
+    "url": "https://eclipse-score.github.io/logging/pr-390/"
   }
 ]
