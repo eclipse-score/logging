@@ -1,0 +1,75 @@
+..
+   # *******************************************************************************
+   # Copyright (c) 2026 Contributors to the Eclipse Foundation
+   #
+   # See the NOTICE file(s) distributed with this work for additional
+   # information regarding copyright ownership.
+   #
+   # This program and the accompanying materials are made available under the
+   # terms of the Apache License Version 2.0 which is available at
+   # https://www.apache.org/licenses/LICENSE-2.0
+   #
+   # SPDX-License-Identifier: Apache-2.0
+   # *******************************************************************************
+
+mw_log_backend_fmea
+===================
+
+Overview
+--------
+
+.. list-table::
+   :header-rows: 1
+
+   * - Failure Mode
+     - Guideword
+     - ASIL
+     - Interface
+   * - :ref:`LogMessageLossOrCorruption <fmea-mwlogbackend-logmessagelossorcorruption>`
+     - 
+     - B
+     - DataRouterBackend, SharedMemoryWriter, SharedMemoryReader
+
+
+Failure Modes
+-------------
+
+.. dropdown:: MwLogBackend.LogMessageLossOrCorruption
+   :name: fmea-mwlogbackend-logmessagelossorcorruption
+
+   .. grid:: 2
+      :gutter: 3
+
+      .. grid-item::
+         :class: sd-text-center
+
+         :bdg-warning:`ASIL B`
+
+      .. grid-item-card:: Interface
+
+         DataRouterBackend, SharedMemoryWriter, SharedMemoryReader
+
+      .. grid-item-card:: Failure Effect
+
+         Diagnostic and verification data is missing or misleading. mw::log is not itself a safety-actuating function, but missing or corrupted logs can hide evidence needed for post-incident or verification analysis.
+
+   .. grid:: 1
+
+      .. grid-item-card:: Description
+
+         A log message is lost, dropped, or its content is corrupted between being recorded by the frontend and reaching a configured backend sink.
+
+Control Measures
+----------------
+
+.. list-table::
+   :header-rows: 1
+
+   * - Control Measure
+     - ASIL
+     - Description
+   * - BoundedSharedMemoryAccess
+     - B
+     - Shared-memory writer/reader implementations shall explicitly check indices and buffer bounds before every read from or write to shared memory.
+
+
