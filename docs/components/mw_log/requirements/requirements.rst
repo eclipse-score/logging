@@ -26,6 +26,19 @@ Component Requirements
 mw::log
 -------
 
+.. comp_req:: Inactive LogStream Behavior
+   :id: comp_req__log__inactive_logstream
+   :version: 1
+   :reqtype: Functional
+   :security: NO
+   :safety: QM
+   :derived_from: feat_req__logging__filtering_log_levels, feat_req__logging__resource_performance
+   :status: valid
+   :satisfied_by: comp__mw_log_backend
+
+    mw::log library shall not perform any useful activity if log level of
+    LogStream object is insufficient for given context.
+
 .. comp_req:: Avoid Signal Processing
    :id: comp_req__log__avoid_signal_processing
    :version: 1
@@ -36,7 +49,7 @@ mw::log
    :status: valid
    :satisfied_by: comp__mw_log_backend
 
-   The component shall not register any signal handler.
+   mw::log shall not register any signal handler.
 
 .. comp_req:: File Descriptor Flags
    :id: comp_req__log__file_descriptor_flags
@@ -48,12 +61,13 @@ mw::log
    :status: valid
    :satisfied_by: comp__mw_log_backend
 
-   The component shall set the ``FD_CLOEXEC`` (or ``O_CLOEXEC``) flag on all the file
-   descriptors it owns.
+   mw::log shall ensure that file descriptors it owns are not inherited by
+   processes started by the application.
 
-   Note: This requirement can be satisfied in unit-test, by checking
-   ``int flags = fcntl(fd, F_GETFD); assert((flags != -1) && (flags & FD_CLOEXEC));`` for every
-   file descriptor owned by the component.
+   .. note::
+      This requirement can be satisfied in unit-test, by checking
+      ``int flags = fcntl(fd, F_GETFD); assert((flags != -1) && (flags & FD_CLOEXEC));`` for every
+      file descriptor owned by the component.
 
 .. comp_req:: DLT Verbose Mode
    :id: comp_req__log__dlt_verbose_mode
@@ -65,9 +79,8 @@ mw::log
    :status: valid
    :satisfied_by: comp__mw_log_backend
 
-   mw::log shall implement DLT verbose mode. Generation of messages shall be done in
-   DLT-conform format, allowing messages to be sent by Datarouter without additional
-   reprocessing.
+   mw::log shall generate log messages in DLT verbose mode format, so that Datarouter
+   can send them without additional reprocessing.
 
 .. comp_req:: AUTOSAR Log and Trace Specification
    :id: comp_req__log__autosar_log_trace_spec
@@ -82,48 +95,51 @@ mw::log
    mw::log shall implement "Specification of Log and Trace for Adaptive Platform". Release of
    specification used shall be in agreement with the rest of Adaptive AUTOSAR stack.
 
-.. comp_req:: Send Messages to Datarouter
-   :id: comp_req__log__send_to_datarouter
-   :version: 1
-   :reqtype: Functional
-   :security: NO
-   :safety: QM
-   :derived_from: feat_req__logging__log_sources_user_app, feat_req__logging__log_sinks_network
-   :status: valid
-   :satisfied_by: comp__mw_log_backend
-
-   mw::log shall use logging library to send verbose messages to datarouter. Applications shall
-   use mw::log interface to log verbose mode messages. Internally mw::log shall be using logging
-   library.
-
-.. comp_req:: Inactive LogStream Behavior
-   :id: comp_req__log__inactive_logstream
-   :version: 1
-   :reqtype: Functional
-   :security: NO
-   :safety: QM
-   :derived_from: feat_req__logging__filtering_log_levels, feat_req__logging__resource_performance
-   :status: valid
-   :satisfied_by: comp__mw_log_backend
-
-   mw::log library shall not perform any useful activity if log level of LogStream object is
-   insufficient for given context. LogStream object shall not generate serialized messages if
-   the severity of the message does not allow it to be sent.
-
 .. comp_req:: Shared Memory File Permissions
    :id: comp_req__log__shm_file_permissions
    :version: 1
    :reqtype: Functional
    :security: YES
    :safety: ASIL_B
-   :derived_from: feat_req__logging__security_log_access, feat_req__logging__config_permissions
+   :derived_from: feat_req__logging__asil_support
    :status: valid
    :satisfied_by: comp__mw_log_backend
 
-   Logging shared-memory files shall have read-only posix file permission for group and others.
-   The shared-memory file created by mw::log shall be read-only for group and others.
+   mw::log shall ensure that the shared-memory files it creates are not writable
+   by group and others.
 
-   Note: mw::log creates a shared memory file for each app.
+   .. note::
+      mw::log creates a shared memory file for each app.
+
+Remote Backend
+--------------
+
+.. comp_req:: Send Messages to Datarouter
+   :id: comp_req__log__send_to_datarouter
+   :version: 1
+   :reqtype: Functional
+   :security: NO
+   :safety: QM
+   :status: valid
+   :derived_from: feat_req__logging__log_sources_user_app, feat_req__logging__log_sinks_network
+   :satisfied_by: comp__mw_log_backend
+
+   mw::log shall hand over the log messages to the Datarouter process for forwarding
+   when the remote backend is used. mw::log shall not transmit log messages to the
+   network itself.
+
+.. comp_req:: Remote Backend Activation
+   :id: comp_req__log__remote_backend_activation
+   :version: 1
+   :reqtype: Functional
+   :security: NO
+   :safety: QM
+   :derived_from: feat_req__logging__log_sinks_local_fs, feat_req__logging__config_on_demand
+   :status: valid
+   :satisfied_by: comp__mw_log_backend
+
+   mw::log shall enable the file backend if and only if the log mode contains
+   "kRemote".
 
 System Backend
 --------------
@@ -140,9 +156,11 @@ System Backend
    :status: valid
    :satisfied_by: comp__mw_log_backend
 
-   The system logger backend shall forward the logs to the native system logger mechanism.
+   mw::log shall forward the logs to the native system logger mechanism when the system
+   logger backend is used.
 
-   Note: slogger2 shall be used for QNX. syslog(3) shall be used for Linux.
+   .. note::
+      mw::log shall use slogger2 on QNX and syslog(3) on Linux.
 
 .. comp_req:: System Backend Activation
    :id: comp_req__log__system_backend_activation
@@ -154,12 +172,44 @@ System Backend
    :status: valid
    :satisfied_by: comp__mw_log_backend
 
-   The system logger backend shall be enabled if and only if the log mode contains "kSystem".
+   mw::log shall enable the system logger backend if and only if the log mode contains
+   "kSystem".
+
+File Backend
+------------
+
+*File backend shall write the logs to the local file system.*
+
+.. comp_req:: Write to Local File
+   :id: comp_req__log__write_to_local_file
+   :version: 1
+   :reqtype: Functional
+   :security: NO
+   :safety: QM
+   :derived_from: feat_req__logging__log_sinks_local_fs
+   :status: valid
+   :satisfied_by: comp__mw_log_backend
+
+   mw::log shall write the logs to a file on the local file system when the file
+   backend is used.
+
+.. comp_req:: File Backend Activation
+   :id: comp_req__log__file_backend_activation
+   :version: 1
+   :reqtype: Functional
+   :security: NO
+   :safety: QM
+   :derived_from: feat_req__logging__log_sinks_local_fs, feat_req__logging__config_on_demand
+   :status: valid
+   :satisfied_by: comp__mw_log_backend
+
+   mw::log shall enable the file backend if and only if the log mode contains
+   "kFile".
 
 Non-Functional Requirements
 ---------------------------
 
-.. comp_req:: Local Allocation Strategy
+.. comp_req:: Heap Allocation Only During Initialization
    :id: comp_req__log__local_allocation_strategy
    :version: 1
    :reqtype: Non-Functional
@@ -169,20 +219,9 @@ Non-Functional Requirements
    :status: valid
    :satisfied_by: comp__mw_log_backend
 
-   mw::log shall use local allocators to avoid using global heap. Global heap allocation (if
-   any) shall be limited to initialization phase of application lifecycle.
-
-.. comp_req:: No Endless Loops
-   :id: comp_req__log__no_endless_loops
-   :version: 1
-   :reqtype: Non-Functional
-   :security: YES
-   :safety: ASIL_B
-   :derived_from: feat_req__logging__asil_support, feat_req__logging__resource_performance
-   :status: valid
-   :satisfied_by: comp__mw_log_backend
-
-   mw::log shall not contain unbound loops or loops with unchecked exit conditions.
+   mw::log shall allocate heap memory only during the initialization phase of
+   the application lifecycle, and shall therefore satisfy any memory needs after
+   that phase from pre-allocated, bounded memory resources.
 
 .. comp_req:: Avoid Locks
    :id: comp_req__log__avoid_locks
@@ -217,12 +256,13 @@ Non-Functional Requirements
    :reqtype: Non-Functional
    :security: YES
    :safety: ASIL_B
-   :derived_from: feat_req__logging__asil_support
+   :derived_from: feat_req__logging__asil_support, feat_req__logging__error_handling_recoverable
    :status: valid
    :satisfied_by: comp__mw_log_backend
 
-   Indices in data structures and sizes of data accessed or copied shall be checked for
-   plausibility to avoid high runtime utilization through long iterations or data corruption.
+   mw::log shall check indices in data structures and sizes of data accessed or copied for
+   plausibility, to avoid high runtime utilization through long iterations or data corruption.
+   If a check fails, mw::log shall discard the affected log message without performing the access.
 
 .. comp_req:: Memory Bound Checking
    :id: comp_req__log__memory_bound_checking
@@ -230,8 +270,9 @@ Non-Functional Requirements
    :reqtype: Non-Functional
    :security: YES
    :safety: ASIL_B
-   :derived_from: feat_req__logging__asil_support
+   :derived_from: feat_req__logging__asil_support, feat_req__logging__error_handling_recoverable
    :status: valid
    :satisfied_by: comp__mw_log_backend
 
-   Memory boundaries shall be explicitly checked when writing to shared memory.
+   mw::log shall check memory boundaries before writing to shared memory.
+   If a check fails, mw::log shall discard the affected log message without performing the write.
