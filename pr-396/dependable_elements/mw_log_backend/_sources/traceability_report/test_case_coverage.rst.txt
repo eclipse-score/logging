@@ -1,0 +1,200 @@
+Test Case Coverage
+==================
+
+**Coverage:** 100.0% (12 of 12 items OK)
+
+.. _lobster-item-e1a18727225f81a896f6db7310c7a50c6242d5c7:
+
+.. dropdown:: [OK] test\_case\_coverage Test MwLog.AutosarLogTraceSpec
+   :class-title: sd-bg-success sd-text-white
+
+   **Derived from:**
+
+   * :ref:`DltMessageBuilderFixture:ShallDepleteAfterHeaderAndPayload <lobster-item-1b528e66b62fc00c9d51817fde888988bbbb9522>`
+   * :ref:`MwLog.AutosarLogTraceSpec <lobster-item-983a22b6905837b1aaa6899ad9c655553f115a0f>`
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** unknown location
+
+.. _lobster-item-ced2c57302fcc50249701e4b4b3b94b9078b8480:
+
+.. dropdown:: [OK] test\_case\_coverage Test MwLog.AvoidSignalProcessing
+   :class-title: sd-bg-success sd-text-white
+
+   **Derived from:**
+
+   * :ref:`SignalHandlingTest:PThreadBlockSigTerm\_AllSucceed\_ReturnsSuccess <lobster-item-a5b04b7ebfec7e883c834693fdcf79a02a00779c>`
+   * :ref:`MwLog.AvoidSignalProcessing <lobster-item-f8e3900e83768564b6a528579eeb57dca7fdb099>`
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** unknown location
+
+.. _lobster-item-cc737508749b155b7d6fdc596797776bb73d6faa:
+
+.. dropdown:: [OK] test\_case\_coverage Test MwLog.BoundedLoopExecution
+   :class-title: sd-bg-success sd-text-white
+
+   **Derived from:**
+
+   * :ref:`WaitFreeLinearWriter:WriteBufferFullShouldReturnExpectedData <lobster-item-3cd2764d8e3cb57bd83b61273da11fda3dba7625>`
+   * :ref:`MwLog.BoundedLoopExecution <lobster-item-ab77c02cb03c98149347622ca992c919b1a2c030>`
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** unknown location
+
+.. _lobster-item-f215ef9092c9d584be4a7ee548eadcf134530de5:
+
+.. dropdown:: [OK] test\_case\_coverage Test MwLog.CrossLockingPrevention
+   :class-title: sd-bg-success sd-text-white
+
+   **Derived from:**
+
+   * :ref:`WaitFreeLinearWriter:EnsureAtomicRequirements <lobster-item-806fbe70fe9d62984527a7b08b067f2376879dbb>`
+   * :ref:`WaitFreeAlternatingWriterTests:EnsureAtomicRequirements <lobster-item-406b3806da32adb8ab3238ef8fe591c5ac8bed33>`
+   * :ref:`MwLog.CrossLockingPrevention <lobster-item-532a3ea19ff52d3c56fcdfce276b0af8af68564e>`
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** unknown location
+
+.. _lobster-item-74ac57c0bf5aa1d72e064f61c325c2614e32cbd4:
+
+.. dropdown:: [OK] test\_case\_coverage Test MwLog.DltVerboseMode
+   :class-title: sd-bg-success sd-text-white
+
+   **Derived from:**
+
+   * :ref:`DataRouterBackendFixture:LogLevelVerbose <lobster-item-cfe908fd84198a355e10ec2722bd19fbe7ebff4c>`
+   * :ref:`MwLog.DltVerboseMode <lobster-item-3379e95a99d683504eb27583c0669e3532730a40>`
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** unknown location
+
+.. _lobster-item-c9b1d871162e55c501411c378e063679bd229c58:
+
+.. dropdown:: [OK] test\_case\_coverage Test MwLog.FileDescriptorFlags
+   :class-title: sd-bg-success sd-text-white
+
+   **Derived from:**
+
+   * :ref:`WriterFactoryFixture:MakeSureThatOpenCallWillOnlyBeDoneWithCorrectOpenReadFlags <lobster-item-239d122654e8b342bcdcebc4fc520e358985eccf>`
+   * :ref:`FileRecorderFactoryConfigFixture:FileConfigurionShallCallFileCreationAndReturnFileRecorder <lobster-item-90a46a45f9853034ad5bc6fddfa2e952d1978cd7>`
+   * :ref:`MwLog.FileDescriptorFlags <lobster-item-023e236205af00574969ad5a522d1fa561ed204d>`
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** unknown location
+
+.. _lobster-item-4a8507ec9e8943effd1c838137b7898fe33f29eb:
+
+.. dropdown:: [OK] test\_case\_coverage Test MwLog.InactiveLogStreamBehavior
+   :class-title: sd-bg-success sd-text-white
+
+   **Derived from:**
+
+   * :ref:`DataRouterRecorderFixtureWithLogLevelCheck:DisablesOrEnablesLogAccordingToLevel <lobster-item-a8ad8335e061849ec0f9feb74abb2a6cae7ce650>`
+   * :ref:`MwLog.InactiveLogStreamBehavior <lobster-item-a4a883d0188ce9e31168d4aae9f9683f2bde6439>`
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** unknown location
+
+.. _lobster-item-062613c155c75a6edf2c437e374db55f3a85db1e:
+
+.. dropdown:: [OK] test\_case\_coverage Test MwLog.IndexAndSizeChecking
+   :class-title: sd-bg-success sd-text-white
+
+   **Derived from:**
+
+   * :ref:`LinearReaderTests:LengthExceedingMaxThresholdShouldReturnEmpty <lobster-item-50be8f9ea8ae1476499df2085112e23862a85dbf>`
+   * :ref:`MwLog.IndexAndSizeChecking <lobster-item-325e97c01897aac1a8c60fc78a4851ba4853bcbe>`
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** unknown location
+
+.. _lobster-item-62a40ad5774c5f40fd02c2dec1c40a8ed2ea5741:
+
+.. dropdown:: [OK] test\_case\_coverage Test MwLog.LocalAllocationStrategy
+   :class-title: sd-bg-success sd-text-white
+
+   **Derived from:**
+
+   * :ref:`FileRecorderFixture:TooManyArgumentsWillYieldTruncatedLog <lobster-item-b640b8e0dbd0a9d7a3af7f3e8ca503ecbbe17fc6>`
+   * :ref:`MwLog.LocalAllocationStrategy <lobster-item-973e6c32f0a9ea6df9ced35cd5df3667f3d80b12>`
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** unknown location
+
+.. _lobster-item-7bbc2daa27e2b8c15461436bdd4925a2797ba925:
+
+.. dropdown:: [OK] test\_case\_coverage Test MwLog.MemoryBoundChecking
+   :class-title: sd-bg-success sd-text-white
+
+   **Derived from:**
+
+   * :ref:`WaitFreeLinearWriter:BufferSizeExceededShouldReturnEmpty <lobster-item-e8e0858324efa43d746992341b8a524ac676c05b>`
+   * :ref:`MwLog.MemoryBoundChecking <lobster-item-2418b8704dc0807bdc2ab9fca05cd33fb4e81ad3>`
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** unknown location
+
+.. _lobster-item-60b4f61fcee0b4035bbd22173e993fb25938fbc8:
+
+.. dropdown:: [OK] test\_case\_coverage Test MwLog.SharedMemoryFilePermissions
+   :class-title: sd-bg-success sd-text-white
+
+   **Derived from:**
+
+   * :ref:`WriterFactoryFixture:MakeSureThatOpenCallWillOnlyBeDoneWithCorrectOpenReadFlags <lobster-item-239d122654e8b342bcdcebc4fc520e358985eccf>`
+   * :ref:`MwLog.SharedMemoryFilePermissions <lobster-item-4bfac174996a064d970b79537a8ab4821e4c3f13>`
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** unknown location
+
+.. _lobster-item-a9e4429453bad068ab1a28d9606125cd89fc305d:
+
+.. dropdown:: [OK] test\_case\_coverage Test MwLog.TimeBoundedLocking
+   :class-title: sd-bg-success sd-text-white
+
+   **Derived from:**
+
+   * :ref:`WaitFreeLinearWriter:EnsureAtomicRequirements <lobster-item-806fbe70fe9d62984527a7b08b067f2376879dbb>`
+   * :ref:`CommonTests:TypesShallBeLockFree <lobster-item-497f3637ba9e73c1269bd7ec774c1d88eea7aabb>`
+   * :ref:`MwLog.TimeBoundedLocking <lobster-item-4b371bc3ac6ae56c17e7d7a4b9c3d6c0f30fe81c>`
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** unknown location
+
