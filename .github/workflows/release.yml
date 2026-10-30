@@ -42,7 +42,7 @@ jobs:
     secrets: inherit
   create-release:
     needs: [coverage-linux, coverage-qnx]
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     permissions:
       contents: write
     env:
