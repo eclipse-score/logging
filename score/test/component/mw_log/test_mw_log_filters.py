@@ -35,7 +35,7 @@ CONTEXT_IDS = ["FAT", "ERR", "WRN", "INF", "DBG", "VBS"]
 
 
 @add_test_properties(
-    fully_verifies=["comp_req__data_router__dlt_message_filtering"],
+    fully_verifies=["comp_req__log__inactive_logstream"],
     test_type="requirements-based",
     derivation_technique="equivalence-classes",
 )

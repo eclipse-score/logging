@@ -446,7 +446,7 @@ TEST_F(MwsrFileNameEmptyFixture, SendConnectMessageMwsrFileNameEmptyShouldSendEx
 
 TEST_F(DatarouterMessageClientFixture, ConnectToDatarouterShouldSendConnectMessage)
 {
-    RecordProperty("PartiallyVerifies", "comp_req__data_router__dlt_server");
+    RecordProperty("PartiallyVerifies", "comp_req__log__send_to_datarouter");
     RecordProperty("ASIL", "B");
     RecordProperty("Description", "Verifies the ability of sending connect message when connecting to datarouter.");
     RecordProperty("TestType", "Interface test");
@@ -475,7 +475,7 @@ TEST_F(DatarouterMessageClientFixture, ConnectToDatarouterShouldSendConnectMessa
 
 TEST_F(DatarouterMessageClientFixture, AcquireNotifyShouldSendExpectedAcquireResponse)
 {
-    RecordProperty("PartiallyVerifies", "comp_req__data_router__dlt_server");
+    RecordProperty("PartiallyVerifies", "comp_req__log__send_to_datarouter");
     RecordProperty("ASIL", "B");
     RecordProperty(
         "Description",

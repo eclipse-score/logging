@@ -75,6 +75,7 @@ VALUES_TO_CHECK_CONSOLE = [
 
 @add_test_properties(
     fully_verifies=[
+        "comp_req__log__send_to_datarouter",
         "comp_req__log__autosar_log_trace_spec",
         "comp_req__log__dlt_verbose_mode",
     ],
