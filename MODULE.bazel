@@ -46,7 +46,7 @@ git_override(
     remote = "https://github.com/eclipse-score/docs-as-code.git",
 )
 
-bazel_dep(name = "score_tooling", version = "2.2.0")
+bazel_dep(name = "score_tooling", version = "3.0.2")
 
 # LLVM source-based coverage pipeline (C++ + Rust): the qualified S-CORE
 # coverage tool, successor of @score_tooling//coverage. See quality/coverage/.
