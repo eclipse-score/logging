@@ -53,7 +53,7 @@ bazel_dep(name = "score_tooling", version = "2.2.0")
 bazel_dep(name = "score_coverage", version = "0.4.2", dev_dependency = True)
 
 # Runs cc_test targets in QEMU on QNX (--run_under for on-target coverage).
-bazel_dep(name = "score_qnx_unit_tests", version = "0.2.0", dev_dependency = True)
+bazel_dep(name = "score_qnx_unit_tests", version = "0.3.0", dev_dependency = True)
 
 bazel_dep(name = "score_rust_policies", version = "0.0.5")
 bazel_dep(name = "score_process_description", version = "2.2.1")
