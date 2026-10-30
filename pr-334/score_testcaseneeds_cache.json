@@ -1648,7 +1648,7 @@
     "TestType": "requirements-based",
     "DerivationTechnique": "requirements-analysis",
     "result_text": "",
-    "PartiallyVerifies": "comp_req__log__dlt_verbose_mode",
+    "PartiallyVerifies": "comp_req__log__dlt_verbose_mode, comp_req__log__send_to_datarouter",
     "FullyVerifies": null
   },
   {
@@ -2012,7 +2012,7 @@
     "TestType": "Interface test",
     "DerivationTechnique": "Generation and analysis of equivalence classes",
     "result_text": "",
-    "PartiallyVerifies": "comp_req__data_router__dlt_server",
+    "PartiallyVerifies": "comp_req__log__send_to_datarouter",
     "FullyVerifies": null
   },
   {
@@ -2026,7 +2026,7 @@
     "TestType": "Interface test",
     "DerivationTechnique": "Generation and analysis of equivalence classes",
     "result_text": "",
-    "PartiallyVerifies": "comp_req__data_router__dlt_server",
+    "PartiallyVerifies": "comp_req__log__send_to_datarouter",
     "FullyVerifies": null
   },
   {
@@ -2390,7 +2390,7 @@
     "TestType": "Interface test",
     "DerivationTechnique": "Generation and analysis of equivalence classes",
     "result_text": "",
-    "PartiallyVerifies": "comp_req__data_router__dlt_message_filtering",
+    "PartiallyVerifies": "comp_req__log__inactive_logstream",
     "FullyVerifies": null
   },
   {
@@ -2404,7 +2404,7 @@
     "TestType": "requirements-based",
     "DerivationTechnique": "requirements-analysis",
     "result_text": "",
-    "PartiallyVerifies": "comp_req__data_router__dlt_message_filtering",
+    "PartiallyVerifies": "comp_req__log__inactive_logstream",
     "FullyVerifies": null
   },
   {

@@ -1050,7 +1050,7 @@ Unit Test
 
    .. pull-quote::
 
-      :Partiallyverifies: comp_req__data_router__dlt_server
+      :Partiallyverifies: comp_req__log__send_to_datarouter
       :Asil: B
       :Description: Verifies the ability of sending connect message when connecting to datarouter.
       :Testtype: Interface test
@@ -1081,7 +1081,7 @@ Unit Test
 
    .. pull-quote::
 
-      :Partiallyverifies: comp_req__data_router__dlt_server
+      :Partiallyverifies: comp_req__log__send_to_datarouter
       :Asil: B
       :Description: Verifies that an acquire request delivered via NotifyCallback sends the expected acquire response.
       :Testtype: Interface test
@@ -1802,7 +1802,7 @@ Unit Test
 
    .. pull-quote::
 
-      :Partiallyverifies: comp_req__data_router__dlt_message_filtering
+      :Partiallyverifies: comp_req__log__inactive_logstream
       :Asil: B
       :Description: Verifies the in-ability of returning a slot in case of inactive log level.
       :Testtype: Interface test
@@ -5998,7 +5998,7 @@ Unit Test
 
    .. pull-quote::
 
-      :Partiallyverifies: comp_req__log__dlt_verbose_mode
+      :Partiallyverifies: comp_req__log__dlt_verbose_mode, comp_req__log__send_to_datarouter
       :Description: Verify the ability of logging verbose message.
       :Testtype: requirements-based
       :Derivationtechnique: requirements-analysis
@@ -6035,7 +6035,7 @@ Unit Test
 
    .. pull-quote::
 
-      :Partiallyverifies: comp_req__data_router__dlt_message_filtering
+      :Partiallyverifies: comp_req__log__inactive_logstream
       :Asil: B
       :Description: Verifies the ability of checking the log availability using 'IsLogEnabled' API.
       :Testtype: requirements-based

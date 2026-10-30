@@ -228,15 +228,27 @@
     }
   },
   {
-    "need": "comp_req__data_router__dlt_server",
+    "need": "comp_req__log__send_to_datarouter",
     "links": {
       "CodeLinks": [],
       "TestLinks": [
         {
+          "name": "DataRouterBackendFixture__LogLevelVerbose",
+          "file": "score/mw/log/detail/data_router/data_router_backend_test.cpp",
+          "line": 332,
+          "need": "comp_req__log__send_to_datarouter",
+          "verify_type": "partially",
+          "result": "passed",
+          "result_text": "",
+          "repo_name": "local_repo",
+          "hash": "",
+          "url": ""
+        },
+        {
           "name": "DatarouterMessageClientFixture__ConnectToDatarouterShouldSendConnectMessage",
           "file": "score/mw/log/detail/data_router/data_router_message_client_test.cpp",
           "line": 447,
-          "need": "comp_req__data_router__dlt_server",
+          "need": "comp_req__log__send_to_datarouter",
           "verify_type": "partially",
           "result": "passed",
           "result_text": "",
@@ -248,79 +260,7 @@
           "name": "DatarouterMessageClientFixture__AcquireNotifyShouldSendExpectedAcquireResponse",
           "file": "score/mw/log/detail/data_router/data_router_message_client_test.cpp",
           "line": 476,
-          "need": "comp_req__data_router__dlt_server",
-          "verify_type": "partially",
-          "result": "passed",
-          "result_text": "",
-          "repo_name": "local_repo",
-          "hash": "",
-          "url": ""
-        },
-        {
-          "name": "DataRouterTestFixture__ConstructionAndDestructionOnStack",
-          "file": "score/datarouter/test/ut/ut_logging/test_datarouter.cpp",
-          "line": 527,
-          "need": "comp_req__data_router__dlt_server",
-          "verify_type": "partially",
-          "result": "passed",
-          "result_text": "",
-          "repo_name": "local_repo",
-          "hash": "",
-          "url": ""
-        },
-        {
-          "name": "DataRouterTestFixture__ConstructionAndDestructionOnHeap",
-          "file": "score/datarouter/test/ut/ut_logging/test_datarouter.cpp",
-          "line": 538,
-          "need": "comp_req__data_router__dlt_server",
-          "verify_type": "partially",
-          "result": "passed",
-          "result_text": "",
-          "repo_name": "local_repo",
-          "hash": "",
-          "url": ""
-        },
-        {
-          "name": "DataRouterTestFixture__TestUsingTheDefaultStackAndRingSizesIfTheUserProvidesZeros",
-          "file": "score/datarouter/test/ut/ut_logging/test_datarouter.cpp",
-          "line": 768,
-          "need": "comp_req__data_router__dlt_server",
-          "verify_type": "partially",
-          "result": "passed",
-          "result_text": "",
-          "repo_name": "local_repo",
-          "hash": "",
-          "url": ""
-        },
-        {
-          "name": "DataRouterTestFixture__TestSomeConditionsInsideTickMethodWithDisablingDlt",
-          "file": "score/datarouter/test/ut/ut_logging/test_datarouter.cpp",
-          "line": 785,
-          "need": "comp_req__data_router__dlt_server",
-          "verify_type": "partially",
-          "result": "passed",
-          "result_text": "",
-          "repo_name": "local_repo",
-          "hash": "",
-          "url": ""
-        },
-        {
-          "name": "UdpStreamOutputFixture__SendMethodShallSucceedIfSendmmsgSucceeded",
-          "file": "score/datarouter/test/ut/ut_logging/test_udp_stream_output.cpp",
-          "line": 165,
-          "need": "comp_req__data_router__dlt_server",
-          "verify_type": "partially",
-          "result": "passed",
-          "result_text": "",
-          "repo_name": "local_repo",
-          "hash": "",
-          "url": ""
-        },
-        {
-          "name": "DltServerCreatedWithoutConfigFixture__WhenCreatedDefault",
-          "file": "score/datarouter/test/ut/ut_logging/test_dltserver.cpp",
-          "line": 150,
-          "need": "comp_req__data_router__dlt_server",
+          "need": "comp_req__log__send_to_datarouter",
           "verify_type": "partially",
           "result": "passed",
           "result_text": "",
@@ -332,7 +272,7 @@
     }
   },
   {
-    "need": "comp_req__data_router__dlt_message_filtering",
+    "need": "comp_req__log__inactive_logstream",
     "links": {
       "CodeLinks": [],
       "TestLinks": [
@@ -340,7 +280,7 @@
           "name": "DataRouterRecorderFixtureWithLogLevelCheck__WillObtainEmptySlotForInsufficentLogLevel",
           "file": "score/mw/log/detail/data_router/data_router_recorder_test.cpp",
           "line": 106,
-          "need": "comp_req__data_router__dlt_message_filtering",
+          "need": "comp_req__log__inactive_logstream",
           "verify_type": "partially",
           "result": "passed",
           "result_text": "",
@@ -352,55 +292,7 @@
           "name": "DataRouterRecorderFixtureWithLogLevelCheck__DisablesOrEnablesLogAccordingToLevel",
           "file": "score/mw/log/detail/data_router/data_router_recorder_test.cpp",
           "line": 118,
-          "need": "comp_req__data_router__dlt_message_filtering",
-          "verify_type": "partially",
-          "result": "passed",
-          "result_text": "",
-          "repo_name": "local_repo",
-          "hash": "",
-          "url": ""
-        },
-        {
-          "name": "SocketserverConfigTest__ReadCorrectLogChannelsNoErrorsExpected",
-          "file": "score/datarouter/test/ut/ut_logging/test_socketserver_config.cpp",
-          "line": 50,
-          "need": "comp_req__data_router__dlt_message_filtering",
-          "verify_type": "partially",
-          "result": "passed",
-          "result_text": "",
-          "repo_name": "local_repo",
-          "hash": "",
-          "url": ""
-        },
-        {
-          "name": "SocketserverConfigTest__JsonFilteringEnabledExpectConfigFilterTrue",
-          "file": "score/datarouter/test/ut/ut_logging/test_socketserver_config.cpp",
-          "line": 91,
-          "need": "comp_req__data_router__dlt_message_filtering",
-          "verify_type": "partially",
-          "result": "passed",
-          "result_text": "",
-          "repo_name": "local_repo",
-          "hash": "",
-          "url": ""
-        },
-        {
-          "name": "DltChannelTest__WhenLogLevelExceedsThreshold_Verbose",
-          "file": "score/datarouter/test/ut/ut_logging/test_dltchannel.cpp",
-          "line": 457,
-          "need": "comp_req__data_router__dlt_message_filtering",
-          "verify_type": "partially",
-          "result": "passed",
-          "result_text": "",
-          "repo_name": "local_repo",
-          "hash": "",
-          "url": ""
-        },
-        {
-          "name": "DltChannelTest__WhenNonVerboseLogLevelExceedsThreshold",
-          "file": "score/datarouter/test/ut/ut_logging/test_dltchannel.cpp",
-          "line": 484,
-          "need": "comp_req__data_router__dlt_message_filtering",
+          "need": "comp_req__log__inactive_logstream",
           "verify_type": "partially",
           "result": "passed",
           "result_text": "",
@@ -784,6 +676,86 @@
     }
   },
   {
+    "need": "comp_req__data_router__dlt_server",
+    "links": {
+      "CodeLinks": [],
+      "TestLinks": [
+        {
+          "name": "DataRouterTestFixture__ConstructionAndDestructionOnStack",
+          "file": "score/datarouter/test/ut/ut_logging/test_datarouter.cpp",
+          "line": 527,
+          "need": "comp_req__data_router__dlt_server",
+          "verify_type": "partially",
+          "result": "passed",
+          "result_text": "",
+          "repo_name": "local_repo",
+          "hash": "",
+          "url": ""
+        },
+        {
+          "name": "DataRouterTestFixture__ConstructionAndDestructionOnHeap",
+          "file": "score/datarouter/test/ut/ut_logging/test_datarouter.cpp",
+          "line": 538,
+          "need": "comp_req__data_router__dlt_server",
+          "verify_type": "partially",
+          "result": "passed",
+          "result_text": "",
+          "repo_name": "local_repo",
+          "hash": "",
+          "url": ""
+        },
+        {
+          "name": "DataRouterTestFixture__TestUsingTheDefaultStackAndRingSizesIfTheUserProvidesZeros",
+          "file": "score/datarouter/test/ut/ut_logging/test_datarouter.cpp",
+          "line": 768,
+          "need": "comp_req__data_router__dlt_server",
+          "verify_type": "partially",
+          "result": "passed",
+          "result_text": "",
+          "repo_name": "local_repo",
+          "hash": "",
+          "url": ""
+        },
+        {
+          "name": "DataRouterTestFixture__TestSomeConditionsInsideTickMethodWithDisablingDlt",
+          "file": "score/datarouter/test/ut/ut_logging/test_datarouter.cpp",
+          "line": 785,
+          "need": "comp_req__data_router__dlt_server",
+          "verify_type": "partially",
+          "result": "passed",
+          "result_text": "",
+          "repo_name": "local_repo",
+          "hash": "",
+          "url": ""
+        },
+        {
+          "name": "UdpStreamOutputFixture__SendMethodShallSucceedIfSendmmsgSucceeded",
+          "file": "score/datarouter/test/ut/ut_logging/test_udp_stream_output.cpp",
+          "line": 165,
+          "need": "comp_req__data_router__dlt_server",
+          "verify_type": "partially",
+          "result": "passed",
+          "result_text": "",
+          "repo_name": "local_repo",
+          "hash": "",
+          "url": ""
+        },
+        {
+          "name": "DltServerCreatedWithoutConfigFixture__WhenCreatedDefault",
+          "file": "score/datarouter/test/ut/ut_logging/test_dltserver.cpp",
+          "line": 150,
+          "need": "comp_req__data_router__dlt_server",
+          "verify_type": "partially",
+          "result": "passed",
+          "result_text": "",
+          "repo_name": "local_repo",
+          "hash": "",
+          "url": ""
+        }
+      ]
+    }
+  },
+  {
     "need": "comp_req__data_router__dlt_bw_quota_config",
     "links": {
       "CodeLinks": [],
@@ -849,6 +821,62 @@
           "file": "score/datarouter/test/ut/ut_logging/test_dltchannel.cpp",
           "line": 93,
           "need": "comp_req__data_router__dlt_multiple_channels",
+          "verify_type": "partially",
+          "result": "passed",
+          "result_text": "",
+          "repo_name": "local_repo",
+          "hash": "",
+          "url": ""
+        }
+      ]
+    }
+  },
+  {
+    "need": "comp_req__data_router__dlt_message_filtering",
+    "links": {
+      "CodeLinks": [],
+      "TestLinks": [
+        {
+          "name": "SocketserverConfigTest__ReadCorrectLogChannelsNoErrorsExpected",
+          "file": "score/datarouter/test/ut/ut_logging/test_socketserver_config.cpp",
+          "line": 50,
+          "need": "comp_req__data_router__dlt_message_filtering",
+          "verify_type": "partially",
+          "result": "passed",
+          "result_text": "",
+          "repo_name": "local_repo",
+          "hash": "",
+          "url": ""
+        },
+        {
+          "name": "SocketserverConfigTest__JsonFilteringEnabledExpectConfigFilterTrue",
+          "file": "score/datarouter/test/ut/ut_logging/test_socketserver_config.cpp",
+          "line": 91,
+          "need": "comp_req__data_router__dlt_message_filtering",
+          "verify_type": "partially",
+          "result": "passed",
+          "result_text": "",
+          "repo_name": "local_repo",
+          "hash": "",
+          "url": ""
+        },
+        {
+          "name": "DltChannelTest__WhenLogLevelExceedsThreshold_Verbose",
+          "file": "score/datarouter/test/ut/ut_logging/test_dltchannel.cpp",
+          "line": 457,
+          "need": "comp_req__data_router__dlt_message_filtering",
+          "verify_type": "partially",
+          "result": "passed",
+          "result_text": "",
+          "repo_name": "local_repo",
+          "hash": "",
+          "url": ""
+        },
+        {
+          "name": "DltChannelTest__WhenNonVerboseLogLevelExceedsThreshold",
+          "file": "score/datarouter/test/ut/ut_logging/test_dltchannel.cpp",
+          "line": 484,
+          "need": "comp_req__data_router__dlt_message_filtering",
           "verify_type": "partially",
           "result": "passed",
           "result_text": "",
