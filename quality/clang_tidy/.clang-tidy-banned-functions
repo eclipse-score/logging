@@ -1,0 +1,40 @@
+# *******************************************************************************
+# Copyright (c) 2026 Contributors to the Eclipse Foundation
+#
+# See the NOTICE file(s) distributed with this work for additional
+# information regarding copyright ownership.
+#
+# This program and the accompanying materials are made available under the
+# terms of the Apache License Version 2.0 which is available at
+# https://www.apache.org/licenses/LICENSE-2.0
+#
+# SPDX-License-Identifier: Apache-2.0
+# *******************************************************************************
+
+# Banned-function check, used via --config-file (see tools/lint/linters.bzl),
+# so it is independent of the S-CORE baseline and of the local .clang-tidy.
+# CustomFunctions needs clang-tidy >= 20.
+# Entry format: <POSIX ERE>,<replacement>,><reason>; a regex containing ':' is
+# matched against the qualified name, '^::' anchors at the global namespace.
+# Reasons must not contain commas or semicolons.
+---
+Checks: >-
+  -*,
+  bugprone-unsafe-functions
+
+WarningsAsErrors: >-
+  bugprone-unsafe-functions
+
+CheckOptions:
+  bugprone-unsafe-functions.ReportDefaultFunctions: false
+  bugprone-unsafe-functions.ReportMoreUnsafeFunctions: false
+  bugprone-unsafe-functions.CustomFunctions: >-
+    ^::sigaction$,,>registers a signal handler (comp_req__log__avoid_signal_processing);
+    ^::signal$,,>registers a signal handler (comp_req__log__avoid_signal_processing);
+    ^::std::signal$,,>registers a signal handler (comp_req__log__avoid_signal_processing);
+    ^::bsd_signal$,,>registers a signal handler (comp_req__log__avoid_signal_processing);
+    ^::sigset$,,>registers a signal handler (comp_req__log__avoid_signal_processing);
+    ^::sigvec$,,>registers a signal handler (comp_req__log__avoid_signal_processing);
+    ^::sigignore$,,>registers a signal handler (comp_req__log__avoid_signal_processing);
+    ^::score::os::Signal::SigAction$,,>registers a signal handler (comp_req__log__avoid_signal_processing);
+    ^::score::os::SignalImpl::SigAction$,,>registers a signal handler (comp_req__log__avoid_signal_processing)

@@ -365,12 +365,12 @@ Payload: None
 #### Response from the Client to confirm acquire
 
 When the data is acquired on client side by a call to
-`SharedMemoryWriter::ReadAcquire()`, the client confirms that by responding. The
-response contains the identifier of the acquired buffer
-(`ReadAcquireResult::acquired_buffer`). When a user traces a data type, the C++
-fully qualified type name is registered by `SharedMemoryWriter::TryRegisterType()`
-and written to the ring buffer. This allows Datarouter to identify the payload in
-the ring buffer by the type identifier.
+`AlternatingReaderProxy::Switch()`, the client confirms that by responding. The
+response contains the range in the ring buffer that is ready to be read as well
+as the updated type index. When a user traces a data type for the C++ fully
+qualified type name is put on the type stack in the `MwsrWriter`. This allows
+Datarouter to identify the payload in the ring buffer by index to the type
+stack.
 
 Message ID: `kAcquireResponse`
 

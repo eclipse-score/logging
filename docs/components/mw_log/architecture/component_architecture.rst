@@ -60,7 +60,7 @@ A component can optional also consist of lower level components to further struc
    :safety: ASIL_B
    :status: valid
    :version: 1
-   :implements: logic_arc_int__log_cpp__logging, logic_arc_int__logging__shm, logic_arc_int__logging__session_ctrl_channel
+   :implements: logic_arc_int__log_cpp__logging, logic_arc_int__logging__shared_memory, logic_arc_int__logging__datarouter_msg_client
    :belongs_to: feat__logging
 
    This is the logging component library responsible for selecting the appropriate log sinks based on configuration at runtime. It can perform tasks such as log formatting, filtering, and composite backend selection based on runtime context and configuration. The logging component is designed to be extensible, allowing for custom logging backend to be added as needed.
@@ -90,7 +90,7 @@ Interfaces
 ----------
 
 .. logic_arc_int:: Log Record Shared-Memory
-   :id: logic_arc_int__logging__shm
+   :id: logic_arc_int__logging__shared_memory
    :security: YES
    :safety: ASIL_B
    :status: valid
@@ -99,10 +99,10 @@ Interfaces
    Shared-memory ring buffer carrying only serialized log records: the remote/DLT recorder
    backend writes into it, and ``comp__datarouter`` reads from it to route records onward to the
    network stack. Connection setup and buffer-acquire requests are not carried on this channel;
-   see :need:`logic_arc_int__logging__session_ctrl_channel` for that.
+   see :need:`logic_arc_int__logging__datarouter_msg_client` for that.
 
 .. logic_arc_int:: Control Channel
-   :id: logic_arc_int__logging__session_ctrl_channel
+   :id: logic_arc_int__logging__datarouter_msg_client
    :security: YES
    :safety: ASIL_B
    :status: valid
@@ -111,7 +111,7 @@ Interfaces
    ``mw::com`` message-passing session between the remote/DLT recorder and its source session
    inside ``comp__datarouter``: used to initiate the connection and for ``comp__datarouter`` to
    send buffer-acquire requests back to the recorder. Carries no log record payload; see
-   :need:`logic_arc_int__logging__shm` for that.
+   :need:`logic_arc_int__logging__shared_memory` for that.
 
 Decision Records
 ----------------

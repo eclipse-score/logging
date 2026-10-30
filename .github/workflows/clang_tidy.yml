@@ -42,3 +42,6 @@ jobs:
         # Scope limited to C++ targets. Rust targets are not yet validated against
         # this configuration and are explicitly excluded.
         run: bazel test --config=clang-tidy --lockfile_mode=error -- //score/mw/log/... //score/datarouter/... -//score/mw/log/rust/...
+      - name: Check banned functions
+        # comp_req__log__avoid_signal_processing applies to mw::log cpp implementation only.
+        run: bazel build --config=banned-functions --lockfile_mode=error -- //score/mw/log/... -//score/mw/log/rust/...
