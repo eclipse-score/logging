@@ -24,7 +24,8 @@ namespace detail
 namespace
 {
 
-std::unique_ptr<Recorder> CreateSlogRecorder(const Configuration& config, score::cpp::pmr::memory_resource* memory_resource)
+std::unique_ptr<score::mw::log::Recorder> CreateSlogRecorder(const Configuration& config,
+                                                             score::cpp::pmr::memory_resource* memory_resource)
 {
     SlogRecorderFactory factory;
     return factory.CreateLogRecorder(config, memory_resource);

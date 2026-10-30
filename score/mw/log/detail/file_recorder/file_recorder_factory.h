@@ -13,11 +13,11 @@
 #ifndef SCORE_MW_LOG_DETAIL_FILE_RECORDER_FILE_RECORDER_FACTORY_H
 #define SCORE_MW_LOG_DETAIL_FILE_RECORDER_FILE_RECORDER_FACTORY_H
 
-#include "score/os/fcntl.h"
-#include "score/mw/log/detail/error.h"
 #include "score/mw/log/detail/file_recorder/file_recorder.h"
+#include "score/mw/log/detail/error.h"
 #include "score/mw/log/detail/initialization_reporter.h"
 #include "score/mw/log/detail/log_recorder_factory.hpp"
+#include "score/os/fcntl.h"
 
 namespace score
 {
@@ -27,6 +27,7 @@ namespace log
 {
 namespace detail
 {
+using namespace score::mw::log::detail;  // NOLINT(google-build-using-namespace) keep names unqualified below
 class FileRecorderFactory : public LogRecorderFactory<FileRecorderFactory>
 {
   public:
@@ -35,8 +36,8 @@ class FileRecorderFactory : public LogRecorderFactory<FileRecorderFactory>
         : LogRecorderFactory<FileRecorderFactory>(), fcntl_{std::move(fcntl_instance)}
     {
     }
-    std::unique_ptr<Recorder> CreateConcreteLogRecorder(const Configuration& config,
-                                                        score::cpp::pmr::memory_resource* memory_resource);
+    std::unique_ptr<score::mw::log::Recorder> CreateConcreteLogRecorder(const Configuration& config,
+                                                                        score::cpp::pmr::memory_resource* memory_resource);
 
   private:
     score::cpp::pmr::unique_ptr<score::os::Fcntl> fcntl_;

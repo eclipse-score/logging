@@ -16,3 +16,9 @@ alias(
     actual = "//score/mw/log/requirements/component_requirements:component_requirements_test",
     visibility = ["//visibility:public"],
 )
+
+filegroup(
+    name = "baselibs_aou_requirements",
+    srcs = ["@score_baselibs//score/mw/log:docs"],
+    visibility = ["//visibility:public"],
+)

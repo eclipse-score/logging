@@ -270,8 +270,7 @@ UnixDomainSockAddr MakeTempAddrAbstractFalse(std::string& name)
     return UnixDomainSockAddr(name, /*isAbstract=*/false);
 }
 
-/// Block until the server at \p path is accepting connections (i.e. listen() completed).
-/// A successful non-blocking connect() proves the server passed both bind() and listen().
+/// Block until the filesystem socket at \p path exists (i.e. bind() completed).
 /// Returns true on success, false on timeout.
 bool WaitForSocketFile(const std::string& path, std::chrono::milliseconds timeout = std::chrono::milliseconds(5000))
 {
@@ -279,18 +278,10 @@ bool WaitForSocketFile(const std::string& path, std::chrono::milliseconds timeou
     auto deadline = std::chrono::steady_clock::now() + timeout;
     while (std::chrono::steady_clock::now() < deadline)
     {
-        int fd = ::socket(AF_UNIX, SOCK_STREAM, 0);
-        if (fd >= 0)
+        struct stat st{};
+        if (::stat(path.c_str(), &st) == 0 && (st.st_mode & S_IFSOCK) != 0)
         {
-            sockaddr_un su{};
-            su.sun_family = AF_UNIX;
-            std::strncpy(su.sun_path, path.c_str(), sizeof(su.sun_path) - 1);
-            if (::connect(fd, reinterpret_cast<sockaddr*>(&su), sizeof(su)) == 0)
-            {
-                ::close(fd);
-                return true;
-            }
-            ::close(fd);
+            return true;
         }
         std::this_thread::sleep_for(kPollInterval);
     }
@@ -942,7 +933,8 @@ TEST_F(PthreadMockFixture, ServerIgnoresSetnameError)
 TEST(UnixDomainCommon, SetupSignalsFailurePath)
 {
     // Given we have our mock gives us the error path on all calls
-    std::unique_ptr<StrictMock<score::os::SignalMock>> signal_mock = std::make_unique<StrictMock<score::os::SignalMock>>();
+    std::unique_ptr<StrictMock<score::os::SignalMock>> signal_mock =
+        std::make_unique<StrictMock<score::os::SignalMock>>();
     auto error = score::os::Error::createUnspecifiedError();
 
     testing::InSequence seq;

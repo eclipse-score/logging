@@ -13,11 +13,11 @@
 
 #include "score/mw/log/detail/data_router/data_router_backend.h"
 
-#include "score/os/mocklib/stat_mock.h"
-#include "score/os/mocklib/stdlib_mock.h"
 #include "score/mw/log/configuration/nvconfigfactory.h"
 #include "score/mw/log/detail/data_router/shared_memory/shared_memory_reader.h"
 #include "score/mw/log/legacy_non_verbose_api/tracing.h"
+#include "score/os/mocklib/stat_mock.h"
+#include "score/os/mocklib/stdlib_mock.h"
 
 #include "score/datarouter/dlt_filetransfer_trigger_lib/filetransfer_message_trace.h"
 
@@ -48,6 +48,9 @@ SCORE_STRUCT_TRACEABLE(DisabledLoggerTestEntry, dummy)
 
 namespace
 {
+
+using namespace score::mw::log::detail;  // NOLINT(google-build-using-namespace) keep names unqualified below
+using namespace score::mw::log;          // NOLINT(google-build-using-namespace) keep names unqualified below
 
 using SerializeNs = ::score::common::visitor::logging_serializer;
 const std::string kErrorContent1Path =

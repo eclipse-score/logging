@@ -13,9 +13,9 @@
 #ifndef SCORE_MW_LOG_DETAIL_SLOG_SLOG_BACKEND_H
 #define SCORE_MW_LOG_DETAIL_SLOG_SLOG_BACKEND_H
 
-#include "score/os/qnx/slog2_impl.h"
 #include "score/mw/log/detail/backend.h"
 #include "score/mw/log/detail/circular_allocator.h"
+#include "score/os/qnx/slog2_impl.h"
 
 #include <cstdint>
 #include <string_view>
@@ -28,6 +28,8 @@ namespace log
 {
 namespace detail
 {
+using namespace score::mw::log::detail;  // NOLINT(google-build-using-namespace) keep names unqualified below
+using score::mw::log::SlotHandle;
 
 class SlogBackend final : public Backend
 {

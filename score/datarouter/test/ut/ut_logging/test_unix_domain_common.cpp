@@ -202,11 +202,12 @@ TEST_F(UnixDomainCommonTestFixture, recv_socket_message_SocketMessangerHeaderFor
     score::cpp::optional<std::int32_t> peer_pid{};
     EXPECT_CALL(*sock_mock, recvmsg(_, _, _))
         .Times(Exactly(2))
-        .WillOnce(::testing::Invoke([&](const std::int32_t, msghdr* const message, const score::os::Socket::MessageFlag) {
-            reinterpret_cast<SocketMessangerHeader*>(reinterpret_cast<iovec*>(message->msg_iov)->iov_base)->type =
-                MessageType::kSharedMemoryFileHandle;
-            return 8;
-        }))
+        .WillOnce(
+            ::testing::Invoke([&](const std::int32_t, msghdr* const message, const score::os::Socket::MessageFlag) {
+                reinterpret_cast<SocketMessangerHeader*>(reinterpret_cast<iovec*>(message->msg_iov)->iov_base)->type =
+                    MessageType::kSharedMemoryFileHandle;
+                return 8;
+            }))
         .WillOnce(Return(1));
 
     auto ret = RecvSocketMessage(5, file_handle, peer_pid, my_lambda);
@@ -224,11 +225,12 @@ TEST_F(UnixDomainCommonTestFixture, recv_socket_message_SocketMessangerHeaderFor
 
     EXPECT_CALL(*sock_mock, recvmsg(_, _, _))
         .Times(Exactly(2))
-        .WillOnce(::testing::Invoke([&](const std::int32_t, msghdr* const message, const score::os::Socket::MessageFlag) {
-            reinterpret_cast<SocketMessangerHeader*>(reinterpret_cast<iovec*>(message->msg_iov)->iov_base)->type =
-                static_cast<MessageType>(2);
-            return 8;
-        }))
+        .WillOnce(
+            ::testing::Invoke([&](const std::int32_t, msghdr* const message, const score::os::Socket::MessageFlag) {
+                reinterpret_cast<SocketMessangerHeader*>(reinterpret_cast<iovec*>(message->msg_iov)->iov_base)->type =
+                    static_cast<MessageType>(2);
+                return 8;
+            }))
         .WillOnce(Return(1));
 
     auto ret = RecvSocketMessage(5);

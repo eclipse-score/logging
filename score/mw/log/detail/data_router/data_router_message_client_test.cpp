@@ -13,12 +13,12 @@
 
 #include "score/assert_support.hpp"
 #include "score/message_passing/mock/client_connection_mock.h"
-#include "score/os/mocklib/mock_pthread.h"
-#include "score/os/mocklib/unistdmock.h"
-#include "score/os/utils/mocklib/signalmock.h"
 #include "score/mw/log/detail/data_router/data_router_message_client_impl.h"
 #include "score/mw/log/detail/data_router/data_router_message_client_mock.h"
 #include "score/mw/log/detail/data_router/message_passing_factory_mock.h"
+#include "score/os/mocklib/mock_pthread.h"
+#include "score/os/mocklib/unistdmock.h"
+#include "score/os/utils/mocklib/signalmock.h"
 
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"

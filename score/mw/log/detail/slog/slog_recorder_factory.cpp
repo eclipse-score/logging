@@ -20,6 +20,8 @@ namespace log
 {
 namespace detail
 {
+using namespace score::mw::log::detail;  // NOLINT(google-build-using-namespace) keep names unqualified below
+using score::mw::log::Recorder;
 std::unique_ptr<Recorder> SlogRecorderFactory::CreateConcreteLogRecorder(const Configuration& config,
                                                                          score::cpp::pmr::memory_resource* memory_resource)
 {

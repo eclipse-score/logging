@@ -24,7 +24,8 @@ namespace detail
 namespace
 {
 
-std::unique_ptr<Recorder> CreateRemoteRecorder(const Configuration& config, score::cpp::pmr::memory_resource* memory_resource)
+std::unique_ptr<score::mw::log::Recorder> CreateRemoteRecorder(const Configuration& config,
+                                                               score::cpp::pmr::memory_resource* memory_resource)
 {
     RemoteDltRecorderFactory factory;
     return factory.CreateLogRecorder(config, memory_resource);

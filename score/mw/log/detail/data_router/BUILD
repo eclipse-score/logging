@@ -82,7 +82,7 @@ cc_library(
         "@score_baselibs//score/os:pthread",
         "@score_baselibs//score/os:stdlib",
         "@score_baselibs//score/os/utils:signal",
-        "@score_communication//score/memory/shared",
+        "@score_communication//score/memory/shared",  # Preperation for full rollout of (Ticket-105741), build cyclic dependency is broken (runtime, in next commit)
         "@score_communication//score/message_passing",
     ],
 )
@@ -139,8 +139,10 @@ cc_test(
         "@googletest//:gtest_main",
         "@score_baselibs//score/concurrency:thread_pool",
         "@score_baselibs//score/language/futurecpp:futurecpp_test_support",
+        "@score_baselibs//score/mw/log:minimal",
         "@score_baselibs//score/mw/log/configuration:target_config_reader_mock",
         "@score_baselibs//score/mw/log/detail:backend_mock",
+        "@score_baselibs//score/mw/log/detail:empty_recorder",
         "@score_baselibs//score/mw/log/detail/text_recorder",
         "@score_baselibs//score/os/mocklib:fcntl_mock",
         "@score_baselibs//score/os/mocklib:mman_mock",

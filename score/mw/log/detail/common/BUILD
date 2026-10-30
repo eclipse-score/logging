@@ -42,6 +42,9 @@ cc_library(
     ],
     features = COMPILER_WARNING_FEATURES,
     tags = ["FFI"],
+    visibility = [
+        "@score_baselibs//score/mw/log/detail:__pkg__",
+    ],
 )
 
 cc_library(
@@ -177,6 +180,7 @@ cc_test(
         "@googletest//:gtest_main",
         "@score_baselibs//score/mw/log:console",
         "@score_baselibs//score/mw/log:recorder_mock",
+        "@score_baselibs//score/mw/log/detail:empty_recorder",
     ] + select({
         "//score/mw/log/detail/flags:config_KConsole_Logging": [
             "@score_baselibs//score/mw/log/detail/text_recorder",
@@ -190,15 +194,10 @@ cc_test(
     srcs = [
         "@score_baselibs//score/mw/log:log_stream_test.cpp",
     ],
-    # FIXME: To be removed after https://github.com/eclipse-score/score_cpp_policies/issues/8 is resolved
-    copts = ["-Wno-deprecated-declarations"],  # src from @score_baselibs uses deprecated APIs
     features = COMPILER_WARNING_FEATURES + [
         "aborts_upon_exception",
     ],
-    tags = [
-        "no-clang-tidy",  # src from @score_baselibs, cannot suppress deprecations in source
-        "unit",
-    ],
+    tags = ["unit"],
     deps = [
         "@googletest//:gtest_main",
         "@score_baselibs//score/mw/log:console",

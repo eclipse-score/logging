@@ -13,8 +13,8 @@
 #ifndef SCORE_MW_LOG_TEST_FAKE_RECORDER_FAKE_RECORDER_H
 #define SCORE_MW_LOG_TEST_FAKE_RECORDER_FAKE_RECORDER_H
 
-#include "score/concurrency/synchronized.h"
 #include "score/mw/log/recorder.h"
+#include "score/concurrency/synchronized.h"
 
 #include <array>
 #include <cstddef>
@@ -32,6 +32,7 @@ namespace log
 {
 namespace test
 {
+using namespace score::mw::log;  // NOLINT(google-build-using-namespace) keep names unqualified below
 
 class FakeRecorder final : public score::mw::log::Recorder
 {

@@ -13,16 +13,16 @@
 
 #include "score/mw/log/detail/data_router/data_router_backend.h"
 
-#include "score/os/mocklib/fcntl_mock.h"
-#include "score/os/mocklib/mman_mock.h"
-#include "score/os/mocklib/stat_mock.h"
-#include "score/os/mocklib/stdlib_mock.h"
-#include "score/os/mocklib/unistdmock.h"
 #include "score/mw/log/configuration/nvconfigfactory.h"
 #include "score/mw/log/detail/data_router/data_router_message_client_factory_mock.h"
 #include "score/mw/log/detail/data_router/data_router_message_client_mock.h"
 #include "score/mw/log/detail/data_router/shared_memory/shared_memory_reader.h"
 #include "score/mw/log/legacy_non_verbose_api/tracing.h"
+#include "score/os/mocklib/fcntl_mock.h"
+#include "score/os/mocklib/mman_mock.h"
+#include "score/os/mocklib/stat_mock.h"
+#include "score/os/mocklib/stdlib_mock.h"
+#include "score/os/mocklib/unistdmock.h"
 
 #include "static_reflection_with_serialization/serialization/for_logging.h"
 
@@ -39,6 +39,9 @@ namespace detail
 {
 namespace
 {
+
+using namespace score::mw::log::detail;  // NOLINT(google-build-using-namespace) keep names unqualified below
+using namespace score::mw::log;          // NOLINT(google-build-using-namespace) keep names unqualified below
 
 using ::testing::_;
 using ::testing::Return;

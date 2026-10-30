@@ -20,12 +20,13 @@
 
 #include "static_reflection_with_serialization/serialization/for_logging.h"
 
-#include "score/os/utils/high_resolution_steady_clock.h"
-#include "score/mw/log/configuration/configuration.h"
 #include "score/mw/log/configuration/nvconfig.h"
 #include "score/mw/log/detail/data_router/shared_memory/writer_factory.h"
 #include "score/mw/log/detail/logging_identifier.h"
 #include "score/mw/log/logging.h"
+#include "score/mw/log/configuration/configuration.h"
+#include "score/mw/log/detail/verbose_payload.h"
+#include "score/os/utils/high_resolution_steady_clock.h"
 
 namespace score
 {
@@ -130,7 +131,7 @@ class Logger
             // Check the range's value of the log level before casting it to the LogLevel enum.
             if (message_descriptor_log_level <=
                 score::mw::log::LogLevel::kVerbose)  // LCOV_EXCL_BR_START  message_descriptor_log_level is enum class
-                                                   // which is constant & can't exceed more than, kVerbose.
+                                                     // which is constant & can't exceed more than, kVerbose.
             {
                 // LCOV_EXCL_BR_STOP
                 log_level = static_cast<LogLevel>(msg_desc->GetLogLevel());

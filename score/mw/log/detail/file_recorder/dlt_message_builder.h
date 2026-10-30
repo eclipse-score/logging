@@ -26,6 +26,7 @@ namespace log
 {
 namespace detail
 {
+using namespace score::mw::log::detail;  // NOLINT(google-build-using-namespace) keep names unqualified below
 
 // This method was kept here in this namespace for testing purposes.
 void ConstructDltStandardHeaderTypes(DltStandardHeader& standard,

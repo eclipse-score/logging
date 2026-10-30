@@ -75,10 +75,10 @@ ScoreReq.CompReq SharedMemoryFilePermissions {
 // comp_req__log__forward_to_system_logger
 ScoreReq.CompReq ForwardToSystemLogger {
     description = '''The system logger backend shall forward the logs to the native system logger mechanism.
-    Under QNX, slogger2 shall be used.'''
+    slogger2 shall be used for QNX. syslog(3) shall be used for Linux.'''
     safety = ScoreReq.Asil.QM
     derived_from = [MwLogFeature.EarlyStartupLogging@1]
-    version = 1
+    version = 2
 }
 
 // comp_req__log__system_backend_activation

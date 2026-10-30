@@ -14,8 +14,8 @@
 #ifndef SCORE_MW_LOG_DETAIL_DATA_ROUTER_SHARED_MEMORY_COMMON_H
 #define SCORE_MW_LOG_DETAIL_DATA_ROUTER_SHARED_MEMORY_COMMON_H
 
-#include "score/os/utils/high_resolution_steady_clock.h"
 #include "score/mw/log/detail/wait_free_producer_queue/alternating_control_block.h"
+#include "score/os/utils/high_resolution_steady_clock.h"
 
 #include <score/callback.hpp>
 

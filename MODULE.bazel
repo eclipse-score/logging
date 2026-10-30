@@ -206,6 +206,8 @@ single_version_override(
     patches = [
         # Export the AoU requirements file so downstream repos can consume it directly.
         "//third_party/score_baselibs:0001-logging-export-aou-requirements.patch",
+        # Allow downstream repos to consume the no-op fallback recorder implementation.
+        "//third_party/score_baselibs:0002-logging-allow-score-empty-recorder.patch",
     ],
 )
 
