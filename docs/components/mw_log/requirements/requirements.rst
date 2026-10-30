@@ -26,6 +26,19 @@ Component Requirements
 mw::log
 -------
 
+.. comp_req:: Inactive LogStream Behavior
+   :id: comp_req__log__inactive_logstream
+   :version: 1
+   :reqtype: Functional
+   :security: NO
+   :safety: QM
+   :derived_from: feat_req__logging__filtering_log_levels, feat_req__logging__resource_performance
+   :status: valid
+   :satisfied_by: comp__mw_log_backend
+
+    mw::log library shall not perform any useful activity if log level of
+    LogStream object is insufficient for given context.
+
 .. comp_req:: Avoid Signal Processing
    :id: comp_req__log__avoid_signal_processing
    :version: 1
@@ -97,6 +110,36 @@ mw::log
 
    .. note::
       mw::log creates a shared memory file for each app.
+
+Remote Backend
+--------------
+
+.. comp_req:: Send Messages to Datarouter
+   :id: comp_req__log__send_to_datarouter
+   :version: 1
+   :reqtype: Functional
+   :security: NO
+   :safety: QM
+   :status: valid
+   :derived_from: feat_req__logging__log_sources_user_app, feat_req__logging__log_sinks_network
+   :satisfied_by: comp__mw_log_backend
+
+   mw::log shall hand over the log messages to the Datarouter process for forwarding
+   when the remote backend is used. mw::log shall not transmit log messages to the
+   network itself.
+
+.. comp_req:: Remote Backend Activation
+   :id: comp_req__log__remote_backend_activation
+   :version: 1
+   :reqtype: Functional
+   :security: NO
+   :safety: QM
+   :derived_from: feat_req__logging__log_sinks_local_fs, feat_req__logging__config_on_demand
+   :status: valid
+   :satisfied_by: comp__mw_log_backend
+
+   mw::log shall enable the file backend if and only if the log mode contains
+   "kRemote".
 
 System Backend
 --------------
