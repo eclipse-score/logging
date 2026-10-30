@@ -96,14 +96,9 @@ See also :need:`doc_concept__wp_inspections` for further information about revie
      - Check the automated dependency analysis.
        Also make sure ASIL rated units also only use ASIL rated libraries.
      - no
-     - Dependency and FFI metadata are maintained in Bazel. The direct
-       dependencies outside of ``//score/mw/log`` are listed with::
-
-         bazel query 'let l = kind(".*_library", //score/mw/log/...) except attr(testonly, 1, //score/mw/log/...) in labels(deps, $l) except //score/mw/log/...' --keep_going --output=label_kind
-
-       Those without the ``FFI`` tag are listed with::
-
-         bazel query 'let l = kind(".*_library", //score/mw/log/...) except attr(testonly, 1, //score/mw/log/...) in (labels(deps, $l) except //score/mw/log/...) except attr(tags, FFI, labels(deps, $l))' --keep_going --output=label
+     - Dependency and FFI metadata are maintained in Bazel. The generated
+       :doc:`backend_dependencies` and :doc:`frontend_dependencies` pages
+       list the dependencies of each unit.
 
        Dependency/configuration findings remain:
 

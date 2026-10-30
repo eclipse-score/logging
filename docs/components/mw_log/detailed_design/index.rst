@@ -124,8 +124,9 @@ External dependencies and their relationships are defined in the Bazel BUILD
 targets.
 FFI classifications are maintained using Bazel target metadata,
 including the ``FFI`` tag.
-The dependency tree used for implementation inspection and
-safety analysis is generated from the Bazel dependency graph.
+The direct dependencies of each unit, their ``FFI`` tag and the external
+repositories used transitively are listed in :doc:`backend_dependencies`
+and :doc:`frontend_dependencies`.
 
 Rationale Behind Decomposition into Units
 -----------------------------------------
@@ -186,6 +187,8 @@ the diagrams. The interface documentation is part of the headers.
 
    file_output_backend
    datarouter_backend/index
+   backend_dependencies
+   frontend_dependencies
 
 
 Inspection Checklist
