@@ -568,9 +568,16 @@ bool MessagePassingServer::NotifyAcquireRequest(const pid_t pid)
         return true;
     }
 
-    // Notify() is non-blocking (QNX pulse), so holding the mutex is safe and avoids
-    // a use-after-free race where disconnect_callback could destroy the connection
-    // object between releasing the lock and calling Notify().
+    // Holding the mutex here is safe because:
+    // - On QNX, Notify() uses non-blocking pulses (MsgDeliverEvent).
+    // - On Linux, Notify() uses sendmsg() on a blocking socket, but the
+    //   acquire_in_flight guard above ensures at most one 1-byte message
+    //   is outstanding per client, making a blocking send practically
+    //   impossible under normal conditions.
+    // The mutex must be held to prevent a use-after-free race where
+    // disconnect_callback could destroy the connection object between
+    // releasing the lock and calling Notify().
+    
     constexpr std::array<std::uint8_t, 1> kMessage{score::cpp::to_underlying(DatarouterMessageIdentifier::kAcquireRequest)};
     auto ret = wrapper.connection->Notify(kMessage);
 
