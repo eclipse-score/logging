@@ -1,0 +1,116 @@
+' *******************************************************************************
+' Copyright (c) 2026 Contributors to the Eclipse Foundation
+'
+' See the NOTICE file(s) distributed with this work for additional
+' information regarding copyright ownership.
+'
+' This program and the accompanying materials are made available under the
+' terms of the Apache License Version 2.0 which is available at
+' https://www.apache.org/licenses/LICENSE-2.0
+'
+' SPDX-License-Identifier: Apache-2.0
+' *******************************************************************************
+
+@startuml datarouter_initialization_processing_sequence
+title Datarouter Initialization and Message Processing
+
+skinparam sequenceMessageAlign center
+skinparam responseMessageBelowArrow true
+
+participant "SocketServer" as SS
+participant "DltLogServer" as DLS
+participant "ILogParserFactory\n(DltLogParserFactory)" as ILPF
+participant "DataRouter" as DR
+participant "SourceSession" as SRC
+participant "LogParser" as LP
+participant "DltVerboseHandler" as VH
+participant "DltNonverboseHandler" as NH
+participant "FileTransferStreamHandler" as FTH
+participant "DLT Channel" as CH
+
+== System Initialization ==
+
+SS -> DLS : CreateDltServer(storage_handlers, log_channels_path)
+
+note over DLS
+  DltLogServer constructs handlers
+  with itself as IOutput:
+  nvhandler_(*this)
+  vhandler_(*this)
+  fthandler_(*this)
+end note
+
+SS -> ILPF : CreateLogParserFactory(*dlt_server)
+
+note over ILPF
+  DltLogParserFactory holds a
+  reference to DltLogServer for
+  obtaining handlers at Create() time
+end note
+
+SS -> DR : DataRouter(logger, log_parser_factory)
+
+== LogParser Creation (on new client connection) ==
+
+DR -> ILPF : Create(nv_config)
+ILPF -> DLS : GetGlobalHandlers()
+ILPF -> DLS : GetTypeHandlerBindings()
+
+note right of DLS
+  GlobalHandlers: {&nvhandler_}
+  TypeHandlerBindings:
+    "LogEntry" → &vhandler_
+    "FileTransferEntry" → &fthandler_
+end note
+
+ILPF -> LP : new LogParser(nv_config, global_handlers, handle_request_map)
+ILPF --> DR : unique_ptr<ILogParser>
+DR -> SRC : new SourceSession(..., parser)
+
+== Message Processing ==
+
+SRC -> LP : ParseSharedMemoryRecord(record)
+note left of SRC
+  Called per record from
+  ISharedMemoryReader callback
+end note
+
+LP -> LP : Look up IndexParser by type_identifier
+LP -> LP : IndexParser::Parse(timestamp, data, size)
+
+alt LogEntry type
+  LP -> VH : Handle(timestamp, data, size)
+  VH -> DLS : SendVerbose(tmsp, entry)
+  DLS -> DLS : FilterAndCall(app_id, ctx_id, log_level)
+  DLS -> CH : Send DLT message
+else FileTransferEntry type
+  LP -> FTH : Handle(timestamp, data, size)
+  FTH -> FTH : Queue FileTransferEntry
+  FTH ->> DLS : SendFtVerbose() [background thread]
+  DLS -> DLS : FilterAndCall(app_id, ctx_id, log_level)
+  DLS -> CH : Send DLT message
+else no TypeHandler match
+  note over LP
+    No TypeHandler registered
+    IndexParser::Parse() returns immediately without calling any handler.
+  end note
+end
+
+LP -> NH : Handle(TypeInfo, timestamp, data, size)
+
+alt nv_msg_desc != nullptr
+  NH -> DLS : SendNonVerbose(desc, tmsp, data, size)
+  DLS -> DLS : FilterAndCall(app_id, ctx_id, log_level)
+  DLS -> CH : Send DLT message
+else nv_msg_desc == nullptr
+  note over NH
+    Handler returns immediately without sending to DltLogServer.
+  end note
+end
+
+note over VH, NH
+  All handlers check IsOutputEnabled() first.
+  If disabled, Handle() returns immediately without sending to DltLogServer.
+end note
+
+@enduml
