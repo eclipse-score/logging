@@ -49,6 +49,19 @@ package "Configuration session" as pkg_config {
     component "PersistentDictionary" as PD <<unit>>
 }
 
+package "Initialization and message processing" as pkg_init_proc {
+    component "SocketServer" as SS <<unit>>
+    component "DltLogServer" as DLS <<unit>>
+    component "ILogParserFactory" as ILPF <<unit>>
+    component "DataRouter" as DR <<unit>>
+    component "SourceSession" as SRC <<unit>>
+    component "LogParser" as LP <<unit>>
+    component "DltVerboseHandler" as VH <<unit>>
+    component "DltNonverboseHandler" as NH <<unit>>
+    component "FileTransferStreamHandler" as FTH <<unit>>
+    component "DLT Channel" as CH <<unit>>
+}
+
 interface "IUTAAE" as IUTAAE
 interface "IAESE" as IAESE
 interface "IMWSE" as IMWSE
@@ -68,6 +81,21 @@ interface "IConfigSessionDLTS" as IConfigSessionDLTS
 interface "IDLTSPD" as IDLTSPD
 interface "IConfigSessionSocket" as IConfigSessionSocket
 interface "IDRConfServiceDRConf" as IDRConfServiceDRConf
+interface "ISSDLS" as ISSDLS
+interface "ISSILPF" as ISSILPF
+interface "ISSDR" as ISSDR
+interface "IDRILPF" as IDRILPF
+interface "IILPFDLS" as IILPFDLS
+interface "IILPFLP" as IILPFLP
+interface "IDRSRC" as IDRSRC
+interface "ISRCLP" as ISRCLP
+interface "ILPVH" as ILPVH
+interface "IVHDLS" as IVHDLS
+interface "IDLSCH" as IDLSCH
+interface "ILPFTH" as ILPFTH
+interface "IFTHDLS" as IFTHDLS
+interface "ILPNH" as ILPNH
+interface "INHDLS" as INHDLS
 
 UTA -( IUTAAE
 AE )- IUTAAE
@@ -125,5 +153,50 @@ Socket )- IConfigSessionSocket
 
 DRConfService -( IDRConfServiceDRConf
 DRConf )- IDRConfServiceDRConf
+
+SS -( ISSDLS
+DLS )- ISSDLS
+
+SS -( ISSILPF
+ILPF )- ISSILPF
+
+SS -( ISSDR
+DR )- ISSDR
+
+DR -( IDRILPF
+ILPF )- IDRILPF
+
+ILPF -( IILPFDLS
+DLS )- IILPFDLS
+
+ILPF -( IILPFLP
+LP )- IILPFLP
+
+DR -( IDRSRC
+SRC )- IDRSRC
+
+SRC -( ISRCLP
+LP )- ISRCLP
+
+LP -( ILPVH
+VH )- ILPVH
+
+VH -( IVHDLS
+DLS )- IVHDLS
+
+DLS -( IDLSCH
+CH )- IDLSCH
+
+LP -( ILPFTH
+FTH )- ILPFTH
+
+FTH -( IFTHDLS
+DLS )- IFTHDLS
+
+LP -( ILPNH
+NH )- ILPNH
+
+NH -( INHDLS
+DLS )- INHDLS
 
 @enduml
