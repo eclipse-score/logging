@@ -5834,7 +5834,7 @@ Unit Test
 
       <hr>
 
-   **Source:** `score/mw/log/detail/wait\_free\_producer\_queue/wait\_free\_linear\_writer\_test.cpp:123 <../../../../../../score/mw/log/detail/wait_free_producer_queue/wait_free_linear_writer_test.cpp#L123>`__
+   **Source:** `score/mw/log/detail/wait\_free\_producer\_queue/wait\_free\_linear\_writer\_test.cpp:122 <../../../../../../score/mw/log/detail/wait_free_producer_queue/wait_free_linear_writer_test.cpp#L122>`__
 
 .. _lobster-item-3c854f1d14f62b99e3b79a07baa6a9b69e37fd55:
 
@@ -5865,7 +5865,7 @@ Unit Test
 
       <hr>
 
-   **Source:** `score/mw/log/detail/wait\_free\_producer\_queue/wait\_free\_linear\_writer\_test.cpp:197 <../../../../../../score/mw/log/detail/wait_free_producer_queue/wait_free_linear_writer_test.cpp#L197>`__
+   **Source:** `score/mw/log/detail/wait\_free\_producer\_queue/wait\_free\_linear\_writer\_test.cpp:196 <../../../../../../score/mw/log/detail/wait_free_producer_queue/wait_free_linear_writer_test.cpp#L196>`__
 
 .. _lobster-item-2e0582573476d9a6d7adde6b69bdad40576ccdf4:
 
@@ -5896,7 +5896,7 @@ Unit Test
 
       <hr>
 
-   **Source:** `score/mw/log/detail/wait\_free\_producer\_queue/wait\_free\_linear\_writer\_test.cpp:237 <../../../../../../score/mw/log/detail/wait_free_producer_queue/wait_free_linear_writer_test.cpp#L237>`__
+   **Source:** `score/mw/log/detail/wait\_free\_producer\_queue/wait\_free\_linear\_writer\_test.cpp:236 <../../../../../../score/mw/log/detail/wait_free_producer_queue/wait_free_linear_writer_test.cpp#L236>`__
 
 .. _lobster-item-61d7d4076fa5a791c1bf4c5bf3a551b116f1a5bc:
 
@@ -5927,7 +5927,7 @@ Unit Test
 
       <hr>
 
-   **Source:** `score/mw/log/detail/wait\_free\_producer\_queue/wait\_free\_linear\_writer\_test.cpp:256 <../../../../../../score/mw/log/detail/wait_free_producer_queue/wait_free_linear_writer_test.cpp#L256>`__
+   **Source:** `score/mw/log/detail/wait\_free\_producer\_queue/wait\_free\_linear\_writer\_test.cpp:255 <../../../../../../score/mw/log/detail/wait_free_producer_queue/wait_free_linear_writer_test.cpp#L255>`__
 
 .. _lobster-item-171118cf5880d569fa9965c61d106fe81aa55b2a:
 
@@ -5958,7 +5958,7 @@ Unit Test
 
       <hr>
 
-   **Source:** `score/mw/log/detail/wait\_free\_producer\_queue/wait\_free\_linear\_writer\_test.cpp:306 <../../../../../../score/mw/log/detail/wait_free_producer_queue/wait_free_linear_writer_test.cpp#L306>`__
+   **Source:** `score/mw/log/detail/wait\_free\_producer\_queue/wait\_free\_linear\_writer\_test.cpp:305 <../../../../../../score/mw/log/detail/wait_free_producer_queue/wait_free_linear_writer_test.cpp#L305>`__
 
 .. _lobster-item-1eeda00329e0bf0e3eae02f240424c3aa9be12d8:
 
@@ -5989,7 +5989,7 @@ Unit Test
 
       <hr>
 
-   **Source:** `score/mw/log/detail/wait\_free\_producer\_queue/wait\_free\_linear\_writer\_test.cpp:356 <../../../../../../score/mw/log/detail/wait_free_producer_queue/wait_free_linear_writer_test.cpp#L356>`__
+   **Source:** `score/mw/log/detail/wait\_free\_producer\_queue/wait\_free\_linear\_writer\_test.cpp:355 <../../../../../../score/mw/log/detail/wait_free_producer_queue/wait_free_linear_writer_test.cpp#L355>`__
 
 .. _lobster-item-cfe908fd84198a355e10ec2722bd19fbe7ebff4c:
 
@@ -6404,7 +6404,6 @@ Unit Test
 
    .. pull-quote::
 
-      :Partiallyverifies: comp_req__log__no_endless_loops
       :Description: Returning the expected data if the write buffer is full.
       :Testtype: requirements-based
       :Derivationtechnique: boundary-values
@@ -6468,5 +6467,5 @@ Unit Test
 
       <hr>
 
-   **Source:** `score/mw/log/detail/wait\_free\_producer\_queue/wait\_free\_linear\_writer\_test.cpp:216 <../../../../../../score/mw/log/detail/wait_free_producer_queue/wait_free_linear_writer_test.cpp#L216>`__
+   **Source:** `score/mw/log/detail/wait\_free\_producer\_queue/wait\_free\_linear\_writer\_test.cpp:215 <../../../../../../score/mw/log/detail/wait_free_producer_queue/wait_free_linear_writer_test.cpp#L215>`__
 
