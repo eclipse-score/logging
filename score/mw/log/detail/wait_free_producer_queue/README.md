@@ -103,40 +103,41 @@ For the consumer, consider the following example code:
 
 ```C++
 void Consumer(score::cpp::stop_token stop_token) {
-    score::mw::log::detail::AlternatingReader reader{control_block};
+    score::mw::log::detail::AlternatingReaderProxy reader_proxy{control_block};
+    score::mw::log::detail::AlternatingReadOnlyReader read_only_reader{control_block, buffer1_span, buffer2_span};
     while (stop_token.exit_requested() == false)
     {
         // Toggle between the two alternating linear buffers for concurrent reading and writing.
-        reader.Switch();
+        const auto block_id_count = reader_proxy.Switch();
 
-        auto read_result = reader.Read();
-        while (read_result.has_value())
+        // Only read once read_only_reader.IsBlockReleasedByWriters(block_id_count) returns true.
+        auto linear_reader = read_only_reader.CreateLinearReader(block_id_count);
+        while (const auto packet = linear_reader.Read())
         {
-            const auto packet = read_result.value();
-            ConsumePacket(packet);
-
-            read_result = reader.Read();
+            ConsumePacket(packet.value());
         }
-
-        // At this point all data from the current linear buffer has been consumed,
-        // and we can toggle to the next buffer for reading.
     }
 }
 ```
 
 The key method for the consumer-side is the `Switch()` method that toggles the
-buffers used for reading and writing. The operation of the consumer is blocking,
-i.e., it waits until (all) pending writes to the buffer have completed. After
-`Switch()` returns, the data from one buffer can be safely read without need for
-further synchronization. In parallel, the writer can concurrently write to the
-other buffer.
+buffers used for reading and writing. `Switch()` does not wait for pending
+writers. The consumer has to check `IsBlockReleasedByWriters()` for the returned
+block id before reading. Once it returns true, the data from that buffer can be
+safely read without need for further synchronization. In parallel, the writer
+can concurrently write to the other buffer.
+
+In `mw::log`, `Switch()` is called in the client process (`SharedMemoryWriter`)
+and the buffer is read by the Datarouter. See `SharedMemoryReader` in
+`score/mw/log/detail/data_router/shared_memory/shared_memory_reader.cpp` for
+the complete read flow including error handling.
 
 ## Static Design
 
 The design is divided into data structures for linear and alternating mode.
 The alternating mode is composed by reusing the linear entities:
 
-![Class diagram](./score/mw/log/detail/wait_free_producer_queue/design/class_diagram.puml)
+![Class diagram](./design/class_diagram.puml)
 
 For each mode, we extract the data members into POD structs that could be
 allocated on shared memory. The data structs should not be accessed directly but
@@ -166,7 +167,7 @@ to finish the data for reading. This operation atomically adds the number of
 written bytes to the `written_index`. Thus as soon as all pending writers are
 finished we arrive at the equality of `written_index` and `acquire_index`.
 
-![Linear writer sequence](./score/mw/log/detail/wait_free_producer_queue/design/wait_free_linear_buffer.puml)
+![Linear writer sequence](./design/wait_free_linear_buffer.puml)
 
 The implementation shall prevent the overflow of the running indices. This
 achieved by limiting the maximum allowed number of concurrent writers to some
@@ -200,7 +201,7 @@ one is for writing.
 
 The figure below shows the concurrent operation of a producer and consumer thread:
 
-![Alternating writer sequence](./score/mw/log/detail/wait_free_producer_queue/design/wait_free_alternating_buffers.puml)
+![Alternating writer sequence](./design/wait_free_alternating_buffers.puml)
 
 In the sequence diagram, the producer thread starts to acquire data on the
 linear buffer 1. After that the consumer threads calls `Switch()` to toggle the

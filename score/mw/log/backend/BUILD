@@ -183,12 +183,28 @@ cc_test(
     ],
 )
 
+cc_test(
+    name = "syslog_registrant_test",
+    srcs = ["syslog_registrant_test.cpp"],
+    features = COMPILER_WARNING_FEATURES + [
+        "aborts_upon_exception",
+    ],
+    tags = ["unit"],
+    target_compatible_with = ["@platforms//os:linux"],
+    deps = [
+        ":syslog",
+        "@googletest//:gtest_main",
+        "@score_baselibs//score/mw/log",
+    ],
+)
+
 cc_unit_test_suites_for_host_and_qnx(
     name = "unit_tests",
     cc_unit_tests = [
         ":file_registrant_test",
         ":remote_registrant_test",
         ":slog_registrant_test",
+        ":syslog_registrant_test",
     ],
     visibility = [
         "@score_baselibs//score/mw/log:__pkg__",
