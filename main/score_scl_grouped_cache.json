@@ -648,26 +648,6 @@
     }
   },
   {
-    "need": "comp_req__log__no_endless_loops",
-    "links": {
-      "CodeLinks": [],
-      "TestLinks": [
-        {
-          "name": "WaitFreeLinearWriter__WriteBufferFullShouldReturnExpectedData",
-          "file": "score/mw/log/detail/wait_free_producer_queue/wait_free_linear_writer_test.cpp",
-          "line": 45,
-          "need": "comp_req__log__no_endless_loops",
-          "verify_type": "partially",
-          "result": "passed",
-          "result_text": "",
-          "repo_name": "local_repo",
-          "hash": "",
-          "url": ""
-        }
-      ]
-    }
-  },
-  {
     "need": "comp_req__log__autosar_log_trace_spec",
     "links": {
       "CodeLinks": [],

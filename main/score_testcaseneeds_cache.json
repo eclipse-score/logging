@@ -5708,13 +5708,13 @@
     "TestType": "requirements-based",
     "DerivationTechnique": "boundary-values",
     "result_text": "",
-    "PartiallyVerifies": "comp_req__log__no_endless_loops",
+    "PartiallyVerifies": null,
     "FullyVerifies": null
   },
   {
     "name": "WaitFreeLinearWriter__WriterBigDataTest",
     "file": "score/mw/log/detail/wait_free_producer_queue/wait_free_linear_writer_test.cpp",
-    "line": "123",
+    "line": "122",
     "result": "passed",
     "repo_name": "local_repo",
     "hash": "",
@@ -5728,7 +5728,7 @@
   {
     "name": "WaitFreeLinearWriter__TooManyConcurrentWriterShouldReturnEmpty",
     "file": "score/mw/log/detail/wait_free_producer_queue/wait_free_linear_writer_test.cpp",
-    "line": "197",
+    "line": "196",
     "result": "passed",
     "repo_name": "local_repo",
     "hash": "",
@@ -5742,7 +5742,7 @@
   {
     "name": "WaitFreeLinearWriter__BufferSizeExceededShouldReturnEmpty",
     "file": "score/mw/log/detail/wait_free_producer_queue/wait_free_linear_writer_test.cpp",
-    "line": "216",
+    "line": "215",
     "result": "passed",
     "repo_name": "local_repo",
     "hash": "",
@@ -5756,7 +5756,7 @@
   {
     "name": "WaitFreeLinearWriter__BufferSizeExceededUpperLimitShouldReturnEmpty",
     "file": "score/mw/log/detail/wait_free_producer_queue/wait_free_linear_writer_test.cpp",
-    "line": "237",
+    "line": "236",
     "result": "passed",
     "repo_name": "local_repo",
     "hash": "",
@@ -5770,7 +5770,7 @@
   {
     "name": "WaitFreeLinearWriter__FailedAcquireShouldTerminateBuffer",
     "file": "score/mw/log/detail/wait_free_producer_queue/wait_free_linear_writer_test.cpp",
-    "line": "256",
+    "line": "255",
     "result": "passed",
     "repo_name": "local_repo",
     "hash": "",
@@ -5784,7 +5784,7 @@
   {
     "name": "WaitFreeLinearWriter__FailedAcquireWithNoFreeSpaceShouldNotTerminateBuffer",
     "file": "score/mw/log/detail/wait_free_producer_queue/wait_free_linear_writer_test.cpp",
-    "line": "306",
+    "line": "305",
     "result": "passed",
     "repo_name": "local_repo",
     "hash": "",
@@ -5798,7 +5798,7 @@
   {
     "name": "WaitFreeLinearWriter__AcquireMoreThanMaximumShouldFail",
     "file": "score/mw/log/detail/wait_free_producer_queue/wait_free_linear_writer_test.cpp",
-    "line": "356",
+    "line": "355",
     "result": "passed",
     "repo_name": "local_repo",
     "hash": "",
