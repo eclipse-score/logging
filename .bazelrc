@@ -61,55 +61,26 @@ common:qnx --credential_helper=*.qnx.com=%workspace%/scripts/internal/qnx_creds.
 common:qnx --credential_helper_timeout="60s"
 common:qnx --sandbox_writable_path=/var/tmp
 
-# -------------------------------------------------------------------------------
-# Config dedicated to target platform CPU:arm64 and OS:QNX
-# -------------------------------------------------------------------------------
-build:arm64-qnx --config=qnx
-build:arm64-qnx --config=_common
-build:arm64-qnx --platforms=@score_bazel_platforms//:aarch64-qnx-sdp_8.0.0-posix
-build:arm64-qnx --extra_toolchains=@score_qcc_aarch64_toolchain//:aarch64-qnx-sdp_8.0.0
-build:arm64-qnx --extra_toolchains=@score_qnx_aarch64_ifs_toolchain//:ifs-aarch64-qnx-sdp_8.0.0
-build:arm64-qnx --extra_toolchains=@score_toolchains_rust//toolchains/ferrocene:ferrocene_aarch64_unknown_nto_qnx800
+# Import central S-CORE toolchain configuration
+import %workspace%/score.bazelrc/score_toolchain.bazelrc
+
+# Python precompile disabling for GCC toolchains
+build:score-linux-x86_64 --@rules_python//python/config_settings:precompile=force_disabled
+build:score-linux-aarch64 --@rules_python//python/config_settings:precompile=force_disabled
+
+# Target specific settings for QNX
+build:score-qnx-x86_64 --config=qnx
+build:score-qnx-aarch64 --config=qnx
+test:score-qnx-x86_64 --strategy=TestRunner=local
+test:score-qnx-x86_64 --local_test_jobs=1
 
 # -------------------------------------------------------------------------------
-# Config dedicated to target platform CPU:x86_64 and OS:QNX
+# Backward-compatibility aliases for previous config names
 # -------------------------------------------------------------------------------
-build:x86_64-qnx --config=qnx
-build:x86_64-qnx --config=_common
-build:x86_64-qnx --platforms=@score_bazel_platforms//:x86_64-qnx-sdp_8.0.0-posix
-build:x86_64-qnx --extra_toolchains=@score_qcc_x86_64_toolchain//:x86_64-qnx-sdp_8.0.0
-build:x86_64-qnx --extra_toolchains=@score_qnx_x86_64_ifs_toolchain//:ifs-x86_64-qnx-sdp_8.0.0
-build:x86_64-qnx --extra_toolchains=@score_toolchains_rust//toolchains/ferrocene:ferrocene_x86_64_pc_nto_qnx800
-# Integration tests require direct device access (KVM, TAP) — bypass linux-sandbox
-test:x86_64-qnx --strategy=TestRunner=local
-# All QEMU instances share one tap0/IP — tests must run one at a time
-test:x86_64-qnx --local_test_jobs=1
-
-# TODO arm64 when rust support is there
-
-# -------------------------------------------------------------------------------
-# Config dedicated to host platform CPU:x86_64 and OS:Linux
-# -------------------------------------------------------------------------------
-build:x86_64-linux --config=_common
-build:x86_64-linux --platforms=@score_bazel_platforms//:x86_64-linux-gcc_12.2.0-posix
-build:x86_64-linux --extra_toolchains=@score_gcc_x86_64_toolchain//:x86_64-linux-gcc_12.2.0
-build:x86_64-linux --extra_toolchains=@score_toolchains_rust//toolchains/ferrocene:ferrocene_x86_64_unknown_linux_gnu
-# rules_python 1.8.5 enables precompile by default. The custom GCC toolchain has no
-# Python runtime, causing analysis to crash. "force_disabled" (not "disabled") is needed
-# because pip packages set precompile=enabled at target level, which "disabled" won't override.
-build:x86_64-linux --@rules_python//python/config_settings:precompile=force_disabled
-
-# -------------------------------------------------------------------------------
-# Config dedicated to target platform CPU:aarch64 and OS:Linux
-# -------------------------------------------------------------------------------
-build:aarch64-linux --config=_common
-build:aarch64-linux --platforms=@score_bazel_platforms//:aarch64-linux-gcc_12.2.0-posix
-build:aarch64-linux --extra_toolchains=@score_gcc_aarch64_toolchain//:aarch64-linux-gcc_12.2.0
-build:aarch64-linux --extra_toolchains=@score_toolchains_rust//toolchains/ferrocene:ferrocene_aarch64_unknown_linux_gnu
-# rules_python 1.8.5 enables precompile by default. The custom GCC toolchain has no
-# Python runtime, causing analysis to crash. "force_disabled" (not "disabled") is needed
-# because pip packages set precompile=enabled at target level, which "disabled" won't override.
-build:aarch64-linux --@rules_python//python/config_settings:precompile=force_disabled
+build:x86_64-linux --config=score-linux-x86_64
+build:aarch64-linux --config=score-linux-aarch64
+build:x86_64-qnx --config=score-qnx-x86_64
+build:arm64-qnx --config=score-qnx-aarch64
 
 
 
