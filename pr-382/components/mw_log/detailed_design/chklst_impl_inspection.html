@@ -74,7 +74,7 @@
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
     <link rel="next" title="Requirements" href="../requirements/index.html" />
-    <link rel="prev" title="Safe Datarouter Backend" href="datarouter_backend/index.html" />
+    <link rel="prev" title="Unit Test" href="unit_test.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="0.1" />
@@ -438,6 +438,7 @@
 <li class="toctree-l1 current active has-children"><a class="reference internal" href="index.html">mw::log Backend Detailed Design</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="file_output_backend.html">FileOutputBackend</a></li>
 <li class="toctree-l2"><a class="reference internal" href="datarouter_backend/index.html">Safe Datarouter Backend</a></li>
+<li class="toctree-l2"><a class="reference internal" href="unit_test.html">Unit Test</a></li>
 <li class="toctree-l2 current active"><a class="current reference internal" href="#">Implementation Inspection Checklist</a></li>
 </ul>
 </details></li>
@@ -508,7 +509,7 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <div class="need_container docutils container" id="SNCB-f5fe8fd7">
+  <div class="need_container docutils container" id="SNCB-425ea9bc">
 <div class="pst-scrollable-table-container"><table class="need needs_grid_complex needs_layout_score needs_style_none needs_type_document table" id="doc__mw_log_backend_impl_inspection">
 <tbody>
 <tr class="head row-odd"><td class="head_left" colspan="2"><div class="needs_head_left line-block">
@@ -574,8 +575,8 @@ by linking to C++ or Rust specific documentation.</p>
 <p>It is mandatory to fill in the “passed” column with “yes” or “no” for each checklist item and additionally to add in the remarks why it is passed or not passed.
 In case of “no” an issue link to the issue tracking system has to be added in the last column (if not solved in the same issue).
 See also <a class="external_link reference external" href="https://eclipse-score.github.io/process_description//main/general_concepts/score_review_concept.html#doc_concept__wp_inspections">doc_concept__wp_inspections</a> for further information about reviews in general and inspection in particular.</p>
-<div class="pst-scrollable-table-container"><table class="table" id="id3">
-<caption><span class="caption-number">Table 11 </span><span class="caption-text">Implementation Checklist</span><a class="headerlink" href="#id3" title="Link to this table">#</a></caption>
+<div class="pst-scrollable-table-container"><table class="table" id="id4">
+<caption><span class="caption-number">Table 11 </span><span class="caption-text">Implementation Checklist</span><a class="headerlink" href="#id4" title="Link to this table">#</a></caption>
 <colgroup>
 <col style="width: 7.9%" />
 <col style="width: 19.8%" />
@@ -653,19 +654,17 @@ Accepted as deviation.</p></li>
 <td><p>All violations in ASIL related code must be justified. This includes the checks of coding guidelines.</p></td>
 <td><p>no</p></td>
 <td><p>Static code analysis is covered by: AddressSanitizer + UndefinedBehaviorSanitizer + LeakSanitizer + ThreadSanitizer.</p>
-<p>Static code analysis with MISRA cpp23 checks is planned.</p>
-<p>Dynamic code analysis using valgrind is planned.</p>
+<p>Static code analysis with MISRA cpp23 checks is planned: <a class="reference external" href="https://github.com/eclipse-score/logging/issues/262">#262</a></p>
+<p>Dynamic code analysis using valgrind is planned: <a class="reference external" href="https://github.com/eclipse-score/logging/issues/389">#389</a></p>
 </td>
-<td><p><a class="reference external" href="https://github.com/eclipse-score/logging/issues/336">#336</a></p>
-<p><a class="reference external" href="https://github.com/eclipse-score/logging/issues/389">#389</a></p>
-</td>
+<td></td>
 </tr>
 <tr class="row-odd"><td><p>IMPL_02_02</p></td>
 <td><p>Do manual checks, that are derived from the coding guideline, find no safety critical error?</p></td>
 <td><p>Check this for the programming language used (e.g. C++ &lt;link_to_checks_list&gt;, Rust &lt;link_to_checks_list&gt;)</p></td>
 <td><p>no</p></td>
 <td><p>The manual MISRA C++:2023 checks are not done yet. Accepted as deviation,
-new tooling will be set up soon.</p>
+new tooling will be set up soon: <a class="reference external" href="https://github.com/eclipse-score/logging/issues/262">#262</a></p>
 <p>Following issues found in <a class="reference external" href="https://eclipse-score.github.io/score/main/contribute/development/cpp/coding_guidelines.html">C++ guideline</a>:</p>
 <ul class="simple">
 <li><p>The coding guideline asks to avoid the prefix <code class="docutils literal notranslate"><span class="pre">I</span></code> for interfaces and to
@@ -715,12 +714,12 @@ is not part of this detailed design and was not compared with the code.</p></td>
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="datarouter_backend/index.html"
+       href="unit_test.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Safe Datarouter Backend</p>
+        <p class="prev-next-title">Unit Test</p>
       </div>
     </a>
     <a class="right-next"
