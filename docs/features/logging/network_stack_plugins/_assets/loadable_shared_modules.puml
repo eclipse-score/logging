@@ -1,0 +1,58 @@
+' *******************************************************************************
+' Copyright (c) 2026 Contributors to the Eclipse Foundation
+'
+' See the NOTICE file(s) distributed with this work for additional
+' information regarding copyright ownership.
+'
+' This program and the accompanying materials are made available under the
+' terms of the Apache License Version 2.0 which is available at
+' https://www.apache.org/licenses/LICENSE-2.0
+'
+' SPDX-License-Identifier: Apache-2.0
+' *******************************************************************************
+
+@startuml loadable_shared_modules
+
+package "Network Stack (log_and_trace_instance)" <<QM>> as network_stack {
+   package "Proprietary Plugin Module" as proprietary_plugin_module {
+      rectangle "Plugin Deployer" as proprietary_plugin_deployer
+      rectangle "Proprietary Plugin (Business Logic)" as proprietary_plugin_bl
+      rectangle "Network Accessor" as proprietary_network_accessor
+
+	   proprietary_plugin_deployer -down-> proprietary_plugin_bl : "deploys"
+	   proprietary_plugin_bl -down-> proprietary_network_accessor : "uses"
+   }
+	package "IPC Trace Plugin Module" as ipc_plugin {
+      rectangle "Plugin Deployer" as ipc_plugin_deployer
+      rectangle "IPC Trace Plugin (Business Logic)" as ipc_plugin_bl
+      rectangle "Network Accessor" as ipc_network_accessor
+
+	ipc_plugin_deployer -down-> ipc_plugin_bl : "deploys"
+	ipc_plugin_bl -down-> ipc_network_accessor : "uses"
+   }
+	package "DLT Plugin Module" as dlt_plugin {
+      rectangle "Plugin Deployer" as dlt_plugin_deployer
+      rectangle "DLT Plugin (Business Logic)" as dlt_plugin_bl
+      rectangle "Network Accessor" as dlt_network_accessor
+
+	dlt_plugin_deployer -down-> dlt_plugin_bl : "deploys"
+	dlt_plugin_bl -down-> dlt_network_accessor : "uses"
+   }
+
+   rectangle "Native Network Stack APIs" as native_network_stack_apis
+   rectangle "Network Drivers" as network_drivers
+
+   native_network_stack_apis -down-> network_drivers : "uses"
+}
+dlt_network_accessor -down-> native_network_stack_apis : "uses"
+ipc_network_accessor -down-> native_network_stack_apis : "uses"
+proprietary_network_accessor -down-> native_network_stack_apis : "uses"
+
+actor "Integrator" as integrator
+
+integrator -> network_drivers : "configures"
+
+cloud "External Network" as external_network
+network_drivers -down-> external_network : "I/O"
+
+@enduml

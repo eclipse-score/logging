@@ -1,0 +1,45 @@
+' *******************************************************************************
+' Copyright (c) 2026 Contributors to the Eclipse Foundation
+'
+' See the NOTICE file(s) distributed with this work for additional
+' information regarding copyright ownership.
+'
+' This program and the accompanying materials are made available under the
+' terms of the Apache License Version 2.0 which is available at
+' https://www.apache.org/licenses/LICENSE-2.0
+'
+' SPDX-License-Identifier: Apache-2.0
+' *******************************************************************************
+
+@startuml component_interaction
+
+package "Application" as application <<ASIL-B>> {
+   rectangle "Log Frontend (Baselibs)" as log_frontend
+   rectangle "Log Backend (Logging)" as log_backend
+   rectangle "Generic Trace Library Interface (Baselibs)" as gtl_interface
+   rectangle "Generic Trace Library Implementation (Logging)" as gtl_implementation
+
+   log_frontend -down-> log_backend : "forwards logs"
+   log_backend -down-> gtl_interface : "forwards logs"
+   gtl_interface -down-> gtl_implementation : "forwards logs"
+}
+
+package "Network Stack (log_and_trace_instance)" <<QM>> as network_stack {
+   package "DLT Plugin Module" as dlt_plugin_module {
+      rectangle "Plugin Deployer" as dlt_plugin_deployer
+      rectangle "DLT Plugin (Business Logic)" as dlt_plugin_bl
+      rectangle "Network Accessor" as dlt_network_accessor
+
+      dlt_plugin_deployer -down-> dlt_plugin_bl : "deploys"
+      dlt_plugin_bl -down-> dlt_network_accessor : "uses"
+   }
+}
+
+gtl_implementation -right-> dlt_plugin_bl : "provides logs to"
+
+rectangle "lib_json (baselibs)" as lib_json
+rectangle "lib_concurrency (baselibs)" as lib_concurrency
+rectangle "lib_memory (communication)" as lib_memory
+rectangle "lib_message_passing (communication)?" as lib_message_passing
+
+@enduml
