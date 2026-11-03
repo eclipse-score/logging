@@ -60,7 +60,6 @@ const std::string& GetSharedMemoryFileName()
 {
     std::stringstream ss;
     ss << "/tmp/logging.UTST." << kArbitratyUid << ".shmem";
-    ss.str();
     static const std::string kFileName{ss.str()};
     return kFileName;
 }
