@@ -38,7 +38,10 @@ build --experimental_retain_test_configuration_across_testonly #https://github.c
 common --extra_toolchains=//bazel/toolchains:score_logging_libclang_toolchain
 
 # Ferrocene must be common compiler for HOST. To ensure metadata compatibility for proc macro crates!
-build:_common --extra_toolchains=@score_toolchains_rust//toolchains/ferrocene:ferrocene_x86_64_unknown_linux_gnu
+# Exec Rust tools (e.g. score_tooling puml_cli) also need rustc 1.88+ (psm -> ar_archive_writer,
+# edition 2024); the default rules_rust toolchain (1.86) cannot compile them.
+build --extra_toolchains=@score_toolchains_rust//toolchains/ferrocene:ferrocene_x86_64_unknown_linux_gnu
+
 build:_common --features=minimal_warnings --features=-strict_warnings --features=warnings_as_errors
 
 # Common flags for all builds
@@ -93,7 +96,6 @@ test:x86_64-qnx --local_test_jobs=1
 build:x86_64-linux --config=_common
 build:x86_64-linux --platforms=@score_bazel_platforms//:x86_64-linux-gcc_12.2.0-posix
 build:x86_64-linux --extra_toolchains=@score_gcc_x86_64_toolchain//:x86_64-linux-gcc_12.2.0
-build:x86_64-linux --extra_toolchains=@score_toolchains_rust//toolchains/ferrocene:ferrocene_x86_64_unknown_linux_gnu
 # rules_python 1.8.5 enables precompile by default. The custom GCC toolchain has no
 # Python runtime, causing analysis to crash. "force_disabled" (not "disabled") is needed
 # because pip packages set precompile=enabled at target level, which "disabled" won't override.

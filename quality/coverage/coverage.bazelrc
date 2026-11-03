@@ -42,11 +42,8 @@ coverage:llvm_cov --experimental_generate_llvm_lcov
 # filtering happens at report time via the score_coverage_scope allowlist.
 coverage:llvm_cov --experimental_use_llvm_covmap
 coverage:llvm_cov --extra_toolchains=@llvm_toolchain_coverage//:cc-toolchain-x86_64-linux
-# Ferrocene (score_toolchains_rust >= 0.10.0 ships llvm-cov/llvm-profdata with
-# the toolchain, which is what activates Rust coverage instrumentation). The
-# regular builds register this toolchain inside the x86_64-linux config only,
-# so it is registered here explicitly.
-coverage:llvm_cov --extra_toolchains=@score_toolchains_rust//toolchains/ferrocene:ferrocene_x86_64_unknown_linux_gnu
+# Rust coverage instrumentation needs the Ferrocene toolchain (score_toolchains_rust >= 0.10.0
+# ships llvm-cov/llvm-profdata with it); it is registered for all builds in the root .bazelrc.
 
 coverage:llvm_cov --coverage_output_generator=@score_coverage//:merger
 coverage:llvm_cov --coverage_report_generator=//quality/coverage:reporter_wrapper
