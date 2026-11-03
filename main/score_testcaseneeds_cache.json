@@ -5110,6 +5110,20 @@
     "FullyVerifies": null
   },
   {
+    "name": "SyslogRegistrantTest__SyslogBackendIsRegisteredAfterStaticInitialization",
+    "file": "score/mw/log/backend/syslog_registrant_test.cpp",
+    "line": "28",
+    "result": "passed",
+    "repo_name": "local_repo",
+    "hash": "",
+    "url": "",
+    "TestType": "requirements-based",
+    "DerivationTechnique": "requirements-analysis",
+    "result_text": "",
+    "PartiallyVerifies": "comp_req__log__system_backend_activation",
+    "FullyVerifies": null
+  },
+  {
     "name": "FileRegistrantTest__FileBackendIsRegisteredAfterStaticInitialization",
     "file": "score/mw/log/backend/file_registrant_enabled_test.cpp",
     "line": "28",

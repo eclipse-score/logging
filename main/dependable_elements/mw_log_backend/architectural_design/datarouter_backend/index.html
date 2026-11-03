@@ -433,12 +433,12 @@ keepalive manner to check the communication link.</p>
 <section id="response-from-the-client-to-confirm-acquire">
 <h4>Response from the Client to confirm acquire<a class="headerlink" href="#response-from-the-client-to-confirm-acquire" title="Link to this heading"></a></h4>
 <p>When the data is acquired on client side by a call to
-<code class="docutils literal notranslate"><span class="pre">SharedMemoryWriter::ReadAcquire()</span></code>, the client confirms that by responding. The
-response contains the identifier of the acquired buffer
-(<code class="docutils literal notranslate"><span class="pre">ReadAcquireResult::acquired_buffer</span></code>). When a user traces a data type, the C++
-fully qualified type name is registered by <code class="docutils literal notranslate"><span class="pre">SharedMemoryWriter::TryRegisterType()</span></code>
-and written to the ring buffer. This allows Datarouter to identify the payload in
-the ring buffer by the type identifier.</p>
+<code class="docutils literal notranslate"><span class="pre">AlternatingReaderProxy::Switch()</span></code>, the client confirms that by responding. The
+response contains the range in the ring buffer that is ready to be read as well
+as the updated type index. When a user traces a data type for the C++ fully
+qualified type name is put on the type stack in the <code class="docutils literal notranslate"><span class="pre">MwsrWriter</span></code>. This allows
+Datarouter to identify the payload in the ring buffer by index to the type
+stack.</p>
 <p>Message ID: <code class="docutils literal notranslate"><span class="pre">kAcquireResponse</span></code></p>
 <p>Payload: <code class="docutils literal notranslate"><span class="pre">struct</span> <span class="pre">ReadAcquireResult</span></code></p>
 </section>

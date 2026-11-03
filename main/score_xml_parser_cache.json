@@ -516,6 +516,18 @@
     "url": ""
   },
   {
+    "name": "SyslogRegistrantTest__SyslogBackendIsRegisteredAfterStaticInitialization",
+    "file": "score/mw/log/backend/syslog_registrant_test.cpp",
+    "line": 28,
+    "need": "comp_req__log__system_backend_activation",
+    "verify_type": "partially",
+    "result": "passed",
+    "result_text": "",
+    "repo_name": "local_repo",
+    "hash": "",
+    "url": ""
+  },
+  {
     "name": "LinearReaderTests__LengthExceedingMaxThresholdShouldReturnEmpty",
     "file": "score/mw/log/detail/wait_free_producer_queue/linear_reader_test.cpp",
     "line": 26,
