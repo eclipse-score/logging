@@ -21,6 +21,7 @@ namespace impl
 {
 namespace detail
 {
+using namespace score::mw::log::detail;  // NOLINT(google-build-using-namespace) keep names unqualified below
 
 CustomRecorderFactoryImpl::CustomRecorderFactoryImpl(score::cpp::pmr::unique_ptr<score::os::Fcntl>)
     : LogRecorderFactory<CustomRecorderFactoryImpl>()

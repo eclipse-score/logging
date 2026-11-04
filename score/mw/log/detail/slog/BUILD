@@ -34,6 +34,7 @@ cc_library(
         "@score_baselibs//score/mw/log/detail:backend_interface",
         "@score_baselibs//score/mw/log/detail:circular_allocator",
         "@score_baselibs//score/mw/log/detail:initialization_reporter",
+        "@score_baselibs//score/mw/log/detail:types_and_errors",
         "@score_baselibs//score/os/qnx:slog2",
     ],
 )

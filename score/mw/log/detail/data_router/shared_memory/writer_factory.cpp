@@ -238,8 +238,9 @@ LoggingClientFileNameResult WriterFactory::PrepareFileNameAndUpdateOpenFlags(
             std::cerr << "mkstemps: Failed to create '" << name_buffer.data() << "' file for app: " << app_id.data()
                       << '\n';
         }
-        constexpr score::os::Stat::Mode kPermissions = score::os::Stat::Mode::kReadUser | score::os::Stat::Mode::kReadGroup |
-                                                     score::os::Stat::Mode::kReadOthers | score::os::Stat::Mode::kWriteUser;
+        constexpr score::os::Stat::Mode kPermissions =
+            score::os::Stat::Mode::kReadUser | score::os::Stat::Mode::kReadGroup | score::os::Stat::Mode::kReadOthers |
+            score::os::Stat::Mode::kWriteUser;
 
         if ((osal_.stat_osal->chmod(name_buffer.data(), kPermissions)).has_value() == false)
         {

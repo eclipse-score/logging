@@ -14,9 +14,9 @@
 #ifndef SCORE_DATAROUTER_INCLUDE_DAEMON_UDP_STREAM_OUTPUT_H
 #define SCORE_DATAROUTER_INCLUDE_DAEMON_UDP_STREAM_OUTPUT_H
 
+#include "score/datarouter/network/vlan.h"
 #include "score/os/pthread.h"
 #include "score/os/socket_impl.h"
-#include "score/datarouter/network/vlan.h"
 
 #include <arpa/inet.h>
 #include <netinet/in.h>

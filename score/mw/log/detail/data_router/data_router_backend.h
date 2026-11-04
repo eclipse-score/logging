@@ -16,10 +16,10 @@
 
 #include "score/mw/log/detail/backend.h"
 
-#include "score/mw/log/configuration/configuration.h"
-#include "score/mw/log/detail/circular_allocator.h"
 #include "score/mw/log/detail/data_router/data_router_message_client.h"
 #include "score/mw/log/detail/data_router/data_router_message_client_factory.h"
+#include "score/mw/log/configuration/configuration.h"
+#include "score/mw/log/detail/circular_allocator.h"
 #include "score/mw/log/detail/log_record.h"
 
 #include <cstdint>
@@ -32,6 +32,8 @@ namespace log
 {
 namespace detail
 {
+using namespace score::mw::log::detail;  // NOLINT(google-build-using-namespace) keep names unqualified below
+using score::mw::log::SlotHandle;
 
 class DataRouterBackend final : public Backend
 {

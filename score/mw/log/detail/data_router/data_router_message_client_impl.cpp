@@ -14,10 +14,10 @@
 #include "score/mw/log/detail/data_router/data_router_message_client_impl.h"
 
 #include "score/assert.hpp"
-#include "score/os/utils/signal.h"
 #include "score/mw/log/detail/data_router/message_passing_config.h"
 #include "score/mw/log/detail/error.h"
 #include "score/mw/log/detail/initialization_reporter.h"
+#include "score/os/utils/signal.h"
 
 #include <array>
 #include <thread>
@@ -31,6 +31,7 @@ namespace log
 {
 namespace detail
 {
+using namespace score::mw::log::detail;  // NOLINT(google-build-using-namespace) keep names unqualified below
 
 DatarouterMessageClientImpl::DatarouterMessageClientImpl(const MsgClientIdentifiers& ids,
                                                          MsgClientBackend backend,
@@ -253,10 +254,11 @@ void DatarouterMessageClientImpl::Shutdown() noexcept
         connect_thread_.join();
     }
 
-    {
+    auto sender_to_destroy = [this]() noexcept {
         std::unique_lock<std::mutex> lock(sender_mutex_);
-        sender_.reset();
-    }
+        return std::move(sender_);
+    }();
+    sender_to_destroy.reset();
     // Block until all pending tasks and threads have finished.
     UnlinkSharedMemoryFile();
 }

@@ -12,10 +12,10 @@
  ********************************************************************************/
 #include "score/mw/log/detail/file_recorder/dlt_message_builder.h"
 
-#include "score/os/utils/high_resolution_steady_clock.h"
 #include "score/mw/log/detail/common/dlt_format.h"
 #include "score/mw/log/detail/file_recorder/svp_time.h"
 #include "score/mw/log/log_level.h"
+#include "score/os/utils/high_resolution_steady_clock.h"
 
 #include "static_reflection_with_serialization/serialization/for_logging.h"
 #include "static_reflection_with_serialization/visitor/visit.h"
@@ -133,6 +133,7 @@ namespace log
 {
 namespace detail
 {
+using namespace score::mw::log::detail;  // NOLINT(google-build-using-namespace) keep names unqualified below
 
 void ConstructDltStandardHeaderTypes(DltStandardHeader& standard,
                                      const std::uint16_t msg_size,

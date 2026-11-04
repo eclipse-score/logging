@@ -26,6 +26,5 @@ cc_library(
     visibility = ["@score_logging//score/datarouter:__subpackages__"],
     deps = [
         "@score_baselibs//score/result",
-        "@score_baselibs//score/string_manipulation:string_literal",
     ],
 )

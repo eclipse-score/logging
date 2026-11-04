@@ -60,7 +60,8 @@ TEST(LoggingErrorDomainTest, TestkNoChannelsFoundCode)
 
     std::string_view expected_result("No channels information found");
     LoggingErrorDomain obj;
-    EXPECT_EQ(obj.MessageFor(static_cast<score::result::ErrorCode>(LoggingErrorCode::kNoChannelsFound)), expected_result);
+    EXPECT_EQ(obj.MessageFor(static_cast<score::result::ErrorCode>(LoggingErrorCode::kNoChannelsFound)),
+              expected_result);
 }
 
 enum ExtendLoggingErrorCode : std::underlying_type_t<LoggingErrorCode>

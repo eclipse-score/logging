@@ -31,6 +31,20 @@ namespace log
 namespace detail
 {
 
+using score::mw::log::LogBin16;
+using score::mw::log::LogBin32;
+using score::mw::log::LogBin64;
+using score::mw::log::LogBin8;
+using score::mw::log::LogHex16;
+using score::mw::log::LogHex32;
+using score::mw::log::LogHex64;
+using score::mw::log::LogHex8;
+using score::mw::log::LogRawBuffer;
+using score::mw::log::detail::AddArgumentResult;
+using score::mw::log::detail::Byte;
+using score::mw::log::detail::ByteVector;
+using score::mw::log::detail::IntegerRepresentation;
+using score::mw::log::detail::VerbosePayload;
 class DLTFormat
 {
   public:

@@ -81,7 +81,8 @@ void UnixDomainClient::ClientRoutine()
     while (false == exit_.load())
     {
         new_socket_retry_ = false;
-        const auto socket_result = score::os::Socket::instance().socket(score::os::Socket::Domain::kUnix, SOCK_STREAM, 0);
+        const auto socket_result =
+            score::os::Socket::instance().socket(score::os::Socket::Domain::kUnix, SOCK_STREAM, 0);
 
         using namespace std::chrono_literals;
         if (!socket_result.has_value())

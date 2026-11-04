@@ -14,10 +14,10 @@
 #ifndef SCORE_MW_LOG_DETAIL_DATA_ROUTER_DATA_ROUTER_MESSAGE_CLIENT_FACTORY_IMPL_H
 #define SCORE_MW_LOG_DETAIL_DATA_ROUTER_DATA_ROUTER_MESSAGE_CLIENT_FACTORY_IMPL_H
 
-#include "score/mw/log/configuration/configuration.h"
 #include "score/mw/log/detail/data_router/data_router_message_client_factory.h"
 #include "score/mw/log/detail/data_router/data_router_message_client_utils.h"
 #include "score/mw/log/detail/data_router/message_passing_factory.h"
+#include "score/mw/log/configuration/configuration.h"
 
 #include <memory>
 
@@ -29,6 +29,8 @@ namespace log
 {
 namespace detail
 {
+
+using namespace score::mw::log::detail;  // NOLINT(google-build-using-namespace) keep names unqualified below
 
 class DatarouterMessageClientFactoryImpl : public DatarouterMessageClientFactory
 {

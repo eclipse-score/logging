@@ -13,8 +13,8 @@
 
 #include "score/mw/log/legacy_non_verbose_api/tracing.h"
 
-#include "score/os/unistd.h"
 #include "score/mw/log/configuration/nvconfigfactory.h"
+#include "score/os/unistd.h"
 
 #include <iostream>
 #include <sstream>

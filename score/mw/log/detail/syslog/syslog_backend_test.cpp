@@ -12,9 +12,9 @@
  ********************************************************************************/
 #include "gtest/gtest.h"
 
-#include "score/os/mocklib/mock_syslog.h"
-#include "score/mw/log/configuration/configuration.h"
 #include "score/mw/log/detail/syslog/syslog_backend.h"
+#include "score/mw/log/configuration/configuration.h"
+#include "score/os/mocklib/mock_syslog.h"
 
 #include "score/assert_support.hpp"
 
@@ -30,6 +30,8 @@ namespace log
 {
 namespace detail
 {
+using namespace score::mw::log;          // NOLINT(google-build-using-namespace) keep names unqualified below
+using namespace score::mw::log::detail;  // NOLINT(google-build-using-namespace) keep names unqualified below
 namespace
 {
 
@@ -77,12 +79,14 @@ struct SyslogBackendFixture : ::testing::Test
 TEST_F(SyslogBackendFixture, SyslogOpenlog)
 {
     RecordProperty("PartiallyVerifies", "comp_req__log__forward_to_system_logger");
-    RecordProperty("Description", "Check that the system logger backend registers with syslog and forwards logs to it.");
+    RecordProperty("Description",
+                   "Check that the system logger backend registers with syslog and forwards logs to it.");
     RecordProperty("TestType", "requirements-based");
     RecordProperty("DerivationTechnique", "requirements-analysis");
     RecordProperty("ParentRequirement", "SCR-8017664");
     RecordProperty("Description", "Verifies the backend opens the syslog connection on construction.");
     RecordProperty("TestingTechnique", "Requirements-based test");
+    RecordProperty("lobster-tracing", "MwLog.ForwardToSystemLogger");
 
     EXPECT_CALL(*syslog_mock_raw_ptr_, openlog(_, _, _));
 
@@ -287,12 +291,12 @@ TEST_F(SyslogBackendFixture, TooMuchSlotsRequestedShallBeTruncated)
     RecordProperty("TestingTechnique", "Requirements-based test");
     RecordProperty("DerivationTechnique", "Analysis of requirements");
 
-    const auto kMaxSlotCount = std::numeric_limits<SlotIndex>::max();
-    const std::size_t kSlotNumberOverflow = static_cast<std::size_t>(kMaxSlotCount) + 2UL;
+    const auto k_max_slot_count = std::numeric_limits<SlotIndex>::max();
+    const std::size_t k_slot_number_overflow = static_cast<std::size_t>(k_max_slot_count) + 2UL;
 
-    SyslogBackend backend(kSlotNumberOverflow, log_record_, config_.GetAppId(), std::move(syslog_mock_));
+    SyslogBackend backend(k_slot_number_overflow, log_record_, config_.GetAppId(), std::move(syslog_mock_));
 
-    for (std::size_t i = 0; i < kMaxSlotCount; ++i)
+    for (std::size_t i = 0; i < k_max_slot_count; ++i)
     {
         EXPECT_TRUE(backend.ReserveSlot().has_value());
     }

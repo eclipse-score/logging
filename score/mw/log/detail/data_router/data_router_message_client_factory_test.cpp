@@ -12,14 +12,14 @@
  ********************************************************************************/
 
 #include "score/assert_support.hpp"
-#include "score/os/mocklib/mock_pthread.h"
-#include "score/os/mocklib/unistdmock.h"
-#include "score/os/utils/mocklib/signalmock.h"
-#include "score/mw/log/configuration/configuration.h"
 #include "score/mw/log/detail/data_router/data_router_message_client_factory_impl.h"
 #include "score/mw/log/detail/data_router/data_router_message_client_impl.h"
 #include "score/mw/log/detail/data_router/message_passing_factory_mock.h"
 #include "score/mw/log/legacy_non_verbose_api/tracing.h"
+#include "score/mw/log/configuration/configuration.h"
+#include "score/os/mocklib/mock_pthread.h"
+#include "score/os/mocklib/unistdmock.h"
+#include "score/os/utils/mocklib/signalmock.h"
 
 #include "gmock/gmock.h"
 #include "gtest/gtest.h"
@@ -34,6 +34,9 @@ namespace detail
 {
 namespace
 {
+
+using namespace score::mw::log::detail;  // NOLINT(google-build-using-namespace) keep names unqualified below
+using namespace score::mw::log;          // NOLINT(google-build-using-namespace) keep names unqualified below
 
 using ::testing::Return;
 using ::testing::StrEq;
