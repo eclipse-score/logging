@@ -1,85 +1,5 @@
 [
   {
-    "need": "comp_req__data_router__dlt_server",
-    "links": {
-      "CodeLinks": [],
-      "TestLinks": [
-        {
-          "name": "UdpStreamOutputFixture__SendMethodShallSucceedIfSendmmsgSucceeded",
-          "file": "score/datarouter/test/ut/ut_logging/test_udp_stream_output.cpp",
-          "line": 165,
-          "need": "comp_req__data_router__dlt_server",
-          "verify_type": "partially",
-          "result": "passed",
-          "result_text": "",
-          "repo_name": "local_repo",
-          "hash": "",
-          "url": ""
-        },
-        {
-          "name": "DataRouterTestFixture__ConstructionAndDestructionOnStack",
-          "file": "score/datarouter/test/ut/ut_logging/test_datarouter.cpp",
-          "line": 527,
-          "need": "comp_req__data_router__dlt_server",
-          "verify_type": "partially",
-          "result": "passed",
-          "result_text": "",
-          "repo_name": "local_repo",
-          "hash": "",
-          "url": ""
-        },
-        {
-          "name": "DataRouterTestFixture__ConstructionAndDestructionOnHeap",
-          "file": "score/datarouter/test/ut/ut_logging/test_datarouter.cpp",
-          "line": 538,
-          "need": "comp_req__data_router__dlt_server",
-          "verify_type": "partially",
-          "result": "passed",
-          "result_text": "",
-          "repo_name": "local_repo",
-          "hash": "",
-          "url": ""
-        },
-        {
-          "name": "DataRouterTestFixture__TestUsingTheDefaultStackAndRingSizesIfTheUserProvidesZeros",
-          "file": "score/datarouter/test/ut/ut_logging/test_datarouter.cpp",
-          "line": 768,
-          "need": "comp_req__data_router__dlt_server",
-          "verify_type": "partially",
-          "result": "passed",
-          "result_text": "",
-          "repo_name": "local_repo",
-          "hash": "",
-          "url": ""
-        },
-        {
-          "name": "DataRouterTestFixture__TestSomeConditionsInsideTickMethodWithDisablingDlt",
-          "file": "score/datarouter/test/ut/ut_logging/test_datarouter.cpp",
-          "line": 785,
-          "need": "comp_req__data_router__dlt_server",
-          "verify_type": "partially",
-          "result": "passed",
-          "result_text": "",
-          "repo_name": "local_repo",
-          "hash": "",
-          "url": ""
-        },
-        {
-          "name": "DltServerCreatedWithoutConfigFixture__WhenCreatedDefault",
-          "file": "score/datarouter/test/ut/ut_logging/test_dltserver.cpp",
-          "line": 150,
-          "need": "comp_req__data_router__dlt_server",
-          "verify_type": "partially",
-          "result": "passed",
-          "result_text": "",
-          "repo_name": "local_repo",
-          "hash": "",
-          "url": ""
-        }
-      ]
-    }
-  },
-  {
     "need": "comp_req__data_router__dlt_multiple_channels",
     "links": {
       "CodeLinks": [],
@@ -328,15 +248,15 @@
     }
   },
   {
-    "need": "comp_req__data_router__dlt_verbose_messages",
+    "need": "comp_req__data_router__dlt_server",
     "links": {
       "CodeLinks": [],
       "TestLinks": [
         {
-          "name": "DltVerboseHandlerTest__sendVerboseTest",
-          "file": "score/datarouter/test/ut/ut_logging/test_verbose_dlt.cpp",
-          "line": 33,
-          "need": "comp_req__data_router__dlt_verbose_messages",
+          "name": "UdpStreamOutputFixture__SendMethodShallSucceedIfSendmmsgSucceeded",
+          "file": "score/datarouter/test/ut/ut_logging/test_udp_stream_output.cpp",
+          "line": 165,
+          "need": "comp_req__data_router__dlt_server",
           "verify_type": "partially",
           "result": "passed",
           "result_text": "",
@@ -344,6 +264,74 @@
           "hash": "",
           "url": ""
         },
+        {
+          "name": "DataRouterTestFixture__ConstructionAndDestructionOnStack",
+          "file": "score/datarouter/test/ut/ut_logging/test_datarouter.cpp",
+          "line": 527,
+          "need": "comp_req__data_router__dlt_server",
+          "verify_type": "partially",
+          "result": "passed",
+          "result_text": "",
+          "repo_name": "local_repo",
+          "hash": "",
+          "url": ""
+        },
+        {
+          "name": "DataRouterTestFixture__ConstructionAndDestructionOnHeap",
+          "file": "score/datarouter/test/ut/ut_logging/test_datarouter.cpp",
+          "line": 538,
+          "need": "comp_req__data_router__dlt_server",
+          "verify_type": "partially",
+          "result": "passed",
+          "result_text": "",
+          "repo_name": "local_repo",
+          "hash": "",
+          "url": ""
+        },
+        {
+          "name": "DataRouterTestFixture__TestUsingTheDefaultStackAndRingSizesIfTheUserProvidesZeros",
+          "file": "score/datarouter/test/ut/ut_logging/test_datarouter.cpp",
+          "line": 768,
+          "need": "comp_req__data_router__dlt_server",
+          "verify_type": "partially",
+          "result": "passed",
+          "result_text": "",
+          "repo_name": "local_repo",
+          "hash": "",
+          "url": ""
+        },
+        {
+          "name": "DataRouterTestFixture__TestSomeConditionsInsideTickMethodWithDisablingDlt",
+          "file": "score/datarouter/test/ut/ut_logging/test_datarouter.cpp",
+          "line": 785,
+          "need": "comp_req__data_router__dlt_server",
+          "verify_type": "partially",
+          "result": "passed",
+          "result_text": "",
+          "repo_name": "local_repo",
+          "hash": "",
+          "url": ""
+        },
+        {
+          "name": "DltServerCreatedWithoutConfigFixture__WhenCreatedDefault",
+          "file": "score/datarouter/test/ut/ut_logging/test_dltserver.cpp",
+          "line": 150,
+          "need": "comp_req__data_router__dlt_server",
+          "verify_type": "partially",
+          "result": "passed",
+          "result_text": "",
+          "repo_name": "local_repo",
+          "hash": "",
+          "url": ""
+        }
+      ]
+    }
+  },
+  {
+    "need": "comp_req__data_router__dlt_verbose_messages",
+    "links": {
+      "CodeLinks": [],
+      "TestLinks": [
         {
           "name": "SourceSessionTestFixture__TryFinalizeAcquisitionIsBlockReleased",
           "file": "score/datarouter/test/ut/ut_logging/test_datarouter.cpp",
@@ -549,30 +537,10 @@
           "url": ""
         },
         {
-          "name": "DltChannelTest__WhenSendingVerboseTwice",
-          "file": "score/datarouter/test/ut/ut_logging/test_dltchannel.cpp",
-          "line": 139,
+          "name": "DltVerboseHandlerTest__sendVerboseTest",
+          "file": "score/datarouter/test/ut/ut_logging/test_verbose_dlt.cpp",
+          "line": 33,
           "need": "comp_req__data_router__dlt_verbose_messages",
-          "verify_type": "partially",
-          "result": "passed",
-          "result_text": "",
-          "repo_name": "local_repo",
-          "hash": "",
-          "url": ""
-        }
-      ]
-    }
-  },
-  {
-    "need": "comp_req__log__system_backend_activation",
-    "links": {
-      "CodeLinks": [],
-      "TestLinks": [
-        {
-          "name": "SyslogRegistrantTest__SyslogBackendIsRegisteredAfterStaticInitialization",
-          "file": "score/mw/log/backend/syslog_registrant_test.cpp",
-          "line": 31,
-          "need": "comp_req__log__system_backend_activation",
           "verify_type": "partially",
           "result": "passed",
           "result_text": "",
@@ -581,10 +549,10 @@
           "url": ""
         },
         {
-          "name": "SyslogRegistrantTest__RegisteredCreatorProducesARecorder",
-          "file": "score/mw/log/backend/syslog_registrant_test.cpp",
-          "line": 43,
-          "need": "comp_req__log__system_backend_activation",
+          "name": "DltChannelTest__WhenSendingVerboseTwice",
+          "file": "score/datarouter/test/ut/ut_logging/test_dltchannel.cpp",
+          "line": 139,
+          "need": "comp_req__data_router__dlt_verbose_messages",
           "verify_type": "partially",
           "result": "passed",
           "result_text": "",
@@ -669,110 +637,6 @@
           "file": "score/mw/log/detail/data_router/shared_memory/common_test.cpp",
           "line": 37,
           "need": "comp_req__log__avoid_locks",
-          "verify_type": "partially",
-          "result": "passed",
-          "result_text": "",
-          "repo_name": "local_repo",
-          "hash": "",
-          "url": ""
-        }
-      ]
-    }
-  },
-  {
-    "need": "comp_req__log__no_endless_loops",
-    "links": {
-      "CodeLinks": [],
-      "TestLinks": [
-        {
-          "name": "WaitFreeLinearWriter__WriteBufferFullShouldReturnExpectedData",
-          "file": "score/mw/log/detail/wait_free_producer_queue/wait_free_linear_writer_test.cpp",
-          "line": 45,
-          "need": "comp_req__log__no_endless_loops",
-          "verify_type": "partially",
-          "result": "passed",
-          "result_text": "",
-          "repo_name": "local_repo",
-          "hash": "",
-          "url": ""
-        }
-      ]
-    }
-  },
-  {
-    "need": "comp_req__log__autosar_log_trace_spec",
-    "links": {
-      "CodeLinks": [],
-      "TestLinks": [
-        {
-          "name": "DltMessageBuilderFixture__ShallDepleteAfterHeaderAndPayload",
-          "file": "score/mw/log/detail/file_recorder/dlt_message_builder_test.cpp",
-          "line": 68,
-          "need": "comp_req__log__autosar_log_trace_spec",
-          "verify_type": "partially",
-          "result": "passed",
-          "result_text": "",
-          "repo_name": "local_repo",
-          "hash": "",
-          "url": ""
-        }
-      ]
-    }
-  },
-  {
-    "need": "comp_req__log__file_descriptor_flags",
-    "links": {
-      "CodeLinks": [],
-      "TestLinks": [
-        {
-          "name": "FileRecorderFactoryConfigFixture__FileConfigurionShallCallFileCreationAndReturnFileRecorder",
-          "file": "score/mw/log/detail/file_recorder/file_recorder_factory_test.cpp",
-          "line": 56,
-          "need": "comp_req__log__file_descriptor_flags",
-          "verify_type": "partially",
-          "result": "passed",
-          "result_text": "",
-          "repo_name": "local_repo",
-          "hash": "",
-          "url": ""
-        },
-        {
-          "name": "WriterFactoryFixture__WhenTheFileExistsItShallBeUnlinked",
-          "file": "score/mw/log/detail/data_router/shared_memory/writer_factory_test.cpp",
-          "line": 209,
-          "need": "comp_req__log__file_descriptor_flags",
-          "verify_type": "partially",
-          "result": "passed",
-          "result_text": "",
-          "repo_name": "local_repo",
-          "hash": "",
-          "url": ""
-        }
-      ]
-    }
-  },
-  {
-    "need": "comp_req__log__local_allocation_strategy",
-    "links": {
-      "CodeLinks": [],
-      "TestLinks": [
-        {
-          "name": "FileRecorderFixture__TooManyArgumentsWillYieldTruncatedLog",
-          "file": "score/mw/log/detail/file_recorder/file_recorder_test.cpp",
-          "line": 157,
-          "need": "comp_req__log__local_allocation_strategy",
-          "verify_type": "partially",
-          "result": "passed",
-          "result_text": "",
-          "repo_name": "local_repo",
-          "hash": "",
-          "url": ""
-        },
-        {
-          "name": "RecorderFactoryConfigFixture__RemoteConfiguredShallReturnDataRouterRecorder",
-          "file": "score/mw/log/detail/data_router/remote_dlt_recorder_factory_test.cpp",
-          "line": 79,
-          "need": "comp_req__log__local_allocation_strategy",
           "verify_type": "partially",
           "result": "passed",
           "result_text": "",
@@ -880,6 +744,38 @@
     }
   },
   {
+    "need": "comp_req__log__local_allocation_strategy",
+    "links": {
+      "CodeLinks": [],
+      "TestLinks": [
+        {
+          "name": "RecorderFactoryConfigFixture__RemoteConfiguredShallReturnDataRouterRecorder",
+          "file": "score/mw/log/detail/data_router/remote_dlt_recorder_factory_test.cpp",
+          "line": 79,
+          "need": "comp_req__log__local_allocation_strategy",
+          "verify_type": "partially",
+          "result": "passed",
+          "result_text": "",
+          "repo_name": "local_repo",
+          "hash": "",
+          "url": ""
+        },
+        {
+          "name": "FileRecorderFixture__TooManyArgumentsWillYieldTruncatedLog",
+          "file": "score/mw/log/detail/file_recorder/file_recorder_test.cpp",
+          "line": 157,
+          "need": "comp_req__log__local_allocation_strategy",
+          "verify_type": "partially",
+          "result": "passed",
+          "result_text": "",
+          "repo_name": "local_repo",
+          "hash": "",
+          "url": ""
+        }
+      ]
+    }
+  },
+  {
     "need": "comp_req__log__memory_bound_checking",
     "links": {
       "CodeLinks": [],
@@ -889,6 +785,38 @@
           "file": "score/mw/log/detail/data_router/shared_memory/shared_memory_reader_test.cpp",
           "line": 86,
           "need": "comp_req__log__memory_bound_checking",
+          "verify_type": "partially",
+          "result": "passed",
+          "result_text": "",
+          "repo_name": "local_repo",
+          "hash": "",
+          "url": ""
+        }
+      ]
+    }
+  },
+  {
+    "need": "comp_req__log__file_descriptor_flags",
+    "links": {
+      "CodeLinks": [],
+      "TestLinks": [
+        {
+          "name": "WriterFactoryFixture__WhenTheFileExistsItShallBeUnlinked",
+          "file": "score/mw/log/detail/data_router/shared_memory/writer_factory_test.cpp",
+          "line": 209,
+          "need": "comp_req__log__file_descriptor_flags",
+          "verify_type": "partially",
+          "result": "passed",
+          "result_text": "",
+          "repo_name": "local_repo",
+          "hash": "",
+          "url": ""
+        },
+        {
+          "name": "FileRecorderFactoryConfigFixture__FileConfigurionShallCallFileCreationAndReturnFileRecorder",
+          "file": "score/mw/log/detail/file_recorder/file_recorder_factory_test.cpp",
+          "line": 56,
+          "need": "comp_req__log__file_descriptor_flags",
           "verify_type": "partially",
           "result": "passed",
           "result_text": "",
@@ -920,6 +848,26 @@
     }
   },
   {
+    "need": "comp_req__log__autosar_log_trace_spec",
+    "links": {
+      "CodeLinks": [],
+      "TestLinks": [
+        {
+          "name": "DltMessageBuilderFixture__ShallDepleteAfterHeaderAndPayload",
+          "file": "score/mw/log/detail/file_recorder/dlt_message_builder_test.cpp",
+          "line": 68,
+          "need": "comp_req__log__autosar_log_trace_spec",
+          "verify_type": "partially",
+          "result": "passed",
+          "result_text": "",
+          "repo_name": "local_repo",
+          "hash": "",
+          "url": ""
+        }
+      ]
+    }
+  },
+  {
     "need": "comp_req__log__avoid_signal_processing",
     "links": {
       "CodeLinks": [],
@@ -929,6 +877,38 @@
           "file": "score/mw/log/detail/utils/signal_handling/signal_handling_test.cpp",
           "line": 88,
           "need": "comp_req__log__avoid_signal_processing",
+          "verify_type": "partially",
+          "result": "passed",
+          "result_text": "",
+          "repo_name": "local_repo",
+          "hash": "",
+          "url": ""
+        }
+      ]
+    }
+  },
+  {
+    "need": "comp_req__log__system_backend_activation",
+    "links": {
+      "CodeLinks": [],
+      "TestLinks": [
+        {
+          "name": "SyslogRegistrantTest__SyslogBackendIsRegisteredAfterStaticInitialization",
+          "file": "score/mw/log/backend/syslog_registrant_test.cpp",
+          "line": 31,
+          "need": "comp_req__log__system_backend_activation",
+          "verify_type": "partially",
+          "result": "passed",
+          "result_text": "",
+          "repo_name": "local_repo",
+          "hash": "",
+          "url": ""
+        },
+        {
+          "name": "SyslogRegistrantTest__RegisteredCreatorProducesARecorder",
+          "file": "score/mw/log/backend/syslog_registrant_test.cpp",
+          "line": 43,
+          "need": "comp_req__log__system_backend_activation",
           "verify_type": "partially",
           "result": "passed",
           "result_text": "",
