@@ -16,12 +16,12 @@
 left to right direction
 skinparam linetype ortho
 
-class "Logging Client" as LoggingClient <<Process>>
+class "LoggingClient" as LoggingClient <<Process>>
 class "mw::log::detail::DataRouterBackend" as Backend
 class "score::message_passing::IClientConnection" as ClientConnection
 class "Datarouter" as Datarouter <<Process>>
 class "score::message_passing::IServer" as DrServer
-class "Shared Memory" as SharedMemory <<Shared Memory>>
+class "SharedMemory" as SharedMemory <<Shared Memory>>
 
 LoggingClient --> Backend
 Backend --> ClientConnection
