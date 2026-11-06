@@ -23,7 +23,7 @@ left to right direction
 
 title Units and unit bindings of the sequence diagrams of the backend
 
-package "Backend: Logging" as backend_logging {
+package "BackendLogging" as backend_logging {
     component "App" as App <<unit>>
     component "FreeFunctions" as FreeFunctions <<unit>>
     component "LogStreamFactory" as LogStreamFactory <<unit>>
@@ -87,93 +87,93 @@ interface "ISharedMemoryWriterWaitFreeAlternatingWriter" as ISharedMemoryWriterW
 interface "ISharedMemoryWriterSharedData" as ISharedMemoryWriterSharedData
 
 App -( IAppFreeFunctions
-FreeFunctions )- IAppFreeFunctions
+FreeFunctions - IAppFreeFunctions
 
 FreeFunctions -( IFreeFunctionsLogStreamFactory
-LogStreamFactory )- IFreeFunctionsLogStreamFactory
+LogStreamFactory - IFreeFunctionsLogStreamFactory
 
 LogStreamFactory -( ILogStreamFactoryRuntime
-Runtime )- ILogStreamFactoryRuntime
+Runtime - ILogStreamFactoryRuntime
 
 LogStreamFactory -( ILogStreamFactoryLogStream
-LogStream )- ILogStreamFactoryLogStream
+LogStream - ILogStreamFactoryLogStream
 
 App -( IAppLogStream
-LogStream )- IAppLogStream
+LogStream - IAppLogStream
 
 LogStream -( ILogStreamDataRouterRecorder
-DataRouterRecorder )- ILogStreamDataRouterRecorder
+DataRouterRecorder - ILogStreamDataRouterRecorder
 
 LogStream -( ILogStreamTextRecorder
-TextRecorder )- ILogStreamTextRecorder
+TextRecorder - ILogStreamTextRecorder
 
 Runtime -( IRuntimeDataRouterRecorder
-DataRouterRecorder )- IRuntimeDataRouterRecorder
+DataRouterRecorder - IRuntimeDataRouterRecorder
 
 Runtime -( IRuntimeTextRecorder
-TextRecorder )- IRuntimeTextRecorder
+TextRecorder - IRuntimeTextRecorder
 
 TextRecorder -( ITextRecorderSyslogBackend
-SyslogBackend )- ITextRecorderSyslogBackend
+SyslogBackend - ITextRecorderSyslogBackend
 
 SyslogBackend -( ISyslogBackendSyslog
-Syslog )- ISyslogBackendSyslog
+Syslog - ISyslogBackendSyslog
 
 DataRouterRecorder -( IDataRouterRecorderDataRouterBackend
-DataRouterBackend )- IDataRouterRecorderDataRouterBackend
+DataRouterBackend - IDataRouterRecorderDataRouterBackend
 
 DataRouterRecorder -( IDataRouterRecorderDLTFormat
-DLTFormat )- IDataRouterRecorderDLTFormat
+DLTFormat - IDataRouterRecorderDLTFormat
 
 DataRouterBackend -( IDataRouterBackendTRACE
-TRACE )- IDataRouterBackendTRACE
+TRACE - IDataRouterBackendTRACE
 
 TRACE -( ITRACESharedMemoryWriter
-SharedMemoryWriter )- ITRACESharedMemoryWriter
+SharedMemoryWriter - ITRACESharedMemoryWriter
 
 DataRouterBackend -( IDataRouterBackendWriterFactory
-WriterFactory )- IDataRouterBackendWriterFactory
+WriterFactory - IDataRouterBackendWriterFactory
 
 DataRouterBackend -( IDataRouterBackendLogger
-Logger )- IDataRouterBackendLogger
+Logger - IDataRouterBackendLogger
 
 DataRouterBackend -( IDataRouterBackendMessageClientFactory
-MessageClientFactory )- IDataRouterBackendMessageClientFactory
+MessageClientFactory - IDataRouterBackendMessageClientFactory
 
 DataRouterBackend -( IDataRouterBackendMessageClient
-MessageClient )- IDataRouterBackendMessageClient
+MessageClient - IDataRouterBackendMessageClient
 
 DataRouterBackend -( IDataRouterBackendDatarouterMessageClientImpl
-DatarouterMessageClientImpl )- IDataRouterBackendDatarouterMessageClientImpl
+DatarouterMessageClientImpl - IDataRouterBackendDatarouterMessageClientImpl
 
 DatarouterMessageClientImpl -( IDatarouterMessageClientImplMsgClientUtils
-MsgClientUtils )- IDatarouterMessageClientImplMsgClientUtils
+MsgClientUtils - IDatarouterMessageClientImplMsgClientUtils
 
 DatarouterMessageClientImpl -( IDatarouterMessageClientImplMessagePassingFactory
-MessagePassingFactory )- IDatarouterMessageClientImplMessagePassingFactory
+MessagePassingFactory - IDatarouterMessageClientImplMessagePassingFactory
 
 DatarouterMessageClientImpl -( IDatarouterMessageClientImplIClientConnection
-IClientConnection )- IDatarouterMessageClientImplIClientConnection
+IClientConnection - IDatarouterMessageClientImplIClientConnection
 
 Datarouter -( IDatarouterSharedMemoryReader
-SharedMemoryReader )- IDatarouterSharedMemoryReader
+SharedMemoryReader - IDatarouterSharedMemoryReader
 
 SharedMemoryReader -( ISharedMemoryReaderAlternatingReadOnlyReader
-AlternatingReadOnlyReader )- ISharedMemoryReaderAlternatingReadOnlyReader
+AlternatingReadOnlyReader - ISharedMemoryReaderAlternatingReadOnlyReader
 
 SharedMemoryReader -( ISharedMemoryReaderLinearReader
-LinearReader )- ISharedMemoryReaderLinearReader
+LinearReader - ISharedMemoryReaderLinearReader
 
 SharedMemoryReader -( ISharedMemoryReaderTypeRegistrationCallback
-TypeRegistrationCallback )- ISharedMemoryReaderTypeRegistrationCallback
+TypeRegistrationCallback - ISharedMemoryReaderTypeRegistrationCallback
 
 SharedMemoryReader -( ISharedMemoryReaderNewRecordCallback
-NewRecordCallback )- ISharedMemoryReaderNewRecordCallback
+NewRecordCallback - ISharedMemoryReaderNewRecordCallback
 
 SharedMemoryWriter -( ISharedMemoryWriterWaitFreeAlternatingWriter
-WaitFreeAlternatingWriter )- ISharedMemoryWriterWaitFreeAlternatingWriter
+WaitFreeAlternatingWriter - ISharedMemoryWriterWaitFreeAlternatingWriter
 
 SharedMemoryWriter -( ISharedMemoryWriterSharedData
-SharedData )- ISharedMemoryWriterSharedData
+SharedData - ISharedMemoryWriterSharedData
 
 @enduml
