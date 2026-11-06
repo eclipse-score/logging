@@ -12,13 +12,13 @@
 ' *******************************************************************************
 @startuml syslog_backend_sequence
 
-participant "_:App_" as App
+participant "App" as App
 participant "FreeFunctions" as FreeFunctions
 participant "LogStreamFactory" as LogStreamFactory
 participant "Runtime" as Runtime
-participant "_:LogStream_" as LogStream
-participant "_:TextRecorder_" as TextRecorder
-participant "_:SyslogBackend_" as SyslogBackend
+participant "LogStream" as LogStream
+participant "TextRecorder" as TextRecorder
+participant "SyslogBackend" as SyslogBackend
 participant "score::os::Syslog" as Syslog
 
 activate App
