@@ -14,21 +14,29 @@
 load(
     "@score_tooling//bazel/rules/rules_score:rules_score.bzl",
     "dependability_analysis",
-    "fmea",
+    "fault_trees",
+    "safety_analysis",
 )
 
-fmea(
-    name = "mw_log_backend_fmea",
-    arch_design = "//score/mw/log/design/backend:mw_log_backend_architectural_design",
-    controlmeasures = ["control_measures.trlc"],
-    failuremodes = ["failure_modes.trlc"],
+# No fault tree diagrams yet; the rule requires the target.
+fault_trees(
+    name = "mw_log_backend_fault_trees",
+)
+
+safety_analysis(
+    name = "mw_log_backend_safety_analysis",
+    fault_trees = ":mw_log_backend_fault_trees",
+    safety_measures = [
+        "//score/mw/log/requirements/component_requirements",
+        "//score/mw/log/requirements/safety_analysis:assumptions_of_use",
+    ],
     visibility = ["//score/mw/log/dependability:__pkg__"],
 )
 
 dependability_analysis(
     name = "mw_log_backend_dependability_analysis",
     arch_design = "//score/mw/log/design/backend:mw_log_backend_architectural_design",
-    fmea = [":mw_log_backend_fmea"],
+    safety_analysis = [":mw_log_backend_safety_analysis"],
     tags = ["manual"],
     visibility = ["//score/mw/log/dependability:__pkg__"],
 )
