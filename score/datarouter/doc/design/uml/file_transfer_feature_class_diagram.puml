@@ -58,7 +58,7 @@ interface "FileTransferStreamHandler::IOutput" as FileIOutput {
   + sendFTVerbose(score::cpp::span<const std::uint8_t>, mw::log::LogLevel, dltid_t, dltid_t, uint8_t, uint32_t): void
 }
 
-class "dltserver::Output (Mock)" as MockOutput {
+class "dltserver::MockOutput" as MockOutput {
   + ~Output()
   + sendFTVerbose(score::cpp::span<const std::uint8_t>, mw::log::LogLevel, dltid_t, dltid_t, uint8_t, uint32_t): void
 }

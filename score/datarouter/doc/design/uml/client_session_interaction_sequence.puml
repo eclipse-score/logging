@@ -19,20 +19,20 @@ skinparam sequenceMessageAlign center
 skinparam responseMessageBelowArrow true
 
 box "Client A (healthy)" #LightBlue
-    participant "User Threads\n(Client A)" as UTA
-    participant "SharedMemoryWriter\n(Client A)" as SHMA
-    participant "QnxDispatchEngine\n(Client A)" as AE
+    participant "UserThreads_ClientA" as UTA
+    participant "SharedMemoryWriter_ClientA" as SHMA
+    participant "QnxDispatchEngine_ClientA" as AE
 end box
 
 box "Client X (unhealthy)" #PeachPuff
-    participant "QnxDispatchEngine\n(Client X)" as XE
+    participant "QnxDispatchEngine_ClientX" as XE
 end box
 
 box "Datarouter Process" #LightGreen
-    participant "QnxDispatchEngine\n(server engine)" as SE
-    participant "mp_worker thread" as MW
-    participant "Watchdog Timer" as WD
-    participant "DLT output" as DLT
+    participant "QnxDispatchEngine_ServerEngine" as SE
+    participant "MpWorkerThread" as MW
+    participant "WatchdogTimer" as WD
+    participant "DltOutput" as DLT
 end box
 
 note over SE

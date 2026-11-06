@@ -18,8 +18,8 @@ node AdaptiveApplication {
 }
 
 node "Datarouter" {
-  component "Message Server" as msg_server
-  component [Source Session] as sourcesession
+  component "MessageServer" as msg_server
+  component "SourceSession" as sourcesession
   component UnixDomainServer
 }
 
@@ -27,7 +27,7 @@ node "DatarouterConf" {
   component UnixDomainClient as config_client
 }
 
-queue "SourceBuffer: MWSR buffer" as RB1
+queue "SourceBuffer" as RB1
 note top of RB1 : Shared memory allocated by Application
 
 app -> msg_server : connect()
