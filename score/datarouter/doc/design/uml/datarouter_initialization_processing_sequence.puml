@@ -19,14 +19,14 @@ skinparam responseMessageBelowArrow true
 
 participant "SocketServer" as SS
 participant "DltLogServer" as DLS
-participant "ILogParserFactory\n(DltLogParserFactory)" as ILPF
+participant "ILogParserFactory" as ILPF
 participant "DataRouter" as DR
 participant "SourceSession" as SRC
 participant "LogParser" as LP
 participant "DltVerboseHandler" as VH
 participant "DltNonverboseHandler" as NH
 participant "FileTransferStreamHandler" as FTH
-participant "DLT Channel" as CH
+participant "DltChannel" as CH
 
 == System Initialization ==
 
