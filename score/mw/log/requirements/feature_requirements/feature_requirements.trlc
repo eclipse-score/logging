@@ -292,7 +292,7 @@ ScoreReq.FeatReq ConfigCustomTypes {
 ScoreReq.FeatReq ErrorHandlingRecoverable {
     description = '''In case of recoverable error, the logging framework shall continue the current
     operations.'''
-    safety = ScoreReq.Asil.QM
+    safety = ScoreReq.Asil.B
     derived_from = [
         MwLogAssumedSystemRequirements.ASR_LoggingSupport@1,
         MwLogAssumedSystemRequirements.ASR_ErrorHandling@1,
@@ -304,7 +304,7 @@ ScoreReq.FeatReq ErrorHandlingRecoverable {
 ScoreReq.FeatReq ErrorHandlingNonRecoverable {
     description = '''In case of non-recoverable error, the logging framework shall deactivate
     silently and set an error state reported on shutdown.'''
-    safety = ScoreReq.Asil.QM
+    safety = ScoreReq.Asil.B
     derived_from = [
         MwLogAssumedSystemRequirements.ASR_LoggingSupport@1,
         MwLogAssumedSystemRequirements.ASR_ErrorHandling@1,
@@ -316,7 +316,7 @@ ScoreReq.FeatReq ErrorHandlingNonRecoverable {
 ScoreReq.FeatReq ErrorHandlingIsolation {
     description = '''The logging framework shall ensure that user applications are not affected by
     logging framework errors.'''
-    safety = ScoreReq.Asil.QM
+    safety = ScoreReq.Asil.B
     derived_from = [
         MwLogAssumedSystemRequirements.ASR_LoggingSupport@1,
         MwLogAssumedSystemRequirements.ASR_ErrorHandling@1,

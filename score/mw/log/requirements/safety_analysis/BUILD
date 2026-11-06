@@ -11,21 +11,20 @@
 # SPDX-License-Identifier: Apache-2.0
 # *******************************************************************************
 
-load("@bazel_skylib//rules:copy_file.bzl", "copy_file")
 load(
     "@score_tooling//bazel/rules/rules_score:rules_score.bzl",
     "assumptions_of_use",
+    "rst_to_trlc",
 )
 
-copy_file(
-    name = "aou_requirements_rst",
-    src = "@score_baselibs//score/mw/log:docs/safety_analysis/aou_requirements.rst",
-    out = "aou_requirements.rst",
+rst_to_trlc(
+    name = "aou_requirements_trlc",
+    srcs = ["@score_baselibs//score/mw/log:docs/safety_analysis/aou_requirements.rst"],
 )
 
 assumptions_of_use(
     name = "assumptions_of_use",
-    srcs = ["aou_requirements.rst"],
+    srcs = [":aou_requirements_trlc"],
     target_compatible_with = ["@platforms//os:linux"],
     visibility = [
         "//score/mw/log/dependability:__subpackages__",
