@@ -11,20 +11,33 @@
 ' SPDX-License-Identifier: Apache-2.0
 ' *******************************************************************************
 
-@startuml persistent_logging_class
-title Persistent Logging Class Diagram
+@startuml datarouter_class_overview
+title Datarouter Class Overview
+
+class SocketServer
+class DltLogServer
+class DataRouter
+class SourceSession
+interface ILogParserFactory
+interface ILogParser
+class DltNonverboseHandler
+class DltVerboseHandler
+class FileTransferStreamHandler
 
 SocketServer --> DltLogServer : creates
 SocketServer --> DataRouter : creates
-DataRouter *-- LogParser : owns
+SocketServer --> ILogParserFactory : creates
+
+DataRouter *-- ILogParserFactory : owns
+DataRouter *-- "0..*" SourceSession : owns
+SourceSession *-- ILogParser : owns
+
 DltLogServer *-- DltNonverboseHandler : owns
 DltLogServer *-- DltVerboseHandler : owns
 DltLogServer *-- FileTransferStreamHandler : owns
-DltLogServer *-- SysedrHandler : owns
-DltLogServer --> LogParser : registers handlers
-SysedrHandler --> LogParser : uses
-SysedrHandler *-- ICompressedFile : owns
-SysedrHandler *-- IBuildInfo : owns
-SysedrHandler *-- INvConfig : owns
+
+ILogParserFactory --> DltLogServer : concrete implementation queries handlers via\nGetGlobalHandlers() and\nGetTypeHandlerBindings()
+
+ILogParserFactory ..> ILogParser : creates
 
 @enduml

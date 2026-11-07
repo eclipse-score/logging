@@ -19,11 +19,14 @@ architectural_design(
     name = "datarouter_architectural_design",
     dynamic = [
         "uml/client_session_interaction_sequence.puml",
+        "uml/datarouter_initialization_processing_sequence.puml",
         "uml/sequence_early_disconnect_race.puml",
         "uml/seq_kvs_threads_sequence_diagram.puml",
     ],
     static = [
+        "uml/context-details.puml",
         "uml/context-sw-units.puml",
+        "uml/datarouter_class_overview.puml",
         "uml/datarouter_units.puml",
         "uml/detail-ipc.puml",
         "uml/file_transfer_feature_class_diagram.puml",
