@@ -440,6 +440,7 @@
 <li class="toctree-l2"><a class="reference internal" href="datarouter_backend/index.html">Safe Datarouter Backend</a></li>
 <li class="toctree-l2 current active"><a class="current reference internal" href="#">mw::log Backend Dependencies</a></li>
 <li class="toctree-l2"><a class="reference internal" href="frontend_dependencies.html">mw::log Frontend Dependencies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="unit_test.html">Unit Test</a></li>
 <li class="toctree-l2"><a class="reference internal" href="chklst_impl_inspection.html">Implementation Inspection Checklist</a></li>
 </ul>
 </details></li>
@@ -510,7 +511,7 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <div class="need_container docutils container" id="SNCB-ed0da654">
+  <div class="need_container docutils container" id="SNCB-ece352e5">
 <div class="pst-scrollable-table-container"><table class="need needs_grid_complex needs_layout_score needs_style_none needs_type_document table" id="doc__mw_log_backend_dependencies">
 <tbody>
 <tr class="head row-odd"><td class="head_left" colspan="2"><div class="needs_head_left line-block">
@@ -836,95 +837,91 @@ tables below: <code class="docutils literal notranslate"><span class="pre">score
 <td><p>cc_library</p></td>
 <td><p>yes</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">&#64;score_baselibs//score/concurrency:thread_pool</span></code></p></td>
-<td><p>cc_library</p></td>
-<td><p>yes</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">&#64;score_baselibs//score/language/futurecpp:futurecpp</span></code></p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">&#64;score_baselibs//score/language/futurecpp:futurecpp</span></code></p></td>
 <td><p>cc_library</p></td>
 <td><p>no</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">&#64;score_baselibs//score/mw/log/configuration:configuration</span></code></p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">&#64;score_baselibs//score/mw/log/configuration:configuration</span></code></p></td>
 <td><p>cc_library</p></td>
 <td><p>yes</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">&#64;score_baselibs//score/mw/log/detail/wait_free_stack:wait_free_stack</span></code></p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">&#64;score_baselibs//score/mw/log/detail/wait_free_stack:wait_free_stack</span></code></p></td>
 <td><p>cc_library</p></td>
 <td><p>yes</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">&#64;score_baselibs//score/mw/log/detail:backend_interface</span></code></p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">&#64;score_baselibs//score/mw/log/detail:backend_interface</span></code></p></td>
 <td><p>cc_library</p></td>
 <td><p>yes</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">&#64;score_baselibs//score/mw/log/detail:circular_allocator</span></code></p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">&#64;score_baselibs//score/mw/log/detail:circular_allocator</span></code></p></td>
 <td><p>cc_library</p></td>
 <td><p>yes</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">&#64;score_baselibs//score/mw/log/detail:dlt_argument_counter</span></code></p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">&#64;score_baselibs//score/mw/log/detail:dlt_argument_counter</span></code></p></td>
 <td><p>cc_library</p></td>
 <td><p>yes</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">&#64;score_baselibs//score/mw/log/detail:initialization_reporter</span></code></p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">&#64;score_baselibs//score/mw/log/detail:initialization_reporter</span></code></p></td>
 <td><p>cc_library</p></td>
 <td><p>yes</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">&#64;score_baselibs//score/mw/log/detail:log_data_types</span></code></p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">&#64;score_baselibs//score/mw/log/detail:log_data_types</span></code></p></td>
 <td><p>cc_library</p></td>
 <td><p>yes</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">&#64;score_baselibs//score/mw/log/detail:log_recorder_factory</span></code></p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">&#64;score_baselibs//score/mw/log/detail:log_recorder_factory</span></code></p></td>
 <td><p>cc_library</p></td>
 <td><p>yes</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">&#64;score_baselibs//score/mw/log/detail:logging_identifier</span></code></p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">&#64;score_baselibs//score/mw/log/detail:logging_identifier</span></code></p></td>
 <td><p>cc_library</p></td>
 <td><p>yes</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">&#64;score_baselibs//score/mw/log/detail:types_and_errors</span></code></p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">&#64;score_baselibs//score/mw/log/detail:types_and_errors</span></code></p></td>
 <td><p>cc_library</p></td>
 <td><p>yes</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">&#64;score_baselibs//score/mw/log:recorder</span></code></p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">&#64;score_baselibs//score/mw/log:recorder</span></code></p></td>
 <td><p>cc_library</p></td>
 <td><p>yes</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">&#64;score_baselibs//score/os/utils:high_resolution_steady_clock</span></code></p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">&#64;score_baselibs//score/os/utils:high_resolution_steady_clock</span></code></p></td>
 <td><p>cc_library</p></td>
 <td><p>yes</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">&#64;score_baselibs//score/os/utils:signal</span></code></p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">&#64;score_baselibs//score/os/utils:signal</span></code></p></td>
 <td><p>cc_library</p></td>
 <td><p>yes</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">&#64;score_baselibs//score/os:fcntl</span></code></p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">&#64;score_baselibs//score/os:fcntl</span></code></p></td>
 <td><p>cc_library</p></td>
 <td><p>yes</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">&#64;score_baselibs//score/os:mman</span></code></p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">&#64;score_baselibs//score/os:mman</span></code></p></td>
 <td><p>cc_library</p></td>
 <td><p>yes</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">&#64;score_baselibs//score/os:pthread</span></code></p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">&#64;score_baselibs//score/os:pthread</span></code></p></td>
 <td><p>alias</p></td>
 <td><p>no</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">&#64;score_baselibs//score/os:stat</span></code></p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">&#64;score_baselibs//score/os:stat</span></code></p></td>
 <td><p>cc_library</p></td>
 <td><p>yes</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">&#64;score_baselibs//score/os:stdlib</span></code></p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">&#64;score_baselibs//score/os:stdlib</span></code></p></td>
 <td><p>cc_library</p></td>
 <td><p>yes</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">&#64;score_baselibs//score/os:unistd</span></code></p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">&#64;score_baselibs//score/os:unistd</span></code></p></td>
 <td><p>cc_library</p></td>
 <td><p>yes</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">&#64;score_communication//score/memory/shared:shared</span></code></p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">&#64;score_communication//score/memory/shared:shared</span></code></p></td>
 <td><p>cc_library</p></td>
 <td><p>yes</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">&#64;score_communication//score/message_passing:message_passing</span></code></p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">&#64;score_communication//score/message_passing:message_passing</span></code></p></td>
 <td><p>cc_library</p></td>
 <td><p>yes</p></td>
 </tr>
