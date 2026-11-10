@@ -175,6 +175,18 @@ System Backend
    mw::log shall enable the system logger backend if and only if the log mode contains
    "kSystem".
 
+.. comp_req:: Message Loss Detection
+   :id: comp_req__log__log_loss_detect
+   :status: valid
+   :derived_from: feat_req__logging__message_loss_detection[version==1]
+   :reqtype: Functional
+   :security: NO
+   :safety: QM
+   :satisfied_by: comp__mw_log_backend
+   :version: 1
+
+    ``mw::log`` shall detect and report any message loss.
+
 File Backend
 ------------
 
