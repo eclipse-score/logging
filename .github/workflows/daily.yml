@@ -24,6 +24,7 @@ permissions:
   pull-requests: write
   pages: write
   id-token: write
+  actions: write
 
 jobs:
   maintenance:
@@ -34,3 +35,4 @@ jobs:
       pull-requests: write
       pages: write
       id-token: write
+      actions: write
