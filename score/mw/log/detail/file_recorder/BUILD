@@ -24,6 +24,7 @@ COMPILER_WARNING_FEATURES = [
 unit(
     name = "file_recorder_unit",
     scope = [":file_recorder_factory"],
+    target_compatible_with = ["@platforms//os:linux"],
     tests = [":unit_test"],
     unit_design = ["//score/mw/log/dependability/software_unit_design:file_recorder_unit_design"],
     visibility = ["//score/mw/log/dependability:__pkg__"],

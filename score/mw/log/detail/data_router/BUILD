@@ -18,6 +18,7 @@ load("@score_tooling//bazel/rules/rules_score:rules_score.bzl", "unit")
 
 unit(
     name = "data_router_backend_unit",
+    target_compatible_with = ["@platforms//os:linux"],
     tests = [":unit_test"],
     unit_design = ["//score/mw/log/dependability/software_unit_design:data_router_backend_unit_design"],
     visibility = ["//score/mw/log/dependability:__pkg__"],

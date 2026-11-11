@@ -23,6 +23,7 @@ COMPILER_WARNING_FEATURES = [
 
 unit(
     name = "signal_handling_unit",
+    target_compatible_with = ["@platforms//os:linux"],
     tests = [":unit_test"],
     unit_design = ["//score/mw/log/dependability/software_unit_design:signal_handling_unit_design"],
     visibility = ["//score/mw/log/dependability:__pkg__"],
