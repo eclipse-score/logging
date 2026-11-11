@@ -503,7 +503,7 @@
                   
   <section id="detailed-design">
 <h1>Detailed Design<a class="headerlink" href="#detailed-design" title="Link to this heading">#</a></h1>
-<div class="need_container docutils container" id="SNCB-0e68f1c3">
+<div class="need_container docutils container" id="SNCB-18ef8436">
 <div class="pst-scrollable-table-container"><table class="need needs_grid_complex needs_layout_score needs_style_none needs_type_document table" id="doc__datarouter_detailed_design">
 <tbody>
 <tr class="head row-odd"><td class="head_left" colspan="2"><div class="needs_head_left line-block">
@@ -675,12 +675,12 @@ replaced independently. The units and their relations are shown in
 <section id="static-diagrams-for-unit-interactions">
 <h2>Static Diagrams for Unit Interactions<a class="headerlink" href="#static-diagrams-for-unit-interactions" title="Link to this heading">#</a></h2>
 <p class="plantuml">
-<object data="../../../_images/plantuml-8f15151b2d63a5b994f0aa18de3a9d37e7c103b2.svg" type="image/svg+xml" style="width:2014px;height:540px;background:#FFFFFF;"></object></p>
+<object data="../../../_images/plantuml-2e7a3f417ec8a551af16a8c5e70f9e435edf29aa.svg" type="image/svg+xml" style="width:1715px;height:596px;background:#FFFFFF;"></object></p>
 <p class="plantuml">
-<object data="../../../_images/plantuml-a644a6a4ed569c571406ae740ed9273ede9d5ea8.svg" type="image/svg+xml" style="width:1020px;height:1380px;background:#FFFFFF;"></object></p>
+<object data="../../../_images/plantuml-a644a6a4ed569c571406ae740ed9273ede9d5ea8.svg" type="image/svg+xml" style="width:1018px;height:1382px;background:#FFFFFF;"></object></p>
 <p>The units that appear in the sequence diagrams and their bindings:</p>
 <p class="plantuml">
-<object data="../../../_images/plantuml-de241cefd24a13f676bdeb2ee2f045413d7d785e.svg" type="image/svg+xml" style="width:564px;height:2864px;background:#FFFFFF;"></object></p>
+<object data="../../../_images/plantuml-ff97d6da7cee996bfaea0f6d5ad02520547eff6e.svg" type="image/svg+xml" style="width:564px;height:4550px;background:#FFFFFF;"></object></p>
 <p>The diagrams are validated by the <code class="docutils literal notranslate"><span class="pre">architectural_design</span></code> target
 <code class="docutils literal notranslate"><span class="pre">//score/datarouter/doc/design:datarouter_architectural_design</span></code>. The interface
 names in the unit diagram follow the convention of the validator (<code class="docutils literal notranslate"><span class="pre">I&lt;caller&gt;&lt;callee&gt;</span></code>)
@@ -722,12 +722,12 @@ part of the headers.</p>
 </tr>
 </thead>
 <tbody>
-<tr class="row-even"><td><p><a class="reference internal" href="../../mw_log/architecture/component_architecture.html#logic_arc_int__logging__shm" title="logic_arc_int__logging__shm"><em class="xref need">Log Record Shared-Memory (logic_arc_int__logging__shm)</em></a></p></td>
+<tr class="row-even"><td><p><a class="reference internal" href="../../mw_log/architecture/component_architecture.html#logic_arc_int__logging__shared_memory" title="logic_arc_int__logging__shared_memory"><em class="xref need">Log Record Shared-Memory (logic_arc_int__logging__shared_memory)</em></a></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">ISharedMemoryReader</span></code> (<code class="docutils literal notranslate"><span class="pre">score_logging</span></code> <code class="docutils literal notranslate"><span class="pre">score/mw/log</span></code>), used by
 <code class="docutils literal notranslate"><span class="pre">SourceSession</span></code></p></td>
 <td><p>Data router core</p></td>
 </tr>
-<tr class="row-odd"><td><p><a class="reference internal" href="../../mw_log/architecture/component_architecture.html#logic_arc_int__logging__session_ctrl_channel" title="logic_arc_int__logging__session_ctrl_channel"><em class="xref need">Control Channel (logic_arc_int__logging__session_ctrl_channel)</em></a></p></td>
+<tr class="row-odd"><td><p><a class="reference internal" href="../../mw_log/architecture/component_architecture.html#logic_arc_int__logging__datarouter_msg_client" title="logic_arc_int__logging__datarouter_msg_client"><em class="xref need">Control Channel (logic_arc_int__logging__datarouter_msg_client)</em></a></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">MessagePassingServer</span></code> with <code class="docutils literal notranslate"><span class="pre">MessagePassingServer::ISession</span></code> and
 <code class="docutils literal notranslate"><span class="pre">ISessionHandle</span></code>, messages in <code class="docutils literal notranslate"><span class="pre">data_router_messages.h</span></code></p></td>
 <td><p>Message passing server, data router core</p></td>

@@ -73,7 +73,7 @@
     <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
     <link rel="index" title="Index" href="../../../../genindex.html" />
     <link rel="search" title="Search" href="../../../../search.html" />
-    <link rel="next" title="Implementation Inspection Checklist" href="../chklst_impl_inspection.html" />
+    <link rel="next" title="Unit Test" href="../unit_test.html" />
     <link rel="prev" title="FileOutputBackend" href="../file_output_backend.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
@@ -438,6 +438,7 @@
 <li class="toctree-l1 current active has-children"><a class="reference internal" href="../index.html">mw::log Backend Detailed Design</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="../file_output_backend.html">FileOutputBackend</a></li>
 <li class="toctree-l2 current active"><a class="current reference internal" href="#">Safe Datarouter Backend</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../unit_test.html">Unit Test</a></li>
 <li class="toctree-l2"><a class="reference internal" href="../chklst_impl_inspection.html">Implementation Inspection Checklist</a></li>
 </ul>
 </details></li>
@@ -522,7 +523,7 @@
 ----------------------------------------------------------------------------- -->
 <section id="safe-datarouter-backend">
 <h1>Safe Datarouter Backend<a class="headerlink" href="#safe-datarouter-backend" title="Link to this heading">#</a></h1>
-<div class="need_container docutils container" id="SNCB-40813352">
+<div class="need_container docutils container" id="SNCB-61129b19">
 <div class="pst-scrollable-table-container"><table class="need needs_grid_complex needs_layout_score needs_style_none needs_type_document table" id="doc__mw_log_datarouter_backend_design">
 <tbody>
 <tr class="head row-odd"><td class="head_left" colspan="2"><div class="needs_head_left line-block">
@@ -626,7 +627,7 @@ separate channel in the opposite direction is needed. On the highest level of
 abstraction we see the ASIL-B qualified client process on the one side and the
 datarouter process on the other</p>
 <p class="plantuml">
-<object data="../../../../_images/plantuml-f483a7cb0e6c6a97454820c053e1a7cc16bf2e2d.svg" type="image/svg+xml" style="width:2097px;height:283px;background:#FFFFFF;"></object></p>
+<object data="../../../../_images/plantuml-f483a7cb0e6c6a97454820c053e1a7cc16bf2e2d.svg" type="image/svg+xml" style="width:2086px;height:283px;background:#FFFFFF;"></object></p>
 <p>The logs are written by the client into shared memory and read-out by
 datarouter. Freedom of interference is ensured since the datarouter process has
 read-only access to the shared-memory. In order to reuse the logging buffers in
@@ -657,7 +658,7 @@ access to the ring buffer between Datarouter and the client.</p>
 <p>The <code class="docutils literal notranslate"><span class="pre">DataRouterRecorder</span></code> owns the <code class="docutils literal notranslate"><span class="pre">Backend</span></code> (here the <code class="docutils literal notranslate"><span class="pre">DataRouterBackend</span></code>), the
 <code class="docutils literal notranslate"><span class="pre">Configuration</span></code> and a <code class="docutils literal notranslate"><span class="pre">StatisticsReporter</span></code>:</p>
 <p class="plantuml">
-<object data="../../../../_images/plantuml-a64ad15ba2d04b0e0e630599edb473a08df53058.svg" type="image/svg+xml" style="width:1043px;height:860px;background:#FFFFFF;"></object></p>
+<object data="../../../../_images/plantuml-a64ad15ba2d04b0e0e630599edb473a08df53058.svg" type="image/svg+xml" style="width:1042px;height:860px;background:#FFFFFF;"></object></p>
 </section>
 <section id="verbose-logging-sequence">
 <h2>Verbose logging sequence<a class="headerlink" href="#verbose-logging-sequence" title="Link to this heading">#</a></h2>
@@ -669,7 +670,7 @@ to the flush of the slot into the shared memory.</p>
 below. The interface names of this diagram follow the convention of the
 <code class="docutils literal notranslate"><span class="pre">architectural_design</span></code> validation (caller and callee) and are not code interfaces.</p>
 <p class="plantuml">
-<object data="../../../../_images/plantuml-802a62bfd54fdf19a9eab87d6f1fde103a7bd97f.svg" type="image/svg+xml" style="width:545px;height:4194px;background:#FFFFFF;"></object></p>
+<object data="../../../../_images/plantuml-802a62bfd54fdf19a9eab87d6f1fde103a7bd97f.svg" type="image/svg+xml" style="width:545px;height:4192px;background:#FFFFFF;"></object></p>
 </section>
 <section id="activity-diagrams">
 <h2>Activity diagrams<a class="headerlink" href="#activity-diagrams" title="Link to this heading">#</a></h2>
@@ -694,7 +695,7 @@ variables.</p>
 <p>The <code class="docutils literal notranslate"><span class="pre">WriterFactory</span></code> creates the shared memory file, maps it and constructs the
 <code class="docutils literal notranslate"><span class="pre">SharedData</span></code> and the <code class="docutils literal notranslate"><span class="pre">SharedMemoryWriter</span></code>:</p>
 <p class="plantuml">
-<object data="../../../../_images/plantuml-2197e25b7a62d6c8ef4ab98e9e99b75e3c0bb1f2.svg" type="image/svg+xml" style="width:2227px;height:650px;background:#FFFFFF;"></object></p>
+<object data="../../../../_images/plantuml-2197e25b7a62d6c8ef4ab98e9e99b75e3c0bb1f2.svg" type="image/svg+xml" style="width:2224px;height:650px;background:#FFFFFF;"></object></p>
 <p>The <code class="docutils literal notranslate"><span class="pre">SharedMemoryWriter</span></code> has two main responsibilities. First is to register
 data types using <code class="docutils literal notranslate"><span class="pre">TryRegisterType()</span></code> and secondly to push instances of those
 types using <code class="docutils literal notranslate"><span class="pre">AllocAndWrite()</span></code>. Both aspects use the <code class="docutils literal notranslate"><span class="pre">WaitFreeAlternatingWriter</span></code>
@@ -798,7 +799,7 @@ readable without synchronization. Only after reading the remaining data from the
 ring buffer, should Datarouter unmap the shared memory page. Then the OS should
 free up the used resources.</p>
 <p class="plantuml">
-<object data="../../../../_images/plantuml-5436fc03fc05da265d85ea5a90fa3e70f0ca8b02.svg" type="image/svg+xml" style="width:1141px;height:1190px;background:#FFFFFF;"></object></p>
+<object data="../../../../_images/plantuml-5436fc03fc05da265d85ea5a90fa3e70f0ca8b02.svg" type="image/svg+xml" style="width:1138px;height:1189px;background:#FFFFFF;"></object></p>
 <p>The flow of <code class="docutils literal notranslate"><span class="pre">NotifyAcquisitionSetReader()</span></code> and <code class="docutils literal notranslate"><span class="pre">Read()</span></code>, including the detached
 mode, is shown below:</p>
 <p class="plantuml">
@@ -884,12 +885,12 @@ keepalive manner to check the communication link.</p>
 <section id="response-from-the-client-to-confirm-acquire">
 <h4>Response from the Client to confirm acquire<a class="headerlink" href="#response-from-the-client-to-confirm-acquire" title="Link to this heading">#</a></h4>
 <p>When the data is acquired on client side by a call to
-<code class="docutils literal notranslate"><span class="pre">SharedMemoryWriter::ReadAcquire()</span></code>, the client confirms that by responding. The
-response contains the identifier of the acquired buffer
-(<code class="docutils literal notranslate"><span class="pre">ReadAcquireResult::acquired_buffer</span></code>). When a user traces a data type, the C++
-fully qualified type name is registered by <code class="docutils literal notranslate"><span class="pre">SharedMemoryWriter::TryRegisterType()</span></code>
-and written to the ring buffer. This allows Datarouter to identify the payload in
-the ring buffer by the type identifier.</p>
+<code class="docutils literal notranslate"><span class="pre">AlternatingReaderProxy::Switch()</span></code>, the client confirms that by responding. The
+response contains the range in the ring buffer that is ready to be read as well
+as the updated type index. When a user traces a data type for the C++ fully
+qualified type name is put on the type stack in the <code class="docutils literal notranslate"><span class="pre">MwsrWriter</span></code>. This allows
+Datarouter to identify the payload in the ring buffer by index to the type
+stack.</p>
 <p>Message ID: <code class="docutils literal notranslate"><span class="pre">kAcquireResponse</span></code></p>
 <p>Payload: <code class="docutils literal notranslate"><span class="pre">struct</span> <span class="pre">ReadAcquireResult</span></code></p>
 </section>
@@ -917,11 +918,11 @@ the ring buffer by the type identifier.</p>
       </div>
     </a>
     <a class="right-next"
-       href="../chklst_impl_inspection.html"
+       href="../unit_test.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Implementation Inspection Checklist</p>
+        <p class="prev-next-title">Unit Test</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
