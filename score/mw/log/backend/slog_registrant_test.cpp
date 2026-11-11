@@ -38,6 +38,7 @@ TEST(SlogRegistrantTest, SlogBackendIsRegisteredAfterStaticInitialization)
 
 TEST(SlogRegistrantTest, SlogBackendCreatorReturnsNonNullRecorder)
 {
+    RecordProperty("lobster-tracing", "MwLog.SystemBackendActivation");
     RecordProperty("Description",
                    "The registered slog backend creator shall return a non-null Recorder given valid configuration.");
     RecordProperty("TestType", "Interface test");
