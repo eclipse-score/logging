@@ -438,6 +438,8 @@
 <li class="toctree-l1 current active has-children"><a class="current reference internal" href="#">mw::log Backend Detailed Design</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2"><a class="reference internal" href="file_output_backend.html">FileOutputBackend</a></li>
 <li class="toctree-l2"><a class="reference internal" href="datarouter_backend/index.html">Safe Datarouter Backend</a></li>
+<li class="toctree-l2"><a class="reference internal" href="backend_dependencies.html">mw::log Backend Dependencies</a></li>
+<li class="toctree-l2"><a class="reference internal" href="frontend_dependencies.html">mw::log Frontend Dependencies</a></li>
 <li class="toctree-l2"><a class="reference internal" href="unit_test.html">Unit Test</a></li>
 <li class="toctree-l2"><a class="reference internal" href="chklst_impl_inspection.html">Implementation Inspection Checklist</a></li>
 </ul>
@@ -508,7 +510,7 @@
                   
   <section id="mw-log-backend-detailed-design">
 <h1>mw::log Backend Detailed Design<a class="headerlink" href="#mw-log-backend-detailed-design" title="Link to this heading">#</a></h1>
-<div class="need_container docutils container" id="SNCB-653121a0">
+<div class="need_container docutils container" id="SNCB-4622bfaf">
 <div class="pst-scrollable-table-container"><table class="need needs_grid_complex needs_layout_score needs_style_none needs_type_document table" id="doc__mw_log_backend_detailed_design">
 <tbody>
 <tr class="head row-odd"><td class="head_left" colspan="2"><div class="needs_head_left line-block">
@@ -674,8 +676,9 @@ untrusted</p></td>
 targets.
 FFI classifications are maintained using Bazel target metadata,
 including the <code class="docutils literal notranslate"><span class="pre">FFI</span></code> tag.
-The dependency tree used for implementation inspection and
-safety analysis is generated from the Bazel dependency graph.</p>
+The direct dependencies of each unit, their <code class="docutils literal notranslate"><span class="pre">FFI</span></code> tag and the external
+repositories used transitively are listed in <a class="reference internal" href="backend_dependencies.html"><span class="doc">mw::log Backend Dependencies</span></a>
+and <a class="reference internal" href="frontend_dependencies.html"><span class="doc">mw::log Frontend Dependencies</span></a>.</p>
 </section>
 <section id="rationale-behind-decomposition-into-units">
 <h3>Rationale Behind Decomposition into Units<a class="headerlink" href="#rationale-behind-decomposition-into-units" title="Link to this heading">#</a></h3>
@@ -737,6 +740,8 @@ The UID is defined in the feature architecture of the <code class="docutils lite
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="file_output_backend.html">FileOutputBackend</a></li>
 <li class="toctree-l1"><a class="reference internal" href="datarouter_backend/index.html">Safe Datarouter Backend</a></li>
+<li class="toctree-l1"><a class="reference internal" href="backend_dependencies.html">mw::log Backend Dependencies</a></li>
+<li class="toctree-l1"><a class="reference internal" href="frontend_dependencies.html">mw::log Frontend Dependencies</a></li>
 </ul>
 </div>
 </section>

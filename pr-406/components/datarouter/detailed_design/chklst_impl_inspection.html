@@ -74,7 +74,7 @@
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" />
     <link rel="next" title="mw::log Backend" href="../../mw_log/index.html" />
-    <link rel="prev" title="Remote Logging implementation details" href="shm_apis.html" />
+    <link rel="prev" title="Datarouter Dependencies" href="dependencies.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="0.1" />
@@ -438,6 +438,7 @@
 <li class="toctree-l1 current active has-children"><a class="reference internal" href="index.html">Detailed Design</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="logging_architecture.html">Logging: architecture and SW design</a></li>
 <li class="toctree-l2"><a class="reference internal" href="shm_apis.html">Remote Logging implementation details</a></li>
+<li class="toctree-l2"><a class="reference internal" href="dependencies.html">Datarouter Dependencies</a></li>
 <li class="toctree-l2 current active"><a class="current reference internal" href="#">Implementation Inspection Checklist</a></li>
 </ul>
 </details></li>
@@ -504,7 +505,7 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <div class="need_container docutils container" id="SNCB-0f1acd95">
+  <div class="need_container docutils container" id="SNCB-a084748b">
 <div class="pst-scrollable-table-container"><table class="need needs_grid_complex needs_layout_score needs_style_none needs_type_document table" id="doc__datarouter_impl_inspection">
 <tbody>
 <tr class="head row-odd"><td class="head_left" colspan="2"><div class="needs_head_left line-block">
@@ -657,16 +658,9 @@ read-only mapping. Correct the text.</p></li>
 <td><p>Check the automated dependency analysis.
 Also make sure ASIL rated units also only use ASIL rated libraries.</p></td>
 <td><p>no</p></td>
-<td><p>Dependency and FFI metadata are maintained in Bazel. The direct
-dependencies outside of <code class="docutils literal notranslate"><span class="pre">//score/datarouter</span></code> are listed with:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">bazel</span> <span class="n">query</span> <span class="s1">&#39;let l = kind(&quot;.*_library&quot;, //score/datarouter/...) except attr(testonly, 1, //score/datarouter/...) in labels(deps, $l) except //score/datarouter/...&#39;</span> <span class="o">--</span><span class="n">keep_going</span> <span class="o">--</span><span class="n">output</span><span class="o">=</span><span class="n">label_kind</span>
-</pre></div>
-</div>
-<p>Those without the <code class="docutils literal notranslate"><span class="pre">FFI</span></code> tag are listed with:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">bazel</span> <span class="n">query</span> <span class="s1">&#39;let l = kind(&quot;.*_library&quot;, //score/datarouter/...) except attr(testonly, 1, //score/datarouter/...) in (labels(deps, $l) except //score/datarouter/...) except attr(tags, FFI, labels(deps, $l))&#39;</span> <span class="o">--</span><span class="n">keep_going</span> <span class="o">--</span><span class="n">output</span><span class="o">=</span><span class="n">label</span>
-</pre></div>
-</div>
-<p>The Datarouter is QM, the rule “ASIL units only use ASIL-rated
+<td><p>Dependency and FFI metadata are maintained in Bazel. The generated
+<a class="reference internal" href="dependencies.html"><span class="doc">Datarouter Dependencies</span></a> page lists the dependencies of each unit.
+The Datarouter is QM, the rule “ASIL units only use ASIL-rated
 libraries” does not apply to it.</p>
 <p>Dependency/configuration findings remain:</p>
 <ul class="simple">
@@ -818,12 +812,12 @@ Other points: To be added.</p></td>
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="shm_apis.html"
+       href="dependencies.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Remote Logging implementation details</p>
+        <p class="prev-next-title">Datarouter Dependencies</p>
       </div>
     </a>
     <a class="right-next"
