@@ -179,3 +179,6 @@ build:banned-functions --host_copt=-Wno-unused-command-line-argument
 # Unified LLVM source-based coverage (C++ + Rust), see quality/coverage/ and
 # @score_coverage. Use: bazel coverage --config=llvm_cov //score/... --build_tests_only
 import %workspace%/quality/coverage/coverage.bazelrc
+
+# CodeQL / MISRA static analysis configuration. See //quality/static_analysis.
+import %workspace%/quality/static_analysis/static_analysis.bazelrc
