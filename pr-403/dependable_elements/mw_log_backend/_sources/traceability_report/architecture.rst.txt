@@ -1,0 +1,33 @@
+Architecture
+============
+
+**Coverage:** 100.0% (1 of 1 items OK)
+
+.. _lobster-item-7bfe7ca94ee8257f6da5326b842b99c0c42a6273:
+
+.. dropdown:: [OK] Bazel Architecture //score/mw/log/dependability:component\_mw\_log\_backend
+   :class-title: sd-bg-success sd-text-white
+
+   **Derived from:**
+
+   * :ref:`MwLog.TimeBoundedLocking <lobster-item-4b371bc3ac6ae56c17e7d7a4b9c3d6c0f30fe81c>`
+   * :ref:`MwLog.SystemBackendActivation <lobster-item-c9cd5482c0049b64d91b1f53bf505fbdca20a050>`
+   * :ref:`MwLog.SharedMemoryFilePermissions <lobster-item-4bfac174996a064d970b79537a8ab4821e4c3f13>`
+   * :ref:`MwLog.MemoryBoundChecking <lobster-item-2418b8704dc0807bdc2ab9fca05cd33fb4e81ad3>`
+   * :ref:`MwLog.LocalAllocationStrategy <lobster-item-973e6c32f0a9ea6df9ced35cd5df3667f3d80b12>`
+   * :ref:`MwLog.IndexAndSizeChecking <lobster-item-325e97c01897aac1a8c60fc78a4851ba4853bcbe>`
+   * :ref:`MwLog.InactiveLogStreamBehavior <lobster-item-a4a883d0188ce9e31168d4aae9f9683f2bde6439>`
+   * :ref:`MwLog.ForwardToSystemLogger <lobster-item-1e19ff64dfdcb7d355592f7cf299e240907b27dc>`
+   * :ref:`MwLog.FileDescriptorFlags <lobster-item-023e236205af00574969ad5a522d1fa561ed204d>`
+   * :ref:`MwLog.DltVerboseMode <lobster-item-3379e95a99d683504eb27583c0669e3532730a40>`
+   * :ref:`MwLog.CrossLockingPrevention <lobster-item-532a3ea19ff52d3c56fcdfce276b0af8af68564e>`
+   * :ref:`MwLog.BoundedLoopExecution <lobster-item-ab77c02cb03c98149347622ca992c919b1a2c030>`
+   * :ref:`MwLog.AvoidSignalProcessing <lobster-item-f8e3900e83768564b6a528579eeb57dca7fdb099>`
+   * :ref:`MwLog.AutosarLogTraceSpec <lobster-item-983a22b6905837b1aaa6899ad9c655553f115a0f>`
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/dependability/BUILD:1 <../../../../../../score/mw/log/dependability/BUILD#L1>`__
+
