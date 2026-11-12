@@ -50,11 +50,13 @@ jobs:
       - name: Run sanitizer tests via Bazel
         run: |
           set -euo pipefail
-          echo "Running: bazel test --config=${{ matrix.sanitizer_config }} //score/..."
+          echo "Running: bazel test --config=${{ matrix.sanitizer_config }} --build_tests_only //score/..."
           # Note: Scoped to C/C++ targets only. Rust targets require Rust-specific
           # sanitizer handling and are excluded via tag filters.
           bazel test \
             --config=${{ matrix.sanitizer_config }} \
+            --build_tests_only \
+            --test_lang_filters=cc \
             //score/... \
             --build_tag_filters=-rust,-integration \
             --test_tag_filters=-rust,-integration \
