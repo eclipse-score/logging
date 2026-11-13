@@ -33,6 +33,8 @@ jobs:
     permissions:
       contents: read
       pull-requests: read
+    secrets:
+      UBUNTU_SNAPSHOT_MIRROR_URL: ${{ secrets.UBUNTU_SNAPSHOT_MIRROR_URL }}
   coverage-qnx:
     uses: ./.github/workflows/coverage_report_qnx.yml
     permissions:

@@ -14,6 +14,9 @@ name: Code coverage (LLVM, C++ + Rust)
 
 on:
   workflow_call:
+    secrets:
+      UBUNTU_SNAPSHOT_MIRROR_URL:
+        required: false
 
 jobs:
   approval:
@@ -45,6 +48,11 @@ jobs:
           disk-cache: ${{ github.workflow }}-coverage
           repository-cache: true
           cache-save: ${{ github.event_name == 'push' }}
+
+      - name: Configure Ubuntu snapshot mirror
+        uses: ./.github/actions/configure_ubuntu_snapshot_mirror
+        with:
+          ubuntu-snapshot-mirror-url: ${{ secrets.UBUNTU_SNAPSHOT_MIRROR_URL }}
 
       # Unified LLVM source-based coverage (C++ + Rust) from @score_coverage,
       # see quality/coverage/. Integration tests need docker/QNX and are excluded via

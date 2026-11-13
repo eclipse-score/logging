@@ -25,10 +25,9 @@ common --registry=https://bcr.bazel.build
 common --repo_env=ANDROID_HOME=
 
 # Retry HTTP downloads to handle transient failures (e.g. QNX toolchain, snapshot.ubuntu.com)
-common --experimental_repository_downloader_retries=10
-common --experimental_scale_timeouts=2.0
+common --experimental_repository_downloader_retries=3
 common --http_connector_attempts=10
-common --http_connector_retry_max_timeout=1s
+common --http_connector_retry_max_timeout=15s
 common --http_timeout_scaling=2.0
 
 test --test_tag_filters=-manual
