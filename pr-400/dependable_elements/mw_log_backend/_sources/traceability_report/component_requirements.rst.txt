@@ -376,8 +376,8 @@ Component Requirements
 
    **Traces to:**
 
-   * :ref:`CommonTests:TypesShallBeLockFree <lobster-item-497f3637ba9e73c1269bd7ec774c1d88eea7aabb>`
    * :ref:`WaitFreeLinearWriter:EnsureAtomicRequirements <lobster-item-806fbe70fe9d62984527a7b08b067f2376879dbb>`
+   * :ref:`CommonTests:TypesShallBeLockFree <lobster-item-497f3637ba9e73c1269bd7ec774c1d88eea7aabb>`
    * :ref:`MwLog.TimeBoundedLocking <lobster-item-a9e4429453bad068ab1a28d9606125cd89fc305d>`
    * :ref:`//score/mw/log/dependability:component\_mw\_log\_backend <lobster-item-7bfe7ca94ee8257f6da5326b842b99c0c42a6273>`
 
