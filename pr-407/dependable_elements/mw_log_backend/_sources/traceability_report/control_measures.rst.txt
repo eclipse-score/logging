@@ -1,0 +1,20 @@
+Control Measures
+================
+
+**Coverage:** 100.0% (1 of 1 items OK)
+
+.. _lobster-item-92f17f613f0347cc7878bdae14f6d9a3a849f1c4:
+
+.. dropdown:: [OK] TRLC Controlmeasure MwLogBackend.BoundedSharedMemoryAccess
+   :class-title: sd-bg-success sd-text-white
+
+   .. pull-quote::
+
+      Shared-memory writer/reader implementations shall explicitly check indices and buffer bounds before every read from or write to shared memory.
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/dependability/safety\_analysis/control\_measures.trlc:17:25 <../../../../../../score/mw/log/dependability/safety_analysis/control_measures.trlc#L17>`__
+
