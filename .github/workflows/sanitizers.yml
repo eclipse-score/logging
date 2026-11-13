@@ -47,6 +47,11 @@ jobs:
           bazelisk-cache: true
           cache-save: ${{ github.event_name == 'push' }}
 
+      - name: Configure Ubuntu snapshot mirror
+        uses: ./.github/actions/configure_ubuntu_snapshot_mirror
+        with:
+          ubuntu-snapshot-mirror-url: ${{ secrets.UBUNTU_SNAPSHOT_MIRROR_URL }}
+
       - name: Run sanitizer tests via Bazel
         run: |
           set -euo pipefail

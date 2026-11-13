@@ -38,6 +38,10 @@ jobs:
           disk-cache: clang-tidy
           repository-cache: true
           external-cache: true
+      - name: Configure Ubuntu snapshot mirror
+        uses: ./.github/actions/configure_ubuntu_snapshot_mirror
+        with:
+          ubuntu-snapshot-mirror-url: ${{ secrets.UBUNTU_SNAPSHOT_MIRROR_URL }}
       - name: Run clang-tidy
         # Scope limited to C++ targets. Rust targets are not yet validated against
         # this configuration and are explicitly excluded.

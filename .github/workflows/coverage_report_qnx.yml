@@ -79,6 +79,13 @@ jobs:
           qnx-password: ${{ secrets.SCORE_QNX_PASSWORD }}
           qnx-credential-helper: scripts/internal/qnx_creds.py
           qnx-license-dir: /opt/score_qnx/license
+      # Runs from the checked-out PR head, so the secret must not reach fork PRs, which could
+      # modify this action. Fork PRs use snapshot.ubuntu.com directly.
+      - name: Configure Ubuntu snapshot mirror
+        if: github.event_name != 'pull_request_target' || github.event.pull_request.head.repo.full_name == github.repository
+        uses: ./.github/actions/configure_ubuntu_snapshot_mirror
+        with:
+          ubuntu-snapshot-mirror-url: ${{ secrets.UBUNTU_SNAPSHOT_MIRROR_URL }}
       - name: Install qemu
         run: |
           sudo apt-get update

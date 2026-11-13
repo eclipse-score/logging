@@ -30,6 +30,8 @@ jobs:
     permissions:
       contents: read
       pull-requests: read
+    secrets:
+      UBUNTU_SNAPSHOT_MIRROR_URL: ${{ secrets.UBUNTU_SNAPSHOT_MIRROR_URL }}
 
   build-docs:
     needs: [run-tests]

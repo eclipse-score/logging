@@ -1,0 +1,78 @@
+# *******************************************************************************
+# Copyright (c) 2026 Contributors to the Eclipse Foundation
+#
+# See the NOTICE file(s) distributed with this work for additional
+# information regarding copyright ownership.
+#
+# This program and the accompanying materials are made available under the
+# terms of the Apache License Version 2.0 which is available at
+# https://www.apache.org/licenses/LICENSE-2.0
+#
+# SPDX-License-Identifier: Apache-2.0
+# *******************************************************************************
+name: "Configure Ubuntu snapshot mirror"
+# The snapshot timestamps are derived from the Bazel lockfile, so the mirror rules cannot drift from the
+# pinned packages. Do not use this action in jobs that run PR-controlled code with the secret (fork PRs on
+# pull_request_target). Jobs in external reusable workflows (eclipse-score/cicd-workflows) are not covered.
+description: "Try a private Ubuntu snapshot mirror before snapshot.ubuntu.com, keeping the public URL as fallback. No-op if the mirror secret is empty."
+
+inputs:
+  ubuntu-snapshot-mirror-url:
+    description: "Secret tag of the StableBuild debmirror (the <tag> in <tag>.debmirror.stablebuild.com)."
+    required: false
+    default: ""
+  lockfile:
+    description: "Bazel lockfile, relative to the workspace, scanned for snapshot.ubuntu.com timestamps."
+    required: false
+    default: "MODULE.bazel.lock"
+runs:
+  using: "composite"
+  steps:
+    - name: Configure Bazel downloader rewrite
+      shell: bash
+      env:
+        UBUNTU_SNAPSHOT_MIRROR_URL: ${{ inputs.ubuntu-snapshot-mirror-url }}
+        LOCKFILE: ${{ inputs.lockfile }}
+      run: |
+        set -euo pipefail
+
+        if [[ -z "${UBUNTU_SNAPSHOT_MIRROR_URL}" ]]; then
+          echo "No Ubuntu snapshot mirror configured; using snapshot.ubuntu.com."
+          exit 0
+        fi
+
+        echo "::add-mask::${UBUNTU_SNAPSHOT_MIRROR_URL}"
+        if [[ ! "${UBUNTU_SNAPSHOT_MIRROR_URL}" =~ ^[A-Za-z0-9-]+$ ]]; then
+          echo "::error::ubuntu-snapshot-mirror-url must be a bare mirror tag (letters, digits, '-')."
+          exit 1
+        fi
+
+        # One rule set per snapshot timestamp pinned in the lockfile, e.g. 20260401T104001Z.
+        mapfile -t timestamps < <(grep -ohE 'snapshot\.ubuntu\.com/ubuntu/[0-9]{8}T[0-9]{6}Z/' "${GITHUB_WORKSPACE}/${LOCKFILE}" 2>/dev/null | grep -oE '[0-9]{8}T[0-9]{6}Z' | sort -u || true)
+        if [[ ${#timestamps[@]} -eq 0 ]]; then
+          echo "::warning::No snapshot.ubuntu.com URLs found in ${LOCKFILE}; using snapshot.ubuntu.com."
+          exit 0
+        fi
+
+        # Kept outside the workspace: the file contains the secret mirror tag and must not be archived with it.
+        DOWNLOADER_CONFIG="${RUNNER_TEMP}/ubuntu_snapshot.downloader_config"
+        (
+          umask 077
+          : > "${DOWNLOADER_CONFIG}"
+          for ts in "${timestamps[@]}"; do
+            iso="${ts:0:4}-${ts:4:2}-${ts:6:2}T${ts:9:2}:${ts:11:2}:${ts:13:2}Z"
+            pattern="snapshot\\.ubuntu\\.com/ubuntu/${ts}/(.*)"
+            # Identical patterns are tried in file order: private mirror first, public URL as fallback
+            # (e.g. if the mirror quota is exhausted).
+            printf 'rewrite %s %s\n' "${pattern}" "${UBUNTU_SNAPSHOT_MIRROR_URL}.debmirror.stablebuild.com/${iso}/archive.ubuntu.com/ubuntu/\$1" >> "${DOWNLOADER_CONFIG}"
+            printf 'rewrite %s %s\n' "${pattern}" "snapshot.ubuntu.com/ubuntu/${ts}/\$1" >> "${DOWNLOADER_CONFIG}"
+          done
+        )
+
+        # Bazel fails hard on a missing downloader_config, so drop stale entries instead of appending blindly.
+        BAZELRC="${GITHUB_WORKSPACE}/user.bazelrc"
+        touch "${BAZELRC}"
+        { grep -v '^common --downloader_config=' "${BAZELRC}" || true; } > "${BAZELRC}.tmp"
+        echo "common --downloader_config=${DOWNLOADER_CONFIG}" >> "${BAZELRC}.tmp"
+        mv "${BAZELRC}.tmp" "${BAZELRC}"
+        echo "Configured Bazel downloader mirror with fallback for ${#timestamps[@]} Ubuntu snapshot timestamp(s)."
