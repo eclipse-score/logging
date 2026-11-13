@@ -1,7 +1,85 @@
 Component Requirements
 ======================
 
-**Coverage:** 100.0% (14 of 14 items OK)
+**Coverage:** 85.7% (12 of 14 items OK)
+
+.. _lobster-item-1e19ff64dfdcb7d355592f7cf299e240907b27dc:
+
+.. dropdown:: [PARTIAL] TRLC Compreq MwLog.ForwardToSystemLogger
+   :open:
+   :class-title: sd-bg-warning
+
+   .. pull-quote::
+
+      The system logger backend shall forward the logs to the native system logger mechanism.
+      Under QNX, slogger2 shall be used.
+
+   .. raw:: html
+
+      <hr>
+
+   **Traces to:**
+
+   * :ref:`//score/mw/log/dependability:component\_mw\_log\_backend <lobster-item-7bfe7ca94ee8257f6da5326b842b99c0c42a6273>`
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing reference to Unit Test
+      * missing reference to Test Case Coverage
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   * :ref:`MwLogFeature.EarlyStartupLogging <lobster-item-aa650183c72ea63efb42dab07ffd3b2932544558>`
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/requirements/component\_requirements/component\_requirements.trlc:76:18 <../../../../../../score/mw/log/requirements/component_requirements/component_requirements.trlc#L76>`__
+
+.. _lobster-item-c9cd5482c0049b64d91b1f53bf505fbdca20a050:
+
+.. dropdown:: [PARTIAL] TRLC Compreq MwLog.SystemBackendActivation
+   :open:
+   :class-title: sd-bg-warning
+
+   .. pull-quote::
+
+      The system logger backend shall be enabled if and only if the log mode contains
+      "kSystem".
+
+   .. raw:: html
+
+      <hr>
+
+   **Traces to:**
+
+   * :ref:`//score/mw/log/dependability:component\_mw\_log\_backend <lobster-item-7bfe7ca94ee8257f6da5326b842b99c0c42a6273>`
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing reference to Unit Test
+      * missing reference to Test Case Coverage
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   * :ref:`MwLogFeature.ConfigOnDemand <lobster-item-a88495ae75cb1097e64d4fa98fc5bdae61c695df>`
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/requirements/component\_requirements/component\_requirements.trlc:85:18 <../../../../../../score/mw/log/requirements/component_requirements/component_requirements.trlc#L85>`__
 
 .. _lobster-item-f8e3900e83768564b6a528579eeb57dca7fdb099:
 
@@ -53,8 +131,8 @@ Component Requirements
 
    **Traces to:**
 
-   * :ref:`WriterFactoryFixture:MakeSureThatOpenCallWillOnlyBeDoneWithCorrectOpenReadFlags <lobster-item-239d122654e8b342bcdcebc4fc520e358985eccf>`
    * :ref:`FileRecorderFactoryConfigFixture:FileConfigurionShallCallFileCreationAndReturnFileRecorder <lobster-item-90a46a45f9853034ad5bc6fddfa2e952d1978cd7>`
+   * :ref:`WriterFactoryFixture:MakeSureThatOpenCallWillOnlyBeDoneWithCorrectOpenReadFlags <lobster-item-239d122654e8b342bcdcebc4fc520e358985eccf>`
    * :ref:`MwLog.FileDescriptorFlags <lobster-item-c9b1d871162e55c501411c378e063679bd229c58>`
    * :ref:`//score/mw/log/dependability:component\_mw\_log\_backend <lobster-item-7bfe7ca94ee8257f6da5326b842b99c0c42a6273>`
 
@@ -212,89 +290,6 @@ Component Requirements
 
    **Source:** `score/mw/log/requirements/component\_requirements/component\_requirements.trlc:67:18 <../../../../../../score/mw/log/requirements/component_requirements/component_requirements.trlc#L67>`__
 
-.. _lobster-item-1e19ff64dfdcb7d355592f7cf299e240907b27dc:
-
-.. dropdown:: [OK] TRLC Compreq MwLog.ForwardToSystemLogger
-   :class-title: sd-bg-success sd-text-white
-
-   .. pull-quote::
-
-      The system logger backend shall forward the logs to the native system logger mechanism.
-      Under QNX, slogger2 shall be used.
-
-   .. raw:: html
-
-      <hr>
-
-   **Traces to:**
-
-   * :ref:`SyslogRecorderFactoryTest:CreateRecorder <lobster-item-23cc5a6ea34f92961ea500ae400245e947434c90>`
-   * :ref:`SyslogBackendFixture:SyslogOpenlog <lobster-item-d8a03643fd9750975b5269682f17318dc1c74823>`
-   * :ref:`SyslogBackendFixture:SyslogOpenlogWithCapacityBiggerThanTheMaximum <lobster-item-740044965fb328b6933a17861495d76d4b131283>`
-   * :ref:`SyslogBackendFixture:LevelOffProducesNoEmit <lobster-item-9f83f960ba066e54c2d3be26d9bb07a07611f77e>`
-   * :ref:`SyslogBackendFixture:FatalLog <lobster-item-80d4bc261aab3db2748292a3e1cf93be9d25c64c>`
-   * :ref:`SyslogBackendFixture:ErrorLog <lobster-item-1c49c48ca259035ac68f49cfb38c0ee55aaa9133>`
-   * :ref:`SyslogBackendFixture:WarningLog <lobster-item-62ee4b56b9e42b59d2bf261f6a8b7406a61e0b0b>`
-   * :ref:`SyslogBackendFixture:InfoLog <lobster-item-65853fcafc0f65d35bab41765c5f4c41ca5f66a4>`
-   * :ref:`SyslogBackendFixture:DebugLog <lobster-item-b0bca62f2d3cfd35863e74100daaee58c833ad37>`
-   * :ref:`SyslogBackendFixture:VerboseLog <lobster-item-df2ce3c031c944e630deda34747c66d7f339e0c4>`
-   * :ref:`SyslogBackendFixture:MessageShouldContainAppCtxPayload <lobster-item-187f73efb26d4b993bcc2fc9b581f3c1ebfe60b0>`
-   * :ref:`SyslogBackendFixture:BackendShouldHandleEmptyPayload <lobster-item-dd655efae5bd544b46e109d436374e3cc5759530>`
-   * :ref:`SyslogBackendFixture:LongIdentifiersShouldBeCropped <lobster-item-bc211acbe813dd1a92e933225e7f19f0bad69fb2>`
-   * :ref:`SyslogBackendFixture:NoSlotAvailableShouldReturnEmptyHandle <lobster-item-aabcef9bae4371ff92dcb1df1a96fc9e613939b0>`
-   * :ref:`SyslogBackendFixture:TooMuchSlotsRequestedShallBeTruncated <lobster-item-229dad70571fca3750d1aa6442249f0d077a33bf>`
-   * :ref:`SyslogBackendFixture:ToSyslogPriorityInvalidLevel <lobster-item-9495c66f852a2d4f3e8784955264a3478691f95d>`
-   * :ref:`MwLog.ForwardToSystemLogger <lobster-item-7bf1de0ea8bdf45acdf6439ac04b4a1fbe27f857>`
-   * :ref:`//score/mw/log/dependability:component\_mw\_log\_backend <lobster-item-7bfe7ca94ee8257f6da5326b842b99c0c42a6273>`
-
-   .. raw:: html
-
-      <hr>
-
-   **Derived from:**
-
-   * :ref:`MwLogFeature.EarlyStartupLogging <lobster-item-aa650183c72ea63efb42dab07ffd3b2932544558>`
-
-   .. raw:: html
-
-      <hr>
-
-   **Source:** `score/mw/log/requirements/component\_requirements/component\_requirements.trlc:76:18 <../../../../../../score/mw/log/requirements/component_requirements/component_requirements.trlc#L76>`__
-
-.. _lobster-item-c9cd5482c0049b64d91b1f53bf505fbdca20a050:
-
-.. dropdown:: [OK] TRLC Compreq MwLog.SystemBackendActivation
-   :class-title: sd-bg-success sd-text-white
-
-   .. pull-quote::
-
-      The system logger backend shall be enabled if and only if the log mode contains
-      "kSystem".
-
-   .. raw:: html
-
-      <hr>
-
-   **Traces to:**
-
-   * :ref:`SyslogRegistrantTest:SyslogBackendIsRegisteredAfterStaticInitialization <lobster-item-a9d7c7d6c715c122ad328bb1f697706dfe63becd>`
-   * :ref:`MwLog.SystemBackendActivation <lobster-item-0efcc40e65ba07644ad0d90c83b2e03c0167aa77>`
-   * :ref:`//score/mw/log/dependability:component\_mw\_log\_backend <lobster-item-7bfe7ca94ee8257f6da5326b842b99c0c42a6273>`
-
-   .. raw:: html
-
-      <hr>
-
-   **Derived from:**
-
-   * :ref:`MwLogFeature.ConfigOnDemand <lobster-item-a88495ae75cb1097e64d4fa98fc5bdae61c695df>`
-
-   .. raw:: html
-
-      <hr>
-
-   **Source:** `score/mw/log/requirements/component\_requirements/component\_requirements.trlc:85:18 <../../../../../../score/mw/log/requirements/component_requirements/component_requirements.trlc#L85>`__
-
 .. _lobster-item-973e6c32f0a9ea6df9ced35cd5df3667f3d80b12:
 
 .. dropdown:: [OK] TRLC Compreq MwLog.LocalAllocationStrategy
@@ -417,7 +412,6 @@ Component Requirements
 
    **Traces to:**
 
-   * :ref:`SyslogBackendFixture:ReserveSlotShouldAcquireSlot <lobster-item-8eb9c9a93d7875c7ca8a5719a28af9807e90200c>`
    * :ref:`WaitFreeAlternatingWriterTests:EnsureAtomicRequirements <lobster-item-406b3806da32adb8ab3238ef8fe591c5ac8bed33>`
    * :ref:`WaitFreeLinearWriter:EnsureAtomicRequirements <lobster-item-806fbe70fe9d62984527a7b08b067f2376879dbb>`
    * :ref:`MwLog.CrossLockingPrevention <lobster-item-f215ef9092c9d584be4a7ee548eadcf134530de5>`
