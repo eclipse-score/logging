@@ -2,7 +2,7 @@
 L.O.B.S.T.E.R. Traceability Report
 ##################################
 
-| Generated: 2026-11-13 12:05 UTC
+| Generated: 2026-11-13 14:37 UTC
 | LOBSTER Version: 1.0.6
 
 .. rubric:: Tracing Policy
@@ -41,17 +41,17 @@ L.O.B.S.T.E.R. Traceability Report
      - 11
      - 49
    * - :doc:`Component Requirements <component_requirements>`
-     - 85.7%
-     - 12
+     - 100.0%
+     - 14
      - 14
    * - :doc:`Unit Test <unit_test>`
-     - 6.0%
-     - 13
-     - 215
+     - 13.3%
+     - 31
+     - 233
    * - :doc:`Test Case Coverage <test_case_coverage>`
      - 100.0%
-     - 12
-     - 12
+     - 14
+     - 14
    * - :doc:`Architecture <architecture>`
      - 100.0%
      - 1
@@ -271,10 +271,6 @@ L.O.B.S.T.E.R. Traceability Report
 * [MISSING — no trace to: Component Requirements] :ref:`MwLogAssumedSystemRequirements.ASR\_ErrorHandling <lobster-item-4febb9a966e85f572203bb0f5915eb0bf4999546>`
 * [MISSING — no trace to: Component Requirements] :ref:`MwLogAssumedSystemRequirements.ASR\_LogAndTraceConsistentBehaviour <lobster-item-fb5c5bcedf7c8a802c8f1737ccc21ea6b4c53645>`
 * [MISSING — no trace to: Component Requirements] :ref:`MwLogAssumedSystemRequirements.ASR\_OverallGoalsEnableCooperation <lobster-item-d3522f633f62d45b1f9d6d09aeb77f60b074abd4>`
-* [PARTIAL — no trace to: Unit Test] :ref:`MwLog.ForwardToSystemLogger <lobster-item-1e19ff64dfdcb7d355592f7cf299e240907b27dc>`
-* [PARTIAL — no trace to: Test Case Coverage] :ref:`MwLog.ForwardToSystemLogger <lobster-item-1e19ff64dfdcb7d355592f7cf299e240907b27dc>`
-* [PARTIAL — no trace to: Unit Test] :ref:`MwLog.SystemBackendActivation <lobster-item-c9cd5482c0049b64d91b1f53bf505fbdca20a050>`
-* [PARTIAL — no trace to: Test Case Coverage] :ref:`MwLog.SystemBackendActivation <lobster-item-c9cd5482c0049b64d91b1f53bf505fbdca20a050>`
 * [MISSING — no trace to: Component Requirements] :ref:`MwLogFeature.TimestampingLocal <lobster-item-3ad526b3ca6bc3cad8006f7fe7f21453c13d13ae>`
 * [MISSING — no trace to: Component Requirements] :ref:`MwLogFeature.TimestampingOriginal <lobster-item-93c5495224828e744d310b8c560a29b7e08d3ce4>`
 * [MISSING — no trace to: Component Requirements] :ref:`MwLogFeature.TimestampingSync <lobster-item-49168ec192a867d2a2e43360c30229dc6fafbe98>`
