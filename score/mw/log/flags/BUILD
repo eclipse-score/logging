@@ -40,10 +40,7 @@ config_setting(
     flag_values = {
         ":KCustom_Logging": "True",
     },
-    visibility = [
-        "//score/mw/log:__subpackages__",
-        "@score_baselibs//score/mw/log:__subpackages__",
-    ],
+    visibility = ["//visibility:public"],
 )
 
 bool_flag(
