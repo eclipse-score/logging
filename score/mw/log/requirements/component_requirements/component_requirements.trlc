@@ -22,7 +22,7 @@ import ScoreReq
 ScoreReq.CompReq AvoidSignalProcessing {
     description = '''The component shall not register any signal handler.'''
     safety = ScoreReq.Asil.B
-    derived_from = [MwLogFeature.ErrorHandlingIsolation@1, MwLogFeature.AsilLevelSupport@1]
+    derived_from = [MwLogFeature.FEAT_ErrorHandling@1, MwLogFeature.AsilLevelSupport@1]
     version = 1
 }
 

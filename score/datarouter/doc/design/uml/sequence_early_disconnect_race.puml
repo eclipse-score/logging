@@ -23,9 +23,9 @@ box "Client Process" #LightBlue
 end box
 
 box "Datarouter Process" #LightGreen
-    participant "Server Engine\n(message thread)" as SE
-    participant "OnConnectRequest\n(processes connect)" as OC
-    participant "disconnect_callback\n(connection teardown)" as DC
+    participant "ServerEngine" as SE
+    participant "OnConnectRequest" as OC
+    participant "DisconnectCallback" as DC
 end box
 
 == Client sends kConnect, then crashes ==

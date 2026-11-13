@@ -13,7 +13,7 @@
 
 @startuml kvs_threads_sequence_diagram
 
-participant "DataRouterConfigurator App" as DRConf
+participant "DataRouterConfiguratorApp" as DRConf
 participant "DiagnosticManager" as DiagM
 participant "DataRouterConfiguratorService" as DRConfService
 participant "UnixDomainClient" as UDC

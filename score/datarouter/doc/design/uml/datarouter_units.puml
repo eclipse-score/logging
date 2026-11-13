@@ -23,22 +23,22 @@ left to right direction
 
 title Units and unit bindings of the sequence diagrams of the datarouter
 
-package "Client session and datarouter" as pkg_session {
-    component "User Threads (Client A)" as UTA <<unit>>
-    component "SharedMemoryWriter (Client A)" as SHMA <<unit>>
-    component "QnxDispatchEngine (Client A)" as AE <<unit>>
-    component "QnxDispatchEngine (Client X)" as XE <<unit>>
-    component "Server Engine" as SE <<unit>>
-    component "MessagePassingServer worker thread" as MW <<unit>>
-    component "Watchdog Timer" as WD <<unit>>
-    component "DLT output" as DLT <<unit>>
-    component "Client (connecting)" as MC <<unit>>
+package "ClientSessionAndDatarouter" as pkg_session {
+    component "UserThreads_ClientA" as UTA <<unit>>
+    component "SharedMemoryWriter_ClientA" as SHMA <<unit>>
+    component "QnxDispatchEngine_ClientA" as AE <<unit>>
+    component "QnxDispatchEngine_ClientX" as XE <<unit>>
+    component "ServerEngine" as SE <<unit>>
+    component "MpWorkerThread" as MW <<unit>>
+    component "WatchdogTimer" as WD <<unit>>
+    component "DltOutput" as DLT <<unit>>
+    component "Client" as MC <<unit>>
     component "OnConnectRequest" as OC <<unit>>
-    component "disconnect_callback" as DC <<unit>>
+    component "DisconnectCallback" as DC <<unit>>
 }
 
-package "Configuration session" as pkg_config {
-    component "DataRouterConfigurator App (outside this repository)" as DRConf <<unit>>
+package "ConfigurationSession" as pkg_config {
+    component "DataRouterConfiguratorApp" as DRConf <<unit>>
     component "DiagnosticManager" as DiagM <<unit>>
     component "DataRouterConfiguratorService" as DRConfService <<unit>>
     component "UnixDomainClient" as UDC <<unit>>
@@ -49,7 +49,7 @@ package "Configuration session" as pkg_config {
     component "PersistentDictionary" as PD <<unit>>
 }
 
-package "Initialization and message processing" as pkg_init_proc {
+package "InitializationAndMessageProcessing" as pkg_init_proc {
     component "SocketServer" as SS <<unit>>
     component "DltLogServer" as DLS <<unit>>
     component "ILogParserFactory" as ILPF <<unit>>
@@ -59,7 +59,7 @@ package "Initialization and message processing" as pkg_init_proc {
     component "DltVerboseHandler" as VH <<unit>>
     component "DltNonverboseHandler" as NH <<unit>>
     component "FileTransferStreamHandler" as FTH <<unit>>
-    component "DLT Channel" as CH <<unit>>
+    component "DltChannel" as CH <<unit>>
 }
 
 interface "IUTAAE" as IUTAAE
@@ -98,105 +98,105 @@ interface "ILPNH" as ILPNH
 interface "INHDLS" as INHDLS
 
 UTA -( IUTAAE
-AE )- IUTAAE
+AE - IUTAAE
 
 AE -( IAESE
-SE )- IAESE
+SE - IAESE
 
 MW -( IMWSE
-SE )- IMWSE
+SE - IMWSE
 
 AE -( IAESHMA
-SHMA )- IAESHMA
+SHMA - IAESHMA
 
 MW -( IMWSHMA
-SHMA )- IMWSHMA
+SHMA - IMWSHMA
 
 MW -( IMWDLT
-DLT )- IMWDLT
+DLT - IMWDLT
 
 MW -( IMWWD
-WD )- IMWWD
+WD - IMWWD
 
 MC -( IMCSE
-SE )- IMCSE
+SE - IMCSE
 
 SE -( ISEOC
-OC )- ISEOC
+OC - ISEOC
 
 SE -( ISEDC
-DC )- ISEDC
+DC - ISEDC
 
 DiagM -( IDiagMDRConfService
-DRConfService )- IDiagMDRConfService
+DRConfService - IDiagMDRConfService
 
 DRConfService -( IDRConfServiceUDC
-UDC )- IDRConfServiceUDC
+UDC - IDRConfServiceUDC
 
 UDC -( IUDCUDS
-UDS )- IUDCUDS
+UDS - IUDCUDS
 
 UDS -( IUDSSocket
-Socket )- IUDSSocket
+Socket - IUDSSocket
 
 UDS -( IUDSConfigSession
-ConfigSession )- IUDSConfigSession
+ConfigSession - IUDSConfigSession
 
 ConfigSession -( IConfigSessionDLTS
-DLTS )- IConfigSessionDLTS
+DLTS - IConfigSessionDLTS
 
 DLTS -( IDLTSPD
-PD )- IDLTSPD
+PD - IDLTSPD
 
 ConfigSession -( IConfigSessionSocket
-Socket )- IConfigSessionSocket
+Socket - IConfigSessionSocket
 
 DRConfService -( IDRConfServiceDRConf
-DRConf )- IDRConfServiceDRConf
+DRConf - IDRConfServiceDRConf
 
 SS -( ISSDLS
-DLS )- ISSDLS
+DLS - ISSDLS
 
 SS -( ISSILPF
-ILPF )- ISSILPF
+ILPF - ISSILPF
 
 SS -( ISSDR
-DR )- ISSDR
+DR - ISSDR
 
 DR -( IDRILPF
-ILPF )- IDRILPF
+ILPF - IDRILPF
 
 ILPF -( IILPFDLS
-DLS )- IILPFDLS
+DLS - IILPFDLS
 
 ILPF -( IILPFLP
-LP )- IILPFLP
+LP - IILPFLP
 
 DR -( IDRSRC
-SRC )- IDRSRC
+SRC - IDRSRC
 
 SRC -( ISRCLP
-LP )- ISRCLP
+LP - ISRCLP
 
 LP -( ILPVH
-VH )- ILPVH
+VH - ILPVH
 
 VH -( IVHDLS
-DLS )- IVHDLS
+DLS - IVHDLS
 
 DLS -( IDLSCH
-CH )- IDLSCH
+CH - IDLSCH
 
 LP -( ILPFTH
-FTH )- ILPFTH
+FTH - ILPFTH
 
 FTH -( IFTHDLS
-DLS )- IFTHDLS
+DLS - IFTHDLS
 
 LP -( ILPNH
-NH )- ILPNH
+NH - ILPNH
 
 NH -( INHDLS
-DLS )- INHDLS
+DLS - INHDLS
 
 @enduml

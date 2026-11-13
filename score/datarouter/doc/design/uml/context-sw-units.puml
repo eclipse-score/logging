@@ -46,12 +46,12 @@ frame ApplicationProcess {
     ApplicationLogic --> TRACE : non-verbose
   }
 
-  queue "Shared Memory Buffer" as RB
+  queue "SharedMemoryBuffer" as RB
 }
 
 node "Datarouter"{
   component MessagePassingServer
-  component "Source Session" as session {
+  component "SourceSession" as session {
     component SharedMemoryReader
   }
 

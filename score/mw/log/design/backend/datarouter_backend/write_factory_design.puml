@@ -13,7 +13,7 @@
 
 @startuml write_factory_design
 ' Library dependencies
-package "OSAL Abstractions" {
+package "OSALAbstractions" {
   class Unistd
   class Fcntl
   class Stat
