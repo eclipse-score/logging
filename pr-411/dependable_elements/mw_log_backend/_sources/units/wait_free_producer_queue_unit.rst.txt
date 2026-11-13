@@ -1,0 +1,19 @@
+
+
+wait_free_producer_queue_unit
+=============================
+
+
+Implementation
+--------------
+
+This unit is implemented by the following targets:
+
+- ``@@//score/mw/log/detail/wait_free_producer_queue:alternating_control_block``
+
+Tests
+-----
+
+This unit is verified by the following test targets:
+
+- ``score/mw/log/detail/wait_free_producer_queue/wait_free_producer_queue_unit_score_mw_log_detail_wait_free_producer_queue_unit_test_gtest_report_test.xml``
