@@ -1,0 +1,7 @@
+.. include:: index.md.inc
+   :parser: myst_parser.sphinx_
+
+.. toctree::
+   :maxdepth: 1
+
+   verbose_logging_static
