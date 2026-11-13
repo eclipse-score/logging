@@ -1,0 +1,21 @@
+
+
+``//score/mw/log/detail/syslog:syslog_backend_unit``
+====================================================
+
+
+Implementation
+--------------
+
+This unit is implemented by the following targets:
+
+- ``//score/mw/log/detail/syslog:syslog``
+
+Tests
+-----
+
+This unit is verified by the following test targets:
+
+- ``score/mw/log/detail/syslog/syslog_backend_unit_score_mw_log_detail_syslog_syslog_backend_test_gtest_report_test.xml``
+- ``score/mw/log/detail/syslog/syslog_backend_unit_score_mw_log_detail_syslog_syslog_recorder_factory_test_gtest_report_test.xml``
+- ``score/mw/log/detail/syslog/syslog_backend_unit_score_mw_log_backend_syslog_registrant_test_gtest_report_test.xml``
