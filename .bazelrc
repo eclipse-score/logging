@@ -24,7 +24,9 @@ common --registry=https://bcr.bazel.build
 # project does not use Android; unset ANDROID_HOME so the lookup is skipped.
 common --repo_env=ANDROID_HOME=
 
-# Retry HTTP downloads to handle transient failures (e.g. QNX toolchain)
+# Retry HTTP downloads to handle transient failures (e.g. QNX toolchain, snapshot.ubuntu.com)
+common --experimental_repository_downloader_retries=10
+common --experimental_scale_timeouts=2.0
 common --http_connector_attempts=10
 common --http_connector_retry_max_timeout=1s
 common --http_timeout_scaling=2.0
@@ -179,3 +181,6 @@ build:banned-functions --host_copt=-Wno-unused-command-line-argument
 # Unified LLVM source-based coverage (C++ + Rust), see quality/coverage/ and
 # @score_coverage. Use: bazel coverage --config=llvm_cov //score/... --build_tests_only
 import %workspace%/quality/coverage/coverage.bazelrc
+
+# Per-machine/CI overrides, e.g. the Ubuntu snapshot mirror downloader_config.
+try-import %workspace%/user.bazelrc
