@@ -1,0 +1,1374 @@
+Feature Requirements
+====================
+
+**Coverage:** 21.6% (11 of 51 items OK)
+
+.. _lobster-item-3e119d3059694912c39f5b876fbd0e6e2c851861:
+
+.. dropdown:: [MISSING] TRLC Assumedsystemreq MwLogAssumedSystemRequirements.ASR\_LoggingSupport
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      The platform shall support Diagnostic Log and Trace (DLT) / Logcat format as well as logging of early startup events.
+
+   .. raw:: html
+
+      <hr>
+
+   **Traces to:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing reference to Component Requirements
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/requirements/assumed\_system\_requirements/assumed\_system\_requirements.trlc:21:27 <../../../../../../score/mw/log/requirements/assumed_system_requirements/assumed_system_requirements.trlc#L21>`__
+
+.. _lobster-item-479675ca42859bd4a9af20f83d6ed38daa073061:
+
+.. dropdown:: [MISSING] TRLC Assumedsystemreq MwLogAssumedSystemRequirements.ASR\_SafeLogAndTrace
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      The platform shall provide a Log and Trace infrastructure supporting the highest ASIL level, guaranteeing freedom from interference (FFI) with regard to the calling components.
+
+   .. raw:: html
+
+      <hr>
+
+   **Traces to:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing reference to Component Requirements
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/requirements/assumed\_system\_requirements/assumed\_system\_requirements.trlc:29:27 <../../../../../../score/mw/log/requirements/assumed_system_requirements/assumed_system_requirements.trlc#L29>`__
+
+.. _lobster-item-6abfc9f6c9b9584d0c76917c3a1faf75d3f1000a:
+
+.. dropdown:: [MISSING] TRLC Assumedsystemreq MwLogAssumedSystemRequirements.ASR\_SecureLogAndTrace
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      The information exchanged between applications and the Logging and Tracing components shall be protected against unauthorized access and manipulation. The platform shall provide mechanisms to ensure confidentiality, integrity, and authenticity of the exchanged information.
+
+   .. raw:: html
+
+      <hr>
+
+   **Traces to:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing reference to Component Requirements
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/requirements/assumed\_system\_requirements/assumed\_system\_requirements.trlc:37:27 <../../../../../../score/mw/log/requirements/assumed_system_requirements/assumed_system_requirements.trlc#L37>`__
+
+.. _lobster-item-4febb9a966e85f572203bb0f5915eb0bf4999546:
+
+.. dropdown:: [MISSING] TRLC Assumedsystemreq MwLogAssumedSystemRequirements.ASR\_ErrorHandling
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      (C++) exceptions shall not be used for error handling.
+      The best way to deal with errors is to try to resolve those component internally. If not possible the caller of the function shall be notified of the error.
+      For (error) returns there is a specific library to be used in S-CORE, it is the score::Result library which is part of
+      the Base Libraries feature.
+
+   .. raw:: html
+
+      <hr>
+
+   **Traces to:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing reference to Component Requirements
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/requirements/assumed\_system\_requirements/assumed\_system\_requirements.trlc:45:27 <../../../../../../score/mw/log/requirements/assumed_system_requirements/assumed_system_requirements.trlc#L45>`__
+
+.. _lobster-item-fb5c5bcedf7c8a802c8f1737ccc21ea6b4c53645:
+
+.. dropdown:: [MISSING] TRLC Assumedsystemreq MwLogAssumedSystemRequirements.ASR\_LogAndTraceConsistentBehaviour
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      All Log and Trace functionality used in the context of customer functionality shall provide consistent behaviour.
+
+   .. raw:: html
+
+      <hr>
+
+   **Traces to:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing reference to Component Requirements
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/requirements/assumed\_system\_requirements/assumed\_system\_requirements.trlc:55:27 <../../../../../../score/mw/log/requirements/assumed_system_requirements/assumed_system_requirements.trlc#L55>`__
+
+.. _lobster-item-d3522f633f62d45b1f9d6d09aeb77f60b074abd4:
+
+.. dropdown:: [MISSING] TRLC Assumedsystemreq MwLogAssumedSystemRequirements.ASR\_OverallGoalsEnableCooperation
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      The SW-platform shall where possible be based on existing standards (e.g. network
+      protocols).
+
+   .. raw:: html
+
+      <hr>
+
+   **Traces to:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing reference to Component Requirements
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/requirements/assumed\_system\_requirements/assumed\_system\_requirements.trlc:63:27 <../../../../../../score/mw/log/requirements/assumed_system_requirements/assumed_system_requirements.trlc#L63>`__
+
+.. _lobster-item-3ad526b3ca6bc3cad8006f7fe7f21453c13d13ae:
+
+.. dropdown:: [MISSING] TRLC Featreq MwLogFeature.TimestampingLocal
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      The logging framework shall support local timestamps for each log entry.
+
+   .. raw:: html
+
+      <hr>
+
+   **Traces to:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing reference to Component Requirements
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/requirements/feature\_requirements/feature\_requirements.trlc:22:18 <../../../../../../score/mw/log/requirements/feature_requirements/feature_requirements.trlc#L22>`__
+
+.. _lobster-item-93c5495224828e744d310b8c560a29b7e08d3ce4:
+
+.. dropdown:: [MISSING] TRLC Featreq MwLogFeature.TimestampingOriginal
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      The logging framework shall support original timestamps for routed log entries.
+
+   .. raw:: html
+
+      <hr>
+
+   **Traces to:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing reference to Component Requirements
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/requirements/feature\_requirements/feature\_requirements.trlc:30:18 <../../../../../../score/mw/log/requirements/feature_requirements/feature_requirements.trlc#L30>`__
+
+.. _lobster-item-49168ec192a867d2a2e43360c30229dc6fafbe98:
+
+.. dropdown:: [MISSING] TRLC Featreq MwLogFeature.TimestampingSync
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      The logging framework shall support timestamp synchronization for log entries
+      coming from different logging nodes.
+
+   .. raw:: html
+
+      <hr>
+
+   **Traces to:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing reference to Component Requirements
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/requirements/feature\_requirements/feature\_requirements.trlc:38:18 <../../../../../../score/mw/log/requirements/feature_requirements/feature_requirements.trlc#L38>`__
+
+.. _lobster-item-2ad440eab4e396c3b1c94edb4abf440212fed51b:
+
+.. dropdown:: [MISSING] TRLC Featreq MwLogFeature.Prioritization
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      The logging framework shall prioritize logs in case of resource conflicts to
+      ensure critical logs are not lost.
+
+   .. raw:: html
+
+      <hr>
+
+   **Traces to:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing reference to Component Requirements
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/requirements/feature\_requirements/feature\_requirements.trlc:55:18 <../../../../../../score/mw/log/requirements/feature_requirements/feature_requirements.trlc#L55>`__
+
+.. _lobster-item-546ba5ac42ac99b95e45e8ae1b71a632cc3ff581:
+
+.. dropdown:: [MISSING] TRLC Featreq MwLogFeature.EntityIdentifier
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      The logging framework shall support logging entity identifiers for each log
+      entry.
+
+   .. raw:: html
+
+      <hr>
+
+   **Traces to:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing reference to Component Requirements
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/requirements/feature\_requirements/feature\_requirements.trlc:73:18 <../../../../../../score/mw/log/requirements/feature_requirements/feature_requirements.trlc#L73>`__
+
+.. _lobster-item-bed01cecc0c0d02d23024374ee1a65212701a09a:
+
+.. dropdown:: [MISSING] TRLC Featreq MwLogFeature.FilteringEntityId
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      The logging framework shall support filtering by logging entity identifiers.
+
+   .. raw:: html
+
+      <hr>
+
+   **Traces to:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing reference to Component Requirements
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/requirements/feature\_requirements/feature\_requirements.trlc:90:18 <../../../../../../score/mw/log/requirements/feature_requirements/feature_requirements.trlc#L90>`__
+
+.. _lobster-item-896a0c84a5fe3a0ffa5ffabf83f03038984c79f3:
+
+.. dropdown:: [MISSING] TRLC Featreq MwLogFeature.MessageLossDetection
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      The logging framework shall detect and report any message loss.
+
+   .. raw:: html
+
+      <hr>
+
+   **Traces to:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing reference to Component Requirements
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/requirements/feature\_requirements/feature\_requirements.trlc:98:18 <../../../../../../score/mw/log/requirements/feature_requirements/feature_requirements.trlc#L98>`__
+
+.. _lobster-item-d7c95a2a1cbac1ffce2db5c31fe712e396df2f9b:
+
+.. dropdown:: [MISSING] TRLC Featreq MwLogFeature.MessageLossHandling
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      The logging framework shall provide mechanisms to handle message loss
+      gracefully. Additional Information: e.g. buffering or prioritizing critical messages.
+
+   .. raw:: html
+
+      <hr>
+
+   **Traces to:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing reference to Component Requirements
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/requirements/feature\_requirements/feature\_requirements.trlc:106:18 <../../../../../../score/mw/log/requirements/feature_requirements/feature_requirements.trlc#L106>`__
+
+.. _lobster-item-73df2baba998ff6a4b575d1dcea989f13adba714:
+
+.. dropdown:: [MISSING] TRLC Featreq MwLogFeature.ContextLogLevelActivation
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      The logging framework shall allow context-specific log level activation at
+      runtime to enable fine-grained control over logging behavior.
+
+   .. raw:: html
+
+      <hr>
+
+   **Traces to:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing reference to Component Requirements
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/requirements/feature\_requirements/feature\_requirements.trlc:115:18 <../../../../../../score/mw/log/requirements/feature_requirements/feature_requirements.trlc#L115>`__
+
+.. _lobster-item-3575c38585c677145a7077f44c77b6b05a5178ff:
+
+.. dropdown:: [MISSING] TRLC Featreq MwLogFeature.LogSourcesUserApp
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      The logging framework shall support user application as log source.
+
+   .. raw:: html
+
+      <hr>
+
+   **Traces to:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing reference to Component Requirements
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/requirements/feature\_requirements/feature\_requirements.trlc:124:18 <../../../../../../score/mw/log/requirements/feature_requirements/feature_requirements.trlc#L124>`__
+
+.. _lobster-item-75afab8534e650b792dd01973b2e06133b01878e:
+
+.. dropdown:: [MISSING] TRLC Featreq MwLogFeature.LogSourcesComponentPlatform
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      The logging framework shall support component features and platform as log
+      sources.
+
+   .. raw:: html
+
+      <hr>
+
+   **Traces to:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing reference to Component Requirements
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/requirements/feature\_requirements/feature\_requirements.trlc:132:18 <../../../../../../score/mw/log/requirements/feature_requirements/feature_requirements.trlc#L132>`__
+
+.. _lobster-item-fc3ef24df4cbb101c31e972b5df3f6a58098759c:
+
+.. dropdown:: [MISSING] TRLC Featreq MwLogFeature.LogSinksConsole
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      The logging framework shall support console as a log sink.
+
+   .. raw:: html
+
+      <hr>
+
+   **Traces to:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing reference to Component Requirements
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/requirements/feature\_requirements/feature\_requirements.trlc:141:18 <../../../../../../score/mw/log/requirements/feature_requirements/feature_requirements.trlc#L141>`__
+
+.. _lobster-item-934c37ba34c937b375502e7d7d07af4a8c9a723a:
+
+.. dropdown:: [MISSING] TRLC Featreq MwLogFeature.LogSinksLocalFs
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      The logging framework shall support local file system as log sink.
+
+   .. raw:: html
+
+      <hr>
+
+   **Traces to:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing reference to Component Requirements
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/requirements/feature\_requirements/feature\_requirements.trlc:149:18 <../../../../../../score/mw/log/requirements/feature_requirements/feature_requirements.trlc#L149>`__
+
+.. _lobster-item-6682a03c6abbd3c86356588d9db371afb11de855:
+
+.. dropdown:: [MISSING] TRLC Featreq MwLogFeature.LogSinksCloudDrive
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      The logging framework shall support cloud-native drives via network as log
+      sinks.
+
+   .. raw:: html
+
+      <hr>
+
+   **Traces to:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing reference to Component Requirements
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/requirements/feature\_requirements/feature\_requirements.trlc:157:18 <../../../../../../score/mw/log/requirements/feature_requirements/feature_requirements.trlc#L157>`__
+
+.. _lobster-item-4c543ec8339cf438e4987f3604acde32ca15019a:
+
+.. dropdown:: [MISSING] TRLC Featreq MwLogFeature.LogSinksNetwork
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      The logging framework shall support network channels, including a second
+      dedicated Ethernet channel, as log sinks.
+
+   .. raw:: html
+
+      <hr>
+
+   **Traces to:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing reference to Component Requirements
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/requirements/feature\_requirements/feature\_requirements.trlc:166:18 <../../../../../../score/mw/log/requirements/feature_requirements/feature_requirements.trlc#L166>`__
+
+.. _lobster-item-143bf995e123805fa2e4e452f8e22cadb9adfd35:
+
+.. dropdown:: [MISSING] TRLC Featreq MwLogFeature.LogSinksStdout
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      The logging framework shall ensure logs appear on stdout when running unit
+      tests.
+
+   .. raw:: html
+
+      <hr>
+
+   **Traces to:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing reference to Component Requirements
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/requirements/feature\_requirements/feature\_requirements.trlc:175:18 <../../../../../../score/mw/log/requirements/feature_requirements/feature_requirements.trlc#L175>`__
+
+.. _lobster-item-c3bfff067c540b07d4de24192a93df72385fb760:
+
+.. dropdown:: [MISSING] TRLC Featreq MwLogFeature.BootLogging
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      The logging framework shall support logging of data to memory which survives a
+      reboot cycle.
+
+   .. raw:: html
+
+      <hr>
+
+   **Traces to:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing reference to Component Requirements
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/requirements/feature\_requirements/feature\_requirements.trlc:184:18 <../../../../../../score/mw/log/requirements/feature_requirements/feature_requirements.trlc#L184>`__
+
+.. _lobster-item-0d1c50b2b9cac17c7afca48c5513807ae8116bce:
+
+.. dropdown:: [MISSING] TRLC Featreq MwLogFeature.ConfigLogLevel
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      The logging framework shall support configuration of log levels.
+
+   .. raw:: html
+
+      <hr>
+
+   **Traces to:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing reference to Component Requirements
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/requirements/feature\_requirements/feature\_requirements.trlc:193:18 <../../../../../../score/mw/log/requirements/feature_requirements/feature_requirements.trlc#L193>`__
+
+.. _lobster-item-1805c188fbb291092f262b4cae727c64eac99b6d:
+
+.. dropdown:: [MISSING] TRLC Featreq MwLogFeature.SinkDevice
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      The logging framework shall support configuration of the log storage device.
+
+   .. raw:: html
+
+      <hr>
+
+   **Traces to:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing reference to Component Requirements
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/requirements/feature\_requirements/feature\_requirements.trlc:201:18 <../../../../../../score/mw/log/requirements/feature_requirements/feature_requirements.trlc#L201>`__
+
+.. _lobster-item-c6dd46a3f3d08409c67111ddbe06ac8e6577f92c:
+
+.. dropdown:: [MISSING] TRLC Featreq MwLogFeature.SinkMultipleDevice
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      The logging framework shall support multiple log storage devices.
+
+   .. raw:: html
+
+      <hr>
+
+   **Traces to:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing reference to Component Requirements
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/requirements/feature\_requirements/feature\_requirements.trlc:209:18 <../../../../../../score/mw/log/requirements/feature_requirements/feature_requirements.trlc#L209>`__
+
+.. _lobster-item-9569b6e4258c7a88bc7a29acca80951327e048cf:
+
+.. dropdown:: [MISSING] TRLC Featreq MwLogFeature.SinkStrategy
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      The logging framework shall support configurable log storage strategy.
+
+   .. raw:: html
+
+      <hr>
+
+   **Traces to:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing reference to Component Requirements
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/requirements/feature\_requirements/feature\_requirements.trlc:217:18 <../../../../../../score/mw/log/requirements/feature_requirements/feature_requirements.trlc#L217>`__
+
+.. _lobster-item-a2830940764a35e750c364e5da319b974669bee0:
+
+.. dropdown:: [MISSING] TRLC Featreq MwLogFeature.ConfigBufferSize
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      The logging framework shall allow configuration of internal buffer sizes.
+
+   .. raw:: html
+
+      <hr>
+
+   **Traces to:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing reference to Component Requirements
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/requirements/feature\_requirements/feature\_requirements.trlc:225:18 <../../../../../../score/mw/log/requirements/feature_requirements/feature_requirements.trlc#L225>`__
+
+.. _lobster-item-dad3b4e6199c26371a3d083715357e2ce8f1bfd8:
+
+.. dropdown:: [MISSING] TRLC Featreq MwLogFeature.ConfigStorageSize
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      The logging framework shall allow configuration of storage size per log file.
+
+   .. raw:: html
+
+      <hr>
+
+   **Traces to:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing reference to Component Requirements
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/requirements/feature\_requirements/feature\_requirements.trlc:233:18 <../../../../../../score/mw/log/requirements/feature_requirements/feature_requirements.trlc#L233>`__
+
+.. _lobster-item-57f2d49cf6004e6cd072f5911f686ec150e46363:
+
+.. dropdown:: [MISSING] TRLC Featreq MwLogFeature.ConfigLogFilter
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      The logging framework shall allow configuration of log filters.
+
+   .. raw:: html
+
+      <hr>
+
+   **Traces to:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing reference to Component Requirements
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/requirements/feature\_requirements/feature\_requirements.trlc:250:18 <../../../../../../score/mw/log/requirements/feature_requirements/feature_requirements.trlc#L250>`__
+
+.. _lobster-item-b291f1f6dc84c9dff05f33d0b1e6f8b2cc0541fd:
+
+.. dropdown:: [MISSING] TRLC Featreq MwLogFeature.ConfigEntityId
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      The logging framework shall allow configuration of logging entity IDs.
+
+   .. raw:: html
+
+      <hr>
+
+   **Traces to:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing reference to Component Requirements
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/requirements/feature\_requirements/feature\_requirements.trlc:258:18 <../../../../../../score/mw/log/requirements/feature_requirements/feature_requirements.trlc#L258>`__
+
+.. _lobster-item-de4ddfae3c09b5caab649715cea4e5daa951a76f:
+
+.. dropdown:: [MISSING] TRLC Featreq MwLogFeature.ConfigFallback
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      The logging framework shall provide fallback configurations, such as
+      application-wide or system-wide defaults.
+
+   .. raw:: html
+
+      <hr>
+
+   **Traces to:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing reference to Component Requirements
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/requirements/feature\_requirements/feature\_requirements.trlc:275:18 <../../../../../../score/mw/log/requirements/feature_requirements/feature_requirements.trlc#L275>`__
+
+.. _lobster-item-8c49f035cd7a1ee6bd45041c43580fb819d4e9cb:
+
+.. dropdown:: [MISSING] TRLC Featreq MwLogFeature.ConfigCustomTypes
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      The logging framework shall allow extensions for custom log types.
+
+   .. raw:: html
+
+      <hr>
+
+   **Traces to:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing reference to Component Requirements
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/requirements/feature\_requirements/feature\_requirements.trlc:284:18 <../../../../../../score/mw/log/requirements/feature_requirements/feature_requirements.trlc#L284>`__
+
+.. _lobster-item-65d5478daf582e7a254d3b797287839dd9e90749:
+
+.. dropdown:: [MISSING] TRLC Featreq MwLogFeature.ErrorHandlingRecoverable
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      In case of recoverable error, the logging framework shall continue the current
+      operations.
+
+   .. raw:: html
+
+      <hr>
+
+   **Traces to:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing reference to Component Requirements
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/requirements/feature\_requirements/feature\_requirements.trlc:292:18 <../../../../../../score/mw/log/requirements/feature_requirements/feature_requirements.trlc#L292>`__
+
+.. _lobster-item-8cbd662a672f8dee68e34ac53c8ead5d83ddd819:
+
+.. dropdown:: [MISSING] TRLC Featreq MwLogFeature.ErrorHandlingNonRecoverable
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      In case of non-recoverable error, the logging framework shall deactivate
+      silently and set an error state reported on shutdown.
+
+   .. raw:: html
+
+      <hr>
+
+   **Traces to:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing reference to Component Requirements
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/requirements/feature\_requirements/feature\_requirements.trlc:304:18 <../../../../../../score/mw/log/requirements/feature_requirements/feature_requirements.trlc#L304>`__
+
+.. _lobster-item-787fb213f37e54283302cae7cac90f3be2aa8e66:
+
+.. dropdown:: [MISSING] TRLC Featreq MwLogFeature.CompatibilitySupportedOs
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      The logging framework shall support QNX and Linux operating systems
+      (encapsulated via OSAL).
+
+   .. raw:: html
+
+      <hr>
+
+   **Traces to:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing reference to Component Requirements
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/requirements/feature\_requirements/feature\_requirements.trlc:328:18 <../../../../../../score/mw/log/requirements/feature_requirements/feature_requirements.trlc#L328>`__
+
+.. _lobster-item-6deb7031728ba0507a0ecd7c617c8124ab672c63:
+
+.. dropdown:: [MISSING] TRLC Featreq MwLogFeature.CompatibilitySupportedLanguages
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      The logging framework shall support C++ and Rust programming languages.
+
+   .. raw:: html
+
+      <hr>
+
+   **Traces to:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing reference to Component Requirements
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/requirements/feature\_requirements/feature\_requirements.trlc:337:18 <../../../../../../score/mw/log/requirements/feature_requirements/feature_requirements.trlc#L337>`__
+
+.. _lobster-item-f0083c53d8c9b4cc578a199c94e10cf2503e396c:
+
+.. dropdown:: [MISSING] TRLC Featreq MwLogFeature.ResourceConsumptionStorage
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      The logging framework shall minimize storage resource consumption.
+
+   .. raw:: html
+
+      <hr>
+
+   **Traces to:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing reference to Component Requirements
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/requirements/feature\_requirements/feature\_requirements.trlc:345:18 <../../../../../../score/mw/log/requirements/feature_requirements/feature_requirements.trlc#L345>`__
+
+.. _lobster-item-032c7839d9f3664d26d143af2f251cffc697c00f:
+
+.. dropdown:: [MISSING] TRLC Featreq MwLogFeature.ResourceConsumptionCommChannel
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      The logging framework shall minimize communication channel resource
+      consumption.
+
+   .. raw:: html
+
+      <hr>
+
+   **Traces to:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing reference to Component Requirements
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/requirements/feature\_requirements/feature\_requirements.trlc:353:18 <../../../../../../score/mw/log/requirements/feature_requirements/feature_requirements.trlc#L353>`__
+
+.. _lobster-item-b3c34c72a135368b5e803cf12e44772fa310dd5f:
+
+.. dropdown:: [MISSING] TRLC Featreq MwLogFeature.QosMessageHandling
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      The logging framework shall provide QoS for handling overflows or dropping log
+      messages.
+
+   .. raw:: html
+
+      <hr>
+
+   **Traces to:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing reference to Component Requirements
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/requirements/feature\_requirements/feature\_requirements.trlc:384:18 <../../../../../../score/mw/log/requirements/feature_requirements/feature_requirements.trlc#L384>`__
+
+.. _lobster-item-e2bd9b58ae62d2d6f94923330143eb1299e37a61:
+
+.. dropdown:: [OK] TRLC Featreq MwLogFeature.SeverityLevels
+   :class-title: sd-bg-success sd-text-white
+
+   .. pull-quote::
+
+      The logging framework shall support a log level for each log entry.
+
+   .. raw:: html
+
+      <hr>
+
+   **Traces to:**
+
+   * :ref:`MwLog.AutosarLogTraceSpec <lobster-item-983a22b6905837b1aaa6899ad9c655553f115a0f>`
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/requirements/feature\_requirements/feature\_requirements.trlc:47:18 <../../../../../../score/mw/log/requirements/feature_requirements/feature_requirements.trlc#L47>`__
+
+.. _lobster-item-aa650183c72ea63efb42dab07ffd3b2932544558:
+
+.. dropdown:: [OK] TRLC Featreq MwLogFeature.EarlyStartupLogging
+   :class-title: sd-bg-success sd-text-white
+
+   .. pull-quote::
+
+      The logging framework shall support logging of early startup events to capture
+      critical initialization information.
+
+   .. raw:: html
+
+      <hr>
+
+   **Traces to:**
+
+   * :ref:`MwLog.ForwardToSystemLogger <lobster-item-1e19ff64dfdcb7d355592f7cf299e240907b27dc>`
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/requirements/feature\_requirements/feature\_requirements.trlc:64:18 <../../../../../../score/mw/log/requirements/feature_requirements/feature_requirements.trlc#L64>`__
+
+.. _lobster-item-df8e2dbb357e00fcb7e43674549208a3228fbd74:
+
+.. dropdown:: [OK] TRLC Featreq MwLogFeature.FilteringLogLevels
+   :class-title: sd-bg-success sd-text-white
+
+   .. pull-quote::
+
+      The logging framework shall support filtering by log levels.
+
+   .. raw:: html
+
+      <hr>
+
+   **Traces to:**
+
+   * :ref:`MwLog.InactiveLogStreamBehavior <lobster-item-a4a883d0188ce9e31168d4aae9f9683f2bde6439>`
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/requirements/feature\_requirements/feature\_requirements.trlc:82:18 <../../../../../../score/mw/log/requirements/feature_requirements/feature_requirements.trlc#L82>`__
+
+.. _lobster-item-cd219caba97d69d808bc31fc6d91a9f0a04e7fd0:
+
+.. dropdown:: [OK] TRLC Featreq MwLogFeature.ConfigPermissions
+   :class-title: sd-bg-success sd-text-white
+
+   .. pull-quote::
+
+      The logging framework shall allow configuration of permission settings for log
+      access.
+
+   .. raw:: html
+
+      <hr>
+
+   **Traces to:**
+
+   * :ref:`MwLog.SharedMemoryFilePermissions <lobster-item-4bfac174996a064d970b79537a8ab4821e4c3f13>`
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/requirements/feature\_requirements/feature\_requirements.trlc:241:18 <../../../../../../score/mw/log/requirements/feature_requirements/feature_requirements.trlc#L241>`__
+
+.. _lobster-item-a88495ae75cb1097e64d4fa98fc5bdae61c695df:
+
+.. dropdown:: [OK] TRLC Featreq MwLogFeature.ConfigOnDemand
+   :class-title: sd-bg-success sd-text-white
+
+   .. pull-quote::
+
+      The logging framework shall support on-demand functionality, such as enabling
+      or disabling log storage.
+
+   .. raw:: html
+
+      <hr>
+
+   **Traces to:**
+
+   * :ref:`MwLog.SystemBackendActivation <lobster-item-c9cd5482c0049b64d91b1f53bf505fbdca20a050>`
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/requirements/feature\_requirements/feature\_requirements.trlc:266:18 <../../../../../../score/mw/log/requirements/feature_requirements/feature_requirements.trlc#L266>`__
+
+.. _lobster-item-af5e35a7e653dde51a44b84c6f6cd6dd8da4eaf7:
+
+.. dropdown:: [OK] TRLC Featreq MwLogFeature.ErrorHandlingIsolation
+   :class-title: sd-bg-success sd-text-white
+
+   .. pull-quote::
+
+      The logging framework shall ensure that user applications are not affected by
+      logging framework errors.
+
+   .. raw:: html
+
+      <hr>
+
+   **Traces to:**
+
+   * :ref:`MwLog.AvoidSignalProcessing <lobster-item-f8e3900e83768564b6a528579eeb57dca7fdb099>`
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/requirements/feature\_requirements/feature\_requirements.trlc:316:18 <../../../../../../score/mw/log/requirements/feature_requirements/feature_requirements.trlc#L316>`__
+
+.. _lobster-item-34aa173989a94b49318d1914c06c658c94ee5b70:
+
+.. dropdown:: [OK] TRLC Featreq MwLogFeature.ResourceConsumptionRuntime
+   :class-title: sd-bg-success sd-text-white
+
+   .. pull-quote::
+
+      The logging framework shall minimize runtime resource consumption.
+
+   .. raw:: html
+
+      <hr>
+
+   **Traces to:**
+
+   * :ref:`MwLog.LocalAllocationStrategy <lobster-item-973e6c32f0a9ea6df9ced35cd5df3667f3d80b12>`
+   * :ref:`MwLog.BoundedLoopExecution <lobster-item-ab77c02cb03c98149347622ca992c919b1a2c030>`
+   * :ref:`MwLog.CrossLockingPrevention <lobster-item-532a3ea19ff52d3c56fcdfce276b0af8af68564e>`
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/requirements/feature\_requirements/feature\_requirements.trlc:362:18 <../../../../../../score/mw/log/requirements/feature_requirements/feature_requirements.trlc#L362>`__
+
+.. _lobster-item-5d1abbac86069bc5ca0568adc4d21c45065c4fde:
+
+.. dropdown:: [OK] TRLC Featreq MwLogFeature.ResourceConsumptionPerformance
+   :class-title: sd-bg-success sd-text-white
+
+   .. pull-quote::
+
+      The logging framework shall have low impact on overall system performance.
+
+   .. raw:: html
+
+      <hr>
+
+   **Traces to:**
+
+   * :ref:`MwLog.InactiveLogStreamBehavior <lobster-item-a4a883d0188ce9e31168d4aae9f9683f2bde6439>`
+   * :ref:`MwLog.TimeBoundedLocking <lobster-item-4b371bc3ac6ae56c17e7d7a4b9c3d6c0f30fe81c>`
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/requirements/feature\_requirements/feature\_requirements.trlc:373:18 <../../../../../../score/mw/log/requirements/feature_requirements/feature_requirements.trlc#L373>`__
+
+.. _lobster-item-66cc23446562700dc9e1bb0cef92ef83ec9e47c9:
+
+.. dropdown:: [OK] TRLC Featreq MwLogFeature.CompatibilityDltProtocol
+   :class-title: sd-bg-success sd-text-white
+
+   .. pull-quote::
+
+      The logging framework shall be DLT compatible. Additional Information: support for DLT message format, sending and receiving DLT messages, and integration with existing DLT tools and infrastructure.
+
+   .. raw:: html
+
+      <hr>
+
+   **Traces to:**
+
+   * :ref:`MwLog.DltVerboseMode <lobster-item-3379e95a99d683504eb27583c0669e3532730a40>`
+   * :ref:`MwLog.AutosarLogTraceSpec <lobster-item-983a22b6905837b1aaa6899ad9c655553f115a0f>`
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/requirements/feature\_requirements/feature\_requirements.trlc:395:18 <../../../../../../score/mw/log/requirements/feature_requirements/feature_requirements.trlc#L395>`__
+
+.. _lobster-item-a2e2d961f89736ae3d745201a43355d64501822e:
+
+.. dropdown:: [OK] TRLC Featreq MwLogFeature.SecurityLogAccess
+   :class-title: sd-bg-success sd-text-white
+
+   .. pull-quote::
+
+      The logging framework shall ensure that only authorized users can access log
+      files.
+
+   .. raw:: html
+
+      <hr>
+
+   **Traces to:**
+
+   * :ref:`MwLog.FileDescriptorFlags <lobster-item-023e236205af00574969ad5a522d1fa561ed204d>`
+   * :ref:`MwLog.SharedMemoryFilePermissions <lobster-item-4bfac174996a064d970b79537a8ab4821e4c3f13>`
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/requirements/feature\_requirements/feature\_requirements.trlc:406:18 <../../../../../../score/mw/log/requirements/feature_requirements/feature_requirements.trlc#L406>`__
+
+.. _lobster-item-ef6a394608be4aa475fd1a5391cc3add822ddbb3:
+
+.. dropdown:: [OK] TRLC Featreq MwLogFeature.AsilLevelSupport
+   :class-title: sd-bg-success sd-text-white
+
+   .. pull-quote::
+
+      The logging framework shall support the ASIL level of the user function to ensure compliance with the safety requirements of the application. Additional Information: Freedom from interference must be guaranteed with regard to the calling components.
+
+   .. raw:: html
+
+      <hr>
+
+   **Traces to:**
+
+   * :ref:`MwLog.AvoidSignalProcessing <lobster-item-f8e3900e83768564b6a528579eeb57dca7fdb099>`
+   * :ref:`MwLog.LocalAllocationStrategy <lobster-item-973e6c32f0a9ea6df9ced35cd5df3667f3d80b12>`
+   * :ref:`MwLog.BoundedLoopExecution <lobster-item-ab77c02cb03c98149347622ca992c919b1a2c030>`
+   * :ref:`MwLog.TimeBoundedLocking <lobster-item-4b371bc3ac6ae56c17e7d7a4b9c3d6c0f30fe81c>`
+   * :ref:`MwLog.CrossLockingPrevention <lobster-item-532a3ea19ff52d3c56fcdfce276b0af8af68564e>`
+   * :ref:`MwLog.IndexAndSizeChecking <lobster-item-325e97c01897aac1a8c60fc78a4851ba4853bcbe>`
+   * :ref:`MwLog.MemoryBoundChecking <lobster-item-2418b8704dc0807bdc2ab9fca05cd33fb4e81ad3>`
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/requirements/feature\_requirements/feature\_requirements.trlc:418:18 <../../../../../../score/mw/log/requirements/feature_requirements/feature_requirements.trlc#L418>`__
+

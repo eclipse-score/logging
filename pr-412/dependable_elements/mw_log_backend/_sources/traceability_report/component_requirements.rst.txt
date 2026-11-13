@@ -1,0 +1,501 @@
+Component Requirements
+======================
+
+**Coverage:** 85.7% (12 of 14 items OK)
+
+.. _lobster-item-1e19ff64dfdcb7d355592f7cf299e240907b27dc:
+
+.. dropdown:: [PARTIAL] TRLC Compreq MwLog.ForwardToSystemLogger
+   :open:
+   :class-title: sd-bg-warning
+
+   .. pull-quote::
+
+      The system logger backend shall forward the logs to the native system logger mechanism.
+      Under QNX, slogger2 shall be used.
+
+   .. raw:: html
+
+      <hr>
+
+   **Traces to:**
+
+   * :ref:`//score/mw/log/dependability:component\_mw\_log\_backend <lobster-item-7bfe7ca94ee8257f6da5326b842b99c0c42a6273>`
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing reference to Unit Test
+      * missing reference to Test Case Coverage
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   * :ref:`MwLogFeature.EarlyStartupLogging <lobster-item-aa650183c72ea63efb42dab07ffd3b2932544558>`
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/requirements/component\_requirements/component\_requirements.trlc:76:18 <../../../../../../score/mw/log/requirements/component_requirements/component_requirements.trlc#L76>`__
+
+.. _lobster-item-c9cd5482c0049b64d91b1f53bf505fbdca20a050:
+
+.. dropdown:: [PARTIAL] TRLC Compreq MwLog.SystemBackendActivation
+   :open:
+   :class-title: sd-bg-warning
+
+   .. pull-quote::
+
+      The system logger backend shall be enabled if and only if the log mode contains
+      "kSystem".
+
+   .. raw:: html
+
+      <hr>
+
+   **Traces to:**
+
+   * :ref:`//score/mw/log/dependability:component\_mw\_log\_backend <lobster-item-7bfe7ca94ee8257f6da5326b842b99c0c42a6273>`
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * missing reference to Unit Test
+      * missing reference to Test Case Coverage
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   * :ref:`MwLogFeature.ConfigOnDemand <lobster-item-a88495ae75cb1097e64d4fa98fc5bdae61c695df>`
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/requirements/component\_requirements/component\_requirements.trlc:85:18 <../../../../../../score/mw/log/requirements/component_requirements/component_requirements.trlc#L85>`__
+
+.. _lobster-item-f8e3900e83768564b6a528579eeb57dca7fdb099:
+
+.. dropdown:: [OK] TRLC Compreq MwLog.AvoidSignalProcessing
+   :class-title: sd-bg-success sd-text-white
+
+   .. pull-quote::
+
+      The component shall not register any signal handler.
+
+   .. raw:: html
+
+      <hr>
+
+   **Traces to:**
+
+   * :ref:`SignalHandlingTest:PThreadBlockSigTerm\_AllSucceed\_ReturnsSuccess <lobster-item-a5b04b7ebfec7e883c834693fdcf79a02a00779c>`
+   * :ref:`MwLog.AvoidSignalProcessing <lobster-item-ced2c57302fcc50249701e4b4b3b94b9078b8480>`
+   * :ref:`//score/mw/log/dependability:component\_mw\_log\_backend <lobster-item-7bfe7ca94ee8257f6da5326b842b99c0c42a6273>`
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   * :ref:`MwLogFeature.AsilLevelSupport <lobster-item-ef6a394608be4aa475fd1a5391cc3add822ddbb3>`
+   * :ref:`MwLogFeature.ErrorHandlingIsolation <lobster-item-af5e35a7e653dde51a44b84c6f6cd6dd8da4eaf7>`
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/requirements/component\_requirements/component\_requirements.trlc:22:18 <../../../../../../score/mw/log/requirements/component_requirements/component_requirements.trlc#L22>`__
+
+.. _lobster-item-023e236205af00574969ad5a522d1fa561ed204d:
+
+.. dropdown:: [OK] TRLC Compreq MwLog.FileDescriptorFlags
+   :class-title: sd-bg-success sd-text-white
+
+   .. pull-quote::
+
+      The component shall set the FD\_CLOEXEC (or O\_CLOEXEC) flag on all the file descriptors
+      it owns.
+
+   .. raw:: html
+
+      <hr>
+
+   **Traces to:**
+
+   * :ref:`FileRecorderFactoryConfigFixture:FileConfigurionShallCallFileCreationAndReturnFileRecorder <lobster-item-90a46a45f9853034ad5bc6fddfa2e952d1978cd7>`
+   * :ref:`WriterFactoryFixture:MakeSureThatOpenCallWillOnlyBeDoneWithCorrectOpenReadFlags <lobster-item-239d122654e8b342bcdcebc4fc520e358985eccf>`
+   * :ref:`MwLog.FileDescriptorFlags <lobster-item-c9b1d871162e55c501411c378e063679bd229c58>`
+   * :ref:`//score/mw/log/dependability:component\_mw\_log\_backend <lobster-item-7bfe7ca94ee8257f6da5326b842b99c0c42a6273>`
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   * :ref:`MwLogFeature.SecurityLogAccess <lobster-item-a2e2d961f89736ae3d745201a43355d64501822e>`
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/requirements/component\_requirements/component\_requirements.trlc:30:18 <../../../../../../score/mw/log/requirements/component_requirements/component_requirements.trlc#L30>`__
+
+.. _lobster-item-3379e95a99d683504eb27583c0669e3532730a40:
+
+.. dropdown:: [OK] TRLC Compreq MwLog.DltVerboseMode
+   :class-title: sd-bg-success sd-text-white
+
+   .. pull-quote::
+
+      mw::log shall implement DLT verbose mode. Generation of messages shall be done in
+      DLT-conform format, allowing messages to be sent by Datarouter without additional reprocessing.
+
+   .. raw:: html
+
+      <hr>
+
+   **Traces to:**
+
+   * :ref:`DataRouterBackendFixture:LogLevelVerbose <lobster-item-cfe908fd84198a355e10ec2722bd19fbe7ebff4c>`
+   * :ref:`MwLog.DltVerboseMode <lobster-item-74ac57c0bf5aa1d72e064f61c325c2614e32cbd4>`
+   * :ref:`//score/mw/log/dependability:component\_mw\_log\_backend <lobster-item-7bfe7ca94ee8257f6da5326b842b99c0c42a6273>`
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   * :ref:`MwLogFeature.CompatibilityDltProtocol <lobster-item-66cc23446562700dc9e1bb0cef92ef83ec9e47c9>`
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/requirements/component\_requirements/component\_requirements.trlc:39:18 <../../../../../../score/mw/log/requirements/component_requirements/component_requirements.trlc#L39>`__
+
+.. _lobster-item-983a22b6905837b1aaa6899ad9c655553f115a0f:
+
+.. dropdown:: [OK] TRLC Compreq MwLog.AutosarLogTraceSpec
+   :class-title: sd-bg-success sd-text-white
+
+   .. pull-quote::
+
+      mw::log shall implement "Specification of Log and Trace for Adaptive Platform". Release
+      of specification used shall be in agreement with the rest of Adaptive AUTOSAR stack.
+
+   .. raw:: html
+
+      <hr>
+
+   **Traces to:**
+
+   * :ref:`DltMessageBuilderFixture:ShallDepleteAfterHeaderAndPayload <lobster-item-1b528e66b62fc00c9d51817fde888988bbbb9522>`
+   * :ref:`MwLog.AutosarLogTraceSpec <lobster-item-e1a18727225f81a896f6db7310c7a50c6242d5c7>`
+   * :ref:`//score/mw/log/dependability:component\_mw\_log\_backend <lobster-item-7bfe7ca94ee8257f6da5326b842b99c0c42a6273>`
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   * :ref:`MwLogFeature.SeverityLevels <lobster-item-e2bd9b58ae62d2d6f94923330143eb1299e37a61>`
+   * :ref:`MwLogFeature.CompatibilityDltProtocol <lobster-item-66cc23446562700dc9e1bb0cef92ef83ec9e47c9>`
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/requirements/component\_requirements/component\_requirements.trlc:48:18 <../../../../../../score/mw/log/requirements/component_requirements/component_requirements.trlc#L48>`__
+
+.. _lobster-item-a4a883d0188ce9e31168d4aae9f9683f2bde6439:
+
+.. dropdown:: [OK] TRLC Compreq MwLog.InactiveLogStreamBehavior
+   :class-title: sd-bg-success sd-text-white
+
+   .. pull-quote::
+
+      mw::log library shall not perform any useful activity if log level of LogStream object is
+      insufficient for given context. LogStream object shall not generate serialized messages if the severity of
+      the message does not allow it to be sent.
+
+   .. raw:: html
+
+      <hr>
+
+   **Traces to:**
+
+   * :ref:`DataRouterRecorderFixtureWithLogLevelCheck:DisablesOrEnablesLogAccordingToLevel <lobster-item-a8ad8335e061849ec0f9feb74abb2a6cae7ce650>`
+   * :ref:`MwLog.InactiveLogStreamBehavior <lobster-item-4a8507ec9e8943effd1c838137b7898fe33f29eb>`
+   * :ref:`//score/mw/log/dependability:component\_mw\_log\_backend <lobster-item-7bfe7ca94ee8257f6da5326b842b99c0c42a6273>`
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   * :ref:`MwLogFeature.ResourceConsumptionPerformance <lobster-item-5d1abbac86069bc5ca0568adc4d21c45065c4fde>`
+   * :ref:`MwLogFeature.FilteringLogLevels <lobster-item-df8e2dbb357e00fcb7e43674549208a3228fbd74>`
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/requirements/component\_requirements/component\_requirements.trlc:57:18 <../../../../../../score/mw/log/requirements/component_requirements/component_requirements.trlc#L57>`__
+
+.. _lobster-item-4bfac174996a064d970b79537a8ab4821e4c3f13:
+
+.. dropdown:: [OK] TRLC Compreq MwLog.SharedMemoryFilePermissions
+   :class-title: sd-bg-success sd-text-white
+
+   .. pull-quote::
+
+      Logging shared-memory files shall have read-only posix file permission for group and
+      others. The shared-memory file created by mw::log shall be read-only for group and others.
+
+   .. raw:: html
+
+      <hr>
+
+   **Traces to:**
+
+   * :ref:`WriterFactoryFixture:MakeSureThatOpenCallWillOnlyBeDoneWithCorrectOpenReadFlags <lobster-item-239d122654e8b342bcdcebc4fc520e358985eccf>`
+   * :ref:`MwLog.SharedMemoryFilePermissions <lobster-item-60b4f61fcee0b4035bbd22173e993fb25938fbc8>`
+   * :ref:`//score/mw/log/dependability:component\_mw\_log\_backend <lobster-item-7bfe7ca94ee8257f6da5326b842b99c0c42a6273>`
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   * :ref:`MwLogFeature.ConfigPermissions <lobster-item-cd219caba97d69d808bc31fc6d91a9f0a04e7fd0>`
+   * :ref:`MwLogFeature.SecurityLogAccess <lobster-item-a2e2d961f89736ae3d745201a43355d64501822e>`
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/requirements/component\_requirements/component\_requirements.trlc:67:18 <../../../../../../score/mw/log/requirements/component_requirements/component_requirements.trlc#L67>`__
+
+.. _lobster-item-973e6c32f0a9ea6df9ced35cd5df3667f3d80b12:
+
+.. dropdown:: [OK] TRLC Compreq MwLog.LocalAllocationStrategy
+   :class-title: sd-bg-success sd-text-white
+
+   .. pull-quote::
+
+      mw::log shall use local allocators to avoid using global heap. Global heap allocation
+      (if any) shall be limited to the initialization phase of application lifecycle.
+
+   .. raw:: html
+
+      <hr>
+
+   **Traces to:**
+
+   * :ref:`FileRecorderFixture:TooManyArgumentsWillYieldTruncatedLog <lobster-item-b640b8e0dbd0a9d7a3af7f3e8ca503ecbbe17fc6>`
+   * :ref:`MwLog.LocalAllocationStrategy <lobster-item-62a40ad5774c5f40fd02c2dec1c40a8ed2ea5741>`
+   * :ref:`//score/mw/log/dependability:component\_mw\_log\_backend <lobster-item-7bfe7ca94ee8257f6da5326b842b99c0c42a6273>`
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   * :ref:`MwLogFeature.AsilLevelSupport <lobster-item-ef6a394608be4aa475fd1a5391cc3add822ddbb3>`
+   * :ref:`MwLogFeature.ResourceConsumptionRuntime <lobster-item-34aa173989a94b49318d1914c06c658c94ee5b70>`
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/requirements/component\_requirements/component\_requirements.trlc:94:18 <../../../../../../score/mw/log/requirements/component_requirements/component_requirements.trlc#L94>`__
+
+.. _lobster-item-ab77c02cb03c98149347622ca992c919b1a2c030:
+
+.. dropdown:: [OK] TRLC Compreq MwLog.BoundedLoopExecution
+   :class-title: sd-bg-success sd-text-white
+
+   .. pull-quote::
+
+      mw::log shall not contain unbound loops or loops with unchecked exit conditions.
+
+   .. raw:: html
+
+      <hr>
+
+   **Traces to:**
+
+   * :ref:`WaitFreeLinearWriter:WriteBufferFullShouldReturnExpectedData <lobster-item-3cd2764d8e3cb57bd83b61273da11fda3dba7625>`
+   * :ref:`MwLog.BoundedLoopExecution <lobster-item-cc737508749b155b7d6fdc596797776bb73d6faa>`
+   * :ref:`//score/mw/log/dependability:component\_mw\_log\_backend <lobster-item-7bfe7ca94ee8257f6da5326b842b99c0c42a6273>`
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   * :ref:`MwLogFeature.ResourceConsumptionRuntime <lobster-item-34aa173989a94b49318d1914c06c658c94ee5b70>`
+   * :ref:`MwLogFeature.AsilLevelSupport <lobster-item-ef6a394608be4aa475fd1a5391cc3add822ddbb3>`
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/requirements/component\_requirements/component\_requirements.trlc:103:18 <../../../../../../score/mw/log/requirements/component_requirements/component_requirements.trlc#L103>`__
+
+.. _lobster-item-4b371bc3ac6ae56c17e7d7a4b9c3d6c0f30fe81c:
+
+.. dropdown:: [OK] TRLC Compreq MwLog.TimeBoundedLocking
+   :class-title: sd-bg-success sd-text-white
+
+   .. pull-quote::
+
+      mw::log shall be free of time-unbound locks and shall implement strategies to limit wait
+      time. Time limit shall be defined based on requirements from functions on individual ECU. Mutual
+      exclusion mechanisms shall include priority inversion protection.
+
+   .. raw:: html
+
+      <hr>
+
+   **Traces to:**
+
+   * :ref:`WaitFreeLinearWriter:EnsureAtomicRequirements <lobster-item-806fbe70fe9d62984527a7b08b067f2376879dbb>`
+   * :ref:`CommonTests:TypesShallBeLockFree <lobster-item-497f3637ba9e73c1269bd7ec774c1d88eea7aabb>`
+   * :ref:`MwLog.TimeBoundedLocking <lobster-item-a9e4429453bad068ab1a28d9606125cd89fc305d>`
+   * :ref:`//score/mw/log/dependability:component\_mw\_log\_backend <lobster-item-7bfe7ca94ee8257f6da5326b842b99c0c42a6273>`
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   * :ref:`MwLogFeature.ResourceConsumptionPerformance <lobster-item-5d1abbac86069bc5ca0568adc4d21c45065c4fde>`
+   * :ref:`MwLogFeature.AsilLevelSupport <lobster-item-ef6a394608be4aa475fd1a5391cc3add822ddbb3>`
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/requirements/component\_requirements/component\_requirements.trlc:111:18 <../../../../../../score/mw/log/requirements/component_requirements/component_requirements.trlc#L111>`__
+
+.. _lobster-item-532a3ea19ff52d3c56fcdfce276b0af8af68564e:
+
+.. dropdown:: [OK] TRLC Compreq MwLog.CrossLockingPrevention
+   :class-title: sd-bg-success sd-text-white
+
+   .. pull-quote::
+
+      Cross-application and cross-thread dependencies shall be avoided. A thread logging in a
+      loop shall not block other thread's execution.
+
+   .. raw:: html
+
+      <hr>
+
+   **Traces to:**
+
+   * :ref:`WaitFreeAlternatingWriterTests:EnsureAtomicRequirements <lobster-item-406b3806da32adb8ab3238ef8fe591c5ac8bed33>`
+   * :ref:`WaitFreeLinearWriter:EnsureAtomicRequirements <lobster-item-806fbe70fe9d62984527a7b08b067f2376879dbb>`
+   * :ref:`MwLog.CrossLockingPrevention <lobster-item-f215ef9092c9d584be4a7ee548eadcf134530de5>`
+   * :ref:`//score/mw/log/dependability:component\_mw\_log\_backend <lobster-item-7bfe7ca94ee8257f6da5326b842b99c0c42a6273>`
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   * :ref:`MwLogFeature.ResourceConsumptionRuntime <lobster-item-34aa173989a94b49318d1914c06c658c94ee5b70>`
+   * :ref:`MwLogFeature.AsilLevelSupport <lobster-item-ef6a394608be4aa475fd1a5391cc3add822ddbb3>`
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/requirements/component\_requirements/component\_requirements.trlc:121:18 <../../../../../../score/mw/log/requirements/component_requirements/component_requirements.trlc#L121>`__
+
+.. _lobster-item-325e97c01897aac1a8c60fc78a4851ba4853bcbe:
+
+.. dropdown:: [OK] TRLC Compreq MwLog.IndexAndSizeChecking
+   :class-title: sd-bg-success sd-text-white
+
+   .. pull-quote::
+
+      Indices in data structures and sizes of data accessed or copied shall be checked for
+      plausibility to avoid high runtime utilization through long iterations or data corruption.
+
+   .. raw:: html
+
+      <hr>
+
+   **Traces to:**
+
+   * :ref:`LinearReaderTests:LengthExceedingMaxThresholdShouldReturnEmpty <lobster-item-50be8f9ea8ae1476499df2085112e23862a85dbf>`
+   * :ref:`MwLog.IndexAndSizeChecking <lobster-item-062613c155c75a6edf2c437e374db55f3a85db1e>`
+   * :ref:`//score/mw/log/dependability:component\_mw\_log\_backend <lobster-item-7bfe7ca94ee8257f6da5326b842b99c0c42a6273>`
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   * :ref:`MwLogFeature.AsilLevelSupport <lobster-item-ef6a394608be4aa475fd1a5391cc3add822ddbb3>`
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/requirements/component\_requirements/component\_requirements.trlc:130:18 <../../../../../../score/mw/log/requirements/component_requirements/component_requirements.trlc#L130>`__
+
+.. _lobster-item-2418b8704dc0807bdc2ab9fca05cd33fb4e81ad3:
+
+.. dropdown:: [OK] TRLC Compreq MwLog.MemoryBoundChecking
+   :class-title: sd-bg-success sd-text-white
+
+   .. pull-quote::
+
+      Memory boundaries shall be explicitly checked when writing to shared memory.
+
+   .. raw:: html
+
+      <hr>
+
+   **Traces to:**
+
+   * :ref:`WaitFreeLinearWriter:BufferSizeExceededShouldReturnEmpty <lobster-item-e8e0858324efa43d746992341b8a524ac676c05b>`
+   * :ref:`MwLog.MemoryBoundChecking <lobster-item-7bbc2daa27e2b8c15461436bdd4925a2797ba925>`
+   * :ref:`//score/mw/log/dependability:component\_mw\_log\_backend <lobster-item-7bfe7ca94ee8257f6da5326b842b99c0c42a6273>`
+
+   .. raw:: html
+
+      <hr>
+
+   **Derived from:**
+
+   * :ref:`MwLogFeature.AsilLevelSupport <lobster-item-ef6a394608be4aa475fd1a5391cc3add822ddbb3>`
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/requirements/component\_requirements/component\_requirements.trlc:139:18 <../../../../../../score/mw/log/requirements/component_requirements/component_requirements.trlc#L139>`__
+

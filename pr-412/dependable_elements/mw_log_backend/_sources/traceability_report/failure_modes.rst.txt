@@ -1,0 +1,32 @@
+Failure Modes
+=============
+
+**Coverage:** 0.0% (0 of 1 items OK)
+
+.. _lobster-item-922f6d38c2f6888efe6490565491e6049b597a0a:
+
+.. dropdown:: [MISSING] TRLC Failuremode MwLogBackend.LogMessageLossOrCorruption
+   :open:
+   :class-title: sd-bg-danger sd-text-white
+
+   .. pull-quote::
+
+      A log message is lost, dropped, or its content is corrupted between being recorded by the frontend and reaching a configured backend sink.
+
+   .. raw:: html
+
+      <hr>
+
+   **Traces to:**
+
+   .. card::
+      :class-card: lobster-issue-card
+
+      * unknown tracing target req DataRouterBackend, SharedMemoryWriter, SharedMemoryReader
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `score/mw/log/dependability/safety\_analysis/failure\_modes.trlc:17:22 <../../../../../../score/mw/log/dependability/safety_analysis/failure_modes.trlc#L17>`__
+
