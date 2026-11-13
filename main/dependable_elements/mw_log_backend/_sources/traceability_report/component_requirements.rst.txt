@@ -107,7 +107,7 @@ Component Requirements
    **Derived from:**
 
    * :ref:`MwLogFeature.AsilLevelSupport <lobster-item-ef6a394608be4aa475fd1a5391cc3add822ddbb3>`
-   * :ref:`MwLogFeature.ErrorHandlingIsolation <lobster-item-af5e35a7e653dde51a44b84c6f6cd6dd8da4eaf7>`
+   * :ref:`MwLogFeature.FEAT\_ErrorHandling <lobster-item-14c6d0998a8ebe8375fbc20930df11c444346399>`
 
    .. raw:: html
 

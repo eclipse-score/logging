@@ -18,4 +18,4 @@ Components
 .. toctree::
    :maxdepth: 1
 
-   components/component_mw_log_backend
+   components/_main/score/mw/log/dependability/component_mw_log_backend/index

@@ -2,7 +2,7 @@
 L.O.B.S.T.E.R. Traceability Report
 ##################################
 
-| Generated: 2026-11-13 09:39 UTC
+| Generated: 2026-11-13 09:43 UTC
 | LOBSTER Version: 1.0.6
 
 .. rubric:: Tracing Policy
@@ -19,8 +19,7 @@ L.O.B.S.T.E.R. Traceability Report
       "Unit Test" [fillcolor="#FF9800", fontcolor="white"];
       "Test Case Coverage" [fillcolor="#FF9800", fontcolor="white"];
       "Architecture" [fillcolor="#4CAF50", fontcolor="white"];
-      "Failure Modes" [fillcolor="#2196F3", fontcolor="white"];
-      "Control Measures" [fillcolor="#2196F3", fontcolor="white"];
+      "Assumptions of Use" [fillcolor="#2196F3", fontcolor="white"];
       "Component Requirements" -> "Feature Requirements";
       "Unit Test" -> "Component Requirements";
       "Test Case Coverage" -> "Component Requirements";
@@ -38,9 +37,9 @@ L.O.B.S.T.E.R. Traceability Report
      - OK Items
      - Total Items
    * - :doc:`Feature Requirements <feature_requirements>`
-     - 21.6%
+     - 22.4%
      - 11
-     - 51
+     - 49
    * - :doc:`Component Requirements <component_requirements>`
      - 85.7%
      - 12
@@ -57,18 +56,13 @@ L.O.B.S.T.E.R. Traceability Report
      - 100.0%
      - 1
      - 1
-   * - :doc:`Failure Modes <failure_modes>`
-     - 0.0%
-     - 0
-     - 1
-   * - :doc:`Control Measures <control_measures>`
+   * - :doc:`Assumptions of Use <assumptions_of_use>`
      - 100.0%
-     - 1
-     - 1
+     - 5
+     - 5
 
 .. rubric:: Issues
 
-* [MISSING — unknown target: req DataRouterBackend, SharedMemoryWriter, SharedMemoryReader] :ref:`MwLogBackend.LogMessageLossOrCorruption <lobster-item-922f6d38c2f6888efe6490565491e6049b597a0a>`
 * [MISSING — no upward trace] :ref:`DataRouterBackendFixture:AppIDSetCorrectly <lobster-item-38181aa0f6ccfb59f6c255617af8f959d1aca3a7>`
 * [MISSING — no upward trace] :ref:`DataRouterBackendFixture:ToSmallAppIdSetCorrectlyWithZeroPadding <lobster-item-a276ec2a7ecb7cd5f2520ed7169f8c93ea03cd0e>`
 * [MISSING — no upward trace] :ref:`DataRouterBackendFixture:ContextIdSetCorrectly <lobster-item-da4f5e665e6a861d71b7081944c57a7764fff991>`
@@ -308,8 +302,6 @@ L.O.B.S.T.E.R. Traceability Report
 * [MISSING — no trace to: Component Requirements] :ref:`MwLogFeature.ConfigEntityId <lobster-item-b291f1f6dc84c9dff05f33d0b1e6f8b2cc0541fd>`
 * [MISSING — no trace to: Component Requirements] :ref:`MwLogFeature.ConfigFallback <lobster-item-de4ddfae3c09b5caab649715cea4e5daa951a76f>`
 * [MISSING — no trace to: Component Requirements] :ref:`MwLogFeature.ConfigCustomTypes <lobster-item-8c49f035cd7a1ee6bd45041c43580fb819d4e9cb>`
-* [MISSING — no trace to: Component Requirements] :ref:`MwLogFeature.ErrorHandlingRecoverable <lobster-item-65d5478daf582e7a254d3b797287839dd9e90749>`
-* [MISSING — no trace to: Component Requirements] :ref:`MwLogFeature.ErrorHandlingNonRecoverable <lobster-item-8cbd662a672f8dee68e34ac53c8ead5d83ddd819>`
 * [MISSING — no trace to: Component Requirements] :ref:`MwLogFeature.CompatibilitySupportedOs <lobster-item-787fb213f37e54283302cae7cac90f3be2aa8e66>`
 * [MISSING — no trace to: Component Requirements] :ref:`MwLogFeature.CompatibilitySupportedLanguages <lobster-item-6deb7031728ba0507a0ecd7c617c8124ab672c63>`
 * [MISSING — no trace to: Component Requirements] :ref:`MwLogFeature.ResourceConsumptionStorage <lobster-item-f0083c53d8c9b4cc578a199c94e10cf2503e396c>`
@@ -324,8 +316,7 @@ L.O.B.S.T.E.R. Traceability Report
    Overview <self>
    feature_requirements
    component_requirements
-   failure_modes
-   control_measures
+   assumptions_of_use
 
 .. toctree::
    :caption: Implementation
