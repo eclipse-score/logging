@@ -1,7 +1,7 @@
 Feature Requirements
 ====================
 
-**Coverage:** 21.6% (11 of 51 items OK)
+**Coverage:** 22.4% (11 of 49 items OK)
 
 .. _lobster-item-3e119d3059694912c39f5b876fbd0e6e2c851861:
 
@@ -909,62 +909,6 @@ Feature Requirements
 
    **Source:** `score/mw/log/requirements/feature\_requirements/feature\_requirements.trlc:284:18 <../../../../../../score/mw/log/requirements/feature_requirements/feature_requirements.trlc#L284>`__
 
-.. _lobster-item-65d5478daf582e7a254d3b797287839dd9e90749:
-
-.. dropdown:: [MISSING] TRLC Featreq MwLogFeature.ErrorHandlingRecoverable
-   :open:
-   :class-title: sd-bg-danger sd-text-white
-
-   .. pull-quote::
-
-      In case of recoverable error, the logging framework shall continue the current
-      operations.
-
-   .. raw:: html
-
-      <hr>
-
-   **Traces to:**
-
-   .. card::
-      :class-card: lobster-issue-card
-
-      * missing reference to Component Requirements
-
-   .. raw:: html
-
-      <hr>
-
-   **Source:** `score/mw/log/requirements/feature\_requirements/feature\_requirements.trlc:292:18 <../../../../../../score/mw/log/requirements/feature_requirements/feature_requirements.trlc#L292>`__
-
-.. _lobster-item-8cbd662a672f8dee68e34ac53c8ead5d83ddd819:
-
-.. dropdown:: [MISSING] TRLC Featreq MwLogFeature.ErrorHandlingNonRecoverable
-   :open:
-   :class-title: sd-bg-danger sd-text-white
-
-   .. pull-quote::
-
-      In case of non-recoverable error, the logging framework shall deactivate
-      silently and set an error state reported on shutdown.
-
-   .. raw:: html
-
-      <hr>
-
-   **Traces to:**
-
-   .. card::
-      :class-card: lobster-issue-card
-
-      * missing reference to Component Requirements
-
-   .. raw:: html
-
-      <hr>
-
-   **Source:** `score/mw/log/requirements/feature\_requirements/feature\_requirements.trlc:304:18 <../../../../../../score/mw/log/requirements/feature_requirements/feature_requirements.trlc#L304>`__
-
 .. _lobster-item-787fb213f37e54283302cae7cac90f3be2aa8e66:
 
 .. dropdown:: [MISSING] TRLC Featreq MwLogFeature.CompatibilitySupportedOs
@@ -991,7 +935,7 @@ Feature Requirements
 
       <hr>
 
-   **Source:** `score/mw/log/requirements/feature\_requirements/feature\_requirements.trlc:328:18 <../../../../../../score/mw/log/requirements/feature_requirements/feature_requirements.trlc#L328>`__
+   **Source:** `score/mw/log/requirements/feature\_requirements/feature\_requirements.trlc:302:18 <../../../../../../score/mw/log/requirements/feature_requirements/feature_requirements.trlc#L302>`__
 
 .. _lobster-item-6deb7031728ba0507a0ecd7c617c8124ab672c63:
 
@@ -1018,7 +962,7 @@ Feature Requirements
 
       <hr>
 
-   **Source:** `score/mw/log/requirements/feature\_requirements/feature\_requirements.trlc:337:18 <../../../../../../score/mw/log/requirements/feature_requirements/feature_requirements.trlc#L337>`__
+   **Source:** `score/mw/log/requirements/feature\_requirements/feature\_requirements.trlc:311:18 <../../../../../../score/mw/log/requirements/feature_requirements/feature_requirements.trlc#L311>`__
 
 .. _lobster-item-f0083c53d8c9b4cc578a199c94e10cf2503e396c:
 
@@ -1045,7 +989,7 @@ Feature Requirements
 
       <hr>
 
-   **Source:** `score/mw/log/requirements/feature\_requirements/feature\_requirements.trlc:345:18 <../../../../../../score/mw/log/requirements/feature_requirements/feature_requirements.trlc#L345>`__
+   **Source:** `score/mw/log/requirements/feature\_requirements/feature\_requirements.trlc:319:18 <../../../../../../score/mw/log/requirements/feature_requirements/feature_requirements.trlc#L319>`__
 
 .. _lobster-item-032c7839d9f3664d26d143af2f251cffc697c00f:
 
@@ -1073,7 +1017,7 @@ Feature Requirements
 
       <hr>
 
-   **Source:** `score/mw/log/requirements/feature\_requirements/feature\_requirements.trlc:353:18 <../../../../../../score/mw/log/requirements/feature_requirements/feature_requirements.trlc#L353>`__
+   **Source:** `score/mw/log/requirements/feature\_requirements/feature\_requirements.trlc:327:18 <../../../../../../score/mw/log/requirements/feature_requirements/feature_requirements.trlc#L327>`__
 
 .. _lobster-item-b3c34c72a135368b5e803cf12e44772fa310dd5f:
 
@@ -1101,7 +1045,7 @@ Feature Requirements
 
       <hr>
 
-   **Source:** `score/mw/log/requirements/feature\_requirements/feature\_requirements.trlc:384:18 <../../../../../../score/mw/log/requirements/feature_requirements/feature_requirements.trlc#L384>`__
+   **Source:** `score/mw/log/requirements/feature\_requirements/feature\_requirements.trlc:358:18 <../../../../../../score/mw/log/requirements/feature_requirements/feature_requirements.trlc#L358>`__
 
 .. _lobster-item-e2bd9b58ae62d2d6f94923330143eb1299e37a61:
 
@@ -1221,15 +1165,17 @@ Feature Requirements
 
    **Source:** `score/mw/log/requirements/feature\_requirements/feature\_requirements.trlc:266:18 <../../../../../../score/mw/log/requirements/feature_requirements/feature_requirements.trlc#L266>`__
 
-.. _lobster-item-af5e35a7e653dde51a44b84c6f6cd6dd8da4eaf7:
+.. _lobster-item-14c6d0998a8ebe8375fbc20930df11c444346399:
 
-.. dropdown:: [OK] TRLC Featreq MwLogFeature.ErrorHandlingIsolation
+.. dropdown:: [OK] TRLC Featreq MwLogFeature.FEAT\_ErrorHandling
    :class-title: sd-bg-success sd-text-white
 
    .. pull-quote::
 
-      The logging framework shall ensure that user applications are not affected by
-      logging framework errors.
+      (C++) exceptions shall not be used for error handling.
+      The best way to deal with errors is to try to resolve those component internally. If not possible the caller of the function shall be notified of the error.
+      For (error) returns there is a specific library to be used in S-CORE, it is the score::Result library which is part of
+      the Base Libraries feature.
 
    .. raw:: html
 
@@ -1243,7 +1189,7 @@ Feature Requirements
 
       <hr>
 
-   **Source:** `score/mw/log/requirements/feature\_requirements/feature\_requirements.trlc:316:18 <../../../../../../score/mw/log/requirements/feature_requirements/feature_requirements.trlc#L316>`__
+   **Source:** `score/mw/log/requirements/feature\_requirements/feature\_requirements.trlc:291:18 <../../../../../../score/mw/log/requirements/feature_requirements/feature_requirements.trlc#L291>`__
 
 .. _lobster-item-34aa173989a94b49318d1914c06c658c94ee5b70:
 
@@ -1268,7 +1214,7 @@ Feature Requirements
 
       <hr>
 
-   **Source:** `score/mw/log/requirements/feature\_requirements/feature\_requirements.trlc:362:18 <../../../../../../score/mw/log/requirements/feature_requirements/feature_requirements.trlc#L362>`__
+   **Source:** `score/mw/log/requirements/feature\_requirements/feature\_requirements.trlc:336:18 <../../../../../../score/mw/log/requirements/feature_requirements/feature_requirements.trlc#L336>`__
 
 .. _lobster-item-5d1abbac86069bc5ca0568adc4d21c45065c4fde:
 
@@ -1292,7 +1238,7 @@ Feature Requirements
 
       <hr>
 
-   **Source:** `score/mw/log/requirements/feature\_requirements/feature\_requirements.trlc:373:18 <../../../../../../score/mw/log/requirements/feature_requirements/feature_requirements.trlc#L373>`__
+   **Source:** `score/mw/log/requirements/feature\_requirements/feature\_requirements.trlc:347:18 <../../../../../../score/mw/log/requirements/feature_requirements/feature_requirements.trlc#L347>`__
 
 .. _lobster-item-66cc23446562700dc9e1bb0cef92ef83ec9e47c9:
 
@@ -1316,7 +1262,7 @@ Feature Requirements
 
       <hr>
 
-   **Source:** `score/mw/log/requirements/feature\_requirements/feature\_requirements.trlc:395:18 <../../../../../../score/mw/log/requirements/feature_requirements/feature_requirements.trlc#L395>`__
+   **Source:** `score/mw/log/requirements/feature\_requirements/feature\_requirements.trlc:369:18 <../../../../../../score/mw/log/requirements/feature_requirements/feature_requirements.trlc#L369>`__
 
 .. _lobster-item-a2e2d961f89736ae3d745201a43355d64501822e:
 
@@ -1341,7 +1287,7 @@ Feature Requirements
 
       <hr>
 
-   **Source:** `score/mw/log/requirements/feature\_requirements/feature\_requirements.trlc:406:18 <../../../../../../score/mw/log/requirements/feature_requirements/feature_requirements.trlc#L406>`__
+   **Source:** `score/mw/log/requirements/feature\_requirements/feature\_requirements.trlc:380:18 <../../../../../../score/mw/log/requirements/feature_requirements/feature_requirements.trlc#L380>`__
 
 .. _lobster-item-ef6a394608be4aa475fd1a5391cc3add822ddbb3:
 
@@ -1370,5 +1316,5 @@ Feature Requirements
 
       <hr>
 
-   **Source:** `score/mw/log/requirements/feature\_requirements/feature\_requirements.trlc:418:18 <../../../../../../score/mw/log/requirements/feature_requirements/feature_requirements.trlc#L418>`__
+   **Source:** `score/mw/log/requirements/feature\_requirements/feature\_requirements.trlc:392:18 <../../../../../../score/mw/log/requirements/feature_requirements/feature_requirements.trlc#L392>`__
 
