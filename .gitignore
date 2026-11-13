@@ -35,6 +35,7 @@
 # Bazel
 bazel-*
 user.bazelrc
+user.downloader_config
 
 # Compilation databases for code completion in IDEs
 .cache/*
