@@ -163,6 +163,11 @@
 <li class="toctree-l5"><a class="reference internal" href="../units/_main/score/mw/log/detail/file_recorder/file_recorder_unit/index.html#tests">Tests</a></li>
 </ul>
 </li>
+<li class="toctree-l4"><a class="reference internal" href="../units/_main/score/mw/log/detail/syslog/syslog_backend_unit/index.html"><code class="docutils literal notranslate"><span class="pre">//score/mw/log/detail/syslog:syslog_backend_unit</span></code></a><ul>
+<li class="toctree-l5"><a class="reference internal" href="../units/_main/score/mw/log/detail/syslog/syslog_backend_unit/index.html#implementation">Implementation</a></li>
+<li class="toctree-l5"><a class="reference internal" href="../units/_main/score/mw/log/detail/syslog/syslog_backend_unit/index.html#tests">Tests</a></li>
+</ul>
+</li>
 <li class="toctree-l4"><a class="reference internal" href="../units/_main/score/mw/log/detail/utils/signal_handling/signal_handling_unit/index.html"><code class="docutils literal notranslate"><span class="pre">//score/mw/log/detail/utils/signal_handling:signal_handling_unit</span></code></a><ul>
 <li class="toctree-l5"><a class="reference internal" href="../units/_main/score/mw/log/detail/utils/signal_handling/signal_handling_unit/index.html#implementation">Implementation</a></li>
 <li class="toctree-l5"><a class="reference internal" href="../units/_main/score/mw/log/detail/utils/signal_handling/signal_handling_unit/index.html#tests">Tests</a></li>
@@ -222,58 +227,8 @@
              
   <section id="component-requirements">
 <h1>Component Requirements<a class="headerlink" href="#component-requirements" title="Link to this heading"></a></h1>
-<p><strong>Coverage:</strong> 85.7% (12 of 14 items OK)</p>
-<details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3" id="lobster-item-1e19ff64dfdcb7d355592f7cf299e240907b27dc" open="open">
-<summary class="sd-summary-title sd-card-header sd-bg-warning">
-<span class="sd-summary-text">[PARTIAL] TRLC Compreq MwLog.ForwardToSystemLogger</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
-<blockquote class="pull-quote">
-<div><p class="sd-card-text">The system logger backend shall forward the logs to the native system logger mechanism.
-Under QNX, slogger2 shall be used.</p>
-</div></blockquote>
-<hr><p class="sd-card-text"><strong>Traces to:</strong></p>
-<ul class="simple">
-<li><p class="sd-card-text"><a class="reference internal" href="architecture.html#lobster-item-7bfe7ca94ee8257f6da5326b842b99c0c42a6273"><span class="std std-ref">//score/mw/log/dependability:component_mw_log_backend</span></a></p></li>
-</ul>
-<div class="sd-card sd-sphinx-override sd-mb-3 sd-shadow-sm lobster-issue-card docutils">
-<div class="sd-card-body docutils">
-<ul class="simple">
-<li><p class="sd-card-text">missing reference to Unit Test</p></li>
-<li><p class="sd-card-text">missing reference to Test Case Coverage</p></li>
-</ul>
-</div>
-</div>
-<hr><p class="sd-card-text"><strong>Derived from:</strong></p>
-<ul class="simple">
-<li><p class="sd-card-text"><a class="reference internal" href="feature_requirements.html#lobster-item-aa650183c72ea63efb42dab07ffd3b2932544558"><span class="std std-ref">MwLogFeature.EarlyStartupLogging</span></a></p></li>
-</ul>
-<hr><p class="sd-card-text"><strong>Source:</strong> <a class="reference external" href="../../../../../../score/mw/log/requirements/component_requirements/component_requirements.trlc#L76">score/mw/log/requirements/component_requirements/component_requirements.trlc:76:18</a></p>
-</div>
-</details><details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3" id="lobster-item-c9cd5482c0049b64d91b1f53bf505fbdca20a050" open="open">
-<summary class="sd-summary-title sd-card-header sd-bg-warning">
-<span class="sd-summary-text">[PARTIAL] TRLC Compreq MwLog.SystemBackendActivation</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
-<blockquote class="pull-quote">
-<div><p class="sd-card-text">The system logger backend shall be enabled if and only if the log mode contains
-“kSystem”.</p>
-</div></blockquote>
-<hr><p class="sd-card-text"><strong>Traces to:</strong></p>
-<ul class="simple">
-<li><p class="sd-card-text"><a class="reference internal" href="architecture.html#lobster-item-7bfe7ca94ee8257f6da5326b842b99c0c42a6273"><span class="std std-ref">//score/mw/log/dependability:component_mw_log_backend</span></a></p></li>
-</ul>
-<div class="sd-card sd-sphinx-override sd-mb-3 sd-shadow-sm lobster-issue-card docutils">
-<div class="sd-card-body docutils">
-<ul class="simple">
-<li><p class="sd-card-text">missing reference to Unit Test</p></li>
-<li><p class="sd-card-text">missing reference to Test Case Coverage</p></li>
-</ul>
-</div>
-</div>
-<hr><p class="sd-card-text"><strong>Derived from:</strong></p>
-<ul class="simple">
-<li><p class="sd-card-text"><a class="reference internal" href="feature_requirements.html#lobster-item-a88495ae75cb1097e64d4fa98fc5bdae61c695df"><span class="std std-ref">MwLogFeature.ConfigOnDemand</span></a></p></li>
-</ul>
-<hr><p class="sd-card-text"><strong>Source:</strong> <a class="reference external" href="../../../../../../score/mw/log/requirements/component_requirements/component_requirements.trlc#L85">score/mw/log/requirements/component_requirements/component_requirements.trlc:85:18</a></p>
-</div>
-</details><details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3" id="lobster-item-f8e3900e83768564b6a528579eeb57dca7fdb099">
+<p><strong>Coverage:</strong> 100.0% (14 of 14 items OK)</p>
+<details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3" id="lobster-item-f8e3900e83768564b6a528579eeb57dca7fdb099">
 <summary class="sd-summary-title sd-card-header sd-bg-success sd-text-white">
 <span class="sd-summary-text">[OK] TRLC Compreq MwLog.AvoidSignalProcessing</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
 <blockquote class="pull-quote">
@@ -301,8 +256,8 @@ it owns.</p>
 </div></blockquote>
 <hr><p class="sd-card-text"><strong>Traces to:</strong></p>
 <ul class="simple">
-<li><p class="sd-card-text"><a class="reference internal" href="unit_test.html#lobster-item-90a46a45f9853034ad5bc6fddfa2e952d1978cd7"><span class="std std-ref">FileRecorderFactoryConfigFixture:FileConfigurionShallCallFileCreationAndReturnFileRecorder</span></a></p></li>
 <li><p class="sd-card-text"><a class="reference internal" href="unit_test.html#lobster-item-239d122654e8b342bcdcebc4fc520e358985eccf"><span class="std std-ref">WriterFactoryFixture:MakeSureThatOpenCallWillOnlyBeDoneWithCorrectOpenReadFlags</span></a></p></li>
+<li><p class="sd-card-text"><a class="reference internal" href="unit_test.html#lobster-item-90a46a45f9853034ad5bc6fddfa2e952d1978cd7"><span class="std std-ref">FileRecorderFactoryConfigFixture:FileConfigurionShallCallFileCreationAndReturnFileRecorder</span></a></p></li>
 <li><p class="sd-card-text"><a class="reference internal" href="test_case_coverage.html#lobster-item-c9b1d871162e55c501411c378e063679bd229c58"><span class="std std-ref">MwLog.FileDescriptorFlags</span></a></p></li>
 <li><p class="sd-card-text"><a class="reference internal" href="architecture.html#lobster-item-7bfe7ca94ee8257f6da5326b842b99c0c42a6273"><span class="std std-ref">//score/mw/log/dependability:component_mw_log_backend</span></a></p></li>
 </ul>
@@ -392,6 +347,59 @@ others. The shared-memory file created by mw::log shall be read-only for group a
 </ul>
 <hr><p class="sd-card-text"><strong>Source:</strong> <a class="reference external" href="../../../../../../score/mw/log/requirements/component_requirements/component_requirements.trlc#L67">score/mw/log/requirements/component_requirements/component_requirements.trlc:67:18</a></p>
 </div>
+</details><details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3" id="lobster-item-1e19ff64dfdcb7d355592f7cf299e240907b27dc">
+<summary class="sd-summary-title sd-card-header sd-bg-success sd-text-white">
+<span class="sd-summary-text">[OK] TRLC Compreq MwLog.ForwardToSystemLogger</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
+<blockquote class="pull-quote">
+<div><p class="sd-card-text">The system logger backend shall forward the logs to the native system logger mechanism.
+Under QNX, slogger2 shall be used.</p>
+</div></blockquote>
+<hr><p class="sd-card-text"><strong>Traces to:</strong></p>
+<ul class="simple">
+<li><p class="sd-card-text"><a class="reference internal" href="unit_test.html#lobster-item-23cc5a6ea34f92961ea500ae400245e947434c90"><span class="std std-ref">SyslogRecorderFactoryTest:CreateRecorder</span></a></p></li>
+<li><p class="sd-card-text"><a class="reference internal" href="unit_test.html#lobster-item-d8a03643fd9750975b5269682f17318dc1c74823"><span class="std std-ref">SyslogBackendFixture:SyslogOpenlog</span></a></p></li>
+<li><p class="sd-card-text"><a class="reference internal" href="unit_test.html#lobster-item-740044965fb328b6933a17861495d76d4b131283"><span class="std std-ref">SyslogBackendFixture:SyslogOpenlogWithCapacityBiggerThanTheMaximum</span></a></p></li>
+<li><p class="sd-card-text"><a class="reference internal" href="unit_test.html#lobster-item-9f83f960ba066e54c2d3be26d9bb07a07611f77e"><span class="std std-ref">SyslogBackendFixture:LevelOffProducesNoEmit</span></a></p></li>
+<li><p class="sd-card-text"><a class="reference internal" href="unit_test.html#lobster-item-80d4bc261aab3db2748292a3e1cf93be9d25c64c"><span class="std std-ref">SyslogBackendFixture:FatalLog</span></a></p></li>
+<li><p class="sd-card-text"><a class="reference internal" href="unit_test.html#lobster-item-1c49c48ca259035ac68f49cfb38c0ee55aaa9133"><span class="std std-ref">SyslogBackendFixture:ErrorLog</span></a></p></li>
+<li><p class="sd-card-text"><a class="reference internal" href="unit_test.html#lobster-item-62ee4b56b9e42b59d2bf261f6a8b7406a61e0b0b"><span class="std std-ref">SyslogBackendFixture:WarningLog</span></a></p></li>
+<li><p class="sd-card-text"><a class="reference internal" href="unit_test.html#lobster-item-65853fcafc0f65d35bab41765c5f4c41ca5f66a4"><span class="std std-ref">SyslogBackendFixture:InfoLog</span></a></p></li>
+<li><p class="sd-card-text"><a class="reference internal" href="unit_test.html#lobster-item-b0bca62f2d3cfd35863e74100daaee58c833ad37"><span class="std std-ref">SyslogBackendFixture:DebugLog</span></a></p></li>
+<li><p class="sd-card-text"><a class="reference internal" href="unit_test.html#lobster-item-df2ce3c031c944e630deda34747c66d7f339e0c4"><span class="std std-ref">SyslogBackendFixture:VerboseLog</span></a></p></li>
+<li><p class="sd-card-text"><a class="reference internal" href="unit_test.html#lobster-item-187f73efb26d4b993bcc2fc9b581f3c1ebfe60b0"><span class="std std-ref">SyslogBackendFixture:MessageShouldContainAppCtxPayload</span></a></p></li>
+<li><p class="sd-card-text"><a class="reference internal" href="unit_test.html#lobster-item-dd655efae5bd544b46e109d436374e3cc5759530"><span class="std std-ref">SyslogBackendFixture:BackendShouldHandleEmptyPayload</span></a></p></li>
+<li><p class="sd-card-text"><a class="reference internal" href="unit_test.html#lobster-item-bc211acbe813dd1a92e933225e7f19f0bad69fb2"><span class="std std-ref">SyslogBackendFixture:LongIdentifiersShouldBeCropped</span></a></p></li>
+<li><p class="sd-card-text"><a class="reference internal" href="unit_test.html#lobster-item-aabcef9bae4371ff92dcb1df1a96fc9e613939b0"><span class="std std-ref">SyslogBackendFixture:NoSlotAvailableShouldReturnEmptyHandle</span></a></p></li>
+<li><p class="sd-card-text"><a class="reference internal" href="unit_test.html#lobster-item-229dad70571fca3750d1aa6442249f0d077a33bf"><span class="std std-ref">SyslogBackendFixture:TooMuchSlotsRequestedShallBeTruncated</span></a></p></li>
+<li><p class="sd-card-text"><a class="reference internal" href="unit_test.html#lobster-item-9495c66f852a2d4f3e8784955264a3478691f95d"><span class="std std-ref">SyslogBackendFixture:ToSyslogPriorityInvalidLevel</span></a></p></li>
+<li><p class="sd-card-text"><a class="reference internal" href="test_case_coverage.html#lobster-item-7bf1de0ea8bdf45acdf6439ac04b4a1fbe27f857"><span class="std std-ref">MwLog.ForwardToSystemLogger</span></a></p></li>
+<li><p class="sd-card-text"><a class="reference internal" href="architecture.html#lobster-item-7bfe7ca94ee8257f6da5326b842b99c0c42a6273"><span class="std std-ref">//score/mw/log/dependability:component_mw_log_backend</span></a></p></li>
+</ul>
+<hr><p class="sd-card-text"><strong>Derived from:</strong></p>
+<ul class="simple">
+<li><p class="sd-card-text"><a class="reference internal" href="feature_requirements.html#lobster-item-aa650183c72ea63efb42dab07ffd3b2932544558"><span class="std std-ref">MwLogFeature.EarlyStartupLogging</span></a></p></li>
+</ul>
+<hr><p class="sd-card-text"><strong>Source:</strong> <a class="reference external" href="../../../../../../score/mw/log/requirements/component_requirements/component_requirements.trlc#L76">score/mw/log/requirements/component_requirements/component_requirements.trlc:76:18</a></p>
+</div>
+</details><details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3" id="lobster-item-c9cd5482c0049b64d91b1f53bf505fbdca20a050">
+<summary class="sd-summary-title sd-card-header sd-bg-success sd-text-white">
+<span class="sd-summary-text">[OK] TRLC Compreq MwLog.SystemBackendActivation</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
+<blockquote class="pull-quote">
+<div><p class="sd-card-text">The system logger backend shall be enabled if and only if the log mode contains
+“kSystem”.</p>
+</div></blockquote>
+<hr><p class="sd-card-text"><strong>Traces to:</strong></p>
+<ul class="simple">
+<li><p class="sd-card-text"><a class="reference internal" href="unit_test.html#lobster-item-a9d7c7d6c715c122ad328bb1f697706dfe63becd"><span class="std std-ref">SyslogRegistrantTest:SyslogBackendIsRegisteredAfterStaticInitialization</span></a></p></li>
+<li><p class="sd-card-text"><a class="reference internal" href="test_case_coverage.html#lobster-item-0efcc40e65ba07644ad0d90c83b2e03c0167aa77"><span class="std std-ref">MwLog.SystemBackendActivation</span></a></p></li>
+<li><p class="sd-card-text"><a class="reference internal" href="architecture.html#lobster-item-7bfe7ca94ee8257f6da5326b842b99c0c42a6273"><span class="std std-ref">//score/mw/log/dependability:component_mw_log_backend</span></a></p></li>
+</ul>
+<hr><p class="sd-card-text"><strong>Derived from:</strong></p>
+<ul class="simple">
+<li><p class="sd-card-text"><a class="reference internal" href="feature_requirements.html#lobster-item-a88495ae75cb1097e64d4fa98fc5bdae61c695df"><span class="std std-ref">MwLogFeature.ConfigOnDemand</span></a></p></li>
+</ul>
+<hr><p class="sd-card-text"><strong>Source:</strong> <a class="reference external" href="../../../../../../score/mw/log/requirements/component_requirements/component_requirements.trlc#L85">score/mw/log/requirements/component_requirements/component_requirements.trlc:85:18</a></p>
+</div>
 </details><details class="sd-sphinx-override sd-dropdown sd-card sd-mb-3" id="lobster-item-973e6c32f0a9ea6df9ced35cd5df3667f3d80b12">
 <summary class="sd-summary-title sd-card-header sd-bg-success sd-text-white">
 <span class="sd-summary-text">[OK] TRLC Compreq MwLog.LocalAllocationStrategy</span><span class="sd-summary-state-marker sd-summary-chevron-right"><svg version="1.1" width="1.5em" height="1.5em" class="sd-octicon sd-octicon-chevron-right" viewBox="0 0 24 24" aria-hidden="true"><path d="M8.72 18.78a.75.75 0 0 1 0-1.06L14.44 12 8.72 6.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018l6.25 6.25a.75.75 0 0 1 0 1.06l-6.25 6.25a.75.75 0 0 1-1.06 0Z"></path></svg></span></summary><div class="sd-summary-content sd-card-body docutils">
@@ -462,6 +470,7 @@ loop shall not block other thread’s execution.</p>
 </div></blockquote>
 <hr><p class="sd-card-text"><strong>Traces to:</strong></p>
 <ul class="simple">
+<li><p class="sd-card-text"><a class="reference internal" href="unit_test.html#lobster-item-8eb9c9a93d7875c7ca8a5719a28af9807e90200c"><span class="std std-ref">SyslogBackendFixture:ReserveSlotShouldAcquireSlot</span></a></p></li>
 <li><p class="sd-card-text"><a class="reference internal" href="unit_test.html#lobster-item-406b3806da32adb8ab3238ef8fe591c5ac8bed33"><span class="std std-ref">WaitFreeAlternatingWriterTests:EnsureAtomicRequirements</span></a></p></li>
 <li><p class="sd-card-text"><a class="reference internal" href="unit_test.html#lobster-item-806fbe70fe9d62984527a7b08b067f2376879dbb"><span class="std std-ref">WaitFreeLinearWriter:EnsureAtomicRequirements</span></a></p></li>
 <li><p class="sd-card-text"><a class="reference internal" href="test_case_coverage.html#lobster-item-f215ef9092c9d584be4a7ee548eadcf134530de5"><span class="std std-ref">MwLog.CrossLockingPrevention</span></a></p></li>
