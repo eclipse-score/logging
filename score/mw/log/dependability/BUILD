@@ -25,6 +25,7 @@ component(
         "//score/mw/log/detail/data_router:data_router_backend_unit",
         "//score/mw/log/detail/data_router/shared_memory:shared_memory_unit",
         "//score/mw/log/detail/file_recorder:file_recorder_unit",
+        "//score/mw/log/detail/syslog:syslog_backend_unit",
         "//score/mw/log/detail/utils/signal_handling:signal_handling_unit",
         "//score/mw/log/detail/wait_free_producer_queue:wait_free_producer_queue_unit",
     ],

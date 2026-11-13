@@ -95,6 +95,7 @@ TEST_F(SlogBackendFixture, SlogRegister)
 
 TEST_F(SlogBackendFixture, SlogRegisterWithCapacityBiggerThanTheMaximum)
 {
+    RecordProperty("lobster-tracing", "MwLog.ForwardToSystemLogger");
     RecordProperty("ParentRequirement", "SCR-8017664");
     RecordProperty("Description", "Verifies slog registering with slots' capacity bigger than the maximum.");
     RecordProperty("TestingTechnique", "Requirements-based test");
@@ -109,6 +110,7 @@ TEST_F(SlogBackendFixture, SlogRegisterWithCapacityBiggerThanTheMaximum)
 
 TEST_F(SlogBackendFixture, SlogRegisterShouldHandleError)
 {
+    RecordProperty("lobster-tracing", "MwLog.ForwardToSystemLogger");
     RecordProperty("ParentRequirement", "SCR-8017664");
     RecordProperty("Description", "Verifies slog registering in case of returning an error.");
     RecordProperty("TestingTechnique", "Requirements-based test");
@@ -123,6 +125,7 @@ TEST_F(SlogBackendFixture, SlogRegisterShouldHandleError)
 
 TEST_F(SlogBackendFixture, ReserveSlotShouldAcquireSlot)
 {
+    RecordProperty("lobster-tracing", "MwLog.ForwardToSystemLogger");
     RecordProperty("ParentRequirement", "SCR-8017664");
     RecordProperty("Description", "Verifies the ability of reserving slot.");
     RecordProperty("TestingTechnique", "Requirements-based test");
@@ -138,6 +141,7 @@ TEST_F(SlogBackendFixture, ReserveSlotShouldAcquireSlot)
 
 TEST_F(SlogBackendFixture, LevelOffLog)
 {
+    RecordProperty("lobster-tracing", "MwLog.ForwardToSystemLogger");
     RecordProperty("ParentRequirement", "SCR-8017664");
     RecordProperty("Description", "Verbosity shall be invaild in case of disabling the logging.");
     RecordProperty("TestingTechnique", "Requirements-based test");
@@ -151,6 +155,7 @@ TEST_F(SlogBackendFixture, LevelOffLog)
 
 TEST_F(SlogBackendFixture, FatalLog)
 {
+    RecordProperty("lobster-tracing", "MwLog.ForwardToSystemLogger");
     RecordProperty("ParentRequirement", "SCR-8017664");
     RecordProperty("Description", "Verifies the ability of logging fatal message.");
     RecordProperty("TestingTechnique", "Requirements-based test");
@@ -164,6 +169,7 @@ TEST_F(SlogBackendFixture, FatalLog)
 
 TEST_F(SlogBackendFixture, ErrorLog)
 {
+    RecordProperty("lobster-tracing", "MwLog.ForwardToSystemLogger");
     RecordProperty("ParentRequirement", "SCR-8017664");
     RecordProperty("Description", "Verifies the ability of logging error message.");
     RecordProperty("TestingTechnique", "Requirements-based test");
@@ -177,6 +183,7 @@ TEST_F(SlogBackendFixture, ErrorLog)
 
 TEST_F(SlogBackendFixture, WarningLog)
 {
+    RecordProperty("lobster-tracing", "MwLog.ForwardToSystemLogger");
     RecordProperty("ParentRequirement", "SCR-8017664");
     RecordProperty("Description", "Verifies the ability of logging waring message.");
     RecordProperty("TestingTechnique", "Requirements-based test");
@@ -190,6 +197,7 @@ TEST_F(SlogBackendFixture, WarningLog)
 
 TEST_F(SlogBackendFixture, InfoLog)
 {
+    RecordProperty("lobster-tracing", "MwLog.ForwardToSystemLogger");
     RecordProperty("ParentRequirement", "SCR-8017664");
     RecordProperty("Description", "Verifies the ability of logging info message.");
     RecordProperty("TestingTechnique", "Requirements-based test");
@@ -203,6 +211,7 @@ TEST_F(SlogBackendFixture, InfoLog)
 
 TEST_F(SlogBackendFixture, DebugLog)
 {
+    RecordProperty("lobster-tracing", "MwLog.ForwardToSystemLogger");
     RecordProperty("ParentRequirement", "SCR-8017664");
     RecordProperty("Description", "Verifies the ability of logging debug message.");
     RecordProperty("TestingTechnique", "Requirements-based test");
@@ -216,6 +225,7 @@ TEST_F(SlogBackendFixture, DebugLog)
 
 TEST_F(SlogBackendFixture, VerboseLog)
 {
+    RecordProperty("lobster-tracing", "MwLog.ForwardToSystemLogger");
     RecordProperty("ParentRequirement", "SCR-8017664");
     RecordProperty("Description", "Verifies the ability of logging verbose message.");
     RecordProperty("TestingTechnique", "Requirements-based test");
@@ -229,6 +239,7 @@ TEST_F(SlogBackendFixture, VerboseLog)
 
 TEST_F(SlogBackendFixture, DisableTheLog)
 {
+    RecordProperty("lobster-tracing", "MwLog.ForwardToSystemLogger");
     RecordProperty("ParentRequirement", "SCR-8017664");
     RecordProperty("Description", "Verifies the ability of disabling the logging.");
     RecordProperty("TestingTechnique", "Requirements-based test");
@@ -241,6 +252,7 @@ TEST_F(SlogBackendFixture, DisableTheLog)
 
 TEST_F(SlogBackendFixture, MessageShouldContainAppCtxPayload)
 {
+    RecordProperty("lobster-tracing", "MwLog.ForwardToSystemLogger");
     RecordProperty("ParentRequirement", "SCR-8017664");
     RecordProperty("Description", "Verifies lgo message with application and context payload.");
     RecordProperty("TestingTechnique", "Requirements-based test");
@@ -254,6 +266,7 @@ TEST_F(SlogBackendFixture, MessageShouldContainAppCtxPayload)
 
 TEST_F(SlogBackendFixture, BackendShouldHandleEmptyPayload)
 {
+    RecordProperty("lobster-tracing", "MwLog.ForwardToSystemLogger");
     RecordProperty("ParentRequirement", "SCR-8017664");
     RecordProperty("Description", "Verifies the ability of hte backend of handling empty payload.");
     RecordProperty("TestingTechnique", "Requirements-based test");
@@ -267,6 +280,7 @@ TEST_F(SlogBackendFixture, BackendShouldHandleEmptyPayload)
 
 TEST_F(SlogBackendFixture, LongIdentifiersShouldBeCropped)
 {
+    RecordProperty("lobster-tracing", "MwLog.ForwardToSystemLogger");
     RecordProperty("ParentRequirement", "SCR-8017664");
     RecordProperty("Description",
                    "Verifies that the application or context IDs should be cropped if it exceeds 4 characters length.");
@@ -281,6 +295,7 @@ TEST_F(SlogBackendFixture, LongIdentifiersShouldBeCropped)
 
 TEST_F(SlogBackendFixture, Slog2CodeShouldBeForwarded)
 {
+    RecordProperty("lobster-tracing", "MwLog.ForwardToSystemLogger");
     RecordProperty("Description", "Verify if slog2 code is forwarded to slog2.");
     RecordProperty("TestingTechnique", "Requirements-based test");
     RecordProperty("DerivationTechnique", "Analysis of requirements");
@@ -293,6 +308,7 @@ TEST_F(SlogBackendFixture, Slog2CodeShouldBeForwarded)
 
 TEST_F(SlogBackendFixture, NoSlotAvailableShouldReturnEmptyHandle)
 {
+    RecordProperty("lobster-tracing", "MwLog.ForwardToSystemLogger");
     RecordProperty("ParentRequirement", "SCR-8017664");
     RecordProperty("Description", "Verifies returning empty handler in case of no available slots.");
     RecordProperty("TestingTechnique", "Requirements-based test");
@@ -310,6 +326,7 @@ TEST_F(SlogBackendFixture, NoSlotAvailableShouldReturnEmptyHandle)
 
 TEST_F(SlogBackendFixture, TooMuchSlotsRequestedShallBeTruncated)
 {
+    RecordProperty("lobster-tracing", "MwLog.ForwardToSystemLogger");
     RecordProperty("ParentRequirement", "SCR-8017664");
     RecordProperty("Description", "Verifies requesting too much slots shall be truncated.");
     RecordProperty("TestingTechnique", "Requirements-based test");
@@ -330,6 +347,7 @@ TEST_F(SlogBackendFixture, TooMuchSlotsRequestedShallBeTruncated)
 
 TEST_F(SlogBackendFixture, ToSloggerLogLevelInvalidLevel)
 {
+    RecordProperty("lobster-tracing", "MwLog.ForwardToSystemLogger");
     RecordProperty("ParentRequirement", "SCR-8017664");
     RecordProperty("Description", "Tests ToSloggerLogLevel with an invalid log level.");
     RecordProperty("TestingTechnique", "Boundary value analysis");

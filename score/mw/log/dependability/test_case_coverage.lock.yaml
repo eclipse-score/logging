@@ -47,6 +47,10 @@ requirements:
       Cross-application and cross-thread dependencies shall be avoided. A thread logging in a
       loop shall not block other thread's execution.
     test_cases:
+      - uid: //score/mw/log/dependability/SyslogBackendFixture:ReserveSlotShouldAcquireSlot
+        given: ''
+        when: ''
+        then: ''
       - uid: //score/mw/log/dependability/WaitFreeAlternatingWriterTests:EnsureAtomicRequirements
         given: ''
         when: ''
@@ -84,7 +88,71 @@ requirements:
     description: |-
       The system logger backend shall forward the logs to the native system logger mechanism.
       Under QNX, slogger2 shall be used.
-    test_cases: []
+    test_cases:
+      - uid: //score/mw/log/dependability/SyslogBackendFixture:BackendShouldHandleEmptyPayload
+        given: ''
+        when: ''
+        then: ''
+      - uid: //score/mw/log/dependability/SyslogBackendFixture:DebugLog
+        given: ''
+        when: ''
+        then: ''
+      - uid: //score/mw/log/dependability/SyslogBackendFixture:ErrorLog
+        given: ''
+        when: ''
+        then: ''
+      - uid: //score/mw/log/dependability/SyslogBackendFixture:FatalLog
+        given: ''
+        when: ''
+        then: ''
+      - uid: //score/mw/log/dependability/SyslogBackendFixture:InfoLog
+        given: ''
+        when: ''
+        then: ''
+      - uid: //score/mw/log/dependability/SyslogBackendFixture:LevelOffProducesNoEmit
+        given: ''
+        when: ''
+        then: ''
+      - uid: //score/mw/log/dependability/SyslogBackendFixture:LongIdentifiersShouldBeCropped
+        given: ''
+        when: ''
+        then: ''
+      - uid: //score/mw/log/dependability/SyslogBackendFixture:MessageShouldContainAppCtxPayload
+        given: ''
+        when: ''
+        then: ''
+      - uid: //score/mw/log/dependability/SyslogBackendFixture:NoSlotAvailableShouldReturnEmptyHandle
+        given: ''
+        when: ''
+        then: ''
+      - uid: //score/mw/log/dependability/SyslogBackendFixture:SyslogOpenlog
+        given: ''
+        when: ''
+        then: ''
+      - uid: //score/mw/log/dependability/SyslogBackendFixture:SyslogOpenlogWithCapacityBiggerThanTheMaximum
+        given: ''
+        when: ''
+        then: ''
+      - uid: //score/mw/log/dependability/SyslogBackendFixture:ToSyslogPriorityInvalidLevel
+        given: ''
+        when: ''
+        then: ''
+      - uid: //score/mw/log/dependability/SyslogBackendFixture:TooMuchSlotsRequestedShallBeTruncated
+        given: ''
+        when: ''
+        then: ''
+      - uid: //score/mw/log/dependability/SyslogBackendFixture:VerboseLog
+        given: ''
+        when: ''
+        then: ''
+      - uid: //score/mw/log/dependability/SyslogBackendFixture:WarningLog
+        given: ''
+        when: ''
+        then: ''
+      - uid: //score/mw/log/dependability/SyslogRecorderFactoryTest:CreateRecorder
+        given: ''
+        when: ''
+        then: ''
   - id: MwLog.InactiveLogStreamBehavior
     version: '1'
     description: |-
@@ -139,7 +207,11 @@ requirements:
     description: |-
       The system logger backend shall be enabled if and only if the log mode contains
       "kSystem".
-    test_cases: []
+    test_cases:
+      - uid: //score/mw/log/dependability/SyslogRegistrantTest:SyslogBackendIsRegisteredAfterStaticInitialization
+        given: ''
+        when: ''
+        then: ''
   - id: MwLog.TimeBoundedLocking
     version: '1'
     description: |-

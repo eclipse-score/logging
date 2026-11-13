@@ -12,7 +12,20 @@
 # *******************************************************************************
 
 load("@rules_cc//cc:defs.bzl", "cc_library", "cc_test")
+load("@score_tooling//bazel/rules/rules_score:rules_score.bzl", "unit")
 load("//:score/mw/common_features.bzl", "COMPILER_WARNING_FEATURES")
+
+unit(
+    name = "syslog_backend_unit",
+    tests = [
+        ":syslog_backend_test",
+        ":syslog_recorder_factory_test",
+        "//score/mw/log/backend:syslog_registrant_test",
+    ],
+    unit_design = ["//score/mw/log/dependability/software_unit_design:syslog_backend_unit_design"],
+    visibility = ["//score/mw/log/dependability:__pkg__"],
+    implementation = [":syslog"],
+)
 
 cc_library(
     name = "syslog_backend",

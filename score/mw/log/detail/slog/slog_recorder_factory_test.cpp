@@ -35,6 +35,7 @@ bool IsRecorderOfType(const std::unique_ptr<Recorder>& recorder) noexcept
 
 TEST(SlogRecorderFactoryTest, CreateRecorder)
 {
+    RecordProperty("lobster-tracing", "MwLog.ForwardToSystemLogger");
     Configuration config;
     score::cpp::pmr::memory_resource* memory_resource = score::cpp::pmr::get_default_resource();
 

@@ -76,6 +76,7 @@ struct SyslogBackendFixture : ::testing::Test
 
 TEST_F(SyslogBackendFixture, SyslogOpenlog)
 {
+    RecordProperty("lobster-tracing", "MwLog.ForwardToSystemLogger");
     RecordProperty("PartiallyVerifies", "comp_req__log__forward_to_system_logger");
     RecordProperty("Description", "Check that the system logger backend registers with syslog and forwards logs to it.");
     RecordProperty("TestType", "requirements-based");
@@ -91,6 +92,7 @@ TEST_F(SyslogBackendFixture, SyslogOpenlog)
 
 TEST_F(SyslogBackendFixture, SyslogOpenlogWithCapacityBiggerThanTheMaximum)
 {
+    RecordProperty("lobster-tracing", "MwLog.ForwardToSystemLogger");
     RecordProperty("PartiallyVerifies", "comp_req__log__forward_to_system_logger");
     RecordProperty("ParentRequirement", "SCR-8017664");
     RecordProperty("Description", "Verifies backend construction with slots' capacity bigger than the maximum.");
@@ -106,6 +108,7 @@ TEST_F(SyslogBackendFixture, SyslogOpenlogWithCapacityBiggerThanTheMaximum)
 
 TEST_F(SyslogBackendFixture, ReserveSlotShouldAcquireSlot)
 {
+    RecordProperty("lobster-tracing", "MwLog.CrossLockingPrevention");
     RecordProperty("PartiallyVerifies", "comp_req__log__cross_locking");
     RecordProperty("ParentRequirement", "SCR-8017664");
     RecordProperty("Description", "Verifies the ability of reserving slot.");
@@ -122,6 +125,7 @@ TEST_F(SyslogBackendFixture, ReserveSlotShouldAcquireSlot)
 
 TEST_F(SyslogBackendFixture, LevelOffProducesNoEmit)
 {
+    RecordProperty("lobster-tracing", "MwLog.ForwardToSystemLogger");
     RecordProperty("PartiallyVerifies", "comp_req__log__forward_to_system_logger");
     RecordProperty("ParentRequirement", "SCR-8017664");
     RecordProperty("Description", "A kOff level shall not be emitted to syslog.");
@@ -136,6 +140,7 @@ TEST_F(SyslogBackendFixture, LevelOffProducesNoEmit)
 
 TEST_F(SyslogBackendFixture, FatalLog)
 {
+    RecordProperty("lobster-tracing", "MwLog.ForwardToSystemLogger");
     RecordProperty("PartiallyVerifies", "comp_req__log__forward_to_system_logger");
     RecordProperty("ParentRequirement", "SCR-8017664");
     RecordProperty("Description", "Verifies the ability of logging fatal message.");
@@ -150,6 +155,7 @@ TEST_F(SyslogBackendFixture, FatalLog)
 
 TEST_F(SyslogBackendFixture, ErrorLog)
 {
+    RecordProperty("lobster-tracing", "MwLog.ForwardToSystemLogger");
     RecordProperty("PartiallyVerifies", "comp_req__log__forward_to_system_logger");
     RecordProperty("ParentRequirement", "SCR-8017664");
     RecordProperty("Description", "Verifies the ability of logging error message.");
@@ -164,6 +170,7 @@ TEST_F(SyslogBackendFixture, ErrorLog)
 
 TEST_F(SyslogBackendFixture, WarningLog)
 {
+    RecordProperty("lobster-tracing", "MwLog.ForwardToSystemLogger");
     RecordProperty("PartiallyVerifies", "comp_req__log__forward_to_system_logger");
     RecordProperty("ParentRequirement", "SCR-8017664");
     RecordProperty("Description", "Verifies the ability of logging warning message.");
@@ -178,6 +185,7 @@ TEST_F(SyslogBackendFixture, WarningLog)
 
 TEST_F(SyslogBackendFixture, InfoLog)
 {
+    RecordProperty("lobster-tracing", "MwLog.ForwardToSystemLogger");
     RecordProperty("PartiallyVerifies", "comp_req__log__forward_to_system_logger");
     RecordProperty("ParentRequirement", "SCR-8017664");
     RecordProperty("Description", "Verifies the ability of logging info message.");
@@ -192,6 +200,7 @@ TEST_F(SyslogBackendFixture, InfoLog)
 
 TEST_F(SyslogBackendFixture, DebugLog)
 {
+    RecordProperty("lobster-tracing", "MwLog.ForwardToSystemLogger");
     RecordProperty("PartiallyVerifies", "comp_req__log__forward_to_system_logger");
     RecordProperty("ParentRequirement", "SCR-8017664");
     RecordProperty("Description", "Verifies the ability of logging debug message.");
@@ -206,6 +215,7 @@ TEST_F(SyslogBackendFixture, DebugLog)
 
 TEST_F(SyslogBackendFixture, VerboseLog)
 {
+    RecordProperty("lobster-tracing", "MwLog.ForwardToSystemLogger");
     RecordProperty("PartiallyVerifies", "comp_req__log__forward_to_system_logger");
     RecordProperty("ParentRequirement", "SCR-8017664");
     RecordProperty("Description", "Verifies verbose maps to LOG_DEBUG (syslog has no separate verbose level).");
@@ -220,6 +230,7 @@ TEST_F(SyslogBackendFixture, VerboseLog)
 
 TEST_F(SyslogBackendFixture, MessageShouldContainAppCtxPayload)
 {
+    RecordProperty("lobster-tracing", "MwLog.ForwardToSystemLogger");
     RecordProperty("PartiallyVerifies", "comp_req__log__forward_to_system_logger");
     RecordProperty("ParentRequirement", "SCR-8017664");
     RecordProperty("Description", "Verifies log message contains application id, context id and payload.");
@@ -234,6 +245,7 @@ TEST_F(SyslogBackendFixture, MessageShouldContainAppCtxPayload)
 
 TEST_F(SyslogBackendFixture, BackendShouldHandleEmptyPayload)
 {
+    RecordProperty("lobster-tracing", "MwLog.ForwardToSystemLogger");
     RecordProperty("PartiallyVerifies", "comp_req__log__forward_to_system_logger");
     RecordProperty("ParentRequirement", "SCR-8017664");
     RecordProperty("Description", "Verifies the ability of the backend of handling empty payload.");
@@ -248,6 +260,7 @@ TEST_F(SyslogBackendFixture, BackendShouldHandleEmptyPayload)
 
 TEST_F(SyslogBackendFixture, LongIdentifiersShouldBeCropped)
 {
+    RecordProperty("lobster-tracing", "MwLog.ForwardToSystemLogger");
     RecordProperty("PartiallyVerifies", "comp_req__log__forward_to_system_logger");
     RecordProperty("ParentRequirement", "SCR-8017664");
     RecordProperty("Description",
@@ -263,6 +276,7 @@ TEST_F(SyslogBackendFixture, LongIdentifiersShouldBeCropped)
 
 TEST_F(SyslogBackendFixture, NoSlotAvailableShouldReturnEmptyHandle)
 {
+    RecordProperty("lobster-tracing", "MwLog.ForwardToSystemLogger");
     RecordProperty("PartiallyVerifies", "comp_req__log__forward_to_system_logger");
     RecordProperty("ParentRequirement", "SCR-8017664");
     RecordProperty("Description", "Verifies returning empty handler in case of no available slots.");
@@ -281,6 +295,7 @@ TEST_F(SyslogBackendFixture, NoSlotAvailableShouldReturnEmptyHandle)
 
 TEST_F(SyslogBackendFixture, TooMuchSlotsRequestedShallBeTruncated)
 {
+    RecordProperty("lobster-tracing", "MwLog.ForwardToSystemLogger");
     RecordProperty("PartiallyVerifies", "comp_req__log__forward_to_system_logger");
     RecordProperty("ParentRequirement", "SCR-8017664");
     RecordProperty("Description", "Verifies requesting too much slots shall be truncated.");
@@ -302,6 +317,7 @@ TEST_F(SyslogBackendFixture, TooMuchSlotsRequestedShallBeTruncated)
 
 TEST_F(SyslogBackendFixture, ToSyslogPriorityInvalidLevel)
 {
+    RecordProperty("lobster-tracing", "MwLog.ForwardToSystemLogger");
     RecordProperty("ParentRequirement", "SCR-8017664");
     RecordProperty("Description", "Tests ToSyslogPriority with an invalid log level, which must not be emitted.");
     RecordProperty("TestingTechnique", "Boundary value analysis");

@@ -191,6 +191,7 @@ cc_test(
     ],
     tags = ["unit"],
     target_compatible_with = ["@platforms//os:linux"],
+    visibility = ["//score/mw/log/detail/syslog:__pkg__"],
     deps = [
         ":syslog",
         "@googletest//:gtest_main",
