@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 
 
@@ -27,8 +26,8 @@
   </noscript>
   
   <!-- Loaded before other Sphinx assets -->
-  <link href="../../../_static/styles/theme.css?digest=cb8930eaaf36d9849b67" rel="stylesheet" />
-<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=cb8930eaaf36d9849b67" rel="stylesheet" />
+  <link href="../../../_static/styles/theme.css?digest=18bd87630a240e9c25be" rel="stylesheet" />
+<link href="../../../_static/styles/pydata-sphinx-theme.css?digest=18bd87630a240e9c25be" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=8f2a1f02" />
     <link rel="stylesheet" type="text/css" href="../../../_static/graphviz.css?v=4ae1632d" />
@@ -46,10 +45,10 @@
     <link rel="stylesheet" type="text/css" href="../../../_static/sphinx-needs/modern.css?v=803738c0" />
   
   <!-- So that users can add custom icons -->
-  <script defer src="../../../_static/scripts/fontawesome.js?digest=cb8930eaaf36d9849b67"></script>
+  <script defer src="../../../_static/scripts/fontawesome.js?digest=18bd87630a240e9c25be"></script>
   <!-- Pre-loaded scripts that we'll load fully later -->
-  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67" />
-<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67" />
+  <link rel="preload" as="script" href="../../../_static/scripts/bootstrap.js?digest=18bd87630a240e9c25be" />
+<link rel="preload" as="script" href="../../../_static/scripts/pydata-sphinx-theme.js?digest=18bd87630a240e9c25be" />
 
     <script src="../../../_static/jquery.js?v=5d32c60e"></script>
     <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
@@ -64,7 +63,7 @@
     <script src="../../../_static/sphinx-needs/libs/html/sphinx_needs_collapse.js?v=dca66431"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'components/datarouter/detailed_design/shm_apis';</script>
     <script>
-        DOCUMENTATION_OPTIONS.theme_version = '0.21.0';
+        DOCUMENTATION_OPTIONS.theme_version = '0.23.0';
         DOCUMENTATION_OPTIONS.theme_switcher_json_url = 'https://eclipse-score.github.io/logging/versions.json';
         DOCUMENTATION_OPTIONS.theme_switcher_version_match = '';
         DOCUMENTATION_OPTIONS.show_version_warning_banner =
@@ -76,6 +75,7 @@
     <link rel="next" title="Datarouter Dependencies" href="dependencies.html" />
     <link rel="prev" title="Logging: architecture and SW design" href="logging_architecture.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="color-scheme" content="light dark"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="0.1" />
   
@@ -125,7 +125,7 @@
   
     <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
 <div class="bd-header__inner bd-page-width">
-  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+  <button type="button" class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
     <span class="fa-solid fa-bars"></span>
   </button>
   
@@ -211,7 +211,7 @@
         <div class="navbar-item navbar-persistent--container">
           
 
-<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+<button type="button" class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
  <i class="fa-solid fa-magnifying-glass"></i>
  <span class="search-button__default-text">Search</span>
  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
@@ -222,15 +222,15 @@
         <div class="navbar-item">
 
 <div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
-  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+  <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
     <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
     <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
     <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
   </button>
   <ul class="dropdown-menu dropdown-menu-end">
-    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
-    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
-    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
   </ul>
 </div></div>
       
@@ -276,7 +276,7 @@
   
     <div class="navbar-persistent--mobile">
 
-<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+<button type="button" class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
  <i class="fa-solid fa-magnifying-glass"></i>
  <span class="search-button__default-text">Search</span>
  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
@@ -285,7 +285,7 @@
   
 
   
-    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+    <button type="button" class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
       <span class="fa-solid fa-outdent"></span>
     </button>
   
@@ -369,15 +369,15 @@
           <div class="navbar-item">
 
 <div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
-  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+  <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
     <i class="theme-switch fa-solid fa-sun fa-lg fa-fw" data-mode="light" title="Light"></i>
     <i class="theme-switch fa-solid fa-moon fa-lg fa-fw" data-mode="dark" title="Dark"></i>
     <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg fa-fw" data-mode="auto" title="System Settings"></i>
   </button>
   <ul class="dropdown-menu dropdown-menu-end">
-    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
-    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
-    <li><button class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg fa-fw me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg fa-fw me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg fa-fw me-1"></i>Dark</button></li>
   </ul>
 </div></div>
         
@@ -421,7 +421,7 @@
   </div>
   
     <div class="sidebar-primary-items__start sidebar-primary__section">
-        <div class="sidebar-primary-item pst-sidebar-collapse"><button id="pst-collapse-sidebar-button" aria-expanded="true" aria-controls="pst-primary-sidebar">
+        <div class="sidebar-primary-item pst-sidebar-collapse"><button type="button" id="pst-collapse-sidebar-button" aria-expanded="true" aria-controls="pst-primary-sidebar">
   <svg class="pst-icon" role="img" aria-hidden="true" focusable="false" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
     <path fill="currentColor" d="M3 15.5C2.36232 15.5 1.74874 15.2564 1.28478 14.8189C0.820828 14.3815 0.541576 13.7832 0.504167 13.1467L0.5 13L0.5 3C0.499965 2.36232 0.743605 1.74874 1.18107 1.28478C1.61854 0.820828 2.21676 0.541576 2.85333 0.504167L3 0.5L13 0.5C13.6377 0.499965 14.2513 0.743605 14.7152 1.18107C15.1792 1.61854 15.4584 2.21676 15.4958 2.85333L15.5 3L15.5 13C15.5 13.6377 15.2564 14.2513 14.8189 14.7152C14.3815 15.1792 13.7832 15.4584 13.1467 15.4958L13 15.5L3 15.5ZM3 13.8333L10.5 13.8333L10.5 2.16667L3 2.16667C2.79589 2.16669 2.59889 2.24163 2.44636 2.37726C2.29383 2.5129 2.19638 2.69979 2.1725 2.9025L2.16667 3L2.16667 13C2.16669 13.2041 2.24163 13.4011 2.37726 13.5536C2.5129 13.7062 2.69979 13.8036 2.9025 13.8275L3 13.8333ZM6.65583 10.325L6.5775 10.2558L4.91083 8.58917C4.76735 8.44567 4.68116 8.25476 4.66843 8.05223C4.65569 7.84971 4.71729 7.6495 4.84167 7.48917L4.91083 7.41083L6.5775 5.74417C6.72747 5.59471 6.9287 5.50794 7.14032 5.50148C7.35194 5.49502 7.55809 5.56935 7.7169 5.70937C7.8757 5.8494 7.97525 6.04463 7.99533 6.25539C8.01541 6.46616 7.95451 6.67667 7.825 6.84417L7.75583 6.9225L6.67917 8L7.75583 9.0775C7.89931 9.22099 7.98551 9.41191 7.99824 9.61443C8.01097 9.81695 7.94938 10.0172 7.825 10.1775L7.75583 10.2558C7.61234 10.3993 7.42142 10.4855 7.2189 10.4982C7.01638 10.511 6.81617 10.4494 6.65583 10.325Z"/>
   </svg>
@@ -437,7 +437,7 @@
 <li class="toctree-l1"><a class="reference internal" href="../requirements/index.html">Requirements</a></li>
 <li class="toctree-l1 current active has-children"><a class="reference internal" href="index.html">Detailed Design</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="logging_architecture.html">Logging: architecture and SW design</a></li>
-<li class="toctree-l2 current active"><a class="current reference internal" href="#">Remote Logging implementation details</a></li>
+<li class="toctree-l2 current active"><a aria-current="page" class="current reference internal" href="#">Remote Logging implementation details</a></li>
 <li class="toctree-l2"><a class="reference internal" href="dependencies.html">Datarouter Dependencies</a></li>
 <li class="toctree-l2"><a class="reference internal" href="chklst_impl_inspection.html">Implementation Inspection Checklist</a></li>
 </ul>
@@ -521,36 +521,41 @@
 <h1>Remote Logging implementation details<a class="headerlink" href="#remote-logging-implementation-details" title="Link to this heading">#</a></h1>
 <p>Remote Logging uses the <strong>message passing</strong> library (<code class="docutils literal notranslate"><span class="pre">MessagePassingServer</span></code> / <code class="docutils literal notranslate"><span class="pre">MessagePassingClient</span></code>) as the session channel between <code class="docutils literal notranslate"><span class="pre">mw::log</span></code> producers and DataRouter. It is used for log session registration (<code class="docutils literal notranslate"><span class="pre">kConnect</span></code>), shared memory buffer acquire requests (<code class="docutils literal notranslate"><span class="pre">kAcquireRequest</span></code> / <code class="docutils literal notranslate"><span class="pre">kAcquireResponse</span></code>), and disconnect handling. Shared memory is the data channel.</p>
 <p>For communications between a producer and the DataRouter, the producer is the writer and the DataRouter is the reader.</p>
-<p>Shared memory is allocated using <code class="docutils literal notranslate"><span class="pre">open()</span></code> syscall by the writer process, and a link is created as <code class="docutils literal notranslate"><span class="pre">/tmp/logging.&lt;app_id&gt;.&lt;uid&gt;.shmem</span></code> (static mode) or <code class="docutils literal notranslate"><span class="pre">/tmp/logging-&lt;random&gt;.shmem</span></code> (dynamic mode, when no app ID is available). At the moment, the reader can (and does) modify the shared memory; in the case of communications between ASIL D writers and ASIL QM reader it can be avoided by requesting such modifications through the control channel; in this case, the fd handle returned by <code class="docutils literal notranslate"><span class="pre">open()</span></code> could be reopened as a read-only fd handle (for the filename /proc/self/fd/<fd>) and this reopened handle passed to the reader process, thus guaranteeing that the ASIL QM process cannot modify the memory shared with ASIL D processes.</p>
-<p>The consistency of write and read pointers in the shared buffer is protected by a POSIX mutex. A writer takes the mutex for the time of writing a single message record. A reader takes the mutex to read the read and write pointer, and also takes the mutex to advance a reader pointer toward the previous value of the write pointer after the reader processes the existing records. During reading, the reader does not hold the lock. The writer is able to detect if reading is happening at the moment. If the buffer is full, the writer either advances the reading pointer if there is no reading happening, or discards the writing attempt if reading is happening. The writer never waits for the reader to finish reading.</p>
-<p>At the moment, the mutex is kept in the shared memory. If we need to make the memory read-only for the writer, the reader needs to request access to the read pointer value through the control channel. The the writer process will fully own the mutex both physically and logically (the mutex is still briefly locked before and after reading, but is not held during reading).</p>
-<p>When the producer starts it creates the shared memory buffer (for example, as a <a class="reference external" href="http://laristra.github.io/flecsi/src/developer-guide/patterns/meyers_singleton.html">Meyer’s singleton</a>) and can start writing into it immediately from multiple threads, if desired. The logic of starting a control channel for this buffer and connecting it to the DataRouter is separate and asynchronous. The message passing client for the control channel runs in a separate dedicated thread. The control channel detects disconnects of its peer and reconnects automatically if DataRouter restarts. If the producer exits, DataRouter only closes (and thus frees) the shared memory region when its content fully fed to DataRouter’s filters.</p>
+<p>The writer process creates the shared memory file, sizes it and allocates the memory.</p>
+<p>The reader accesses the shared memory in read-only mode using <code class="docutils literal notranslate"><span class="pre">mmap()</span></code> syscall with the file name reconstructed based on data passed via connect message.</p>
+<p>The writer uses lock-free atomics in the linear control block to avoid race condition between its threads when accessing the buffer.
+The writer switches the double buffers assigned for writing and for reading following request sent from the reader via message.
+The reader requests the switch of the buffer either when it has finished reading or after a timeout has occurred.
+The writer drops log messages if the active write-buffer is full.
+Under no circumstances, the writer will be blocked by the reader.</p>
+<p>When the producer starts it creates the shared memory buffer (for example, as a <a class="reference external" href="http://laristra.github.io/flecsi/src/developer-guide/patterns/meyers_singleton.html">Meyer’s singleton</a>) and can start writing into it immediately from multiple threads, if desired. The logic of starting a control channel for this buffer and connecting it to the DataRouter is separate and asynchronous. The message passing client for the control channel runs in a separate dedicated thread.</p>
+<p>The control channel detects disconnects of its peer and reconnects automatically if DataRouter restarts unless the connection attempt fails repeatedly. If the producer exits, DataRouter only closes (and thus frees) the shared memory region when its content fully fed to DataRouter’s filters.</p>
 <section id="apis-in-use">
 <h2>APIs in use<a class="headerlink" href="#apis-in-use" title="Link to this heading">#</a></h2>
 <p>System/library calls used in particular (as implemented at the moment):</p>
 <section id="at-a-producer">
 <h3>At a Producer<a class="headerlink" href="#at-a-producer" title="Link to this heading">#</a></h3>
-<p>Producers obtain the fd of the shared memory with <code class="docutils literal notranslate"><span class="pre">open()</span></code> with flag <code class="docutils literal notranslate"><span class="pre">O_RDWR</span></code> (read-write, as the producer both creates and writes the shared memory region).</p>
-<p>Then a Producer would <code class="docutils literal notranslate"><span class="pre">ftruncate()</span></code> the obtained descriptor to the required size.</p>
-<p>Then <code class="docutils literal notranslate"><span class="pre">mmap()</span></code> the whole content of the memory region with flags <code class="docutils literal notranslate"><span class="pre">(PROT_READ</span> <span class="pre">|</span> <span class="pre">PROT_WRITE,</span> <span class="pre">MAP_SHARED)</span></code>, initialize it.</p>
+<p>In static mode, the writer process creates the shared memory file using <code class="docutils literal notranslate"><span class="pre">open()</span></code> syscall as <code class="docutils literal notranslate"><span class="pre">/tmp/logging.&lt;app_id&gt;.&lt;uid&gt;.shmem</span></code>.
+In dynamic mode, the writer process creates the shared memory file using <code class="docutils literal notranslate"><span class="pre">mkstemps</span></code> as <code class="docutils literal notranslate"><span class="pre">/tmp/logging-&lt;random&gt;.shmem</span></code> and reopens it using <code class="docutils literal notranslate"><span class="pre">open()</span></code>.
+When opening the file, the writer uses the flags O_RDWR | O_EXCL | O_CLOEXEC (+ O_CREAT in static mode).
+In both cases, the writer sizes the file using <code class="docutils literal notranslate"><span class="pre">ftruncate()</span></code> and allocates the memory using <code class="docutils literal notranslate"><span class="pre">mmap()</span></code> syscall with flags <code class="docutils literal notranslate"><span class="pre">(PROT_READ</span> <span class="pre">|</span> <span class="pre">PROT_WRITE,</span> <span class="pre">MAP_SHARED)</span></code>.</p>
 <p>In a separate thread starting later, a Producer</p>
 <ul class="simple">
 <li><p>creates a message passing client.</p></li>
 <li><p>sends a connect message with identifier <code class="docutils literal notranslate"><span class="pre">DatarouterMessageIdentifier::kConnect</span></code> and app id and uid.</p></li>
 <li><p>keeps listening the message passing channel for acquire requests.</p></li>
 </ul>
-<p>If the message passing connection is lost, the message passing library handles reconnection transparently.</p>
 </section>
 <section id="at-the-datarouter">
 <h3>At the DataRouter<a class="headerlink" href="#at-the-datarouter" title="Link to this heading">#</a></h3>
 <p>DataRouter will setup a message passing server. At each connection, DataRouter does the following:</p>
 <ul class="simple">
-<li><p>receive the shared memory file by constructing from the message as <code class="docutils literal notranslate"><span class="pre">/tmp/logging.&lt;app_id&gt;.&lt;uid&gt;.shmem</span></code> (or <code class="docutils literal notranslate"><span class="pre">/tmp/logging-&lt;random&gt;.shmem</span></code> in dynamic mode),</p></li>
+<li><p>reconstruct the shared memory file name from the connect message fields as /tmp/logging.&lt;app_id&gt;.<uid>.shmem (or /tmp/logging-<random>.shmem in dynamic mode) and open it with <code class="docutils literal notranslate"><span class="pre">O_RDONLY</span></code>,</p></li>
 <li><p>calculate the size of the shared memory region using <code class="docutils literal notranslate"><span class="pre">fstat()</span></code>,</p></li>
 <li><p>map the whole region using mmap() with the flags <code class="docutils literal notranslate"><span class="pre">(PROT_READ,</span> <span class="pre">MAP_SHARED)</span></code>.</p></li>
 </ul>
 <p>DataRouter keeps the message passing channel monitored via a worker thread; once each message received (or once each 100 ms timeout) it processes the tick queue and reads the ring buffer content.</p>
-<p>If the control channel disconnects, DataRouter reads the content of the ring buffer for the last time and then close its file descriptor. Then DataRouter wait for the reconnect from the client.</p>
+<p>If the control channel disconnects, DataRouter reads the content of the ring buffer for the last time, then unmaps the shared memory and destroys the session. The server continues listening for new connections, so a reconnecting client establishes a new session.</p>
 </section>
 </section>
 </section>
@@ -639,8 +644,8 @@
   </div>
   
   <!-- Scripts loaded after <body> so the DOM is not blocked -->
-  <script defer src="../../../_static/scripts/bootstrap.js?digest=cb8930eaaf36d9849b67"></script>
-<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=cb8930eaaf36d9849b67"></script>
+  <script defer src="../../../_static/scripts/bootstrap.js?digest=18bd87630a240e9c25be"></script>
+<script defer src="../../../_static/scripts/pydata-sphinx-theme.js?digest=18bd87630a240e9c25be"></script>
 
   <footer class="bd-footer">
 <div class="bd-footer__inner bd-page-width">
@@ -650,8 +655,7 @@
         <div class="footer-item">
 
   <p class="sphinx-version">
-    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.0.
-    <br/>
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.1.1.
   </p>
 </div>
       
@@ -664,7 +668,7 @@
         <div class="footer-item">
 <p class="theme-version">
   <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
-  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.21.0.
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.23.0.
 </p></div>
       
     </div>

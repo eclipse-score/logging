@@ -9158,7 +9158,7 @@
   {
     "name": "SyslogBackendFixture__SyslogOpenlogWithCapacityBiggerThanTheMaximum",
     "file": "score/mw/log/detail/syslog/syslog_backend_test.cpp",
-    "line": "92",
+    "line": "93",
     "result": "passed",
     "repo_name": "local_repo",
     "hash": "",
@@ -9172,7 +9172,7 @@
   {
     "name": "SyslogBackendFixture__ReserveSlotShouldAcquireSlot",
     "file": "score/mw/log/detail/syslog/syslog_backend_test.cpp",
-    "line": "107",
+    "line": "109",
     "result": "passed",
     "repo_name": "local_repo",
     "hash": "",
@@ -9186,7 +9186,7 @@
   {
     "name": "SyslogBackendFixture__LevelOffProducesNoEmit",
     "file": "score/mw/log/detail/syslog/syslog_backend_test.cpp",
-    "line": "123",
+    "line": "126",
     "result": "passed",
     "repo_name": "local_repo",
     "hash": "",
@@ -9200,7 +9200,7 @@
   {
     "name": "SyslogBackendFixture__FatalLog",
     "file": "score/mw/log/detail/syslog/syslog_backend_test.cpp",
-    "line": "137",
+    "line": "141",
     "result": "passed",
     "repo_name": "local_repo",
     "hash": "",
@@ -9214,7 +9214,7 @@
   {
     "name": "SyslogBackendFixture__ErrorLog",
     "file": "score/mw/log/detail/syslog/syslog_backend_test.cpp",
-    "line": "151",
+    "line": "156",
     "result": "passed",
     "repo_name": "local_repo",
     "hash": "",
@@ -9228,7 +9228,7 @@
   {
     "name": "SyslogBackendFixture__WarningLog",
     "file": "score/mw/log/detail/syslog/syslog_backend_test.cpp",
-    "line": "165",
+    "line": "171",
     "result": "passed",
     "repo_name": "local_repo",
     "hash": "",
@@ -9242,7 +9242,7 @@
   {
     "name": "SyslogBackendFixture__InfoLog",
     "file": "score/mw/log/detail/syslog/syslog_backend_test.cpp",
-    "line": "179",
+    "line": "186",
     "result": "passed",
     "repo_name": "local_repo",
     "hash": "",
@@ -9256,7 +9256,7 @@
   {
     "name": "SyslogBackendFixture__DebugLog",
     "file": "score/mw/log/detail/syslog/syslog_backend_test.cpp",
-    "line": "193",
+    "line": "201",
     "result": "passed",
     "repo_name": "local_repo",
     "hash": "",
@@ -9270,7 +9270,7 @@
   {
     "name": "SyslogBackendFixture__VerboseLog",
     "file": "score/mw/log/detail/syslog/syslog_backend_test.cpp",
-    "line": "207",
+    "line": "216",
     "result": "passed",
     "repo_name": "local_repo",
     "hash": "",
@@ -9284,7 +9284,7 @@
   {
     "name": "SyslogBackendFixture__MessageShouldContainAppCtxPayload",
     "file": "score/mw/log/detail/syslog/syslog_backend_test.cpp",
-    "line": "221",
+    "line": "231",
     "result": "passed",
     "repo_name": "local_repo",
     "hash": "",
@@ -9298,7 +9298,7 @@
   {
     "name": "SyslogBackendFixture__BackendShouldHandleEmptyPayload",
     "file": "score/mw/log/detail/syslog/syslog_backend_test.cpp",
-    "line": "235",
+    "line": "246",
     "result": "passed",
     "repo_name": "local_repo",
     "hash": "",
@@ -9312,7 +9312,7 @@
   {
     "name": "SyslogBackendFixture__LongIdentifiersShouldBeCropped",
     "file": "score/mw/log/detail/syslog/syslog_backend_test.cpp",
-    "line": "249",
+    "line": "261",
     "result": "passed",
     "repo_name": "local_repo",
     "hash": "",
@@ -9326,7 +9326,7 @@
   {
     "name": "SyslogBackendFixture__NoSlotAvailableShouldReturnEmptyHandle",
     "file": "score/mw/log/detail/syslog/syslog_backend_test.cpp",
-    "line": "264",
+    "line": "277",
     "result": "passed",
     "repo_name": "local_repo",
     "hash": "",
@@ -9340,7 +9340,7 @@
   {
     "name": "SyslogBackendFixture__TooMuchSlotsRequestedShallBeTruncated",
     "file": "score/mw/log/detail/syslog/syslog_backend_test.cpp",
-    "line": "282",
+    "line": "296",
     "result": "passed",
     "repo_name": "local_repo",
     "hash": "",
@@ -9354,7 +9354,7 @@
   {
     "name": "SyslogBackendFixture__ToSyslogPriorityInvalidLevel",
     "file": "score/mw/log/detail/syslog/syslog_backend_test.cpp",
-    "line": "303",
+    "line": "318",
     "result": "passed",
     "repo_name": "local_repo",
     "hash": "",
@@ -9370,9 +9370,9 @@
     "file": "score/mw/log/detail/syslog/syslog_recorder_factory_test.cpp",
     "line": "36",
     "result": "passed",
-    "repo_name": null,
-    "hash": null,
-    "url": null,
+    "repo_name": "local_repo",
+    "hash": "",
+    "url": "",
     "TestType": null,
     "DerivationTechnique": null,
     "result_text": "",
