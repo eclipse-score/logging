@@ -91,10 +91,12 @@ Interfaces
 
 .. logic_arc_int:: Log Record Shared-Memory
    :id: logic_arc_int__logging__shared_memory
+   :included_by: feat__logging
    :security: YES
    :safety: ASIL_B
    :status: valid
    :version: 1
+   :fulfils: feat_req__logging__asil_support
 
    Shared-memory ring buffer carrying only serialized log records: the remote/DLT recorder
    backend writes into it, and ``comp__datarouter`` reads from it to route records onward to the
@@ -103,10 +105,12 @@ Interfaces
 
 .. logic_arc_int:: Control Channel
    :id: logic_arc_int__logging__datarouter_msg_client
+   :included_by: feat__logging
    :security: YES
    :safety: ASIL_B
    :status: valid
    :version: 1
+   :fulfils: feat_req__logging__asil_support
 
    ``mw::com`` message-passing session between the remote/DLT recorder and its source session
    inside ``comp__datarouter``: used to initiate the connection and for ``comp__datarouter`` to
