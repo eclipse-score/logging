@@ -15,14 +15,27 @@
 #include "score/os/mocklib/mock_pthread.h"
 #include "score/os/mocklib/socketmock.h"
 #include "score/os/mocklib/sys_poll_mock.h"
+#include "score/os/mocklib/unistdmock.h"
 #include "score/os/socket.h"
 #include "score/os/unistd.h"
 #include "score/os/utils/mocklib/signalmock.h"
 #include "unix_domain/unix_domain_server.h"
 
-#include <sys/stat.h>
-
+#include <gmock/gmock.h>
 #include <gtest/gtest.h>
+
+#include <sys/socket.h>
+
+#include <atomic>
+#include <chrono>
+#include <condition_variable>
+#include <cstring>
+#include <map>
+#include <memory>
+#include <mutex>
+#include <string>
+#include <thread>
+#include <vector>
 
 namespace score
 {
@@ -30,6 +43,21 @@ namespace platform
 {
 namespace internal
 {
+
+namespace
+{
+
+std::unique_ptr<score::os::Signal> MakeSignalMock()
+{
+    auto signal = std::make_unique<::testing::NiceMock<score::os::SignalMock>>();
+    ON_CALL(*signal, SigEmptySet(::testing::_)).WillByDefault(::testing::Return(0));
+    ON_CALL(*signal, SigAddSet(::testing::_, ::testing::_)).WillByDefault(::testing::Return(0));
+    ON_CALL(*signal, PthreadSigMask(::testing::_, ::testing::_)).WillByDefault(::testing::Return(0));
+    ON_CALL(*signal, SigAction(::testing::_, ::testing::_, ::testing::_)).WillByDefault(::testing::Return(0));
+    return signal;
+}
+
+}  // namespace
 
 class ISessionMock : public UnixDomainServer::ISession
 {
@@ -46,6 +74,11 @@ class UnixDomainServer::SessionWrapper::SessionWrapperTest : public UnixDomainSe
   public:
     SessionWrapperTest(UnixDomainServer* server, int fd) : SessionWrapper(server, fd) {}
 
+    static void ExpireTimeout(SessionWrapper& wrapper)
+    {
+        wrapper.timeout_ = TimestampT::clock::now() - std::chrono::milliseconds(1);
+    }
+
     using SessionWrapper::closed_by_peer_;
     using SessionWrapper::enqueued_;
     using SessionWrapper::running_;
@@ -58,9 +91,8 @@ class UnixDomainServer::SessionWrapper::SessionWrapperTest : public UnixDomainSe
 class UnixDomainServer::UnixDomainServerTest : public UnixDomainServer
 {
   public:
-    UnixDomainServerTest()
-        : UnixDomainServer(UnixDomainSockAddr("test_" + std::to_string(getpid()) + "_" + std::to_string(rand()), true),
-                           SessionFactory())
+    explicit UnixDomainServerTest(SessionFactory factory = SessionFactory())
+        : UnixDomainServer(UnixDomainSockAddr("unix_domain_server_test", true), std::move(factory), MakeSignalMock())
     {
     }
 
@@ -81,8 +113,7 @@ class UnixDomainServerMock : public UnixDomainServer
 {
   public:
     UnixDomainServerMock()
-        : UnixDomainServer(UnixDomainSockAddr("mock_" + std::to_string(getpid()) + "_" + std::to_string(rand()), true),
-                           SessionFactory())
+        : UnixDomainServer(UnixDomainSockAddr("unix_domain_server_mock", true), SessionFactory(), MakeSignalMock())
     {
     }
 
@@ -126,104 +157,31 @@ TEST(ISessionTest, ISessionTestSuccessfully)
     EXPECT_NO_FATAL_FAILURE(m.OnClosedByPeer());
 }
 
-TEST(SessionWrapperTest, HandleCommand)
-{
-    UnixDomainServerMock server_mock;
-    constexpr std::uint8_t kServerFd = 10U;
-    constexpr std::uint16_t kPeerPid = 1234U;
-    bool tick_called = false;
-    std::string last_command{};
-    bool closed_by_peer_called = false;
-    EXPECT_CALL(server_mock, EnqueueTickDirect(kServerFd));
-    UnixDomainServer::SessionWrapper::SessionWrapperTest session_test(&server_mock, kServerFd);
-
-    auto isession_mock = std::make_unique<ISessionMock>(UnixDomainServer::SessionHandle{kServerFd});
-    ISessionMock* raw_isession_mock_ptr = isession_mock.get();
-    EXPECT_CALL(*raw_isession_mock_ptr, Tick()).WillRepeatedly([&tick_called]() {
-        tick_called = true;
-        return false;
-    });
-    EXPECT_CALL(*raw_isession_mock_ptr, OnClosedByPeer()).WillRepeatedly([&closed_by_peer_called]() {
-        closed_by_peer_called = true;
-    });
-    session_test.session_ = std::move(isession_mock);
-
-    std::string test_command = "test_command";
-    EXPECT_CALL(*raw_isession_mock_ptr, OnCommand(test_command))
-        .WillRepeatedly([&last_command](const std::string& command) {
-            last_command = command;
-        });
-    bool result = session_test.HandleCommand(test_command, kPeerPid);
-    EXPECT_TRUE(result);
-    EXPECT_EQ(last_command, test_command);
-
-    bool tick_result = session_test.Tick();
-    EXPECT_FALSE(tick_result);
-    EXPECT_TRUE(tick_called);
-
-    session_test.NotifyClosedByPeer();
-    EXPECT_TRUE(closed_by_peer_called);
-}
-
-class EnqueueSession : public UnixDomainServer::ISession
-{
-  public:
-    bool Tick() override
-    {
-        return true;
-    }
-};
-
-TEST(SessionWrapperTest, TryEnqueueForDeleteWithSessionAlreadyRunningNoEnqueue)
-{
-    UnixDomainServerMock server_mock;
-    constexpr std::uint8_t kServerFd = 10U;
-    UnixDomainServer::SessionWrapper::SessionWrapperTest wrapper(&server_mock, kServerFd);
-    wrapper.session_ = std::make_unique<EnqueueSession>();
-    wrapper.running_ = true;
-    wrapper.enqueued_ = false;
-
-    bool result = wrapper.TryEnqueueForDelete(false);
-    EXPECT_TRUE(result);
-}
-
-TEST(SessionWrapperTest, TryEnqueueForDeleteWithSessionTriggersEnqueue)
-{
-    UnixDomainServerMock server_mock;
-    constexpr std::uint8_t kServerFd = 42U;
-    uint8_t enqueue_call_count = 0U;
-    std::int32_t last_fd = 0U;
-    EXPECT_CALL(server_mock, EnqueueTickDirect(kServerFd))
-        .WillRepeatedly([&enqueue_call_count, &last_fd](std::int32_t fd) {
-            ++enqueue_call_count;
-            last_fd = fd;
-        });
-    UnixDomainServer::SessionWrapper::SessionWrapperTest wrapper(&server_mock, kServerFd);
-    wrapper.session_ = std::make_unique<EnqueueSession>();
-    wrapper.running_ = false;
-    wrapper.enqueued_ = false;
-
-    bool result = wrapper.TryEnqueueForDelete(true);
-    EXPECT_TRUE(result);
-    EXPECT_EQ(enqueue_call_count, 1);
-    EXPECT_EQ(last_fd, kServerFd);
-    EXPECT_TRUE(wrapper.to_delete_);
-    EXPECT_TRUE(wrapper.closed_by_peer_);
-    EXPECT_TRUE(wrapper.enqueued_);
-}
-
 }  // namespace dummy_namespace
 
 namespace
 {
 
-// we will reuse your TempMarker
-using dummy_namespace::TempMarker;
+using ::testing::_;
+using ::testing::AnyNumber;
+using ::testing::HasSubstr;
+using ::testing::NiceMock;
+using ::testing::Return;
+using ::testing::StrEq;
 
-// a tiny factory that always returns a TempMarker
-const UnixDomainServer::SessionFactory kFactory = [](const std::string&, UnixDomainServer::SessionHandle) {
-    return std::make_unique<TempMarker>();
-};
+using ServerTest = UnixDomainServer::UnixDomainServerTest;
+using WrapperTest = UnixDomainServer::SessionWrapper::SessionWrapperTest;
+using RecvResult = score::cpp::expected<ssize_t, score::os::Error>;
+using PollResult = score::cpp::expected<std::int32_t, score::os::Error>;
+using MessageFlag = score::os::Socket::MessageFlag;
+
+constexpr std::int32_t kServerFd{10};
+constexpr std::int32_t kClientFd{20};
+constexpr std::int32_t kOtherClientFd{21};
+constexpr std::int32_t kPeerPid{1234};
+// ProcessServerIteration() skips idle-connection handling for a positive poll timeout.
+constexpr std::int32_t kSkipIdle{100};
+constexpr std::int32_t kProcessIdle{0};
 
 class CountingSession : public UnixDomainServer::ISession
 {
@@ -250,337 +208,6 @@ std::atomic<int> CountingSession::gConstructed{0};
 std::atomic<int> CountingSession::gCommands{0};
 std::atomic<int> CountingSession::gTicks{0};
 
-UnixDomainSockAddr MakeTempAddrAbstractFalse()
-{
-#ifdef _NTO_VERSION
-    std::string name = "/persistent/uds_ut_" + std::to_string(getpid()) + "_" + std::to_string(rand() & 0xffff);
-#else
-    std::string name = "/tmp/uds_ut_" + std::to_string(getpid()) + "_" + std::to_string(rand() & 0xffff);
-#endif
-    return UnixDomainSockAddr(name, /*isAbstract=*/false);
-}
-
-UnixDomainSockAddr MakeTempAddrAbstractFalse(std::string& name)
-{
-#ifdef _NTO_VERSION
-    name = "/persistent/uds_ut_" + std::to_string(getpid()) + "_" + std::to_string(rand() & 0xffff);
-#else
-    name = "/tmp/uds_ut_" + std::to_string(getpid()) + "_" + std::to_string(rand() & 0xffff);
-#endif
-    return UnixDomainSockAddr(name, /*isAbstract=*/false);
-}
-
-/// Block until the server at \p path is accepting connections (i.e. listen() completed).
-/// A successful non-blocking connect() proves the server passed both bind() and listen().
-/// Returns true on success, false on timeout.
-bool WaitForSocketFile(const std::string& path, std::chrono::milliseconds timeout = std::chrono::milliseconds(5000))
-{
-    constexpr auto kPollInterval = std::chrono::milliseconds(10);
-    auto deadline = std::chrono::steady_clock::now() + timeout;
-    while (std::chrono::steady_clock::now() < deadline)
-    {
-        int fd = ::socket(AF_UNIX, SOCK_STREAM, 0);
-        if (fd >= 0)
-        {
-            sockaddr_un su{};
-            su.sun_family = AF_UNIX;
-            std::strncpy(su.sun_path, path.c_str(), sizeof(su.sun_path) - 1);
-            if (::connect(fd, reinterpret_cast<sockaddr*>(&su), sizeof(su)) == 0)
-            {
-                ::close(fd);
-                return true;
-            }
-            ::close(fd);
-        }
-        std::this_thread::sleep_for(kPollInterval);
-    }
-    return false;
-}
-
-TEST(UnixDomainSockAddr, NonAbstractRoundTrip)
-{
-    UnixDomainSockAddr addr("datarouter_socket", false);
-    EXPECT_FALSE(addr.IsAbstract());
-    const char* s = addr.GetAddressString();
-    // since we constructed with isAbstract=false, sun_path[0] ≠ '\0'
-    EXPECT_NE(s[0], '\0');
-    EXPECT_STREQ(s, addr.addr.sun_path);
-}
-
-TEST(UnixDomainServerSessionWrapper, BasicFlagsAndTimeout)
-{
-    UnixDomainSockAddr addr("datarouter_socket", true);
-    UnixDomainServer server(addr, UnixDomainServer::SessionFactory());
-    UnixDomainServer::SessionWrapper w(&server, /*fd=*/7);
-
-    EXPECT_FALSE(w.IsMarkedForDelete());
-    EXPECT_FALSE(w.GetResetClosedByPeer());
-
-    // before a real session_ is constructed, handle_command("") returns now<timeout
-    EXPECT_TRUE(w.HandleCommand("", /*peer_pid=*/score::cpp::nullopt));
-    EXPECT_TRUE(w.HandleCommand("TT", /*peer_pid=*/score::cpp::nullopt));
-    EXPECT_FALSE(w.TryEnqueueForDelete(/*by_peer=*/false));
-
-    w.SetRunning();
-    EXPECT_FALSE(w.ResetRunning(/*requeue=*/false));
-    EXPECT_TRUE(w.ResetRunning(/*requeue=*/true));
-}
-
-TEST(SessionHandle, PassMessage)
-{
-    int fake_fd = 42;
-    UnixDomainSockAddr addr("datarouter_socket", true);
-    UnixDomainServer server(addr, UnixDomainServer::SessionFactory());
-
-    UnixDomainServer::SessionHandle h(fake_fd);
-    EXPECT_NO_FATAL_FAILURE(h.PassMessage("HelloTest"));
-}
-
-TEST(SessionWrapperMove, CanMoveAndDestructWithoutCrash)
-{
-    UnixDomainSockAddr addr("datarouter_socket", true);
-    UnixDomainServer server(addr, {});
-    UnixDomainServer::SessionWrapper orig(&server, 42);
-    EXPECT_FALSE(orig.IsMarkedForDelete());
-    EXPECT_FALSE(orig.GetResetClosedByPeer());
-
-    EXPECT_NO_FATAL_FAILURE({
-        UnixDomainServer::SessionWrapper moved(std::move(orig));
-        EXPECT_FALSE(moved.IsMarkedForDelete());
-        EXPECT_FALSE(moved.GetResetClosedByPeer());
-    });
-}
-
-TEST(UnixDomainServerSessionWrapper, ServerSessionWrapperWithRealFactory)
-{
-    UnixDomainSockAddr addr = MakeTempAddrAbstractFalse();
-
-    UnixDomainServer server(addr, {});
-
-    UnixDomainServer::SessionWrapper w(&server, /*fd*/ 7);
-
-    EXPECT_FALSE(w.IsMarkedForDelete());
-    EXPECT_FALSE(w.GetResetClosedByPeer());
-
-    EXPECT_TRUE(w.HandleCommand("someName", score::cpp::nullopt));
-    EXPECT_TRUE(w.HandleCommand("someName", score::cpp::nullopt));
-    EXPECT_TRUE(w.HandleCommand("subscriberName", /*peer_pid=*/static_cast<int>(::getpid())));
-}
-
-TEST(UnixDomainServerAcceptTest, AcceptsOneClientConnection)
-{
-#ifdef _NTO_VERSION
-    std::string path = "/persistent/uds_accept_test_" + std::to_string(getpid());
-#else
-    std::string path = "/tmp/uds_accept_test_" + std::to_string(getpid());
-#endif
-    ::unlink(path.c_str());
-
-    UnixDomainSockAddr addr(path, /* isAbstract = */ false);
-    UnixDomainServer* server = new UnixDomainServer(addr, kFactory);
-
-    ASSERT_TRUE(WaitForSocketFile(path)) << "server did not bind in time";
-
-    // create a client socket
-    int client = ::socket(AF_UNIX, SOCK_STREAM, 0);
-    ASSERT_GE(client, 0) << strerror(errno);
-
-    struct sockaddr_un sun{};
-    sun.sun_family = AF_UNIX;
-    strncpy(sun.sun_path, path.c_str(), sizeof(sun.sun_path) - 1);
-
-    ASSERT_EQ(0, ::connect(client, reinterpret_cast<struct sockaddr*>(&sun), sizeof(sun))) << strerror(errno);
-
-    // now wait a bit so that server_routine's accept() branch fires
-    std::this_thread::sleep_for(std::chrono::milliseconds(100));
-
-    // if we reach here, accept() did not abort
-    EXPECT_TRUE(::close(client) == 0);
-
-    delete server;
-}
-
-TEST(UnixDomainServerCleanup, DestructorProcessesPendingConnections)
-{
-    std::string path;
-    auto addr = MakeTempAddrAbstractFalse(path);  // non‑abstract file‑system socket
-
-    // Scope the server so its destructor will run cleanup
-    {
-        UnixDomainServer server(addr, kFactory);
-
-        // wait for the server to bind the socket file
-        ASSERT_TRUE(WaitForSocketFile(path)) << "server did not bind in time";
-
-        // open two real UNIX‐domain clients and connect them
-        for (int i = 0; i < 2; ++i)
-        {
-            int cfd = ::socket(AF_UNIX, SOCK_STREAM, 0);
-            ASSERT_GE(cfd, 0) << strerror(errno);
-
-            sockaddr_un su{};
-            su.sun_family = AF_UNIX;
-            // sun_path must be null‑terminated and include the path
-            std::strncpy(su.sun_path, path.c_str(), sizeof(su.sun_path) - 1);
-
-            int rc = ::connect(cfd, reinterpret_cast<sockaddr*>(&su), sizeof(sockaddr_un));
-            ASSERT_EQ(rc, 0) << strerror(errno);
-
-            // leave cfd open; server will accept it
-        }
-
-        // give server time to wake up, accept both
-        std::this_thread::sleep_for(std::chrono::milliseconds(200));
-    }
-
-    SUCCEED();
-}
-
-TEST(UnixDomainServerHandleCmd, AllBranchesViaFramedMessages)
-{
-    CountingSession::gConstructed = 0;
-    CountingSession::gCommands = 0;
-    CountingSession::gTicks = 0;
-
-    std::string path;
-    auto addr = MakeTempAddrAbstractFalse(path);  // non‑abstract file‑system socket
-    ::unlink(path.c_str());
-
-    UnixDomainServer::SessionFactory factory = [](const std::string&, UnixDomainServer::SessionHandle h) {
-        return std::make_unique<CountingSession>(std::move(h));
-    };
-
-    UnixDomainServer server(addr, factory);
-
-    ASSERT_TRUE(WaitForSocketFile(path)) << "server did not bind in time";
-
-    // open one client and connect
-    int cfd = ::socket(AF_UNIX, SOCK_STREAM, 0);
-    ASSERT_GE(cfd, 0) << strerror(errno);
-
-    sockaddr_un su{};
-    su.sun_family = AF_UNIX;
-    std::strncpy(su.sun_path, path.c_str(), sizeof(su.sun_path) - 1);
-
-    ASSERT_EQ(::connect(cfd, reinterpret_cast<sockaddr*>(&su), sizeof(su)), 0) << strerror(errno);
-
-    // send messages using the correct framing helper
-    SendSocketMessage(cfd, std::string("subName"));
-    SendSocketMessage(cfd, std::string("cmd1"));
-    SendSocketMessage(cfd, std::string("cmd2"));
-
-    // give the worker thread some time to dequeue & process
-    for (int i = 0; i < 50 && CountingSession::gTicks.load() == 0; ++i)
-    {
-        std::this_thread::sleep_for(std::chrono::milliseconds(10));
-    }
-
-    std::this_thread::sleep_for(std::chrono::milliseconds(100));
-
-    // verify that every branch in handle_command() ran
-    EXPECT_EQ(CountingSession::gConstructed.load(), 1);
-    EXPECT_EQ(CountingSession::gCommands.load(), 2);
-    EXPECT_GE(CountingSession::gTicks.load(), 1);
-
-    // clean up
-    EXPECT_EQ(::close(cfd), 0);
-}
-
-TEST(UnixDomainServerHandleCommand, IdleClientTriggersDeleteBranch)
-{
-    std::string path;
-    UnixDomainSockAddr addr = MakeTempAddrAbstractFalse(path);
-
-    /* start server with an **empty factory**  */
-    {
-        UnixDomainServer server(addr, /*factory*/ {});
-
-        ASSERT_TRUE(WaitForSocketFile(path)) << "server did not bind in time";
-
-        /* connect client but **do not send** anything */
-        int cli = ::socket(AF_UNIX, SOCK_STREAM, 0);
-        ASSERT_GE(cli, 0) << strerror(errno);
-
-        sockaddr_un su{};
-        su.sun_family = AF_UNIX;
-        std::strncpy(su.sun_path, path.c_str(), sizeof(su.sun_path) - 1);
-
-        ASSERT_EQ(::connect(cli, reinterpret_cast<sockaddr*>(&su), sizeof(su)), 0) << strerror(errno);
-
-        /* wait long enough for the 500 ms idle‑timeout to expire */
-        std::this_thread::sleep_for(std::chrono::milliseconds(650));
-
-        /* peer should have been closed by the server branch -> recv() returns 0 (EOF) */
-        char dummy;
-        ssize_t n = ::recv(cli, &dummy, 1, 0);
-        EXPECT_EQ(n, 0) << "socket still open - idle branch not executed?";
-
-        ::close(cli);  // tidy‑up client fd
-    }  // server destructor runs here; should not abort
-
-    SUCCEED();  // reaching here proves the branch ran
-}
-
-class CommandErrorInjectingSession : public UnixDomainServer::ISession
-{
-  public:
-    explicit CommandErrorInjectingSession(UnixDomainServer::SessionHandle) {}
-    bool Tick() override
-    {
-        return false;
-    }
-    void OnCommand(const std::string&) override
-    {
-        throw std::runtime_error("boom!");
-    }
-};
-
-TEST(UnixDomainServerExceptions, CatchStdExceptionInServerRoutine)
-{
-    /* prepare a non‑abstract pathname and start a real server*/
-    std::string path;
-    UnixDomainSockAddr addr = MakeTempAddrAbstractFalse(path);
-    ::unlink(path.c_str());  // clean up any stale
-    /* factory builds a session whose **on_command() causes error**. */
-    UnixDomainServer::SessionFactory factory = [](const std::string&, UnixDomainServer::SessionHandle h) {
-        return std::make_unique<CommandErrorInjectingSession>(h);
-    };
-
-    /* start the server (on its background thread) */
-    UnixDomainServer server(addr, factory);
-    ASSERT_TRUE(WaitForSocketFile(path)) << "server did not bind in time";
-
-    /* create a client, subscribe (no throw), then send a 2nd string which triggers
-     * CommandErrorInjectingSession::on_command() */
-    int cfd = ::socket(AF_UNIX, SOCK_STREAM, 0);
-    ASSERT_GE(cfd, 0) << strerror(errno);
-
-    sockaddr_un sun{};
-    sun.sun_family = AF_UNIX;
-    std::strncpy(sun.sun_path, path.c_str(), sizeof(sun.sun_path) - 1);
-    ASSERT_EQ(0, ::connect(cfd, reinterpret_cast<sockaddr*>(&sun), sizeof(sun))) << strerror(errno);
-
-    /* first message -> session is created */
-    const char* subscribe = "subName";
-    ASSERT_EQ(::send(cfd, subscribe, strlen(subscribe), 0), static_cast<ssize_t>(strlen(subscribe)));
-
-    /* second message -> OnCommand() causes error */
-    const char* bad_msg = "this_will_cause_error";
-    ASSERT_EQ(::send(cfd, bad_msg, strlen(bad_msg), 0), static_cast<ssize_t>(strlen(bad_msg)));
-
-    /* wait long enough for the poll‑loop to run exactly once */
-    std::this_thread::sleep_for(std::chrono::milliseconds(250));
-
-    /* Verify the socket was closed on the server side inside the
-           catch‑handler: further send() must now fail with EPIPE. */
-    const char* more = "ping";
-    ssize_t sret = ::send(cfd, more, strlen(more), MSG_NOSIGNAL);
-    EXPECT_EQ(sret, -1);
-    EXPECT_TRUE(errno == EPIPE || errno == ECONNRESET);
-
-    ::close(cfd);
-}
-
 class CloseAwareSession : public UnixDomainServer::ISession
 {
   public:
@@ -589,60 +216,15 @@ class CloseAwareSession : public UnixDomainServer::ISession
     bool Tick() override
     {
         return false;
-    }  // no re‑queue
+    }
     void OnClosedByPeer() override
     {
         ++gPeerClosed;
-    }  // mark call
+    }
 
     static std::atomic<int> gPeerClosed;
 };
-
 std::atomic<int> CloseAwareSession::gPeerClosed{0};
-
-TEST(UnixDomainServer, NotifiesClosedByPeer)
-{
-    CloseAwareSession::gPeerClosed = 0;
-
-    // start server on fresh pathname
-    std::string path;
-    UnixDomainSockAddr addr = MakeTempAddrAbstractFalse(path);
-    ::unlink(path.c_str());
-
-    UnixDomainServer::SessionFactory factory = [](const std::string&, UnixDomainServer::SessionHandle h) {
-        return std::make_unique<CloseAwareSession>(std::move(h));
-    };
-
-    UnixDomainServer server(addr, factory);
-
-    ASSERT_TRUE(WaitForSocketFile(path)) << "server did not bind in time";
-
-    // create client, subscribe, then close() to simulate peer hang‑up
-    int cfd = ::socket(AF_UNIX, SOCK_STREAM, 0);
-    ASSERT_GE(cfd, 0) << strerror(errno);
-
-    sockaddr_un su{};
-    su.sun_family = AF_UNIX;
-    std::strncpy(su.sun_path, path.c_str(), sizeof(su.sun_path) - 1);
-
-    ASSERT_EQ(::connect(cfd, reinterpret_cast<sockaddr*>(&su), sizeof(su)), 0) << strerror(errno);
-
-    SendSocketMessage(cfd, std::string("subscriber"));
-
-    // grace interval for server to accept and build the session
-    std::this_thread::sleep_for(std::chrono::milliseconds(80));
-
-    ASSERT_EQ(::close(cfd), 0);
-
-    // wait until the worker thread runs and calls notify_closed_by_peer()
-    for (int i = 0; i < 50 && CloseAwareSession::gPeerClosed.load() == 0; ++i)
-    {
-        std::this_thread::sleep_for(std::chrono::milliseconds(20));
-    }
-
-    // verify the callback was invoked exactly once
-    EXPECT_EQ(CloseAwareSession::gPeerClosed.load(), 1);
-}
 
 class RequeueSession : public UnixDomainServer::ISession
 {
@@ -656,296 +238,558 @@ class RequeueSession : public UnixDomainServer::ISession
     }
     static std::atomic<int> gTicks;
 };
-
 std::atomic<int> RequeueSession::gTicks{0};
 
+class EnqueueSession : public UnixDomainServer::ISession
+{
+  public:
+    bool Tick() override
+    {
+        return true;
+    }
+};
+
+template <typename Session>
 UnixDomainServer::SessionFactory MakeFactory()
 {
     return [](const std::string&, UnixDomainServer::SessionHandle h) {
-        return std::make_unique<RequeueSession>(std::move(h));
+        return std::make_unique<Session>(h);
     };
 }
 
-TEST(UnixDomainServer, WorkerRequeuesOnTrueTick)
+// First recvmsg() of a frame: delivers the message header.
+auto DeliverHeader(std::uint16_t payload_len)
 {
-    RequeueSession::gTicks = 0;
-
-    std::string path;
-    UnixDomainSockAddr addr = MakeTempAddrAbstractFalse(path);
-    ::unlink(path.c_str());
-
-    UnixDomainServer server(addr, MakeFactory());
-
-    ASSERT_TRUE(WaitForSocketFile(path)) << "server did not bind in time";
-
-    int cfd = ::socket(AF_UNIX, SOCK_STREAM, 0);
-    ASSERT_GE(cfd, 0) << strerror(errno);
-
-    sockaddr_un su{};
-    su.sun_family = AF_UNIX;
-    std::strncpy(su.sun_path, path.c_str(), sizeof(su.sun_path) - 1);
-
-    ASSERT_EQ(::connect(cfd, reinterpret_cast<sockaddr*>(&su), sizeof(su)), 0) << strerror(errno);
-
-    // send a name so server builds the session
-    SendSocketMessage(cfd, std::string("subscriber"));
-
-    // wait until the worker thread has processed the session at least twice
-    // (first tick returns true -> re‑queue, second tick returns false)
-    for (int i = 0; i < 30 && RequeueSession::gTicks.load() < 2; ++i)
-    {
-        std::this_thread::sleep_for(std::chrono::milliseconds(20));
-    }
-
-    EXPECT_GE(RequeueSession::gTicks.load(), 2);
-
-    ::close(cfd);  // tidy up client side
+    return [payload_len](std::int32_t, msghdr* msg, MessageFlag) -> RecvResult {
+        SocketMessangerHeader header{};
+        header.len = payload_len;
+        header.type = MessageType::kDefault;
+        header.pid = kPeerPid;
+        std::memcpy(msg->msg_iov[0].iov_base, &header, sizeof(header));
+        return static_cast<ssize_t>(sizeof(header));
+    };
 }
 
-class ErrorInjectingSession : public UnixDomainServer::ISession
+// Second recvmsg() of a frame: delivers the null-terminated payload.
+auto DeliverPayload(const std::string& payload)
 {
-  public:
-    explicit ErrorInjectingSession(UnixDomainServer::SessionHandle /*h*/) {}
-    bool Tick() override
-    {
-        throw std::runtime_error("boom from Tick()");
-    }
-    void OnCommand(const std::string&) override {}
-};
-
-// simple factory that builds a ErrorInjectingSession
-UnixDomainServer::SessionFactory gKErrorInjectingFactory = [](const std::string&, UnixDomainServer::SessionHandle h) {
-    return std::make_unique<ErrorInjectingSession>(h);
-};
-
-TEST(UnixDomainServer, ServerCatchesSessionFailure)
-{
-    std::string path;
-    auto addr = MakeTempAddrAbstractFalse(path);
-    UnixDomainServer server(addr, gKErrorInjectingFactory);
-
-    /* wait for server to bind the socket file */
-    ASSERT_TRUE(WaitForSocketFile(path)) << "server did not bind in time";
-
-    int cfd = ::socket(AF_UNIX, SOCK_STREAM, 0);
-    ASSERT_GE(cfd, 0) << strerror(errno);
-
-    sockaddr_un su{};
-    su.sun_family = AF_UNIX;
-    std::strncpy(su.sun_path, path.c_str(), sizeof(su.sun_path) - 1);
-
-    ASSERT_EQ(::connect(cfd, reinterpret_cast<sockaddr*>(&su), sizeof(su)), 0) << strerror(errno);
-
-    const char* sub = "subName";
-    ssize_t n = ::send(cfd, sub, std::strlen(sub), 0);
-    ASSERT_EQ(n, static_cast<ssize_t>(std::strlen(sub))) << strerror(errno);
-
-    /* give the server thread enough time to dequeue & run Tick() (⇒ error) */
-    std::this_thread::sleep_for(std::chrono::milliseconds(250));
-
-    /* clean up the client socket */
-    ::close(cfd);
+    return [payload](std::int32_t, msghdr* msg, MessageFlag) -> RecvResult {
+        std::memcpy(msg->msg_iov[0].iov_base, payload.c_str(), payload.size() + 1U);
+        return static_cast<ssize_t>(payload.size() + 1U);
+    };
 }
 
-extern "C" {
-
-// test‑controlled return‑code for shm_create_handle
-static int gShmCreateRc = 0;  // default: succeed
-
-int ShmCreateHandle(int /*fd*/, int /*pid*/, int /*oflag*/, void* /*handle*/, int /*reserved*/)
-{
-    // just return whatever the test configured
-    return gShmCreateRc;
-}
-}  // extern "C"
-
-using namespace testing;
-
-TEST(UnixDomainServerSocketFixture, ServerFailedToCreateSocket)
-{
-    std::unique_ptr<score::os::SocketMock> sock_mock;
-    sock_mock = std::make_unique<score::os::SocketMock>();
-    ::testing::Mock::AllowLeak(sock_mock.get());
-    score::os::Socket::set_testing_instance(*sock_mock);
-    EXPECT_CALL(*sock_mock, socket(_, _, _))
-        .WillRepeatedly(Return(score::cpp::make_unexpected(score::os::Error::createFromErrno())));
-    EXPECT_CALL(*sock_mock, bind(_, _, _)).WillRepeatedly(Return(score::cpp::blank{}));
-    EXPECT_CALL(*sock_mock, listen(_, _)).WillRepeatedly(Return(score::cpp::blank{}));
-    UnixDomainSockAddr addr("socket", true);
-    EXPECT_DEATH(UnixDomainServer server(addr, UnixDomainServer::SessionFactory()), "");
-}
-
-TEST(UnixDomainServerSocketFixture, ServerFailedToCreateBind)
-{
-    std::unique_ptr<score::os::SocketMock> sock_mock;
-    sock_mock = std::make_unique<score::os::SocketMock>();
-    score::os::Socket::set_testing_instance(*sock_mock);
-    ::testing::Mock::AllowLeak(sock_mock.get());
-    EXPECT_CALL(*sock_mock, socket(_, _, _)).WillRepeatedly(Return(20));
-    EXPECT_CALL(*sock_mock, bind(_, _, _))
-        .WillRepeatedly(Return(score::cpp::make_unexpected(score::os::Error::createFromErrno())));
-    UnixDomainSockAddr addr("socket", true);
-    EXPECT_DEATH(UnixDomainServer server(addr, UnixDomainServer::SessionFactory()), "");
-}
-
-TEST(UnixDomainServerSocketFixture, ServerFailedToListen)
-{
-    std::unique_ptr<score::os::SocketMock> sock_mock;
-    sock_mock = std::make_unique<score::os::SocketMock>();
-    score::os::Socket::set_testing_instance(*sock_mock);
-    ::testing::Mock::AllowLeak(sock_mock.get());
-    EXPECT_CALL(*sock_mock, socket(_, _, _)).WillRepeatedly(Return(20));
-    EXPECT_CALL(*sock_mock, bind(_, _, _)).WillRepeatedly(Return(score::cpp::blank{}));
-    EXPECT_CALL(*sock_mock, listen(_, _))
-        .WillRepeatedly(Return(score::cpp::make_unexpected(score::os::Error::createFromErrno())));
-    UnixDomainSockAddr addr("socket", true);
-    EXPECT_DEATH(UnixDomainServer server(addr, UnixDomainServer::SessionFactory()), "");
-}
-
-TEST(UnixDomainServerSocketFixture, FailedToPoll)
-{
-#ifdef _NTO_VERSION
-    std::string path = "/persistent/uds_accept_test_" + std::to_string(getpid());
-#else
-    std::string path = "/tmp/uds_accept_test_" + std::to_string(getpid());
-#endif
-    ::unlink(path.c_str());
-
-    score::os::SysPollMock sys_poll_mock;
-    score::os::SocketMock sock_mock;
-
-    ::testing::Mock::AllowLeak(&sock_mock);
-    ::testing::Mock::AllowLeak(&sys_poll_mock);
-
-    score::os::Socket::set_testing_instance(sock_mock);
-    score::os::SysPoll::set_testing_instance(sys_poll_mock);
-
-    EXPECT_CALL(sock_mock, socket(_, _, _)).WillRepeatedly(Return(20));
-    EXPECT_CALL(sock_mock, bind(_, _, _)).WillRepeatedly(Return(score::cpp::blank{}));
-    EXPECT_CALL(sock_mock, listen(_, _)).WillRepeatedly(Return(score::cpp::blank{}));
-    EXPECT_CALL(sys_poll_mock, poll(_, _, _))
-        .WillRepeatedly(Return(score::cpp::make_unexpected(score::os::Error::createFromErrno())));
-    EXPECT_CALL(sock_mock, accept(_, _, _)).WillRepeatedly(Return(1));
-
-    UnixDomainSockAddr addr(path, /* isAbstract = */ false);
-
-    ASSERT_DEATH(
-        {
-            // This block is expected to call std::exit()
-            UnixDomainServer* server = new UnixDomainServer(addr, kFactory);
-            std::this_thread::sleep_for(std::chrono::milliseconds(100));
-            delete server;
-        },
-        ".*poll.*");
-}
-
-TEST(UnixDomainServerSocketFixture, ServerFailedToAcceptClientConnection)
-{
-    score::os::SysPollMock sys_poll_mock;
-    score::os::SocketMock sock_mock;
-
-    ::testing::Mock::AllowLeak(&sock_mock);
-    ::testing::Mock::AllowLeak(&sys_poll_mock);
-
-    score::os::Socket::set_testing_instance(sock_mock);
-    score::os::SysPoll::set_testing_instance(sys_poll_mock);
-
-    EXPECT_CALL(sock_mock, socket(_, _, _)).WillRepeatedly(Return(20));
-    EXPECT_CALL(sock_mock, bind(_, _, _)).WillRepeatedly(Return(score::cpp::blank{}));
-    EXPECT_CALL(sock_mock, listen(_, _)).WillRepeatedly(Return(score::cpp::blank{}));
-    EXPECT_CALL(sys_poll_mock, poll(_, _, _)).WillRepeatedly([](struct pollfd* in_pollfd, nfds_t, int) {
-        in_pollfd[0].fd = 20;  // return fd as 1 to call ARPfilter functions
-        in_pollfd[0].revents = POLLIN;
-        return 1;  // number of events for polling
-    });
-
-    std::string path;
-    UnixDomainSockAddr addr = MakeTempAddrAbstractFalse(path);
-
-    std::this_thread::sleep_for(std::chrono::milliseconds(40));  // bind+listen
-    EXPECT_CALL(sock_mock, accept(_, _, _))
-        .WillRepeatedly(Return(score::cpp::make_unexpected(score::os::Error::createFromErrno())));
-    // open one client
-    auto client_socket_ret = score::os::Socket::instance().socket(score::os::Socket::Domain::kUnix, SOCK_STREAM, 0);
-    std::int32_t client_fd = client_socket_ret.has_value() ? client_socket_ret.value() : -1;
-
-    ASSERT_GE(client_fd, 0) << strerror(errno);
-
-    ASSERT_DEATH(
-        {
-            // This block is expected to call std::exit()
-            UnixDomainServer* server = new UnixDomainServer(addr, kFactory);
-            std::this_thread::sleep_for(std::chrono::milliseconds(100));
-            delete server;
-        },
-        ".*accept.*");
-}
-
-class PthreadMockFixture : public ::testing::Test
+class UnixDomainServerFixture : public ::testing::Test
 {
   protected:
-    // The mock object (lives as long as the fixture)
-    score::os::MockPthread pthread_mock_;
-
     void SetUp() override
     {
-        // Tell the singleton to use *our* mock instead of the real impl
+        test_thread_id_ = std::this_thread::get_id();
+
+        score::os::Socket::set_testing_instance(socket_mock_);
+        score::os::SysPoll::set_testing_instance(sys_poll_mock_);
+        score::os::Unistd::set_testing_instance(unistd_mock_);
         score::os::Pthread::set_testing_instance(pthread_mock_);
 
-        // Default behaviour: pretend everything succeeds
-        ON_CALL(pthread_mock_, setname_np(::testing::_, ::testing::_)).WillByDefault([](pthread_t, const char*) {
-            return score::cpp::blank{};  // success
+        ON_CALL(socket_mock_, socket(_, _, _)).WillByDefault(Return(kServerFd));
+        ON_CALL(socket_mock_, bind(_, _, _)).WillByDefault(Return(score::cpp::blank{}));
+        ON_CALL(socket_mock_, listen(_, _)).WillByDefault(Return(score::cpp::blank{}));
+        ON_CALL(socket_mock_, sendmsg(_, _, _)).WillByDefault(Return(0));
+        ON_CALL(sys_poll_mock_, poll(_, _, _)).WillByDefault([this](pollfd* fds, nfds_t count, std::int32_t timeout) {
+            return Poll(fds, count, timeout);
         });
+        ON_CALL(unistd_mock_, close(_)).WillByDefault(Return(score::cpp::blank{}));
+        ON_CALL(unistd_mock_, unlink(_)).WillByDefault(Return(score::cpp::blank{}));
+        ON_CALL(pthread_mock_, setname_np(_, _)).WillByDefault(Return(score::cpp::blank{}));
+        // Catch-alls (e.g. the server closing its listening fd), overridden by fd-specific expectations.
+        EXPECT_CALL(unistd_mock_, close(_)).Times(AnyNumber());
+        EXPECT_CALL(unistd_mock_, unlink(_)).Times(AnyNumber());
     }
 
     void TearDown() override
     {
-        // Remove the testing instance so it does not leak into other tests
-        score::os::Pthread::set_testing_instance(score::os::Pthread::instance());
+        ReleaseServerThreads();
+        servers_.clear();
+
+        score::os::Socket::restore_instance();
+        score::os::SysPoll::restore_instance();
+        score::os::Unistd::restore_instance();
+        score::os::Pthread::restore_instance();
     }
+
+    // Owned by the fixture so the server threads are released before the servers are joined.
+    template <typename Server, typename... Args>
+    Server& MakeServer(Args&&... args)
+    {
+        std::int32_t parked_before{};
+        {
+            std::lock_guard<std::mutex> lock(server_thread_mutex_);
+            parked_before = parked_server_threads_;
+        }
+        auto server = std::make_unique<Server>(std::forward<Args>(args)...);
+        Server& server_ref = *server;
+        servers_.push_back(std::move(server));
+
+        std::unique_lock<std::mutex> lock(server_thread_mutex_);
+        server_thread_cv_.wait(lock, [this, parked_before]() {
+            return parked_server_threads_ > parked_before;
+        });
+        return server_ref;
+    }
+
+    // Lets the servers' own threads run their ServerRoutine() loop freely.
+    void ReleaseServerThreads()
+    {
+        {
+            std::lock_guard<std::mutex> lock(server_thread_mutex_);
+            server_threads_released_ = true;
+        }
+        server_thread_cv_.notify_all();
+    }
+
+    bool WaitForZeroTimeoutServerPoll()
+    {
+        std::unique_lock<std::mutex> lock(server_thread_mutex_);
+        return server_thread_cv_.wait_for(lock, std::chrono::seconds(2), [this]() {
+            return zero_timeout_server_polls_ > 0;
+        });
+    }
+
+    static ServerTest::ConnectionState MakeConnectionState()
+    {
+        ServerTest::ConnectionState state{};
+        state.connection_pollfd_list.push_back({kServerFd, POLLIN, 0});
+        return state;
+    }
+
+    void AcceptClient(ServerTest& server, ServerTest::ConnectionState& state, std::int32_t client_fd)
+    {
+        poll_events_ = {{kServerFd, POLLIN}};
+        EXPECT_CALL(socket_mock_, accept(kServerFd, _, _)).WillOnce(Return(client_fd));
+        server.ProcessServerIteration(state, kServerFd, kSkipIdle);
+    }
+
+    void ReceiveFrame(ServerTest& server,
+                      ServerTest::ConnectionState& state,
+                      std::int32_t client_fd,
+                      const std::string& payload)
+    {
+        poll_events_ = {{client_fd, POLLIN}};
+        EXPECT_CALL(socket_mock_, recvmsg(client_fd, _, MessageFlag::kWaitAll))
+            .WillOnce(DeliverHeader(static_cast<std::uint16_t>(payload.size() + 1U)))
+            .WillOnce(DeliverPayload(payload));
+        server.ProcessServerIteration(state, kServerFd, kSkipIdle);
+    }
+
+    NiceMock<score::os::SocketMock> socket_mock_;
+    NiceMock<score::os::SysPollMock> sys_poll_mock_;
+    NiceMock<score::os::UnistdMock> unistd_mock_;
+    NiceMock<score::os::MockPthread> pthread_mock_;
+
+    // fd -> revents reported by the next poll() issued from the test thread.
+    std::map<std::int32_t, short> poll_events_;
+
+  private:
+    PollResult Poll(pollfd* fds, nfds_t count, std::int32_t timeout)
+    {
+        if (std::this_thread::get_id() != test_thread_id_)
+        {
+            // Park the server's own thread so that only the test thread drives the server state.
+            std::unique_lock<std::mutex> lock(server_thread_mutex_);
+            ++parked_server_threads_;
+            zero_timeout_server_polls_ += (timeout == 0) ? 1 : 0;
+            server_thread_cv_.notify_all();
+            server_thread_cv_.wait(lock, [this]() {
+                return server_threads_released_;
+            });
+            lock.unlock();
+            std::this_thread::sleep_for(std::chrono::milliseconds(1));
+            return 0;
+        }
+
+        std::int32_t ready{0};
+        for (nfds_t i = 0U; i < count; ++i)
+        {
+            const auto event = poll_events_.find(fds[i].fd);
+            fds[i].revents = (event != poll_events_.end()) ? event->second : static_cast<short>(0);
+            ready += (fds[i].revents != 0) ? 1 : 0;
+        }
+        return ready;
+    }
+
+    std::thread::id test_thread_id_{};
+    std::mutex server_thread_mutex_;
+    std::condition_variable server_thread_cv_;
+    std::int32_t parked_server_threads_{0};
+    std::int32_t zero_timeout_server_polls_{0};
+    bool server_threads_released_{false};
+    std::vector<std::unique_ptr<UnixDomainServer>> servers_;
 };
 
-TEST_F(PthreadMockFixture, ServerIgnoresSetnameError)
+TEST_F(UnixDomainServerFixture, SessionWrapperHandleCommandForwardsToSession)
 {
-    score::os::SysPollMock sys_poll_mock;
-    score::os::SocketMock sock_mock;
+    auto& server_mock = MakeServer<UnixDomainServerMock>();
+    constexpr std::int32_t kSessionFd = 10;
+    bool tick_called = false;
+    std::string last_command{};
+    bool closed_by_peer_called = false;
+    EXPECT_CALL(server_mock, EnqueueTickDirect(kSessionFd));
+    WrapperTest session_test(&server_mock, kSessionFd);
 
-    score::os::Socket::set_testing_instance(sock_mock);
-    score::os::SysPoll::set_testing_instance(sys_poll_mock);
-    ::testing::Mock::AllowLeak(&sock_mock);
-    ::testing::Mock::AllowLeak(&sys_poll_mock);
-
-    // Make the call appear to fail (Error::createFromErrno() is the usual way)
-    EXPECT_CALL(pthread_mock_, setname_np(::testing::_, ::testing::_))
-        .Times(1)
-        .WillRepeatedly(::testing::Return(score::cpp::make_unexpected(score::os::Error::createFromErrno(EINVAL))));
-    EXPECT_CALL(sock_mock, socket(_, _, _)).WillRepeatedly(Return(30));
-    EXPECT_CALL(sock_mock, socket(_, _, _)).WillRepeatedly(Return(30));
-    EXPECT_CALL(sock_mock, bind(_, _, _)).Times(Exactly(1)).WillOnce(Return(score::cpp::blank{}));
-    EXPECT_CALL(sock_mock, listen(_, _)).Times(Exactly(1)).WillOnce(Return(score::cpp::blank{}));
-    EXPECT_CALL(sys_poll_mock, poll(_, _, _)).WillRepeatedly([](struct pollfd* in_pollfd, nfds_t, int) {
-        in_pollfd[0].fd = 1;  // return fd as 1 to call ARPfilter functions
-        in_pollfd[0].revents = POLLIN;
-        return 1;  // number of events for polling
+    auto isession_mock = std::make_unique<ISessionMock>(UnixDomainServer::SessionHandle{kSessionFd});
+    ISessionMock* raw_isession_mock_ptr = isession_mock.get();
+    EXPECT_CALL(*raw_isession_mock_ptr, Tick()).WillRepeatedly([&tick_called]() {
+        tick_called = true;
+        return false;
     });
-    EXPECT_CALL(sock_mock, accept(_, _, _)).WillRepeatedly(Return(30));
+    EXPECT_CALL(*raw_isession_mock_ptr, OnClosedByPeer()).WillRepeatedly([&closed_by_peer_called]() {
+        closed_by_peer_called = true;
+    });
+    session_test.session_ = std::move(isession_mock);
 
-    // happens and the process does *not* abort when the error is returned.
-    UnixDomainSockAddr addr("uds_mock_socket", /*isAbstract=*/true);
+    std::string test_command = "test_command";
+    EXPECT_CALL(*raw_isession_mock_ptr, OnCommand(test_command))
+        .WillRepeatedly([&last_command](const std::string& command) {
+            last_command = command;
+        });
+    EXPECT_TRUE(session_test.HandleCommand(test_command, kPeerPid));
+    EXPECT_EQ(last_command, test_command);
+
+    EXPECT_FALSE(session_test.Tick());
+    EXPECT_TRUE(tick_called);
+
+    session_test.NotifyClosedByPeer();
+    EXPECT_TRUE(closed_by_peer_called);
+}
+
+TEST_F(UnixDomainServerFixture, SessionWrapperTryEnqueueForDeleteWhileRunningDoesNotEnqueue)
+{
+    auto& server_mock = MakeServer<UnixDomainServerMock>();
+    EXPECT_CALL(server_mock, EnqueueTickDirect(_)).Times(0);
+    WrapperTest wrapper(&server_mock, kClientFd);
+    wrapper.session_ = std::make_unique<EnqueueSession>();
+    wrapper.running_ = true;
+    wrapper.enqueued_ = false;
+
+    EXPECT_TRUE(wrapper.TryEnqueueForDelete(false));
+}
+
+TEST_F(UnixDomainServerFixture, SessionWrapperTryEnqueueForDeleteTriggersEnqueue)
+{
+    auto& server_mock = MakeServer<UnixDomainServerMock>();
+    EXPECT_CALL(server_mock, EnqueueTickDirect(kClientFd)).Times(1);
+    WrapperTest wrapper(&server_mock, kClientFd);
+    wrapper.session_ = std::make_unique<EnqueueSession>();
+    wrapper.running_ = false;
+    wrapper.enqueued_ = false;
+
+    EXPECT_TRUE(wrapper.TryEnqueueForDelete(true));
+    EXPECT_TRUE(wrapper.to_delete_);
+    EXPECT_TRUE(wrapper.closed_by_peer_);
+    EXPECT_TRUE(wrapper.enqueued_);
+}
+
+TEST(UnixDomainSockAddr, NonAbstractRoundTrip)
+{
+    UnixDomainSockAddr addr("datarouter_socket", false);
+    EXPECT_FALSE(addr.IsAbstract());
+    const char* s = addr.GetAddressString();
+    // since we constructed with isAbstract=false, sun_path[0] ≠ '\0'
+    EXPECT_NE(s[0], '\0');
+    EXPECT_STREQ(s, addr.addr.sun_path);
+}
+
+TEST_F(UnixDomainServerFixture, SessionWrapperBasicFlagsAndTimeout)
+{
+    auto& server = MakeServer<UnixDomainServer>(
+        UnixDomainSockAddr("datarouter_socket", true), UnixDomainServer::SessionFactory(), MakeSignalMock());
+    EXPECT_CALL(unistd_mock_, close(7)).Times(1);
+    UnixDomainServer::SessionWrapper w(&server, /*fd=*/7);
+
+    EXPECT_FALSE(w.IsMarkedForDelete());
+    EXPECT_FALSE(w.GetResetClosedByPeer());
+
+    // without a factory no session is created; handle_command returns now < timeout
+    EXPECT_TRUE(w.HandleCommand("", /*peer_pid=*/score::cpp::nullopt));
+    EXPECT_TRUE(w.HandleCommand("TT", /*peer_pid=*/score::cpp::nullopt));
+    EXPECT_FALSE(w.TryEnqueueForDelete(/*by_peer=*/false));
+
+    w.SetRunning();
+    EXPECT_FALSE(w.ResetRunning(/*requeue=*/false));
+    EXPECT_TRUE(w.ResetRunning(/*requeue=*/true));
+}
+
+TEST_F(UnixDomainServerFixture, SessionHandlePassMessageSendsOnSessionFd)
+{
+    UnixDomainServer::SessionHandle h(kClientFd);
+    EXPECT_CALL(socket_mock_, sendmsg(kClientFd, _, MessageFlag::kNone)).WillOnce(Return(10));
+
+    h.PassMessage("HelloTest");
+}
+
+TEST_F(UnixDomainServerFixture, SessionWrapperMoveClosesFdOnlyOnce)
+{
+    auto& server = MakeServer<ServerTest>();
+    EXPECT_CALL(unistd_mock_, close(42)).Times(1);
+    UnixDomainServer::SessionWrapper orig(&server, 42);
+    EXPECT_FALSE(orig.IsMarkedForDelete());
+    EXPECT_FALSE(orig.GetResetClosedByPeer());
+
     {
-        UnixDomainServer server(addr, UnixDomainServer::SessionFactory{});
-        std::this_thread::sleep_for(std::chrono::milliseconds(20));
-        // server dtor will run here; test passes if no abort & expectation met
+        UnixDomainServer::SessionWrapper moved(std::move(orig));
+        EXPECT_FALSE(moved.IsMarkedForDelete());
+        EXPECT_FALSE(moved.GetResetClosedByPeer());
     }
+}
+
+TEST_F(UnixDomainServerFixture, NonAbstractAddressIsUnlinkedBeforeBind)
+{
+    EXPECT_CALL(unistd_mock_, unlink(StrEq("/tmp/uds_ut_socket"))).Times(1);
+    auto& server = MakeServer<UnixDomainServer>(
+        UnixDomainSockAddr("/tmp/uds_ut_socket", false), UnixDomainServer::SessionFactory(), MakeSignalMock());
+
+    UnixDomainServer::SessionWrapper w(&server, /*fd*/ 7);
+    EXPECT_TRUE(w.HandleCommand("someName", score::cpp::nullopt));
+    EXPECT_TRUE(w.HandleCommand("subscriberName", kPeerPid));
+}
+
+TEST_F(UnixDomainServerFixture, SetupServerSocketReportsUnlinkFailureAndContinues)
+{
+    auto& server = MakeServer<ServerTest>();
+    UnixDomainSockAddr addr("/tmp/uds_ut_unlink_failure", false);
+    EXPECT_CALL(unistd_mock_, unlink(StrEq("/tmp/uds_ut_unlink_failure")))
+        .WillOnce(Return(score::cpp::make_unexpected(score::os::Error::createFromErrno(EACCES))));
+    EXPECT_CALL(socket_mock_, bind(kServerFd, _, _));
+    EXPECT_CALL(socket_mock_, listen(kServerFd, _));
+
+    ::testing::internal::CaptureStderr();
+    const auto server_fd = server.SetupServerSocket(addr);
+    const std::string output = ::testing::internal::GetCapturedStderr();
+
+    EXPECT_EQ(server_fd, kServerFd);
+    EXPECT_THAT(output, HasSubstr("/tmp/uds_ut_unlink_failure"));
+}
+
+TEST_F(UnixDomainServerFixture, AcceptAddsClientConnection)
+{
+    auto& server = MakeServer<ServerTest>();
+    auto state = MakeConnectionState();
+
+    AcceptClient(server, state, kClientFd);
+
+    ASSERT_EQ(state.connection_pollfd_list.size(), 2U);
+    EXPECT_EQ(state.connection_pollfd_list[1].fd, kClientFd);
+    EXPECT_EQ(state.connection_fd_map.count(kClientFd), 1U);
+}
+
+TEST_F(UnixDomainServerFixture, CleanupAllConnectionsClosesClients)
+{
+    auto& server = MakeServer<ServerTest>();
+    auto state = MakeConnectionState();
+    AcceptClient(server, state, kClientFd);
+    AcceptClient(server, state, kOtherClientFd);
+    ASSERT_EQ(state.connection_pollfd_list.size(), 3U);
+
+    EXPECT_CALL(unistd_mock_, close(kClientFd)).Times(1);
+    EXPECT_CALL(unistd_mock_, close(kOtherClientFd)).Times(1);
+    server.CleanupAllConnections(state);
+
+    ASSERT_EQ(state.connection_pollfd_list.size(), 1U);
+    EXPECT_EQ(state.connection_pollfd_list[0].fd, kServerFd);
+    EXPECT_TRUE(state.connection_fd_map.empty());
+}
+
+TEST_F(UnixDomainServerFixture, FramedMessagesCreateSessionAndForwardCommands)
+{
+    CountingSession::gConstructed = 0;
+    CountingSession::gCommands = 0;
+    CountingSession::gTicks = 0;
+    auto& server = MakeServer<ServerTest>(MakeFactory<CountingSession>());
+    auto state = MakeConnectionState();
+    AcceptClient(server, state, kClientFd);
+
+    ReceiveFrame(server, state, kClientFd, "subName");
+    ReceiveFrame(server, state, kClientFd, "cmd1");
+    ReceiveFrame(server, state, kClientFd, "cmd2");
+
+    EXPECT_EQ(CountingSession::gConstructed.load(), 1);
+    EXPECT_EQ(CountingSession::gCommands.load(), 2);
+    EXPECT_EQ(CountingSession::gTicks.load(), 3);
+    EXPECT_EQ(state.connection_pollfd_list.size(), 2U);
+}
+
+TEST_F(UnixDomainServerFixture, IdleClientWithoutSessionIsDroppedAfterTimeout)
+{
+    auto& server = MakeServer<ServerTest>();
+    auto state = MakeConnectionState();
+    AcceptClient(server, state, kClientFd);
+
+    poll_events_.clear();
+    server.ProcessServerIteration(state, kServerFd, kProcessIdle);
+    ASSERT_EQ(state.connection_pollfd_list.size(), 2U) << "dropped within the grace period";
+
+    WrapperTest::ExpireTimeout(state.connection_fd_map.at(kClientFd));
+    EXPECT_CALL(unistd_mock_, close(kClientFd)).Times(1);
+    server.ProcessServerIteration(state, kServerFd, kProcessIdle);
+
+    EXPECT_EQ(state.connection_pollfd_list.size(), 1U);
+    EXPECT_TRUE(state.connection_fd_map.empty());
+}
+
+TEST_F(UnixDomainServerFixture, OversizedFrameClosesConnection)
+{
+    auto& server = MakeServer<ServerTest>();
+    auto state = MakeConnectionState();
+    AcceptClient(server, state, kClientFd);
+
+    poll_events_ = {{kClientFd, POLLIN}};
+    EXPECT_CALL(socket_mock_, recvmsg(kClientFd, _, _)).WillOnce(DeliverHeader(2000U));
+    EXPECT_CALL(unistd_mock_, close(kClientFd)).Times(1);
+    server.ProcessServerIteration(state, kServerFd, kSkipIdle);
+
+    EXPECT_EQ(state.connection_pollfd_list.size(), 1U);
+    EXPECT_TRUE(state.connection_fd_map.empty());
+}
+
+TEST_F(UnixDomainServerFixture, TruncatedHeaderClosesConnection)
+{
+    auto& server = MakeServer<ServerTest>();
+    auto state = MakeConnectionState();
+    AcceptClient(server, state, kClientFd);
+
+    poll_events_ = {{kClientFd, POLLIN}};
+    EXPECT_CALL(socket_mock_, recvmsg(kClientFd, _, _)).WillOnce(Return(RecvResult{3}));
+    EXPECT_CALL(unistd_mock_, close(kClientFd)).Times(1);
+    server.ProcessServerIteration(state, kServerFd, kSkipIdle);
+
+    EXPECT_EQ(state.connection_pollfd_list.size(), 1U);
+    EXPECT_TRUE(state.connection_fd_map.empty());
+}
+
+TEST_F(UnixDomainServerFixture, PeerCloseNotifiesSessionAndClosesFd)
+{
+    CloseAwareSession::gPeerClosed = 0;
+    auto& server = MakeServer<ServerTest>(MakeFactory<CloseAwareSession>());
+    auto state = MakeConnectionState();
+    AcceptClient(server, state, kClientFd);
+    ReceiveFrame(server, state, kClientFd, "subscriber");
+    ASSERT_EQ(CloseAwareSession::gPeerClosed.load(), 0);
+
+    poll_events_ = {{kClientFd, POLLIN}};
+    EXPECT_CALL(socket_mock_, recvmsg(kClientFd, _, _)).WillOnce(Return(RecvResult{0}));
+    EXPECT_CALL(unistd_mock_, close(kClientFd)).Times(1);
+    server.ProcessServerIteration(state, kServerFd, kSkipIdle);
+
+    EXPECT_EQ(CloseAwareSession::gPeerClosed.load(), 1);
+    EXPECT_EQ(state.connection_pollfd_list.size(), 1U);
+    EXPECT_TRUE(state.connection_fd_map.empty());
+}
+
+TEST_F(UnixDomainServerFixture, TickReturningTrueRequeuesSession)
+{
+    RequeueSession::gTicks = 0;
+    auto& server = MakeServer<ServerTest>(MakeFactory<RequeueSession>());
+    auto state = MakeConnectionState();
+    AcceptClient(server, state, kClientFd);
+
+    ReceiveFrame(server, state, kClientFd, "subscriber");
+
+    EXPECT_EQ(RequeueSession::gTicks.load(), 2);
+    EXPECT_TRUE(server.work_queue_.empty());
+}
+
+TEST_F(UnixDomainServerFixture, SessionCreatedWithoutPeerPidIsReported)
+{
+    CountingSession::gConstructed = 0;
+    auto& server = MakeServer<ServerTest>(MakeFactory<CountingSession>());
+    WrapperTest wrapper(&server, kClientFd);
+
+    ::testing::internal::CaptureStderr();
+    EXPECT_TRUE(wrapper.HandleCommand("subscriber", score::cpp::nullopt));
+    const std::string output = ::testing::internal::GetCapturedStderr();
+
+    EXPECT_THAT(output, HasSubstr("Peer PID unavailable"));
+    EXPECT_EQ(CountingSession::gConstructed.load(), 1);
+}
+
+TEST_F(UnixDomainServerFixture, ServerRoutineResetsPollTimeoutEvery100ms)
+{
+    MakeServer<ServerTest>();
+    ReleaseServerThreads();
+
+    EXPECT_TRUE(WaitForZeroTimeoutServerPoll());
+}
+
+TEST_F(UnixDomainServerFixture, ServerIgnoresSetnameError)
+{
+    EXPECT_CALL(pthread_mock_, setname_np(_, StrEq("server_routine")))
+        .WillOnce(Return(score::cpp::make_unexpected(score::os::Error::createFromErrno(EINVAL))));
+
+    ::testing::internal::CaptureStderr();
+    MakeServer<ServerTest>();
+    const std::string output = ::testing::internal::GetCapturedStderr();
+
+    EXPECT_THAT(output, HasSubstr("pthread_setname_np"));
+}
+
+using UnixDomainServerDeathTest = UnixDomainServerFixture;
+
+void RunServerBriefly()
+{
+    UnixDomainServer server(UnixDomainSockAddr("unix_domain_server_death_test", true),
+                            UnixDomainServer::SessionFactory(),
+                            MakeSignalMock());
+    std::this_thread::sleep_for(std::chrono::milliseconds(100));
+}
+
+// Mock setup uses ON_CALL only: the mocked calls happen in the death-test child process.
+TEST_F(UnixDomainServerDeathTest, SocketCreationFailureExits)
+{
+    ON_CALL(socket_mock_, socket(_, _, _))
+        .WillByDefault(Return(score::cpp::make_unexpected(score::os::Error::createFromErrno(EMFILE))));
+    EXPECT_DEATH(RunServerBriefly(), "Socket");
+}
+
+TEST_F(UnixDomainServerDeathTest, BindFailureExits)
+{
+    ON_CALL(socket_mock_, bind(_, _, _))
+        .WillByDefault(Return(score::cpp::make_unexpected(score::os::Error::createFromErrno(EADDRINUSE))));
+    EXPECT_DEATH(RunServerBriefly(), "bind");
+}
+
+TEST_F(UnixDomainServerDeathTest, ListenFailureExits)
+{
+    ON_CALL(socket_mock_, listen(_, _))
+        .WillByDefault(Return(score::cpp::make_unexpected(score::os::Error::createFromErrno(EINVAL))));
+    EXPECT_DEATH(RunServerBriefly(), "listen");
+}
+
+TEST_F(UnixDomainServerDeathTest, PollFailureExits)
+{
+    ON_CALL(sys_poll_mock_, poll(_, _, _))
+        .WillByDefault(Return(score::cpp::make_unexpected(score::os::Error::createFromErrno(EINVAL))));
+    EXPECT_DEATH(RunServerBriefly(), "poll");
+}
+
+TEST_F(UnixDomainServerDeathTest, AcceptFailureExits)
+{
+    ON_CALL(sys_poll_mock_, poll(_, _, _)).WillByDefault([](pollfd* fds, nfds_t, std::int32_t) -> PollResult {
+        fds[0].revents = POLLIN;
+        return 1;
+    });
+    ON_CALL(socket_mock_, accept(_, _, _))
+        .WillByDefault(Return(score::cpp::make_unexpected(score::os::Error::createFromErrno(EMFILE))));
+    EXPECT_DEATH(RunServerBriefly(), "accept");
 }
 
 TEST(UnixDomainCommon, SetupSignalsFailurePath)
 {
     // Given we have our mock gives us the error path on all calls
-    std::unique_ptr<StrictMock<score::os::SignalMock>> signal_mock = std::make_unique<StrictMock<score::os::SignalMock>>();
+    std::unique_ptr<::testing::StrictMock<score::os::SignalMock>> signal_mock =
+        std::make_unique<::testing::StrictMock<score::os::SignalMock>>();
     auto error = score::os::Error::createUnspecifiedError();
 
-    testing::InSequence seq;
+    ::testing::InSequence seq;
     EXPECT_CALL(*signal_mock, SigEmptySet(_)).WillOnce(Return(score::cpp::make_unexpected(error)));
     EXPECT_CALL(*signal_mock, SigAddSet(_, _)).WillOnce(Return(score::cpp::make_unexpected(error)));
     EXPECT_CALL(*signal_mock, PthreadSigMask(_, _)).WillOnce(Return(score::cpp::make_unexpected(error)));
@@ -955,12 +799,12 @@ TEST(UnixDomainCommon, SetupSignalsFailurePath)
 
     // When we capture the output
     std::cerr.flush();
-    testing::internal::CaptureStderr();
+    ::testing::internal::CaptureStderr();
 
     SetupSignals(s);
 
     std::cerr.flush();
-    std::string output = testing::internal::GetCapturedStderr();
+    std::string output = ::testing::internal::GetCapturedStderr();
     std::string expected_err = error.ToString();
 
     // Then we expect to find the error message four time in there

@@ -53,9 +53,7 @@ bool UnixDomainServer::SessionWrapper::HandleCommand(const std::string& in_strin
             // subscriber session
             if (false == peer_pid.has_value())
             {
-                // Execution reaches this diagnostic only in an abort‑path (missing peer‑PID); exercising it in a
-                // unit‑test would terminate the process, so the line is excluded from coverage.
-                std::cerr << "UnixDomainServer: Peer PID unavailable" << std::endl;  // LCOV_EXCL_LINE
+                std::cerr << "UnixDomainServer: Peer PID unavailable" << std::endl;
             }
             session_ = server_->factory_(in_string, SessionHandle{session_fd_});
         }
