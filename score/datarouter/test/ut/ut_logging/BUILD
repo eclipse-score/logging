@@ -372,6 +372,7 @@ cc_test(
         "@score_baselibs//score/os/mocklib:pthread_mock",
         "@score_baselibs//score/os/mocklib:socket_mock",
         "@score_baselibs//score/os/mocklib:sys_poll_mock",
+        "@score_baselibs//score/os/mocklib:unistd_mock",
         "@score_baselibs//score/os/utils/mocklib:signal_mock",
         "@score_logging//score/datarouter:unixdomain_server",
     ],
