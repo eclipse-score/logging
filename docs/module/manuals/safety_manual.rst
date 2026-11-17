@@ -106,8 +106,8 @@ This means for every feature the user selects, the platform safety manual and th
 Safety concept of the SEooC
 ---------------------------
 
-The safety concept of the Logging Module is to avoid errors by using a development process as if the
-component's requirements would be all ASIL_B.
+The safety concept of the Logging Module is to avoid errors in the components running in the same context as the user application
+by using a development process as if these component's requirements would be all ASIL_B.
 
 Safety Anomalies
 ----------------

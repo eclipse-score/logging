@@ -33,7 +33,7 @@ Datarouter Services
    :security: NO
    :safety: QM
    :derived_from: feat_req__logging__compat_dlt
-   :status: valid
+   :status: valid_inspected
    :satisfied_by: comp__datarouter
 
    Datarouter shall implement a DLT server, sending messages in the DLT packet format.
@@ -45,7 +45,7 @@ Datarouter Services
    :security: NO
    :safety: QM
    :derived_from: feat_req__logging__log_sinks_network
-   :status: valid
+   :status: valid_inspected
    :satisfied_by: comp__datarouter
 
    Datarouter shall transmit the DLT messages of its DLT server over UDP multicast.
@@ -57,7 +57,7 @@ Datarouter Services
    :security: NO
    :safety: QM
    :derived_from: feat_req__logging__compat_dlt
-   :status: valid
+   :status: valid_inspected
    :satisfied_by: comp__datarouter
 
    Datarouter shall support multiple log channels in its DLT server, each with its own
@@ -71,7 +71,7 @@ Datarouter Services
    :security: NO
    :safety: QM
    :derived_from: feat_req__logging__config_log_filter
-   :status: valid
+   :status: valid_inspected
    :satisfied_by: comp__datarouter
 
    Datarouter shall be able to read a deployment-specific configuration file located at
@@ -84,7 +84,7 @@ Datarouter Services
    :security: NO
    :safety: QM
    :derived_from: feat_req__logging__config_log_filter, feat_req__logging__config_entity_id
-   :status: valid
+   :status: valid_inspected
    :satisfied_by: comp__datarouter
 
    The following parameters of the DLT log channels
@@ -100,7 +100,7 @@ Datarouter Services
    :security: NO
    :safety: QM
    :derived_from: feat_req__logging__filtering_log_levels, feat_req__logging__filtering_entity_id, feat_req__logging__config_log_filter
-   :status: valid
+   :status: valid_inspected
    :satisfied_by: comp__datarouter
 
    Datarouter shall support filtering of DLT messages within each channel. The filter shall be
@@ -115,7 +115,7 @@ Datarouter Services
    :security: NO
    :safety: QM
    :derived_from: feat_req__logging__compat_dlt
-   :status: valid
+   :status: valid_inspected
    :satisfied_by: comp__datarouter
 
    Datarouter shall support verbose DLT messages. Datarouter shall send messages received from
@@ -131,7 +131,7 @@ DLT Quotas
    :security: NO
    :safety: QM
    :derived_from: feat_req__logging__config_buffer_size, feat_req__logging__resource_comm_channel, feat_req__logging__message_loss_handling, feat_req__logging__qos_message_handling
-   :status: valid
+   :status: valid_inspected
    :satisfied_by: comp__datarouter
 
    Datarouter shall have the DLT bandwidth quota configuration in the deployment-specific
@@ -144,10 +144,13 @@ DLT Quotas
    :security: NO
    :safety: QM
    :derived_from: feat_req__logging__message_loss_handling, feat_req__logging__qos_message_handling
-   :status: valid
+   :status: valid_inspected
    :satisfied_by: comp__datarouter
 
    Datarouter shall allow users to configure the action to drop DLT messages when a quota is exceeded.
 
    Note: The configuration shall be provided as an attribute as part of the DLT quota
    configuration file (:need:`comp_req__data_router__dlt_bw_quota_config`).
+
+.. needextend:: c.this_doc() and (type == "comp_req" or type == "aou_req")
+   :+tags: datarouter

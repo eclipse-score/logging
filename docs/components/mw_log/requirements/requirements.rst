@@ -33,7 +33,7 @@ mw::log
    :security: NO
    :safety: QM
    :derived_from: feat_req__logging__filtering_log_levels, feat_req__logging__resource_performance
-   :status: valid
+   :status: valid_inspected
    :satisfied_by: comp__mw_log_backend
 
     mw::log library shall not perform any useful activity if log level of
@@ -46,7 +46,7 @@ mw::log
    :security: YES
    :safety: ASIL_B
    :derived_from: feat_req__logging__error_handling_isolation, feat_req__logging__asil_support
-   :status: valid
+   :status: valid_inspected
    :satisfied_by: comp__mw_log_backend
 
    mw::log shall not register any signal handler.
@@ -58,7 +58,7 @@ mw::log
    :security: YES
    :safety: ASIL_B
    :derived_from: feat_req__logging__security_log_access
-   :status: valid
+   :status: valid_inspected
    :satisfied_by: comp__mw_log_backend
 
    mw::log shall ensure that file descriptors it owns are not inherited by
@@ -76,7 +76,7 @@ mw::log
    :security: NO
    :safety: QM
    :derived_from: feat_req__logging__compat_dlt
-   :status: valid
+   :status: valid_inspected
    :satisfied_by: comp__mw_log_backend
 
    mw::log shall generate log messages in DLT verbose mode format, so that Datarouter
@@ -89,7 +89,7 @@ mw::log
    :security: YES
    :safety: QM
    :derived_from: feat_req__logging__compat_dlt, feat_req__logging__severity_levels
-   :status: valid
+   :status: valid_inspected
    :satisfied_by: comp__mw_log_backend
 
    mw::log shall implement "Specification of Log and Trace for Adaptive Platform". Release of
@@ -102,7 +102,7 @@ mw::log
    :security: YES
    :safety: ASIL_B
    :derived_from: feat_req__logging__asil_support
-   :status: valid
+   :status: valid_inspected
    :satisfied_by: comp__mw_log_backend
 
    mw::log shall ensure that the shared-memory files it creates are read-only
@@ -120,7 +120,7 @@ Remote Backend
    :reqtype: Functional
    :security: NO
    :safety: QM
-   :status: valid
+   :status: valid_inspected
    :derived_from: feat_req__logging__log_sources_user_app, feat_req__logging__log_sinks_network
    :satisfied_by: comp__mw_log_backend
 
@@ -135,7 +135,7 @@ Remote Backend
    :security: NO
    :safety: QM
    :derived_from: feat_req__logging__log_sinks_local_fs, feat_req__logging__config_on_demand
-   :status: valid
+   :status: valid_inspected
    :satisfied_by: comp__mw_log_backend
 
    mw::log shall enable the file backend if and only if the log mode contains
@@ -153,7 +153,7 @@ System Backend
    :security: NO
    :safety: QM
    :derived_from: feat_req__logging__log_sinks_console
-   :status: valid
+   :status: valid_inspected
    :satisfied_by: comp__mw_log_backend
 
    mw::log shall forward the logs to the native system logger mechanism when the system
@@ -169,7 +169,7 @@ System Backend
    :security: NO
    :safety: QM
    :derived_from: feat_req__logging__config_on_demand
-   :status: valid
+   :status: valid_inspected
    :satisfied_by: comp__mw_log_backend
 
    mw::log shall enable the system logger backend if and only if the log mode contains
@@ -177,7 +177,7 @@ System Backend
 
 .. comp_req:: Message Loss Detection
    :id: comp_req__log__log_loss_detect
-   :status: valid
+   :status: valid_inspected
    :derived_from: feat_req__logging__message_loss_detection[version==1]
    :reqtype: Functional
    :security: NO
@@ -199,7 +199,7 @@ File Backend
    :security: NO
    :safety: QM
    :derived_from: feat_req__logging__log_sinks_local_fs
-   :status: valid
+   :status: valid_inspected
    :satisfied_by: comp__mw_log_backend
 
    mw::log shall write the logs to a file on the local file system when the file
@@ -212,7 +212,7 @@ File Backend
    :security: NO
    :safety: QM
    :derived_from: feat_req__logging__log_sinks_local_fs, feat_req__logging__config_on_demand
-   :status: valid
+   :status: valid_inspected
    :satisfied_by: comp__mw_log_backend
 
    mw::log shall enable the file backend if and only if the log mode contains
@@ -228,7 +228,7 @@ Non-Functional Requirements
    :security: YES
    :safety: ASIL_B
    :derived_from: feat_req__logging__resource_runtime, feat_req__logging__asil_support
-   :status: valid
+   :status: valid_inspected
    :satisfied_by: comp__mw_log_backend
 
    mw::log shall allocate heap memory only during the initialization phase of
@@ -242,7 +242,7 @@ Non-Functional Requirements
    :security: YES
    :safety: ASIL_B
    :derived_from: feat_req__logging__asil_support, feat_req__logging__resource_performance
-   :status: valid
+   :status: valid_inspected
    :satisfied_by: comp__mw_log_backend
 
    mw::log shall be free of time-unbound locks and shall implement strategies to limit wait
@@ -256,7 +256,7 @@ Non-Functional Requirements
    :security: YES
    :safety: ASIL_B
    :derived_from: feat_req__logging__asil_support, feat_req__logging__error_handling_isolation
-   :status: valid
+   :status: valid_inspected
    :satisfied_by: comp__mw_log_backend
 
    Cross-application and cross-thread dependencies shall be avoided. A thread logging in a loop
@@ -269,7 +269,7 @@ Non-Functional Requirements
    :security: YES
    :safety: ASIL_B
    :derived_from: feat_req__logging__asil_support, feat_req__logging__error_handling_recoverable
-   :status: valid
+   :status: valid_inspected
    :satisfied_by: comp__mw_log_backend
 
    mw::log shall check indices in data structures and sizes of data accessed or copied for
@@ -283,8 +283,11 @@ Non-Functional Requirements
    :security: YES
    :safety: ASIL_B
    :derived_from: feat_req__logging__asil_support, feat_req__logging__error_handling_recoverable
-   :status: valid
+   :status: valid_inspected
    :satisfied_by: comp__mw_log_backend
 
    mw::log shall check memory boundaries before writing to shared memory.
    If a check fails, mw::log shall discard the affected log message without performing the write.
+
+.. needextend:: c.this_doc() and (type == "comp_req" or type == "aou_req")
+   :+tags: mw_log_backend
