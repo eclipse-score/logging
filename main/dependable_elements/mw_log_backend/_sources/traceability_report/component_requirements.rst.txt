@@ -417,9 +417,9 @@ Component Requirements
 
    **Traces to:**
 
-   * :ref:`SyslogBackendFixture:ReserveSlotShouldAcquireSlot <lobster-item-8eb9c9a93d7875c7ca8a5719a28af9807e90200c>`
    * :ref:`WaitFreeAlternatingWriterTests:EnsureAtomicRequirements <lobster-item-406b3806da32adb8ab3238ef8fe591c5ac8bed33>`
    * :ref:`WaitFreeLinearWriter:EnsureAtomicRequirements <lobster-item-806fbe70fe9d62984527a7b08b067f2376879dbb>`
+   * :ref:`SyslogBackendFixture:ReserveSlotShouldAcquireSlot <lobster-item-8eb9c9a93d7875c7ca8a5719a28af9807e90200c>`
    * :ref:`MwLog.CrossLockingPrevention <lobster-item-f215ef9092c9d584be4a7ee548eadcf134530de5>`
    * :ref:`//score/mw/log/dependability:component\_mw\_log\_backend <lobster-item-7bfe7ca94ee8257f6da5326b842b99c0c42a6273>`
 
