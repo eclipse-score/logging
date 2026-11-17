@@ -92,8 +92,10 @@ py_test(
 docs(
     data = glob(["scripts/dependency_reports/dependency_report_*.json"]) + [
         "scripts/generate_dependency_report.py",
-        "@score_platform//:needs_json",
-        "@score_process_description//:needs_json",
+    ],
+    external_needs = [
+        "@score_platform//:needs_json_file",
+        "@score_process_description//:needs_json_file",
     ],
     source_dir = "docs",
 )
