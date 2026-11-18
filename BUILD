@@ -47,10 +47,10 @@ exports_files([
     ".clang-tidy",
 ])
 
-_DEPENDABLE_ELEMENT = "dependable_element_mw_log_backend_doc"
+_DEPENDABLE_ELEMENT = "dependable_element_mw_log_doc"
 
 # Public URL folder; docs/dependable_elements/index.rst links to it.
-_PUBLISH_NAME = "mw_log_backend"
+_PUBLISH_NAME = "mw_log"
 
 _DEPENDABLE_ELEMENT_DOC = "//score/mw/log/dependability:" + _DEPENDABLE_ELEMENT
 

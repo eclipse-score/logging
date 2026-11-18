@@ -10,7 +10,7 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 # *******************************************************************************
-# POC (option 2, see trlc_migration_plan.md): mw::log backend as a full
+# POC (option 2, see trlc_migration_plan.md): mw::log (frontend + backends) as a full
 # rules_score SEooC. maturity="development" and the placeholder FMEA mean this
 # is not yet certification evidence -- see safety_analysis/*.trlc notes.
 load(
@@ -20,7 +20,7 @@ load(
 )
 
 component(
-    name = "component_mw_log_backend",
+    name = "component_mw_log",
     components = [
         "//score/mw/log/detail/data_router:data_router_backend_unit",
         "//score/mw/log/detail/data_router/shared_memory:shared_memory_unit",
@@ -39,9 +39,9 @@ component(
 )
 
 dependable_element(
-    name = "dependable_element_mw_log_backend",
+    name = "dependable_element_mw_log",
     architectural_design = ["//score/mw/log/design/backend:mw_log_backend_architectural_design"],
-    components = [":component_mw_log_backend"],
+    components = [":component_mw_log"],
     dependability_analysis = ["//score/mw/log/dependability/safety_analysis:mw_log_backend_dependability_analysis"],
     integrity_level = "B",
     maturity = "development",

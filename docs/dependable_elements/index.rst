@@ -15,6 +15,6 @@
 Safety Report
 ===========================================
 
-The work products for the ``mw::log`` backend dependable-element can be found in the report:
+The work products for the ``mw::log`` dependable element (frontend and backends, excluding the Datarouter process) can be found in the report:
 
-`mw::log Backend Dependable Element Report <mw_log_backend/index.html>`_
+`mw::log Dependable Element Report <mw_log/index.html>`_
