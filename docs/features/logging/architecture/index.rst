@@ -112,7 +112,7 @@ Static Architecture
    :status: valid
    :version: 1
    :includes: logic_arc_int__log_cpp__logging
-   :fulfils: feat_req__logging__log_sources_user_app
+   :fulfils: feat_req__logging__log_sources_user_app, feat_req__logging__asil_support
    :belongs_to: feat__logging
 
    .. needarch::
