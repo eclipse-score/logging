@@ -525,7 +525,7 @@
 ----------------------------------------------------------------------------- -->
 <section id="safe-datarouter-backend">
 <h1>Safe Datarouter Backend<a class="headerlink" href="#safe-datarouter-backend" title="Link to this heading">#</a></h1>
-<div class="need_container docutils container" id="SNCB-33add7c4">
+<div class="need_container docutils container" id="SNCB-4745ca61">
 <div class="pst-scrollable-table-container"><table class="need needs_grid_complex needs_layout_score needs_style_none needs_type_document table" id="doc__mw_log_datarouter_backend_design">
 <tbody>
 <tr class="head row-odd"><td class="head_left" colspan="2"><div class="needs_head_left line-block">
@@ -629,7 +629,7 @@ separate channel in the opposite direction is needed. On the highest level of
 abstraction we see the ASIL-B qualified client process on the one side and the
 datarouter process on the other</p>
 <p class="plantuml">
-<object data="../../../../_images/plantuml-4757b88ee889a2774ee0a9ae948eb1ac43466749.svg" type="image/svg+xml" style="width:2085px;height:283px;background:#FFFFFF;"></object></p>
+<object data="../../../../_images/plantuml-4757b88ee889a2774ee0a9ae948eb1ac43466749.svg" type="image/svg+xml" style="width:2093px;height:291px;background:#FFFFFF;"></object></p>
 <p>The logs are written by the client into shared memory and read-out by
 datarouter. Freedom of interference is ensured since the datarouter process has
 read-only access to the shared-memory. In order to reuse the logging buffers in
@@ -640,7 +640,7 @@ safety-qualified <a class="reference external" href="https://github.com/eclipse-
 <section id="class-diagram">
 <h2>Class diagram<a class="headerlink" href="#class-diagram" title="Link to this heading">#</a></h2>
 <p class="plantuml">
-<object data="../../../../_images/plantuml-9ed386dfdca528830ac12fd7845bef9afc83cda5.svg" type="image/svg+xml" style="width:6596px;height:2288px;background:#FFFFFF;"></object></p>
+<object data="../../../../_images/plantuml-9ed386dfdca528830ac12fd7845bef9afc83cda5.svg" type="image/svg+xml" style="width:6604px;height:2296px;background:#FFFFFF;"></object></p>
 <p>The class diagram above shows the relevant classes client-side and in
 Datarouter. Client-side the <code class="docutils literal notranslate"><span class="pre">DataRouterBackend</span></code> contains a circular allocator
 for the preallocation of the verbose messages. When a new verbose message is
@@ -660,24 +660,24 @@ access to the ring buffer between Datarouter and the client.</p>
 <p>The <code class="docutils literal notranslate"><span class="pre">DataRouterRecorder</span></code> owns the <code class="docutils literal notranslate"><span class="pre">Backend</span></code> (here the <code class="docutils literal notranslate"><span class="pre">DataRouterBackend</span></code>), the
 <code class="docutils literal notranslate"><span class="pre">Configuration</span></code> and a <code class="docutils literal notranslate"><span class="pre">StatisticsReporter</span></code>:</p>
 <p class="plantuml">
-<object data="../../../../_images/plantuml-a64ad15ba2d04b0e0e630599edb473a08df53058.svg" type="image/svg+xml" style="width:1042px;height:860px;background:#FFFFFF;"></object></p>
+<object data="../../../../_images/plantuml-a64ad15ba2d04b0e0e630599edb473a08df53058.svg" type="image/svg+xml" style="width:1050px;height:868px;background:#FFFFFF;"></object></p>
 </section>
 <section id="verbose-logging-sequence">
 <h2>Verbose logging sequence<a class="headerlink" href="#verbose-logging-sequence" title="Link to this heading">#</a></h2>
 <p>The sequence below shows a verbose log call from the creation of the <code class="docutils literal notranslate"><span class="pre">LogStream</span></code>
 to the flush of the slot into the shared memory.</p>
 <p class="plantuml">
-<object data="../../../../_images/plantuml-7beffa1d74f9c36933299c7f408630a9a2982f62.svg" type="image/svg+xml" style="width:1178px;height:1008px;background:#FFFFFF;"></object></p>
+<object data="../../../../_images/plantuml-7beffa1d74f9c36933299c7f408630a9a2982f62.svg" type="image/svg+xml" style="width:1178px;height:1054px;background:#FFFFFF;"></object></p>
 <p>The units of all sequence diagrams of the backend and their bindings are shown
 below. The interface names of this diagram follow the convention of the
 <code class="docutils literal notranslate"><span class="pre">architectural_design</span></code> validation (caller and callee) and are not code interfaces.</p>
 <p class="plantuml">
-<object data="../../../../_images/plantuml-91b2018d66e2cf74a553e33df2efd24cdaa9a302.svg" type="image/svg+xml" style="width:545px;height:4192px;background:#FFFFFF;"></object></p>
+<object data="../../../../_images/plantuml-91b2018d66e2cf74a553e33df2efd24cdaa9a302.svg" type="image/svg+xml" style="width:544px;height:4200px;background:#FFFFFF;"></object></p>
 </section>
 <section id="activity-diagrams">
 <h2>Activity diagrams<a class="headerlink" href="#activity-diagrams" title="Link to this heading">#</a></h2>
 <p class="plantuml">
-<object data="../../../../_images/plantuml-eede30289d7672923ffae5e4a99122a54198612d.svg" type="image/svg+xml" style="width:762px;height:320px;background:#FFFFFF;"></object></p>
+<object data="../../../../_images/plantuml-eede30289d7672923ffae5e4a99122a54198612d.svg" type="image/svg+xml" style="width:746px;height:348px;background:#FFFFFF;"></object></p>
 </section>
 <section id="lock-free-shared-memory-design">
 <h2>Lock-free Shared Memory Design<a class="headerlink" href="#lock-free-shared-memory-design" title="Link to this heading">#</a></h2>
@@ -697,7 +697,7 @@ variables.</p>
 <p>The <code class="docutils literal notranslate"><span class="pre">WriterFactory</span></code> creates the shared memory file, maps it and constructs the
 <code class="docutils literal notranslate"><span class="pre">SharedData</span></code> and the <code class="docutils literal notranslate"><span class="pre">SharedMemoryWriter</span></code>:</p>
 <p class="plantuml">
-<object data="../../../../_images/plantuml-7deb53c5b71914abe555d0b9b5aec1a83ddca316.svg" type="image/svg+xml" style="width:2224px;height:650px;background:#FFFFFF;"></object></p>
+<object data="../../../../_images/plantuml-7deb53c5b71914abe555d0b9b5aec1a83ddca316.svg" type="image/svg+xml" style="width:2232px;height:658px;background:#FFFFFF;"></object></p>
 <p>The <code class="docutils literal notranslate"><span class="pre">SharedMemoryWriter</span></code> has two main responsibilities. First is to register
 data types using <code class="docutils literal notranslate"><span class="pre">TryRegisterType()</span></code> and secondly to push instances of those
 types using <code class="docutils literal notranslate"><span class="pre">AllocAndWrite()</span></code>. Both aspects use the <code class="docutils literal notranslate"><span class="pre">WaitFreeAlternatingWriter</span></code>
@@ -715,7 +715,7 @@ identification.</p></li>
 </ol>
 <p>The flow of <code class="docutils literal notranslate"><span class="pre">AllocAndWrite()</span></code> including the drop counters is shown below:</p>
 <p class="plantuml">
-<object data="../../../../_images/plantuml-c81d176f2f7b51969efeb7524c238cc4e0f03f2d.svg" type="image/svg+xml" style="width:849px;height:503px;background:#FFFFFF;"></object></p>
+<object data="../../../../_images/plantuml-c81d176f2f7b51969efeb7524c238cc4e0f03f2d.svg" type="image/svg+xml" style="width:822px;height:549px;background:#FFFFFF;"></object></p>
 </section>
 <section id="lazy-logging-client">
 <h2>Lazy logging client<a class="headerlink" href="#lazy-logging-client" title="Link to this heading">#</a></h2>
@@ -769,7 +769,7 @@ establish the connection by sending the connect message.</p>
 <p>The client connects in a separate thread, because waiting for the connection is a
 blocking operation:</p>
 <p class="plantuml">
-<object data="../../../../_images/plantuml-f167ec203d4b8207b27dacd556054f2a61554a8a.svg" type="image/svg+xml" style="width:957px;height:793px;background:#FFFFFF;"></object></p>
+<object data="../../../../_images/plantuml-f167ec203d4b8207b27dacd556054f2a61554a8a.svg" type="image/svg+xml" style="width:943px;height:867px;background:#FFFFFF;"></object></p>
 </section>
 <section id="avoiding-shared-memory-leaks">
 <h2>Avoiding shared memory leaks<a class="headerlink" href="#avoiding-shared-memory-leaks" title="Link to this heading">#</a></h2>
@@ -801,11 +801,11 @@ readable without synchronization. Only after reading the remaining data from the
 ring buffer, should Datarouter unmap the shared memory page. Then the OS should
 free up the used resources.</p>
 <p class="plantuml">
-<object data="../../../../_images/plantuml-5436fc03fc05da265d85ea5a90fa3e70f0ca8b02.svg" type="image/svg+xml" style="width:1138px;height:1189px;background:#FFFFFF;"></object></p>
+<object data="../../../../_images/plantuml-5436fc03fc05da265d85ea5a90fa3e70f0ca8b02.svg" type="image/svg+xml" style="width:1146px;height:1197px;background:#FFFFFF;"></object></p>
 <p>The flow of <code class="docutils literal notranslate"><span class="pre">NotifyAcquisitionSetReader()</span></code> and <code class="docutils literal notranslate"><span class="pre">Read()</span></code>, including the detached
 mode, is shown below:</p>
 <p class="plantuml">
-<object data="../../../../_images/plantuml-075201871a41d95fe17c5e773a6d83afbb2871f7.svg" type="image/svg+xml" style="width:1397px;height:985px;background:#FFFFFF;"></object></p>
+<object data="../../../../_images/plantuml-075201871a41d95fe17c5e773a6d83afbb2871f7.svg" type="image/svg+xml" style="width:1379px;height:1109px;background:#FFFFFF;"></object></p>
 </section>
 <section id="limited-impact-of-incoming-messages-in-the-logging-client">
 <h2>Limited impact of incoming messages in the logging client<a class="headerlink" href="#limited-impact-of-incoming-messages-in-the-logging-client" title="Link to this heading">#</a></h2>
