@@ -47,3 +47,8 @@ unit_design(
     name = "backend_table_unit_design",
     visibility = ["@score_baselibs//score/mw/log:__pkg__"],
 )
+
+unit_design(
+    name = "slog_backend_unit_design",
+    visibility = ["//score/mw/log/detail/slog:__pkg__"],
+)

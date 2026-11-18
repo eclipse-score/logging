@@ -10,8 +10,8 @@
 #
 # SPDX-License-Identifier: Apache-2.0
 # *******************************************************************************
-# POC (option 2, see trlc_migration_plan.md): mw::log (frontend + backends) as a full
-# rules_score SEooC. maturity="development" and the placeholder FMEA mean this
+# mw::log (frontend + backends) as a full rules_score SEooC.
+# maturity="development" and the placeholder FMEA mean this
 # is not yet certification evidence -- see safety_analysis/*.trlc notes.
 load(
     "@score_tooling//bazel/rules/rules_score:rules_score.bzl",
@@ -25,6 +25,7 @@ component(
         "//score/mw/log/detail/data_router:data_router_backend_unit",
         "//score/mw/log/detail/data_router/shared_memory:shared_memory_unit",
         "//score/mw/log/detail/file_recorder:file_recorder_unit",
+        "//score/mw/log/detail/slog:slog_backend_unit",
         "//score/mw/log/detail/syslog:syslog_backend_unit",
         "//score/mw/log/detail/utils/signal_handling:signal_handling_unit",
         "//score/mw/log/detail/wait_free_producer_queue:wait_free_producer_queue_unit",
