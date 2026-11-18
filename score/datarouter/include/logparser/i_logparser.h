@@ -80,7 +80,9 @@ class ILogParser
     virtual void AddIncomingType(const score::mw::log::detail::TypeRegistration&) = 0;
 
     virtual void Parse(TimestampT timestamp, const char* data, BufsizeT size) = 0;
-    virtual void ParseSharedMemoryRecord(const score::mw::log::detail::SharedMemoryRecord& record) = 0;
+
+    /// Returns false if the record's type is not registered; the record is dropped in that case.
+    virtual bool ParseSharedMemoryRecord(const score::mw::log::detail::SharedMemoryRecord& record) = 0;
 };
 
 }  // namespace internal

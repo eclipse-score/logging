@@ -181,11 +181,22 @@ TEST(LogParserTest, WeCanNotParseIfTheIndexIsNotWithinTheIndexParserMap)
 TEST(LogParserTest, WeCanNotParseASharedMemoryRecordIfTheTypeIdentifierIsNotWithinTheIndexParserMap)
 {
     LogParser parser(CreateTestNvConfig());
-    // Unfortunately, there other way to set expectation for calling this method.
-    // And there is no other methods are using it internally.
     score::mw::log::detail::SharedMemoryRecord record;
-    EXPECT_NO_FATAL_FAILURE(parser.ParseSharedMemoryRecord(record));
-    // Since we didn't fill any values to 'index_parser_map' map, it will be empty which leads to immediate returning.
+    EXPECT_FALSE(parser.ParseSharedMemoryRecord(record));
+}
+
+TEST(LogParserTest, ParsingASharedMemoryRecordOfARegisteredTypeReturnsTrueAndCallsTheHandler)
+{
+    testing::StrictMock<AnyHandlerMock> any_handler;
+    EXPECT_CALL(any_handler, Handle(_, _, _, _)).Times(1);
+
+    constexpr BufsizeT kTestMessageIndex = 1234;
+    LogParser parser(CreateTestNvConfig(), {&any_handler});
+    parser.AddIncomingType(kTestMessageIndex, MakeTypeParams<TestMessage>(DltidT{"ECU0"}, DltidT{"APP0"}));
+
+    score::mw::log::detail::SharedMemoryRecord record;
+    record.header.type_identifier = kTestMessageIndex;
+    EXPECT_TRUE(parser.ParseSharedMemoryRecord(record));
 }
 
 }  // namespace test

@@ -27,6 +27,7 @@
 
 #include "score/variant.hpp"
 
+#include <atomic>
 #include <memory>
 #include <unordered_map>
 #include <unordered_set>
@@ -187,6 +188,7 @@ class DataRouter
         Synchronized<LocalSubscriberData> local_subscriber_data_;
         Synchronized<CommandData> command_data_;
         Synchronized<StatsData> stats_data_;
+        std::atomic<uint64_t> message_count_dropped_unknown_type_{0};
 
         DataRouter& router_;
         std::unique_ptr<score::mw::log::detail::ISharedMemoryReader> reader_;

@@ -237,7 +237,10 @@ void DataRouter::SourceSession::ProcessAndRouteLogMessages(uint64_t& message_cou
             }
 
             auto record_received_timestamp = score::mw::log::detail::TimePoint::clock::now();
-            parser_->ParseSharedMemoryRecord(record);
+            if (!parser_->ParseSharedMemoryRecord(record))
+            {
+                message_count_dropped_unknown_type_.fetch_add(1U, std::memory_order_relaxed);
+            }
             ++message_count_local;
 
             transport_delay_local = std::max(transport_delay_local,
@@ -307,7 +310,10 @@ void DataRouter::SourceSession::ProcessDetachedLogs(uint64_t& number_of_bytes_in
             parser_->AddIncomingType(registration);
         },
         [this](const auto& record) noexcept {
-            parser_->ParseSharedMemoryRecord(record);
+            if (!parser_->ParseSharedMemoryRecord(record))
+            {
+                message_count_dropped_unknown_type_.fetch_add(1U, std::memory_order_relaxed);
+            }
         });
 
     if (number_of_bytes_in_buffer_result_detached.has_value())
@@ -473,6 +479,8 @@ void DataRouter::SourceSession::ShowStats()
         name = stats->name;
     }
 
+    const auto message_count_dropped_unknown_type = message_count_dropped_unknown_type_.load(std::memory_order_relaxed);
+
     const auto buffer_size_kb = reader_->GetRingBufferSizeBytes() / 1024U / 2U;
     auto buffer_watermark_kb = max_bytes_in_buffer / 1024U;
 
@@ -508,18 +516,26 @@ void DataRouter::SourceSession::ShowStats()
         return std::make_pair(subs_data->time_between_to_calls.count(), subs_data->time_to_process_records.count());
     }();
 
-    stats_logger_.LogInfo() << name << ": count " << message_count << ", size " << totalsize
-                            << " B, rate: " << rate_k_bps << " KBps"
-                            << ", quota rate: " << QuotaValueAsString(quota_k_bps)
-                            << ", quota enforcement: " << quota_overlimit_detected
-                            << ", read_time:" << time_spent_reading.count() << " us"
-                            << ", transp_delay:" << transport_delay.count() << " us"
-                            << ", time_between_to_calls_us:" << time_between_calls << " us"
-                            << ", time_to_process_records_:" << time_to_process << " us"
-                            << ", buffer size watermark: " << buffer_watermark_kb << " KB out of" << buffer_size_kb
-                            << " KB (" << buffer_watermark_percent << "%)"
-                            << ", messages dropped: " << message_count_dropped << " (accumulated)"
-                            << ", IPC count: " << count_acquire_requests;
+    {
+        auto&& log_stream = stats_logger_.LogInfo();
+        log_stream << name << ": count " << message_count << ", size " << totalsize << " B, rate: " << rate_k_bps
+                   << " KBps"
+                   << ", quota rate: " << QuotaValueAsString(quota_k_bps)
+                   << ", quota enforcement: " << quota_overlimit_detected
+                   << ", read_time:" << time_spent_reading.count() << " us"
+                   << ", transp_delay:" << transport_delay.count() << " us"
+                   << ", time_between_to_calls_us:" << time_between_calls << " us"
+                   << ", time_to_process_records_:" << time_to_process << " us"
+                   << ", buffer size watermark: " << buffer_watermark_kb << " KB out of" << buffer_size_kb << " KB ("
+                   << buffer_watermark_percent << "%)"
+                   << ", messages dropped: " << message_count_dropped << " (accumulated)";
+        if (message_count_dropped_unknown_type > 0)
+        {
+            log_stream << ", messages dropped (unregistered type): " << message_count_dropped_unknown_type
+                       << " (accumulated)";
+        }
+        log_stream << ", IPC count: " << count_acquire_requests;
+    }
 
     if (rate_k_bps > quota_k_bps && quota_enforcement_enabled)
     {
