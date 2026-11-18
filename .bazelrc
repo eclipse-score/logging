@@ -85,6 +85,9 @@ build:score-qnx-x86_64 --config=qnx
 build:score-qnx-aarch64 --config=qnx
 test:score-qnx-x86_64 --strategy=TestRunner=local
 test:score-qnx-x86_64 --local_test_jobs=1
+# Run QNX unit tests in a QEMU micro-VM (see score_qnx_unit_tests)
+test:score-qnx-x86_64 --run_under=@score_qnx_unit_tests//src:run_under_qnx
+test:score-qnx-aarch64 --run_under=@score_qnx_unit_tests//src:run_under_qnx
 
 # -------------------------------------------------------------------------------
 # Backward-compatibility aliases for previous config names

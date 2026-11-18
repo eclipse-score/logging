@@ -104,6 +104,17 @@ To run the supported test suites:
    # Integration tests on QNX/QEMU
    bazel test --config=x86_64-qnx --test_tag_filters=integration //score/test/integration/...
 
+Running unit tests on QNX
+-------------------------
+
+The general QNX setup (SDP access, license, QEMU/KVM) is described in the S-CORE
+`QNX unit tests how-to <https://eclipse-score.github.io/infrastructure/dev/how-to/testing.html#advanced-qnx-unit-tests>`_
+guide. The ``score-qnx-*`` configs already run tests in QEMU through ``score_qnx_unit_tests``:
+
+.. code-block:: bash
+
+   bazel test --config=x86_64-qnx //score/mw/log/detail/file_recorder:unit_test
+
 Quality
 -------
 
