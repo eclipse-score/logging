@@ -24,8 +24,6 @@
 #include <score/span.hpp>
 #include <score/string_view.hpp>
 
-#include "score/os/utils/signal.h"
-
 namespace score
 {
 namespace platform
@@ -33,19 +31,6 @@ namespace platform
 namespace internal
 {
 using SharedMemoryFileHandle = std::int32_t;
-
-enum class MessageType : std::uint8_t
-{
-    kDefault = 0,
-    kSharedMemoryFileHandle = 1,
-};
-
-struct SocketMessangerHeader  //  __attribute__((packed))  //  TODO: deal with packed
-{
-    uint16_t len;
-    MessageType type;
-    std::int32_t pid;
-};
 
 class UnixDomainSockAddr
 {
@@ -74,9 +59,6 @@ void SendSocketMessage(std::int32_t connection_file_descriptor,
                        std::string_view message,
                        score::cpp::optional<SharedMemoryFileHandle> file_handle = score::cpp::nullopt);
 
-/* @data - data to be send over the socket */
-void SendAncillaryDataOverSocket(int connection_file_descriptor, score::cpp::span<std::uint8_t> data);
-
 /* Returns: Message string. Possibly zero-sized when pinging or timeout occurs. score::cpp::nullopt is returned when error
  * occurs.
  * @ancillary_data_process - callback may be used to convert ancillary data to file descriptor but it is not the only
@@ -86,14 +68,6 @@ void SendAncillaryDataOverSocket(int connection_file_descriptor, score::cpp::spa
 std::optional<std::string> RecvSocketMessage(
     std::int32_t socket_fd,
     AncillaryDataFileHandleReceptionCallback ancillary_data_process = AncillaryDataFileHandleReceptionCallback{});
-
-std::optional<std::string> RecvSocketMessage(
-    std::int32_t socket_fd,
-    score::cpp::optional<SharedMemoryFileHandle>& file_handle,
-    score::cpp::optional<std::int32_t>& peer_pid,
-    AncillaryDataFileHandleReceptionCallback ancillary_data_process = AncillaryDataFileHandleReceptionCallback{});
-
-void SetupSignals(const std::unique_ptr<score::os::Signal>& signal);
 
 }  // namespace internal
 }  // namespace platform

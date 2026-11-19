@@ -12,6 +12,7 @@
  ********************************************************************************/
 
 #include "unix_domain/unix_domain_common.h"
+#include "score/datarouter/include/unix_domain/unix_domain_internal.h"
 #include "score/os/errno.h"
 #include "score/os/socket.h"
 #include "score/os/utils/signal.h"
