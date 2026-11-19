@@ -35,10 +35,9 @@ Conduct
 
 As described in the concept :need:`doc_concept__wp_inspections` the following "inspection roles" are expected to be filled:
 
-- content responsible (author): <contributor/committer explicitly named here, who is the main author, as can be seen in config mgt tooling>
-- reviewer: <contributor/committer explicitly named here, who is the main content reviewer, must be different from content responsible>
-- moderator: <committer explicitly named here, who is is the safety manager, security manager or quality manager initiating the inspection>
-- test expert: <one of the reviewers explicitly named here, to cover REQ_08_01 as described>
+- content responsible (author): `<https://github.com/MaciejKaszynski>`_
+- reviewer: `<https://github.com/rmaddikery>`_
+- moderator: `<https://github.com/aschemmel-tech>`_
 
 Checklist
 ---------
@@ -140,7 +139,7 @@ See also :need:`doc_concept__wp_inspections` for further information about revie
       - Is the requirement verifiable by design or code review in case it is not feasibly testable?
       - In very rare cases a requirement may not be verifiable by test cases, for example a specific non-functional requirement. In this case a requirement analysis verifies the requirement by design/code review. If such a requirement is in scope of this inspection, please check this here and link to the respective review record. A test expert is invited to the inspection to confirm their opinion that the requirement is not testable.
       - Yes
-      -
+      - <should mention which non-functional and therefore untestable requirements these are if any, in case all testable put a n/a instead of a yes>
       -
     * - REQ_09_01
       - Do the requirements that define a safety mechanism specify the error reaction leading to a safe state?
@@ -157,27 +156,28 @@ See also :need:`doc_concept__wp_inspections` for further information about revie
 
 .. attention::
     The above checklist entries must be filled according to your component requirements in scope.
+    It is mandatory to fill remarks also for checklist entries which are passed, to be able to understand the verdict.
 
-Note: If a Review ID is not applicable for your requirement, then state ""n/a" in status and comment accordingly in remarks.
+Note: If a Review ID is not applicable for your requirement, then state ""n/a" in status and comment accordingly in remarks. For example "no stakeholder requirement (no rationale needed)"
 
-The following requirements in "valid" state and with "inspected" tag set are in the scope of this inspection:
+The following requirements in "valid_inspected" state are in the scope of this inspection:
 
 .. needtable::
-   :filter: "mw_log_backend" in docname and "requirements" in docname and docname is not None and status == "valid"
+   :filter: "datarouter" in docname and "requirements" in docname and docname is not None
    :style: table
    :types: comp_req
-   :tags: mw_log_backend
+   :tags: datarouter
    :columns: id;status;tags
    :colwidths: 25,25,25
    :sort: title
 
-And also the following AoUs in "valid" state and with "inspected" tag set (for these please answer the questions above as if the AoUs are requirements, except question REQ_03_01):
+And also the following AoUs in "valid_inspected" state (for these please answer the questions above as if the AoUs are requirements, except questions REQ_03_01 and REQ_03_02):
 
 .. needtable::
-   :filter: "mw_log_backend" in docname and "requirements" in docname and docname is not None and status == "valid"
+   :filter: "datarouter" in docname and "requirements" in docname and docname is not None
    :style: table
    :types: aou_req
-   :tags: mw_log_backend
+   :tags: datarouter
    :columns: id;status;tags
    :colwidths: 25,25,25
    :sort: title

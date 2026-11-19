@@ -35,10 +35,10 @@ Conduct
 
 As described in the concept :need:`doc_concept__wp_inspections` the following "inspection roles" are expected to be filled:
 
-- content responsible (author): <contributor/committer explicitly named here, who is the main author, as can be seen in config mgt tooling>
-- reviewer: <contributor/committer explicitly named here, who is the main content reviewer, must be different from content responsible>
-- moderator: <committer explicitly named here, who is is the safety manager, security manager or quality manager initiating the inspection>
-- test expert: <one of the reviewers explicitly named here, to cover REQ_08_01 as described>
+- content responsible (author): `<https://github.com/MaciejKaszynski>`_
+- reviewer: `<https://github.com/rmaddikery>`_
+- moderator: `<https://github.com/aschemmel-tech>`_
+- test expert: <one of the reviewers explicitly named here, to cover REQ_08_01 as described for ASIL-B quality>
 
 Checklist
 ---------
@@ -67,13 +67,13 @@ See also :need:`doc_concept__wp_inspections` for further information about revie
       - Is the requirement description *comprehensible* ?
       - If you think the requirement is hard to understand, comment here.
       - Yes
-      -
+      - <comment why it is "Yes">
       -
     * - REQ_02_02
       - Is the requirement description *unambiguous* ?
       - Especially search for "weak words" like "about", "etc.", "relevant" and others (see the internet documentation on this). This check shall be supported by tooling.
       - Yes
-      -
+      - <comment why it is "Yes">
       -
     * - REQ_02_03
       - Is the requirement description *atomic* ?
@@ -85,13 +85,13 @@ See also :need:`doc_concept__wp_inspections` for further information about revie
       - Is the requirement description *feasible* ?
       - If at the time of the inspection the requirement has already some implementation, the answer is yes. This can be checked via traces, but also :need:`gd_req__req_attr_impl` shows this. In case the requirement has no implementation at the time of inspection (i.e. not implemented at least as "proof-of-concept"), a development expert should be invited to the Pull-Request review to explicitly check this item.
       - Yes
-      -
+      - <comment why it is "Yes">
       -
     * - REQ_02_05
       - Is the requirement description *independent from implementation* ?
       - This checkpoint should improve requirements definition in the sense that the "what" is described and not the "how" - the latter should be described in architecture/design derived from the requirement. But there can also be a good reason for this, for example we would require using a file format like JSON and even specify the formatting standard already on stakeholder requirement level because we want to be compatible. A finding in this checkpoint does not mean there is a safety problem in the requirement.
       - Yes
-      -
+      - <comment why it is "Yes">
       -
     * - REQ_03_01
       - Is the *linkage to the parent requirement* correct?
@@ -106,7 +106,7 @@ See also :need:`doc_concept__wp_inspections` for further information about revie
       - Is the requirement *internally and externally consistent*?
       - Does the requirement contradict other requirements within the same or higher levels? One may restrict the search to the feature for component requirements, for features to other features using same components. Is the description of the requirement consistent with all its attributes (if not already part of another check, e.g. does the title fit?).
       - Yes
-      -
+      - <comment why it is "Yes">
       -
     * - REQ_05_01
       - Do the software requirements consider *timing constraints*?
@@ -123,25 +123,25 @@ See also :need:`doc_concept__wp_inspections` for further information about revie
         determine the input data use and setting of output data for these
         interfaces. Are all output values defined?
       - Yes
-      -
+      - <comment why it is "Yes">
       -
     * - REQ_07_01
       - Is the *safety* attribute set correctly?
       - Derived requirements are checked automatically, see :need:`gd_req__req_linkage_safety`. But for the top level requirements (and also all AoU) this needs to be checked manually for correctness.
       - Yes
-      -
+      - <comment why it is "Yes">
       -
     * - REQ_07_02
       - Is the attribute *security* set correctly?
       - For component requirements this checklist item is supported by automated check: "Every requirement which satisfies a feature requirement with security attribute set to YES inherits this". But the component requirements/architecture may additionally also be subject to a :need:`wp__sw_component_security_analysis`.
       - Yes
-      -
+      - <comment why it is "Yes">
       -
     * - REQ_08_01
       - Is the requirement *verifiable*?
       - If at the time of the inspection already tests are created for the requirement, the answer is yes. This can be checked via traces, but also :need:`gd_req__req_attr_test_covered` shows this. In case the requirement is not sufficiently traced to test cases already, a test expert is invited to the inspection to give their opinion whether the requirement is formulated in a way that supports test development and the available test infrastructure is sufficient to perform the test.
       - Yes
-      -
+      - <comment why it is "Yes">
       -
     * - REQ_08_02
       - Is the requirement verifiable by design or code review in case it is not feasibly testable?
@@ -154,25 +154,26 @@ See also :need:`doc_concept__wp_inspections` for further information about revie
       - Do the requirements that define a safety mechanism specify the error reaction leading to a safe state?
       - Alternatively to the safe state there could also be "repair" mechanisms. Also do not forget to consider REQ_05_01 for these.
       - Yes
-      -
+      - <comment why it is "Yes">
       -
     * - REQ_10_01
       - Is the requirement description *complete* ?
       - For every requirement in the inspection, follow to its parent (feature) requirement(s) and then check if this/these are fulfilled completely by its/their linked children (component requirements, including those which are not in scope of the inspection).
       - Yes
-      -
+      - <comment why it is "Yes">
       -
 
 
 .. attention::
     The above checklist entries must be filled according to your component requirements in scope.
+    It is mandatory to fill remarks also for checklist entries which are passed, to be able to understand the verdict.
 
-Note: If a Review ID is not applicable for your requirement, then state ""n/a" in status and comment accordingly in remarks.
+Note: If a Review ID is not applicable for your requirement, then state ""n/a" in status and comment accordingly in remarks. For example "no stakeholder requirement (no rationale needed)"
 
-The following requirements in "valid" state and with "inspected" tag set are in the scope of this inspection:
+The following requirements in "valid_inspected" state are in the scope of this inspection:
 
 .. needtable::
-   :filter: "mw_log_backend" in docname and "requirements" in docname and docname is not None and status == "valid"
+   :filter: "mw_log" in docname and "requirements" in docname and docname is not None
    :style: table
    :types: comp_req
    :tags: mw_log_backend
@@ -180,10 +181,10 @@ The following requirements in "valid" state and with "inspected" tag set are in 
    :colwidths: 25,25,25
    :sort: title
 
-And also the following AoUs in "valid" state and with "inspected" tag set (for these please answer the questions above as if the AoUs are requirements, except question REQ_03_01):
+And also the following AoUs in "valid_inspected" state (for these please answer the questions above as if the AoUs are requirements, except questions REQ_03_01 and REQ_03_02):
 
 .. needtable::
-   :filter: "mw_log_backend" in docname and "requirements" in docname and docname is not None and status == "valid"
+   :filter: "mw_log" in docname and "requirements" in docname and docname is not None
    :style: table
    :types: aou_req
    :tags: mw_log_backend
