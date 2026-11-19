@@ -11,4 +11,4 @@
  * SPDX-License-Identifier: Apache-2.0
  ********************************************************************************/
 
-#include <data_router_cfg.h>
+#include "score/datarouter/include/daemon/data_router_cfg.h"

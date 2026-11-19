@@ -32,7 +32,7 @@
 #include "score/concurrency/thread_pool.h"
 
 // Constants
-#include "data_router_cfg.h"
+#include "score/datarouter/include/daemon/data_router_cfg.h"
 
 #include <score/math.hpp>
 #include <functional>
