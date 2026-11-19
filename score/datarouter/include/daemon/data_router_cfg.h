@@ -14,6 +14,8 @@
 #ifndef SCORE_DATAROUTER_INCLUDE_DAEMON_DATA_ROUTER_CFG_H
 #define SCORE_DATAROUTER_INCLUDE_DAEMON_DATA_ROUTER_CFG_H
 
+#include <string>
+
 #include <score/string_view.hpp>
 
 namespace score
@@ -22,8 +24,8 @@ namespace logging
 {
 namespace config
 {
-static const std::string kSocketAddress{"datarouter_socket"};
-static constexpr const score::cpp::string_view kDltConfigClientName{"_dlt_config"};
+inline const std::string kSocketAddress{"datarouter_socket"};
+inline constexpr score::cpp::string_view kDltConfigClientName{"_dlt_config"};
 }  // namespace config
 }  // namespace logging
 }  // namespace score
