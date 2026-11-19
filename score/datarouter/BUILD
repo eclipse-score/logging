@@ -64,6 +64,7 @@ cc_library(
 cc_library(
     name = "unixdomain_common",
     srcs = [
+        "include/unix_domain/unix_domain_internal.h",
         "src/unix_domain/unix_domain_common.cpp",
     ],
     hdrs = [
@@ -91,6 +92,8 @@ cc_library(
     visibility = ["@score_logging//score/datarouter:__subpackages__"],
     deps = [
         ":unixdomain_common",
+        "@score_baselibs//score/language/futurecpp",
+        "@score_baselibs//score/os/utils:signal",
     ],
 )
 
