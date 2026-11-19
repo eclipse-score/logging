@@ -1,0 +1,80 @@
+Assumptions of Use
+==================
+
+**Coverage:** 100.0% (5 of 5 items OK)
+
+.. _lobster-item-3a3a632a569921c25653e42037fa4f0875fedddd:
+
+.. dropdown:: [OK] TRLC Aou AouRequirements.aou\_req\_\_log\_\_private\_or\_undocumented\_apis
+   :class-title: sd-bg-success sd-text-white
+
+   .. pull-quote::
+
+      Undocumented or private API from \`\`mw::log\`\` shall not be used. The public API of \`\`mw::log\`\` is contained in the \`\`mw::log\`\` namespace and is annotated with the documentation tag \`\`\\\\public\`\`. Everything else is considered part of the private API and shall not be used. Entities from any implementation \`\`details\`\` namespace shall not be used. In the following example, the \`\`TextRecorder\`\` class is part of a detail namespace and shall not be used directly. It may be used indirectly but only though public API: .. code:: cpp namespace mw::log { namespace details { class TextRecorder : public Recorder // Private undocumented API SHALL NOT be used. { // ... }; } // namespace detail /  \\\\public \*/ LogStream LogInfo(); // Public API is OK to be used by Safety-Related Application Software. } // namespace mw::log
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `bazel-out/k8-fastbuild/bin/score/mw/log/requirements/safety\_analysis/aou\_requirements\_trlc/0/aou\_requirements.trlc:17:14 <../../../../../../bazel-out/k8-fastbuild/bin/score/mw/log/requirements/safety_analysis/aou_requirements_trlc/0/aou_requirements.trlc#L17>`__
+
+.. _lobster-item-defe74d863399d1b326c7d1fda60a4369bd6b70e:
+
+.. dropdown:: [OK] TRLC Aou AouRequirements.aou\_req\_\_log\_\_unsupported\_contexts
+   :class-title: sd-bg-success sd-text-white
+
+   .. pull-quote::
+
+      The log frontend API shall not be used from unsupported contexts. 1. Threads: mw::log API documented and tagged \`\`\\\\thread-safe\`\` shall be thread safe. 2. Signal handler: mw::log API shall not be called from signal handlers. 3. Interrupt handler: mw::log API shall not be called from interrupt handlers. The majority of the mw::log API is thread-safe. Thread-safe API can be recognized by the \`\\\\thread-safe\` tag in the documentation: .. code:: cpp class Logger { /// \\\\brief Creates a LogStream to log messages of criticality \`Fatal\` (highest). /// /// \\\\public /// \\\\thread-safe /// /// \\\\details Fatal shall be used on errors that cannot be recovered and will lead to an overall failure in the /// system. The message will be logged under the context that was provided on construction. /// /// \\\\return LogStream which can be used stream verbose logging messages (will be flushed on destruction) log::LogStream LogFatal() const noexcept; }; \`\`LogStream\`\` classes are not thread-safe. For example, the following code shows what not to do with \`\`LogStream\`\` classes: .. code:: cpp auto log\_stream = logger.LogInfo(); std::thread t1([&](){ // Do not access log\_stream from another thread! log\_stream << "test"; }); log\_stream << "hello";
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `bazel-out/k8-fastbuild/bin/score/mw/log/requirements/safety\_analysis/aou\_requirements\_trlc/0/aou\_requirements.trlc:23:14 <../../../../../../bazel-out/k8-fastbuild/bin/score/mw/log/requirements/safety_analysis/aou_requirements_trlc/0/aou_requirements.trlc#L23>`__
+
+.. _lobster-item-b9ef428abf72e5a861eaa77be294c1b3453d986b:
+
+.. dropdown:: [OK] TRLC Aou AouRequirements.aou\_req\_\_log\_\_no\_static\_log
+   :class-title: sd-bg-success sd-text-white
+
+   .. pull-quote::
+
+      mw::log SHALL NOT be used during the C++ static storage Safety-Related Platform Software and Safety-Related Application Software shall not use mw::log during C++ static storage initialization and destruction. .. code:: cpp struct MyClass { MyClass() { mw::log::LogInfo() << "MyClass()"; // mw::log SHALL NOT be used before entering main(). } ~MyClass() { mw::log::LogInfo() << "MyClass()"; // mw::log SHALL NOT be used after exiting main(). } }; static MyClass singleton{};
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `bazel-out/k8-fastbuild/bin/score/mw/log/requirements/safety\_analysis/aou\_requirements\_trlc/0/aou\_requirements.trlc:29:14 <../../../../../../bazel-out/k8-fastbuild/bin/score/mw/log/requirements/safety_analysis/aou_requirements_trlc/0/aou_requirements.trlc#L29>`__
+
+.. _lobster-item-815491c020605678c10be27069a1cd1dc4c0dc95:
+
+.. dropdown:: [OK] TRLC Aou AouRequirements.aou\_req\_\_log\_\_console\_logging
+   :class-title: sd-bg-success sd-text-white
+
+   .. pull-quote::
+
+      Console logging shall not be used in production.
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `bazel-out/k8-fastbuild/bin/score/mw/log/requirements/safety\_analysis/aou\_requirements\_trlc/0/aou\_requirements.trlc:35:14 <../../../../../../bazel-out/k8-fastbuild/bin/score/mw/log/requirements/safety_analysis/aou_requirements_trlc/0/aou_requirements.trlc#L35>`__
+
+.. _lobster-item-f6e2d90c52ffd9e191f5484ab297dfa4bb945136:
+
+.. dropdown:: [OK] TRLC Aou AouRequirements.aou\_req\_\_log\_\_relying\_on\_logs
+   :class-title: sd-bg-success sd-text-white
+
+   .. pull-quote::
+
+      Applications shall not rely on mw::log output for safety verification/qualification/case. Safety-Related Platform Software and Safety-Related Application Software shall not rely on the presence of any form of mw::log output for delivering their business logic. This shall hold even for logs sent out by the application itself. Safety-Related Platform Software and Safety-Related Application Software behavior shall not depend on log messages: .. code:: cpp void Step() { // Do not rely on log messages! if ( ReceiveStopLogMessage() ) { ExecuteStopCommand(); } // ... This requirement shall be verified for each assigned application. The whole dependency tree of all included libraries shall be also verified on this requirement in the application use case and by application developers.
+
+   .. raw:: html
+
+      <hr>
+
+   **Source:** `bazel-out/k8-fastbuild/bin/score/mw/log/requirements/safety\_analysis/aou\_requirements\_trlc/0/aou\_requirements.trlc:41:14 <../../../../../../bazel-out/k8-fastbuild/bin/score/mw/log/requirements/safety_analysis/aou_requirements_trlc/0/aou_requirements.trlc#L41>`__
+
