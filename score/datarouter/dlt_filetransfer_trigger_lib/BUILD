@@ -27,7 +27,6 @@ cc_library(
     ],
     features = COMPILER_WARNING_FEATURES,
     visibility = [
-        "//platform/aas/log_and_trace/datarouterconf/src/services:__pkg__",
         "//platform/aas/pas/crash_handler:__pkg__",
         "//platform/aas/test/pas:__subpackages__",
         "//score/datarouter/test:__subpackages__",
@@ -49,7 +48,6 @@ cc_library(
     ],
     features = COMPILER_WARNING_FEATURES,
     visibility = [
-        "//platform/aas/log_and_trace/datarouterconf/src/filetransfer:__subpackages__",
         "//platform/aas/pas/crash_handler:__subpackages__",
         "//score/mw/log/legacy_non_verbose_api:__pkg__",
         "@score_logging//score/datarouter:__subpackages__",
