@@ -23,7 +23,6 @@ filegroup(
         "datarouter/persistent-logging_test_6.json",
     ],
     visibility = [
-        "//platform/aas/log_and_trace/datarouterconf:__subpackages__",
         "@score_logging//score/datarouter:__subpackages__",
     ],
 )
