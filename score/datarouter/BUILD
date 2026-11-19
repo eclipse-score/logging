@@ -279,11 +279,19 @@ cc_library(
 ## ---------------------------------------------------------------------------
 
 cc_library(
-    name = "libdrconfighdrs",
+    name = "data_router_cfg",
     hdrs = ["include/daemon/data_router_cfg.h"],
     features = COMPILER_WARNING_FEATURES,
-    strip_include_prefix = "include/daemon",
+    # Transitional: keeps the short include "data_router_cfg.h" working until consumers use the full path.
+    includes = ["include/daemon"],
     # Public: socket and client names shared with datarouter clients.
+    visibility = ["//visibility:public"],
+)
+
+# Legacy label, kept until consumers depend on :data_router_cfg.
+alias(
+    name = "libdrconfighdrs",
+    actual = ":data_router_cfg",
     visibility = ["//visibility:public"],
 )
 
