@@ -23,7 +23,7 @@ node "Datarouter" {
   component UnixDomainServer
 }
 
-node "Datarouter Configurator Client" {
+node "DatarouterConfiguratorClient" {
   component UnixDomainClient as config_client
 }
 
