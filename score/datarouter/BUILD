@@ -322,7 +322,7 @@ cc_library(
     strip_include_prefix = "include",
     visibility = ["//visibility:private"],
     deps = [
-        ":libdrconfighdrs",
+        ":data_router_cfg",
     ],
 )
 
@@ -583,10 +583,10 @@ cc_library(
     visibility = ["//visibility:private"],
     deps = [
         ":configurator_commands",
+        ":data_router_cfg",
         ":datarouter_feature_config",
         ":dlt_log_channel_lib",
         ":dltserver_common",
-        ":libdrconfighdrs",
         ":log_entry_deserialization",
         ":log_sender",
         ":logchannel_utility",
@@ -1039,12 +1039,12 @@ cc_library(
         ":udpoutput_mock",
         # buildifier on
         ":unixdomain_mock",
+        ":data_router_cfg",
         ":datarouter_feature_config_testing",
         ":datarouter_types",
         ":diagnostic_job_handler_mock",
         ":diagnostic_job_parser_mock",
         ":dlt_log_server_mock",
-        ":libdrconfighdrs",
         ":log_entry_deserialization",
         ":log_sender_mock",
         ":logparser_testing",
