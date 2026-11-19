@@ -12,6 +12,7 @@
  ********************************************************************************/
 
 #include "unix_domain/unix_domain_server.h"
+#include "unix_domain/unix_domain_internal.h"
 #include "score/os/pthread.h"
 
 #include "score/os/socket.h"

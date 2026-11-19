@@ -19,6 +19,7 @@
 #include "score/os/socket.h"
 #include "score/os/unistd.h"
 #include "score/os/utils/mocklib/signalmock.h"
+#include "unix_domain/unix_domain_internal.h"
 #include "unix_domain/unix_domain_server.h"
 
 #include <gmock/gmock.h>
