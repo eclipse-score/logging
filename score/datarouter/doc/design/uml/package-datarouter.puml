@@ -35,10 +35,13 @@ package "score::platform::internal" {
   class MessagePassingServer
   class MessagePassingServer::ISession
   class UnixDomainClient
-  class UnixDomainSockAddr
   class UnixDomainServer
   class UnixDomainServer::SessionHandle
   class UnixDomainServer::SessionWrapper
+}
+
+package "score::platform::unix_domain" {
+  class UnixDomainSockAddr
 }
 
 package "score::logging::dltserver" {

@@ -34,7 +34,7 @@ TEST_F(TracingTest, TracingLifeCycleStart)
 {
     // EXPECT_CALL(appconfigmock_, getApplicationId().Times(AtLeast(1)).WillOnce(Return("SMOKE"));
     //--TODO expectations need to be added after the below mocks are available
-    // score::platform::internal::UnixDomainSockAddr
+    // score::platform::unix_domain::UnixDomainSockAddr
     // score::platform::logger
     // score::platform::internal::MwsrDataReadAcquired
     // score::platform::internal::MwsrDataReadReleased

@@ -14,7 +14,7 @@
 #ifndef UNIX_DOMAIN_CLIENT_H_
 #define UNIX_DOMAIN_CLIENT_H_
 
-#include "unix_domain/unix_domain_common.h"
+#include "unix_domain/unix_domain_internal.h"
 
 #include <functional>
 #include <string>

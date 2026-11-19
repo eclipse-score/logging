@@ -28,7 +28,7 @@ namespace score
 {
 namespace platform
 {
-namespace internal
+namespace unix_domain
 {
 using SharedMemoryFileHandle = std::int32_t;
 
@@ -69,7 +69,7 @@ std::optional<std::string> RecvSocketMessage(
     std::int32_t socket_fd,
     AncillaryDataFileHandleReceptionCallback ancillary_data_process = AncillaryDataFileHandleReceptionCallback{});
 
-}  // namespace internal
+}  // namespace unix_domain
 }  // namespace platform
 }  // namespace score
 
