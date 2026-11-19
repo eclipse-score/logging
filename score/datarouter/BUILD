@@ -71,14 +71,16 @@ cc_library(
         "include/unix_domain/unix_domain_common.h",
     ],
     features = COMPILER_WARNING_FEATURES,
+    implementation_deps = [
+        "@score_baselibs//score/os:socket",
+        "@score_baselibs//score/os/utils:signal",
+        "@score_baselibs//score/quality/compiler_warnings",
+    ],
     strip_include_prefix = "include",
     # Public: socket send/receive helpers used by datarouter clients.
     visibility = ["//visibility:public"],
     deps = [
         "@score_baselibs//score/language/futurecpp",
-        "@score_baselibs//score/os:socket",
-        "@score_baselibs//score/os/utils:signal",
-        "@score_baselibs//score/quality/compiler_warnings",
     ],
 )
 
@@ -113,6 +115,9 @@ cc_library(
         ":unixdomain_internal",
         "@score_baselibs//score/language/futurecpp",
         "@score_baselibs//score/os:pthread",
+        "@score_baselibs//score/os:socket",
+        "@score_baselibs//score/os:unistd",
+        "@score_baselibs//score/os/utils:signal",
     ],
 )
 
@@ -135,7 +140,10 @@ cc_library(
         ":unixdomain_internal",
         "//score/datarouter/src/configuration/dynamic_config:i_session",
         "@score_baselibs//score/os:pthread",
+        "@score_baselibs//score/os:socket",
         "@score_baselibs//score/os:sys_poll",
+        "@score_baselibs//score/os:unistd",
+        "@score_baselibs//score/os/utils:signal",
         "@score_baselibs//score/quality/compiler_warnings",
     ],
 )
@@ -156,7 +164,10 @@ cc_library(
         ":unixdomain_internal",
         "//score/datarouter/src/configuration/dynamic_config:i_session",
         "@score_baselibs//score/os:pthread",
+        "@score_baselibs//score/os:socket",
         "@score_baselibs//score/os:sys_poll",
+        "@score_baselibs//score/os:unistd",
+        "@score_baselibs//score/os/utils:signal",
         "@score_baselibs//score/quality/compiler_warnings",
     ],
 )
