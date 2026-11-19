@@ -13,6 +13,7 @@
 
 #include "score/os/mocklib/socketmock.h"
 #include "unix_domain/unix_domain_common.h"
+#include "unix_domain/unix_domain_internal.h"
 #include <gmock/gmock.h>
 #include <gtest/gtest.h>
 #include <sstream>

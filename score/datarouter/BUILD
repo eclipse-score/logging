@@ -82,6 +82,19 @@ cc_library(
 )
 
 cc_library(
+    name = "unixdomain_internal",
+    hdrs = [
+        "include/unix_domain/unix_domain_internal.h",
+    ],
+    features = COMPILER_WARNING_FEATURES,
+    strip_include_prefix = "include",
+    visibility = ["@score_logging//score/datarouter:__subpackages__"],
+    deps = [
+        ":unixdomain_common",
+    ],
+)
+
+cc_library(
     name = "unixdomain_client",
     srcs = [
         "src/unix_domain/unix_domain_client.cpp",
@@ -94,6 +107,7 @@ cc_library(
     visibility = ["//visibility:private"],
     deps = [
         ":unixdomain_common",
+        ":unixdomain_internal",
         "@score_baselibs//score/language/futurecpp",
         "@score_baselibs//score/os:pthread",
     ],
@@ -115,6 +129,7 @@ cc_library(
     ],
     deps = [
         ":unixdomain_common",
+        ":unixdomain_internal",
         "//score/datarouter/src/configuration/dynamic_config:i_session",
         "@score_baselibs//score/os:pthread",
         "@score_baselibs//score/os:sys_poll",
@@ -135,6 +150,7 @@ cc_library(
     visibility = ["//score/datarouter/test:__subpackages__"],
     deps = [
         ":unixdomain_client",
+        ":unixdomain_internal",
         "//score/datarouter/src/configuration/dynamic_config:i_session",
         "@score_baselibs//score/os:pthread",
         "@score_baselibs//score/os:sys_poll",
