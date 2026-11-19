@@ -26,13 +26,8 @@ cc_library(
         "include/ifile_transfer.h",
     ],
     features = COMPILER_WARNING_FEATURES,
-    visibility = [
-        "//platform/aas/pas/crash_handler:__pkg__",
-        "//platform/aas/test/pas:__subpackages__",
-        "//score/datarouter/test:__subpackages__",
-        "//score/test/component:__subpackages__",
-        "@score_baselibs//score/logging:__pkg__",
-    ],
+    # Public: client API to trigger DLT file transfers.
+    visibility = ["//visibility:public"],
     deps = [
         "filetransfer_message_types",
         "//score/mw/log/legacy_non_verbose_api",
