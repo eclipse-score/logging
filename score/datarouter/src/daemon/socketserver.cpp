@@ -47,7 +47,7 @@ namespace datarouter
 {
 
 using score::platform::internal::MessagePassingServer;
-using score::platform::internal::UnixDomainSockAddr;
+using score::platform::unix_domain::UnixDomainSockAddr;
 
 namespace
 {

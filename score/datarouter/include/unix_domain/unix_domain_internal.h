@@ -30,6 +30,13 @@ namespace platform
 namespace internal
 {
 
+// Public API names used unqualified by the implementation in this namespace.
+using unix_domain::AncillaryDataFileHandleReceptionCallback;
+using unix_domain::RecvSocketMessage;
+using unix_domain::SendSocketMessage;
+using unix_domain::SharedMemoryFileHandle;
+using unix_domain::UnixDomainSockAddr;
+
 enum class MessageType : std::uint8_t
 {
     kDefault = 0,

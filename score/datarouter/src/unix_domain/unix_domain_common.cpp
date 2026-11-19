@@ -92,6 +92,11 @@ int32_t* CmsgDataSuppressWarning(struct cmsghdr* cmsg)
     return fdptr;
 }
 
+}  // namespace internal
+
+namespace unix_domain
+{
+
 UnixDomainSockAddr::UnixDomainSockAddr(const std::string& path, bool is_abstract) : addr()
 {
     addr.sun_family = static_cast<sa_family_t>(AF_UNIX);
@@ -100,6 +105,11 @@ UnixDomainSockAddr::UnixDomainSockAddr(const std::string& path, bool is_abstract
     std::advance(addr_iter, static_cast<int32_t>(is_abstract));
     std::copy_n(path.begin(), len, addr_iter);
 }
+
+}  // namespace unix_domain
+
+namespace internal
+{
 
 void SendAncillaryDataOverSocket(int connection_file_descriptor, score::cpp::span<std::uint8_t> data)
 {
@@ -155,6 +165,11 @@ void SendAncillaryDataOverSocket(int connection_file_descriptor, score::cpp::spa
     }
 }
 
+}  // namespace internal
+
+namespace unix_domain
+{
+
 /* Send message without file descriptor option *
  * One of the function is to pass a handle to shared memory file */
 void SendSocketMessage(std::int32_t connection_file_descriptor,
@@ -169,8 +184,8 @@ void SendSocketMessage(std::int32_t connection_file_descriptor,
     }
 
     int pid = getpid();
-    SocketMessangerHeader messanger_header{};
-    messanger_header.type = MessageType::kDefault;
+    internal::SocketMessangerHeader messanger_header{};
+    messanger_header.type = internal::MessageType::kDefault;
     messanger_header.len = static_cast<uint16_t>(message.size() + 1U);
     messanger_header.pid = pid;
 
@@ -207,7 +222,7 @@ void SendSocketMessage(std::int32_t connection_file_descriptor,
         - char array has predefined size kSocketCmsgSpace, thus false positive
         */
         // coverity[autosar_cpp14_a9_6_1_violation : FALSE]
-        char buf[kSocketCmsgSpace];  // NOLINT(modernize-avoid-c-arrays) see comment above
+        char buf[internal::kSocketCmsgSpace];  // NOLINT(modernize-avoid-c-arrays) see comment above
         struct cmsghdr align;
         /*
         Deviation from Rule A9-5-1:
@@ -237,8 +252,8 @@ void SendSocketMessage(std::int32_t connection_file_descriptor,
         cmsg = CMSG_FIRSTHDR(&msg);
         cmsg->cmsg_level = SOL_SOCKET;
         cmsg->cmsg_type = SCM_RIGHTS;
-        CmsgLenSuppressWarnings(cmsg, num_fds);
-        std::int32_t* fdptr = CmsgDataSuppressWarning(cmsg);
+        internal::CmsgLenSuppressWarnings(cmsg, num_fds);
+        std::int32_t* fdptr = internal::CmsgDataSuppressWarning(cmsg);
         if (num_fds > 0)
         {
             // Disable maybe uninitialized warning for optional.
@@ -281,8 +296,13 @@ std::optional<std::string> RecvSocketMessage(std::int32_t socket_fd,
 {
     score::cpp::optional<SharedMemoryFileHandle> discard_file_handle = score::cpp::nullopt;
     score::cpp::optional<std::int32_t> discard_pid = score::cpp::nullopt;
-    return RecvSocketMessage(socket_fd, discard_file_handle, discard_pid, std::move(ancillary_data_process));
+    return internal::RecvSocketMessage(socket_fd, discard_file_handle, discard_pid, std::move(ancillary_data_process));
 }
+
+}  // namespace unix_domain
+
+namespace internal
+{
 
 std::optional<std::string> RecvSocketMessage(std::int32_t socket_fd,
                                              score::cpp::optional<SharedMemoryFileHandle>& file_handle,

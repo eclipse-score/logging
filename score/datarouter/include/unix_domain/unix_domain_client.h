@@ -14,7 +14,7 @@
 #ifndef SCORE_DATAROUTER_INCLUDE_UNIX_DOMAIN_UNIX_DOMAIN_CLIENT_H
 #define SCORE_DATAROUTER_INCLUDE_UNIX_DOMAIN_UNIX_DOMAIN_CLIENT_H
 
-#include "unix_domain/unix_domain_common.h"
+#include "unix_domain/unix_domain_internal.h"
 
 #include <unistd.h>
 

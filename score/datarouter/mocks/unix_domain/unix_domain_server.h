@@ -15,7 +15,7 @@
 #define SCORE_DATAROUTER_MOCKS_UNIX_DOMAIN_UNIX_DOMAIN_SERVER_H
 
 #include "i_session.h"
-#include "unix_domain/unix_domain_common.h"
+#include "unix_domain/unix_domain_internal.h"
 
 #include <functional>
 #include <optional>

@@ -186,6 +186,7 @@ cc_library(
     ],
     deps = [
         ":unixdomain_common",
+        ":unixdomain_internal",
         "//score/datarouter/src/configuration/dynamic_config:i_session",
         "@googletest//:gtest_main",
     ],
