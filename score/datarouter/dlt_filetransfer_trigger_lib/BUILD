@@ -43,7 +43,6 @@ cc_library(
     ],
     features = COMPILER_WARNING_FEATURES,
     visibility = [
-        "//platform/aas/pas/crash_handler:__subpackages__",
         "//score/mw/log/legacy_non_verbose_api:__pkg__",
         "@score_logging//score/datarouter:__subpackages__",
     ],
