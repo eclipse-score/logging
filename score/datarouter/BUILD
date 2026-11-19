@@ -71,10 +71,8 @@ cc_library(
     ],
     features = COMPILER_WARNING_FEATURES,
     strip_include_prefix = "include",
-    visibility = [
-        "//platform/aas/log_and_trace/datarouterconf:__subpackages__",
-        "@score_logging//score/datarouter:__subpackages__",
-    ],
+    # Public: socket send/receive helpers used by datarouter clients.
+    visibility = ["//visibility:public"],
     deps = [
         "@score_baselibs//score/language/futurecpp",
         "@score_baselibs//score/os:socket",
