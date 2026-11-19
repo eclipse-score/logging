@@ -285,9 +285,8 @@ cc_library(
     hdrs = ["include/daemon/data_router_cfg.h"],
     features = COMPILER_WARNING_FEATURES,
     strip_include_prefix = "include/daemon",
-    visibility = [
-        "//platform/aas/log_and_trace/datarouterconf:__subpackages__",
-    ],
+    # Public: socket and client names shared with datarouter clients.
+    visibility = ["//visibility:public"],
 )
 
 ## ===========================================================================
@@ -330,10 +329,8 @@ cc_library(
     hdrs = [
         "include/daemon/configurator_commands.h",
     ],
-    visibility = [
-        "//platform/aas/log_and_trace/datarouterconf:__subpackages__",
-        "@score_logging//score/datarouter:__subpackages__",
-    ],
+    # Public: command and return codes shared with datarouter clients.
+    visibility = ["//visibility:public"],
 )
 
 filegroup(
