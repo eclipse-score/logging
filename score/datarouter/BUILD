@@ -323,6 +323,7 @@ cc_library(
 alias(
     name = "libdrconfighdrs",
     actual = ":data_router_cfg",
+    deprecation = "Usage of target '@score_logging//score/datarouter:libdrconfighdrs' is deprecated. Please use '@score_logging//score/datarouter:data_router_cfg' instead.",
     visibility = ["//visibility:public"],
 )
 
