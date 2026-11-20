@@ -67,7 +67,7 @@ class LogParser : public ILogParser
     void AddIncomingType(const score::mw::log::detail::TypeRegistration&) override;
 
     void Parse(TimestampT timestamp, const char* data, BufsizeT size) override;
-    void ParseSharedMemoryRecord(const score::mw::log::detail::SharedMemoryRecord& record) override;
+    bool ParseSharedMemoryRecord(const score::mw::log::detail::SharedMemoryRecord& record) override;
 
   private:
     class IndexParser

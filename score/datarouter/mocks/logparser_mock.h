@@ -32,13 +32,17 @@ namespace internal
 class LogParserMock : public ILogParser
 {
   public:
+    LogParserMock()
+    {
+        ON_CALL(*this, ParseSharedMemoryRecord(::testing::_)).WillByDefault(::testing::Return(true));
+    }
     ~LogParserMock() = default;
 
     MOCK_METHOD(void, AddIncomingType, (const BufsizeT map_index, const std::string& params), (override));
     MOCK_METHOD(void, AddIncomingType, (const score::mw::log::detail::TypeRegistration&), (override));
 
     MOCK_METHOD(void, Parse, (TimestampT timestamp, const char* data, BufsizeT size), (override));
-    MOCK_METHOD(void, ParseSharedMemoryRecord, (const score::mw::log::detail::SharedMemoryRecord& record), (override));
+    MOCK_METHOD(bool, ParseSharedMemoryRecord, (const score::mw::log::detail::SharedMemoryRecord& record), (override));
 };
 
 }  // namespace internal

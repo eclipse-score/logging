@@ -127,6 +127,7 @@ class DataRouter::DataRouterForTest::SourceSession::SourceSessionForTest : publi
     using DataRouter::SourceSession::command_data_;
     using DataRouter::SourceSession::handle_;
     using DataRouter::SourceSession::local_subscriber_data_;
+    using DataRouter::SourceSession::message_count_dropped_unknown_type_;
     using DataRouter::SourceSession::stats_data_;
 
     SourceSessionForTest(DataRouter& router,
@@ -427,6 +428,39 @@ TEST_F(SourceSessionTestFixture, ProcessDetachedLogsReaderUsed)
 
     uint64_t number_of_bytes_in_buffer = 0;
     source_session_under_test_->ProcessDetachedLogs(number_of_bytes_in_buffer);
+
+    EXPECT_EQ(source_session_under_test_->message_count_dropped_unknown_type_.load(), 0U);
+}
+
+TEST_F(SourceSessionTestFixture, ProcessDetachedLogsCountsRecordsWithUnregisteredType)
+{
+    EXPECT_CALL(*shared_memory_reader_mock_, ReadDetached(_, _))
+        .WillOnce(DoAll(InvokeSharedReadArguments(), Return(std::nullopt)));
+    EXPECT_CALL(*log_parser_mock_, AddIncomingType(_));
+    EXPECT_CALL(*log_parser_mock_, ParseSharedMemoryRecord(_)).WillOnce(Return(false));
+
+    uint64_t number_of_bytes_in_buffer = 0;
+    source_session_under_test_->ProcessDetachedLogs(number_of_bytes_in_buffer);
+
+    EXPECT_EQ(source_session_under_test_->message_count_dropped_unknown_type_.load(), 1U);
+}
+
+TEST_F(SourceSessionTestFixture, ProcessAndRouteLogMessagesCountsRecordsWithUnregisteredType)
+{
+    uint64_t message_count_local = 0;
+    std::chrono::microseconds transport_delay_local = std::chrono::microseconds::zero();
+    uint64_t number_of_bytes_in_buffer = 0;
+    bool needs_fast_reschedule = false;
+
+    EXPECT_CALL(*shared_memory_reader_mock_, Read(_, _))
+        .WillOnce(DoAll(InvokeSharedReadArguments(), Return(std::nullopt)));
+    EXPECT_CALL(*log_parser_mock_, AddIncomingType(_));
+    EXPECT_CALL(*log_parser_mock_, ParseSharedMemoryRecord(_)).WillOnce(Return(false));
+
+    source_session_under_test_->ProcessAndRouteLogMessages(
+        message_count_local, transport_delay_local, number_of_bytes_in_buffer, true, needs_fast_reschedule);
+
+    EXPECT_EQ(source_session_under_test_->message_count_dropped_unknown_type_.load(), 1U);
 }
 
 TEST_F(SourceSessionTestFixture, ProcessAndRouteLogMessagesQuotaLimitExceeded)

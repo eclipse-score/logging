@@ -153,12 +153,12 @@ void LogParser::Parse(TimestampT timestamp, const char* data, BufsizeT size)
     }
 }
 
-void LogParser::ParseSharedMemoryRecord(const score::mw::log::detail::SharedMemoryRecord& record)
+bool LogParser::ParseSharedMemoryRecord(const score::mw::log::detail::SharedMemoryRecord& record)
 {
     const auto index_parser_entry = index_parser_map_.find(record.header.type_identifier);
     if (index_parser_entry == index_parser_map_.end())
     {
-        return;
+        return false;
     }
 
     auto& index_parser = index_parser_entry->second;
@@ -173,7 +173,7 @@ void LogParser::ParseSharedMemoryRecord(const score::mw::log::detail::SharedMemo
     // it will overflow and reset the variable.
     if (payload_length > std::numeric_limits<BufsizeT>::max())  // LCOV_EXCL_BR_LINE
     {
-        return;  // LCOV_EXCL_LINE
+        return true;  // LCOV_EXCL_LINE
     }
 
     const auto payload_length_buf_size = static_cast<BufsizeT>(payload_length);
@@ -186,6 +186,8 @@ void LogParser::ParseSharedMemoryRecord(const score::mw::log::detail::SharedMemo
     {
         handler->Handle(type_info, record.header.time_stamp, payload_ptr, payload_length_buf_size);
     }
+
+    return true;
 }
 
 }  // namespace internal

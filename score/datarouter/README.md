@@ -40,6 +40,7 @@ The datarouter collects basic statistics for all source sessions. The system tra
 - **time_to_process_records_** - Duration required to process the current message set
 - **buffer size watermark** - Maximum occupied space in the ring buffer since application start
 - **messages dropped** - Cumulative count of dropped messages since start
+- **messages dropped (unregistered type)** - Cumulative count of messages dropped because their type was not registered; printed only if at least one such message occurred
 
 Example statistics message:
 ```
