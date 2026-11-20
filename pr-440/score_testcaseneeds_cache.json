@@ -884,7 +884,7 @@
   {
     "name": "SourceSessionTestFixture__TryFinalizeAcquisitionIsBlockReleased",
     "file": "score/datarouter/test/ut/ut_logging/test_datarouter.cpp",
-    "line": "203",
+    "line": "204",
     "result": "passed",
     "repo_name": "local_repo",
     "hash": "",
@@ -898,7 +898,7 @@
   {
     "name": "SourceSessionTestFixture__TryFinalizeAcquisitionIsBlockNotReleased",
     "file": "score/datarouter/test/ut/ut_logging/test_datarouter.cpp",
-    "line": "220",
+    "line": "221",
     "result": "passed",
     "repo_name": "local_repo",
     "hash": "",
@@ -912,7 +912,7 @@
   {
     "name": "SourceSessionTestFixture__ProcessAndRouteLogMessagesAcquireFinalized",
     "file": "score/datarouter/test/ut/ut_logging/test_datarouter.cpp",
-    "line": "237",
+    "line": "238",
     "result": "passed",
     "repo_name": "local_repo",
     "hash": "",
@@ -926,7 +926,7 @@
   {
     "name": "SourceSessionTestFixture__ProcessAndRouteLogMessagesBlockExpectedToBeNextDataAvailable",
     "file": "score/datarouter/test/ut/ut_logging/test_datarouter.cpp",
-    "line": "262",
+    "line": "263",
     "result": "passed",
     "repo_name": "local_repo",
     "hash": "",
@@ -940,7 +940,7 @@
   {
     "name": "SourceSessionTestFixture__ProcessAndRouteLogMessagesBlockExpectedToBeNextDataNotAvailable",
     "file": "score/datarouter/test/ut/ut_logging/test_datarouter.cpp",
-    "line": "293",
+    "line": "294",
     "result": "passed",
     "repo_name": "local_repo",
     "hash": "",
@@ -954,7 +954,7 @@
   {
     "name": "SourceSessionTestFixture__ProcessAndRouteLogMessagesNotBlockExpectedToBeNext",
     "file": "score/datarouter/test/ut/ut_logging/test_datarouter.cpp",
-    "line": "325",
+    "line": "326",
     "result": "passed",
     "repo_name": "local_repo",
     "hash": "",
@@ -968,7 +968,7 @@
   {
     "name": "SourceSessionTestFixture__RequestAcquire",
     "file": "score/datarouter/test/ut/ut_logging/test_datarouter.cpp",
-    "line": "355",
+    "line": "356",
     "result": "passed",
     "repo_name": "local_repo",
     "hash": "",
@@ -982,7 +982,7 @@
   {
     "name": "SourceSessionTestFixture__OnAcquireResponse",
     "file": "score/datarouter/test/ut/ut_logging/test_datarouter.cpp",
-    "line": "371",
+    "line": "372",
     "result": "passed",
     "repo_name": "local_repo",
     "hash": "",
@@ -996,7 +996,7 @@
   {
     "name": "SourceSessionTestFixture__IsSourceClosed",
     "file": "score/datarouter/test/ut/ut_logging/test_datarouter.cpp",
-    "line": "388",
+    "line": "389",
     "result": "passed",
     "repo_name": "local_repo",
     "hash": "",
@@ -1010,7 +1010,7 @@
   {
     "name": "SourceSessionTestFixture__ProcessDetachedLogsReaderUsed",
     "file": "score/datarouter/test/ut/ut_logging/test_datarouter.cpp",
-    "line": "412",
+    "line": "413",
     "result": "passed",
     "repo_name": "local_repo",
     "hash": "",
@@ -1022,9 +1022,37 @@
     "FullyVerifies": null
   },
   {
+    "name": "SourceSessionTestFixture__ProcessDetachedLogsCountsRecordsWithUnregisteredType",
+    "file": "score/datarouter/test/ut/ut_logging/test_datarouter.cpp",
+    "line": "435",
+    "result": "passed",
+    "repo_name": null,
+    "hash": null,
+    "url": null,
+    "TestType": null,
+    "DerivationTechnique": null,
+    "result_text": "",
+    "PartiallyVerifies": null,
+    "FullyVerifies": null
+  },
+  {
+    "name": "SourceSessionTestFixture__ProcessAndRouteLogMessagesCountsRecordsWithUnregisteredType",
+    "file": "score/datarouter/test/ut/ut_logging/test_datarouter.cpp",
+    "line": "448",
+    "result": "passed",
+    "repo_name": null,
+    "hash": null,
+    "url": null,
+    "TestType": null,
+    "DerivationTechnique": null,
+    "result_text": "",
+    "PartiallyVerifies": null,
+    "FullyVerifies": null
+  },
+  {
     "name": "SourceSessionTestFixture__ProcessAndRouteLogMessagesQuotaLimitExceeded",
     "file": "score/datarouter/test/ut/ut_logging/test_datarouter.cpp",
-    "line": "432",
+    "line": "466",
     "result": "passed",
     "repo_name": "local_repo",
     "hash": "",
@@ -1038,7 +1066,7 @@
   {
     "name": "DataRouterTestFixture__ConstructionAndDestructionOnStack",
     "file": "score/datarouter/test/ut/ut_logging/test_datarouter.cpp",
-    "line": "527",
+    "line": "561",
     "result": "passed",
     "repo_name": "local_repo",
     "hash": "",
@@ -1052,7 +1080,7 @@
   {
     "name": "DataRouterTestFixture__ConstructionAndDestructionOnHeap",
     "file": "score/datarouter/test/ut/ut_logging/test_datarouter.cpp",
-    "line": "538",
+    "line": "572",
     "result": "passed",
     "repo_name": "local_repo",
     "hash": "",
@@ -1066,7 +1094,7 @@
   {
     "name": "DataRouterTestFixture__WhenOnlySourceSession",
     "file": "score/datarouter/test/ut/ut_logging/test_datarouter.cpp",
-    "line": "550",
+    "line": "584",
     "result": "passed",
     "repo_name": "local_repo",
     "hash": "",
@@ -1080,7 +1108,7 @@
   {
     "name": "DataRouterTestFixture__WhenMessageHandledFromRw",
     "file": "score/datarouter/test/ut/ut_logging/test_datarouter.cpp",
-    "line": "612",
+    "line": "646",
     "result": "passed",
     "repo_name": "local_repo",
     "hash": "",
@@ -1094,7 +1122,7 @@
   {
     "name": "DataRouterTestFixture__TestDifferentCountsOfMessagesDropped",
     "file": "score/datarouter/test/ut/ut_logging/test_datarouter.cpp",
-    "line": "669",
+    "line": "703",
     "result": "passed",
     "repo_name": "local_repo",
     "hash": "",
@@ -1108,7 +1136,7 @@
   {
     "name": "DataRouterTestFixture__TestDifferentCountsOfInvalidSizeMessagesDropped",
     "file": "score/datarouter/test/ut/ut_logging/test_datarouter.cpp",
-    "line": "702",
+    "line": "736",
     "result": "passed",
     "repo_name": "local_repo",
     "hash": "",
@@ -1122,7 +1150,7 @@
   {
     "name": "DataRouterTestFixture__CreatingNewSessionShallFailIfTheFileDescriptorIsZero",
     "file": "score/datarouter/test/ut/ut_logging/test_datarouter.cpp",
-    "line": "745",
+    "line": "779",
     "result": "passed",
     "repo_name": "local_repo",
     "hash": "",
@@ -1136,7 +1164,7 @@
   {
     "name": "DataRouterTestFixture__TestUsingTheDefaultStackAndRingSizesIfTheUserProvidesZeros",
     "file": "score/datarouter/test/ut/ut_logging/test_datarouter.cpp",
-    "line": "768",
+    "line": "802",
     "result": "passed",
     "repo_name": "local_repo",
     "hash": "",
@@ -1150,7 +1178,7 @@
   {
     "name": "DataRouterTestFixture__TestSomeConditionsInsideTickMethodWithDisablingDlt",
     "file": "score/datarouter/test/ut/ut_logging/test_datarouter.cpp",
-    "line": "785",
+    "line": "819",
     "result": "passed",
     "repo_name": "local_repo",
     "hash": "",
@@ -1164,7 +1192,7 @@
   {
     "name": "DataRouterTestFixture__TestQuotaOverEnforcementWithZeroTimeDuration",
     "file": "score/datarouter/test/ut/ut_logging/test_datarouter.cpp",
-    "line": "822",
+    "line": "856",
     "result": "passed",
     "repo_name": "local_repo",
     "hash": "",
@@ -1178,7 +1206,7 @@
   {
     "name": "DataRouterTestFixture__TestQuotaEnforcementWithTimeDurationBiggerThanZero",
     "file": "score/datarouter/test/ut/ut_logging/test_datarouter.cpp",
-    "line": "861",
+    "line": "895",
     "result": "passed",
     "repo_name": "local_repo",
     "hash": "",
@@ -1192,7 +1220,7 @@
   {
     "name": "DataRouterTestFixture__OnSessionDetached",
     "file": "score/datarouter/test/ut/ut_logging/test_datarouter.cpp",
-    "line": "901",
+    "line": "935",
     "result": "passed",
     "repo_name": "local_repo",
     "hash": "",
@@ -1206,7 +1234,7 @@
   {
     "name": "DataRouterTestFixture__OnSessionDetachedWithError",
     "file": "score/datarouter/test/ut/ut_logging/test_datarouter.cpp",
-    "line": "937",
+    "line": "971",
     "result": "passed",
     "repo_name": "local_repo",
     "hash": "",
@@ -1220,7 +1248,7 @@
   {
     "name": "DataRouterTestFixture__TestQuotaOverLimitationWithTimeDurationBiggerThanZero",
     "file": "score/datarouter/test/ut/ut_logging/test_datarouter.cpp",
-    "line": "973",
+    "line": "1007",
     "result": "passed",
     "repo_name": "local_repo",
     "hash": "",
@@ -1234,7 +1262,7 @@
   {
     "name": "DataRouterTestFixture__TestQuotaLimitationWithTimeDurationBiggerThanZeroWithQuotaEnforcementEnabled",
     "file": "score/datarouter/test/ut/ut_logging/test_datarouter.cpp",
-    "line": "1025",
+    "line": "1059",
     "result": "passed",
     "repo_name": "local_repo",
     "hash": "",
@@ -1248,7 +1276,7 @@
   {
     "name": "DataRouterTest__QuotaValueAsStringMethodShallReturnunlimitedIfTheQuotaIsBiggerThanOrEqualToTheMax",
     "file": "score/datarouter/test/ut/ut_logging/test_datarouter.cpp",
-    "line": "732",
+    "line": "766",
     "result": "passed",
     "repo_name": "local_repo",
     "hash": "",
@@ -4175,6 +4203,20 @@
     "name": "LogParserTest__WeCanNotParseASharedMemoryRecordIfTheTypeIdentifierIsNotWithinTheIndexParserMap",
     "file": "score/datarouter/test/ut/ut_logging/test_logparser.cpp",
     "line": "181",
+    "result": "passed",
+    "repo_name": null,
+    "hash": null,
+    "url": null,
+    "TestType": null,
+    "DerivationTechnique": null,
+    "result_text": "",
+    "PartiallyVerifies": null,
+    "FullyVerifies": null
+  },
+  {
+    "name": "LogParserTest__ParsingASharedMemoryRecordOfARegisteredTypeReturnsTrueAndCallsTheHandler",
+    "file": "score/datarouter/test/ut/ut_logging/test_logparser.cpp",
+    "line": "188",
     "result": "passed",
     "repo_name": null,
     "hash": null,
