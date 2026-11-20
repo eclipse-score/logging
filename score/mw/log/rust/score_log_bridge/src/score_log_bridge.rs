@@ -199,13 +199,16 @@ impl Log for ScoreLogBridge {
         if self.show_module || self.show_file || self.show_line {
             let _ = score_write!(&mut log_message, "[");
             if self.show_module {
-                let _ = score_write!(&mut log_message, "{}:", record.module_path());
+                let module_path = record.module_path();
+                let _ = score_write!(&mut log_message, "{}:", module_path);
             }
             if self.show_file {
-                let _ = score_write!(&mut log_message, "{}:", record.file());
+                let file = record.file();
+                let _ = score_write!(&mut log_message, "{}:", file);
             }
             if self.show_line {
-                let _ = score_write!(&mut log_message, "{}", record.line());
+                let line = record.line();
+                let _ = score_write!(&mut log_message, "{}", line);
             }
             let _ = score_write!(&mut log_message, "]");
         }
