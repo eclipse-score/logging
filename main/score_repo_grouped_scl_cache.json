@@ -93,7 +93,7 @@
             {
               "name": "DataRouterTest__QuotaValueAsStringMethodShallReturnunlimitedIfTheQuotaIsBiggerThanOrEqualToTheMax",
               "file": "score/datarouter/test/ut/ut_logging/test_datarouter.cpp",
-              "line": 732,
+              "line": 766,
               "need": "comp_req__data_router__dlt_bw_quota_config",
               "verify_type": "partially",
               "result": "passed",
@@ -137,7 +137,7 @@
             {
               "name": "SourceSessionTestFixture__ProcessAndRouteLogMessagesQuotaLimitExceeded",
               "file": "score/datarouter/test/ut/ut_logging/test_datarouter.cpp",
-              "line": 432,
+              "line": 466,
               "need": "comp_req__data_router__dlt_quota_bw_reduction",
               "verify_type": "partially",
               "result": "passed",
@@ -146,7 +146,7 @@
             {
               "name": "DataRouterTestFixture__TestQuotaOverEnforcementWithZeroTimeDuration",
               "file": "score/datarouter/test/ut/ut_logging/test_datarouter.cpp",
-              "line": 822,
+              "line": 856,
               "need": "comp_req__data_router__dlt_quota_bw_reduction",
               "verify_type": "partially",
               "result": "passed",
@@ -155,7 +155,7 @@
             {
               "name": "DataRouterTestFixture__TestQuotaEnforcementWithTimeDurationBiggerThanZero",
               "file": "score/datarouter/test/ut/ut_logging/test_datarouter.cpp",
-              "line": 861,
+              "line": 895,
               "need": "comp_req__data_router__dlt_quota_bw_reduction",
               "verify_type": "partially",
               "result": "passed",
@@ -164,7 +164,7 @@
             {
               "name": "DataRouterTestFixture__TestQuotaOverLimitationWithTimeDurationBiggerThanZero",
               "file": "score/datarouter/test/ut/ut_logging/test_datarouter.cpp",
-              "line": 973,
+              "line": 1007,
               "need": "comp_req__data_router__dlt_quota_bw_reduction",
               "verify_type": "partially",
               "result": "passed",
@@ -173,7 +173,7 @@
             {
               "name": "DataRouterTestFixture__TestQuotaLimitationWithTimeDurationBiggerThanZeroWithQuotaEnforcementEnabled",
               "file": "score/datarouter/test/ut/ut_logging/test_datarouter.cpp",
-              "line": 1025,
+              "line": 1059,
               "need": "comp_req__data_router__dlt_quota_bw_reduction",
               "verify_type": "partially",
               "result": "passed",
@@ -217,7 +217,7 @@
             {
               "name": "DataRouterTestFixture__ConstructionAndDestructionOnStack",
               "file": "score/datarouter/test/ut/ut_logging/test_datarouter.cpp",
-              "line": 527,
+              "line": 561,
               "need": "comp_req__data_router__dlt_server",
               "verify_type": "partially",
               "result": "passed",
@@ -226,7 +226,7 @@
             {
               "name": "DataRouterTestFixture__ConstructionAndDestructionOnHeap",
               "file": "score/datarouter/test/ut/ut_logging/test_datarouter.cpp",
-              "line": 538,
+              "line": 572,
               "need": "comp_req__data_router__dlt_server",
               "verify_type": "partially",
               "result": "passed",
@@ -235,7 +235,7 @@
             {
               "name": "DataRouterTestFixture__TestUsingTheDefaultStackAndRingSizesIfTheUserProvidesZeros",
               "file": "score/datarouter/test/ut/ut_logging/test_datarouter.cpp",
-              "line": 768,
+              "line": 802,
               "need": "comp_req__data_router__dlt_server",
               "verify_type": "partially",
               "result": "passed",
@@ -244,7 +244,7 @@
             {
               "name": "DataRouterTestFixture__TestSomeConditionsInsideTickMethodWithDisablingDlt",
               "file": "score/datarouter/test/ut/ut_logging/test_datarouter.cpp",
-              "line": 785,
+              "line": 819,
               "need": "comp_req__data_router__dlt_server",
               "verify_type": "partially",
               "result": "passed",
@@ -270,7 +270,7 @@
             {
               "name": "SourceSessionTestFixture__TryFinalizeAcquisitionIsBlockReleased",
               "file": "score/datarouter/test/ut/ut_logging/test_datarouter.cpp",
-              "line": 203,
+              "line": 204,
               "need": "comp_req__data_router__dlt_verbose_messages",
               "verify_type": "partially",
               "result": "passed",
@@ -279,7 +279,7 @@
             {
               "name": "SourceSessionTestFixture__TryFinalizeAcquisitionIsBlockNotReleased",
               "file": "score/datarouter/test/ut/ut_logging/test_datarouter.cpp",
-              "line": 220,
+              "line": 221,
               "need": "comp_req__data_router__dlt_verbose_messages",
               "verify_type": "partially",
               "result": "passed",
@@ -288,7 +288,7 @@
             {
               "name": "SourceSessionTestFixture__ProcessAndRouteLogMessagesAcquireFinalized",
               "file": "score/datarouter/test/ut/ut_logging/test_datarouter.cpp",
-              "line": 237,
+              "line": 238,
               "need": "comp_req__data_router__dlt_verbose_messages",
               "verify_type": "partially",
               "result": "passed",
@@ -297,7 +297,7 @@
             {
               "name": "SourceSessionTestFixture__ProcessAndRouteLogMessagesBlockExpectedToBeNextDataAvailable",
               "file": "score/datarouter/test/ut/ut_logging/test_datarouter.cpp",
-              "line": 262,
+              "line": 263,
               "need": "comp_req__data_router__dlt_verbose_messages",
               "verify_type": "partially",
               "result": "passed",
@@ -306,7 +306,7 @@
             {
               "name": "SourceSessionTestFixture__ProcessAndRouteLogMessagesBlockExpectedToBeNextDataNotAvailable",
               "file": "score/datarouter/test/ut/ut_logging/test_datarouter.cpp",
-              "line": 293,
+              "line": 294,
               "need": "comp_req__data_router__dlt_verbose_messages",
               "verify_type": "partially",
               "result": "passed",
@@ -315,7 +315,7 @@
             {
               "name": "SourceSessionTestFixture__ProcessAndRouteLogMessagesNotBlockExpectedToBeNext",
               "file": "score/datarouter/test/ut/ut_logging/test_datarouter.cpp",
-              "line": 325,
+              "line": 326,
               "need": "comp_req__data_router__dlt_verbose_messages",
               "verify_type": "partially",
               "result": "passed",
@@ -324,7 +324,7 @@
             {
               "name": "SourceSessionTestFixture__RequestAcquire",
               "file": "score/datarouter/test/ut/ut_logging/test_datarouter.cpp",
-              "line": 355,
+              "line": 356,
               "need": "comp_req__data_router__dlt_verbose_messages",
               "verify_type": "partially",
               "result": "passed",
@@ -333,7 +333,7 @@
             {
               "name": "SourceSessionTestFixture__OnAcquireResponse",
               "file": "score/datarouter/test/ut/ut_logging/test_datarouter.cpp",
-              "line": 371,
+              "line": 372,
               "need": "comp_req__data_router__dlt_verbose_messages",
               "verify_type": "partially",
               "result": "passed",
@@ -342,7 +342,7 @@
             {
               "name": "SourceSessionTestFixture__IsSourceClosed",
               "file": "score/datarouter/test/ut/ut_logging/test_datarouter.cpp",
-              "line": 388,
+              "line": 389,
               "need": "comp_req__data_router__dlt_verbose_messages",
               "verify_type": "partially",
               "result": "passed",
@@ -351,7 +351,7 @@
             {
               "name": "SourceSessionTestFixture__ProcessDetachedLogsReaderUsed",
               "file": "score/datarouter/test/ut/ut_logging/test_datarouter.cpp",
-              "line": 412,
+              "line": 413,
               "need": "comp_req__data_router__dlt_verbose_messages",
               "verify_type": "partially",
               "result": "passed",
@@ -360,7 +360,7 @@
             {
               "name": "DataRouterTestFixture__WhenOnlySourceSession",
               "file": "score/datarouter/test/ut/ut_logging/test_datarouter.cpp",
-              "line": 550,
+              "line": 584,
               "need": "comp_req__data_router__dlt_verbose_messages",
               "verify_type": "partially",
               "result": "passed",
@@ -369,7 +369,7 @@
             {
               "name": "DataRouterTestFixture__WhenMessageHandledFromRw",
               "file": "score/datarouter/test/ut/ut_logging/test_datarouter.cpp",
-              "line": 612,
+              "line": 646,
               "need": "comp_req__data_router__dlt_verbose_messages",
               "verify_type": "partially",
               "result": "passed",
@@ -378,7 +378,7 @@
             {
               "name": "DataRouterTestFixture__TestDifferentCountsOfMessagesDropped",
               "file": "score/datarouter/test/ut/ut_logging/test_datarouter.cpp",
-              "line": 669,
+              "line": 703,
               "need": "comp_req__data_router__dlt_verbose_messages",
               "verify_type": "partially",
               "result": "passed",
@@ -387,7 +387,7 @@
             {
               "name": "DataRouterTestFixture__TestDifferentCountsOfInvalidSizeMessagesDropped",
               "file": "score/datarouter/test/ut/ut_logging/test_datarouter.cpp",
-              "line": 702,
+              "line": 736,
               "need": "comp_req__data_router__dlt_verbose_messages",
               "verify_type": "partially",
               "result": "passed",
@@ -396,7 +396,7 @@
             {
               "name": "DataRouterTestFixture__CreatingNewSessionShallFailIfTheFileDescriptorIsZero",
               "file": "score/datarouter/test/ut/ut_logging/test_datarouter.cpp",
-              "line": 745,
+              "line": 779,
               "need": "comp_req__data_router__dlt_verbose_messages",
               "verify_type": "partially",
               "result": "passed",
@@ -405,7 +405,7 @@
             {
               "name": "DataRouterTestFixture__OnSessionDetached",
               "file": "score/datarouter/test/ut/ut_logging/test_datarouter.cpp",
-              "line": 901,
+              "line": 935,
               "need": "comp_req__data_router__dlt_verbose_messages",
               "verify_type": "partially",
               "result": "passed",
@@ -414,7 +414,7 @@
             {
               "name": "DataRouterTestFixture__OnSessionDetachedWithError",
               "file": "score/datarouter/test/ut/ut_logging/test_datarouter.cpp",
-              "line": 937,
+              "line": 971,
               "need": "comp_req__data_router__dlt_verbose_messages",
               "verify_type": "partially",
               "result": "passed",
