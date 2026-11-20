@@ -43,7 +43,9 @@ enum class MessageType : std::uint8_t
     kSharedMemoryFileHandle = 1,
 };
 
-struct SocketMessangerHeader  //  __attribute__((packed))  //  TODO: deal with packed
+// Sent as raw bytes, so both ends must agree on this layout (8 bytes, padding after type).
+// Packing it would change the wire format.
+struct SocketMessangerHeader
 {
     uint16_t len;
     MessageType type;
