@@ -346,17 +346,6 @@ cc_library(
     ],
 )
 
-cc_library(
-    name = "libstructdatasource",
-    hdrs = ["include/StructDataSource"],
-    features = COMPILER_WARNING_FEATURES,
-    strip_include_prefix = "include",
-    visibility = ["//visibility:private"],
-    deps = [
-        ":data_router_cfg",
-    ],
-)
-
 ## ===========================================================================
 ##  Datarouter
 ## ---------------------------------------------------------------------------

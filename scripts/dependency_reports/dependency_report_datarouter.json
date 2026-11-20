@@ -17,7 +17,7 @@
     },
     {
       "name": "Log parser and DLT handlers",
-      "scope": "//score/datarouter:logparser + //score/datarouter:logparser_interface + //score/datarouter:logparser_factory_interface + //score/datarouter:log_entry_deserialization + //score/datarouter:libstructdatasource + //score/datarouter/src/dlt/nonverbose_dlt_impl:nonverbose_dlt_handler + //score/datarouter/src/dlt/nonverbose_dlt_stub:nonverbose_dlt_handler_stub"
+      "scope": "//score/datarouter:logparser + //score/datarouter:logparser_interface + //score/datarouter:logparser_factory_interface + //score/datarouter:log_entry_deserialization + //score/datarouter/src/dlt/nonverbose_dlt_impl:nonverbose_dlt_handler + //score/datarouter/src/dlt/nonverbose_dlt_stub:nonverbose_dlt_handler_stub"
     },
     {
       "name": "DLT server and channels",
