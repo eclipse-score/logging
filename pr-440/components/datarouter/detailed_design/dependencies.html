@@ -511,7 +511,7 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <div class="need_container docutils container" id="SNCB-caaddcee">
+  <div class="need_container docutils container" id="SNCB-f2999d82">
 <div class="pst-scrollable-table-container"><table class="need needs_grid_complex needs_layout_score needs_style_none needs_type_document table" id="doc__datarouter_dependencies">
 <tbody>
 <tr class="head row-odd"><td class="head_left" colspan="2"><div class="needs_head_left line-block">
@@ -743,19 +743,16 @@ tables below: <code class="docutils literal notranslate"><span class="pre">score
 <tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">//score/datarouter/src/dlt/nonverbose_dlt_stub:nonverbose_dlt_handler_stub</span></code></p></td>
 <td><p>no</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">//score/datarouter:libstructdatasource</span></code></p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">//score/datarouter:log_entry_deserialization</span></code></p></td>
 <td><p>no</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">//score/datarouter:log_entry_deserialization</span></code></p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">//score/datarouter:logparser</span></code></p></td>
 <td><p>no</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">//score/datarouter:logparser</span></code></p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">//score/datarouter:logparser_factory_interface</span></code></p></td>
 <td><p>no</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">//score/datarouter:logparser_factory_interface</span></code></p></td>
-<td><p>no</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">//score/datarouter:logparser_interface</span></code></p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">//score/datarouter:logparser_interface</span></code></p></td>
 <td><p>no</p></td>
 </tr>
 </tbody>
@@ -793,31 +790,27 @@ tables below: <code class="docutils literal notranslate"><span class="pre">score
 <td><p>cc_library</p></td>
 <td><p>no</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">//score/datarouter:libdrconfighdrs</span></code></p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">//score/mw/log/detail/common:log_entry_deserialize</span></code></p></td>
 <td><p>cc_library</p></td>
 <td><p>no</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">//score/mw/log/detail/common:log_entry_deserialize</span></code></p></td>
-<td><p>cc_library</p></td>
-<td><p>no</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">//score/mw/log/detail/data_router/shared_memory:reader</span></code></p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">//score/mw/log/detail/data_router/shared_memory:reader</span></code></p></td>
 <td><p>cc_library</p></td>
 <td><p>yes</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">//score/mw/log:log</span></code></p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">//score/mw/log:log</span></code></p></td>
 <td><p>cc_library</p></td>
 <td><p>yes</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">&#64;score_baselibs//score/mw/log/configuration:nvconfig</span></code></p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">&#64;score_baselibs//score/mw/log/configuration:nvconfig</span></code></p></td>
 <td><p>cc_library</p></td>
 <td><p>yes</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">&#64;score_baselibs//score/mw/log:log</span></code></p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">&#64;score_baselibs//score/mw/log:log</span></code></p></td>
 <td><p>alias</p></td>
 <td><p>yes</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">&#64;score_baselibs//score/static_reflection_with_serialization/serialization:serialization</span></code></p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">&#64;score_baselibs//score/static_reflection_with_serialization/serialization:serialization</span></code></p></td>
 <td><p>cc_library</p></td>
 <td><p>yes</p></td>
 </tr>
@@ -894,11 +887,11 @@ tables below: <code class="docutils literal notranslate"><span class="pre">score
 <td><p>cc_library</p></td>
 <td><p>no</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">//score/datarouter:datarouter_feature_config</span></code></p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">//score/datarouter:data_router_cfg</span></code></p></td>
 <td><p>cc_library</p></td>
 <td><p>no</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">//score/datarouter:libdrconfighdrs</span></code></p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">//score/datarouter:datarouter_feature_config</span></code></p></td>
 <td><p>cc_library</p></td>
 <td><p>no</p></td>
 </tr>
@@ -1007,16 +1000,13 @@ tables below: <code class="docutils literal notranslate"><span class="pre">score
 <tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">//score/datarouter:datarouter_options</span></code></p></td>
 <td><p>no</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">//score/datarouter:libdrconfighdrs</span></code></p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">//score/datarouter:persistentlogconfig</span></code></p></td>
 <td><p>no</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">//score/datarouter:persistentlogconfig</span></code></p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">//score/datarouter:socketserver_config_helpers</span></code></p></td>
 <td><p>no</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">//score/datarouter:socketserver_config_helpers</span></code></p></td>
-<td><p>no</p></td>
-</tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">//score/datarouter:socketserver_config_lib</span></code></p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">//score/datarouter:socketserver_config_lib</span></code></p></td>
 <td><p>no</p></td>
 </tr>
 </tbody>
@@ -1166,23 +1156,31 @@ tables below: <code class="docutils literal notranslate"><span class="pre">score
 <td><p>cc_library</p></td>
 <td><p>no</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">&#64;score_baselibs//score/language/futurecpp:futurecpp</span></code></p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">//score/datarouter:unixdomain_internal</span></code></p></td>
 <td><p>cc_library</p></td>
 <td><p>no</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">&#64;score_baselibs//score/os/utils:signal</span></code></p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">&#64;score_baselibs//score/language/futurecpp:futurecpp</span></code></p></td>
+<td><p>cc_library</p></td>
+<td><p>no</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">&#64;score_baselibs//score/os/utils:signal</span></code></p></td>
 <td><p>cc_library</p></td>
 <td><p>yes</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">&#64;score_baselibs//score/os:pthread</span></code></p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">&#64;score_baselibs//score/os:pthread</span></code></p></td>
 <td><p>alias</p></td>
 <td><p>no</p></td>
 </tr>
-<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">&#64;score_baselibs//score/os:socket</span></code></p></td>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">&#64;score_baselibs//score/os:socket</span></code></p></td>
 <td><p>cc_library</p></td>
 <td><p>no</p></td>
 </tr>
-<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">&#64;score_baselibs//score/os:sys_poll</span></code></p></td>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">&#64;score_baselibs//score/os:sys_poll</span></code></p></td>
+<td><p>cc_library</p></td>
+<td><p>yes</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">&#64;score_baselibs//score/os:unistd</span></code></p></td>
 <td><p>cc_library</p></td>
 <td><p>yes</p></td>
 </tr>
