@@ -154,7 +154,7 @@ The parts of :doc:`logging_architecture` about ``mw::log`` are context and were 
      - Are the static and dynamic code analysis reports verified for violations?
      - All violations in ASIL related code must be justified. This includes the checks of coding guidelines.
      - no
-     - Refer to the generated :doc:`verification report </verification_report/module_verification_report>`
+     - Refer to the generated :doc:`verification report <../../../verification_report/module_verification_report>`
        and revision-specific CI results. A host run (Linux x86_64) of the unit
        tests, clang-tidy, ASan/UBSan/LSan, TSan and Memcheck shows no findings.
        Line and branch coverage are 82.6 % and 76.1 %. The QNX tests were not run.
