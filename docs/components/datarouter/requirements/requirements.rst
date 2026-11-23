@@ -87,8 +87,8 @@ Datarouter Services
    :status: valid_inspected
    :satisfied_by: comp__datarouter
 
-   The following parameters of the DLT log channels
-   (:need:`comp_req__data_router__dlt_multiple_channels`) shall be configurable statically via
+   Datarouter shall allow the following parameters of the DLT log channels
+   (:need:`comp_req__data_router__dlt_multiple_channels`) to be configured statically via
    the deployment-specific configuration file (:need:`comp_req__data_router__config_file`):
    Number and names of channels, Network configuration for channel output, Log level
    threshold per channel, Log channel assignments per application/context.
