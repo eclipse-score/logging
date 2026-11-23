@@ -3852,7 +3852,7 @@
   {
     "name": "LogStreamFixture__CanLogInt16",
     "file": "external/score_baselibs+/score/mw/log/log_stream_test.cpp",
-    "line": "324",
+    "line": "325",
     "result": "passed",
     "repo_name": "local_repo",
     "hash": "",
@@ -3866,7 +3866,7 @@
   {
     "name": "LogStreamFixture__CanLogUint32",
     "file": "external/score_baselibs+/score/mw/log/log_stream_test.cpp",
-    "line": "341",
+    "line": "342",
     "result": "passed",
     "repo_name": "local_repo",
     "hash": "",
@@ -3880,7 +3880,7 @@
   {
     "name": "LogStreamFixture__CanLogInt32",
     "file": "external/score_baselibs+/score/mw/log/log_stream_test.cpp",
-    "line": "358",
+    "line": "359",
     "result": "passed",
     "repo_name": "local_repo",
     "hash": "",
@@ -3894,7 +3894,7 @@
   {
     "name": "LogStreamFixture__CanLogUint64",
     "file": "external/score_baselibs+/score/mw/log/log_stream_test.cpp",
-    "line": "375",
+    "line": "376",
     "result": "passed",
     "repo_name": "local_repo",
     "hash": "",
@@ -3908,7 +3908,7 @@
   {
     "name": "LogStreamFixture__CanLogInt64",
     "file": "external/score_baselibs+/score/mw/log/log_stream_test.cpp",
-    "line": "392",
+    "line": "393",
     "result": "passed",
     "repo_name": "local_repo",
     "hash": "",
@@ -3922,7 +3922,7 @@
   {
     "name": "LogStreamFixture__CanLogFloat",
     "file": "external/score_baselibs+/score/mw/log/log_stream_test.cpp",
-    "line": "409",
+    "line": "410",
     "result": "passed",
     "repo_name": "local_repo",
     "hash": "",
@@ -3936,7 +3936,7 @@
   {
     "name": "LogStreamFixture__CanLogDouble",
     "file": "external/score_baselibs+/score/mw/log/log_stream_test.cpp",
-    "line": "426",
+    "line": "427",
     "result": "passed",
     "repo_name": "local_repo",
     "hash": "",
@@ -3950,7 +3950,7 @@
   {
     "name": "LogStreamFixture__CanLogAmpStringView",
     "file": "external/score_baselibs+/score/mw/log/log_stream_test.cpp",
-    "line": "443",
+    "line": "444",
     "result": "passed",
     "repo_name": "local_repo",
     "hash": "",
@@ -3964,7 +3964,7 @@
   {
     "name": "LogStreamFixture__CanLogStdStringView",
     "file": "external/score_baselibs+/score/mw/log/log_stream_test.cpp",
-    "line": "460",
+    "line": "461",
     "result": "passed",
     "repo_name": "local_repo",
     "hash": "",
@@ -3978,7 +3978,7 @@
   {
     "name": "LogStreamFixture__WhenTryToLogEmptyAmpStringViewShallNotLog",
     "file": "external/score_baselibs+/score/mw/log/log_stream_test.cpp",
-    "line": "477",
+    "line": "478",
     "result": "passed",
     "repo_name": "local_repo",
     "hash": "",
@@ -3992,7 +3992,7 @@
   {
     "name": "LogStreamFixture__WhenTryToLogEmptyStdStringViewShallNotLog",
     "file": "external/score_baselibs+/score/mw/log/log_stream_test.cpp",
-    "line": "494",
+    "line": "495",
     "result": "passed",
     "repo_name": "local_repo",
     "hash": "",
@@ -4006,7 +4006,7 @@
   {
     "name": "LogStreamFixture__CanLogConstStringReference",
     "file": "external/score_baselibs+/score/mw/log/log_stream_test.cpp",
-    "line": "511",
+    "line": "512",
     "result": "passed",
     "repo_name": "local_repo",
     "hash": "",
@@ -4020,7 +4020,7 @@
   {
     "name": "LogStreamFixture__CanLogStdArrayOfChar",
     "file": "external/score_baselibs+/score/mw/log/log_stream_test.cpp",
-    "line": "528",
+    "line": "529",
     "result": "passed",
     "repo_name": "local_repo",
     "hash": "",
@@ -4034,7 +4034,7 @@
   {
     "name": "LogStreamFixture__CanLogCharArrayLiteral",
     "file": "external/score_baselibs+/score/mw/log/log_stream_test.cpp",
-    "line": "545",
+    "line": "546",
     "result": "passed",
     "repo_name": "local_repo",
     "hash": "",
@@ -4048,7 +4048,7 @@
   {
     "name": "LogStreamFixture__CanLogPtrToNonConstChar",
     "file": "external/score_baselibs+/score/mw/log/log_stream_test.cpp",
-    "line": "560",
+    "line": "561",
     "result": "passed",
     "repo_name": "local_repo",
     "hash": "",
@@ -4062,7 +4062,7 @@
   {
     "name": "LogStreamFixture__CanLogStringView",
     "file": "external/score_baselibs+/score/mw/log/log_stream_test.cpp",
-    "line": "577",
+    "line": "578",
     "result": "passed",
     "repo_name": "local_repo",
     "hash": "",
@@ -4076,7 +4076,7 @@
   {
     "name": "LogStreamFixture__WhenTryToLogEmptyStringViewShallNotLog",
     "file": "external/score_baselibs+/score/mw/log/log_stream_test.cpp",
-    "line": "594",
+    "line": "595",
     "result": "passed",
     "repo_name": "local_repo",
     "hash": "",
@@ -4090,7 +4090,7 @@
   {
     "name": "LogStreamFixture__LogStreamMoveConstructorShallDetachMovedFromInstance",
     "file": "external/score_baselibs+/score/mw/log/log_stream_test.cpp",
-    "line": "611",
+    "line": "612",
     "result": "passed",
     "repo_name": "local_repo",
     "hash": "",
@@ -4104,7 +4104,7 @@
   {
     "name": "LogStreamFixture__CanLogHex8",
     "file": "external/score_baselibs+/score/mw/log/log_stream_test.cpp",
-    "line": "633",
+    "line": "634",
     "result": "passed",
     "repo_name": "local_repo",
     "hash": "",
@@ -4118,7 +4118,7 @@
   {
     "name": "LogStreamFixture__CanLogHex16",
     "file": "external/score_baselibs+/score/mw/log/log_stream_test.cpp",
-    "line": "651",
+    "line": "652",
     "result": "passed",
     "repo_name": "local_repo",
     "hash": "",
@@ -4132,7 +4132,7 @@
   {
     "name": "LogStreamFixture__CanLogHex32",
     "file": "external/score_baselibs+/score/mw/log/log_stream_test.cpp",
-    "line": "669",
+    "line": "670",
     "result": "passed",
     "repo_name": "local_repo",
     "hash": "",
@@ -4146,7 +4146,7 @@
   {
     "name": "LogStreamFixture__CanLogHex64",
     "file": "external/score_baselibs+/score/mw/log/log_stream_test.cpp",
-    "line": "687",
+    "line": "688",
     "result": "passed",
     "repo_name": "local_repo",
     "hash": "",
@@ -4160,7 +4160,7 @@
   {
     "name": "LogStreamFixture__CanLogBin8",
     "file": "external/score_baselibs+/score/mw/log/log_stream_test.cpp",
-    "line": "705",
+    "line": "706",
     "result": "passed",
     "repo_name": "local_repo",
     "hash": "",
@@ -4174,7 +4174,7 @@
   {
     "name": "LogStreamFixture__CanLogBin16",
     "file": "external/score_baselibs+/score/mw/log/log_stream_test.cpp",
-    "line": "723",
+    "line": "724",
     "result": "passed",
     "repo_name": "local_repo",
     "hash": "",
@@ -4188,7 +4188,7 @@
   {
     "name": "LogStreamFixture__CanLogBin32",
     "file": "external/score_baselibs+/score/mw/log/log_stream_test.cpp",
-    "line": "741",
+    "line": "742",
     "result": "passed",
     "repo_name": "local_repo",
     "hash": "",
@@ -4202,7 +4202,7 @@
   {
     "name": "LogStreamFixture__CanLogBin64",
     "file": "external/score_baselibs+/score/mw/log/log_stream_test.cpp",
-    "line": "758",
+    "line": "759",
     "result": "passed",
     "repo_name": "local_repo",
     "hash": "",
@@ -4216,7 +4216,7 @@
   {
     "name": "LogStreamFixture__CanLogRawBuffer",
     "file": "external/score_baselibs+/score/mw/log/log_stream_test.cpp",
-    "line": "775",
+    "line": "776",
     "result": "passed",
     "repo_name": "local_repo",
     "hash": "",
@@ -4230,7 +4230,7 @@
   {
     "name": "LogStreamFixture__WhenTryToLogEmptyRawBufferShallNotLog",
     "file": "external/score_baselibs+/score/mw/log/log_stream_test.cpp",
-    "line": "794",
+    "line": "795",
     "result": "passed",
     "repo_name": "local_repo",
     "hash": "",
@@ -4244,7 +4244,7 @@
   {
     "name": "LogStreamFixture__CanLogACustomType",
     "file": "external/score_baselibs+/score/mw/log/log_stream_test.cpp",
-    "line": "812",
+    "line": "813",
     "result": "passed",
     "repo_name": "local_repo",
     "hash": "",
@@ -4258,7 +4258,7 @@
   {
     "name": "LogStreamFixture__CanLogAnEnumClassWithUnderlyingType",
     "file": "external/score_baselibs+/score/mw/log/log_stream_test.cpp",
-    "line": "954",
+    "line": "955",
     "result": "passed",
     "repo_name": "local_repo",
     "hash": "",
@@ -4272,7 +4272,7 @@
   {
     "name": "LogStreamFixture__CanLogAnEnumClassWithoutUnderlyingType",
     "file": "external/score_baselibs+/score/mw/log/log_stream_test.cpp",
-    "line": "968",
+    "line": "969",
     "result": "passed",
     "repo_name": "local_repo",
     "hash": "",
@@ -4286,7 +4286,7 @@
   {
     "name": "LogStreamFixture__UsesFallbackRecorderWithinOtherRecorder",
     "file": "external/score_baselibs+/score/mw/log/log_stream_test.cpp",
-    "line": "983",
+    "line": "984",
     "result": "passed",
     "repo_name": "local_repo",
     "hash": "",
@@ -4300,7 +4300,7 @@
   {
     "name": "LogStreamFlush__WhenFlushingLogStreamAfterLogUint8ShallBeAbleToLogBoolAgain",
     "file": "external/score_baselibs+/score/mw/log/log_stream_test.cpp",
-    "line": "840",
+    "line": "841",
     "result": "passed",
     "repo_name": "local_repo",
     "hash": "",
@@ -4314,7 +4314,7 @@
   {
     "name": "LogStreamFlush__AvoidFormattingCallsWhenSlotIsNotAvailable",
     "file": "external/score_baselibs+/score/mw/log/log_stream_test.cpp",
-    "line": "877",
+    "line": "878",
     "result": "passed",
     "repo_name": "local_repo",
     "hash": "",
@@ -4328,7 +4328,7 @@
   {
     "name": "LogStreamFlush__WhenEmptyAppIdStringProvidedExpectDefaultOneReturned",
     "file": "external/score_baselibs+/score/mw/log/log_stream_test.cpp",
-    "line": "914",
+    "line": "915",
     "result": "passed",
     "repo_name": "local_repo",
     "hash": "",
