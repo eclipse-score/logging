@@ -21,6 +21,7 @@ import subprocess
 import sys
 from pathlib import Path
 
+# The generated pages are committed, so docs that mount this tree (e.g. reference_integration) have them too.
 if os.environ.get("ACTION") in {"incremental", "live_preview", "linkcheck", "check"}:
     repository_root = Path(__file__).resolve().parents[1]
     dependency_report_configs = sorted(
