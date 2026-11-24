@@ -18,6 +18,7 @@ Module
 .. mod:: Logging
    :id: mod__logging
    :status: valid
+   :maturity: experimental
    :version: 1
    :safety: ASIL_B
    :security: YES
