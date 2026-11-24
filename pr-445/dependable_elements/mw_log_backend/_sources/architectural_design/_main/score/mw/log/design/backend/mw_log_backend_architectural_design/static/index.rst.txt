@@ -1,8 +1,0 @@
-Static Design
--------------
-
-.. toctree::
-   :maxdepth: 1
-
-   datarouter_backend/index
-   file_output_backend
