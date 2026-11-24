@@ -40,6 +40,9 @@ class DatarouterAppTest : public ::testing::Test
 
 TEST_F(DatarouterAppTest, AppInit)
 {
+    RecordProperty("PartiallyVerifies", "comp_arc_sta__data_router__sv");
+    RecordProperty("TestType", "interface-test");
+    RecordProperty("DerivationTechnique", "requirements-analysis");
     // Just call it. Usually logs "datarouter application Version 0.1s starting"
     // No direct assertions, but at least ensures no crash.
     EXPECT_NO_FATAL_FAILURE(score::logging::datarouter::DatarouterAppInit());

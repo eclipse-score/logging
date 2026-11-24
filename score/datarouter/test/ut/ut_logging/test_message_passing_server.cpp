@@ -520,6 +520,10 @@ TEST_F(MessagePassingServerFixture, TestStartListeningFailure)
 
 TEST_F(MessagePassingServerFixture, TestOneConnectAcquireRelease)
 {
+    RecordProperty("PartiallyVerifies", "comp_arc_dyn__data_router__client_session");
+    RecordProperty("TestType", "interface-test");
+    RecordProperty("DerivationTechnique", "requirements-analysis");
+
     ExpectOurPidIsQueried();
 
     InstantiateServer(GetCountingSessionFactory());
@@ -815,6 +819,10 @@ TEST_F(MessagePassingServerFixture, TestSamePidWhileQueued)
 
 TEST_F(MessagePassingServerFixture, WatchdogShouldTearDownUnresponsiveClient)
 {
+    RecordProperty("PartiallyVerifies", "comp_arc_dyn__data_router__client_session");
+    RecordProperty("TestType", "interface-test");
+    RecordProperty("DerivationTechnique", "requirements-analysis");
+
     ExpectOurPidIsQueried();
 
     MessagePassingServer::AcquireWatchdogConfig watchdog_config;
@@ -840,6 +848,10 @@ TEST_F(MessagePassingServerFixture, WatchdogShouldTearDownUnresponsiveClient)
 
 TEST_F(MessagePassingServerFixture, WatchdogMissCountShouldResetOnValidResponse)
 {
+    RecordProperty("PartiallyVerifies", "comp_arc_dyn__data_router__client_session");
+    RecordProperty("TestType", "interface-test");
+    RecordProperty("DerivationTechnique", "requirements-analysis");
+
     ExpectOurPidIsQueried();
 
     MessagePassingServer::AcquireWatchdogConfig watchdog_config;

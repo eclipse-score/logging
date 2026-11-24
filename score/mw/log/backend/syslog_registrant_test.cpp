@@ -27,7 +27,7 @@ namespace
 
 TEST(SyslogRegistrantTest, SyslogBackendIsRegisteredAfterStaticInitialization)
 {
-    RecordProperty("PartiallyVerifies", "comp_req__log__system_backend_activation");
+    RecordProperty("PartiallyVerifies", "comp_req__log__system_backend_activation, comp_arc_sta__log__sv");
     RecordProperty("Description",
                    "The syslog backend registrant is registered for LogMode::kSystem during static init.");
     RecordProperty("TestType", "requirements-based");

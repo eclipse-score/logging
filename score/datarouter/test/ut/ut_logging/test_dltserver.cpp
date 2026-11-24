@@ -777,6 +777,10 @@ TEST_F(DltServerCreatedWithConfigFixture, SetLogChannelThresholdChannelFoundComm
 
 TEST_F(DltServerCreatedWithConfigFixture, SetLogChannelThresholdBehaviorFiltersLowerLevels)
 {
+    RecordProperty("PartiallyVerifies", "comp_arc_dyn__data_router__message_filtering");
+    RecordProperty("TestType", "interface-test");
+    RecordProperty("DerivationTechnique", "requirements-analysis");
+
     EXPECT_CALL(read_callback, Call()).Times(1).WillOnce(Return(p_config));
     EXPECT_CALL(write_callback, Call(_)).Times(0);
 
@@ -927,6 +931,10 @@ TEST_F(DltServerCreatedWithConfigFixture,
 
 TEST_F(DltServerCreatedWithConfigFixture, SendNonVerboseAppIdAcceptedByFilteringExpectSendCallTwice)
 {
+    RecordProperty("PartiallyVerifies", "comp_arc_dyn__data_router__message_filtering");
+    RecordProperty("TestType", "interface-test");
+    RecordProperty("DerivationTechnique", "requirements-analysis");
+
     EXPECT_CALL(read_callback, Call()).Times(1).WillOnce(Return(p_config));
     EXPECT_CALL(write_callback, Call(_)).Times(0);
 
@@ -956,6 +964,10 @@ TEST_F(DltServerCreatedWithConfigFixture, SendVerboseNoAppIdAcceptedByFilteringN
 
 TEST_F(DltServerCreatedWithConfigFixture, SendVerboseAppIdAcceptedByFilteringExpectSendCallTwice)
 {
+    RecordProperty("PartiallyVerifies", "comp_arc_dyn__data_router__message_filtering");
+    RecordProperty("TestType", "interface-test");
+    RecordProperty("DerivationTechnique", "requirements-analysis");
+
     EXPECT_CALL(read_callback, Call()).Times(1).WillOnce(Return(p_config));
     EXPECT_CALL(write_callback, Call(_)).Times(0);
 

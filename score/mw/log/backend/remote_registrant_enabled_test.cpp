@@ -27,6 +27,7 @@ namespace
 
 TEST(RemoteRegistrantTest, RemoteBackendIsRegisteredAfterStaticInitialization)
 {
+    RecordProperty("PartiallyVerifies", "comp_arc_sta__log__sv");
     RecordProperty("Description",
                    "The remote backend registrant shall register a creator for LogMode::kRemote during static init.");
     RecordProperty("TestType", "Verification of the control flow and data flow");
