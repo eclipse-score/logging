@@ -157,7 +157,7 @@ See also :need:`doc_concept__wp_inspections` for further information about revie
       - Alternatively to the safe state there could also be "repair" mechanisms. Also do not forget to consider REQ_05_01 for these.
       - n/a
       - The Datarouter is QM rated and none of its requirements defines a
-        safety mechanism, so no safe state or error reaction is required.
+        safety mechanism.
       -
     * - REQ_10_01
       - Is the requirement description *complete* ?
