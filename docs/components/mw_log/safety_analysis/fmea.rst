@@ -23,6 +23,7 @@ FMEA (Failure Modes and Effects Analysis)
    :safety: ASIL_B
    :security: NO
    :realizes: wp__sw_component_fmea
+   :belongs_to: comp__mw_log_backend
 
 Failure Mode List
 -----------------
