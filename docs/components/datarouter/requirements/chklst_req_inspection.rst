@@ -150,7 +150,7 @@ See also :need:`doc_concept__wp_inspections` for further information about revie
       - In very rare cases a requirement may not be verifiable by test cases, for example a specific non-functional requirement. In this case a requirement analysis verifies the requirement by design/code review. If such a requirement is in scope of this inspection, please check this here and link to the respective review record. A test expert is invited to the inspection to confirm their opinion that the requirement is not testable.
       - n/a
       - All Datarouter requirements are testable, so no verification by design
-        or code review is needed.
+        is needed.
       -
     * - REQ_09_01
       - Do the requirements that define a safety mechanism specify the error reaction leading to a safe state?
