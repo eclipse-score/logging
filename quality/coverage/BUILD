@@ -77,7 +77,7 @@ score_coverage_reporter(
     testonly = True,
     backend = "gcov",
     coverage_scope = ":coverage_scope_qnx",
-    gcov = "@score_qcc_x86_64_toolchain_pkg//:gcov",
+    gcov = "@qnx_sdp_8_0_5_pkg//:gcov_x86_64",
     # Manual: needs the QNX SDP package, which requires QNX credentials.
     tags = ["manual"],
 )
