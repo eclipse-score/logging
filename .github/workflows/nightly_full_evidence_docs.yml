@@ -1,0 +1,432 @@
+# *******************************************************************************
+# Copyright (c) 2026 Contributors to the Eclipse Foundation
+#
+# See the NOTICE file(s) distributed with this work for additional
+# information regarding copyright ownership.
+#
+# This program and the accompanying materials are made available under the
+# terms of the Apache License Version 2.0 which is available at
+# https://www.apache.org/licenses/LICENSE-2.0
+#
+# SPDX-License-Identifier: Apache-2.0
+# *******************************************************************************
+
+# Nightly "full evidence" verification report.
+#
+# This workflow builds the report from all evidence of one commit on `main`:
+#   - QNX unit tests: reused from the coverage_report_qnx.yml run on push to `main`,
+#   - Integration tests: reused from the integration_tests.yml merge-queue
+#     run, which tested the same commit,
+#   - Integration tests (`integration_long`, > ~5 min): always run here.
+# A reusable part that is missing or expired is re-run here instead, so that the
+# report never mixes evidence of different code. The documentation is built from the
+# merged `test.xml` files and published to the `main-full-evidence` folder of the
+# documentation site (only when run on `main`; other refs only produce the artifact).
+
+name: Nightly Full Evidence Docs
+
+on:
+  schedule:
+    - cron: "0 1 * * *"
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+
+defaults:
+  run:
+    shell: bash
+
+concurrency:
+  group: nightly-full-evidence-${{ github.ref }}
+  cancel-in-progress: false
+
+env:
+  EVIDENCE_ARTIFACT: nightly_full_evidence_tests
+  PUBLISH_FOLDER: main-full-evidence
+  # Artifact of coverage_report_qnx.yml: C++ unit tests run on QNX/QEMU.
+  UNIT_ARTIFACT: ${{ github.event.repository.name }}_cpp_coverage_report_qnx
+  # Artifacts of integration_tests.yml (Integration tests) and of this workflow (part 2).
+  ITF_ARTIFACT: qnx-itf-test-results
+  ITF_LONG_ARTIFACT: qnx-itf-long-test-results
+
+# Every job is skipped on scheduled runs outside eclipse-score (forks have neither
+# the QNX secrets nor the runners), but can still be started manually there.
+jobs:
+  # Evidence must belong to exactly the commit that is documented. Reuse the
+  # artifacts of the regular runs when they exist for this commit and have not
+  # expired; the fallback jobs below re-run whatever is missing.
+  find-runs:
+    name: Find reusable QNX runs
+    if: ${{ github.event_name != 'schedule' || github.repository_owner == 'eclipse-score' }}
+    runs-on: ${{ vars.runner_labels_ghub_standard_x64 && fromJSON(vars.runner_labels_ghub_standard_x64) || vars.REPO_RUNNER_LABELS && fromJSON(vars.REPO_RUNNER_LABELS) || 'ubuntu-24.04' }}
+    timeout-minutes: 10
+    permissions:
+      contents: read
+      actions: read
+    outputs:
+      unit-run-id: ${{ steps.unit.outputs.run-id }}
+      itf-run-id: ${{ steps.itf.outputs.run-id }}
+    steps:
+      # Only trusted triggers: `pull_request_target` runs report the base commit
+      # as headSha although they test (approved) fork code, and a fork branch can
+      # be called `main`. Those runs must never count as evidence for this commit.
+      - name: Find QNX unit-test run for this commit
+        id: unit
+        env:
+          GH_TOKEN: ${{ github.token }}
+          WORKFLOW: coverage_report_qnx.yml
+          ARTIFACT: ${{ env.UNIT_ARTIFACT }}
+        run: |
+          set -euo pipefail
+          run_id=""
+          candidates="$(gh run list --repo "$GITHUB_REPOSITORY" --workflow "$WORKFLOW" \
+            --branch "$GITHUB_REF_NAME" --status success --limit 50 \
+            --json databaseId,headSha,event \
+            --jq ".[] | select(.headSha == \"$GITHUB_SHA\" and (.event == \"push\" or .event == \"workflow_dispatch\")) | .databaseId")"
+          for id in $candidates; do
+            found="$(gh api "repos/$GITHUB_REPOSITORY/actions/runs/$id/artifacts?per_page=100" \
+              --jq "[.artifacts[] | select(.name == \"$ARTIFACT\" and (.expired | not))] | length")"
+            if [ "$found" -gt 0 ]; then
+              run_id="$id"
+              break
+            fi
+          done
+          if [ -n "$run_id" ]; then
+            echo "Reusing QNX unit-test results of run $run_id" | tee -a "$GITHUB_STEP_SUMMARY"
+          else
+            echo "No reusable QNX unit-test run for $GITHUB_SHA; the unit tests will be re-run." | tee -a "$GITHUB_STEP_SUMMARY"
+          fi
+          echo "run-id=$run_id" >> "$GITHUB_OUTPUT"
+
+      # The merge queue tests a temporary branch whose head commit is the commit that
+      # lands on `main`; a mismatch simply results in the fallback re-run.
+      - name: Find merge-queue ITF run for this commit
+        id: itf
+        env:
+          GH_TOKEN: ${{ github.token }}
+          WORKFLOW: integration_tests.yml
+          ARTIFACT: ${{ env.ITF_ARTIFACT }}
+        run: |
+          set -euo pipefail
+          run_id=""
+          candidates="$(gh run list --repo "$GITHUB_REPOSITORY" --workflow "$WORKFLOW" \
+            --event merge_group --status success --limit 100 \
+            --json databaseId,headSha \
+            --jq ".[] | select(.headSha == \"$GITHUB_SHA\") | .databaseId")"
+          for id in $candidates; do
+            found="$(gh api "repos/$GITHUB_REPOSITORY/actions/runs/$id/artifacts?per_page=100" \
+              --jq "[.artifacts[] | select(.name == \"$ARTIFACT\" and (.expired | not))] | length")"
+            if [ "$found" -gt 0 ]; then
+              run_id="$id"
+              break
+            fi
+          done
+          if [ -n "$run_id" ]; then
+            echo "Reusing QNX Integration tests results of run $run_id" | tee -a "$GITHUB_STEP_SUMMARY"
+          else
+            echo "No reusable Integration tests run for $GITHUB_SHA; the tests will be re-run." | tee -a "$GITHUB_STEP_SUMMARY"
+          fi
+          echo "run-id=$run_id" >> "$GITHUB_OUTPUT"
+
+  # Fallback: Integration tests for this commit (mostly cached when the merge queue ran).
+  itf-part-1:
+    name: QNX Integration tests (part 1, fallback)
+    needs: find-runs
+    if: ${{ needs.find-runs.result == 'success' && needs.find-runs.outputs.itf-run-id == '' }}
+    uses: ./.github/workflows/qnx_itf.yml
+    with:
+      cache-save: true
+      results-retention-days: 3
+    secrets:
+      SCORE_QNX_LICENSE: ${{ secrets.SCORE_QNX_LICENSE }}
+      SCORE_QNX_USER: ${{ secrets.SCORE_QNX_USER }}
+      SCORE_QNX_PASSWORD: ${{ secrets.SCORE_QNX_PASSWORD }}
+    permissions:
+      contents: read
+      pull-requests: read
+
+  # ITF part 2: Integration tests that take too long for the merge queue.
+  itf-part-2:
+    name: QNX Integration tests (part 2, long running)
+    if: ${{ github.event_name != 'schedule' || github.repository_owner == 'eclipse-score' }}
+    uses: ./.github/workflows/qnx_itf.yml
+    with:
+      cache-save: false
+      results-retention-days: 3
+      test-tag-filters: integration_long
+      artifact-name: qnx-itf-long-test-results
+      timeout-minutes: 180
+      allow-no-tests: true
+    secrets:
+      SCORE_QNX_LICENSE: ${{ secrets.SCORE_QNX_LICENSE }}
+      SCORE_QNX_USER: ${{ secrets.SCORE_QNX_USER }}
+      SCORE_QNX_PASSWORD: ${{ secrets.SCORE_QNX_PASSWORD }}
+    permissions:
+      contents: read
+      pull-requests: read
+
+  unit-coverage:
+    name: QNX unit tests (fallback)
+    needs: find-runs
+    if: ${{ needs.find-runs.result == 'success' && needs.find-runs.outputs.unit-run-id == '' }}
+    uses: ./.github/workflows/coverage_report_qnx.yml
+    secrets:
+      SCORE_QNX_LICENSE: ${{ secrets.SCORE_QNX_LICENSE }}
+      SCORE_QNX_USER: ${{ secrets.SCORE_QNX_USER }}
+      SCORE_QNX_PASSWORD: ${{ secrets.SCORE_QNX_PASSWORD }}
+    permissions:
+      contents: read
+      pull-requests: read
+      actions: write
+
+  collect-evidence:
+    name: Collect test evidence
+    needs: [find-runs, unit-coverage, itf-part-1, itf-part-2]
+    if: ${{ !cancelled() && (github.event_name != 'schedule' || github.repository_owner == 'eclipse-score') }}
+    runs-on: ${{ vars.runner_labels_ghub_standard_x64 && fromJSON(vars.runner_labels_ghub_standard_x64) || vars.REPO_RUNNER_LABELS && fromJSON(vars.REPO_RUNNER_LABELS) || 'ubuntu-24.04' }}
+    timeout-minutes: 15
+    permissions:
+      contents: read
+      actions: read # download artifacts of the regular QNX runs
+    steps:
+      - name: Check evidence jobs
+        env:
+          LOOKUP_RESULT: ${{ needs.find-runs.result }}
+          REUSED_UNIT_RUN: ${{ needs.find-runs.outputs.unit-run-id }}
+          UNIT_RESULT: ${{ needs.unit-coverage.result }}
+        run: |
+          if [ "$LOOKUP_RESULT" != "success" ]; then
+            echo "::error::Looking up the reusable QNX runs failed (result: $LOOKUP_RESULT)."
+            exit 1
+          fi
+          if [ -z "$REUSED_UNIT_RUN" ] && [ "$UNIT_RESULT" != "success" ]; then
+            echo "::error::QNX unit tests were re-run in this workflow but did not succeed (result: $UNIT_RESULT)."
+            exit 1
+          fi
+
+      - name: Download unit-test evidence (reused run)
+        if: ${{ needs.find-runs.outputs.unit-run-id != '' }}
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: ${{ env.UNIT_ARTIFACT }}
+          run-id: ${{ needs.find-runs.outputs.unit-run-id }}
+          github-token: ${{ github.token }}
+          path: evidence/unit
+
+      - name: Download unit-test evidence (re-run in this workflow)
+        if: ${{ needs.find-runs.outputs.unit-run-id == '' }}
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: ${{ env.UNIT_ARTIFACT }}
+          path: evidence/unit
+
+      # Without verification properties the report could not credit any unit test.
+      - name: Check unit-test evidence contains verification properties
+        run: |
+          count="$( (grep -rlE 'PartiallyVerifies|FullyVerifies' --include=test.xml evidence/unit || true) | wc -l)"
+          if [ "$count" -eq 0 ]; then
+            echo "::error::The QNX unit-test artifact contains no test.xml with PartiallyVerifies/FullyVerifies properties."
+            exit 1
+          fi
+          echo "$count unit-test result files carry verification properties" >> "$GITHUB_STEP_SUMMARY"
+
+      # The ITF artifacts may not exist when a QNX job failed before it uploaded
+      # anything (part 2 additionally when there is no long-running test at all).
+      - name: Download Integration tests evidence (reused merge-queue run)
+        if: ${{ needs.find-runs.outputs.itf-run-id != '' }}
+        continue-on-error: true
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: ${{ env.ITF_ARTIFACT }}
+          run-id: ${{ needs.find-runs.outputs.itf-run-id }}
+          github-token: ${{ github.token }}
+          path: evidence/itf
+
+      - name: Download Integration tests evidence (re-run in this workflow)
+        if: ${{ needs.find-runs.outputs.itf-run-id == '' }}
+        continue-on-error: true
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: ${{ env.ITF_ARTIFACT }}
+          path: evidence/itf
+
+      - name: Download ITF part 2 evidence
+        continue-on-error: true
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: ${{ env.ITF_LONG_ARTIFACT }}
+          path: evidence/itf-long
+
+      - name: Merge evidence and determine ITF status
+        env:
+          REUSED_ITF_RUN: ${{ needs.find-runs.outputs.itf-run-id }}
+          ITF_PART_1_RESULT: ${{ needs.itf-part-1.result }}
+          ITF_PART_2_RESULT: ${{ needs.itf-part-2.result }}
+          UNIT_RUN_ID: ${{ needs.find-runs.outputs.unit-run-id || github.run_id }}
+          ITF_RUN_ID: ${{ needs.find-runs.outputs.itf-run-id || github.run_id }}
+        run: |
+          set -euo pipefail
+          mkdir -p tests-report/bazel-testlogs \
+            evidence/unit/bazel-testlogs evidence/itf/bazel-testlogs evidence/itf-long/bazel-testlogs
+
+          # Only the test results are evidence; the coverage reports in the unit-test
+          # artifact are not needed by the docs build. The sets must be disjoint,
+          # otherwise one would silently replace another.
+          for set in unit itf itf-long; do
+            (cd "evidence/$set/bazel-testlogs" && find . -type f | sort) > "$RUNNER_TEMP/$set.files"
+          done
+          conflicts="$(sort "$RUNNER_TEMP"/unit.files "$RUNNER_TEMP"/itf.files "$RUNNER_TEMP"/itf-long.files | uniq -d)"
+          if [ -n "$conflicts" ]; then
+            echo "::error::The evidence sets contain the same files: $conflicts"
+            exit 1
+          fi
+          for set in unit itf itf-long; do
+            cp -a "evidence/$set/bazel-testlogs/." tests-report/bazel-testlogs/
+          done
+
+          part1="$(find evidence/itf -name test.xml | wc -l)"
+          part2="$(find evidence/itf-long -name test.xml | wc -l)"
+          with_props="$( (grep -rl 'FullyVerifies' --include=test.xml evidence/itf evidence/itf-long || true) | wc -l)"
+
+          status=complete
+          reason="$part1 Integration tests and $part2 ITF part 2 test results"
+          if [ -z "$REUSED_ITF_RUN" ] && [ "$ITF_PART_1_RESULT" != "success" ]; then
+            status=missing
+            reason="QNX Integration tests job result: $ITF_PART_1_RESULT"
+          elif [ "$ITF_PART_2_RESULT" != "success" ]; then
+            status=missing
+            reason="QNX ITF part 2 job result: $ITF_PART_2_RESULT"
+          elif [ "$part1" -eq 0 ]; then
+            status=missing
+            reason="no Integration tests test.xml was found"
+          elif [ "$with_props" -eq 0 ]; then
+            status=missing
+            reason="no ITF test.xml contains FullyVerifies properties"
+          fi
+
+          {
+            echo "status=$status"
+            echo "reason=$reason"
+            echo "commit=$GITHUB_SHA"
+            echo "generated=$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+            echo "itf_part_1_run=$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$ITF_RUN_ID"
+            echo "itf_part_2_run=$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
+            echo "unit_run=$GITHUB_SERVER_URL/$GITHUB_REPOSITORY/actions/runs/$UNIT_RUN_ID"
+          } > tests-report/itf_evidence_status.txt
+
+          {
+            echo "### ITF evidence: $status"
+            echo "$reason"
+          } >> "$GITHUB_STEP_SUMMARY"
+          if [ "$status" != "complete" ]; then
+            echo "::warning title=ITF evidence missing::$reason. The report is built anyway and marked accordingly."
+          fi
+
+      - name: Upload combined evidence
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
+        with:
+          name: ${{ env.EVIDENCE_ARTIFACT }}
+          path: tests-report
+          retention-days: 3
+          overwrite: true # a re-run of the job must not fail on the existing artifact
+
+  docs:
+    name: Build full evidence documentation
+    needs: collect-evidence
+    uses: eclipse-score/cicd-workflows/.github/workflows/docs.yml@f77ed751fa587e3a1142b2d85320917e00c888ae # main (2026-10)
+    permissions:
+      contents: read
+    with:
+      bazel-target: >-
+        --lockfile_mode=error //:docs -- --github_user=${{ github.repository_owner }} --github_repo=${{ github.event.repository.name }} && bazel run --lockfile_mode=error //:publish_dependable_element_reports
+      retention-days: 3
+      tests-report-artifact: nightly_full_evidence_tests
+
+  # The shared docs-publish workflow always publishes into the folder of the source
+  # branch (`main`) and would overwrite the regular report, so the full-evidence
+  # report is published with the equivalent steps here.
+  publish:
+    name: Publish full evidence documentation
+    needs: docs
+    if: ${{ github.ref == 'refs/heads/main' }}
+    runs-on: ${{ vars.runner_labels_ghub_standard_x64 && fromJSON(vars.runner_labels_ghub_standard_x64) || vars.REPO_RUNNER_LABELS && fromJSON(vars.REPO_RUNNER_LABELS) || 'ubuntu-24.04' }}
+    timeout-minutes: 15
+    permissions:
+      actions: read
+      contents: write # push to gh-pages
+      pages: write
+      id-token: write
+    # Same group as the shared docs-publish workflow so that both serialize on gh-pages.
+    concurrency:
+      group: cicd-pages-deploy
+      cancel-in-progress: false
+    env:
+      PAGES_ARTIFACT_NAME: github-pages-${{ github.run_id }}-${{ github.run_attempt }}
+    steps:
+      # The checkout credentials are needed by the push below and are removed together
+      # with `.git` before the Pages artifact is created.
+      - name: Checkout gh-pages
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: gh-pages
+          path: gh-pages-content
+
+      - name: Clean up previous full evidence documentation
+        run: rm -rf "gh-pages-content/$PUBLISH_FOLDER"
+
+      - name: Download documentation artifact
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2
+        with:
+          name: github-pages
+          path: gh-pages-content/${{ env.PUBLISH_FOLDER }}
+
+      - name: Extend versions.json
+        env:
+          REPOSITORY: ${{ github.repository }}
+          REPOSITORY_OWNER: ${{ github.repository_owner }}
+        run: |
+          set -euo pipefail
+          touch gh-pages-content/.nojekyll
+          if [ ! -f gh-pages-content/versions.json ]; then
+            echo '[]' > gh-pages-content/versions.json
+          fi
+          if jq -e --arg v "$PUBLISH_FOLDER" 'map(select(.version == $v)) | length > 0' gh-pages-content/versions.json > /dev/null; then
+            echo "Version '$PUBLISH_FOLDER' already exists in versions.json"
+          else
+            pages_url="https://${REPOSITORY_OWNER}.github.io/$(basename "$REPOSITORY")"
+            jq --arg v "$PUBLISH_FOLDER" --arg u "${pages_url}/${PUBLISH_FOLDER}/" \
+              '. + [{"version": $v, "url": $u}]' gh-pages-content/versions.json > gh-pages-content/tmp.json
+            mv gh-pages-content/tmp.json gh-pages-content/versions.json
+          fi
+
+      - name: Commit and push changes to gh-pages
+        run: |
+          cd gh-pages-content
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add .
+          git commit -m "Update full evidence documentation for $GITHUB_SHA" || echo "No changes to commit"
+          git push
+
+      - name: Remove git metadata before creating Pages artifact
+        run: rm -rf gh-pages-content/.git
+
+      - name: Create artifact from gh-pages
+        uses: actions/upload-pages-artifact@fc324d3547104276b827a68afc52ff2a11cc49c9 # v5.0.0
+        with:
+          name: ${{ env.PAGES_ARTIFACT_NAME }}
+          path: gh-pages-content
+
+      - name: Deploy artifact to GitHub Pages
+        id: deploy-pages
+        uses: actions/deploy-pages@368f82528645a54fb793d4d04e342629a3f51346 # v5.0.1
+        with:
+          artifact_name: ${{ env.PAGES_ARTIFACT_NAME }}
+
+      - name: Post deployment URL to summary
+        env:
+          PAGE_URL: ${{ steps.deploy-pages.outputs.page_url }}
+        run: |
+          echo "### Full evidence documentation published" >> "$GITHUB_STEP_SUMMARY"
+          echo "${PAGE_URL}${PUBLISH_FOLDER}/" >> "$GITHUB_STEP_SUMMARY"

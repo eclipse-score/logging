@@ -1,0 +1,217 @@
+# *******************************************************************************
+# Copyright (c) 2026 Contributors to the Eclipse Foundation
+#
+# See the NOTICE file(s) distributed with this work for additional
+# information regarding copyright ownership.
+#
+# This program and the accompanying materials are made available under the
+# terms of the Apache License Version 2.0 which is available at
+# https://www.apache.org/licenses/LICENSE-2.0
+#
+# SPDX-License-Identifier: Apache-2.0
+# *******************************************************************************
+
+# Reusable workflow: runs the ITF component tests on QNX/QEMU and uploads the
+# JUnit results (`test.xml`) as an artifact (default `qnx-itf-test-results`) so that
+# the documentation build can use them as verification evidence.
+#
+# Tests tagged `integration_long` (more than ~30 minutes) are excluded from the
+# default filter and run through `test-tag-filters: integration_long`.
+#
+# The `github` context is the caller's, so the checkout below resolves the PR
+# head for `pull_request_target` and the triggering commit otherwise.
+name: QNX ITF (reusable)
+
+on:
+  workflow_call:
+    inputs:
+      cache-save:
+        description: "Whether this run may save the Bazel caches"
+        required: false
+        default: false
+        type: boolean
+      results-retention-days:
+        description: "Retention of the uploaded test.xml artifact"
+        required: false
+        default: 3
+        type: number
+      test-tag-filters:
+        description: "Bazel --test_tag_filters value"
+        required: false
+        default: "integration,-integration_long"
+        type: string
+      artifact-name:
+        description: "Name of the uploaded test.xml artifact (logs use '<name>-logs')"
+        required: false
+        default: qnx-itf-test-results
+        type: string
+      timeout-minutes:
+        description: "Timeout of the job"
+        required: false
+        default: 45
+        type: number
+      allow-no-tests:
+        description: "Do not fail when no test target matches the tag filter"
+        required: false
+        default: false
+        type: boolean
+    secrets:
+      SCORE_QNX_LICENSE:
+        required: true
+      SCORE_QNX_USER:
+        required: true
+      SCORE_QNX_PASSWORD:
+        required: true
+
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  qnx-itf:
+    name: QNX Integration Tests (x86_64-qnx)
+    timeout-minutes: ${{ inputs.timeout-minutes }}
+    runs-on: ${{ vars.runner_labels_ghub_standard_x64 && fromJSON(vars.runner_labels_ghub_standard_x64) || vars.REPO_RUNNER_LABELS && fromJSON(vars.REPO_RUNNER_LABELS) || 'ubuntu-24.04' }}
+    permissions:
+      contents: read
+      pull-requests: read
+    steps:
+      - name: Clean disk space
+        uses: eclipse-score/more-disk-space@6a3b48901846bf7f8cc985925157d71a8973e61f # v1
+        with:
+          level: 4
+
+      - name: Checkout repository (Handle all events)
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          # Pin to the exact commit (PR head, merge-queue or triggering commit)
+          # instead of a branch name, so a push after the approval gate or after the
+          # trigger cannot change what is tested.
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          repository: ${{ github.event.pull_request.head.repo.full_name || github.repository }}
+          allow-unsafe-pr-checkout: true
+
+      - name: Setup Bazel with shared caching
+        uses: bazel-contrib/setup-bazel@77a1d3d18379c7cb0a7e3b9fcaaa4d94f1029763 # 0.18.0
+        with:
+          bazelisk-version: 1.26.0
+          disk-cache: true
+          repository-cache: true
+          bazelisk-cache: true
+          cache-save: ${{ inputs.cache-save }}
+
+      - uses: eclipse-score/cicd-actions/unblock-user-namespace-for-linux-sandbox@30ed908edcf367bc38ebff5b386a244f9b6417a7 # 2025-06-04
+
+      - name: Setup QNX SDP usage
+        uses: eclipse-score/cicd-actions/setup-qnx-sdp@a2b3c36fc7d1b9d03880d19935c7ac9cfffe58c6 # 2026-05-19
+        with:
+          qnx-license: ${{ secrets.SCORE_QNX_LICENSE }}
+          qnx-user: ${{ secrets.SCORE_QNX_USER }}
+          qnx-password: ${{ secrets.SCORE_QNX_PASSWORD }}
+          qnx-credential-helper: scripts/internal/qnx_creds.py
+          qnx-license-dir: /opt/score_qnx/license
+
+      - name: Install qemu
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends qemu-system-x86
+
+      - name: Enable KVM group permissons
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+
+      - name: Setup tap0 network interface for QEMU
+        run: |
+          set -euo pipefail
+
+          RUNNER_USER="${SUDO_USER:-$USER}"
+          if ! getent passwd "$RUNNER_USER" > /dev/null; then
+            RUNNER_USER="$(id -un)"
+          fi
+
+          if [ ! -c /dev/net/tun ]; then
+            echo "Missing /dev/net/tun; TAP devices are unavailable on this runner." >&2
+            exit 1
+          fi
+
+          if ! ip link show tap0 > /dev/null 2>&1; then
+            sudo ip tuntap add dev tap0 mode tap user "$RUNNER_USER"
+          fi
+
+          sudo ip addr flush dev tap0
+          sudo ip addr add 169.254.21.88/16 dev tap0
+          sudo ip link set dev tap0 up
+
+      - name: Verify QEMU tap0 network preflight
+        run: |
+          set -euo pipefail
+          test -c /dev/net/tun
+          ip link show tap0
+          ip -4 addr show dev tap0 | grep -q "169.254.21.88/16"
+
+      - name: Run integration tests
+        env:
+          TEST_TAG_FILTERS: ${{ inputs.test-tag-filters }}
+          ALLOW_NO_TESTS: ${{ inputs.allow-no-tests }}
+        run: |
+          set -euo pipefail
+          : "${QNX_CREDENTIAL_HELPER:?QNX_CREDENTIAL_HELPER is not set (expected from setup-qnx-sdp)}"
+
+          rc=0
+          bazel test --config score-qnx-x86_64 \
+            --credential_helper=*.qnx.com="${QNX_CREDENTIAL_HELPER}" \
+            --lockfile_mode=error --test_tag_filters="$TEST_TAG_FILTERS" --test_output=errors -- \
+            //score/test/component/... || rc=$?
+
+          # Bazel exits with 4 when the tag filter selects no test target.
+          if [ "$rc" -eq 4 ] && [ "$ALLOW_NO_TESTS" = "true" ]; then
+            echo "No test target matches '$TEST_TAG_FILTERS'."
+            rc=0
+          fi
+          exit "$rc"
+
+      # Keep the bazel-testlogs layout: the docs xml parser derives repo metadata
+      # from the path below `bazel-testlogs/`.
+      - name: Collect ITF test.xml files
+        if: ${{ always() }}
+        run: |
+          set -euo pipefail
+          mkdir -p "$GITHUB_WORKSPACE/itf-evidence/bazel-testlogs"
+          if [ -d bazel-testlogs/score/test/component ]; then
+            (cd bazel-testlogs && find score/test/component -name test.xml \
+              -exec cp --parents {} "$GITHUB_WORKSPACE/itf-evidence/bazel-testlogs/" \;)
+          fi
+          find "$GITHUB_WORKSPACE/itf-evidence" -name test.xml | sort
+
+      - name: Upload QNX ITF test results
+        if: ${{ always() }}
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
+        with:
+          name: ${{ inputs.artifact-name }}
+          path: itf-evidence
+          if-no-files-found: warn
+          retention-days: ${{ inputs.results-retention-days }}
+          overwrite: true # a re-run of the job must not fail on the existing artifact
+
+      - name: Upload QNX ITF test logs
+        if: ${{ failure() || cancelled() }}
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
+        with:
+          name: ${{ inputs.artifact-name }}-logs
+          path: |
+            bazel-testlogs/**/test.log
+            bazel-testlogs/**/test.outputs/**
+          if-no-files-found: warn
+          retention-days: 3
+          overwrite: true
+
+      - name: Cleanup tap0 network interface
+        if: always()
+        run: |
+          sudo ip link delete tap0 2>/dev/null || true
+
+      - name: Cleanup QNX license
+        if: always()
+        run: sudo rm -rf /opt/score_qnx

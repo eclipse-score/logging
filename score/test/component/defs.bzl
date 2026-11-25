@@ -32,7 +32,9 @@ def py_logging_itf_test(name, srcs, filesystem, filesystem_pkg, extra_oci_tars =
             consumed directly by `qnx_ifs` (which requires rules_pkg providers, not a tarball).
         extra_oci_tars: Optional list of additional pkg_tar targets to include
             in the Docker OCI image only (not added to the QNX IFS).
-        **kwargs: Forwarded to py_itf_test.
+        **kwargs: Forwarded to py_itf_test. Tests that run longer than ~5 minutes
+            must additionally set `tags = ["integration_long"]`; they are excluded from
+            the merge queue and run in the nightly workflow.
     """
     image_name = "_image_{}".format(name)
     image_loader = "_image_{}_loader".format(name)

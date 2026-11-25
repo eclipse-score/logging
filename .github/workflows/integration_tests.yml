@@ -11,145 +11,37 @@
 # SPDX-License-Identifier: Apache-2.0
 # *******************************************************************************
 
+# Every test tagged `integration` but not `integration_long`.
+# The integration tests run in the merge queue, so only reviewed and
+# queued code uses the QNX runners. Tests tagged `integration_long` (more than ~2
+# minutes) run in nightly_full_evidence_docs.yml.
+#
+# The `test.xml` results are kept as the `qnx-itf-test-results` artifact. The nightly
+# workflow reuses them as verification evidence for the same commit on `main`.
+
 name: QNX Integration Tests
 
 on:
-  pull_request_target:
-    types: [opened, reopened, synchronize, labeled]
   merge_group:
     types: [checks_requested]
   workflow_dispatch: {}
 
 concurrency:
-  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
-  approval:
-    if: github.event_name == 'pull_request_target' && (github.event.pull_request.head.repo.full_name != github.event.pull_request.base.repo.full_name)
-    environment: workflow-approval
-    runs-on: ubuntu-24.04
-    permissions:
-      contents: read
-      pull-requests: read
-    steps:
-      - name: Blocking on approval
-        run: 'true'
-
   integration-tests-qnx:
     name: QNX Integration Tests (x86_64-qnx)
-    needs: approval
-    # Run for all events except 'labeled', which only triggers on the opt-in label
-    # to avoid rerunning this expensive job on unrelated label changes.
-    if: >-
-      ${{ !cancelled()
-          && (github.event_name != 'pull_request_target'
-              || github.event.action != 'labeled'
-              || github.event.label.name == 'integration_testing') }}
-    timeout-minutes: 45
-    runs-on: ${{ vars.runner_labels_ghub_standard_x64 && fromJSON(vars.runner_labels_ghub_standard_x64) || vars.REPO_RUNNER_LABELS && fromJSON(vars.REPO_RUNNER_LABELS) || 'ubuntu-24.04' }}
+    uses: ./.github/workflows/qnx_itf.yml
+    with:
+      cache-save: ${{ github.event_name == 'merge_group' }}
+      # Must outlive the time until the nightly run that reuses them.
+      results-retention-days: 10
+    secrets:
+      SCORE_QNX_LICENSE: ${{ secrets.SCORE_QNX_LICENSE }}
+      SCORE_QNX_USER: ${{ secrets.SCORE_QNX_USER }}
+      SCORE_QNX_PASSWORD: ${{ secrets.SCORE_QNX_PASSWORD }}
     permissions:
       contents: read
       pull-requests: read
-    steps:
-      - name: Clean disk space
-        uses: eclipse-score/more-disk-space@6a3b48901846bf7f8cc985925157d71a8973e61f # v1
-        with:
-          level: 4
-
-      - name: Checkout repository (Handle all events)
-        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-        with:
-          ref: ${{ github.head_ref || github.event.pull_request.head.ref || github.ref }}
-          repository: ${{ github.event.pull_request.head.repo.full_name || github.repository }}
-          allow-unsafe-pr-checkout: true
-
-      - name: Setup Bazel with shared caching
-        uses: bazel-contrib/setup-bazel@77a1d3d18379c7cb0a7e3b9fcaaa4d94f1029763 # 0.18.0
-        with:
-          bazelisk-version: 1.26.0
-          disk-cache: true
-          repository-cache: true
-          bazelisk-cache: true
-          cache-save: ${{ github.event_name == 'merge_group' }}
-
-      - uses: eclipse-score/cicd-actions/unblock-user-namespace-for-linux-sandbox@30ed908edcf367bc38ebff5b386a244f9b6417a7 # 2025-06-04
-
-      - name: Setup QNX SDP usage
-        uses: eclipse-score/cicd-actions/setup-qnx-sdp@a2b3c36fc7d1b9d03880d19935c7ac9cfffe58c6 # 2026-05-19
-        with:
-          qnx-license: ${{ secrets.SCORE_QNX_LICENSE }}
-          qnx-user: ${{ secrets.SCORE_QNX_USER }}
-          qnx-password: ${{ secrets.SCORE_QNX_PASSWORD }}
-          qnx-credential-helper: scripts/internal/qnx_creds.py
-          qnx-license-dir: /opt/score_qnx/license
-
-      - name: Install qemu
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y --no-install-recommends qemu-system-x86
-
-      - name: Enable KVM group permissons
-        run: |
-          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
-          sudo udevadm control --reload-rules
-          sudo udevadm trigger --name-match=kvm
-
-      - name: Setup tap0 network interface for QEMU
-        run: |
-          set -euo pipefail
-
-          RUNNER_USER="${SUDO_USER:-$USER}"
-          if ! getent passwd "$RUNNER_USER" > /dev/null; then
-            RUNNER_USER="$(id -un)"
-          fi
-
-          if [ ! -c /dev/net/tun ]; then
-            echo "Missing /dev/net/tun; TAP devices are unavailable on this runner." >&2
-            exit 1
-          fi
-
-          if ! ip link show tap0 > /dev/null 2>&1; then
-            sudo ip tuntap add dev tap0 mode tap user "$RUNNER_USER"
-          fi
-
-          sudo ip addr flush dev tap0
-          sudo ip addr add 169.254.21.88/16 dev tap0
-          sudo ip link set dev tap0 up
-
-      - name: Verify QEMU tap0 network preflight
-        run: |
-          set -euo pipefail
-          test -c /dev/net/tun
-          ip link show tap0
-          ip -4 addr show dev tap0 | grep -q "169.254.21.88/16"
-
-      - name: Run integration tests
-        run: |
-          set -euo pipefail
-          : "${QNX_CREDENTIAL_HELPER:?QNX_CREDENTIAL_HELPER is not set (expected from setup-qnx-sdp)}"
-
-          bazel test --config score-qnx-x86_64 \
-            --credential_helper=*.qnx.com="${QNX_CREDENTIAL_HELPER}" \
-            --lockfile_mode=error --test_tag_filters=integration --test_output=errors -- \
-            //score/test/component/...
-
-      - name: Upload QNX ITF test logs
-        if: ${{ failure() || cancelled() }}
-        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f # v6
-        with:
-          name: qnx-itf-test-logs
-          path: |
-            bazel-testlogs/**/test.log
-            bazel-testlogs/**/test.outputs/**
-          if-no-files-found: warn
-          retention-days: 3
-
-      - name: Cleanup tap0 network interface
-        if: always()
-        run: |
-          sudo ip link delete tap0 2>/dev/null || true
-
-      - name: Cleanup QNX license
-        if: always()
-        run: sudo rm -rf /opt/score_qnx
