@@ -286,10 +286,15 @@ reviews in general and inspection in particular.
         processes and make sure an "Assumption of Use requirement" for this
         exists in your project. For example, see `score aou_req__platform__process_isolation
         <https://eclipse-score.github.io/score/main/requirements/platform_assumptions/index.html#aou_req__platform__process_isolation>`_.
-      - No
-      - Need to define AoU for the backends on usage of the shared memory
-        between the datarouter and backend.
-      - TODO: open an issue.
+      - Yes
+      - Shared memory is used only as the IPC mechanism between the datarouter
+        and the backends. It does not influence the safety-related software in
+        a way that requires extra measures to guarantee freedom from
+        interference, so no additional AoU is needed for it. The existing AoUs
+        for the logging module cover initialization and usage, see
+        `aou_requirements.rst
+        <https://github.com/eclipse-score/baselibs/blob/main/score/mw/log/docs/safety_analysis/aou_requirements.rst>`_.
+      -
     * - ARC_04_02
       - Does the software architectural design consider its feasibility with
         respect to the required resources for the embedded software, especially
@@ -323,10 +328,12 @@ reviews in general and inspection in particular.
 
         Note: see :need:`std_req__iso26262__software_743`
       - Provide a rationale for these scheduling policies and priorities, or explain why they are not needed.
-      - No
-      - Datarouter is a process and has no documentation about scheduling are
-        documented.
-      - https://github.com/eclipse-score/logging/issues/308
+      - n/a
+      - No timing requirements are assigned to the datarouter or mw::log, so
+        scheduling policies and priorities are not needed. Where an integrator
+        needs time limits, these are set per ECU, see
+        :need:`comp_req__log__avoid_locks`.
+      -
 
 
 .. attention::
