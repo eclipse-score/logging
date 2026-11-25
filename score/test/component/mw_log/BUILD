@@ -40,3 +40,20 @@ py_logging_itf_test(
     filesystem = "//score/test/component/filters_app:mwfiltertest_filesystem",
     filesystem_pkg = "//score/test/component/filters_app:mwfiltertest_filesystem_pkg",
 )
+
+py_logging_itf_test(
+    name = "test_logging_cross_locking",
+    srcs = ["test_logging_cross_locking.py"],
+    extra_ifs_build_files = ["//quality/integration_testing/environments/qnx8_qemu:tracing_build"],
+    filesystem = "//score/test/component/logging_cross_locking_app:cross_locking_app_filesystem",
+    filesystem_pkg = "//score/test/component/logging_cross_locking_app:cross_locking_app_filesystem_pkg",
+    target_compatible_with = ["@platforms//os:qnx"],
+)
+
+py_logging_itf_test(
+    name = "test_logging_allocation",
+    srcs = ["test_logging_allocation.py"],
+    filesystem = "//score/test/component/dynamic_allocation_apps:dynamic_allocation_apps_filesystem",
+    filesystem_pkg = "//score/test/component/dynamic_allocation_apps:dynamic_allocation_apps_filesystem_pkg",
+    target_compatible_with = ["@platforms//os:qnx"],
+)

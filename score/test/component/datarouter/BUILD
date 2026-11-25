@@ -171,6 +171,14 @@ py_logging_itf_test(
     deps = ["@score_itf//score/itf/plugins/dlt"],
 )
 
+py_logging_itf_test(
+    name = "test_dlt_multiple_channels",
+    srcs = ["test_dlt_multiple_channels.py"],
+    filesystem = "//score/test/component/dlt_generator_app:dlt_generator_filesystem",
+    filesystem_pkg = "//score/test/component/dlt_generator_app:dlt_generator_filesystem_pkg",
+    deps = ["@score_itf//score/itf/plugins/dlt"],
+)
+
 # =============================================================================
 # logging_after_delayed_dr_start test
 # =============================================================================
@@ -190,6 +198,44 @@ py_logging_itf_test(
 py_logging_itf_test(
     name = "test_logging_detached_logs",
     srcs = ["test_logging_detached_logs.py"],
+    filesystem = "//score/test/component/dlt_generator_app:dlt_generator_filesystem",
+    filesystem_pkg = "//score/test/component/dlt_generator_app:dlt_generator_filesystem_pkg",
+    deps = ["@score_itf//score/itf/plugins/dlt"],
+)
+
+py_logging_itf_test(
+    name = "test_datarouter_stuck",
+    srcs = ["test_datarouter_stuck.py"],
+    filesystem = "//score/test/component/dlt_generator_app:dlt_generator_filesystem",
+    filesystem_pkg = "//score/test/component/dlt_generator_app:dlt_generator_filesystem_pkg",
+    target_compatible_with = ["@platforms//os:qnx"],
+)
+
+pkg_filegroup(
+    name = "safe_logging_ipc_filesystem_pkg",
+    srcs = [
+        "//score/test/component/dlt_generator_app:dlt_generator_filesystem_pkg",
+        "//score/test/component/safe_ipc_fault_app:fault_app_filesystem_pkg",
+    ],
+)
+
+pkg_tar(
+    name = "safe_logging_ipc_filesystem",
+    srcs = [":safe_logging_ipc_filesystem_pkg"],
+)
+
+py_logging_itf_test(
+    name = "test_safe_logging_ipc",
+    timeout = "long",
+    srcs = ["test_safe_logging_ipc.py"],
+    filesystem = ":safe_logging_ipc_filesystem",
+    filesystem_pkg = ":safe_logging_ipc_filesystem_pkg",
+    deps = ["@score_itf//score/itf/plugins/dlt"],
+)
+
+py_logging_itf_test(
+    name = "test_quality_of_service",
+    srcs = ["test_quality_of_service.py"],
     filesystem = "//score/test/component/dlt_generator_app:dlt_generator_filesystem",
     filesystem_pkg = "//score/test/component/dlt_generator_app:dlt_generator_filesystem_pkg",
     deps = ["@score_itf//score/itf/plugins/dlt"],
