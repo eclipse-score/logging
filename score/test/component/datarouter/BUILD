@@ -168,6 +168,7 @@ py_logging_itf_test(
     srcs = ["test_quota_exceed.py"],
     filesystem = "//score/test/component/dlt_generator_app:dlt_generator_filesystem",
     filesystem_pkg = "//score/test/component/dlt_generator_app:dlt_generator_filesystem_pkg",
+    tags = ["integration_long"],
     deps = ["@score_itf//score/itf/plugins/dlt"],
 )
 
