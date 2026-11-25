@@ -31,6 +31,15 @@ Documentation lives in `docs/` and is built with `docs-as-code` (Sphinx). Build 
 bazel build //:docs
 ```
 
+The module verification report shows the coverage from
+`coverage-report/coverage_report.dat` (provided by CI). To generate it locally:
+
+```sh
+bazel coverage --config=llvm_cov //score/... --build_tests_only
+COVERAGE_THRESHOLD=0 bazel run @score_coverage//:generate_coverage_html -- --archive-dir coverage-report
+bazel run //:docs
+```
+
 See the [module documentation](docs/index.rst) for the rendered content.
 
 ---
