@@ -413,6 +413,24 @@ jobs:
             mv gh-pages-content/tmp.json gh-pages-content/versions.json
           fi
 
+      # The shared docs cleanup deletes every top-level gh-pages folder that is not a
+      # branch, an open PR or a tag. A tag with the folder name, moved to the documented
+      # commit, keeps the folder. TODO: replace by an exclusion in the shared cleanup.
+      # https://github.com/eclipse-score/cicd-workflows/issues/319
+      - name: Move tag to the documented commit
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          ref="repos/${GITHUB_REPOSITORY}/git/refs/tags/${PUBLISH_FOLDER}"
+          if gh api "$ref" > /dev/null 2>&1; then
+            gh api --method PATCH "$ref" -f sha="$GITHUB_SHA" -F force=true > /dev/null
+          else
+            gh api --method POST "repos/${GITHUB_REPOSITORY}/git/refs" \
+              -f ref="refs/tags/${PUBLISH_FOLDER}" -f sha="$GITHUB_SHA" > /dev/null
+          fi
+          echo "Tag '${PUBLISH_FOLDER}' points to ${GITHUB_SHA}"
+
       - name: Commit and push changes to gh-pages
         run: |
           cd gh-pages-content
