@@ -267,8 +267,13 @@ jobs:
           ITF_RUN_ID: ${{ needs.find-runs.outputs.itf-run-id || github.run_id }}
         run: |
           set -euo pipefail
-          mkdir -p tests-report/bazel-testlogs \
-            evidence/unit/bazel-testlogs evidence/itf/bazel-testlogs evidence/itf-long/bazel-testlogs
+          # The unit-test artifact must have the bazel-testlogs layout; a different
+          # layout would otherwise be merged as an empty set.
+          if ! find evidence/unit/bazel-testlogs -name test.xml 2> /dev/null | grep -q .; then
+            echo "::error::The QNX unit-test artifact has no bazel-testlogs/**/test.xml."
+            exit 1
+          fi
+          mkdir -p tests-report/bazel-testlogs evidence/itf/bazel-testlogs evidence/itf-long/bazel-testlogs
 
           # Only the test results are evidence; the coverage reports in the unit-test
           # artifact are not needed by the docs build. The sets must be disjoint,
@@ -284,6 +289,14 @@ jobs:
           for set in unit itf itf-long; do
             cp -a "evidence/$set/bazel-testlogs/." tests-report/bazel-testlogs/
           done
+
+          # The report is built from the merged files only.
+          merged="$( (grep -rlE 'PartiallyVerifies|FullyVerifies' --include=test.xml tests-report || true) | wc -l)"
+          if [ "$merged" -eq 0 ]; then
+            echo "::error::The merged evidence contains no test.xml with verification properties."
+            exit 1
+          fi
+          echo "$merged merged test results carry verification properties" >> "$GITHUB_STEP_SUMMARY"
 
           part1="$(find evidence/itf -name test.xml | wc -l)"
           part2="$(find evidence/itf-long -name test.xml | wc -l)"
