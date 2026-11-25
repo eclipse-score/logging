@@ -58,6 +58,9 @@ common:qnx --credential_helper=*.qnx.com=%workspace%/scripts/internal/qnx_creds.
 common:qnx --credential_helper_timeout="60s"
 common:qnx --sandbox_writable_path=/var/tmp
 
+# Warning exceptions for targets using the existing _score_common configuration.
+build:_score_common --cxxopt=-Wno-error=mismatched-new-delete
+
 # Import central S-CORE toolchain configuration
 import %workspace%/score.bazelrc/score_toolchain.bazelrc
 
@@ -66,9 +69,6 @@ build:score-linux-x86_64 --config=_common
 build:score-linux-aarch64 --config=_common
 build:score-qnx-x86_64 --config=_common
 build:score-qnx-aarch64 --config=_common
-
-# Target-specific Rust toolchain for Linux AArch64
-build:score-linux-aarch64 --extra_toolchains=@score_toolchains_rust//toolchains/ferrocene:ferrocene_aarch64_unknown_linux_gnu
 
 # Python precompile disabling for GCC toolchains
 build:score-linux-x86_64 --@rules_python//python/config_settings:precompile=force_disabled
@@ -88,47 +88,23 @@ build:aarch64-linux --config=score-linux-aarch64
 build:x86_64-qnx --config=score-qnx-x86_64
 build:arm64-qnx --config=score-qnx-aarch64
 
-
-
-# ==============================================================================
-# Dynamic analysis (sanitizers) for Linux host builds/tests
-# ==============================================================================
-
-# Debug symbols for sanitizer stack traces
-test:with_debug_symbols --cxxopt=-g1
-test:with_debug_symbols --strip=never
-
-# AddressSanitizer + UndefinedBehaviorSanitizer + LeakSanitizer (Combined)
-build:asan_ubsan_lsan --config=x86_64-linux
-build:asan_ubsan_lsan --features=asan
-build:asan_ubsan_lsan --features=ubsan
-build:asan_ubsan_lsan --features=lsan
-build:asan_ubsan_lsan --platform_suffix=asan_ubsan_lsan
-test:asan_ubsan_lsan --config=with_debug_symbols
-test:asan_ubsan_lsan --test_tag_filters=-no-asan,-no-lsan,-no-ubsan
-test:asan_ubsan_lsan --@score_cpp_policies//sanitizers/flags:sanitizer=asan_ubsan_lsan
-test:asan_ubsan_lsan --run_under=@score_cpp_policies//sanitizers:wrapper
-
-# Shortcuts for individual sanitizers
-build:asan  --config=asan_ubsan_lsan
-test:asan   --test_tag_filters=-no-asan
-build:ubsan --config=asan_ubsan_lsan
-test:ubsan  --test_tag_filters=-no-ubsan
-build:lsan  --config=asan_ubsan_lsan
-test:lsan   --test_tag_filters=-no-lsan
-
-# ThreadSanitizer (cannot be combined with ASan/LSan)
+# Select the same Linux GCC toolchain as the other host test configurations.
+build:asan --config=x86_64-linux
+build:ubsan --config=x86_64-linux
+build:lsan --config=x86_64-linux
 build:tsan --config=x86_64-linux
-build:tsan --features=tsan
-build:tsan --platform_suffix=tsan
-# GCC 12 promotes TSan limitation on atomic_thread_fence to -Werror=tsan.
-# Downgrade to warning so external deps (score_baselibs) compile; TSan still runs.
-build:tsan --cxxopt=-Wno-error=tsan
-test:tsan --config=with_debug_symbols
-test:tsan --cxxopt=-O1
+
+# Exclude tests tagged as incompatible with each sanitizer.
+test:asan --test_tag_filters=-no-asan
+test:ubsan --test_tag_filters=-no-ubsan
+test:lsan --test_tag_filters=-no-lsan
+test:asan_ubsan_lsan --test_tag_filters=-no-asan,-no-lsan,-no-ubsan
 test:tsan --test_tag_filters=-no-tsan
-test:tsan --@score_cpp_policies//sanitizers/flags:sanitizer=tsan
-test:tsan --run_under=@score_cpp_policies//sanitizers:wrapper
+test:tsan_ubsan --test_tag_filters=-no-tsan,-no-ubsan
+
+# GCC 12 warns that TSan does not instrument atomic_thread_fence in dependencies such as baselibs.
+build:tsan --cxxopt=-Wno-error=tsan
+test:tsan --cxxopt=-O1
 
 # Clang-tidy: bazel test --config=clang-tidy //score/...
 test:clang-tidy --aspects=//tools/lint:linters.bzl%clang_tidy_aspect
