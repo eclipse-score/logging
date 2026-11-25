@@ -43,9 +43,9 @@ Conduct
 As described in the concept :need:`doc_concept__wp_inspections` the following
 "inspection roles" are expected to be filled:
 
-- content responsible (author): <contributor/committer explicitly named here, who is the main author, as can be seen in config mgt tooling>
-- reviewer: <contributor/committer explicitly named here, who is the main content reviewer, must be different from content responsible>
-- moderator: <committer explicitly named here, who is is the safety manager, security manager or quality manager initiating the inspection>
+- content responsible (author): `<https://github.com/MaciejKaszynski>`_
+- reviewer: `<https://github.com/rmaddikery>`_
+- moderator: `<https://github.com/aschemmel-tech>`_
 
 Checklist
 ---------
