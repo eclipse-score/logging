@@ -24,6 +24,7 @@ import logging
 import os
 import tempfile
 
+from attribute_plugin import add_test_properties
 import dlt.dlt as python_dlt
 from logging_plugin import download_dlt
 
@@ -61,6 +62,11 @@ def _verify_kfile_messages(target, expected):
         )
 
 
+@add_test_properties(
+    fully_verifies=["comp_req__log__file_backend_activation"],
+    test_type="requirements-based",
+    derivation_technique="equivalence-classes",
+)
 def test_mw_log_kfile(target, datarouter_on_target, dlt_capture):
     """Verify kFile logging produces the expected number of messages."""
     expected = ITERATIONS * MESSAGES_PER_ITERATION
@@ -80,6 +86,11 @@ def test_mw_log_kfile(target, datarouter_on_target, dlt_capture):
     _verify_kfile_messages(target, expected)
 
 
+@add_test_properties(
+    fully_verifies=["comp_req__log__file_backend_activation"],
+    test_type="requirements-based",
+    derivation_technique="equivalence-classes",
+)
 def test_mw_log_kfile_multiple_threads(target, datarouter_on_target, dlt_capture):
     """Verify kFile logging with multiple threads."""
     threads = 4

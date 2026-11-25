@@ -78,6 +78,7 @@ VALUES_TO_CHECK_CONSOLE = [
         "comp_req__log__send_to_datarouter",
         "comp_req__log__autosar_log_trace_spec",
         "comp_req__log__dlt_verbose_mode",
+        "comp_req__log__memory_bound_checking",
     ],
     test_type="requirements-based",
     derivation_technique="requirements-analysis",
@@ -104,6 +105,13 @@ def test_mw_log_remote_logging(target, datarouter_on_target, dlt_capture):
     assert not missing, f"Missing expected values in DLT output: {missing}"
 
 
+@add_test_properties(
+    fully_verifies=[
+        "feat_req__logging__log_sinks_console",
+    ],
+    test_type="requirements-based",
+    derivation_technique="requirements-analysis",
+)
 def test_mw_log_console_logging(target, datarouter_on_target):
     """Verify all data types are correctly logged to console (stdout)."""
     proc = target.execute_async(

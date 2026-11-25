@@ -23,6 +23,8 @@ import tempfile
 
 import dlt.dlt as python_dlt
 
+from attribute_plugin import add_test_properties
+
 LOGGER = logging.getLogger(__name__)
 
 APP_ID = "LGGG"
@@ -32,6 +34,11 @@ DEFAULT_MESSAGE = "default message text for example log generating application"
 MESSAGES_PER_ITERATION = 6
 
 
+@add_test_properties(
+    fully_verifies=["comp_req__log__file_backend_activation"],
+    test_type="requirements-based",
+    derivation_technique="equivalence-classes",
+)
 def test_dlt_kfile_logging(target, datarouter_on_target):
     """Verify DLT kFile logging produces the expected number of messages."""
     expected = ITERATIONS * MESSAGES_PER_ITERATION
