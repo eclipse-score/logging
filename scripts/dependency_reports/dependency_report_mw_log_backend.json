@@ -1,5 +1,5 @@
 {
-  "output": "docs/components/mw_log/detailed_design/backend_dependencies.rst",
+  "output": "score/mw/log/docs/detailed_design/backend_dependencies.rst",
   "title": "mw::log Backend Dependencies",
   "document_id": "doc__mw_log_backend_dependencies",
   "safety": "ASIL_B",

@@ -79,7 +79,6 @@ The Components documentation provides detailed documentation for each individual
    :maxdepth: 1
 
    components/index
-   components/mw_log/index.rst
    dependable_elements/index
 
 Quick Start
