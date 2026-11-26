@@ -82,6 +82,7 @@ reviews in general and inspection in particular.
       - ``feat_arc_sta__logging__static_view`` only fulfills
         ``feat_req__logging__log_sources_user_app``, there are more linked in
         (``comp_arc_sta__log__sv``) but they should be also added feature-level:
+
         - ``feat_req__logging__asil_support``
         - ``feat_req__logging__compat_dlt``
         - ``feat_req__logging__severity_levels``
@@ -151,9 +152,9 @@ reviews in general and inspection in particular.
       -
       - No
       - There is detailed design pages (``datarouter_backend/README.md``,
-      ``file_output_backend.md``) but no sphinx-needs objects. So there is no
-      formal/tool-checkable need-link from the architectural elements down to
-      them.
+        ``file_output_backend.md``) but no sphinx-needs objects. So there is no
+        formal/tool-checkable need-link from the architectural elements down to
+        them.
       - https://github.com/eclipse-score/logging/issues/313
     * - ARC_02_01
       - Is the software architecture design compliant with the overall feature
