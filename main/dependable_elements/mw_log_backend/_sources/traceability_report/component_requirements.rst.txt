@@ -228,6 +228,7 @@ Component Requirements
 
    **Traces to:**
 
+   * :ref:`SyslogRecorderFactoryTest:CreateRecorder <lobster-item-23cc5a6ea34f92961ea500ae400245e947434c90>`
    * :ref:`SyslogBackendFixture:SyslogOpenlog <lobster-item-d8a03643fd9750975b5269682f17318dc1c74823>`
    * :ref:`SyslogBackendFixture:SyslogOpenlogWithCapacityBiggerThanTheMaximum <lobster-item-740044965fb328b6933a17861495d76d4b131283>`
    * :ref:`SyslogBackendFixture:LevelOffProducesNoEmit <lobster-item-9f83f960ba066e54c2d3be26d9bb07a07611f77e>`
@@ -243,7 +244,6 @@ Component Requirements
    * :ref:`SyslogBackendFixture:NoSlotAvailableShouldReturnEmptyHandle <lobster-item-aabcef9bae4371ff92dcb1df1a96fc9e613939b0>`
    * :ref:`SyslogBackendFixture:TooMuchSlotsRequestedShallBeTruncated <lobster-item-229dad70571fca3750d1aa6442249f0d077a33bf>`
    * :ref:`SyslogBackendFixture:ToSyslogPriorityInvalidLevel <lobster-item-9495c66f852a2d4f3e8784955264a3478691f95d>`
-   * :ref:`SyslogRecorderFactoryTest:CreateRecorder <lobster-item-23cc5a6ea34f92961ea500ae400245e947434c90>`
    * :ref:`MwLog.ForwardToSystemLogger <lobster-item-7bf1de0ea8bdf45acdf6439ac04b4a1fbe27f857>`
    * :ref:`//score/mw/log/dependability:component\_mw\_log\_backend <lobster-item-7bfe7ca94ee8257f6da5326b842b99c0c42a6273>`
 
@@ -381,8 +381,8 @@ Component Requirements
 
    **Traces to:**
 
-   * :ref:`CommonTests:TypesShallBeLockFree <lobster-item-497f3637ba9e73c1269bd7ec774c1d88eea7aabb>`
    * :ref:`WaitFreeLinearWriter:EnsureAtomicRequirements <lobster-item-806fbe70fe9d62984527a7b08b067f2376879dbb>`
+   * :ref:`CommonTests:TypesShallBeLockFree <lobster-item-497f3637ba9e73c1269bd7ec774c1d88eea7aabb>`
    * :ref:`MwLog.TimeBoundedLocking <lobster-item-a9e4429453bad068ab1a28d9606125cd89fc305d>`
    * :ref:`//score/mw/log/dependability:component\_mw\_log\_backend <lobster-item-7bfe7ca94ee8257f6da5326b842b99c0c42a6273>`
 
@@ -417,9 +417,9 @@ Component Requirements
 
    **Traces to:**
 
-   * :ref:`SyslogBackendFixture:ReserveSlotShouldAcquireSlot <lobster-item-8eb9c9a93d7875c7ca8a5719a28af9807e90200c>`
    * :ref:`WaitFreeAlternatingWriterTests:EnsureAtomicRequirements <lobster-item-406b3806da32adb8ab3238ef8fe591c5ac8bed33>`
    * :ref:`WaitFreeLinearWriter:EnsureAtomicRequirements <lobster-item-806fbe70fe9d62984527a7b08b067f2376879dbb>`
+   * :ref:`SyslogBackendFixture:ReserveSlotShouldAcquireSlot <lobster-item-8eb9c9a93d7875c7ca8a5719a28af9807e90200c>`
    * :ref:`MwLog.CrossLockingPrevention <lobster-item-f215ef9092c9d584be4a7ee548eadcf134530de5>`
    * :ref:`//score/mw/log/dependability:component\_mw\_log\_backend <lobster-item-7bfe7ca94ee8257f6da5326b842b99c0c42a6273>`
 
