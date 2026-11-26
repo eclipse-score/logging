@@ -67,7 +67,7 @@ See also :need:`doc_concept__wp_inspections` for further information about revie
       - Is the requirement description *comprehensible* ?
       - If you think the requirement is hard to understand, comment here.
       - Yes
-      - All requirements are concise "mw::log shall ..." staements using defined
+      - All requirements are concise "mw::log shall ..." statements using defined
         terminology, and are verifiable.
       -
     * - REQ_02_02
