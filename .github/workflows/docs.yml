@@ -31,10 +31,15 @@ jobs:
       contents: read
       pull-requests: read
 
+  component-tests:
+    uses: ./.github/workflows/component_tests.yml
+    permissions:
+      contents: read
+
   build-docs:
-    needs: [run-tests]
-    if: ${{ needs.run-tests.result == 'success' }}
-    uses: eclipse-score/cicd-workflows/.github/workflows/docs.yml@f77ed751fa587e3a1142b2d85320917e00c888ae # main (2026-10)
+    needs: [run-tests, component-tests]
+    if: ${{ needs.run-tests.result == 'success' && needs.component-tests.result == 'success' }}
+    uses: eclipse-score/cicd-workflows/.github/workflows/docs.yml@972e0bd6ce2e41bd627635d3355e8c56efb99530 # main (2026-11)
     permissions:
       contents: read
     with:
@@ -42,4 +47,6 @@ jobs:
       bazel-target: >-
         --lockfile_mode=error //:docs -- --github_user=${{ github.repository_owner }} --github_repo=${{ github.event.repository.name }} && bazel run --lockfile_mode=error //:publish_dependable_element_reports
       retention-days: 3
-      tests-report-artifact: logging_cpp_coverage
+      tests-report-artifacts: |
+        logging_cpp_coverage
+        ${{ needs.component-tests.outputs.artifact-name }}
