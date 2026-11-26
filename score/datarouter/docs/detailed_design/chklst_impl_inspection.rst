@@ -68,9 +68,8 @@ The parts of :doc:`logging_architecture` about ``mw::log`` are context and were 
      - yes
      - Detailed design structure and UML views were reviewed against the template.
        The diagrams pass the ``architectural_design`` target
-       ``//score/datarouter/doc/design:datarouter_architectural_design``.
-       Sources remain in ``score/datarouter/doc/design`` and are included through
-       symlinks.
+       ``//score/datarouter:datarouter_architectural_design``.
+       Sources are in ``score/datarouter/docs/detailed_design``.
      -
    * - IMPL_01_02
      - Is the implementation according to specification?

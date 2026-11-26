@@ -90,6 +90,12 @@ py_test(
 # Creates all documentation targets:
 # - `:docs` for building documentation at build-time
 docs(
+    bundles = [
+        {
+            "bundle": "//score/datarouter:docs_bundle",
+            "mount_at": "components/datarouter",
+        },
+    ],
     data = glob(["scripts/dependency_reports/dependency_report_*.json"]) + [
         "scripts/generate_dependency_report.py",
     ],

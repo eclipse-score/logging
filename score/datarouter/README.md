@@ -17,7 +17,7 @@ This document provides an overview of the platform logging framework components 
 
 For detailed information, refer to:
 - **Usage Guidelines**: [./doc/guideline](./doc/guideline) - Configuration and integration instructions
-- **Design Documentation**: [./doc/design](./doc/design) - Architecture and implementation details
+- **Design Documentation**: [./docs/detailed_design](./docs/detailed_design) - Architecture and implementation details
 
 ## Sources
 

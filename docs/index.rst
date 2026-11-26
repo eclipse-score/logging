@@ -78,7 +78,7 @@ The Components documentation provides detailed documentation for each individual
 .. toctree::
    :maxdepth: 1
 
-   components/datarouter/index.rst
+   components/index
    components/mw_log/index.rst
    dependable_elements/index
 

@@ -1,5 +1,5 @@
 {
-  "output": "docs/components/datarouter/detailed_design/dependencies.rst",
+  "output": "score/datarouter/docs/detailed_design/dependencies.rst",
   "title": "Datarouter Dependencies",
   "document_id": "doc__datarouter_dependencies",
   "safety": "QM",

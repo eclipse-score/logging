@@ -14,6 +14,8 @@
 load("@rules_cc//cc:defs.bzl", "cc_binary", "cc_library")
 load("@score_baselibs//score/language/safecpp:toolchain_features.bzl", "COMPILER_WARNING_FEATURES")
 load("@score_baselibs//score/quality/clang_tidy:extra_checks.bzl", "clang_tidy_extra_checks")
+load("@score_docs_as_code//:docs.bzl", "docs_bundle")
+load("@score_tooling//bazel/rules/rules_score:rules_score.bzl", "architectural_design")
 
 clang_tidy_extra_checks(
     name = "clang_tidy_extra_checks",
@@ -1097,5 +1099,46 @@ test_suite(
 
 exports_files(
     ["common_build_variables.bzl"],
+    visibility = ["//visibility:public"],
+)
+
+# Component documentation, mounted by the root docs(). The bundle sits at the
+# component package boundary, so its code (and coverage) contains the
+# Datarouter implementation only, not code of other components.
+docs_bundle(
+    name = "docs_bundle",
+    code_targets = [
+        ":datarouter",
+        "//score/datarouter/dlt_filetransfer_trigger_lib",
+        "//score/datarouter/src/configuration/dynamic_config/dynamic_config_stub:config_session_stub",
+        "//score/datarouter/src/dlt/nonverbose_dlt_stub:nonverbose_dlt_handler_stub",
+        "//score/datarouter/src/file_transfer/file_transfer_stub:file_transfer_handler_factory_stub",
+        "//score/datarouter/src/file_transfer/file_transfer_stub:file_transfer_stream_handler_stub",
+        "//score/datarouter/src/persistency/stub_persistent_dictionary:stub_persistent_dictionary_factory",
+    ],
+    primary_need_id = "comp__datarouter",
+    source_dir = "docs",
+    visibility = ["//visibility:public"],
+)
+
+architectural_design(
+    name = "datarouter_architectural_design",
+    dynamic = [
+        "docs/detailed_design/_assets/client_session_interaction_sequence.puml",
+        "docs/detailed_design/_assets/datarouter_initialization_processing_sequence.puml",
+        "docs/detailed_design/_assets/sequence_early_disconnect_race.puml",
+        "docs/detailed_design/_assets/seq_kvs_threads_sequence_diagram.puml",
+    ],
+    internal_api = [
+        "docs/detailed_design/_assets/datarouter_class_overview.puml",
+        "docs/detailed_design/_assets/file_transfer_feature_class_diagram.puml",
+        "docs/detailed_design/_assets/package-datarouter.puml",
+    ],
+    maturity = "development",
+    static = [
+        "docs/detailed_design/_assets/context-sw-units.puml",
+        "docs/detailed_design/_assets/datarouter_units.puml",
+        "docs/detailed_design/_assets/detail-ipc.puml",
+    ],
     visibility = ["//visibility:public"],
 )
