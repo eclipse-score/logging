@@ -509,7 +509,7 @@
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <div class="need_container docutils container" id="SNCB-145b444c">
+  <div class="need_container docutils container" id="SNCB-6345c02f">
 <div class="pst-scrollable-table-container"><table class="need needs_grid_complex needs_layout_score needs_style_none needs_type_document table" id="doc__datarouter_req_inspection">
 <tbody>
 <tr class="head row-odd"><td class="head_left" colspan="2"><div class="needs_head_left line-block">
@@ -565,6 +565,7 @@
 <li><p>content responsible (author): <a class="github reference external" href="https://github.com/MaciejKaszynski">MaciejKaszynski</a></p></li>
 <li><p>reviewer: <a class="github reference external" href="https://github.com/rmaddikery">rmaddikery</a></p></li>
 <li><p>moderator: <a class="github reference external" href="https://github.com/aschemmel-tech">aschemmel-tech</a></p></li>
+<li><p>test expert: <a class="github reference external" href="https://github.com/rmaddikery">rmaddikery</a></p></li>
 </ul>
 </section>
 <section id="checklist">
@@ -572,8 +573,8 @@
 <p>It is mandatory to fill in the “passed” column with “yes” or “no” for each checklist item and additionally to add in the remarks why it is passed or not passed.
 In case of “no” an issue link to the issue tracking system has to be added in the last column (if not solved in the same issue).
 See also <a class="external_link reference external" href="https://eclipse-score.github.io/process_description//main/general_concepts/score_review_concept.html#doc_concept__wp_inspections">doc_concept__wp_inspections</a> for further information about reviews in general and inspection in particular.</p>
-<div class="pst-scrollable-table-container"><table class="table" id="id1">
-<caption><span class="caption-number">Table 9 </span><span class="caption-text">Component Requirement Inspection Checklist</span><a class="headerlink" href="#id1" title="Link to this table">#</a></caption>
+<div class="pst-scrollable-table-container"><table class="table" id="id2">
+<caption><span class="caption-number">Table 9 </span><span class="caption-text">Component Requirement Inspection Checklist</span><a class="headerlink" href="#id2" title="Link to this table">#</a></caption>
 <colgroup>
 <col style="width: 9.1%" />
 <col style="width: 27.3%" />
@@ -603,105 +604,116 @@ See also <a class="external_link reference external" href="https://eclipse-score
 <td><p>Is the requirement description <em>comprehensible</em> ?</p></td>
 <td><p>If you think the requirement is hard to understand, comment here.</p></td>
 <td><p>Yes</p></td>
-<td></td>
+<td><p>All requirements are written as short sentences using defined
+terminology, so they are easy to understand.</p></td>
 <td></td>
 </tr>
 <tr class="row-even"><td><p>REQ_02_02</p></td>
 <td><p>Is the requirement description <em>unambiguous</em> ?</p></td>
 <td><p>Especially search for “weak words” like “about”, “etc.”, “relevant” and others (see the internet documentation on this). This check shall be supported by tooling.</p></td>
 <td><p>Yes</p></td>
-<td></td>
+<td><p>All wording seems unambiguous and none of the banned words are used.</p></td>
 <td></td>
 </tr>
 <tr class="row-odd"><td><p>REQ_02_03</p></td>
 <td><p>Is the requirement description <em>atomic</em> ?</p></td>
 <td><p>A good way to think about this is to consider if the requirement may be tested by one (positive) test case or needs more of these. The requirement formulation template should also avoid being non-atomic already. Note that there are cases where also non-atomic requirements are the better ones, for example if those are better understandable.</p></td>
 <td><p>Yes</p></td>
-<td></td>
+<td><p>There are some requirements that list multiple fields that
+configurations shall have, however these should be treated as
+aggregates of all settings and the functionality of these settings
+should be separate requirements.
+<a class="reference internal" href="requirements.html#comp_req__data_router__dlt_channel_config" title="comp_req__data_router__dlt_channel_config"><em class="xref need">DLT Channel Configuration (comp_req__data_router__dlt_channel_config)</em></a> &amp; <a class="reference internal" href="requirements.html#comp_req__data_router__dlt_multiple_channels" title="comp_req__data_router__dlt_multiple_channels"><em class="xref need">DLT Multiple Channel Support (comp_req__data_router__dlt_multiple_channels)</em></a></p></td>
 <td></td>
 </tr>
 <tr class="row-even"><td><p>REQ_02_04</p></td>
 <td><p>Is the requirement description <em>feasible</em> ?</p></td>
 <td><p>If at the time of the inspection the requirement has already some implementation, the answer is yes. This can be checked via traces, but also <a class="external_link reference external" href="https://eclipse-score.github.io/process_description//main/process_areas/requirements_engineering/guidance/requirements_process_reqs.html#gd_req__req_attr_impl">gd_req__req_attr_impl</a> shows this. In case the requirement has no implementation at the time of inspection (i.e. not implemented at least as “proof-of-concept”), a development expert should be invited to the Pull-Request review to explicitly check this item.</p></td>
-<td><p>No</p></td>
-<td><p><a class="reference internal" href="requirements.html#comp_req__data_router__dlt_multiple_channels" title="comp_req__data_router__dlt_multiple_channels"><em class="xref need">DLT Multiple Channel Support (comp_req__data_router__dlt_multiple_channels)</em></a> reword the reference to AUTOSAR? Propse: comparable.</p></td>
-<td><p><a class="github reference external" href="https://github.com/eclipse-score/logging/issues/344">eclipse-score/logging#344</a></p></td>
+<td><p>Yes</p></td>
+<td><p>Most requirements are already implemented and all are feasible to implement.</p></td>
+<td></td>
 </tr>
 <tr class="row-odd"><td><p>REQ_02_05</p></td>
 <td><p>Is the requirement description <em>independent from implementation</em> ?</p></td>
 <td><p>This checkpoint should improve requirements definition in the sense that the “what” is described and not the “how” - the latter should be described in architecture/design derived from the requirement. But there can also be a good reason for this, for example we would require using a file format like JSON and even specify the formatting standard already on stakeholder requirement level because we want to be compatible. A finding in this checkpoint does not mean there is a safety problem in the requirement.</p></td>
 <td><p>Yes</p></td>
-<td></td>
+<td><p>No requirements mention <em>how</em> something should be implemented.</p></td>
 <td></td>
 </tr>
 <tr class="row-even"><td><p>REQ_03_01</p></td>
 <td><p>Is the <em>linkage to the parent requirement</em> correct?</p></td>
 <td><p>Linkage to correct levels and ASIL attributes is checked automatically, but it needs checking if the child requirement implements (at least) a part of the parent requirement.</p></td>
 <td><p>Yes</p></td>
-<td></td>
+<td><p>All logging feature requirements that are to be implemented in the
+data router are linked (note requirements that are <code class="docutils literal notranslate"><span class="pre">valid_from</span> <span class="pre">v2</span></code>
+might not have component requirements yet).</p></td>
 <td></td>
 </tr>
 <tr class="row-odd"><td><p>REQ_04_01</p></td>
 <td><p>Is the requirement <em>internally and externally consistent</em>?</p></td>
 <td><p>Does the requirement contradict other requirements within the same or higher levels? One may restrict the search to the feature for component requirements, for features to other features using same components. Is the description of the requirement consistent with all its attributes (if not already part of another check, e.g. does the title fit?).</p></td>
 <td><p>Yes</p></td>
-<td></td>
+<td><p>No requirement contradicts another, and the titles and attributes match
+the requirement descriptions.</p></td>
 <td></td>
 </tr>
 <tr class="row-even"><td><p>REQ_05_01</p></td>
 <td><p>Do the software requirements consider <em>timing constraints</em>?</p></td>
 <td><p>This checkpoint encourages to think about timing constraints even if those are not explicitly mentioned in the parent requirement. If the reviewer of a requirement already knows or suspects that the code execution will be consuming a lot of time, one should think of the expectation of a “user”.</p></td>
-<td><p>Yes</p></td>
-<td></td>
+<td><p>n/a</p></td>
+<td><p>No timing constraint is needed.</p></td>
 <td></td>
 </tr>
 <tr class="row-odd"><td><p>REQ_06_01</p></td>
 <td><p>Does the requirement consider <em>external interfaces</em>?</p></td>
 <td><p>The SW platform’s external interfaces (to the user) are defined in the Feature Architecture, so the Feature and Component Requirements should determine the input data use and setting of output data for these interfaces. Are all output values defined?</p></td>
 <td><p>Yes</p></td>
-<td></td>
+<td><p>The external interfaces like UDP DLT and the configuration file are
+specified, including the file location and the configurable parameters.</p></td>
 <td></td>
 </tr>
 <tr class="row-even"><td><p>REQ_07_01</p></td>
 <td><p>Is the <em>safety</em> attribute set correctly?</p></td>
 <td><p>Derived requirements are checked automatically, see <a class="external_link reference external" href="https://eclipse-score.github.io/process_description//main/process_areas/requirements_engineering/guidance/requirements_process_reqs.html#gd_req__req_linkage_safety">gd_req__req_linkage_safety</a>. But for the top level requirements (and also all AoU) this needs to be checked manually for correctness.</p></td>
 <td><p>Yes</p></td>
-<td></td>
+<td><p>All are set to QM as expected.</p></td>
 <td></td>
 </tr>
 <tr class="row-odd"><td><p>REQ_07_02</p></td>
 <td><p>Is the attribute <em>security</em> set correctly?</p></td>
 <td><p>For component requirements this checklist item is supported by automated check: “Every requirement which satisfies a feature requirement with security attribute set to YES inherits this”. But the component requirements/architecture may additionally also be subject to a <a class="external_link reference external" href="https://eclipse-score.github.io/process_description//main/process_areas/security_analysis/security_analysis_workproducts.html#wp__sw_component_security_analysis">wp__sw_component_security_analysis</a>.</p></td>
 <td><p>Yes</p></td>
-<td></td>
+<td><p>No security relevant requirements in the Datarouter.</p></td>
 <td></td>
 </tr>
 <tr class="row-even"><td><p>REQ_08_01</p></td>
 <td><p>Is the requirement <em>verifiable</em>?</p></td>
 <td><p>If at the time of the inspection already tests are created for the requirement, the answer is yes. This can be checked via traces, but also <a class="external_link reference external" href="https://eclipse-score.github.io/process_description//main/process_areas/requirements_engineering/guidance/requirements_process_reqs.html#gd_req__req_attr_test_covered">gd_req__req_attr_test_covered</a> shows this. In case the requirement is not sufficiently traced to test cases already, a test expert is invited to the inspection to give their opinion whether the requirement is formulated in a way that supports test development and the available test infrastructure is sufficient to perform the test.</p></td>
 <td><p>Yes</p></td>
-<td></td>
+<td><p>Not all requirements are tested yet but all are testable.</p></td>
 <td></td>
 </tr>
 <tr class="row-odd"><td><p>REQ_08_02</p></td>
 <td><p>Is the requirement verifiable by design or code review in case it is not feasibly testable?</p></td>
 <td><p>In very rare cases a requirement may not be verifiable by test cases, for example a specific non-functional requirement. In this case a requirement analysis verifies the requirement by design/code review. If such a requirement is in scope of this inspection, please check this here and link to the respective review record. A test expert is invited to the inspection to confirm their opinion that the requirement is not testable.</p></td>
-<td><p>Yes</p></td>
-<td><p>&lt;should mention which non-functional and therefore untestable requirements these are if any, in case all testable put a n/a instead of a yes&gt;</p></td>
+<td><p>n/a</p></td>
+<td><p>All Datarouter requirements are testable, so no verification by design
+is needed.</p></td>
 <td></td>
 </tr>
 <tr class="row-even"><td><p>REQ_09_01</p></td>
 <td><p>Do the requirements that define a safety mechanism specify the error reaction leading to a safe state?</p></td>
 <td><p>Alternatively to the safe state there could also be “repair” mechanisms. Also do not forget to consider REQ_05_01 for these.</p></td>
-<td><p>Yes</p></td>
-<td></td>
+<td><p>n/a</p></td>
+<td><p>The Datarouter is QM rated and none of its requirements defines a
+safety mechanism.</p></td>
 <td></td>
 </tr>
 <tr class="row-odd"><td><p>REQ_10_01</p></td>
 <td><p>Is the requirement description <em>complete</em> ?</p></td>
 <td><p>For every requirement in the inspection, follow to its parent (feature) requirement(s) and then check if this/these are fulfilled completely by its/their linked children (component requirements, including those which are not in scope of the inspection).</p></td>
 <td><p>Yes</p></td>
-<td></td>
+<td><p>All feature requirements related to the datarouter are linked.</p></td>
 <td></td>
 </tr>
 </tbody>
