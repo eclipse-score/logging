@@ -113,8 +113,7 @@ reviews in general and inspection in particular.
         ``docs/components/mw_log/requirements`` or
         ``docs/components/datarouter/requirements`` (the only two component
         requirement sets in this repository) are ``derived_from`` the following
-        feature requirements, so they are not linked and so not implemented
-        in the design yet:
+        feature requirements, so they are not linked:
         ``feat_req__logging__timestamping_local``,
         ``feat_req__logging__timestamping_original``,
         ``feat_req__logging__entity_identifier``,
