@@ -134,11 +134,11 @@ Remote Backend
    :reqtype: Functional
    :security: NO
    :safety: QM
-   :derived_from: feat_req__logging__log_sinks_local_fs, feat_req__logging__config_on_demand
+   :derived_from: feat_req__logging__log_sinks_network, feat_req__logging__config_on_demand
    :status: valid_inspected
    :satisfied_by: comp__mw_log_backend
 
-   mw::log shall enable the file backend if and only if the log mode contains
+   mw::log shall enable the remote backend if and only if the log mode contains
    "kRemote".
 
 System Backend
