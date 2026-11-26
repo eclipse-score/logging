@@ -286,8 +286,8 @@ reviews in general and inspection in particular.
         exists in your project. For example, see `score aou_req__platform__process_isolation
         <https://eclipse-score.github.io/score/main/requirements/platform_assumptions/index.html#aou_req__platform__process_isolation>`_.
       - Yes
-      - Shared memory is used only as the IPC mechanism between the datarouter
-        and the backends. It does not influence the safety-related software in
+      - Shared memory is used only as the IPC mechanism between the client application (via recorder backends) and datarouter
+        It does not influence the safety-related software in
         a way that requires extra measures to guarantee freedom from
         interference, so no additional AoU is needed for it. The existing AoUs
         for the logging module cover initialization and usage, see
