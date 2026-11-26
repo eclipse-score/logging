@@ -68,4 +68,6 @@ __pycache__/
 # Local outputs of the coverage report generator
 coverage_linux/
 coverage_artifact/
+# Coverage input of the docs build (see README)
+coverage-report/
 summary.md
