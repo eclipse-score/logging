@@ -106,6 +106,7 @@ docs(
         "scripts/generate_dependency_report.py",
     ],
     external_needs = [
+        "@score_baselibs//:needs_json_file",
         "@score_platform//:needs_json_file",
         "@score_process_description//:needs_json_file",
     ],
