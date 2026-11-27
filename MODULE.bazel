@@ -51,7 +51,7 @@ bazel_dep(name = "score_qnx_unit_tests", version = "0.3.0", dev_dependency = Tru
 
 bazel_dep(name = "score_rust_policies", version = "0.0.5")
 bazel_dep(name = "score_process_description", version = "2.2.5")
-bazel_dep(name = "score_platform", version = "0.7.7")
+bazel_dep(name = "score_platform", version = "0.7.6")
 
 bazel_dep(name = "score_itf", version = "0.7.0", dev_dependency = True)
 
@@ -257,7 +257,10 @@ single_version_override(
     patches = [
         # Export the AoU requirements file so downstream repos can consume it directly.
         "//third_party/score_baselibs:0001-logging-export-aou-requirements.patch",
+        # Make rules_score visible to the baselibs frontend component.
+        "//third_party/score_baselibs:0002-enable-score-tooling.patch",
     ],
+    version = "0.2.19",
 )
 
 # Rust dependencies
