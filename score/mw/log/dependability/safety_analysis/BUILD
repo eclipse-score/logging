@@ -35,7 +35,7 @@ safety_analysis(
 
 dependability_analysis(
     name = "mw_log_backend_dependability_analysis",
-    arch_design = "//score/mw/log/design/backend:mw_log_backend_architectural_design",
+    arch_design = "//score/mw/log:mw_log_backend_architectural_design",
     safety_analysis = [":mw_log_backend_safety_analysis"],
     tags = ["manual"],
     visibility = ["//score/mw/log/dependability:__pkg__"],

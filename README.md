@@ -25,10 +25,22 @@ unit, component, or QNX/QEMU integration tests).
 
 ## 📖 Documentation
 
-Documentation lives in `docs/` and is built with `docs-as-code` (Sphinx). Build it locally with:
+Documentation lives in `docs/` and is built with `docs-as-code` (Sphinx). The
+component documentation lives next to the code (`score/datarouter/docs`,
+`score/mw/log/docs`) and is mounted into it. Build it locally with:
 
 ```sh
 bazel build //:docs
+```
+
+The docs show the line and branch coverage of each component. They read it from
+`coverage-report/coverage_report.dat`, which CI provides. To see it locally,
+generate it before building the docs (without it, the docs show no coverage data):
+
+```sh
+bazel coverage --config=llvm_cov //score/... --build_tests_only
+COVERAGE_THRESHOLD=0 bazel run @score_coverage//:generate_coverage_html -- --archive-dir coverage-report
+bazel run //:docs
 ```
 
 See the [module documentation](docs/index.rst) for the rendered content.

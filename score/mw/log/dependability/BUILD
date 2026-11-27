@@ -40,7 +40,7 @@ component(
 
 dependable_element(
     name = "dependable_element_mw_log_backend",
-    architectural_design = ["//score/mw/log/design/backend:mw_log_backend_architectural_design"],
+    architectural_design = ["//score/mw/log:mw_log_backend_architectural_design"],
     components = [":component_mw_log_backend"],
     dependability_analysis = ["//score/mw/log/dependability/safety_analysis:mw_log_backend_dependability_analysis"],
     integrity_level = "B",

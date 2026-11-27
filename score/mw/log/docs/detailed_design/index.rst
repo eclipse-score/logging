@@ -35,11 +35,9 @@ application configuration selects the ``LogMode`` values and a recorder is
 created for each of them that has a registered backend. The recorders and
 backends are shown in the static diagram below.
 
-The design documents and PlantUML diagrams are in
-``score/mw/log/design/backend``. This folder links them by symbolic links, so
-that the files stay at their place in the source tree. The
-``architectural_design`` target ``//score/mw/log/design/backend:mw_log_backend_architectural_design``
-validates the diagrams.
+The design documents are in this folder, the PlantUML diagrams in
+``_assets``. The ``architectural_design`` target
+``//score/mw/log:mw_log_backend_architectural_design`` validates the diagrams.
 
 Design Decisions
 ----------------

@@ -32,9 +32,8 @@ messages over UDP multicast. A client (``mw::log``) connects through a message
 passing channel. The Datarouter asks the client to hand over a buffer by a
 notification and reads it from the shared memory. It never blocks on a client.
 
-The design documents and PlantUML diagrams are in ``score/datarouter/doc/design``.
-This folder links them by symbolic links, so that the files stay at their place in
-the source tree. The source code is in ``score/datarouter``. Paths in this document
+The design documents are in this folder, the PlantUML diagrams in ``_assets``.
+The source code is in ``score/datarouter``. Paths in this document
 are relative to this directory unless noted otherwise.
 
 Design Decisions
@@ -138,7 +137,7 @@ The units that appear in the sequence diagrams and their bindings:
 .. uml:: _assets/datarouter_units.puml
 
 The diagrams are validated by the ``architectural_design`` target
-``//score/datarouter/doc/design:datarouter_architectural_design``. The interface
+``//score/datarouter:datarouter_architectural_design``. The interface
 names in the unit diagram follow the convention of the validator (``I<caller><callee>``)
 and are not interfaces of the code.
 
