@@ -25,13 +25,7 @@ git_override(
 bazel_dep(name = "rules_cc", version = "0.2.17")
 
 bazel_dep(name = "aspect_rules_lint", version = "2.5.0", dev_dependency = True)
-bazel_dep(name = "score_cpp_policies", version = "0.0.0", dev_dependency = True)
-git_override(
-    module_name = "score_cpp_policies",
-    commit = "b6551c217fbb0daf948b493c4ba69eb7fe8359a5",
-    remote = "https://github.com/eclipse-score/score_cpp_policies.git",
-)
-
+bazel_dep(name = "score_cpp_policies", version = "0.1.3", dev_dependency = True)
 bazel_dep(name = "toolchains_llvm", version = "1.8.0", dev_dependency = True)
 bazel_dep(name = "buildifier_prebuilt", version = "8.5.1", dev_dependency = True)
 
@@ -111,6 +105,22 @@ git_override(
     remote = "https://github.com/bmw-software-engineering/trlc.git",
 )
 
+# S-CORE Sanitizer Features
+# These features are shared by GCC and Clang. The toolchain adds its own
+# UBSan variant, which implies the base feature and supplies the correct link flags.
+_SANITIZER_FEATURES = [
+    "@score_cpp_policies//sanitizers/features:asan",
+    "@score_cpp_policies//sanitizers/features:debug_symbols",
+    "@score_cpp_policies//sanitizers/features:lsan",
+    "@score_cpp_policies//sanitizers/features:tsan",
+    "@score_cpp_policies//sanitizers/features:ubsan_base",
+]
+# end S-CORE Sanitizer Features
+
+_LINUX_GCC_SANITIZER_FEATURES = _SANITIZER_FEATURES + [
+    "@score_cpp_policies//sanitizers/features:ubsan_gcc",
+]
+
 gcc = use_extension("@score_bazel_cpp_toolchains//extensions:gcc.bzl", "gcc", dev_dependency = True)
 gcc.toolchain(
     name = "score_qcc_aarch64_toolchain",
@@ -122,6 +132,7 @@ gcc.toolchain(
 )
 gcc.toolchain(
     name = "score_gcc_aarch64_toolchain",
+    extra_known_features = _LINUX_GCC_SANITIZER_FEATURES,
     target_cpu = "aarch64",
     target_os = "linux",
     use_default_package = True,
@@ -129,6 +140,7 @@ gcc.toolchain(
 )
 gcc.toolchain(
     name = "score_gcc_x86_64_toolchain",
+    extra_known_features = _LINUX_GCC_SANITIZER_FEATURES,
     target_cpu = "x86_64",
     target_os = "linux",
     use_default_package = True,
