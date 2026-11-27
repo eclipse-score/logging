@@ -25,6 +25,12 @@ filegroup(
     visibility = ["//score/test/component:__subpackages__"],
 )
 
+filegroup(
+    name = "tracing_build",
+    srcs = ["tracing.build"],
+    visibility = ["//score/test/component:__subpackages__"],
+)
+
 exports_files(
     [
         "dlt_config_qnx.json",

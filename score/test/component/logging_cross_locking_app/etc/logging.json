@@ -1,0 +1,7 @@
+{
+  "appId": "LOCL",
+  "appDesc": "Logging Cross Locking App",
+  "logLevel": "kVerbose",
+  "logLevelThresholdConsole": "kVerbose",
+  "logMode": "kRemote|kSystem"
+}

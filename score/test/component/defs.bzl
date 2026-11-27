@@ -21,7 +21,7 @@ def _extend_list_in_kwargs(kwargs, key, values):
     kwargs[key] = kwargs.get(key, []) + values
     return kwargs
 
-def py_logging_itf_test(name, srcs, filesystem, filesystem_pkg, extra_oci_tars = None, **kwargs):
+def py_logging_itf_test(name, srcs, filesystem, filesystem_pkg, extra_oci_tars = None, extra_ifs_build_files = None, **kwargs):
     """Integration test macro for score_logging (Docker and QNX).
 
     Args:
@@ -66,7 +66,7 @@ def py_logging_itf_test(name, srcs, filesystem, filesystem_pkg, extra_oci_tars =
             filesystem_pkg,
         ],
         build_file = "{}:init_build".format(_ENV),
-        extra_build_files = ["{}:system_build".format(_ENV)],
+        extra_build_files = ["{}:system_build".format(_ENV)] + (extra_ifs_build_files or []),
         target_compatible_with = [
             "@platforms//cpu:x86_64",
             "@platforms//os:qnx",
