@@ -1,0 +1,26 @@
+
+
+``//score/mw/log/dependability:component_mw_log_backend``
+=========================================================
+
+
+Component Requirements
+----------------------
+
+.. toctree::
+   :maxdepth: 2
+
+   requirements/component_requirements
+
+Units
+-----
+
+.. toctree::
+   :maxdepth: 3
+
+   ../../../../../../../units/_main/score/mw/log/detail/data_router/data_router_backend_unit/index
+   ../../../../../../../units/_main/score/mw/log/detail/data_router/shared_memory/shared_memory_unit/index
+   ../../../../../../../units/_main/score/mw/log/detail/file_recorder/file_recorder_unit/index
+   ../../../../../../../units/_main/score/mw/log/detail/syslog/syslog_backend_unit/index
+   ../../../../../../../units/_main/score/mw/log/detail/utils/signal_handling/signal_handling_unit/index
+   ../../../../../../../units/_main/score/mw/log/detail/wait_free_producer_queue/wait_free_producer_queue_unit/index

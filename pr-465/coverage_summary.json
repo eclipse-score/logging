@@ -1,0 +1,20 @@
+{
+  "coverage_summaries": [
+    {
+      "branches": {
+        "percent": 83,
+        "total": 1302
+      },
+      "files": {
+        "measured": 121,
+        "total": 172
+      },
+      "lines": {
+        "percent": 90,
+        "total": 7058
+      },
+      "primary_need_id": "mod__logging"
+    }
+  ],
+  "version": 1
+}
