@@ -572,6 +572,70 @@
     }
   },
   {
+    "need": "comp_req__data_router__dlt_multiple_channels",
+    "links": {
+      "CodeLinks": [],
+      "TestLinks": [
+        {
+          "name": "test_dlt_multiple_channels",
+          "file": "score/test/component/datarouter/test_dlt_multiple_channels.py",
+          "line": 95,
+          "need": "comp_req__data_router__dlt_multiple_channels",
+          "verify_type": "fully",
+          "result": "passed",
+          "result_text": "",
+          "repo_name": "local_repo",
+          "hash": "",
+          "url": ""
+        },
+        {
+          "name": "SocketserverConfigTest__ReadCorrectLogChannelsNoErrorsExpected",
+          "file": "score/datarouter/test/ut/ut_logging/test_socketserver_config.cpp",
+          "line": 50,
+          "need": "comp_req__data_router__dlt_multiple_channels",
+          "verify_type": "partially",
+          "result": "passed",
+          "result_text": "",
+          "repo_name": "local_repo",
+          "hash": "",
+          "url": ""
+        },
+        {
+          "name": "DltChannelTest__WhenCreatedDefault",
+          "file": "score/datarouter/test/ut/ut_logging/test_dltchannel.cpp",
+          "line": 93,
+          "need": "comp_req__data_router__dlt_multiple_channels",
+          "verify_type": "partially",
+          "result": "passed",
+          "result_text": "",
+          "repo_name": "local_repo",
+          "hash": "",
+          "url": ""
+        }
+      ]
+    }
+  },
+  {
+    "need": "comp_req__data_router__dlt_channel_config",
+    "links": {
+      "CodeLinks": [],
+      "TestLinks": [
+        {
+          "name": "test_dlt_multiple_channels",
+          "file": "score/test/component/datarouter/test_dlt_multiple_channels.py",
+          "line": 95,
+          "need": "comp_req__data_router__dlt_channel_config",
+          "verify_type": "fully",
+          "result": "passed",
+          "result_text": "",
+          "repo_name": "local_repo",
+          "hash": "",
+          "url": ""
+        }
+      ]
+    }
+  },
+  {
     "need": "comp_req__data_router__dlt_message_filtering",
     "links": {
       "CodeLinks": [],
@@ -865,38 +929,6 @@
           "file": "score/datarouter/test/ut/ut_logging/test_verbose_dlt.cpp",
           "line": 33,
           "need": "comp_req__data_router__dlt_verbose_messages",
-          "verify_type": "partially",
-          "result": "passed",
-          "result_text": "",
-          "repo_name": "local_repo",
-          "hash": "",
-          "url": ""
-        }
-      ]
-    }
-  },
-  {
-    "need": "comp_req__data_router__dlt_multiple_channels",
-    "links": {
-      "CodeLinks": [],
-      "TestLinks": [
-        {
-          "name": "SocketserverConfigTest__ReadCorrectLogChannelsNoErrorsExpected",
-          "file": "score/datarouter/test/ut/ut_logging/test_socketserver_config.cpp",
-          "line": 50,
-          "need": "comp_req__data_router__dlt_multiple_channels",
-          "verify_type": "partially",
-          "result": "passed",
-          "result_text": "",
-          "repo_name": "local_repo",
-          "hash": "",
-          "url": ""
-        },
-        {
-          "name": "DltChannelTest__WhenCreatedDefault",
-          "file": "score/datarouter/test/ut/ut_logging/test_dltchannel.cpp",
-          "line": 93,
-          "need": "comp_req__data_router__dlt_multiple_channels",
           "verify_type": "partially",
           "result": "passed",
           "result_text": "",
