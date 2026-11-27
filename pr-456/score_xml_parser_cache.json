@@ -180,6 +180,30 @@
     "url": ""
   },
   {
+    "name": "test_dlt_multiple_channels",
+    "file": "score/test/component/datarouter/test_dlt_multiple_channels.py",
+    "line": 95,
+    "need": "comp_req__data_router__dlt_multiple_channels",
+    "verify_type": "fully",
+    "result": "passed",
+    "result_text": "",
+    "repo_name": "local_repo",
+    "hash": "",
+    "url": ""
+  },
+  {
+    "name": "test_dlt_multiple_channels",
+    "file": "score/test/component/datarouter/test_dlt_multiple_channels.py",
+    "line": 95,
+    "need": "comp_req__data_router__dlt_channel_config",
+    "verify_type": "fully",
+    "result": "passed",
+    "result_text": "",
+    "repo_name": "local_repo",
+    "hash": "",
+    "url": ""
+  },
+  {
     "name": "test_datarouter_filters",
     "file": "score/test/component/datarouter/test_datarouter_filters.py",
     "line": 42,

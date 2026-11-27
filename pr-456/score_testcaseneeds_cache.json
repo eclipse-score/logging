@@ -168,6 +168,48 @@
     "FullyVerifies": null
   },
   {
+    "name": "test_missing_messages",
+    "file": "score/test/component/datarouter/test_quality_of_service.py",
+    "line": "36",
+    "result": "passed",
+    "repo_name": null,
+    "hash": null,
+    "url": null,
+    "TestType": null,
+    "DerivationTechnique": null,
+    "result_text": "",
+    "PartiallyVerifies": null,
+    "FullyVerifies": null
+  },
+  {
+    "name": "test_dlt_multiple_channels",
+    "file": "score/test/component/datarouter/test_dlt_multiple_channels.py",
+    "line": "95",
+    "result": "passed",
+    "repo_name": "local_repo",
+    "hash": "",
+    "url": "",
+    "TestType": "requirements-based",
+    "DerivationTechnique": "requirements-analysis",
+    "result_text": "",
+    "PartiallyVerifies": null,
+    "FullyVerifies": "comp_req__data_router__dlt_multiple_channels, comp_req__data_router__dlt_channel_config"
+  },
+  {
+    "name": "test_datarouter_when_app_disconnect_immediate",
+    "file": "score/test/component/datarouter/test_safe_logging_ipc.py",
+    "line": "48",
+    "result": "passed",
+    "repo_name": null,
+    "hash": null,
+    "url": null,
+    "TestType": null,
+    "DerivationTechnique": null,
+    "result_text": "",
+    "PartiallyVerifies": null,
+    "FullyVerifies": null
+  },
+  {
     "name": "test_datarouter_filters",
     "file": "score/test/component/datarouter/test_datarouter_filters.py",
     "line": "42",
