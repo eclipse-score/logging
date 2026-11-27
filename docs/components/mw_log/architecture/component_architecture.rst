@@ -28,31 +28,58 @@ Component Architecture
 Overview
 --------
 
-Supports logging on several backends (file,slog,remote,custom)
+The ``mw::log`` Backend writes the log records created by the Log Frontend
+(``score_baselibs``) to an output channel: the Datarouter (remote/DLT), the
+system logger (syslog on Linux, slog on QNX), a local file or a custom backend.
 
 Description
 -----------
 
-<General Description>
+The backends are selected in two steps. At build time, the application links
+the backends it needs, and each linked backend registers itself for a
+``LogMode`` before ``main()``. At runtime, the logging configuration of the
+application selects the ``LogMode`` values, and a recorder is created for each
+of them that has a registered backend.
 
-<Design Decisions - For the documentation of the decision the :need:`gd_temp__change_decision_record` can be used.>
+A recorder turns the log calls of a ``LogStream`` into a log record, and its
+backend owns the slots that hold the records and writes a finished record to
+the output channel. The remote/DLT backend hands the records over to
+``comp__datarouter`` through a shared-memory ring buffer
+(:need:`logic_arc_int__logging__shared_memory`) and uses a separate control
+channel to connect to it (:need:`logic_arc_int__logging__datarouter_msg_client`).
 
-<Design Constraints>
+Design decisions:
+
+- Recorder and backend are separate abstractions, so a new output channel only
+  needs a new backend.
+- Logging does not block the application: slots are reserved without
+  time-unbound locks, and a record that does not fit is dropped and counted
+  instead of waited for.
+
+Design constraints:
+
+- Heap allocation only during initialization, local allocators afterwards.
+- Syslog backend on Linux only, slog backend on QNX only.
+- The file backend is not intended for production use (it uses a mutex to drain
+  the slots).
+- Input from the Datarouter is untrusted: sizes of shared-memory entries,
+  messages and notifications are limited and checked.
+
+The detailed design of the units is described in
+:need:`doc__mw_log_backend_detailed_design`.
 
 Rationale Behind Architecture Decomposition
 *******************************************
 
-Mandatory: A motivation for the decomposition or reason for not further splitting it into internal components.
+The component is not split into lower level components. It is decomposed into
+units by output channel (one recorder/backend pair per ``LogMode``), so that
+each unit has a single responsibility and can be selected and tested
+independently. The units are described in the detailed design.
 
 .. note:: Common decisions across components / cross cutting concepts is at the higher level.
 
 Static Architecture
 -------------------
-
-The components are designed to cover the expectations from the feature architecture
-(i.e. if already exists a definition it should be taken over and enriched).
-
-A component can optional also consist of lower level components to further structure the architecture. The component and its static views can also optionally use interfaces provided by other components.
 
 .. comp:: mw::log Backend
    :id: comp__mw_log_backend
@@ -84,7 +111,53 @@ A component can optional also consist of lower level components to further struc
 Dynamic Architecture
 --------------------
 
-not needed
+.. comp_arc_dyn:: Log Call via DataRouter Recorder
+   :id: comp_arc_dyn__log__datarouter_log_call
+   :security: YES
+   :safety: ASIL_B
+   :status: valid
+   :version: 1
+   :belongs_to: comp__mw_log_backend
+   :fulfils: comp_req__log__send_to_datarouter, comp_req__log__dlt_verbose_mode, comp_req__log__inactive_logstream, comp_req__log__log_loss_detect, comp_req__log__avoid_locks, comp_req__log__cross_locking, comp_req__log__memory_bound_checking
+
+   One verbose log call in remote/DLT mode: the ``DataRouterRecorder`` reserves a
+   slot, serializes the arguments in DLT verbose format and, when the
+   ``LogStream`` is destroyed, flushes the record into the shared-memory ring
+   buffer read by ``comp__datarouter``. A disabled log level, a missing slot or
+   an argument that does not fit are handled without blocking and are counted.
+
+   .. uml:: ../detailed_design/_assets/verbose_logging_sequence.puml
+
+.. comp_arc_dyn:: Connection Setup to Datarouter
+   :id: comp_arc_dyn__log__datarouter_connect
+   :security: YES
+   :safety: ASIL_B
+   :status: valid
+   :version: 1
+   :belongs_to: comp__mw_log_backend
+   :fulfils: comp_req__log__send_to_datarouter, comp_req__log__avoid_signal_processing, comp_req__log__cross_locking
+
+   The remote/DLT backend connects to ``comp__datarouter`` over the control
+   channel in its own thread, so the application is not blocked while the
+   Datarouter is not available. On a failure, the shared-memory file is unlinked
+   and the client is stopped.
+
+   .. uml:: ../detailed_design/_assets/datarouter_message_client_impl_connecttodatarouter.puml
+
+.. comp_arc_dyn:: Log Call via System Backend
+   :id: comp_arc_dyn__log__system_log_call
+   :security: NO
+   :safety: QM
+   :status: valid
+   :version: 1
+   :belongs_to: comp__mw_log_backend
+   :fulfils: comp_req__log__forward_to_system_logger
+
+   One log call in system mode on Linux: the ``TextRecorder`` formats the
+   record into a slot of the ``SyslogBackend``, which forwards it to the system
+   logger (``syslog(3)``) when the slot is flushed.
+
+   .. uml:: ../detailed_design/_assets/syslog_backend_sequence.puml
 
 Interfaces
 ----------

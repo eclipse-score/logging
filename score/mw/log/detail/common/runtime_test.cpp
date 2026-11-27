@@ -56,6 +56,7 @@ class RuntimeFixture : public ::testing::Test
 
 TEST_F(RuntimeFixture, CanSetALoggingBackend)
 {
+    RecordProperty("PartiallyVerifies", "comp_arc_sta__log__static_view");
     RecordProperty("ASIL", "B");
     RecordProperty("Description", "Verify the ability to set backend logging without exception.");
     RecordProperty("TestType", "Interface test");
@@ -71,6 +72,7 @@ TEST_F(RuntimeFixture, CanSetALoggingBackend)
 
 TEST_F(RuntimeFixture, CanRetrieveSetRecorder)
 {
+    RecordProperty("PartiallyVerifies", "comp_arc_sta__log__static_view");
     RecordProperty("ASIL", "B");
     RecordProperty("Description", "Verify the ability to get the recorder properly.");
     RecordProperty("TestType", "Interface test");
@@ -86,6 +88,7 @@ TEST_F(RuntimeFixture, CanRetrieveSetRecorder)
 
 TEST_F(RuntimeFixture, CanRetrieveFallbackRecorder)
 {
+    RecordProperty("PartiallyVerifies", "comp_arc_sta__log__static_view");
     RecordProperty("ASIL", "B");
     RecordProperty("Description", "Verify the ability to get a fallback recorder.");
     RecordProperty("TestType", "Interface test");

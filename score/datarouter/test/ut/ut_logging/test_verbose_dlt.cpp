@@ -32,7 +32,9 @@ class MockDltVerboseHandlerOutput : public DltVerboseHandler::IOutput
 
 TEST(DltVerboseHandlerTest, sendVerboseTest)
 {
-    RecordProperty("PartiallyVerifies", "comp_req__data_router__dlt_verbose_messages");
+    RecordProperty("PartiallyVerifies",
+                   "comp_req__data_router__dlt_verbose_messages, "
+                   "comp_arc_dyn__data_router__message_processing");
     RecordProperty("Description", "Check that a handled message is forwarded to the output as a verbose DLT message.");
     RecordProperty("TestType", "requirements-based");
     RecordProperty("DerivationTechnique", "requirements-analysis");
@@ -53,6 +55,10 @@ TEST(DltVerboseHandlerTest, sendVerboseTest)
 // Covers the !IsOutputEnabled() early-return branch in Handle().
 TEST(DltVerboseHandlerTest, HandleDoesNothingWhenOutputDisabled)
 {
+    RecordProperty("PartiallyVerifies", "comp_arc_dyn__data_router__message_processing");
+    RecordProperty("TestType", "interface-test");
+    RecordProperty("DerivationTechnique", "requirements-analysis");
+
     MockDltVerboseHandlerOutput mock_dlt_output;
     ON_CALL(mock_dlt_output, IsOutputEnabled()).WillByDefault(Return(false));
     EXPECT_CALL(mock_dlt_output, SendVerbose(_, _)).Times(0);

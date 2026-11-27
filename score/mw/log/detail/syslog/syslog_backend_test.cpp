@@ -126,7 +126,8 @@ TEST_F(SyslogBackendFixture, ReserveSlotShouldAcquireSlot)
 TEST_F(SyslogBackendFixture, LevelOffProducesNoEmit)
 {
     RecordProperty("lobster-tracing", "MwLog.ForwardToSystemLogger");
-    RecordProperty("PartiallyVerifies", "comp_req__log__forward_to_system_logger");
+    RecordProperty("PartiallyVerifies", "comp_req__log__forward_to_system_logger, comp_arc_dyn__log__system_log_call");
+    RecordProperty("TestType", "requirements-based");
     RecordProperty("ParentRequirement", "SCR-8017664");
     RecordProperty("Description", "A kOff level shall not be emitted to syslog.");
     RecordProperty("TestingTechnique", "Requirements-based test");
@@ -231,7 +232,8 @@ TEST_F(SyslogBackendFixture, VerboseLog)
 TEST_F(SyslogBackendFixture, MessageShouldContainAppCtxPayload)
 {
     RecordProperty("lobster-tracing", "MwLog.ForwardToSystemLogger");
-    RecordProperty("PartiallyVerifies", "comp_req__log__forward_to_system_logger");
+    RecordProperty("PartiallyVerifies", "comp_req__log__forward_to_system_logger, comp_arc_dyn__log__system_log_call");
+    RecordProperty("TestType", "requirements-based");
     RecordProperty("ParentRequirement", "SCR-8017664");
     RecordProperty("Description", "Verifies log message contains application id, context id and payload.");
     RecordProperty("TestingTechnique", "Requirements-based test");
@@ -277,7 +279,8 @@ TEST_F(SyslogBackendFixture, LongIdentifiersShouldBeCropped)
 TEST_F(SyslogBackendFixture, NoSlotAvailableShouldReturnEmptyHandle)
 {
     RecordProperty("lobster-tracing", "MwLog.ForwardToSystemLogger");
-    RecordProperty("PartiallyVerifies", "comp_req__log__forward_to_system_logger");
+    RecordProperty("PartiallyVerifies", "comp_req__log__forward_to_system_logger, comp_arc_dyn__log__system_log_call");
+    RecordProperty("TestType", "requirements-based");
     RecordProperty("ParentRequirement", "SCR-8017664");
     RecordProperty("Description", "Verifies returning empty handler in case of no available slots.");
     RecordProperty("TestingTechnique", "Requirements-based test");

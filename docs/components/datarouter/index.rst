@@ -33,4 +33,5 @@ Datarouter
    :maxdepth: 1
 
    requirements/index
+   architecture/index
    detailed_design/index

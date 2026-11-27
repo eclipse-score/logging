@@ -331,7 +331,9 @@ INSTANTIATE_TEST_SUITE_P(LogLevelSetCorrectly,
 
 TEST_F(DataRouterBackendFixture, LogLevelVerbose)
 {
-    RecordProperty("PartiallyVerifies", "comp_req__log__dlt_verbose_mode, comp_req__log__send_to_datarouter");
+    RecordProperty("PartiallyVerifies",
+                   "comp_req__log__dlt_verbose_mode, comp_req__log__send_to_datarouter, "
+                   "comp_arc_dyn__log__datarouter_log_call");
     RecordProperty("Description", "Check that a message logged at verbose level is sent in DLT verbose mode.");
     RecordProperty("TestType", "requirements-based");
     RecordProperty("DerivationTechnique", "requirements-analysis");

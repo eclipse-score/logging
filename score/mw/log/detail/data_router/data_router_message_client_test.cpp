@@ -446,11 +446,12 @@ TEST_F(MwsrFileNameEmptyFixture, SendConnectMessageMwsrFileNameEmptyShouldSendEx
 
 TEST_F(DatarouterMessageClientFixture, ConnectToDatarouterShouldSendConnectMessage)
 {
-    RecordProperty("PartiallyVerifies", "comp_req__log__send_to_datarouter");
+    RecordProperty("PartiallyVerifies", "comp_req__log__send_to_datarouter, comp_arc_dyn__log__datarouter_connect");
     RecordProperty("ASIL", "B");
     RecordProperty("Description", "Verifies the ability of sending connect message when connecting to datarouter.");
     RecordProperty("TestType", "Interface test");
     RecordProperty("DerivationTechnique", "Generation and analysis of equivalence classes");
+
     score::message_passing::IClientConnection::StateCallback state_callback;
     std::promise<void> callback_registered;
 
@@ -558,6 +559,7 @@ TEST_F(DatarouterMessageClientFixture, SecondAcquireNotifyShouldNotUnlinkMwsrWri
 
 TEST_F(DatarouterMessageClientFixture, ClientShouldShutdownAfterFailingToSendMessage)
 {
+    RecordProperty("PartiallyVerifies", "comp_arc_dyn__log__datarouter_connect");
     RecordProperty("ASIL", "B");
     RecordProperty("Description", "Verifies that the client should shutting down after failing to send message.");
     RecordProperty("TestType", "Interface test");
@@ -588,6 +590,7 @@ TEST_F(DatarouterMessageClientFixture, ClientShouldShutdownAfterFailingToSendMes
 
 TEST_F(DatarouterMessageClientFixture, RunShouldSetupAndConnect)
 {
+    RecordProperty("PartiallyVerifies", "comp_arc_dyn__log__datarouter_connect");
     RecordProperty("ASIL", "B");
     RecordProperty("Description", "Verifies that 'Run' API should setup the client and connect properly");
     RecordProperty("TestType", "Interface test");
@@ -740,6 +743,7 @@ TEST_F(DatarouterMessageClientFixture, FailedToEmptySignalSet)
 
 TEST_F(DatarouterMessageClientFixture, ConnectToDatarouterShouldReportErrorAndShutdownWhenCreateSenderFails)
 {
+    RecordProperty("PartiallyVerifies", "comp_arc_dyn__log__datarouter_connect");
     RecordProperty("ASIL", "B");
     RecordProperty("Description",
                    "Verifies ConnectToDatarouter reports an error and shuts down when CreateSender fails.");

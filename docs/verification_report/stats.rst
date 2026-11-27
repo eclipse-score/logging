@@ -93,6 +93,20 @@ In Detail
 
 
 
+Architecture Elements Without Verifying Test
+--------------------------------------------
+
+*Hint: The Log Frontend elements of the Rust frontend are verified in
+score_baselibs, see the verdict in the verification report. All other elements
+are expected to be covered.*
+
+.. needtable:: ARCHITECTURE ELEMENTS WITHOUT VERIFYING TEST
+   :filter: type in ["comp_arc_sta", "comp_arc_dyn"] and ("comp__datarouter" in belongs_to or "comp__mw_log_backend" in belongs_to or "comp__log" in belongs_to or "comp__log[version==1]" in belongs_to) and not fully_verifies_back and not partially_verifies_back
+   :columns: id;title;safety;belongs_to
+   :style: table
+   :sort: id
+
+
 All passed Tests
 -----------------
 

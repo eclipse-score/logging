@@ -201,6 +201,7 @@ class SocketServerCreateDltServerTest : public ::testing::Test
 
 TEST_F(SocketServerCreateDltServerTest, CreateDltServerExecutesSuccessfully)
 {
+    RecordProperty("PartiallyVerifies", "comp_arc_sta__data_router__sv");
     RecordProperty(
         "Description",
         "Verify CreateDltServer returns correct type and CreateLogParserFactory works when DltServer exists");

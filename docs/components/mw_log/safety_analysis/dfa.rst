@@ -23,6 +23,7 @@ DFA (Dependent Failure Analysis)
    :safety: ASIL_B
    :security: NO
    :realizes: wp__sw_component_dfa
+   :belongs_to: comp__mw_log_backend
 
 Dependent Failure Initiators
 ----------------------------

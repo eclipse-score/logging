@@ -355,7 +355,9 @@ TEST_F(SourceSessionTestFixture, ProcessAndRouteLogMessagesNotBlockExpectedToBeN
 
 TEST_F(SourceSessionTestFixture, RequestAcquire)
 {
-    RecordProperty("PartiallyVerifies", "comp_req__data_router__dlt_verbose_messages");
+    RecordProperty("PartiallyVerifies",
+                   "comp_req__data_router__dlt_verbose_messages, "
+                   "comp_arc_dyn__data_router__client_session");
     RecordProperty("Description", "Check that an acquire request can be sent via a Unix domain session handle.");
     RecordProperty("TestType", "requirements-based");
     RecordProperty("DerivationTechnique", "requirements-analysis");
@@ -371,7 +373,9 @@ TEST_F(SourceSessionTestFixture, RequestAcquire)
 
 TEST_F(SourceSessionTestFixture, OnAcquireResponse)
 {
-    RecordProperty("PartiallyVerifies", "comp_req__data_router__dlt_verbose_messages");
+    RecordProperty("PartiallyVerifies",
+                   "comp_req__data_router__dlt_verbose_messages, "
+                   "comp_arc_dyn__data_router__client_session");
     RecordProperty("Description", "Check that the acquired buffer of an acquire response is stored.");
     RecordProperty("TestType", "requirements-based");
     RecordProperty("DerivationTechnique", "requirements-analysis");
@@ -645,7 +649,9 @@ class TypeHandlerMock : public LogParser::TypeHandler
 
 TEST_F(DataRouterTestFixture, WhenMessageHandledFromRw)
 {
-    RecordProperty("PartiallyVerifies", "comp_req__data_router__dlt_verbose_messages");
+    RecordProperty("PartiallyVerifies",
+                   "comp_req__data_router__dlt_verbose_messages, "
+                   "comp_arc_dyn__data_router__message_processing");
     RecordProperty("Description", "Check that a message written via mw::log reaches the registered handlers.");
     RecordProperty("TestType", "requirements-based");
     RecordProperty("DerivationTechnique", "requirements-analysis");

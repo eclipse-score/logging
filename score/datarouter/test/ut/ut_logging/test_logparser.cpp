@@ -187,6 +187,10 @@ TEST(LogParserTest, WeCanNotParseASharedMemoryRecordIfTheTypeIdentifierIsNotWith
 
 TEST(LogParserTest, ParsingASharedMemoryRecordOfARegisteredTypeReturnsTrueAndCallsTheHandler)
 {
+    RecordProperty("PartiallyVerifies", "comp_arc_dyn__data_router__message_processing");
+    RecordProperty("TestType", "interface-test");
+    RecordProperty("DerivationTechnique", "requirements-analysis");
+
     testing::StrictMock<AnyHandlerMock> any_handler;
     EXPECT_CALL(any_handler, Handle(_, _, _, _)).Times(1);
 

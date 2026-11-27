@@ -60,6 +60,7 @@ class DataRouterRecorderFixtureWithDepletedBackend : public testing::Test
 
 TEST_F(DataRouterRecorderFixtureWithDepletedBackend, WillReturnEmptySlot)
 {
+    RecordProperty("PartiallyVerifies", "comp_arc_dyn__log__datarouter_log_call");
     RecordProperty("ASIL", "B");
     RecordProperty("Description", "Verifies the in-ability of reserving a slot with depleted backend.");
     RecordProperty("TestType", "Interface test");
@@ -117,7 +118,7 @@ TEST_F(DataRouterRecorderFixtureWithLogLevelCheck, WillObtainEmptySlotForInsuffi
 
 TEST_F(DataRouterRecorderFixtureWithLogLevelCheck, DisablesOrEnablesLogAccordingToLevel)
 {
-    RecordProperty("PartiallyVerifies", "comp_req__log__inactive_logstream");
+    RecordProperty("PartiallyVerifies", "comp_req__log__inactive_logstream, comp_arc_dyn__log__datarouter_log_call");
     RecordProperty("ASIL", "B");
     RecordProperty("Description", "Verifies the ability of checking the log availability using 'IsLogEnabled' API.");
     RecordProperty("TestType", "requirements-based");
@@ -184,6 +185,7 @@ TEST_F(DataRouterRecorderFixture, TooManyArgumentsWillYieldTruncatedLog)
 
 TEST_F(DataRouterRecorderFixture, TooLargeSinglePayloadWillYieldTruncatedLog)
 {
+    RecordProperty("PartiallyVerifies", "comp_arc_dyn__log__datarouter_log_call");
     RecordProperty("ASIL", "B");
     RecordProperty("Description", "Verifies that a too large single payload shall lead to truncate the log.");
     RecordProperty("TestType", "Interface test");

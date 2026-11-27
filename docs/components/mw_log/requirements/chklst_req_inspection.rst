@@ -20,6 +20,7 @@
   :safety: ASIL_B
   :security: YES
   :realizes: wp__requirements_inspect
+  :belongs_to: comp__mw_log_backend
 
 
 Requirement Inspection Checklist
