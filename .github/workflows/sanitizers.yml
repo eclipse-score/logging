@@ -16,6 +16,10 @@ name: Sanitizers
 on:
   pull_request:
     types: [opened, reopened, synchronize]
+  # bazel.yml saves caches only from the default branch.
+  push:
+    branches:
+      - main
   merge_group:
     types: [checks_requested]
 
@@ -25,47 +29,19 @@ permissions:
 jobs:
   sanitizer-tests:
     name: Bazel Tests (${{ matrix.sanitizer_config }})
-    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+      # Allows bazel.yml to prune replaced cache generations once it supports this.
+      actions: write
+    uses: eclipse-score/cicd-workflows/.github/workflows/bazel.yml@419f87cb66c1a0eb444416ae47c4c97bdc5732fc # bazel/v0.1.0
     strategy:
       fail-fast: false
       matrix:
         sanitizer_config: [asan_ubsan_lsan, tsan]
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v6
-        with:
-          ref: ${{ github.head_ref || github.event.pull_request.head.ref || github.ref }}
-          repository: ${{ github.event.pull_request.head.repo.full_name || github.repository }}
-
-      - name: Setup Bazel with shared caching
-        uses: bazel-contrib/setup-bazel@0.18.0
-        with:
-          bazelisk-version: 1.26.0
-          disk-cache: true
-          repository-cache: true
-          bazelisk-cache: true
-          cache-save: ${{ github.event_name == 'push' }}
-
-      - name: Run sanitizer tests via Bazel
-        run: |
-          set -euo pipefail
-          echo "Running: bazel test --config=${{ matrix.sanitizer_config }} --build_tests_only //score/..."
-          # Note: Scoped to C/C++ targets only. Rust targets require Rust-specific
-          # sanitizer handling and are excluded via tag filters.
-          bazel test \
-            --config=${{ matrix.sanitizer_config }} \
-            --build_tests_only \
-            --test_lang_filters=cc \
-            //score/... \
-            --build_tag_filters=-rust,-integration \
-            --test_tag_filters=-rust,-integration \
-            --verbose_failures
-
-      - name: Upload Bazel test logs (always)
-        if: always()
-        uses: actions/upload-artifact@v6
-        with:
-          name: bazel-testlogs-${{ matrix.sanitizer_config }}
-          path: bazel-testlogs/**/test.log
-          if-no-files-found: warn
+    with:
+      test-targets: //score/...
+      bazel-configs: ${{ matrix.sanitizer_config }}
+      # Note: Scoped to C/C++ targets only. Rust targets require Rust-specific
+      # sanitizer handling and are excluded via tag filters.
+      test-args: --build_tests_only --test_lang_filters=cc --build_tag_filters=-rust,-integration --test_tag_filters=-rust,-integration --verbose_failures
+      cache-key: sanitizers-${{ matrix.sanitizer_config }}

@@ -16,6 +16,10 @@ name: Clang-Tidy
 on:
   pull_request:
     types: [opened, reopened, synchronize]
+  # bazel.yml saves caches only from the default branch.
+  push:
+    branches:
+      - main
   merge_group:
 
 permissions:
@@ -27,21 +31,18 @@ concurrency:
 
 jobs:
   clang-tidy:
-    runs-on: ubuntu-24.04
-    timeout-minutes: 35
-    steps:
-      - uses: actions/checkout@v6
-      - name: Setup Bazel
-        uses: bazel-contrib/setup-bazel@0.15.0
-        with:
-          bazelisk-version: 1.26.0
-          disk-cache: clang-tidy
-          repository-cache: true
-          external-cache: true
-      - name: Run clang-tidy
-        # Scope limited to C++ targets. Rust targets are not yet validated against
-        # this configuration and are explicitly excluded.
-        run: bazel test --config=clang-tidy --lockfile_mode=error -- //score/mw/log/... //score/datarouter/... -//score/mw/log/rust/...
-      - name: Check banned functions
-        # comp_req__log__avoid_signal_processing applies to mw::log cpp implementation only.
-        run: bazel build --config=banned-functions --lockfile_mode=error -- //score/mw/log/... -//score/mw/log/rust/...
+    permissions:
+      contents: read
+      # Allows bazel.yml to prune replaced cache generations once it supports this.
+      actions: write
+    uses: eclipse-score/cicd-workflows/.github/workflows/bazel.yml@419f87cb66c1a0eb444416ae47c4c97bdc5732fc # bazel/v0.1.0
+    with:
+      # comp_req__log__avoid_signal_processing applies to mw::log cpp implementation only.
+      build-targets: //score/mw/log/... -//score/mw/log/rust/...
+      build-args: --config=banned-functions
+      # Scope limited to C++ targets. Rust targets are not yet validated against
+      # this configuration and are explicitly excluded.
+      test-targets: //score/mw/log/... //score/datarouter/... -//score/mw/log/rust/...
+      test-args: --config=clang-tidy
+      timeout-minutes: 35
+      cache-key: clang-tidy
