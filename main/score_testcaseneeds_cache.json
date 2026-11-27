@@ -9625,16 +9625,16 @@
     "repo_name": "local_repo",
     "hash": "",
     "url": "",
-    "TestType": null,
+    "TestType": "requirements-based",
     "DerivationTechnique": "requirements-analysis",
     "result_text": "",
-    "PartiallyVerifies": null,
+    "PartiallyVerifies": "comp_req__log__cfg_custom_types",
     "FullyVerifies": null
   },
   {
     "name": "LogStreamFixture__CanLogAnEnumClassWithUnderlyingType",
     "file": "external/score_baselibs+/score/mw/log/log_stream_test.cpp",
-    "line": "955",
+    "line": "957",
     "result": "passed",
     "repo_name": "local_repo",
     "hash": "",
@@ -9648,7 +9648,7 @@
   {
     "name": "LogStreamFixture__CanLogAnEnumClassWithoutUnderlyingType",
     "file": "external/score_baselibs+/score/mw/log/log_stream_test.cpp",
-    "line": "969",
+    "line": "971",
     "result": "passed",
     "repo_name": "local_repo",
     "hash": "",
@@ -9662,7 +9662,7 @@
   {
     "name": "LogStreamFixture__UsesFallbackRecorderWithinOtherRecorder",
     "file": "external/score_baselibs+/score/mw/log/log_stream_test.cpp",
-    "line": "984",
+    "line": "986",
     "result": "passed",
     "repo_name": "local_repo",
     "hash": "",
@@ -9676,7 +9676,7 @@
   {
     "name": "LogStreamFlush__WhenFlushingLogStreamAfterLogUint8ShallBeAbleToLogBoolAgain",
     "file": "external/score_baselibs+/score/mw/log/log_stream_test.cpp",
-    "line": "841",
+    "line": "843",
     "result": "passed",
     "repo_name": "local_repo",
     "hash": "",
@@ -9690,7 +9690,7 @@
   {
     "name": "LogStreamFlush__AvoidFormattingCallsWhenSlotIsNotAvailable",
     "file": "external/score_baselibs+/score/mw/log/log_stream_test.cpp",
-    "line": "878",
+    "line": "880",
     "result": "passed",
     "repo_name": "local_repo",
     "hash": "",
@@ -9704,7 +9704,7 @@
   {
     "name": "LogStreamFlush__WhenEmptyAppIdStringProvidedExpectDefaultOneReturned",
     "file": "external/score_baselibs+/score/mw/log/log_stream_test.cpp",
-    "line": "915",
+    "line": "917",
     "result": "passed",
     "repo_name": "local_repo",
     "hash": "",

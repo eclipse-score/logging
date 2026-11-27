@@ -1108,6 +1108,26 @@
     }
   },
   {
+    "need": "comp_req__log__cfg_custom_types",
+    "links": {
+      "CodeLinks": [],
+      "TestLinks": [
+        {
+          "name": "LogStreamFixture__CanLogACustomType",
+          "file": "external/score_baselibs+/score/mw/log/log_stream_test.cpp",
+          "line": 813,
+          "need": "comp_req__log__cfg_custom_types",
+          "verify_type": "partially",
+          "result": "passed",
+          "result_text": "",
+          "repo_name": "local_repo",
+          "hash": "",
+          "url": ""
+        }
+      ]
+    }
+  },
+  {
     "need": "comp_req__log__forward_to_system_logger",
     "links": {
       "CodeLinks": [],
