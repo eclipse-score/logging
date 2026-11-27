@@ -27,6 +27,23 @@ Verification Report
    :belongs_to: mod__logging
    :realizes: wp__verification_module_ver_report
 
+Structural Coverage
+-------------------
+
+Unit test coverage of :need:`comp__datarouter` and :need:`comp__mw_log_backend`,
+without the QNX-only ``slog`` backend.
+
+.. score-coverage-report:: mod__logging
+   :title: Logging
+
+Deviations:
+
+- Coverage below the targets of :need:`doc__verification_plan`.
+- Tooling for merging component test coverage is not available yet
+  (`coverage_tool#39 <https://github.com/eclipse-score/coverage_tool/issues/39>`_).
+- No result per component
+  (`coverage_tool#51 <https://github.com/eclipse-score/coverage_tool/issues/51>`_).
+
 .. toctree::
    :maxdepth: 1
 

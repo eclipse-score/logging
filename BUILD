@@ -90,6 +90,18 @@ py_test(
 # Creates all documentation targets:
 # - `:docs` for building documentation at build-time
 docs(
+    # Code of mod__logging, for the coverage report (slog is QNX-only).
+    code_targets = [
+        "//score/datarouter",
+        "//score/datarouter/dlt_filetransfer_trigger_lib",
+        "//score/mw/log/backend:custom",
+        "//score/mw/log/backend:file",
+        "//score/mw/log/backend:remote",
+        "//score/mw/log/backend:syslog",
+        "//score/mw/log/legacy_non_verbose_api",
+        "//score/mw/log/rust/score_log_bridge",
+        "//score/mw/log/rust/score_log_bridge_cpp_init",
+    ],
     data = glob(["scripts/dependency_reports/dependency_report_*.json"]) + [
         "scripts/generate_dependency_report.py",
     ],
@@ -97,5 +109,6 @@ docs(
         "@score_platform//:needs_json_file",
         "@score_process_description//:needs_json_file",
     ],
+    primary_need_id = "mod__logging",
     source_dir = "docs",
 )
