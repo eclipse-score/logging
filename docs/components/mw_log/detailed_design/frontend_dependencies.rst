@@ -303,7 +303,7 @@ Direct dependencies
      - FFI
    * - ``@score_baselibs//score/json:json``
      - cc_library
-     - no
+     - yes
    * - ``@score_baselibs//score/json:json_parser``
      - alias
      - yes

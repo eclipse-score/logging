@@ -260,7 +260,7 @@ python.toolchain(
 
 bazel_dep(name = "googletest", version = "1.17.0.bcr.2")
 bazel_dep(name = "rapidjson", version = "1.1.0.bcr.20241007")
-bazel_dep(name = "score_baselibs", version = "0.2.19")
+bazel_dep(name = "score_baselibs", version = "0.2.20")
 bazel_dep(name = "score_communication", version = "0.6.0")
 
 single_version_override(
@@ -269,7 +269,11 @@ single_version_override(
     patches = [
         # Export the AoU requirements file so downstream repos can consume it directly.
         "//third_party/score_baselibs:0001-logging-export-aou-requirements.patch",
+        # The logging BUILD loads score_tooling, so it must be visible to downstream consumers.
+        "//third_party/score_baselibs:0002-score-tooling-non-dev-dependency.patch",
     ],
+    # Apply the MODULE.bazel patch only to this version, including transitive requests.
+    version = "0.2.20",
 )
 
 # Rust dependencies
