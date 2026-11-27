@@ -50,3 +50,4 @@ jobs:
       tests-report-artifacts: |
         logging_cpp_coverage
         ${{ needs.component-tests.outputs.artifact-name }}
+      coverage-report-artifact: logging_cpp_coverage
