@@ -269,7 +269,11 @@ single_version_override(
     patches = [
         # Export the AoU requirements file so downstream repos can consume it directly.
         "//third_party/score_baselibs:0001-logging-export-aou-requirements.patch",
+        # The logging BUILD loads score_tooling, so it must be visible to downstream consumers.
+        "//third_party/score_baselibs:0002-score-tooling-non-dev-dependency.patch",
     ],
+    # Apply the MODULE.bazel patch only to this version, including transitive requests.
+    version = "0.2.20",
 )
 
 # Rust dependencies
