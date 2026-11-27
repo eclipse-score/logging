@@ -531,7 +531,7 @@
 ----------------------------------------------------------------------------- -->
 <section id="safe-datarouter-backend">
 <h1>Safe Datarouter Backend<a class="headerlink" href="#safe-datarouter-backend" title="Link to this heading">#</a></h1>
-<div class="need_container docutils container" id="SNCB-12adbf31">
+<div class="need_container docutils container" id="SNCB-12517356">
 <div class="pst-scrollable-table-container"><table class="need needs_grid_complex needs_layout_score needs_style_none needs_type_document table" id="doc__mw_log_datarouter_backend_design">
 <tbody>
 <tr class="head row-odd"><td class="head_left" colspan="2"><div class="needs_head_left line-block">
@@ -635,7 +635,7 @@ separate channel in the opposite direction is needed. On the highest level of
 abstraction we see the ASIL-B qualified client process on the one side and the
 datarouter process on the other</p>
 <p class="plantuml">
-<object data="../../../../_images/plantuml-4757b88ee889a2774ee0a9ae948eb1ac43466749.svg" type="image/svg+xml" style="width:2093px;height:291px;background:#FFFFFF;"></object></p>
+<object data="../../../../_images/plantuml-4757b88ee889a2774ee0a9ae948eb1ac43466749.svg" type="image/svg+xml" style="width:2104px;height:291px;background:#FFFFFF;"></object></p>
 <p>The logs are written by the client into shared memory and read-out by
 datarouter. Freedom of interference is ensured since the datarouter process has
 read-only access to the shared-memory. In order to reuse the logging buffers in
@@ -666,7 +666,7 @@ access to the ring buffer between Datarouter and the client.</p>
 <p>The <code class="docutils literal notranslate"><span class="pre">DataRouterRecorder</span></code> owns the <code class="docutils literal notranslate"><span class="pre">Backend</span></code> (here the <code class="docutils literal notranslate"><span class="pre">DataRouterBackend</span></code>), the
 <code class="docutils literal notranslate"><span class="pre">Configuration</span></code> and a <code class="docutils literal notranslate"><span class="pre">StatisticsReporter</span></code>:</p>
 <p class="plantuml">
-<object data="../../../../_images/plantuml-a64ad15ba2d04b0e0e630599edb473a08df53058.svg" type="image/svg+xml" style="width:1050px;height:868px;background:#FFFFFF;"></object></p>
+<object data="../../../../_images/plantuml-a64ad15ba2d04b0e0e630599edb473a08df53058.svg" type="image/svg+xml" style="width:1051px;height:868px;background:#FFFFFF;"></object></p>
 </section>
 <section id="verbose-logging-sequence">
 <h2>Verbose logging sequence<a class="headerlink" href="#verbose-logging-sequence" title="Link to this heading">#</a></h2>
@@ -678,7 +678,7 @@ to the flush of the slot into the shared memory.</p>
 below. The interface names of this diagram follow the convention of the
 <code class="docutils literal notranslate"><span class="pre">architectural_design</span></code> validation (caller and callee) and are not code interfaces.</p>
 <p class="plantuml">
-<object data="../../../../_images/plantuml-91b2018d66e2cf74a553e33df2efd24cdaa9a302.svg" type="image/svg+xml" style="width:544px;height:4200px;background:#FFFFFF;"></object></p>
+<object data="../../../../_images/plantuml-91b2018d66e2cf74a553e33df2efd24cdaa9a302.svg" type="image/svg+xml" style="width:544px;height:4202px;background:#FFFFFF;"></object></p>
 </section>
 <section id="activity-diagrams">
 <h2>Activity diagrams<a class="headerlink" href="#activity-diagrams" title="Link to this heading">#</a></h2>
@@ -703,7 +703,7 @@ variables.</p>
 <p>The <code class="docutils literal notranslate"><span class="pre">WriterFactory</span></code> creates the shared memory file, maps it and constructs the
 <code class="docutils literal notranslate"><span class="pre">SharedData</span></code> and the <code class="docutils literal notranslate"><span class="pre">SharedMemoryWriter</span></code>:</p>
 <p class="plantuml">
-<object data="../../../../_images/plantuml-7deb53c5b71914abe555d0b9b5aec1a83ddca316.svg" type="image/svg+xml" style="width:2232px;height:658px;background:#FFFFFF;"></object></p>
+<object data="../../../../_images/plantuml-7deb53c5b71914abe555d0b9b5aec1a83ddca316.svg" type="image/svg+xml" style="width:2235px;height:658px;background:#FFFFFF;"></object></p>
 <p>The <code class="docutils literal notranslate"><span class="pre">SharedMemoryWriter</span></code> has two main responsibilities. First is to register
 data types using <code class="docutils literal notranslate"><span class="pre">TryRegisterType()</span></code> and secondly to push instances of those
 types using <code class="docutils literal notranslate"><span class="pre">AllocAndWrite()</span></code>. Both aspects use the <code class="docutils literal notranslate"><span class="pre">WaitFreeAlternatingWriter</span></code>
@@ -807,7 +807,7 @@ readable without synchronization. Only after reading the remaining data from the
 ring buffer, should Datarouter unmap the shared memory page. Then the OS should
 free up the used resources.</p>
 <p class="plantuml">
-<object data="../../../../_images/plantuml-5436fc03fc05da265d85ea5a90fa3e70f0ca8b02.svg" type="image/svg+xml" style="width:1146px;height:1197px;background:#FFFFFF;"></object></p>
+<object data="../../../../_images/plantuml-5436fc03fc05da265d85ea5a90fa3e70f0ca8b02.svg" type="image/svg+xml" style="width:1149px;height:1198px;background:#FFFFFF;"></object></p>
 <p>The flow of <code class="docutils literal notranslate"><span class="pre">NotifyAcquisitionSetReader()</span></code> and <code class="docutils literal notranslate"><span class="pre">Read()</span></code>, including the detached
 mode, is shown below:</p>
 <p class="plantuml">
